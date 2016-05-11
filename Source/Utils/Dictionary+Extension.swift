@@ -1,12 +1,7 @@
-//
-//  Dictionary+Extension.swift
-//  Pods
-//
-//  Created by bxu3 on 4/29/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
+
 extension Dictionary {
     mutating func unionInPlace(dictionary: Dictionary) {
         dictionary.forEach { self.updateValue($1, forKey: $0) }

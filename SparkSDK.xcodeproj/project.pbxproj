@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */; };
+		5DBC17AE1CE3542700DFF1C8 /* Notifications+Locus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */; };
 		61D11B6DCA017A4EB01081B9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC736E40C6FA750F68A7C7D4 /* Pods.framework */; };
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
@@ -44,20 +46,11 @@
 		B91E75B51CE2D7B70080EAE0 /* CallInfoSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E755A1CE2D7B70080EAE0 /* CallInfoSequence.swift */; };
 		B91E75B61CE2D7B70080EAE0 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E755B1CE2D7B70080EAE0 /* CallManager.swift */; };
 		B91E75B71CE2D7B70080EAE0 /* CallMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E755C1CE2D7B70080EAE0 /* CallMetrics.swift */; };
-		B91E75B81CE2D7B70080EAE0 /* Notifications+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E755D1CE2D7B70080EAE0 /* Notifications+Extension.swift */; };
 		B91E75B91CE2D7B70080EAE0 /* CallState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E755F1CE2D7B70080EAE0 /* CallState.swift */; };
 		B91E75BA1CE2D7B70080EAE0 /* CallStateConnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75601CE2D7B70080EAE0 /* CallStateConnected.swift */; };
 		B91E75BB1CE2D7B70080EAE0 /* CallStateIdle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75611CE2D7B70080EAE0 /* CallStateIdle.swift */; };
 		B91E75BC1CE2D7B70080EAE0 /* CallStateIncoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75621CE2D7B70080EAE0 /* CallStateIncoming.swift */; };
-		B91E75BD1CE2D7B70080EAE0 /* CallStateLocalCancelled.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75631CE2D7B70080EAE0 /* CallStateLocalCancelled.swift */; };
-		B91E75BE1CE2D7B70080EAE0 /* CallStateLocalDeclined.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75641CE2D7B70080EAE0 /* CallStateLocalDeclined.swift */; };
-		B91E75BF1CE2D7B70080EAE0 /* CallStateLocalLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75651CE2D7B70080EAE0 /* CallStateLocalLeft.swift */; };
-		B91E75C01CE2D7B70080EAE0 /* CallStateOtherDeviceConnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75661CE2D7B70080EAE0 /* CallStateOtherDeviceConnected.swift */; };
-		B91E75C11CE2D7B70080EAE0 /* CallStateOtherDeviceDeclined.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75671CE2D7B70080EAE0 /* CallStateOtherDeviceDeclined.swift */; };
 		B91E75C21CE2D7B70080EAE0 /* CallStateOutgoing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75681CE2D7B70080EAE0 /* CallStateOutgoing.swift */; };
-		B91E75C31CE2D7B70080EAE0 /* CallStateRemoteCancelled.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75691CE2D7B70080EAE0 /* CallStateRemoteCancelled.swift */; };
-		B91E75C41CE2D7B70080EAE0 /* CallStateRemoteDeclined.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E756A1CE2D7B70080EAE0 /* CallStateRemoteDeclined.swift */; };
-		B91E75C51CE2D7B70080EAE0 /* CallStateRemoteLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E756B1CE2D7B70080EAE0 /* CallStateRemoteLeft.swift */; };
 		B91E75C61CE2D7B70080EAE0 /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E756D1CE2D7B70080EAE0 /* Device.swift */; };
 		B91E75C71CE2D7B70080EAE0 /* DeviceClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E756E1CE2D7B70080EAE0 /* DeviceClient.swift */; };
 		B91E75C81CE2D7B70080EAE0 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E756F1CE2D7B70080EAE0 /* DeviceService.swift */; };
@@ -83,13 +76,11 @@
 		B91E75DC1CE2D7B70080EAE0 /* NSUserDefaultsAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75861CE2D7B70080EAE0 /* NSUserDefaultsAdapter.swift */; };
 		B91E75DD1CE2D7B70080EAE0 /* Storagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75871CE2D7B70080EAE0 /* Storagable.swift */; };
 		B91E75DE1CE2D7B70080EAE0 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75881CE2D7B70080EAE0 /* UserDefaults.swift */; };
-		B91E75DF1CE2D7B70080EAE0 /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E758A1CE2D7B70080EAE0 /* Address.swift */; };
 		B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */; };
 		B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */; };
 		B91E75E21CE2D7B70080EAE0 /* NotificationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E758D1CE2D7B70080EAE0 /* NotificationObserver.swift */; };
 		B91E75E31CE2D7B70080EAE0 /* NSNotification+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E758E1CE2D7B70080EAE0 /* NSNotification+Extension.swift */; };
 		B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */; };
-		B91E75E51CE2D7B70080EAE0 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75901CE2D7B70080EAE0 /* String+Extension.swift */; };
 		B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75921CE2D7B70080EAE0 /* Webhook.swift */; };
 		B91E75E71CE2D7B70080EAE0 /* WebHookClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75931CE2D7B70080EAE0 /* WebHookClient+Sync.swift */; };
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
@@ -98,6 +89,8 @@
 /* Begin PBXFileReference section */
 		0938E19A696B68FAA4504A7C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateDisconnected.swift; sourceTree = "<group>"; };
+		5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notifications+Locus.swift"; sourceTree = "<group>"; };
 		B900B6A41CE2DB3100DC83CB /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = MediaEngine/Wme.framework; sourceTree = "<group>"; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
@@ -135,20 +128,11 @@
 		B91E755A1CE2D7B70080EAE0 /* CallInfoSequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallInfoSequence.swift; sourceTree = "<group>"; };
 		B91E755B1CE2D7B70080EAE0 /* CallManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
 		B91E755C1CE2D7B70080EAE0 /* CallMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallMetrics.swift; sourceTree = "<group>"; };
-		B91E755D1CE2D7B70080EAE0 /* Notifications+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notifications+Extension.swift"; sourceTree = "<group>"; };
 		B91E755F1CE2D7B70080EAE0 /* CallState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallState.swift; sourceTree = "<group>"; };
 		B91E75601CE2D7B70080EAE0 /* CallStateConnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateConnected.swift; sourceTree = "<group>"; };
 		B91E75611CE2D7B70080EAE0 /* CallStateIdle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateIdle.swift; sourceTree = "<group>"; };
 		B91E75621CE2D7B70080EAE0 /* CallStateIncoming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateIncoming.swift; sourceTree = "<group>"; };
-		B91E75631CE2D7B70080EAE0 /* CallStateLocalCancelled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateLocalCancelled.swift; sourceTree = "<group>"; };
-		B91E75641CE2D7B70080EAE0 /* CallStateLocalDeclined.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateLocalDeclined.swift; sourceTree = "<group>"; };
-		B91E75651CE2D7B70080EAE0 /* CallStateLocalLeft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateLocalLeft.swift; sourceTree = "<group>"; };
-		B91E75661CE2D7B70080EAE0 /* CallStateOtherDeviceConnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateOtherDeviceConnected.swift; sourceTree = "<group>"; };
-		B91E75671CE2D7B70080EAE0 /* CallStateOtherDeviceDeclined.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateOtherDeviceDeclined.swift; sourceTree = "<group>"; };
 		B91E75681CE2D7B70080EAE0 /* CallStateOutgoing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateOutgoing.swift; sourceTree = "<group>"; };
-		B91E75691CE2D7B70080EAE0 /* CallStateRemoteCancelled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateRemoteCancelled.swift; sourceTree = "<group>"; };
-		B91E756A1CE2D7B70080EAE0 /* CallStateRemoteDeclined.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateRemoteDeclined.swift; sourceTree = "<group>"; };
-		B91E756B1CE2D7B70080EAE0 /* CallStateRemoteLeft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateRemoteLeft.swift; sourceTree = "<group>"; };
 		B91E756D1CE2D7B70080EAE0 /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		B91E756E1CE2D7B70080EAE0 /* DeviceClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceClient.swift; sourceTree = "<group>"; };
 		B91E756F1CE2D7B70080EAE0 /* DeviceService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
@@ -174,13 +158,11 @@
 		B91E75861CE2D7B70080EAE0 /* NSUserDefaultsAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSUserDefaultsAdapter.swift; sourceTree = "<group>"; };
 		B91E75871CE2D7B70080EAE0 /* Storagable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storagable.swift; sourceTree = "<group>"; };
 		B91E75881CE2D7B70080EAE0 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
-		B91E758A1CE2D7B70080EAE0 /* Address.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Extension.swift"; sourceTree = "<group>"; };
 		B91E758D1CE2D7B70080EAE0 /* NotificationObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationObserver.swift; sourceTree = "<group>"; };
 		B91E758E1CE2D7B70080EAE0 /* NSNotification+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSNotification+Extension.swift"; sourceTree = "<group>"; };
 		B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SparkSDK-Bridging-Header.h"; sourceTree = "<group>"; };
-		B91E75901CE2D7B70080EAE0 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		B91E75921CE2D7B70080EAE0 /* Webhook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webhook.swift; sourceTree = "<group>"; };
 		B91E75931CE2D7B70080EAE0 /* WebHookClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WebHookClient+Sync.swift"; sourceTree = "<group>"; };
 		B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebhookClient.swift; sourceTree = "<group>"; };
@@ -351,12 +333,12 @@
 		B91E75571CE2D7B70080EAE0 /* Call */ = {
 			isa = PBXGroup;
 			children = (
+				5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */,
 				B91E75581CE2D7B70080EAE0 /* Call.swift */,
 				B91E75591CE2D7B70080EAE0 /* CallClient.swift */,
 				B91E755A1CE2D7B70080EAE0 /* CallInfoSequence.swift */,
 				B91E755B1CE2D7B70080EAE0 /* CallManager.swift */,
 				B91E755C1CE2D7B70080EAE0 /* CallMetrics.swift */,
-				B91E755D1CE2D7B70080EAE0 /* Notifications+Extension.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -364,19 +346,12 @@
 		B91E755E1CE2D7B70080EAE0 /* CallState */ = {
 			isa = PBXGroup;
 			children = (
+				5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */,
 				B91E755F1CE2D7B70080EAE0 /* CallState.swift */,
 				B91E75601CE2D7B70080EAE0 /* CallStateConnected.swift */,
 				B91E75611CE2D7B70080EAE0 /* CallStateIdle.swift */,
 				B91E75621CE2D7B70080EAE0 /* CallStateIncoming.swift */,
-				B91E75631CE2D7B70080EAE0 /* CallStateLocalCancelled.swift */,
-				B91E75641CE2D7B70080EAE0 /* CallStateLocalDeclined.swift */,
-				B91E75651CE2D7B70080EAE0 /* CallStateLocalLeft.swift */,
-				B91E75661CE2D7B70080EAE0 /* CallStateOtherDeviceConnected.swift */,
-				B91E75671CE2D7B70080EAE0 /* CallStateOtherDeviceDeclined.swift */,
 				B91E75681CE2D7B70080EAE0 /* CallStateOutgoing.swift */,
-				B91E75691CE2D7B70080EAE0 /* CallStateRemoteCancelled.swift */,
-				B91E756A1CE2D7B70080EAE0 /* CallStateRemoteDeclined.swift */,
-				B91E756B1CE2D7B70080EAE0 /* CallStateRemoteLeft.swift */,
 			);
 			path = CallState;
 			sourceTree = "<group>";
@@ -434,13 +409,11 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				B91E758A1CE2D7B70080EAE0 /* Address.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
 				B91E758D1CE2D7B70080EAE0 /* NotificationObserver.swift */,
 				B91E758E1CE2D7B70080EAE0 /* NSNotification+Extension.swift */,
 				B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */,
-				B91E75901CE2D7B70080EAE0 /* String+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -572,19 +545,16 @@
 				B91E75E71CE2D7B70080EAE0 /* WebHookClient+Sync.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				B91E75CE1CE2D7B70080EAE0 /* MediaConnection.swift in Sources */,
-				B91E75BD1CE2D7B70080EAE0 /* CallStateLocalCancelled.swift in Sources */,
-				B91E75B81CE2D7B70080EAE0 /* Notifications+Extension.swift in Sources */,
 				B91E75C91CE2D7B70080EAE0 /* AlertHint.swift in Sources */,
 				B91E75BC1CE2D7B70080EAE0 /* CallStateIncoming.swift in Sources */,
 				B91E75B31CE2D7B70080EAE0 /* Call.swift in Sources */,
 				B91E75A51CE2D7B70080EAE0 /* MembershipClient+Sync.swift in Sources */,
-				B91E75DF1CE2D7B70080EAE0 /* Address.swift in Sources */,
 				B91E75E31CE2D7B70080EAE0 /* NSNotification+Extension.swift in Sources */,
 				B91E75AF1CE2D7B70080EAE0 /* Notifications.swift in Sources */,
 				B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */,
 				B91E75D61CE2D7B70080EAE0 /* Phone.swift in Sources */,
+				5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */,
 				B91E75DD1CE2D7B70080EAE0 /* Storagable.swift in Sources */,
-				B91E75BF1CE2D7B70080EAE0 /* CallStateLocalLeft.swift in Sources */,
 				B91E75AE1CE2D7B70080EAE0 /* MetricsEngine.swift in Sources */,
 				B91E75B41CE2D7B70080EAE0 /* CallClient.swift in Sources */,
 				B91E75BB1CE2D7B70080EAE0 /* CallStateIdle.swift in Sources */,
@@ -600,34 +570,29 @@
 				B91E75E21CE2D7B70080EAE0 /* NotificationObserver.swift in Sources */,
 				B91E75A91CE2D7B70080EAE0 /* MessageClient.swift in Sources */,
 				B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */,
-				B91E75C01CE2D7B70080EAE0 /* CallStateOtherDeviceConnected.swift in Sources */,
 				B91E75A61CE2D7B70080EAE0 /* MembershipClient.swift in Sources */,
 				B91E75B71CE2D7B70080EAE0 /* CallMetrics.swift in Sources */,
 				B91E75C81CE2D7B70080EAE0 /* DeviceService.swift in Sources */,
 				B91E75B11CE2D7B70080EAE0 /* PersonClient+Sync.swift in Sources */,
 				B91E75B91CE2D7B70080EAE0 /* CallState.swift in Sources */,
-				B91E75C41CE2D7B70080EAE0 /* CallStateRemoteDeclined.swift in Sources */,
 				B91E75CB1CE2D7B70080EAE0 /* CallEvent.swift in Sources */,
 				B91E75A71CE2D7B70080EAE0 /* Message.swift in Sources */,
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
 				B91E759C1CE2D7B70080EAE0 /* HttpParameters.swift in Sources */,
 				B91E75B51CE2D7B70080EAE0 /* CallInfoSequence.swift in Sources */,
-				B91E75C51CE2D7B70080EAE0 /* CallStateRemoteLeft.swift in Sources */,
-				B91E75C31CE2D7B70080EAE0 /* CallStateRemoteCancelled.swift in Sources */,
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
 				B91E75CD1CE2D7B70080EAE0 /* FullState.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
-				B91E75E51CE2D7B70080EAE0 /* String+Extension.swift in Sources */,
 				B91E75991CE2D7B70080EAE0 /* KeychainUtil.swift in Sources */,
 				B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */,
+				5DBC17AE1CE3542700DFF1C8 /* Notifications+Locus.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
 				B91E75A21CE2D7B70080EAE0 /* MediaEngine.swift in Sources */,
 				B91E75A31CE2D7B70080EAE0 /* MediaEngineObserver.swift in Sources */,
 				B91E75D01CE2D7B70080EAE0 /* Participant.swift in Sources */,
-				B91E75C11CE2D7B70080EAE0 /* CallStateOtherDeviceDeclined.swift in Sources */,
 				B91E75C71CE2D7B70080EAE0 /* DeviceClient.swift in Sources */,
 				B91E759B1CE2D7B70080EAE0 /* Error.swift in Sources */,
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
@@ -649,7 +614,6 @@
 				B91E75BA1CE2D7B70080EAE0 /* CallStateConnected.swift in Sources */,
 				B91E75D21CE2D7B70080EAE0 /* ParticipantInfo.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,
-				B91E75BE1CE2D7B70080EAE0 /* CallStateLocalDeclined.swift in Sources */,
 				B91E75C61CE2D7B70080EAE0 /* Device.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

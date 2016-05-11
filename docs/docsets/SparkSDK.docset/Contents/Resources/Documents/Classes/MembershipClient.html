@@ -14,7 +14,7 @@
     <a title="MembershipClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (2% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (46% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -31,22 +31,10 @@
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/AccessToken.html">AccessToken</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/ConnectController.html">ConnectController</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/EmailAddress.html">EmailAddress</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/HttpParameters.html">HttpParameters</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
@@ -64,12 +52,6 @@
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomIdAddress.html">RoomIdAddress</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/SipAddress.html">SipAddress</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
               </li>
               <li class="nav-group-task">
@@ -80,15 +62,6 @@
           <li class="nav-group-name">
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Enums/AuthResult.html">AuthResult</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/ParticipantState.html">ParticipantState</a>
-              </li>
               <li class="nav-group-task">
                 <a href="../Enums/Result.html">Result</a>
               </li>
@@ -106,9 +79,6 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/Address.html">Address</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Protocols/Storagable.html">Storagable</a>
               </li>
             </ul>
@@ -117,25 +87,7 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/AlertHint.html">AlertHint</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/AlertType.html">AlertType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/CallEvent.html">CallEvent</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/CallInfo.html">CallInfo</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/Error.html">Error</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/MediaConnection.html">MediaConnection</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/MediaInfo.html">MediaInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
@@ -147,25 +99,10 @@
                 <a href="../Structs/Notifications.html">Notifications</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/Participant.html">Participant</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantDevice.html">ParticipantDevice</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantInfo.html">ParticipantInfo</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantStatus.html">ParticipantStatus</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Room.html">Room</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/Sequence.html">Sequence</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
@@ -181,7 +118,13 @@
         <section>
           <section class="section">
             <h1>MembershipClient</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MembershipClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Membership</span><span class="o">&gt;</span></code></pre>
+
+                </div>
+              </div>
+            <p>Membership HTTP client.</p>
 
           </section>
           <section class="section task-group-section">
@@ -200,7 +143,112 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+- Parameter roomId: Limit results to a specific room by id.
+- Parameter personId: Limit results to a specific person by id.
+- Parameter personEmail: Limit results to a specific person by email address.
+- Parameter max: Limit the maximum number of items in the response.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ArrayHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific room by id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific person by id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific person by email address.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>max</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit the maximum number of items in the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -219,7 +267,98 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Add someone to a room by person id; optionally making them a moderator.
+- Parameter roomId: The rooom id.
+- Parameter personId: The person id.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWithPersonId</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The rooom id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The person id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -238,7 +377,98 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Add someone to a room by email address; optionally making them a moderator.
+- Parameter roomId: The rooom id.
+- Parameter personEmail: The email address.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWithPersonEmail</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The rooom id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The email address.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -257,7 +487,70 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Get details for a membership by id.
+- Parameter membershipId: The membership id.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -276,7 +569,84 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Updates properties for a membership by id.
+- Parameter membershipId: The membership id.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -295,7 +665,70 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Deletes a membership by id.
+- Parameter membershipId: The membership id.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">AnyObjectHandler</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -318,7 +751,84 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+- Parameter roomId: Limit results to a specific room by id.
+- Parameter personId: Limit results to a specific person by id.
+- Parameter personEmail: Limit results to a specific person by email address.
+- Parameter max: Limit the maximum number of items in the response.
+- Returns: Membership array</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Membership</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific room by id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific person by id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit results to a specific person by email address.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>max</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit the maximum number of items in the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Membership array</p>
 
                       </div>
                     </section>
@@ -337,7 +847,70 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Add someone to a room by person id; optionally making them a moderator.
+- Parameter roomId: The rooom id.
+- Parameter personId: The person id.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Returns: Membership</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWithPersonId</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Membership</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The rooom id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The person id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Membership</p>
 
                       </div>
                     </section>
@@ -356,7 +929,70 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Add someone to a room by email address; optionally making them a moderator.
+- Parameter roomId: The rooom id.
+- Parameter personEmail: The email address.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Returns: Membership</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">createWithPersonEmail</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Membership</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The rooom id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>personEmail</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The email address.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Membership</p>
 
                       </div>
                     </section>
@@ -375,7 +1011,42 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Get details for a membership by id.
+- Parameter membershipId: The membership id.
+- Returns: Membership</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Membership</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Membership</p>
 
                       </div>
                     </section>
@@ -394,7 +1065,56 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Updates properties for a membership by id.
+- Parameter membershipId: The membership id.
+- Parameter isModerator: Set to true to make the person a room moderator.
+- Returns: Membership</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Membership</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>isModerator</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Set to true to make the person a room moderator.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Membership</p>
 
                       </div>
                     </section>
@@ -413,7 +1133,42 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Deletes a membership by id.
+- Parameter membershipId: The membership id.
+- Returns: Void</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">membershipId</span> <span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>membershipId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The membership id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>

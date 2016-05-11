@@ -1,5 +1,5 @@
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
-import Alamofire
 import ObjectMapper
 
 public class Call {
@@ -8,6 +8,15 @@ public class Call {
         case Environment
     }
     
+    public enum Status: String {
+        case Initiated
+        case Ringing
+        case Incoming
+        case Connected
+        case Disconnected
+    }
+    
+    public var status: Status { return state.status }
     // Callee party
     public var to: String?
     // Caller party

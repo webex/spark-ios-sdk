@@ -1,10 +1,4 @@
-//
-//  CallState.swift
-//  Pods
-//
-//  Created by niliu2 on 3/25/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 
@@ -19,6 +13,10 @@ class CallState {
     
     var info: CallInfo {
         return call.info!
+    }
+    
+    var status: Call.Status {
+        return .Disconnected
     }
     
     func isAllowedToDial() -> Bool {

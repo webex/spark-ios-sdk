@@ -1,13 +1,6 @@
-//
-//  UserAgent.swift
-//  Pods
-//
-//  Created by bxu3 on 4/26/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-
 
 class UserAgent {
     // TODO: need to check the id

@@ -1,33 +1,27 @@
-//
-//  Participant.swift
-//  Pods
-//
-//  Created by bxu3 on 3/21/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-public struct Participant: Mappable {
-    public var isCreator: Bool?
-    public var id: String?
-    public var url: String?
-    public var state: ParticipantState?
-    public var type: String?
-    public var person: ParticipantInfo?
-    public var devices: [ParticipantDevice]?
-    public var status: ParticipantStatus?
-    public var deviceUrl: String?
-    public var mediaBaseUrl: String?
-    public var guest: Bool?
-    public var alertHint: AlertHint?
-    public var alertType: AlertType?
+struct Participant: Mappable {
+    var isCreator: Bool?
+    var id: String?
+    var url: String?
+    var state: ParticipantState?
+    var type: String?
+    var person: ParticipantInfo?
+    var devices: [ParticipantDevice]?
+    var status: ParticipantStatus?
+    var deviceUrl: String?
+    var mediaBaseUrl: String?
+    var guest: Bool?
+    var alertHint: AlertHint?
+    var alertType: AlertType?
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         isCreator <- map["isCreator"]
         id <- map["id"]
         url <- map["url"]
@@ -47,8 +41,7 @@ public struct Participant: Mappable {
         typealias Object = ParticipantState
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object?{
-            
+        func transformFromJSON(value: AnyObject?) -> Object? {
             let state = value as? String
             if state == nil {
                 return nil
@@ -72,6 +65,7 @@ public struct Participant: Mappable {
             }
     
         }
+
         func transformToJSON(value: Object?) -> JSON? {
             return nil
         }

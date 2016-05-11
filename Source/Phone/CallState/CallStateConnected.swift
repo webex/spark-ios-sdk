@@ -1,14 +1,12 @@
-//
-//  CallStateConnected.swift
-//  Pods
-//
-//  Created by niliu2 on 3/25/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 
 class CallStateConnected: CallState {
+    
+    override var status: Call.Status {
+        return .Connected
+    }
 
     override func isAllowedToHangup() -> Bool {
         return true

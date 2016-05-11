@@ -14,7 +14,7 @@
     <a title="Webhook Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (2% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (46% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -31,22 +31,10 @@
             <a href="../Classes.html">Classes</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Classes/AccessToken.html">AccessToken</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/ConnectController.html">ConnectController</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/EmailAddress.html">EmailAddress</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/HttpParameters.html">HttpParameters</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
@@ -64,12 +52,6 @@
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/RoomIdAddress.html">RoomIdAddress</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/SipAddress.html">SipAddress</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
               </li>
               <li class="nav-group-task">
@@ -80,15 +62,6 @@
           <li class="nav-group-name">
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Enums/AuthResult.html">AuthResult</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/ParticipantState.html">ParticipantState</a>
-              </li>
               <li class="nav-group-task">
                 <a href="../Enums/Result.html">Result</a>
               </li>
@@ -106,9 +79,6 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/Address.html">Address</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Protocols/Storagable.html">Storagable</a>
               </li>
             </ul>
@@ -117,25 +87,7 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/AlertHint.html">AlertHint</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/AlertType.html">AlertType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/CallEvent.html">CallEvent</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/CallInfo.html">CallInfo</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/Error.html">Error</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/MediaConnection.html">MediaConnection</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/MediaInfo.html">MediaInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
@@ -147,25 +99,10 @@
                 <a href="../Structs/Notifications.html">Notifications</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/Participant.html">Participant</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantDevice.html">ParticipantDevice</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantInfo.html">ParticipantInfo</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/ParticipantStatus.html">ParticipantStatus</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Room.html">Room</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Structs/Sequence.html">Sequence</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
@@ -181,7 +118,13 @@
         <section>
           <section class="section">
             <h1>Webhook</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Webhook</span> <span class="p">:</span> <span class="kt">Mappable</span></code></pre>
+
+                </div>
+              </div>
+            <p>Webhook contents.</p>
 
           </section>
           <section class="section task-group-section">
@@ -200,8 +143,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The id of this webhook.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -219,8 +170,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A user-friendly name for this webhook.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -238,8 +197,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The URL that receives POST requests for each event.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">targetUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -257,8 +224,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The resource type for the webhook.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -276,8 +251,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The event type for the webhook.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -295,8 +278,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The filter that defines the webhook scope.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -304,9 +295,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK7Webhook7createdGSqSd_"></a>
+                    <a name="/s:vV8SparkSDK7Webhook7createdGSqSS_"></a>
                     <a name="//apple_ref/swift/Property/created" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK7Webhook7createdGSqSd_">created</a>
+                    <a class="token" href="#/s:vV8SparkSDK7Webhook7createdGSqSS_">created</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -314,8 +305,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The timestamp that the webhook being created.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">created</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -333,8 +332,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Webhook constructor.
+- Note: for internal use only.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="nf">init</span><span class="p">?(</span><span class="n">_</span> <span class="nv">map</span><span class="p">:</span> <span class="kt">Map</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -352,8 +360,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Webhook mapping from JSON.
+- Note: for internal use only.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">mapping</span><span class="p">(</span><span class="nv">map</span><span class="p">:</span> <span class="kt">Map</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>

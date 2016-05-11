@@ -1,14 +1,6 @@
-//
-//  WdmClient.swift
-//  Pods
-//
-//  Created by bxu3 on 3/15/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-import Alamofire
-import SwiftyJSON
 
 // TODO: need to discuss if use term - "locus"
 class CallClient: CompletionHandlerType<CallInfo>{

@@ -1,12 +1,7 @@
-//
-//  RoomClient+Sync.swift
-//  Pods
-//
-//  Created by bxu3 on 5/6/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
+
 extension RoomClient {
     public func list(showSipAddress showSipAddress: Bool? = nil, max: Int? = nil) throws -> [Room] {
         return try SyncUtil.getArray(showSipAddress, max, async: list)

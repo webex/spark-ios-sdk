@@ -1,10 +1,4 @@
-//
-//  ServiceRequest.swift
-//  Pods
-//
-//  Created by niliu2 on 3/12/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import Alamofire

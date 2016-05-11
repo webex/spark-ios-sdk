@@ -1,10 +1,4 @@
-//
-//  Metrics.swift
-//  Pods
-//
-//  Created by bxu3 on 4/27/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 

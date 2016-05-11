@@ -1,28 +1,22 @@
-//
-//  Device.swift
-//  Pods
-//
-//  Created by bxu3 on 3/14/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-public struct MediaConnection: Mappable {
-    public var mediaId: String?
+struct MediaConnection: Mappable {
+    var mediaId: String?
 
-    public var type: String?
-    public var localSdp: MediaInfo?
-    public var remoteSdp: MediaInfo?
-    public var actionsUrl: String?
-    public var keepAliveUrl: String?
-    public var keepAliveSecs: Int?
+    var type: String?
+    var localSdp: MediaInfo?
+    var remoteSdp: MediaInfo?
+    var actionsUrl: String?
+    var keepAliveUrl: String?
+    var keepAliveSecs: Int?
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         mediaId <- map["mediaId"]
         type <- map["type"]
         localSdp <- (map["localSdp"], MediaTransform())

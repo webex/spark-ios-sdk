@@ -1,15 +1,13 @@
-//
-//  CallStateIncoming.swift
-//  Pods
-//
-//  Created by niliu2 on 3/25/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 
 class CallStateIncoming: CallState {
 
+    override var status: Call.Status {
+        return .Incoming
+    }
+    
     override func isAllowedToAnswer() -> Bool {
         return true
     }

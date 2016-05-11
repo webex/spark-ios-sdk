@@ -1,13 +1,6 @@
-//
-//  WdmClient.swift
-//  Pods
-//
-//  Created by bxu3 on 3/15/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-import Alamofire
 
 class DeviceClient: CompletionHandlerType<Device> {
     private func requestBuilder() -> ServiceRequest.Builder {

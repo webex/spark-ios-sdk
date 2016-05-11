@@ -1,24 +1,18 @@
-//
-//  ParticipantStatus.swift
-//  Pods
-//
-//  Created by bxu3 on 3/21/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
 
-public struct ParticipantStatus: Mappable {
-    public var audioStatus: String?
-    public var videoStatus: String?
-    public var csis: [UInt]?
+struct ParticipantStatus: Mappable {
+    var audioStatus: String?
+    var videoStatus: String?
+    var csis: [UInt]?
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         audioStatus <- map["audioStatus"]
         videoStatus <- map["videoStatus"]
         csis <- map["csis"]

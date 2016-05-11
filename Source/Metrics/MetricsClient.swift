@@ -1,12 +1,6 @@
-//
-//  MetricsClient.swift
-//  Pods
-//
-//  Created by bxu3 on 4/26/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
-import Alamofire
+import Foundation
 
 class MetricsClient {
     func post(metrics: HttpParameters, completionHandler: ServiceResponse<AnyObject> -> Void) {

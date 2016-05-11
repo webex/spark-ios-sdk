@@ -1,12 +1,14 @@
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
-import Alamofire
+import Foundation
 
+/// Room HTTP client
 public class RoomClient: CompletionHandlerType<Room> {
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("rooms")
     }
-    
+
     public func list(showSipAddress showSipAddress: Bool? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.GET)

@@ -1,22 +1,15 @@
-//
-//  AlertType.swift
-//  Pods
-//
-//  Created by niliu2 on 5/9/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-
-public struct AlertType: Mappable {
-    public var action: String?
+struct AlertType: Mappable {
+    var action: String?
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         action <- map["action"]
     }
 }

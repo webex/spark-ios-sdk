@@ -1,10 +1,5 @@
-//
-//  Storagable.swift
-//  Pods
-//
-//  Created by bxu3 on 4/12/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+
 import Foundation
 
 public protocol Storagable {

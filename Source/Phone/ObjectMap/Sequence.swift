@@ -1,27 +1,21 @@
-//
-//  Sequence.swift
-//  Pods
-//
-//  Created by niliu2 on 4/28/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-public struct Sequence: Mappable {
+struct Sequence: Mappable {
     
-    public var entries: [UInt64] = []
-    public var rangeStart: UInt64 = 0
-    public var rangeEnd: UInt64 = 0
+    var entries: [UInt64] = []
+    var rangeStart: UInt64 = 0
+    var rangeEnd: UInt64 = 0
     
-    public init() { // test purpose only
+    init() { // test purpose only
     }
     
-    public init?(_ map: Map){
+    init?(_ map: Map) {
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         entries <- map["entries"]
         rangeStart <- map["rangeStart"]
         rangeEnd <- map["rangeEnd"]

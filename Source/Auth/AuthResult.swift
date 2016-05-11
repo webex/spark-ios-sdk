@@ -1,20 +1,14 @@
-//
-//  AuthResult.swift
-//  SparkSDK
-//
-//  Created by bxu3 on 3/3/16.
 //  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
-//
 
 import Foundation
 
-public enum AuthResult {
+enum AuthResult {
     case Success(AccessToken)
     case Error(OAuth2Error, String)
 }
 
 /// See RFC6749 4.2.2.1
-public enum OAuth2Error {
+enum OAuth2Error {
     /// The client is not authorized to request an access token using this method.
     case UnauthorizedClient
     

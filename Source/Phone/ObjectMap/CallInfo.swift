@@ -1,55 +1,48 @@
-//
-//  CallInfo.swift
-//  Pods
-//
-//  Created by bxu3 on 3/21/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-// TODO: may not need public
-public struct CallInfo: Mappable {
-    public var callUrl: String?
-    public var participants: [Participant]?
-    public var myself: Participant?
-    public var host: ParticipantInfo?
+struct CallInfo: Mappable {
+    var callUrl: String?
+    var participants: [Participant]?
+    var myself: Participant?
+    var host: ParticipantInfo?
     var fullState: FullState?
-    public var sequence: Sequence?
+    var sequence: Sequence?
     
-    public var selfEmail: String? {
+    var selfEmail: String? {
         return myself?.person?.email
     }
     
-    public var hostEmail: String? {
+    var hostEmail: String? {
         return host?.email
     }
 
-    public var allDevices: [ParticipantDevice] {
+    var allDevices: [ParticipantDevice] {
         return allParticipantants.flatMap({$0.devices}).reduce([], combine: +)
     }
     
-    public var selfDevices: [ParticipantDevice] {
+    var selfDevices: [ParticipantDevice] {
         guard let devices = myself?.devices else {
             return []
         }
         return devices
     }
     
-    public var thisDevice: ParticipantDevice? {
+    var thisDevice: ParticipantDevice? {
         return selfDevices.filter({$0.url == DeviceService.sharedInstance.deviceUrl}).first // should be only one
     }
     
-    public var otherDevices: [ParticipantDevice] {
+    var otherDevices: [ParticipantDevice] {
         return selfDevices.filter({$0.url != DeviceService.sharedInstance.deviceUrl})
     }
     
-    public var remoteDevices: [ParticipantDevice] {
+    var remoteDevices: [ParticipantDevice] {
         return remoteParticipantants.flatMap({$0.devices}).reduce([], combine: +)
     }
 
-    public var allParticipantants: [Participant] {
+    var allParticipantants: [Participant] {
         guard let allParticipants = participants else {
             return []
         }
@@ -57,44 +50,44 @@ public struct CallInfo: Mappable {
         return allParticipants
     }
 
-    public var selfParticipantant: Participant? {
+    var selfParticipantant: Participant? {
         return myself
     }
     
-    public var remoteParticipantants: [Participant] {
+    var remoteParticipantants: [Participant] {
         
         return allParticipantants.filter({$0.id != myself?.id})
     }
     
-    public var selfMediaInfo: MediaInfo? {
+    var selfMediaInfo: MediaInfo? {
         return thisDevice?.mediaConnections?.first?.localSdp
     }
     
-    public var selfMediaUrl: String? {
+    var selfMediaUrl: String? {
         return myself?.mediaBaseUrl
     }
     
-    public var selfParticipantUrl: String? {
+    var selfParticipantUrl: String? {
         return myself?.url
     }
     
-    public var selfId: String? {
+    var selfId: String? {
         return myself?.id
     }
     
-    public var selfState: ParticipantState? {
+    var selfState: ParticipantState? {
         return myself?.state
     }
     
-    public var selfAudioMuted: Bool? {
+    var selfAudioMuted: Bool? {
         return selfMediaInfo?.audioMuted
     }
     
-    public var selfVideoMuted: Bool? {
+    var selfVideoMuted: Bool? {
         return selfMediaInfo?.videoMuted
     }
     
-    public var remoteSdp: String? {
+    var remoteSdp: String? {
         return thisDevice?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
@@ -178,10 +171,10 @@ public struct CallInfo: Mappable {
         return selfDevices.filter({$0.state == state})
     }
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         callUrl <- map["url"]
         participants <- map["participants"]
         myself <- map["self"]

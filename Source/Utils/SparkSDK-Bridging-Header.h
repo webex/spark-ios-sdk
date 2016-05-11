@@ -1,10 +1,5 @@
-//
-//  SparkSDK-Bridging-Header.h
-//  Pods
-//
-//  Created by bxu3 on 3/11/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+
 #pragma once
 
 #import "Wme/Wme.h"

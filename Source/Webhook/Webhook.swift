@@ -1,26 +1,39 @@
-//
-//  Webhook.swift
-//  Pods
-//
-//  Created by bxu3 on 3/3/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-public struct Webhook: Mappable {
-    public var id: String?
-    public var name: String?
-    public var targetUrl: String?
-    public var resource: String?
-    public var event: String?
-    public var filter: String?
-    public var created: NSTimeInterval?
+/// Webhook contents.
+public struct Webhook : Mappable {
     
-    public init?(_ map: Map){
+    /// The id of this webhook.
+    public var id: String?
+    
+    /// A user-friendly name for this webhook.
+    public var name: String?
+    
+    /// The URL that receives POST requests for each event.
+    public var targetUrl: String?
+    
+    /// The resource type for the webhook.
+    public var resource: String?
+    
+    /// The event type for the webhook.
+    public var event: String?
+    
+    /// The filter that defines the webhook scope.
+    public var filter: String?
+    
+    /// The timestamp that the webhook being created.
+    public var created: String?
+    
+    /// Webhook constructor.
+    /// - Note: for internal use only.
+    public init?(_ map: Map) {
     }
     
+    /// Webhook mapping from JSON.
+    /// - Note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]
         name <- map["name"]

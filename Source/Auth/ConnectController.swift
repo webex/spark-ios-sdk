@@ -1,15 +1,8 @@
-//
-//  SparkConnectController.swift
-//  SparkSDK
-//
-//  Created by bxu3 on 2/22/16.
 //  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
-//
 
-import UIKit
 import WebKit
 
-public class ConnectController: UIViewController, WKNavigationDelegate {
+class ConnectController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     
     var onWillDismiss: ((didCancel: Bool) -> Void)?
@@ -18,21 +11,21 @@ public class ConnectController: UIViewController, WKNavigationDelegate {
     var cancelButton: UIBarButtonItem?
     
     
-    public init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
     }
     
-    public init(URL: NSURL, parseAccessCodeFrom: ((url: NSURL) -> Bool)) {
+    init(URL: NSURL, parseAccessCodeFrom: ((url: NSURL) -> Bool)) {
         super.init(nibName: nil, bundle: nil)
         self.startURL = URL
         self.tryParseAccessCodeFrom = parseAccessCodeFrom
     }
     
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    override public func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Link to Spark"
         self.webView = WKWebView(frame: self.view.bounds)
@@ -46,7 +39,7 @@ public class ConnectController: UIViewController, WKNavigationDelegate {
         self.navigationItem.rightBarButtonItem = self.cancelButton
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if !webView.canGoBack {
             if nil != startURL {
@@ -58,7 +51,7 @@ public class ConnectController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    public func webView(webView: WKWebView,
+    func webView(webView: WKWebView,
         decidePolicyForNavigationAction navigationAction: WKNavigationAction,
         decisionHandler: (WKNavigationActionPolicy) -> Void) {
             if let url = navigationAction.request.URL, parseAccessCode = self.tryParseAccessCodeFrom {
@@ -70,7 +63,7 @@ public class ConnectController: UIViewController, WKNavigationDelegate {
             return decisionHandler(.Allow)
     }
     
-    public var startURL: NSURL? {
+    var startURL: NSURL? {
         didSet(oldURL) {
             if nil != startURL && nil == oldURL && isViewLoaded() {
                 loadURL(startURL!)
@@ -78,7 +71,7 @@ public class ConnectController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    public func loadURL(url: NSURL) {
+    func loadURL(url: NSURL) {
         webView.loadRequest(NSURLRequest(URL: url))
     }
     

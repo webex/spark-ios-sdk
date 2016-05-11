@@ -1,14 +1,6 @@
-//
-//  File.swift
-//  Pods
-//
-//  Created by bxu3 on 4/26/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-import Alamofire
-import Wme
 
 class MetricsEngine {
     typealias CompletionHandlerType = Bool -> Void

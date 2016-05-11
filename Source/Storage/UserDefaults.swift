@@ -1,13 +1,6 @@
-//
-//  UserDefault.swift
-//  Pods
-//
-//  Created by bxu3 on 4/8/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-
 
 // TODO: need to check if setting is per user
 class UserDefaults {

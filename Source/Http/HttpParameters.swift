@@ -1,19 +1,13 @@
-//
-//  HttpParameters.swift
-//  Pods
-//
-//  Created by niliu2 on 3/12/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 
 // TODO: rename class name?
-public class HttpParameters {
+class HttpParameters {
     private var storage:[String: AnyObject] = [:]
     
     // TODO: figure out why need to convert to String 
-    public init(_ parameters: [String: Any?] = [:]) {
+    init(_ parameters: [String: Any?] = [:]) {
         for (key, value) in parameters {
             if value == nil {
                 continue
@@ -34,11 +28,11 @@ public class HttpParameters {
         }
     }
 
-    public func value() -> [String: AnyObject] {
+    func value() -> [String: AnyObject] {
         return storage
     }
     
-    public func updateValue(value: AnyObject, forKey key: String) {
+    func updateValue(value: AnyObject, forKey key: String) {
         storage.updateValue(value, forKey: key)
     }
 }

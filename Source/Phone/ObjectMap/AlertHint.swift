@@ -1,23 +1,16 @@
-//
-//  AlertHint.swift
-//  Pods
-//
-//  Created by niliu2 on 5/9/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import ObjectMapper
 
-
-public struct AlertHint: Mappable {
-    public var action: String?
-    public var expiration: String?
+struct AlertHint: Mappable {
+    var action: String?
+    var expiration: String?
     
-    public init?(_ map: Map){
+    init?(_ map: Map){
     }
     
-    public mutating func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         action <- map["action"]
         expiration <- map["expiration"]
     }

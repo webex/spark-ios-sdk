@@ -1,10 +1,4 @@
-//
-//  Error.swift
-//  Pods
-//
-//  Created by Bin Xu on 5/4/16.
-//
-//
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
 import SwiftyJSON

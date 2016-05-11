@@ -1,3 +1,5 @@
+//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+
 import AVFoundation
 
 public class Phone {

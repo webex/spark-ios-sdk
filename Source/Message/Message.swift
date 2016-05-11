@@ -1,28 +1,45 @@
-//
-//  Message.swift
-//  Pods
-//
-//  Created by Bin Xu on 3/1/16.
 //  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
-//
 
 import Foundation
 import ObjectMapper
 
+/// Message contents.
 public struct Message: Mappable {
-    public var id: String?
-    public var personId: String?
-    public var personEmail: String?
-    public var roomId: String?
-    public var text: String?
-    public var files: [String]?
-    public var toPersonId: String?
-    public var toPersonEmail: String?
-    public var created: NSTimeInterval?
     
+    /// The id of this message.
+    public var id: String?
+    
+    /// The person id.
+    public var personId: String?
+    
+    /// The person email.
+    public var personEmail: String?
+    
+    /// The room id.
+    public var roomId: String?
+    
+    /// The plain text message.
+    public var text: String?
+    
+    /// A public URL that Spark can use to fetch attachments.
+    public var files: [String]?
+    
+    /// The id of the recipient when sending a private1:1 message.
+    public var toPersonId: String?
+    
+    /// The email address of the recipient when sendinga private 1:1 message.
+    public var toPersonEmail: String?
+    
+    /// The timestamp that the message being created.
+    public var created: String?
+    
+    /// Message constructor.
+    /// - Note: for internal use only.
     public init?(_ map: Map){
     }
     
+    /// Message mapping from JSON.
+    /// - Note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]
         personId <- map["personId"]
