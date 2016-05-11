@@ -30,7 +30,7 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
     pod install
     ```
 
-## Example
+## Example:
 Below is code of a demo of the SDK usage
 
 1. Setup SDK with Spark access Token 
