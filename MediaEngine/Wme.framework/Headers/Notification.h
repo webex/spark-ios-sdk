@@ -1,0 +1,55 @@
+
+// Notification names
+
+extern NSString *const MediaEngineDidSendFirstVideoDataNotification;
+extern NSString *const MediaEngineDidSendFirstAudioDataNotification;
+extern NSString *const MediaEngineDidReceiveFirstVideoDataNotification;
+extern NSString *const MediaEngineDidReceiveFirstScreenDataNotification;
+extern NSString *const MediaEngineDidReceiveFirstAudioDataNotification;
+extern NSString *const MediaEngineDidSwitchCamerasNotification;
+extern NSString *const MediaEngineDidChangeVideoDecodeSizeNotification;
+extern NSString *const MediaEngineDidChangeSelfViewRenderSizeNotification;
+extern NSString *const MediaEngineDidCaptureVideoStatisticsNotification;
+extern NSString *const MediaEngineDidCaptureAudioStatisticsNotification;
+extern NSString *const MediaEngineDidCaptureCpuStatisticsNotification;
+extern NSString *const MediaEngineDidConnectNotification;
+extern NSString *const MediaEngineDidFailToConnectNotification;
+extern NSString *const MediaEngineDidDisconnectNotification;
+extern NSString *const MediaEngineDidReconnectNotification;
+extern NSString *const MediaEngineDidMuteVideoNotification;
+extern NSString *const MediaEngineDidUnMuteVideoNotification;
+extern NSString *const MediaEngineDidMuteAudioNotification;
+extern NSString *const MediaEngineDidUnMuteAudioNotification;
+extern NSString *const MediaEngineDidDetectNetworkCongestionNotification;
+extern NSString *const MediaEngineDidDetectSevereNetworkCongestionNotification;
+extern NSString *const MediaEngineDidDetectLowPerformanceDeviceNotification;
+extern NSString *const MediaEngineDidEncounterErrorNotification;
+extern NSString *const MediaEngineDidDetectCsiChangeNotification;
+extern NSString *const MediaEngineUsedTcpFallbackNotification;
+extern NSString *const MediaEngineAVCaptureResetNotification;
+extern NSString *const MediaEngineIceFailedNotification;
+extern NSString *const MediaEngineDidDetectVideoMediaAvailable;
+extern NSString *const MediaEngineDidDetectVideoMediaUnavailable;
+extern NSString *const MediaEngineDidDetectScreenMediaAvailable;
+extern NSString *const MediaEngineDidDetectScreenMediaUnavailable;
+
+// Notification key and values
+extern NSString *const MediaEngineCsiChangeTypeKey;
+extern NSString *const MediaEngineMediaTypeAudio;
+extern NSString *const MediaEngineMediaTypeVideo;
+extern NSString *const MediaEngineMediaTypeScreen;
+
+extern NSString *const MediaEngineCsiChangeValueKey;
+
+extern NSString *const MediaEngineErrorKey;
+extern NSString *const MediaEngineErrorDescriptionKey;
+extern NSString *const MediaEngineErrorDescription;
+extern NSString *const MediaEngineVideoCameraFailDescription;
+extern NSString *const MediaEngineVideoCameraNotAuthorizedDescription;
+extern NSString *const MediaEngineVideoCameraNoDeviceDescription;
+extern NSString *const MediaEngineVideoCameraRuntimeDieDescription;
+extern NSString *const MediaEngineErrorSeverityKey;
+extern NSString *const MediaEngineErrorSeverityLow;
+extern NSString *const MediaEngineErrorSeverityMid;
+extern NSString *const MediaEngineErrorSeverityHigh;
+extern NSString *const MediaEngineErrorDomain;

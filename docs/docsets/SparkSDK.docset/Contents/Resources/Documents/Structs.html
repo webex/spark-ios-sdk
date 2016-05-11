@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Structs  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a title="Structs  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">SparkSDK Docs</a> (2% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">SparkSDK Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Structs  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Classes/AccessToken.html">AccessToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/ConnectController.html">ConnectController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/EmailAddress.html">EmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/HttpParameters.html">HttpParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MembershipClient.html">MembershipClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/PersonClient.html">PersonClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/RoomClient.html">RoomClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/RoomIdAddress.html">RoomIdAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/SipAddress.html">SipAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/WebhookClient.html">WebhookClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/AuthResult.html">AuthResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/ParticipantState.html">ParticipantState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/Result.html">Result</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/NSNotification.html">NSNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Protocols/Address.html">Address</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Storagable.html">Storagable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/AlertHint.html">AlertHint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/AlertType.html">AlertType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CallEvent.html">CallEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CallInfo.html">CallInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/MediaConnection.html">MediaConnection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/MediaInfo.html">MediaInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Membership.html">Membership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Notifications.html">Notifications</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Participant.html">Participant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ParticipantDevice.html">ParticipantDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ParticipantInfo.html">ParticipantInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ParticipantStatus.html">ParticipantStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Person.html">Person</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Sequence.html">Sequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/ServiceResponse.html">ServiceResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Webhook.html">Webhook</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Structs</h1>
+            <p>The following structs are available globally.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK15MediaConnection"></a>
+                    <a name="//apple_ref/swift/Struct/MediaConnection" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK15MediaConnection">MediaConnection</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/MediaConnection.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK9AlertHint"></a>
+                    <a name="//apple_ref/swift/Struct/AlertHint" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK9AlertHint">AlertHint</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/AlertHint.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK13Notifications"></a>
+                    <a name="//apple_ref/swift/Struct/Notifications" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK13Notifications">Notifications</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Notifications.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK17ParticipantDevice"></a>
+                    <a name="//apple_ref/swift/Struct/ParticipantDevice" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK17ParticipantDevice">ParticipantDevice</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/ParticipantDevice.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/TODO:%20may%20not%20need%20public"></a>
+                <a name="//apple_ref/swift/Section/TODO: may not need public" class="dashAnchor"></a>
+                <a href="#/TODO:%20may%20not%20need%20public">
+                  <h3 class="section-name">TODO: may not need public</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK8CallInfo"></a>
+                    <a name="//apple_ref/swift/Struct/CallInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK8CallInfo">CallInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/CallInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK9CallEvent"></a>
+                    <a name="//apple_ref/swift/Struct/CallEvent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK9CallEvent">CallEvent</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/CallEvent.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK7Message"></a>
+                    <a name="//apple_ref/swift/Struct/Message" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK7Message">Message</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Message.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK6Person"></a>
+                    <a name="//apple_ref/swift/Struct/Person" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK6Person">Person</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Person.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK10Membership"></a>
+                    <a name="//apple_ref/swift/Struct/Membership" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK10Membership">Membership</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Membership.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK11Participant"></a>
+                    <a name="//apple_ref/swift/Struct/Participant" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK11Participant">Participant</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Participant.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK5Error"></a>
+                    <a name="//apple_ref/swift/Struct/Error" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK5Error">Error</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Error.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK4Room"></a>
+                    <a name="//apple_ref/swift/Struct/Room" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK4Room">Room</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Room.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK9MediaInfo"></a>
+                    <a name="//apple_ref/swift/Struct/MediaInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK9MediaInfo">MediaInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/MediaInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK17ParticipantStatus"></a>
+                    <a name="//apple_ref/swift/Struct/ParticipantStatus" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK17ParticipantStatus">ParticipantStatus</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/ParticipantStatus.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK15ServiceResponse"></a>
+                    <a name="//apple_ref/swift/Struct/ServiceResponse" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK15ServiceResponse">ServiceResponse</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/ServiceResponse.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK8Sequence"></a>
+                    <a name="//apple_ref/swift/Struct/Sequence" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK8Sequence">Sequence</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Sequence.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK9AlertType"></a>
+                    <a name="//apple_ref/swift/Struct/AlertType" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK9AlertType">AlertType</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/AlertType.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK15ParticipantInfo"></a>
+                    <a name="//apple_ref/swift/Struct/ParticipantInfo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK15ParticipantInfo">ParticipantInfo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/ParticipantInfo.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:V8SparkSDK7Webhook"></a>
+                    <a name="//apple_ref/swift/Struct/Webhook" class="dashAnchor"></a>
+                    <a class="token" href="#/s:V8SparkSDK7Webhook">Webhook</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                        <a href="Structs/Webhook.html" class="slightly-smaller">See more</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

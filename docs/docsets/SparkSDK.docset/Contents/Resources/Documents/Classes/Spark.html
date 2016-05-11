@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Spark Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/Spark" class="dashAnchor"></a>
+    <a title="Spark Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SparkSDK Docs</a> (2% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SparkSDK Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Spark Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AccessToken.html">AccessToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ConnectController.html">ConnectController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/HttpParameters.html">HttpParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MembershipClient.html">MembershipClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PersonClient.html">PersonClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomClient.html">RoomClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomIdAddress.html">RoomIdAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SipAddress.html">SipAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/WebhookClient.html">WebhookClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/AuthResult.html">AuthResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ParticipantState.html">ParticipantState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Result.html">Result</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSNotification.html">NSNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Address.html">Address</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Storagable.html">Storagable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/AlertHint.html">AlertHint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/AlertType.html">AlertType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallEvent.html">CallEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallInfo.html">CallInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaConnection.html">MediaConnection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaInfo.html">MediaInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Membership.html">Membership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Notifications.html">Notifications</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Participant.html">Participant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantDevice.html">ParticipantDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantInfo.html">ParticipantInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantStatus.html">ParticipantStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Person.html">Person</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Sequence.html">Sequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Webhook.html">Webhook</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Spark</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/TODO:%20check%20if%20it&#39;s%20ok%20to%20get%20sdk%20version"></a>
+                <a name="//apple_ref/swift/Section/TODO: check if it&#39;s ok to get sdk version" class="dashAnchor"></a>
+                <a href="#/TODO:%20check%20if%20it&#39;s%20ok%20to%20get%20sdk%20version">
+                  <h3 class="section-name">TODO: check if it&#39;s ok to get sdk version</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark7versionSS"></a>
+                    <a name="//apple_ref/swift/Variable/version" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark7versionSS">version</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark10authorizedFT_Sb"></a>
+                    <a name="//apple_ref/swift/Method/authorized()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark10authorizedFT_Sb">authorized()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark11accessTokenGSqSS_"></a>
+                    <a name="//apple_ref/swift/Variable/accessToken" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark11accessTokenGSqSS_">accessToken</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark11deauthorizeFT_T_"></a>
+                    <a name="//apple_ref/swift/Method/deauthorize()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark11deauthorizeFT_T_">deauthorize()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark8initWithFT8clientIdSS12clientSecretSS5scopeSS11redirectUriSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/initWith(clientId:clientSecret:scope:redirectUri:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark8initWithFT8clientIdSS12clientSecretSS5scopeSS11redirectUriSS_T_">initWith(clientId:clientSecret:scope:redirectUri:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark8initWithFT11accessTokenSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/initWith(accessToken:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark8initWithFT11accessTokenSS_T_">initWith(accessToken:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark23authorizeFromControllerFCSo16UIViewControllerT_"></a>
+                    <a name="//apple_ref/swift/Method/authorizeFromController(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark23authorizeFromControllerFCSo16UIViewControllerT_">authorizeFromController(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZFC8SparkSDK5Spark12setupStorageFPS_10Storagable_T_"></a>
+                    <a name="//apple_ref/swift/Method/setupStorage(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZFC8SparkSDK5Spark12setupStorageFPS_10Storagable_T_">setupStorage(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark5roomsCS_10RoomClient"></a>
+                    <a name="//apple_ref/swift/Variable/rooms" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark5roomsCS_10RoomClient">rooms</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark6peopleCS_12PersonClient"></a>
+                    <a name="//apple_ref/swift/Variable/people" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark6peopleCS_12PersonClient">people</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark11membershipsCS_16MembershipClient"></a>
+                    <a name="//apple_ref/swift/Variable/memberships" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark11membershipsCS_16MembershipClient">memberships</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark8messagesCS_13MessageClient"></a>
+                    <a name="//apple_ref/swift/Variable/messages" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark8messagesCS_13MessageClient">messages</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark8webhooksCS_13WebhookClient"></a>
+                    <a name="//apple_ref/swift/Variable/webhooks" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark8webhooksCS_13WebhookClient">webhooks</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:ZvC8SparkSDK5Spark5phoneCS_5Phone"></a>
+                    <a name="//apple_ref/swift/Variable/phone" class="dashAnchor"></a>
+                    <a class="token" href="#/s:ZvC8SparkSDK5Spark5phoneCS_5Phone">phone</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

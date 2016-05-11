@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>MembershipClient Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/MembershipClient" class="dashAnchor"></a>
+    <a title="MembershipClient Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SparkSDK Docs</a> (2% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SparkSDK Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        MembershipClient Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/AccessToken.html">AccessToken</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/ConnectController.html">ConnectController</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/HttpParameters.html">HttpParameters</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MembershipClient.html">MembershipClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PersonClient.html">PersonClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomClient.html">RoomClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomIdAddress.html">RoomIdAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SipAddress.html">SipAddress</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/WebhookClient.html">WebhookClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/AuthResult.html">AuthResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/OAuth2Error.html">OAuth2Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/ParticipantState.html">ParticipantState</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Result.html">Result</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/NSNotification.html">NSNotification</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/Address.html">Address</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Storagable.html">Storagable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/AlertHint.html">AlertHint</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/AlertType.html">AlertType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallEvent.html">CallEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallInfo.html">CallInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaConnection.html">MediaConnection</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaInfo.html">MediaInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Membership.html">Membership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Notifications.html">Notifications</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Participant.html">Participant</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantDevice.html">ParticipantDevice</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantInfo.html">ParticipantInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ParticipantStatus.html">ParticipantStatus</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Person.html">Person</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Sequence.html">Sequence</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Webhook.html">Webhook</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>MembershipClient</h1>
+            <p>Undocumented</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient4listFT6roomIdGSqSS_8personIdGSqSS_11personEmailGSqSS_3maxGSqSi_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_10Membership__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/list(roomId:personId:personEmail:max:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient4listFT6roomIdGSqSS_8personIdGSqSS_11personEmailGSqSS_3maxGSqSi_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_10Membership__T__T_">list(roomId:personId:personEmail:max:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient18createWithPersonIdFT6roomIdSS8personIdGSqSS_11isModeratorGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createWithPersonId(roomId:personId:isModerator:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient18createWithPersonIdFT6roomIdSS8personIdGSqSS_11isModeratorGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_">createWithPersonId(roomId:personId:isModerator:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient21createWithPersonEmailFT6roomIdSS11personEmailGSqSS_11isModeratorGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/createWithPersonEmail(roomId:personEmail:isModerator:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient21createWithPersonEmailFT6roomIdSS11personEmailGSqSS_11isModeratorGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_">createWithPersonEmail(roomId:personEmail:isModerator:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient3getFT12membershipIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/get(membershipId:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient3getFT12membershipIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_">get(membershipId:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient6updateFT12membershipIdSS11isModeratorSb5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/update(membershipId:isModerator:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient6updateFT12membershipIdSS11isModeratorSb5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_10Membership_T__T_">update(membershipId:isModerator:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient6deleteFT12membershipIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponsePs9AnyObject__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/delete(membershipId:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient6deleteFT12membershipIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponsePs9AnyObject__T__T_">delete(membershipId:queue:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient4listFzT6roomIdGSqSS_8personIdGSqSS_11personEmailGSqSS_3maxGSqSi__GSaVS_10Membership_"></a>
+                    <a name="//apple_ref/swift/Method/list(roomId:personId:personEmail:max:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient4listFzT6roomIdGSqSS_8personIdGSqSS_11personEmailGSqSS_3maxGSqSi__GSaVS_10Membership_">list(roomId:personId:personEmail:max:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient18createWithPersonIdFzT6roomIdSS8personIdGSqSS_11isModeratorGSqSb__VS_10Membership"></a>
+                    <a name="//apple_ref/swift/Method/createWithPersonId(roomId:personId:isModerator:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient18createWithPersonIdFzT6roomIdSS8personIdGSqSS_11isModeratorGSqSb__VS_10Membership">createWithPersonId(roomId:personId:isModerator:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient21createWithPersonEmailFzT6roomIdSS11personEmailGSqSS_11isModeratorGSqSb__VS_10Membership"></a>
+                    <a name="//apple_ref/swift/Method/createWithPersonEmail(roomId:personEmail:isModerator:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient21createWithPersonEmailFzT6roomIdSS11personEmailGSqSS_11isModeratorGSqSb__VS_10Membership">createWithPersonEmail(roomId:personEmail:isModerator:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient3getFzT12membershipIdSS_VS_10Membership"></a>
+                    <a name="//apple_ref/swift/Method/get(membershipId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient3getFzT12membershipIdSS_VS_10Membership">get(membershipId:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient6updateFzT12membershipIdSS11isModeratorSb_VS_10Membership"></a>
+                    <a name="//apple_ref/swift/Method/update(membershipId:isModerator:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient6updateFzT12membershipIdSS11isModeratorSb_VS_10Membership">update(membershipId:isModerator:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK16MembershipClient6deleteFzT12membershipIdSS_T_"></a>
+                    <a name="//apple_ref/swift/Method/delete(membershipId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK16MembershipClient6deleteFzT12membershipIdSS_T_">delete(membershipId:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>
