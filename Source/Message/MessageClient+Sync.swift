@@ -10,7 +10,7 @@ extension MessageClient {
     /// - Parameter before: List messages sent before a date and time, in ISO8601 format.
     /// - Parameter beforeMessage: List messages sent before a message by id.
     /// - Parameter max: Limit the maximum number of messages in the response.
-    /// - Returns: Message array
+    /// - Returns: Messages array
     public func list(roomId roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil) throws -> [Message] {
         return try SyncUtil.getArray(roomId, before, beforeMessage, max, async: list)
     }

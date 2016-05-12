@@ -14,7 +14,7 @@
     <a title="RoomClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (46% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (51% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -64,6 +64,9 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RoomType.html">RoomType</a>
               </li>
             </ul>
           </li>
@@ -133,9 +136,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10RoomClient4listFT14showSipAddressGSqSb_3maxGSqSi_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_4Room__T__T_"></a>
-                    <a name="//apple_ref/swift/Method/list(showSipAddress:max:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10RoomClient4listFT14showSipAddressGSqSb_3maxGSqSi_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_4Room__T__T_">list(showSipAddress:max:queue:completionHandler:)</a>
+                    <a name="/s:FC8SparkSDK10RoomClient4listFT3maxGSqSi_4typeGSqOS_8RoomType_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_4Room__T__T_"></a>
+                    <a name="//apple_ref/swift/Method/list(max:type:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK10RoomClient4listFT3maxGSqSi_4typeGSqOS_8RoomType_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseGSaVS_4Room__T__T_">list(max:type:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -143,16 +146,85 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>List rooms. By default, lists rooms to which the authenticated user belongs.
+- Parameter max: Limit the maximum number of rooms in the response.
+- Parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">max</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">RoomType</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ArrayHandler</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>max</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit the maximum number of rooms in the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -170,16 +242,71 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
+- Parameter title: A user-friendly name for the room.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">title</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>title</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-friendly name for the room.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -187,9 +314,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10RoomClient3getFT6roomIdSS14showSipAddressGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_4Room_T__T_"></a>
-                    <a name="//apple_ref/swift/Method/get(roomId:showSipAddress:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10RoomClient3getFT6roomIdSS14showSipAddressGSqSb_5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_4Room_T__T_">get(roomId:showSipAddress:queue:completionHandler:)</a>
+                    <a name="/s:FC8SparkSDK10RoomClient3getFT6roomIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_4Room_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/get(roomId:queue:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK10RoomClient3getFT6roomIdSS5queueGSqPSo17OS_dispatch_queue__17completionHandlerFGVS_15ServiceResponseVS_4Room_T__T_">get(roomId:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -197,16 +324,71 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Shows details for a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -224,16 +406,85 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Updates details for a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Parameter title: A user-friendly name for the room.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">ObjectHandler</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>title</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-friendly name for the room.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -251,16 +502,71 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Deletes a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Parameter queue: The queue on which the completion handler is dispatched.
+- Parameter completionHandler: A closure to be executed once the request has finished.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="n">dispatch_queue_t</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">AnyObjectHandler</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>queue</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue on which the completion handler is dispatched.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the request has finished.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -272,9 +578,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10RoomClient4listFzT14showSipAddressGSqSb_3maxGSqSi__GSaVS_4Room_"></a>
-                    <a name="//apple_ref/swift/Method/list(showSipAddress:max:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10RoomClient4listFzT14showSipAddressGSqSb_3maxGSqSi__GSaVS_4Room_">list(showSipAddress:max:)</a>
+                    <a name="/s:FC8SparkSDK10RoomClient4listFzT3maxGSqSi_4typeGSqOS_8RoomType__GSaVS_4Room_"></a>
+                    <a name="//apple_ref/swift/Method/list(max:type:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK10RoomClient4listFzT3maxGSqSi_4typeGSqOS_8RoomType__GSaVS_4Room_">list(max:type:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -282,16 +588,57 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>List rooms. By default, lists rooms to which the authenticated user belongs.
+- Parameter max: Limit the maximum number of rooms in the response.
+- Parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
+- Returns: Rooms array</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">max</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">RoomType</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Room</span><span class="p">]</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>max</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Limit the maximum number of rooms in the response.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>type</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Rooms array</p>
+
                       </div>
                     </section>
                   </div>
@@ -309,16 +656,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
+- Parameter title: A user-friendly name for the room.
+- Returns: Room</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">title</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Room</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>title</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-friendly name for the room.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Room</p>
+
                       </div>
                     </section>
                   </div>
@@ -326,9 +700,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10RoomClient3getFzT6roomIdSS14showSipAddressGSqSb__VS_4Room"></a>
-                    <a name="//apple_ref/swift/Method/get(roomId:showSipAddress:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10RoomClient3getFzT6roomIdSS14showSipAddressGSqSb__VS_4Room">get(roomId:showSipAddress:)</a>
+                    <a name="/s:FC8SparkSDK10RoomClient3getFzT6roomIdSS_VS_4Room"></a>
+                    <a name="//apple_ref/swift/Method/get(roomId:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK10RoomClient3getFzT6roomIdSS_VS_4Room">get(roomId:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -336,16 +710,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Shows details for a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Returns: Room</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Room</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Room</p>
+
                       </div>
                     </section>
                   </div>
@@ -363,16 +764,57 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Updates details for a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Parameter title: A user-friendly name for the room.
+- Returns: Room</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Room</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>title</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A user-friendly name for the room.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Room</p>
+
                       </div>
                     </section>
                   </div>
@@ -390,16 +832,43 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Deletes a room by id. Specify the room id in the roomId parameter in the URI.
+- Parameter roomId: The room id.
+- Returns: Void</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Room</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="n">roomId</span> <span class="nv">roomId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>roomId</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The room id.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
                       </div>
                     </section>
                   </div>
@@ -409,7 +878,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-11)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-12)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

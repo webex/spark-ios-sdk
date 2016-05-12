@@ -3,13 +3,20 @@
 import Foundation
 import ObjectMapper
 
+// Room type.
+public enum RoomType: String {
+    /// 1-to-1 room
+    case Direct
+    /// Group room
+    case Group
+}
+
 /// Room contents.
 public struct Room: Mappable {
     public var id: String?
     public var title: String?
-    public var type: String?
+    public var type: RoomType?
     public var isLocked: Bool?
-    public var sipAddress: String?
     public var lastActivity: String?
     public var created: String?
 
@@ -23,10 +30,25 @@ public struct Room: Mappable {
     public mutating func mapping(map: Map) {
         id <- map["id"]
         title <- map["title"]
-        type <- map["type"]
+        type <- (map["type"], RoomTypeTransform())
         isLocked <- map["isLocked"]
-        sipAddress <- map["sipAddress"]
         lastActivity <- map["lastActivity"]
         created <- map["created"]
+    }
+    
+    private class RoomTypeTransform: TransformType {
+        typealias Object = RoomType
+        typealias JSON = String
+        
+        func transformFromJSON(value: AnyObject?) -> Object? {
+            guard let state = value as? String else {
+                return nil
+            }
+            return RoomType(rawValue: state)
+        }
+        
+        func transformToJSON(value: Object?) -> JSON? {
+            return nil
+        }
     }
 }

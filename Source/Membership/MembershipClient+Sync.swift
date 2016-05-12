@@ -9,7 +9,7 @@ extension MembershipClient {
     /// - Parameter personId: Limit results to a specific person by id.
     /// - Parameter personEmail: Limit results to a specific person by email address.
     /// - Parameter max: Limit the maximum number of items in the response.
-    /// - Returns: Membership array
+    /// - Returns: Memberships array
     public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: String? = nil, max: Int? = nil) throws -> [Membership] {
         return try SyncUtil.getArray(roomId, personId, personEmail, max, async: list)
     }

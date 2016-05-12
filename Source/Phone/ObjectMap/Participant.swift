@@ -42,12 +42,11 @@ struct Participant: Mappable {
         typealias JSON = String
         
         func transformFromJSON(value: AnyObject?) -> Object? {
-            let state = value as? String
-            if state == nil {
+            guard let state = value as? String else {
                 return nil
             }
             
-            switch state! {
+            switch state {
             case "UNKNOWN":
                 return ParticipantState.Unknown
             case "IDLE":
@@ -63,7 +62,6 @@ struct Participant: Mappable {
             default:
                 return ParticipantState.Unknown
             }
-    
         }
 
         func transformToJSON(value: Object?) -> JSON? {
