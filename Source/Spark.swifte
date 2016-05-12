@@ -52,7 +52,7 @@ extension Spark {
     /// Rooms are virtual meeting places where people post messages and collaborate to get work done.
     /// This API is used to manage the rooms themselves. Rooms are create and deleted with this API.
     /// You can also update a room to change its title, for example.
-    /// - Note:
+    /// - note:
     ///     - To manage people in a room see the Memberships API.
     ///     - To post or otherwise manage room content see the Messages API.
     public static var rooms: RoomClient {
@@ -62,7 +62,7 @@ extension Spark {
     /// People are registered users of the Spark application.
     /// Currently, people can only be searched with this API.
     /// Future releases of the API will allow for more complete user administration.
-    /// - Note: To learn more about managing people in a room see the Memberships API
+    /// - note: To learn more about managing people in a room see the Memberships API
     public static var people: PersonClient {
         return PersonClient()
     }

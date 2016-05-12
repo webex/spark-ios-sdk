@@ -10,10 +10,10 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Lists all webhooks
-    /// - Parameter max: Limit the maximum number of webhooks in the response.
-    /// - Parameter queue: The queue on which the completion handler is dispatched.
-    /// - Parameter completionHandler: A closure to be executed once the request has finished.
-    /// - Returns: Void
+    /// - parameter max: Limit the maximum number of webhooks in the response.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
     public func list(max max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.GET)
@@ -26,14 +26,14 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Posts a webhook.
-    /// - Parameter name: A user-friendly name for this webhook.
-    /// - Parameter targetUrl: The URL that receives POST requests for each event.
-    /// - Parameter resource: The resource type for the webhook.
-    /// - Parameter event: The event type for the webhook.
-    /// - Parameter filter: The filter that defines the webhook scope.
-    /// - Parameter queue: The queue on which the completion handler is dispatched.
-    /// - Parameter completionHandler: A closure to be executed once the request has finished.
-    /// - Returns: Void
+    /// - parameter name: A user-friendly name for this webhook.
+    /// - parameter targetUrl: The URL that receives POST requests for each event.
+    /// - parameter resource: The resource type for the webhook.
+    /// - parameter event: The event type for the webhook.
+    /// - parameter filter: The filter that defines the webhook scope.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
     public func create(name name: String, targetUrl: String, resource: String, event: String, filter: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let body = HttpParameters([
             "name": name,
@@ -52,10 +52,10 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Shows details for a webhook by id.
-    /// - Parameter webhookId: A webhook id.
-    /// - Parameter queue: The queue on which the completion handler is dispatched.
-    /// - Parameter completionHandler: A closure to be executed once the request has finished.
-    /// - Returns: Void
+    /// - parameter webhookId: A webhook id.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
     public func get(webhookId webhookId: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.GET)
@@ -67,12 +67,12 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Updates a webhook by id.
-    /// - Parameter webhookId: A webhook id.
-    /// - Parameter name: A user-friendly name for this webhook.
-    /// - Parameter targetUrl: The URL that receives POST requests for each event.
-    /// - Parameter queue: The queue on which the completion handler is dispatched.
-    /// - Parameter completionHandler: A closure to be executed once the request has finished.
-    /// - Returns: Void
+    /// - parameter webhookId: A webhook id.
+    /// - parameter name: A user-friendly name for this webhook.
+    /// - parameter targetUrl: The URL that receives POST requests for each event.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
     public func update(webhookId webhookId: String, name: String, targetUrl: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.PUT)
@@ -85,10 +85,10 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Deletes a webhook by id.
-    /// - Parameter webhookId: A webhook id.
-    /// - Parameter queue: The queue on which the completion handler is dispatched.
-    /// - Parameter completionHandler: A closure to be executed once the request has finished.
-    /// - Returns: Void
+    /// - parameter webhookId: A webhook id.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
     public func delete(webhookId webhookId: String, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
         let request = requestBuilder()
             .method(.DELETE)

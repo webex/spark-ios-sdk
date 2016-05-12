@@ -28,12 +28,12 @@ public struct Membership: Mappable {
     public var created: String?
     
     /// Membership constructor.
-    /// - Note: for internal use only.
+    /// - note: for internal use only.
     public init?(_ map: Map){
     }
     
     /// Membership mapping from JSON.
-    /// - Note: for internal use only.
+    /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]
         personId <- map["personId"]

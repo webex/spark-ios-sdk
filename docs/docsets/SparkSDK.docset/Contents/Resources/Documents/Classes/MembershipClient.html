@@ -147,13 +147,13 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
-- Parameter roomId: Limit results to a specific room by id.
-- Parameter personId: Limit results to a specific person by id.
-- Parameter personEmail: Limit results to a specific person by email address.
-- Parameter max: Limit the maximum number of items in the response.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter roomId: Limit results to a specific room by id.
+- parameter personId: Limit results to a specific person by id.
+- parameter personEmail: Limit results to a specific person by email address.
+- parameter max: Limit the maximum number of items in the response.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -271,12 +271,12 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Add someone to a room by person id; optionally making them a moderator.
-- Parameter roomId: The rooom id.
-- Parameter personId: The person id.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter roomId: The rooom id.
+- parameter personId: The person id.
+- parameter isModerator: Set to true to make the person a room moderator.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -381,12 +381,12 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Add someone to a room by email address; optionally making them a moderator.
-- Parameter roomId: The rooom id.
-- Parameter personEmail: The email address.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter roomId: The rooom id.
+- parameter personEmail: The email address.
+- parameter isModerator: Set to true to make the person a room moderator.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -491,10 +491,10 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Get details for a membership by id.
-- Parameter membershipId: The membership id.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter membershipId: The membership id.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -573,11 +573,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Updates properties for a membership by id.
-- Parameter membershipId: The membership id.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter membershipId: The membership id.
+- parameter isModerator: Set to true to make the person a room moderator.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -669,10 +669,10 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Deletes a membership by id.
-- Parameter membershipId: The membership id.
-- Parameter queue: The queue on which the completion handler is dispatched.
-- Parameter completionHandler: A closure to be executed once the request has finished.
-- Returns: Void</p>
+- parameter membershipId: The membership id.
+- parameter queue: The queue on which the completion handler is dispatched.
+- parameter completionHandler: A closure to be executed once the request has finished.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
@@ -755,11 +755,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
-- Parameter roomId: Limit results to a specific room by id.
-- Parameter personId: Limit results to a specific person by id.
-- Parameter personEmail: Limit results to a specific person by email address.
-- Parameter max: Limit the maximum number of items in the response.
-- Returns: Memberships array</p>
+- parameter roomId: Limit results to a specific room by id.
+- parameter personId: Limit results to a specific person by id.
+- parameter personEmail: Limit results to a specific person by email address.
+- parameter max: Limit the maximum number of items in the response.
+- returns: Memberships array</p>
 
                       </div>
                       <div class="declaration">
@@ -851,10 +851,10 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Add someone to a room by person id; optionally making them a moderator.
-- Parameter roomId: The rooom id.
-- Parameter personId: The person id.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Returns: Membership</p>
+- parameter roomId: The rooom id.
+- parameter personId: The person id.
+- parameter isModerator: Set to true to make the person a room moderator.
+- returns: Membership</p>
 
                       </div>
                       <div class="declaration">
@@ -933,10 +933,10 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Add someone to a room by email address; optionally making them a moderator.
-- Parameter roomId: The rooom id.
-- Parameter personEmail: The email address.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Returns: Membership</p>
+- parameter roomId: The rooom id.
+- parameter personEmail: The email address.
+- parameter isModerator: Set to true to make the person a room moderator.
+- returns: Membership</p>
 
                       </div>
                       <div class="declaration">
@@ -1015,8 +1015,8 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Get details for a membership by id.
-- Parameter membershipId: The membership id.
-- Returns: Membership</p>
+- parameter membershipId: The membership id.
+- returns: Membership</p>
 
                       </div>
                       <div class="declaration">
@@ -1069,9 +1069,9 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Updates properties for a membership by id.
-- Parameter membershipId: The membership id.
-- Parameter isModerator: Set to true to make the person a room moderator.
-- Returns: Membership</p>
+- parameter membershipId: The membership id.
+- parameter isModerator: Set to true to make the person a room moderator.
+- returns: Membership</p>
 
                       </div>
                       <div class="declaration">
@@ -1137,8 +1137,8 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Deletes a membership by id.
-- Parameter membershipId: The membership id.
-- Returns: Void</p>
+- parameter membershipId: The membership id.
+- returns: Void</p>
 
                       </div>
                       <div class="declaration">
