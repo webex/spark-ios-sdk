@@ -22,11 +22,13 @@ public struct Person: Mappable {
     public var created: String?
     
     /// Person constructor.
+    ///
     /// - note: for internal use only.
     public init?(_ map: Map){
     }
     
     /// Person mapping from JSON.
+    ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]

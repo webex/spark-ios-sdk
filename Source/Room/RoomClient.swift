@@ -10,6 +10,7 @@ public class RoomClient: CompletionHandlerType<Room> {
     }
 
     /// List rooms. By default, lists rooms to which the authenticated user belongs.
+    ///
     /// - parameter max: Limit the maximum number of rooms in the response.
     /// - parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
     /// - parameter queue: The queue on which the completion handler is dispatched.
@@ -27,6 +28,7 @@ public class RoomClient: CompletionHandlerType<Room> {
     }
     
     /// Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
+    ///
     /// - parameter title: A user-friendly name for the room.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -42,6 +44,7 @@ public class RoomClient: CompletionHandlerType<Room> {
     }
     
     /// Shows details for a room by id. Specify the room id in the roomId parameter in the URI.
+    ///
     /// - parameter roomId: The room id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -57,6 +60,7 @@ public class RoomClient: CompletionHandlerType<Room> {
     }
     
     /// Updates details for a room by id. Specify the room id in the roomId parameter in the URI.
+    ///
     /// - parameter roomId: The room id.
     /// - parameter title: A user-friendly name for the room.
     /// - parameter queue: The queue on which the completion handler is dispatched.
@@ -74,6 +78,7 @@ public class RoomClient: CompletionHandlerType<Room> {
     }
     
     /// Deletes a room by id. Specify the room id in the roomId parameter in the URI.
+    ///
     /// - parameter roomId: The room id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.

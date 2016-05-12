@@ -5,6 +5,7 @@ import Foundation
 extension PersonClient {
     
     /// List people in your organization.
+    ///
     /// - parameter email: List people with this email address.
     /// - parameter displayName: List people whose name starts with this string.
     /// - parameter max: Limit the maximum number of people in the response.
@@ -14,6 +15,7 @@ extension PersonClient {
     }
     
     /// Shows details for a person by id.
+    ///
     /// - parameter personId: A person id
     /// - returns: Person
     public func get(personId personId: String) throws -> Person {
@@ -21,6 +23,7 @@ extension PersonClient {
     }
     
     /// Show the profile for the authenticated user.
+    ///
     /// - returns: Person
     public func getMe() throws -> Person {
         return try SyncUtil.getObject(getMe)

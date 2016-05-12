@@ -11,6 +11,7 @@ public class MessageClient: CompletionHandlerType<Message> {
     
     /// Lists all messages in a room. If present, includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
+    ///
     /// - parameter roomId: List messages for a room by id.
     /// - parameter before: List messages sent before a date and time, in ISO8601 format.
     /// - parameter beforeMessage: List messages sent before a message by id.
@@ -36,6 +37,7 @@ public class MessageClient: CompletionHandlerType<Message> {
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a room.
+    ///
     /// - parameter roomId: The room id.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
@@ -62,6 +64,7 @@ public class MessageClient: CompletionHandlerType<Message> {
     }
     
     /// Shows details for a message by message id.
+    ///
     /// - parameter messageId: The message id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -77,6 +80,7 @@ public class MessageClient: CompletionHandlerType<Message> {
     }
     
     /// Deletes a message by message id.
+    ///
     /// - parameter messageId: The message id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.

@@ -34,11 +34,13 @@ public struct Message: Mappable {
     public var created: String?
     
     /// Message constructor.
+    ///
     /// - note: for internal use only.
     public init?(_ map: Map){
     }
     
     /// Message mapping from JSON.
+    ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]

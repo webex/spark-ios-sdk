@@ -10,6 +10,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
@@ -36,6 +37,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Add someone to a room by person id; optionally making them a moderator.
+    ///
     /// - parameter roomId: The rooom id.
     /// - parameter personId: The person id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
@@ -58,6 +60,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Add someone to a room by email address; optionally making them a moderator.
+    ///
     /// - parameter roomId: The rooom id.
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a room moderator.
@@ -80,6 +83,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Get details for a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -95,6 +99,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Updates properties for a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - parameter queue: The queue on which the completion handler is dispatched.
@@ -112,6 +117,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     }
     
     /// Deletes a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.

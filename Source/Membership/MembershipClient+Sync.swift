@@ -5,6 +5,7 @@ import Foundation
 extension MembershipClient {
     
     /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
@@ -15,6 +16,7 @@ extension MembershipClient {
     }
     
     /// Add someone to a room by person id; optionally making them a moderator.
+    ///
     /// - parameter roomId: The rooom id.
     /// - parameter personId: The person id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
@@ -24,6 +26,7 @@ extension MembershipClient {
     }
     
     /// Add someone to a room by email address; optionally making them a moderator.
+    ///
     /// - parameter roomId: The rooom id.
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a room moderator.
@@ -33,6 +36,7 @@ extension MembershipClient {
     }
     
     /// Get details for a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - returns: Membership
     public func get(membershipId membershipId: String) throws -> Membership {
@@ -40,6 +44,7 @@ extension MembershipClient {
     }
     
     /// Updates properties for a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
@@ -48,6 +53,7 @@ extension MembershipClient {
     }
     
     /// Deletes a membership by id.
+    ///
     /// - parameter membershipId: The membership id.
     /// - returns: Void
     public func delete(membershipId membershipId: String) throws {

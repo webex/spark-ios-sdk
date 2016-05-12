@@ -10,6 +10,7 @@ public class PersonClient: CompletionHandlerType<Person> {
     }
     
     /// List people in your organization.
+    ///
     /// - parameter email: List people with this email address.
     /// - parameter displayName: List people whose name starts with this string.
     /// - parameter max: Limit the maximum number of people in the response.
@@ -28,6 +29,7 @@ public class PersonClient: CompletionHandlerType<Person> {
     }
     
     /// Shows details for a person by id.
+    ///
     /// - parameter personId: A person id
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -43,6 +45,7 @@ public class PersonClient: CompletionHandlerType<Person> {
     }
     
     /// Show the profile for the authenticated user.
+    ///
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void

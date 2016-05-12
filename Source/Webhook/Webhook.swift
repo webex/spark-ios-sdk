@@ -28,11 +28,13 @@ public struct Webhook : Mappable {
     public var created: String?
     
     /// Webhook constructor.
+    ///
     /// - note: for internal use only.
     public init?(_ map: Map) {
     }
     
     /// Webhook mapping from JSON.
+    ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]

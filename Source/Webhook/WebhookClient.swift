@@ -2,14 +2,15 @@
 
 import Foundation
 
-/// Webhook HTTP client
+/// Webhook HTTP client.
 public class WebhookClient: CompletionHandlerType<Webhook> {
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("webhooks")
     }
     
-    /// Lists all webhooks
+    /// Lists all webhooks.
+    ///
     /// - parameter max: Limit the maximum number of webhooks in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -26,6 +27,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Posts a webhook.
+    ///
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
     /// - parameter resource: The resource type for the webhook.
@@ -52,6 +54,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Shows details for a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -67,6 +70,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Updates a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
@@ -85,6 +89,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     }
     
     /// Deletes a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.

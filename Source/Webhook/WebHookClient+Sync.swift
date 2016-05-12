@@ -5,6 +5,7 @@ import Foundation
 extension WebhookClient {
     
     /// Lists all webhooks
+    ///
     /// - parameter max: Limit the maximum number of webhooks in the response.
     /// - returns: Webhooks array
     public func list(max max: Int? = nil) throws -> [Webhook] {
@@ -12,6 +13,7 @@ extension WebhookClient {
     }
     
     /// Posts a webhook.
+    ///
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
     /// - parameter resource: The resource type for the webhook.
@@ -23,6 +25,7 @@ extension WebhookClient {
     }
     
     /// Shows details for a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - returns: Webhook
     public func get(webhookId webhookId: String) throws -> Webhook {
@@ -30,6 +33,7 @@ extension WebhookClient {
     }
     
     /// Updates a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
@@ -39,6 +43,7 @@ extension WebhookClient {
     }
     
     /// Deletes a webhook by id.
+    ///
     /// - parameter webhookId: A webhook id.
     /// - returns: Void
     public func delete(webhookId webhookId: String) throws {

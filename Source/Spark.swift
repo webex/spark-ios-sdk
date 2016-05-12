@@ -6,7 +6,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.108"
+    public static let version = "0.9.110"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
@@ -19,6 +19,7 @@ public class Spark {
     }
     
     /// Initialize the SDK using client id, client secret, scope and redirect URI.
+    ///
     /// - parameter clientId: The client id issued when creating your app.
     /// - parameter clientSecret: The client secret issued when creating your app.
     /// - parameter scope: Scope defines the level of access that your app requires.
@@ -32,6 +33,7 @@ public class Spark {
     }
     
     /// Initialize the SDK using access token directly.
+    ///
     /// - parameter clientId: The access token.
     /// - returns: Void
     public static func initWith(accessToken accessToken: String) {
@@ -40,6 +42,7 @@ public class Spark {
     }
 
     /// Setup storage plugin to SDK. Different clients may have different storage requirements, for example, security requirements.
+    ///
     /// - parameter storage: The storage plugin implemented by client.
     /// - returns: Void
     public static func setupStorage(storage: Storagable) {
@@ -52,6 +55,7 @@ extension Spark {
     /// Rooms are virtual meeting places where people post messages and collaborate to get work done.
     /// This API is used to manage the rooms themselves. Rooms are create and deleted with this API.
     /// You can also update a room to change its title, for example.
+    ///
     /// - note:
     ///     - To manage people in a room see the Memberships API.
     ///     - To post or otherwise manage room content see the Messages API.
@@ -62,6 +66,7 @@ extension Spark {
     /// People are registered users of the Spark application.
     /// Currently, people can only be searched with this API.
     /// Future releases of the API will allow for more complete user administration.
+    ///
     /// - note: To learn more about managing people in a room see the Memberships API
     public static var people: PersonClient {
         return PersonClient()
