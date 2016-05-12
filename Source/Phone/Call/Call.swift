@@ -2,38 +2,67 @@
 
 import ObjectMapper
 
+/// Represents a Spark call.
 public class Call {
     
+    /// Completion handler for a call operation.
     public typealias CompletionHandler = Bool -> Void
     
+    /// Camera facing mode.
     public enum FacingMode: String {
+        /// Front camera.
         case User
+        /// Back camera.
         case Environment
     }
     
+    /// Call status.
     public enum Status: String {
+        /// Intended recipient hasn't accepted the call.
         case Initiated
+        /// Remote party has acknowledged the call.
         case Ringing
+        /// An incoming call from remote party.
         case Incoming
+        /// Call gets connected.
         case Connected
+        /// Call gets disconnected.
         case Disconnected
     }
     
-    public var status: Status { return state.status }
-    // Callee party
+    /// Call status.
+    public var status: Status {
+        return state.status
+    }
+
+    /// The intended recipient of the call. 
+    /// For an outgoing call this is the same as the address specified in dial. 
+    /// For an incoming call this is the identity of the authenticated user.
     public var to: String?
-    // Caller party
+    
+    /// The receiver of the call. 
+    /// For an outgoing call this is the identity of the authenticated user.
+    /// For an incoming call this is the email address / phone number / SIP address of the caller.
     public var from: String?
-    public var sendingAudio: Bool { return !mediaSession.audioMuted }
-    public var sendingVideo: Bool { return !mediaSession.videoMuted }
-    public var loudSpeaker: Bool { return mediaEngine.isSpeaker() }
+    
+    /// True if client is sending audio (not muted).
+    public var sendingAudio: Bool {
+        return !mediaSession.audioMuted
+    }
+    
+    /// True if client is sending video (not muted).
+    public var sendingVideo: Bool {
+        return !mediaSession.videoMuted
+    }
+    
+    /// True if loud speaker is selected as the output device for this call.
+    public var loudSpeaker: Bool {
+        return mediaEngine.isSpeaker()
+    }
+    
+    /// Camera facing mode selected for this call.
     public var facingMode: FacingMode {
-        let isFront =  mediaEngine.isFrontCamera()
-        if isFront {
-            return FacingMode.User
-        } else {
-            return FacingMode.Environment
-        }
+        return mediaEngine.isFrontCamera() ? .User : .Environment
     }
     
     var info: CallInfo?
@@ -58,6 +87,11 @@ public class Call {
         state = CallStateIncoming(self)
     }
     
+    /// Answers an incoming call. Only applies to incoming calls.
+    ///
+    /// - parameter renderView: Render view when call get connected.
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - returns: Void
     public func answer(renderView: RenderView, completionHandler: CompletionHandler?) {
         mediaEngine.start(self.mediaSession)
         setupMediaView(renderView.local, renderView.remote)
@@ -68,6 +102,10 @@ public class Call {
         }
     }
     
+    /// Disconnects the active call. Applies to both incoming and outgoing calls.
+    ///
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - returns: Void
     public func hangup(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
@@ -86,6 +124,10 @@ public class Call {
         }
     }
     
+    /// Rejects an incoming call. Only applies to incoming calls.
+    ///
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - returns: Void
     public func reject(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
@@ -103,22 +145,35 @@ public class Call {
         }
     }
     
-    public func toggleVideo() {
+    /// If sending video then stop sending video. If not sending sending video then start sending video.
+    public func toggleSendingVideo() {
         mediaEngine.toggleVideo()
     }
     
-    public func toggleAudio() {
+    /// If sending audio then stop sending audio. If not sending sending audio then start sending audio.
+    public func toggleSendingAudio() {
         mediaEngine.toggleAudio()
     }
     
+    /// Toggle camera facing mode between front camera and back camera.
     public func toggleFacingMode() {
         mediaEngine.toggleFacingMode()
     }
     
+    /// Toggle loud speaker.
+    ///
+    /// - parameter isSpeaker: True if use loud speaker as the output device, False as not.
+    /// - returns: Void
     public func toggleLoudSpeaker(isSpeaker: Bool) {
         mediaEngine.toggleLoudSpeaker(isSpeaker)
     }
     
+    /// Send feed back to Spark.
+    ///
+    /// - parameter rating: Rating between 1 and 5.
+    /// - parameter comments: User comments.
+    /// - parameter includeLogs: True if to include logs, False as not.
+    /// - returns: Void
     public func sendFeedback(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
         CallMetrics.sharedInstance.submitFeedback(feedback, callInfo: info!)

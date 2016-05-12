@@ -3,16 +3,20 @@
 import Foundation
 import SwiftyJSON
 
-public struct Error {
+/// Errors when getting service reponse for a request.
+struct Error {
     
-    public static let Domain = "com.ciscospark.error"
+    /// Domain of this error.
+    static let Domain = "com.ciscospark.error"
     
-    public enum Code: Int {
+    /// Error code.
+    enum Code: Int {
         case ServiceRequestFailed   = -7000
         case MediaAccessFailed      = -7001
     }
     
-    public static func requestErrorWithData(data: NSData) -> NSError {
+    /// Converts the error data to NSError
+    static func requestErrorWithData(data: NSData) -> NSError {
         var failureReason = "Service request failed without error message"
         if let errorMessage = JSON(data: data)["message"].string {
             failureReason = errorMessage
@@ -20,11 +24,11 @@ public struct Error {
         return Error.errorWithCode(Error.Code.ServiceRequestFailed, failureReason: failureReason)
     }
     
-    public static func errorWithCode(code: Code, failureReason: String) -> NSError {
+    private static func errorWithCode(code: Code, failureReason: String) -> NSError {
         return errorWithCode(code.rawValue, failureReason: failureReason)
     }
     
-    public static func errorWithCode(code: Int, failureReason: String) -> NSError {
+    private static func errorWithCode(code: Int, failureReason: String) -> NSError {
         let userInfo = [NSLocalizedFailureReasonErrorKey: failureReason]
         return NSError(domain: Domain, code: code, userInfo: userInfo)
     }
