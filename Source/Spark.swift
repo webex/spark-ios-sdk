@@ -6,7 +6,7 @@ import UIKit
 public class Spark {
     
     // TODO: check if it's ok to get sdk version
-    public static let version = "0.9.97"
+    public static let version = "0.9.100"
     
     public static func authorized() -> Bool {
         return AuthManager.sharedInstance.authorized()
