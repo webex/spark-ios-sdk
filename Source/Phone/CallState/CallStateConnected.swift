@@ -7,14 +7,6 @@ class CallStateConnected: CallState {
     override var status: Call.Status {
         return .Connected
     }
-
-    override func isAllowedToHangup() -> Bool {
-        return true
-    }
-
-    override func isAllowedToOperateMedia() -> Bool {
-        return true
-    }
     
     override func update() {
         if info.hasLeft {
@@ -32,7 +24,7 @@ class CallStateConnected: CallState {
     
     private func doActionWhenRemoteLeft() {
         callManager.removeCall(call.url)
-        call.hangup()
+        call.hangup(nil)
         call.state = CallStateRemoteLeft(call)
         postNotification(Notifications.Call.Disconnected)
     }

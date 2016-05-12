@@ -3,6 +3,9 @@
 import ObjectMapper
 
 public class Call {
+    
+    public typealias CompletionHandler = Bool -> Void
+    
     public enum FacingMode: String {
         case User
         case Environment
@@ -55,136 +58,81 @@ public class Call {
         state = CallStateIncoming(self)
     }
     
-    public func answer(completionHandler: ((Bool) -> Void)!) {
-        Spark.phone.requestAccessForMedia() { granted in
-            
-            if !self.state.isAllowedToAnswer() {
-                return
-            }
-            
-            if self.info == nil {
-                print("Failure - info is invlid")
-                assertionFailure("Failure - info is invlid")
-                return
-            }
-            
-            if !granted {
-                completionHandler(false)
-                return
-            }
-            
-            self.mediaEngine.start(self.mediaSession)
-            
-            let localInfo = self.createLocalInfo(self.mediaEngine.getLocalSdp())
-            CallClient().join(self.url, localInfo: localInfo, completionHandler: self.onJoinCallCompleted)
-            completionHandler(true)
+    public func answer(renderView: RenderView, completionHandler: CompletionHandler?) {
+        mediaEngine.start(self.mediaSession)
+        setupMediaView(renderView.local, renderView.remote)
+        
+        let localInfo = self.createLocalInfo(self.mediaEngine.getLocalSdp())
+        CallClient().join(self.url, localInfo: localInfo) {
+            self.onJoinCallCompleted($0, completionHandler: completionHandler)
         }
     }
     
-    public func hangup() {
-        if !state.isAllowedToHangup() {
-            return
-        }
-        
-        if info == nil {
-            print("Failure - info is invlid")
-            assertionFailure("Failure - info is invlid")
-            return
-        }
-        
+    public func hangup(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
         let participantUrl = info?.selfParticipantUrl
         CallClient().leave(participantUrl!, deviceUrl: deviceUrl!) {
-            (response: ServiceResponse<CallInfo>) in
-            switch response.result {
+            switch $0.result {
             case .Success(let value):
                 self.updateCallInfo(value)
                 print("Success: leave call")
+                completionHandler?(true)
             case .Failure(let error):
                 print("Failure: \(error.localizedFailureReason)")
                 assertionFailure("Failure: \(error.localizedFailureReason)")
-                break
+                completionHandler?(false)
             }
         }
     }
     
-    public func reject() {
-        if !state.isAllowedToReject() {
-            return
-        }
-        
-        if info == nil {
-            print("Failure - info is invlid")
-            assertionFailure("Failure - info is invlid")
-            return
-        }
-        
+    public func reject(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
         let callUrl = info?.callUrl
         CallClient().decline(callUrl!, deviceUrl: deviceUrl!) {
-            (response: ServiceResponse<AnyObject>) in
-            switch response.result {
+            switch $0.result {
             case .Success:
                 print("Success: reject call")
+                completionHandler?(true)
             case .Failure(let error):
                 print("Failure: \(error.localizedFailureReason)")
                 assertionFailure("Failure: \(error.localizedFailureReason)")
-                break
+                completionHandler?(false)
             }
         }
     }
     
     public func toggleVideo() {
-        if state.isAllowedToOperateMedia() {
-            mediaEngine.toggleVideo()
-        }
+        mediaEngine.toggleVideo()
     }
     
     public func toggleAudio() {
-        if state.isAllowedToOperateMedia() {
-            mediaEngine.toggleAudio()
-        }
+        mediaEngine.toggleAudio()
     }
     
     public func toggleFacingMode() {
-        if state.isAllowedToOperateMedia() {
-            mediaEngine.toggleFacingMode()
-        }
+        mediaEngine.toggleFacingMode()
     }
     
     public func toggleLoudSpeaker(isSpeaker: Bool) {
-        if state.isAllowedToOperateMedia() {
-            mediaEngine.toggleLoudSpeaker(isSpeaker)
-        }
-    }
-    
-    public func setupMediaView(localView: MediaRenderView, _ remoteView: MediaRenderView) {
-        mediaSession.localPreviewView = localView
-        mediaSession.renderView = remoteView
+        mediaEngine.toggleLoudSpeaker(isSpeaker)
     }
     
     public func sendFeedback(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
-        if info == nil {
-            assertionFailure("Failure: call info is nil")
-            return
-        }
-        
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
         CallMetrics.sharedInstance.submitFeedback(feedback, callInfo: info!)
     }
     
-    func dial(address: String) {
-        if !state.isAllowedToDial() {
-            return
-        }
-        
+    func dial(address: String, renderView: RenderView, completionHandler: CompletionHandler?) {
         mediaEngine.start(mediaSession)
+        setupMediaView(renderView.local, renderView.remote)
         
         let localInfo = createLocalInfo(mediaEngine.getLocalSdp())
         localInfo.updateValue(["address": address], forKey: "invitee")
-        CallClient().join(localInfo, completionHandler: onJoinCallCompleted)
+        CallClient().join(localInfo) {
+            self.onJoinCallCompleted($0, completionHandler: completionHandler)
+        }
         
         to = address
     }
@@ -201,15 +149,13 @@ public class Call {
         
         let localInfo = createLocalInfo((mediaInfo?.sdp)!, audioMuted: audioMuted, videoMuted: videoMuted)
         CallClient().updateMedia(mediaUrl!, localInfo: localInfo) {
-            (response: ServiceResponse<CallInfo>) in
-            switch response.result {
+            switch $0.result {
             case .Success(let value):
                 self.updateCallInfo(value)
                 print("Success: update media")
             case .Failure(let error):
                 print("Failure: \(error.localizedFailureReason)")
                 assertionFailure("Failure: \(error.localizedFailureReason)")
-                break
             }
         }
     }
@@ -233,6 +179,11 @@ public class Call {
         }
     }
     
+    private func setupMediaView(local: MediaRenderView, _ remote: MediaRenderView) {
+        mediaSession.localPreviewView = local
+        mediaSession.renderView = remote
+    }
+    
     private func fetchCallInfo() {
         CallClient().fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
     }
@@ -249,7 +200,7 @@ public class Call {
         return HttpParameters(["deviceUrl": deviceUrl!, "localMedias": localMedias])
     }
     
-    private func onJoinCallCompleted(response: ServiceResponse<CallInfo>) {
+    private func onJoinCallCompleted(response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
         switch response.result {
         case .Success(let value):
             updateCallInfo(value)
@@ -258,19 +209,17 @@ public class Call {
             } else {
                 assertionFailure("Failure - remoteSdp is nil")
             }
-            
             self.mediaEngine.startMedia()
-            
             CallManager.sharedInstance.addCall(self.url, call: self)
-            
             from = info?.hostEmail
             
             print("Success: join call")
+            completionHandler?(true)
             
         case .Failure(let error):
             print("Failure: \(error.localizedFailureReason)")
             assertionFailure("Failure: \(error.localizedFailureReason)")
-            break
+            completionHandler?(false)
         }
     }
     
@@ -282,7 +231,6 @@ public class Call {
         case .Failure(let error):
             print("Failure: \(error.localizedFailureReason)")
             assertionFailure("Failure: \(error.localizedFailureReason)")
-            break
         }
     }
 }

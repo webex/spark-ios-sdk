@@ -19,26 +19,6 @@ class CallState {
         return .Disconnected
     }
     
-    func isAllowedToDial() -> Bool {
-        return false
-    }
-    
-    func isAllowedToAnswer() -> Bool {
-        return false
-    }
-    
-    func isAllowedToHangup() -> Bool {
-        return false
-    }
-    
-    func isAllowedToReject() -> Bool {
-        return false
-    }
-    
-    func isAllowedToOperateMedia() -> Bool {
-        return false
-    }
-    
     func update() {
     }
     

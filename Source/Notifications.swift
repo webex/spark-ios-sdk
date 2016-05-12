@@ -14,19 +14,17 @@ public struct Notifications {
         /// Remote participant(s) answered and call gets connected.
         public static let Connected = "SparkSDK.call.connected"
         
-        /// Call gets disconnected
+        /// Call gets disconnected (hangup, cancelled, get declined or other self device pickup the call).
         public static let Disconnected = "SparkSDK.call.disconnected"
-        public static let AudioRouteChange = "SparkSDK.call.AudioRouteChange"
     }
     
     /// Event notifications for phone.
     public struct Phone {
-        public static let Incoming = "SparkSDK.phone.incoming"
-        public static let IncomingCallObjectKey = "IncomingCallObjectKey"
         
-        public static let AuthSuccess                     = "SparkSDK.phone.auth.success"
-        public static let AuthFail                        = "SparkSDK.phone.auth.fail"
-        public static let WebSocketFail                   = "SparkSDK.phone.websocket.fail"
-        public static let CameraMicrophoneAccessDenied    = "SparkSDK.phone.Camera.Microphone.AccessDenied"
+        /// Gets an incoming call.
+        public static let Incoming = "SparkSDK.phone.incoming"
+        
+        /// Dictionary key used to get call object in an incoming call notification.
+        public static let IncomingCallObjectKey = "IncomingCallObjectKey"
     }
 }

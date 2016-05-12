@@ -45,7 +45,6 @@ class WebSocketService: WebSocketDelegate {
         socket = WebSocket(url: webSocketUrl)
         if socket == nil {
             print("Create web socket fail")
-            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.WebSocketFail, object: nil, userInfo: nil)
             return
         }
         
@@ -81,7 +80,7 @@ class WebSocketService: WebSocketDelegate {
             return
         }
         if error?.code == socketError.AuthError.rawValue {
-            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.AuthFail, object: nil, userInfo: nil)
+            // TODO: handle auth error
         } else {
             print("Websocket will reconnect in \(reConnectTimeInterval) s")
             cancleConnectionTimer()

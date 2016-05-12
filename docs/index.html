@@ -13,7 +13,7 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (58% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (60% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -104,6 +104,9 @@
                 <a href="Structs/Person.html">Person</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/RenderView.html">RenderView</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/Room.html">Room</a>
               </li>
               <li class="nav-group-task">
@@ -122,7 +125,7 @@
             
             <a href='#sparksdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='sparksdk'>SparkSDK</h1>
 
-<p>Spark IOS SDK written in swift.</p>
+<p>Spark iOS SDK written in swift.</p>
 <a href='#setup' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='setup'>Setup</h2>
 
 <p>Here are the steps to integrate SparkSDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
@@ -155,105 +158,68 @@ pod setup
 &ldquo;`swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {</p>
 <pre class="highlight plaintext"><code>let sparkAccessToken = "Yjc5ZTYyMDEt..."
-Spark.setupWithSparkAccessToken(sparkAccessToken)
+Spark.initWith(accessToken: sparkAccessToken)
 return true
 </code></pre>
 
 <p>}
 &rdquo;`</p></li>
-<li><p>Setup SDK with Guest access Token
+<li><p>Setup SDK with App Info, and OAuth authorize to Spark service
 &ldquo;`swift
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {</p>
-<pre class="highlight plaintext"><code>let guestAccessToken = "Yjc5ZTYyMDEt..."
-Spark.setupWithGuestAccessToken(guestAccessToken)
-return true
-</code></pre>
+class LoginViewController: UIViewController {</p>
+<pre class="highlight plaintext"><code>@IBAction func loginWithSpark(sender: AnyObject) {
+    let clientId = "C90f769..."
+    let clientSecret = "64e252..."
+    let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
+    let redirectUri = "SparkSDKDemo://response"
 
-<p>}
-&rdquo;`</p></li>
-<li><p>Setup SDK with App Info
-&ldquo;`swift
-func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool {</p>
-<pre class="highlight plaintext"><code>let clientID = "C1dc0c47e..."
-let clientSecret = "c086fc9c..."
-let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
-let redirectURI = "SparkSDKDemo://response"
-
-Spark.setupWithAppKey(clientID,
-    clientSecret: clientSecret,
-    scope: scope,
-    redirectURI: redirectURI)
-return true
-</code></pre>
-
-<p>}
-&rdquo;`</p></li>
-<li><p>OAuth authorize to Spark platform
-<code>swift
-@IBAction func loginWithSpark(sender: AnyObject) {
-    Spark.authorizeFromController(self)
-}
-</code>
-A webview will be presented for SSO login. Observe the notification of authentication status.
-&ldquo;`swift
-NSNotificationCenter.defaultCenter().addObserver(</p>
-<pre class="highlight plaintext"><code>self,
-selector: "handleAuth",
-name: Spark.notificationSucceedAuthentication,
-object: nil
-</code></pre>
-
-<p>)
-<code>
-A convinience method to check if authorized.
-</code>swift
-Spark.authorized()
-&rdquo;`</p></li>
-<li><p>Use Spark service with Spark SDK
-&ldquo;`swift
-func example() {
-    // List the rooms that I&rsquo;m in
-    if let rooms = Spark.rooms.list() {
-        for room in rooms {
-            print(<q>\(room.title!), created \(room.created!): \(room.id!)</q>)
-        }
-    }</p>
-<pre class="highlight plaintext"><code>// Create a new room
-if let room = Spark.rooms.create(title: "Hello World") {
-    print("\(room.title!), created \(room.created!): \(room.id!)")
-
-    // Add a coworker to the room
-    Spark.memberships.create(roomId: room.id!, personEmail: "coworker@acm.com")
-
-    // List the members of the room
-    if let memberships = Spark.memberships.list(roomId: room.id!) {
-        for membership in memberships {
-            print("\(membership.personEmail!)")
-        }
-    }
-
-    // Post a text message to the room
-    Spark.messages.create(roomId: room.id!, text: "Hello World")
-
-    // Share a file with the room
-    Spark.messages.create(roomId: room.id!, files: "http://example.com/hello_world.jpg")
+    Spark.initWith(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, controller: self)
 }
 </code></pre>
 
 <p>}
 &rdquo;`</p></li>
+<li><p>Use Spark service with Spark SDK</p></li>
 </ol>
-<a href='#sparksdkdemo' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='sparksdkdemo'>SparkSDKDemo</h2>
+<pre class="highlight swift"><code>   <span class="c1">// IM example</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="c1">// Create a new room</span>
+        <span class="k">let</span> <span class="nv">room</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Spark</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Hello World"</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">room</span><span class="o">.</span><span class="n">title</span><span class="o">!</span><span class="se">)</span><span class="s">, created </span><span class="se">\(</span><span class="n">room</span><span class="o">.</span><span class="n">created</span><span class="o">!</span><span class="se">)</span><span class="s">: </span><span class="se">\(</span><span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="o">!</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
 
-<p>A demo app for the Spark SDK. Here are the steps to build it: </p>
+        <span class="c1">// Add a coworker to the room</span>
+        <span class="k">try</span> <span class="kt">Spark</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="nf">createWithPersonEmail</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="o">!</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="s">"coworker@acm.com"</span><span class="p">)</span>
 
-<ol>
-<li><p>Install SparkSDK from app directory ./example: (assume Cocoapods setup is already done.)</p>
-<pre class="highlight shell"><code>pod install
-</code></pre></li>
-<li><p>Open ./example/SparkSDKDemo.xcworkspace with xcode.</p></li>
-<li><p>Build target <q>SparkSDKDemo</q> in xcode. Make sure your iphone is connected to your computer, and select your device for build, because call functionality only works with device.</p></li>
-</ol>
+        <span class="c1">// List the members of the room</span>
+        <span class="k">let</span> <span class="nv">memberships</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Spark</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="nf">list</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="o">!</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">membership</span> <span class="k">in</span> <span class="n">memberships</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">membership</span><span class="o">.</span><span class="n">personEmail</span><span class="o">!</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Post a text message to the room</span>
+        <span class="k">try</span> <span class="kt">Spark</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="o">!</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="s">"Hello World"</span><span class="p">)</span>
+
+        <span class="c1">// Share a file with the room</span>
+        <span class="k">try</span> <span class="kt">Spark</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span><span class="o">!</span><span class="p">,</span> <span class="nv">files</span><span class="p">:</span> <span class="s">"http://example.com/hello_world.jpg"</span><span class="p">)</span>
+
+    <span class="p">}</span> <span class="k">catch</span> <span class="k">let</span> <span class="nv">error</span> <span class="k">as</span> <span class="kt">NSError</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Error: </span><span class="se">\(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedFailureReason</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Calling example</span>
+    <span class="c1">// Make a call</span>
+    <span class="k">var</span> <span class="nv">outgoingCall</span><span class="p">:</span> <span class="kt">Call</span><span class="p">?</span>
+    <span class="kt">Spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="s">"coworker@acm.com"</span><span class="p">,</span> <span class="nv">renderView</span><span class="p">:</span> <span class="kt">RenderView</span><span class="p">(</span><span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
+        <span class="n">outgoingCall</span> <span class="o">=</span> <span class="n">call</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Recive a call</span>
+    <span class="kt">NSNotificationCenter</span><span class="o">.</span><span class="nf">defaultCenter</span><span class="p">()</span><span class="o">.</span><span class="nf">addObserver</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="nv">selector</span><span class="p">:</span> <span class="err">#</span><span class="nf">selector</span><span class="p">(</span><span class="nf">showCallToastView</span><span class="p">(</span><span class="nv">_</span><span class="p">:)),</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">Notifications</span><span class="o">.</span><span class="kt">Phone</span><span class="o">.</span><span class="kt">Incoming</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
+    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">showCallToastView</span><span class="p">(</span><span class="nv">notification</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">incomingCall</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">call</span>
+    <span class="p">}</span>
+    <span class="err">```</span>
+</code></pre>
 
           </section>
         </section>

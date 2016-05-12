@@ -111,7 +111,6 @@ class AuthManager {
                 case .Success(let accessToken):
                     self.accessToken = accessToken
                     self.storeAccessTokenToKeychain()
-                    NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.AuthSuccess, object: nil)
                     return true
                 case .Error:
                     return false

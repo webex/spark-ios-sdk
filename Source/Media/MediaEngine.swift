@@ -41,7 +41,6 @@ class MediaEngine {
     }
     
     func getLocalSdp() -> String {
-        
         mediaEngine.createSdpOffer()
         return mediaEngine.localWmeSdpOffer
     }
@@ -51,6 +50,10 @@ class MediaEngine {
     }
     
     func toggleVideo() {
+        if !isMediaStarted() {
+            return
+        }
+        
         if videoMuted {
             mediaEngine.unMuteVideo()
         } else {
@@ -59,6 +62,10 @@ class MediaEngine {
     }
     
     func toggleAudio() {
+        if !isMediaStarted() {
+            return
+        }
+        
         if audioMuted {
             mediaEngine.unmuteAudio()
         } else {
@@ -105,7 +112,6 @@ class MediaEngine {
     }
     
     private func isMediaStarted() -> Bool {
-        
         guard mediaEngine.mediaAgentsCreated else {
             return false
         }

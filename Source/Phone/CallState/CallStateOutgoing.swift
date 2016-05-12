@@ -8,14 +8,6 @@ class CallStateOutgoing: CallState {
         return .Ringing
     }
     
-    override func isAllowedToHangup() -> Bool {
-        return true
-    }
-    
-    override func isAllowedToOperateMedia() -> Bool {
-        return true
-    }
-    
     override func update() {
         if info.hasLeft {
             doActionWhenLocalCancelled()
@@ -39,7 +31,7 @@ class CallStateOutgoing: CallState {
     
     private func doActionWhenRemoteDeclined() {
         callManager.removeCall(call.url)
-        call.hangup()
+        call.hangup(nil)
         call.state = CallStateRemoteDeclined(call)
         postNotification(Notifications.Call.Disconnected)
     }

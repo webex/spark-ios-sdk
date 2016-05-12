@@ -7,10 +7,6 @@ class CallStateIdle: CallState {
     override var status: Call.Status {
         return .Initiated
     }
-    
-    override func isAllowedToDial() -> Bool {
-        return true
-    }
 
     override func update() {
         if isMakingOutgoingCall() {

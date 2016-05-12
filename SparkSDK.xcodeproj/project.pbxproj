@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */; };
 		5DBC17AE1CE3542700DFF1C8 /* Notifications+Locus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */; };
+		5DC39ACF1CE478EE00A4CD84 /* RenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC39ACE1CE478EE00A4CD84 /* RenderView.swift */; };
 		61D11B6DCA017A4EB01081B9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC736E40C6FA750F68A7C7D4 /* Pods.framework */; };
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
@@ -91,6 +92,7 @@
 		4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateDisconnected.swift; sourceTree = "<group>"; };
 		5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notifications+Locus.swift"; sourceTree = "<group>"; };
+		5DC39ACE1CE478EE00A4CD84 /* RenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderView.swift; sourceTree = "<group>"; };
 		B900B6A41CE2DB3100DC83CB /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = MediaEngine/Wme.framework; sourceTree = "<group>"; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 		B91E75571CE2D7B70080EAE0 /* Call */ = {
 			isa = PBXGroup;
 			children = (
+				5DC39ACE1CE478EE00A4CD84 /* RenderView.swift */,
 				5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */,
 				B91E75581CE2D7B70080EAE0 /* Call.swift */,
 				B91E75591CE2D7B70080EAE0 /* CallClient.swift */,
@@ -609,6 +612,7 @@
 				B91E75B61CE2D7B70080EAE0 /* CallManager.swift in Sources */,
 				B91E75D51CE2D7B70080EAE0 /* Sequence.swift in Sources */,
 				B91E75D31CE2D7B70080EAE0 /* ParticipantState.swift in Sources */,
+				5DC39ACF1CE478EE00A4CD84 /* RenderView.swift in Sources */,
 				B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */,
 				B91E75CA1CE2D7B70080EAE0 /* AlertType.swift in Sources */,
 				B91E75BA1CE2D7B70080EAE0 /* CallStateConnected.swift in Sources */,

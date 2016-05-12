@@ -3,6 +3,7 @@
 import AVFoundation
 
 public class Phone {
+    public typealias CompletionHandler = Bool -> Void
     
     static let sharedInstance = Phone()
     
@@ -17,6 +18,7 @@ public class Phone {
             UserDefaults.sharedInstance.facingMode = newValue
         }
     }
+    
     public var defaultLoudSpeaker: Bool {
         get {
             if let loudSpeaker = UserDefaults.sharedInstance.loudSpeaker {
@@ -32,7 +34,7 @@ public class Phone {
     private let deviceService    = DeviceService.sharedInstance
     private let webSocketService = WebSocketService.sharedInstance
     
-    public func register(completionHandler: (Bool -> Void)? = nil) {
+    public func register(completionHandler: (Bool -> Void)?) {
         CallManager.sharedInstance.startObserving()
         
         deviceService.registerDevice() { success in
@@ -47,7 +49,7 @@ public class Phone {
         }
     }
     
-    public func deregister(completionHandler: (Bool -> Void)? = nil) {
+    public func deregister(completionHandler: CompletionHandler?) {
         CallManager.sharedInstance.stopObserving()
         
         deviceService.deregisterDevice() { success in
@@ -60,19 +62,16 @@ public class Phone {
         }
     }
     
-    public func dial(address: String, completionHandler: ((Call?) -> Void)!) {
-        requestAccessForMedia() { granted in
-            if granted {
-                let call = Call()
-                call.dial(address)
+    public func dial(address: String, renderView: RenderView, completionHandler: (Call?) -> Void) {
+        let call = Call()
+        call.dial(address, renderView: renderView) { success in
+            if success {
                 completionHandler(call)
             } else {
                 completionHandler(nil)
             }
         }
     }
-    
-    // MARK: - Camera, Speaker, Microphone
     
     public func requestAccessForMedia(completionHandler: ((Bool) -> Void)!) {
         AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { grantedAccessToCamera in
@@ -83,7 +82,6 @@ public class Phone {
                     }
                 } else {
                     dispatch_async(dispatch_get_main_queue()) {
-                        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.CameraMicrophoneAccessDenied, object: nil)
                         completionHandler(false)
                     }
                 }

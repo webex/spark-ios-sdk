@@ -8,14 +8,6 @@ class CallStateIncoming: CallState {
         return .Incoming
     }
     
-    override func isAllowedToAnswer() -> Bool {
-        return true
-    }
-
-    override func isAllowedToReject() -> Bool {
-        return true
-    }
-    
     override func update() {
         if info.hasAtLeastOneRemoteParticipantantJoined {
             if info.hasJoinedOnThisDevice {

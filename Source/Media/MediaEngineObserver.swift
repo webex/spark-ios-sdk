@@ -75,6 +75,5 @@ class MediaEngineObserver: NotificationObserver {
     
     @objc private func onMediaEngineAudioSessionRouteChangeNotification(notification: NSNotification) {
         print("onMediaEngineAudioSessionRouteChangeNotification")
-        NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Call.AudioRouteChange, object: nil)
     }
 }
