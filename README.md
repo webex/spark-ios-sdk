@@ -18,10 +18,13 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
 1. Create a new file "Podfile" with following content in your project directory::
 
     ```ruby
-      platform :ios, '8.0'
-      use_frameworks!
-
-      pod 'SparkSDK'
+    source 'https://github.com/CocoaPods/Specs.git'
+    source 'https://github.com/ciscospark/CocoaPodSpecs.git'
+    
+    platform :ios, '8.0'
+    use_frameworks!
+    
+    pod 'SparkSDK'
     ```
 
 1. Install SparkSDK from your project directory:

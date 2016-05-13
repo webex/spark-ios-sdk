@@ -14,7 +14,7 @@
     <a title="Phone Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (60% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (84% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -90,9 +90,6 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Structs/Error.html">Error</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
               </li>
               <li class="nav-group-task">
@@ -124,7 +121,13 @@
         <section>
           <section class="section">
             <h1>Phone</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Phone</span></code></pre>
+
+                </div>
+              </div>
+            <p>Represents a Spark phone device.</p>
 
           </section>
           <section class="section task-group-section">
@@ -133,9 +136,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Phone17defaultFacingModeSS"></a>
+                    <a name="/s:vC8SparkSDK5Phone17defaultFacingModeOCS_4Call10FacingMode"></a>
                     <a name="//apple_ref/swift/Property/defaultFacingMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone17defaultFacingModeSS">defaultFacingMode</a>
+                    <a class="token" href="#/s:vC8SparkSDK5Phone17defaultFacingModeOCS_4Call10FacingMode">defaultFacingMode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -143,8 +146,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Default camera facing mode, used as the default when dialing or answering a call.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span><span class="p">:</span> <span class="kt">Call</span><span class="o">.</span><span class="kt">FacingMode</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -162,8 +173,17 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Default loud speaker mode, used as the default when dialing or answering a call.
+True as using loud speaker, False as not.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultLoudSpeaker</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -181,7 +201,40 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the registration is completed. True means success, and False means failure.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -200,7 +253,41 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Removes the user’s device from Spark and disconnects the websocket. 
+Subsequent invocations of this method should behave as a no-op.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deregister</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -219,7 +306,66 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Makes a call to intended recipient.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">renderView</span><span class="p">:</span> <span class="kt">RenderView</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Call</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>address</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Intended recipient address. Supported URIs: Spark URI (e.g. spark:<a href="mailto:shenning@cisco.com">shenning@cisco.com</a>), SIP / SIPS URI (e.g. sip:<a href="mailto:1234@care.acme.com">1234@care.acme.com</a>), Tropo URI (e.g. tropo:999123456). Supported shorthand: Email address (e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a>), App username (e.g. jp)</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>renderView</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Render view when call get connected.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the action is completed. Non-nil means success and represents a call object, nil means failure.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -228,9 +374,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone21requestAccessForMediaFGSQFSbT__T_"></a>
+                    <a name="/s:FC8SparkSDK5Phone21requestAccessForMediaFGSqFSbT__T_"></a>
                     <a name="//apple_ref/swift/Method/requestAccessForMedia(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone21requestAccessForMediaFGSQFSbT__T_">requestAccessForMedia(_:)</a>
+                    <a class="token" href="#/s:FC8SparkSDK5Phone21requestAccessForMediaFGSqFSbT__T_">requestAccessForMedia(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -238,7 +384,40 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>Requests access for media (audio and video), user can change the settings in iOS device settings.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestAccessForMedia</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the action is completed. True means access granted, and False means not.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
 
                       </div>
                     </section>
@@ -249,7 +428,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-12)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
