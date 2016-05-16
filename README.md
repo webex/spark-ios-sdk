@@ -36,7 +36,7 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
 ## Example
 Below is code of a demo of the SDK usage
 
-1. Setup SDK with Spark access Token 
+1. Setup SDK with Spark access token 
    ```swift
    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -45,7 +45,7 @@ Below is code of a demo of the SDK usage
         return true
     }
    ```
-1. Setup SDK with App Info, and OAuth authorize to Spark service
+1. Setup SDK with app infomation, and authorize access to Spark service
    ```swift
    class LoginViewController: UIViewController {
     
@@ -60,7 +60,16 @@ Below is code of a demo of the SDK usage
     }
     ```
 
-1. Use Spark service with Spark SDK
+1. Register device
+    ```swift
+    Spark.phone.register() { success in
+        if !success {
+            print("Failed to register device.")
+        }
+    }
+    ```
+            
+1. Use Spark service
     
    ```swift
    // IM example
