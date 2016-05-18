@@ -6,7 +6,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.144"
+    public static let version = "0.9.145"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {

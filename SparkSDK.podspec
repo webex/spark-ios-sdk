@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name = "SparkSDK"
-  s.version = "0.9.144"
+  s.version = "0.9.145"
   s.summary = "Spark iOS SDK"
   s.homepage = "https://developer.ciscospark.com"
   s.license = "MIT"
   s.author = { "Spark SDK team" => "spark-sdk-crdc@cisco.com" }
-  s.source = { :git => "https://github.com/ciscospark/spark-ios-sdk.git", :tag => s.version }
+  s.source = { :git => "git@github.com:ciscospark/spark-ios-sdk.git", :tag => s.version }
   s.source_files = "Source/**/*.{h,m,swift}"
   s.requires_arc = true
   s.ios.deployment_target = "8.0"
