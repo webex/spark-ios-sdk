@@ -92,6 +92,7 @@ public class Call {
     /// - parameter renderView: Render view when call get connected.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func answer(renderView: RenderView, completionHandler: CompletionHandler?) {
         mediaEngine.start(self.mediaSession)
         setupMediaView(renderView.local, renderView.remote)
@@ -106,6 +107,7 @@ public class Call {
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func hangup(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
@@ -128,6 +130,7 @@ public class Call {
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func reject(completionHandler: CompletionHandler?) {
         mediaEngine.stopMedia()
         
@@ -146,16 +149,22 @@ public class Call {
     }
     
     /// If sending video then stop sending video. If not sending sending video then start sending video.
+    ///
+    /// - note: This function is expected to run on main thread.
     public func toggleSendingVideo() {
         mediaEngine.toggleVideo()
     }
     
     /// If sending audio then stop sending audio. If not sending sending audio then start sending audio.
+    ///
+    /// - note: This function is expected to run on main thread.
     public func toggleSendingAudio() {
         mediaEngine.toggleAudio()
     }
     
     /// Toggle camera facing mode between front camera and back camera.
+    ///
+    /// - note: This function is expected to run on main thread.
     public func toggleFacingMode() {
         mediaEngine.toggleFacingMode()
     }
@@ -164,6 +173,7 @@ public class Call {
     ///
     /// - parameter isSpeaker: True if use loud speaker as the output device, False as not.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func toggleLoudSpeaker(isSpeaker: Bool) {
         mediaEngine.toggleLoudSpeaker(isSpeaker)
     }
@@ -174,6 +184,7 @@ public class Call {
     /// - parameter comments: User comments.
     /// - parameter includeLogs: True if to include logs, False as not.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func sendFeedback(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
         CallMetrics.sharedInstance.submitFeedback(feedback, callInfo: info!)

@@ -41,6 +41,7 @@ public class Phone {
     ///
     /// - parameter completionHandler: A closure to be executed once the registration is completed. True means success, and False means failure.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func register(completionHandler: (Bool -> Void)?) {
         CallManager.sharedInstance.startObserving()
         
@@ -61,6 +62,7 @@ public class Phone {
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func deregister(completionHandler: (Bool -> Void)?) {
         CallManager.sharedInstance.stopObserving()
         
@@ -79,23 +81,26 @@ public class Phone {
     ///
     /// - parameter address: Intended recipient address. Supported URIs: Spark URI (e.g. spark:shenning@cisco.com), SIP / SIPS URI (e.g. sip:1234@care.acme.com), Tropo URI (e.g. tropo:999123456). Supported shorthand: Email address (e.g. shenning@cisco.com), App username (e.g. jp)
     /// - parameter renderView: Render view when call get connected.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. Non-nil means success and represents a call object, nil means failure.
-    /// - returns: Void
-    public func dial(address: String, renderView: RenderView, completionHandler: (Call?) -> Void) {
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
+    /// - returns: Call object
+    /// - note: This function is expected to run on main thread.
+    public func dial(address: String, renderView: RenderView, completionHandler: (Bool) -> Void) -> Call? {
         let call = Call()
         call.dial(address, renderView: renderView) { success in
             if success {
-                completionHandler(call)
+                completionHandler(true)
             } else {
-                completionHandler(nil)
+                completionHandler(false)
             }
         }
+        return call
     }
     
     /// Requests access for media (audio and video), user can change the settings in iOS device settings.
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means access granted, and False means not.
     /// - returns: Void
+    /// - note: This function is expected to run on main thread.
     public func requestAccessForMedia(completionHandler: (Bool -> Void)?) {
         AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo) { grantedAccessToCamera in
             AVCaptureDevice.requestAccessForMediaType(AVMediaTypeAudio) { grantedAccessToMicrophone in

@@ -78,7 +78,7 @@ struct SyncUtil {
     private static func sync<I, T>(async: (I, queue: Queue?, completionHandler: T -> Void) -> Void) -> I -> T {
         return { i in
             let semaphore = dispatch_semaphore_create(0)
-            let queue = dispatch_queue_create("", nil)
+            let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
             
             var t: T!
             async(i, queue: queue) {

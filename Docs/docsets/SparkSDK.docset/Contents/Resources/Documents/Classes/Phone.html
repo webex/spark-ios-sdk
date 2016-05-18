@@ -203,6 +203,12 @@ True as using loud speaker, False as not.</p>
                       <div class="abstract">
                         <p>Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.</p>
 
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function is expected to run on main thread.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -256,6 +262,12 @@ True as using loud speaker, False as not.</p>
                         <p>Removes the user’s device from Spark and disconnects the websocket. 
 Subsequent invocations of this method should behave as a no-op.</p>
 
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function is expected to run on main thread.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -296,9 +308,9 @@ Subsequent invocations of this method should behave as a no-op.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone4dialFTSS10renderViewVS_10RenderView17completionHandlerFGSqCS_4Call_T__T_"></a>
+                    <a name="/s:FC8SparkSDK5Phone4dialFTSS10renderViewVS_10RenderView17completionHandlerFSbT__GSqCS_4Call_"></a>
                     <a name="//apple_ref/swift/Method/dial(_:renderView:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone4dialFTSS10renderViewVS_10RenderView17completionHandlerFGSqCS_4Call_T__T_">dial(_:renderView:completionHandler:)</a>
+                    <a class="token" href="#/s:FC8SparkSDK5Phone4dialFTSS10renderViewVS_10RenderView17completionHandlerFSbT__GSqCS_4Call_">dial(_:renderView:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -308,12 +320,18 @@ Subsequent invocations of this method should behave as a no-op.</p>
                       <div class="abstract">
                         <p>Makes a call to intended recipient.</p>
 
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function is expected to run on main thread.
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">renderView</span><span class="p">:</span> <span class="kt">RenderView</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Call</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">renderView</span><span class="p">:</span> <span class="kt">RenderView</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Call</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -355,7 +373,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A closure to be executed once the action is completed. Non-nil means success and represents a call object, nil means failure.</p>
+                                  <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
 
                                 </div>
                               </td>
@@ -365,7 +383,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>Void</p>
+                        <p>Call object</p>
 
                       </div>
                     </section>
@@ -385,6 +403,12 @@ Subsequent invocations of this method should behave as a no-op.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Requests access for media (audio and video), user can change the settings in iOS device settings.</p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function is expected to run on main thread.
+
+</div>
 
                       </div>
                       <div class="declaration">
@@ -428,7 +452,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-16)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-18)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

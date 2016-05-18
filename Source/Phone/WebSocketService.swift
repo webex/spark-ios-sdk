@@ -61,9 +61,12 @@ class WebSocketService: WebSocketDelegate {
         socket?.connect()
         
         connectionTimer = NSTimer.scheduledTimerWithTimeInterval(connectTimeoutInterval, target: self, selector: #selector(WebSocketService.onConnectTimeout), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(connectionTimer, forMode: NSRunLoopCommonModes)
         batchingTimer = NSTimer.scheduledTimerWithTimeInterval(batchingTimeInterval, target: self, selector: #selector(WebSocketService.onMessagesBatchingTimer), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(batchingTimer, forMode: NSRunLoopCommonModes)
+        
+        // Websocket delegate Methods will run on main thread by default.
+        // Here we also need to make sure scheduled timer is running on main thread.
+        NSRunLoop.mainRunLoop().addTimer(connectionTimer, forMode: NSRunLoopCommonModes)
+        NSRunLoop.mainRunLoop().addTimer(batchingTimer, forMode: NSRunLoopCommonModes)
     }
     
     // MARK: - Websocket Delegate Methods.

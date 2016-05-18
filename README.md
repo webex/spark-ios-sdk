@@ -15,7 +15,7 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
     pod setup
     ```
 
-1. Create a new file "Podfile" with following content in your project directory:
+1. Create a new file "Podfile" with following content in your project directory::
 
     ```ruby
     source 'https://github.com/CocoaPods/Specs.git'
