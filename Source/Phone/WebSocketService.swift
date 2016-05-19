@@ -48,7 +48,7 @@ class WebSocketService: WebSocketDelegate {
             return
         }
         
-        socket?.headers["Authorization"] = AuthManager.sharedInstance.authorization()
+        socket?.headers["Authorization"] = AuthManager.sharedInstance.getAuthorization()
         socket?.voipEnabled = true
         socket?.selfSignedSSL = true
         socket?.delegate = self

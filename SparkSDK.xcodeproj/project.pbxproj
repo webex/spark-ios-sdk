@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E578E1CEDA348006124B0 /* ClientAccount.swift */; };
+		3D1E57921CEDA348006124B0 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E578F1CEDA348006124B0 /* KeychainManager.swift */; };
+		3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57901CEDA348006124B0 /* OAuthClient.swift */; };
+		3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */; };
+		3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */; };
+		3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57961CEDA351006124B0 /* String+Extension.swift */; };
 		5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */; };
 		5DBC17AE1CE3542700DFF1C8 /* Notifications+Locus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */; };
 		5DC39ACF1CE478EE00A4CD84 /* RenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC39ACE1CE478EE00A4CD84 /* RenderView.swift */; };
@@ -14,9 +20,7 @@
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
 		B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75331CE2D7B70080EAE0 /* AuthManager.swift */; };
-		B91E75971CE2D7B70080EAE0 /* AuthResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75341CE2D7B70080EAE0 /* AuthResult.swift */; };
 		B91E75981CE2D7B70080EAE0 /* ConnectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75351CE2D7B70080EAE0 /* ConnectController.swift */; };
-		B91E75991CE2D7B70080EAE0 /* KeychainUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75361CE2D7B70080EAE0 /* KeychainUtil.swift */; };
 		B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */; };
 		B91E759B1CE2D7B70080EAE0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75391CE2D7B70080EAE0 /* Error.swift */; };
 		B91E759C1CE2D7B70080EAE0 /* HttpParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753A1CE2D7B70080EAE0 /* HttpParameters.swift */; };
@@ -89,6 +93,12 @@
 
 /* Begin PBXFileReference section */
 		0938E19A696B68FAA4504A7C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		3D1E578E1CEDA348006124B0 /* ClientAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientAccount.swift; sourceTree = "<group>"; };
+		3D1E578F1CEDA348006124B0 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		3D1E57901CEDA348006124B0 /* OAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthClient.swift; sourceTree = "<group>"; };
+		3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Extension.swift"; sourceTree = "<group>"; };
+		3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+Extension.swift"; sourceTree = "<group>"; };
+		3D1E57961CEDA351006124B0 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateDisconnected.swift; sourceTree = "<group>"; };
 		5DBC17AD1CE3542700DFF1C8 /* Notifications+Locus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Notifications+Locus.swift"; sourceTree = "<group>"; };
@@ -97,9 +107,7 @@
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		B91E75331CE2D7B70080EAE0 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
-		B91E75341CE2D7B70080EAE0 /* AuthResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthResult.swift; sourceTree = "<group>"; };
 		B91E75351CE2D7B70080EAE0 /* ConnectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectController.swift; sourceTree = "<group>"; };
-		B91E75361CE2D7B70080EAE0 /* KeychainUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainUtil.swift; sourceTree = "<group>"; };
 		B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionHandlerType.swift; sourceTree = "<group>"; };
 		B91E75391CE2D7B70080EAE0 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		B91E753A1CE2D7B70080EAE0 /* HttpParameters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParameters.swift; sourceTree = "<group>"; };
@@ -244,11 +252,12 @@
 		B91E75311CE2D7B70080EAE0 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				3D1E578E1CEDA348006124B0 /* ClientAccount.swift */,
+				3D1E578F1CEDA348006124B0 /* KeychainManager.swift */,
+				3D1E57901CEDA348006124B0 /* OAuthClient.swift */,
 				B91E75321CE2D7B70080EAE0 /* AccessToken.swift */,
 				B91E75331CE2D7B70080EAE0 /* AuthManager.swift */,
-				B91E75341CE2D7B70080EAE0 /* AuthResult.swift */,
 				B91E75351CE2D7B70080EAE0 /* ConnectController.swift */,
-				B91E75361CE2D7B70080EAE0 /* KeychainUtil.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -412,6 +421,9 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */,
+				3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */,
+				3D1E57961CEDA351006124B0 /* String+Extension.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
 				B91E758D1CE2D7B70080EAE0 /* NotificationObserver.swift */,
@@ -548,6 +560,9 @@
 				B91E75E71CE2D7B70080EAE0 /* WebHookClient+Sync.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				B91E75CE1CE2D7B70080EAE0 /* MediaConnection.swift in Sources */,
+				3D1E57921CEDA348006124B0 /* KeychainManager.swift in Sources */,
+				3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */,
+				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
 				B91E75C91CE2D7B70080EAE0 /* AlertHint.swift in Sources */,
 				B91E75BC1CE2D7B70080EAE0 /* CallStateIncoming.swift in Sources */,
 				B91E75B31CE2D7B70080EAE0 /* Call.swift in Sources */,
@@ -579,15 +594,17 @@
 				B91E75B11CE2D7B70080EAE0 /* PersonClient+Sync.swift in Sources */,
 				B91E75B91CE2D7B70080EAE0 /* CallState.swift in Sources */,
 				B91E75CB1CE2D7B70080EAE0 /* CallEvent.swift in Sources */,
+				3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */,
 				B91E75A71CE2D7B70080EAE0 /* Message.swift in Sources */,
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
 				B91E759C1CE2D7B70080EAE0 /* HttpParameters.swift in Sources */,
+				3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */,
 				B91E75B51CE2D7B70080EAE0 /* CallInfoSequence.swift in Sources */,
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
 				B91E75CD1CE2D7B70080EAE0 /* FullState.swift in Sources */,
+				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
-				B91E75991CE2D7B70080EAE0 /* KeychainUtil.swift in Sources */,
 				B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */,
 				5DBC17AE1CE3542700DFF1C8 /* Notifications+Locus.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
@@ -604,7 +621,6 @@
 				B91E75DE1CE2D7B70080EAE0 /* UserDefaults.swift in Sources */,
 				B91E75D91CE2D7B70080EAE0 /* RoomClient+Sync.swift in Sources */,
 				B91E75DB1CE2D7B70080EAE0 /* Spark.swift in Sources */,
-				B91E75971CE2D7B70080EAE0 /* AuthResult.swift in Sources */,
 				B91E75DA1CE2D7B70080EAE0 /* RoomClient.swift in Sources */,
 				B91E75C21CE2D7B70080EAE0 /* CallStateOutgoing.swift in Sources */,
 				B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */,
@@ -724,6 +740,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
@@ -746,6 +763,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",

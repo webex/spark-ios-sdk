@@ -12,7 +12,6 @@ struct Error {
     /// Error code.
     enum Code: Int {
         case ServiceRequestFailed   = -7000
-        case MediaAccessFailed      = -7001
     }
     
     /// Converts the error data to NSError

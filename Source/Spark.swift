@@ -6,7 +6,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.145"
+    public static let version = "0.9.146"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
@@ -15,7 +15,7 @@ public class Spark {
     
     /// Deauthorize the SDK. If phone is registered, deregister the phone first.
     public static func deauthorize() {
-        AuthManager.sharedInstance.invalidateAccessToken()
+        AuthManager.sharedInstance.deauthorize()
     }
     
     /// Initialize the SDK using client id, client secret, scope and redirect URI.
@@ -27,9 +27,11 @@ public class Spark {
     /// - parameter controller: View controller being redirected from and back when during OAuth flow.
     /// - returns: Void
     public static func initWith(clientId clientId: String, clientSecret: String, scope: String, redirectUri: String, controller: UIViewController) {
-        let authMgr = AuthManager.sharedInstance
-        authMgr.setup(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-        authMgr.authorizeFromController(controller)
+        let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
+        AuthManager.sharedInstance.authorize(clientAccount: clientAccount,
+                                             scope: scope,
+                                             redirectUri: redirectUri,
+                                             controller: controller)
     }
     
     /// Initialize the SDK using access token directly.
@@ -37,8 +39,7 @@ public class Spark {
     /// - parameter clientId: The access token.
     /// - returns: Void
     public static func initWith(accessToken accessToken: String) {
-        let authMgr = AuthManager.sharedInstance
-        authMgr.setup(token: accessToken)
+        AuthManager.sharedInstance.authorize(token: accessToken)
     }
 
     /// Setup storage plugin to SDK. Different clients may have different storage requirements, for example, security requirements.

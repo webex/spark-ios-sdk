@@ -1,212 +1,180 @@
 //  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
 
 import Foundation
-import Alamofire
-
-struct OAuthConstants {
-    
-    static let OAuthBaseUrl = "https://api.ciscospark.com"
-    static let authorizePath = "/v1/authorize"
-    static let accessTokenPath = "/v1/access_token"
-    static let grantType = "authorization_code"
-    static let contentType = "application/x-www-form-urlencoded"
-}
-
-class AuthManagerUtils {
-    
-    static func decodeString(string: String?) -> String? {
-        return string?.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
-    }
-    
-    static func encodeString(string: String?) -> String? {
-        return string?.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())
-    }
-    
-    static func authURL(clientId clientId: String, scope: String, redirectUri: String) -> NSURL {
-        let components = NSURLComponents(string: OAuthConstants.OAuthBaseUrl)!
-        components.path = OAuthConstants.authorizePath
-        
-        components.queryItems = [
-            NSURLQueryItem(name: "client_id", value: clientId),
-            NSURLQueryItem(name: "response_type", value: "code"),
-            NSURLQueryItem(name: "redirect_uri", value: encodeString(redirectUri)),
-            NSURLQueryItem(name: "scope", value: encodeString(scope)),
-            NSURLQueryItem(name: "state", value: "set_state_here"),
-        ]
-        components.percentEncodedQuery = components.query
-        
-        return components.URL!
-    }
-    
-    static func extractQueryFromRedirectUri(url: NSURL) -> [String: String] {
-        var query = [String: String]()
-        let pairs  = url.query?.componentsSeparatedByString("&") ?? []
-        
-        for pair in pairs {
-            let kv = pair.componentsSeparatedByString("=")
-            query.updateValue(kv[1], forKey: kv[0])
-        }
-        
-        return query
-    }
-}
 
 class AuthManager {
+    
     static var sharedInstance = AuthManager()
     
-    var accessToken: AccessToken?
-    private var mode: Mode
+    private var accessTokenCache: AccessToken?
+
+    // OAuth parameters
+    private var clientAccountCache: ClientAccount?
+    private var scope: String?
+    private var redirectUri: String?
     
-    private enum Mode {
-        case OAuth(clientId: String, clientSecret: String, scope: String, redirectUri: String)
-        case Token(token: String)
-        case None
-        
-        func get() -> Any? {
-            switch (self) {
-            case .OAuth(clientId: let clientId, clientSecret: let clientSecret, scope: let scope, redirectUri: let redirectUri):
-                return (clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-            case .Token(token: let token):
-                return token
-            default:
-                return nil
+    private let AccessTokenExpirationBufferInMinutes = 15
+    
+    // OAuth flow has client account
+    private var isOAuthMode: Bool {
+        return clientAccount != nil
+    }
+    
+    private var accessToken: AccessToken? {
+        get {
+            if accessTokenCache == nil {
+                accessTokenCache = KeychainManager.sharedInstance.fetchAccessToken()
             }
+            
+            return accessTokenCache
+        }
+        set {
+            accessTokenCache = newValue
+            KeychainManager.sharedInstance.storeAccessToken(newValue)
         }
     }
-
-    init() {
-        mode = Mode.None
+    
+    private var clientAccount: ClientAccount? {
+        get {
+            if clientAccountCache == nil {
+                clientAccountCache = KeychainManager.sharedInstance.fetchClientAccount()
+            }
+            
+            return clientAccountCache
+        }
+        set {
+            clientAccountCache = newValue
+            KeychainManager.sharedInstance.storeClientAccount(newValue)
+        }
     }
     
-    func setup(clientId clidentId: String, clientSecret: String, scope: String, redirectUri: String) {
-        mode = Mode.OAuth(clientId: clidentId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri.lowercaseString)
+    func authorize(clientAccount clientAccount: ClientAccount, scope: String, redirectUri: String, controller: UIViewController) {
+        self.clientAccount = clientAccount
+        self.scope = scope
+        self.redirectUri = redirectUri
+        
+        authorizeFromController(controller)
     }
     
-    func setup(token token: String) {
-        mode = Mode.Token(token: token)
+    func authorize(token token: String) {
         accessToken = AccessToken(accessToken: token)
     }
     
-    func invalidateAccessToken() {
-        mode = Mode.None
+    func deauthorize() {
         accessToken = nil
-        KeychainUtil.removeAccessTokenFromKeychain()
+        clientAccount = nil
     }
     
-    func authorizeFromController(controller: UIViewController) {
+    func authorized() -> Bool {
+        guard let _ = accessToken?.accessTokenString else {
+            return false
+        }
         
-        switch (mode) {
-        case .OAuth(clientId: _, clientSecret: _, scope: _, redirectUri: _):
-            break
-        default:
+        guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
+            return false
+        }
+        
+        return true
+    }
+    
+    func getAuthorization() -> String? {
+        guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
+            return nil
+        }
+        
+        if let accessTokenString = self.accessToken?.accessTokenString {
+            return "Bearer " + accessTokenString
+        }
+        
+        return nil
+    }
+    
+    private func authorizeFromController(controller: UIViewController) {
+        guard isOAuthMode else {
             return
         }
         
-        let (clientId, clientSecret, scope, redirectUri) = mode.get() as! (String, String, String, String)
-        
-        let web = ConnectController(URL: AuthManagerUtils.authURL(clientId: clientId, scope: scope, redirectUri: redirectUri)) { url in
-            if let authResult = self.fetchAccessTokenFromRedirectUri(url, clientId: clientId, clientSecret: clientSecret, redirectUri: redirectUri) {
-                
-                switch authResult {
-                case .Success(let accessToken):
-                    self.accessToken = accessToken
-                    self.storeAccessTokenToKeychain()
-                    return true
-                case .Error:
-                    return false
-                }
+        let url = createAuthCodeRequestURL()
+        let web = ConnectController(URL: url) { url in
+            if let accessToken = self.fetchAccessTokenFromRedirectUri(url) {
+                self.accessToken = accessToken
+                return true
             }
             return false
         }
         
         let navigationController = UINavigationController(rootViewController: web)
         controller.presentViewController(navigationController, animated: true, completion: nil)
-        
     }
     
-    //TODO: need to add refresh token logic
-    func authorization() -> String? {
+    private func createAuthCodeRequestURL() -> NSURL {
+        let components = NSURLComponents(string: "https://api.ciscospark.com/v1/authorize")!
+        components.queryItems = [
+            NSURLQueryItem(name: "client_id", value: (clientAccount?.clientId)!),
+            NSURLQueryItem(name: "response_type", value: "code"),
+            NSURLQueryItem(name: "redirect_uri", value: redirectUri!.encodeString),
+            NSURLQueryItem(name: "scope", value: scope!.encodeString),
+            NSURLQueryItem(name: "state", value: "set_state_here")]
+        components.percentEncodedQuery = components.query
         
-        if let accessToken = self.accessToken {
-            return "Bearer " + accessToken.accessTokenString!
+        return components.URL!
+    }
+    
+    private func fetchAccessTokenFromRedirectUri(url: NSURL) -> AccessToken? {
+        guard url.absoluteString.lowercaseString.containsString(redirectUri!.lowercaseString) else {
+            return nil
+        }
+        
+        let query = url.queryParameters
+        if let error = query["error"] {
+            print("ErrorCode: \(error)")
+            if let description = query["error_description"] {
+                print("Error description: \(description.decodeString!)")
+            }
+        } else if let authCode = query["code"] {
+            do {
+                return try OAuthClient().fetchAccessTokenFromOAuthCode(authCode, clientAccount: clientAccount!, redirectUri: redirectUri!)
+            }  catch let error as NSError {
+                print("Failed to fetch access token: \(error.localizedFailureReason)")
+            }
         }
         
         return nil
     }
     
-    func authorized() -> Bool {
-        if let token = fetchAccessTokenFromKeychain() {
-            accessToken = token
-            return accessToken?.accessTokenString != nil
+    private func refreshAccessTokenWithExpirationBuffer(bufferInMinutes: Int) -> Bool {
+        guard accessTokenWillExpireInMinutes(bufferInMinutes) else {
+            return true
         }
-        return false
+        
+        return refreshAccessToken()
     }
     
-    private func fetchAccessTokenFromRedirectUri(url: NSURL, clientId: String, clientSecret: String, redirectUri: String) -> AuthResult? {
-        
-        guard url.absoluteString.lowercaseString.containsString(redirectUri) else {
-            return nil
+    private func accessTokenWillExpireInMinutes(minutes: Int) -> Bool {
+        // Assume access token (authorized with signle token instead of OAuth parameters) won't expire.
+        guard isOAuthMode else {
+            return false
         }
         
-        let query = AuthManagerUtils.extractQueryFromRedirectUri(url)
-        if let error = query["error"] {
-            let desc = AuthManagerUtils.decodeString(query["error_description"])
-            return .Error(OAuth2Error(errorCode: error), desc ?? "")
+        let thresholdDate = NSDate(timeInterval: Double(minutes*60), sinceDate: NSDate())
+        let expirationdate = accessToken!.accessTokenExpirationDate
+        return thresholdDate.isAfterDate(expirationdate)
+    }
+    
+    private func refreshAccessToken() -> Bool {
+        do {
+            let accessToken = try OAuthClient().refreshAccessTokenFromRefreshToken((self.accessToken?.refreshTokenString)!, clientAccount: clientAccount!)
+            accessToken.refreshTokenString = self.accessToken?.refreshTokenString
+            accessToken.refreshTokenExpiration = self.accessToken?.refreshTokenExpiration
+            self.accessToken = accessToken
             
-        } else {
-            if let authCode = query["code"] {
-                return fetchAccessTokenFromOAuthCode(authCode, clientId: clientId, clientSecret: clientSecret, redirectUri: redirectUri)
-            } else {
-                return nil
-            }
-        }
-    }
-    
-    private func fetchAccessTokenFromOAuthCode(code: String, clientId: String, clientSecret: String, redirectUri: String) -> AuthResult? {
-        
-        let body = ["grant_type": OAuthConstants.grantType,
-                    "redirect_uri": redirectUri,
-                    "code": code,
-                    "client_id": clientId,
-                    "client_secret": clientSecret]
-        
-        let headers = ["Content-Type": OAuthConstants.contentType]
-        let url = OAuthConstants.OAuthBaseUrl + OAuthConstants.accessTokenPath
-        
-        let semaphore = dispatch_semaphore_create(0)
-        let queue: dispatch_queue_t? = dispatch_queue_create("com.cisco.fetchtokenqueue", nil)
-        var result: AuthResult? = nil
-        
-        Alamofire.request(.POST, url, parameters: body, headers: headers)
-            .responseObject(queue: queue) {
-                (response: Response<AccessToken, NSError>) in
-                
-                switch response.result {
-                case .Success:
-                    self.accessToken = response.result.value
-                    result = AuthResult.Success(self.accessToken!)
-                case .Failure(let error):
-                    result = AuthResult.Error(.Unknown, error.localizedDescription)
-                }
-                dispatch_semaphore_signal(semaphore)
+        } catch let error as NSError {
+            deauthorize()
+            print("Failed to refresh token: \(error.localizedFailureReason)")
+            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.RefreshAccessTokenFailed, object: nil)
+            return false
         }
         
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-        
-        return result
+        return true
     }
-    
-    private func storeAccessTokenToKeychain() {
-        let accessTokenData = NSKeyedArchiver.archivedDataWithRootObject(accessToken!)
-        KeychainUtil.storeTokenDataInKeychain(accessTokenData)
-    }
-    
-    private func fetchAccessTokenFromKeychain() -> AccessToken? {
-        if let accessTokenData = KeychainUtil.fetchTokenDataFromKeychain() {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(accessTokenData) as? AccessToken
-        } else {
-            return nil
-        }
-    }
-    
 }

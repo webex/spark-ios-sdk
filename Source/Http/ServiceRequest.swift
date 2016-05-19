@@ -11,21 +11,27 @@ class ServiceRequest {
         return NSURL(string: baseUrl)!.URLByAppendingPathComponent(path)
     }
     
-    private var headers: [String: String] {
-        let authorization = AuthManager.sharedInstance.authorization()!
-        let userAgent = UserAgent.sharedInstance.userAgentString
-        return ["Content-Type": "application/json",
-                "Authorization": authorization,
-                "User-Agent": userAgent]
-    }
-    
-    private var method = Method.GET
-    private var baseUrl = "https://api.ciscospark.com/v1"
-    private var path = ""
+    private var headers: [String: String]
+    private var method: Alamofire.Method
+    private var baseUrl: String
+    private var path: String
+    private var authRequired: Bool
     private var body: HttpParameters?
     private var query: HttpParameters?
     private var keyPath: String?
     private var queue: dispatch_queue_t?
+    
+    
+    init() {
+        let userAgent = UserAgent.sharedInstance.userAgentString
+        self.headers = ["Content-Type": "application/json",
+                        "User-Agent": userAgent]
+        
+        self.authRequired = true
+        self.baseUrl = "https://api.ciscospark.com/v1"
+        self.method = .GET
+        self.path = ""
+    }
     
     class Builder {
         private var request = ServiceRequest()
@@ -36,6 +42,11 @@ class ServiceRequest {
         
         func method(method: Alamofire.Method) -> Builder {
             request.method = method
+            return self
+        }
+        
+        func headers(headers: [String: String]) -> Builder {
+            request.headers = headers
             return self
         }
         
@@ -66,6 +77,11 @@ class ServiceRequest {
         
         func queue(queue: dispatch_queue_t?) -> Builder {
             request.queue = queue
+            return self
+        }
+        
+        func authRequired(authRequired: Bool) -> Builder {
+            request.authRequired = authRequired
             return self
         }
     }
@@ -148,6 +164,12 @@ class ServiceRequest {
         
         for (field, value) in headers {
             request.setValue(value, forHTTPHeaderField: field)
+        }
+        
+        if authRequired {
+            if let authorization = AuthManager.sharedInstance.getAuthorization() {
+                request.setValue(authorization, forHTTPHeaderField: "Authorization")
+            }
         }
         
         if let body = body {

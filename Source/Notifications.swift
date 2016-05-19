@@ -26,5 +26,8 @@ public struct Notifications {
         
         /// Dictionary key used to get call object in an incoming call notification.
         public static let IncomingCallObjectKey = "IncomingCallObjectKey"
+        
+        /// Refreshes access token failed, and App must login again if recieves this notification.
+        public static let RefreshAccessTokenFailed = "SparkSDK.phone.refreshAccessTokenFailed"
     }
 }
