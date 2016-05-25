@@ -12,6 +12,10 @@
 		<data>
 		933A82hijkDOYee9B+hRtOJeuTI=
 		</data>
+		<key>Headers/CustomLogger.h</key>
+		<data>
+		DVQVpxFJSZyZAq1jD6RyscT4mdw=
+		</data>
 		<key>Headers/MediaEngine.h</key>
 		<data>
 		HdxRsmilBSn2M1mZ0DcPBgA7yn8=
@@ -46,7 +50,11 @@
 		</data>
 		<key>Headers/Wme.h</key>
 		<data>
-		EGx7Gpa+2n/+ThKyld8Kc9+nm7A=
+		nGGo3bL/Iq3/vRx088fU3Hm84So=
+		</data>
+		<key>Headers/WmeLogManager.h</key>
+		<data>
+		nHzZytUPY/9aNCIDqEvlKATsXjg=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -62,7 +70,7 @@
 		</data>
 		<key>Wme.xcconfig</key>
 		<data>
-		j1hkQRhk+Dgre595R0Ea2IA+a6I=
+		Lvm9l9TsXKOt8YHYTt0dHI8jBIk=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -87,6 +95,17 @@
 			<key>hash2</key>
 			<data>
 			H/c5lJjmfLArwukb9pfuksZH5N+A3X1miTMtXUG0KDc=
+			</data>
+		</dict>
+		<key>Headers/CustomLogger.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			DVQVpxFJSZyZAq1jD6RyscT4mdw=
+			</data>
+			<key>hash2</key>
+			<data>
+			6UCex9DDNoXM6bfu34laNLicXSBVJQUaOTIhSAYma8I=
 			</data>
 		</dict>
 		<key>Headers/MediaEngine.h</key>
@@ -181,11 +200,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			EGx7Gpa+2n/+ThKyld8Kc9+nm7A=
+			nGGo3bL/Iq3/vRx088fU3Hm84So=
 			</data>
 			<key>hash2</key>
 			<data>
-			N0k2gP5nxixJyIDu1oWhr14GjOiQRYa0m8ET5wuUtxE=
+			eezQYhdOu5iaC2lQcfVxBV9dqWjTwDlmicHz1bDqLe8=
+			</data>
+		</dict>
+		<key>Headers/WmeLogManager.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			nHzZytUPY/9aNCIDqEvlKATsXjg=
+			</data>
+			<key>hash2</key>
+			<data>
+			1+F4CnARxO9c+O6hKh5P7ZG468D4fuzgeRauP2B7eh8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -214,11 +244,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			j1hkQRhk+Dgre595R0Ea2IA+a6I=
+			Lvm9l9TsXKOt8YHYTt0dHI8jBIk=
 			</data>
 			<key>hash2</key>
 			<data>
-			8QBrgqj/k+17ed+ZoUrMlD48svbEmaR+n/R/pqBqlkE=
+			wc85TNmZE/VqrPt2TmXx06dCl4glRhXvjWaQkLzX3qA=
 			</data>
 		</dict>
 	</dict>

@@ -25,3 +25,5 @@ FOUNDATION_EXPORT const unsigned char WmeVersionString[];
 #import <Wme/MicrophoneSelector.h>
 #import <Wme/TimestampFormatter.h>
 #import <Wme/RuntimeHelpers.h>
+#import <Wme/CustomLogger.h>
+#import <Wme/WmeLogManager.h>

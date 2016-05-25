@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 import Alamofire
@@ -16,8 +28,8 @@ class ServiceRequest {
     private var baseUrl: String
     private var path: String
     private var authRequired: Bool
-    private var body: HttpParameters?
-    private var query: HttpParameters?
+    private var body: RequestParameter?
+    private var query: RequestParameter?
     private var keyPath: String?
     private var queue: dispatch_queue_t?
     
@@ -60,12 +72,12 @@ class ServiceRequest {
             return self
         }
         
-        func body(body: HttpParameters) -> Builder {
+        func body(body: RequestParameter) -> Builder {
             request.body = body
             return self
         }
         
-        func query(query: HttpParameters) -> Builder {
+        func query(query: RequestParameter) -> Builder {
             request.query = query
             return self
         }
@@ -162,14 +174,14 @@ class ServiceRequest {
         var request = NSMutableURLRequest(URL: url)
         request.HTTPMethod = method.rawValue
         
-        for (field, value) in headers {
-            request.setValue(value, forHTTPHeaderField: field)
-        }
-        
         if authRequired {
             if let authorization = AuthManager.sharedInstance.getAuthorization() {
-                request.setValue(authorization, forHTTPHeaderField: "Authorization")
+                headers.unionInPlace(authorization)
             }
+        }
+        
+        for (field, value) in headers {
+            request.setValue(value, forHTTPHeaderField: field)
         }
         
         if let body = body {

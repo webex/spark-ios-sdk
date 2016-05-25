@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 import AVFoundation
@@ -16,7 +28,7 @@ class MediaEngineObserver: NotificationObserver {
             MediaEngineDidMuteAudioNotification:             "onMediaEngineDidMuteAudio:",
             MediaEngineDidUnMuteAudioNotification:           "onMediaEngineDidUnMuteAudio:",
             MediaEngineDidConnectNotification:               "onMediaEngineDidConnect:",
-            MediaEngineDidDisconnectNotification:            "onMediaEngineDidDisConnect:",
+            MediaEngineDidDisconnectNotification:            "onMediaEngineDidDisconnect:",
             MediaEngineDidFailToConnectNotification:         "onMediaEngineDidFail:",
             MediaEngineDidSendFirstVideoDataNotification:    "onMediaEngineNotification:",
             MediaEngineDidSendFirstAudioDataNotification:    "onMediaEngineNotification:",
@@ -54,26 +66,22 @@ class MediaEngineObserver: NotificationObserver {
     }
     
     @objc private func onMediaEngineDidConnect(notification: NSNotification) {
-        print("onMediaEngineDidConnect")
-        print(notification)
+        Logger.info(notification.description)
     }
     
-    @objc private func onMediaEngineDidDisConnect(notification: NSNotification) {
-        print("onMediaEngineDidDisConnect")
-        print(notification)
+    @objc private func onMediaEngineDidDisconnect(notification: NSNotification) {
+        Logger.info(notification.description)
     }
     
     @objc private func onMediaEngineDidFail(notification: NSNotification) {
-        print("onMediaEngineDidFail")
-        print(notification)
+        Logger.info(notification.description)
     }
     
     @objc private func onMediaEngineNotification(notification: NSNotification) {
-        print("onMediaEngineNotification")
-        print(notification)
+        Logger.info(notification.description)
     }
     
     @objc private func onMediaEngineAudioSessionRouteChangeNotification(notification: NSNotification) {
-        print("onMediaEngineAudioSessionRouteChangeNotification")
+        Logger.info(notification.description)
     }
 }

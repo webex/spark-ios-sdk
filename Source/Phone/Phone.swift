@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import AVFoundation
 
@@ -47,8 +59,6 @@ public class Phone {
         
         deviceService.registerDevice() { success in
             if success {
-                // TODO: need to check if it's ok when register again.
-                // TODO: need to consider reconnect case.
                 self.webSocketService.connect(NSURL(string: self.deviceService.webSocketUrl!)!)
                 completionHandler?(true)
             } else {
@@ -66,7 +76,6 @@ public class Phone {
     public func deregister(completionHandler: (Bool -> Void)?) {
         CallManager.sharedInstance.stopObserving()
         
-        // TODO: need to check if it's ok to deregister again.
         deviceService.deregisterDevice() { success in
             if success {
                 self.webSocketService.disconnect()

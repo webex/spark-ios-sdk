@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 
@@ -18,7 +30,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     public func list(max max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.GET)
-            .query(HttpParameters(["max": max]))
+            .query(RequestParameter(["max": max]))
             .keyPath("items")
             .queue(queue)
             .build()
@@ -37,7 +49,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     public func create(name name: String, targetUrl: String, resource: String, event: String, filter: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
-        let body = HttpParameters([
+        let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,
             "resource": resource,
@@ -80,7 +92,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     public func update(webhookId webhookId: String, name: String, targetUrl: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.PUT)
-            .body(HttpParameters(["name": name, "targetUrl": targetUrl]))
+            .body(RequestParameter(["name": name, "targetUrl": targetUrl]))
             .path(webhookId)
             .queue(queue)
             .build()

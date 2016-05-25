@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 
@@ -9,7 +21,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         return ServiceRequest.Builder().keyPath("locus")
     }
     
-    func join(localInfo: HttpParameters, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func join(localInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.POST)
             .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
@@ -21,7 +33,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func join(callUrl: String, localInfo: HttpParameters, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func join(callUrl: String, localInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.POST)
             .body(localInfo)
@@ -38,7 +50,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
             .method(.PUT)
             .baseUrl(participantUrl)
             .path("leave")
-            .body(HttpParameters(["deviceUrl": deviceUrl]))
+            .body(RequestParameter(["deviceUrl": deviceUrl]))
             .queue(queue)
             .build()
         
@@ -49,7 +61,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         let request = requestBuilder()
             .method(.PUT)
             .baseUrl(callUrl)
-            .body(HttpParameters(["deviceUrl": deviceUrl]))
+            .body(RequestParameter(["deviceUrl": deviceUrl]))
             .path("participant/decline")
             .queue(queue)
             .build()
@@ -61,7 +73,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         let request = requestBuilder()
             .method(.PUT)
             .baseUrl(participantUrl)
-            .body(HttpParameters(["deviceUrl": deviceUrl]))
+            .body(RequestParameter(["deviceUrl": deviceUrl]))
             .path("alert")
             .queue(queue)
             .build()
@@ -69,7 +81,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
-    func updateMedia(mediaUrl: String, localInfo: HttpParameters, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func updateMedia(mediaUrl: String, localInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.PUT)
             .baseUrl(mediaUrl)

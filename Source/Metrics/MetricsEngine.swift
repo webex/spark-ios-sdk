@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 
@@ -56,14 +68,14 @@ class MetricsEngine {
     //
     func trackMetrics(metrics: [Metric], completionHandler: CompletionHandlerType? = nil) {
         if isDebuggerAttached() {
-            print("Skipping metric while debugging")
+            Logger.warn("Skipping metric while debugging")
             return
         }
         
         var payloads: [Metric.DataType] = []
         for metric in metrics {
             if !metric.isValid {
-                print("Skipping invalid metric \(metric.name)")
+                Logger.warn("Skipping invalid metric \(metric.name)")
                 continue
             }
             
@@ -72,20 +84,20 @@ class MetricsEngine {
         }
         
         if payloads.count > 0 {
-            postMetrics(HttpParameters(["metrics": payloads]), completionHandler: completionHandler)
+            postMetrics(RequestParameter(["metrics": payloads]), completionHandler: completionHandler)
         }
     }
     
-    private func postMetrics(payload: HttpParameters, completionHandler: CompletionHandlerType?) {
+    private func postMetrics(payload: RequestParameter, completionHandler: CompletionHandlerType?) {
         MetricsClient().post(payload) {
             (response: ServiceResponse<AnyObject>) in
             switch response.result {
             case .Success:
-                print("Success: post metrics")
+                Logger.info("Success: post metrics")
                 completionHandler?(true)
                 
             case .Failure(let error):
-                print("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure: \(error.localizedFailureReason)")
                 completionHandler?(false)
                 break
             }

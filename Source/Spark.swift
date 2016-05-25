@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 import UIKit
@@ -6,7 +18,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.146"
+    public static let version = "0.9.147"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
@@ -48,6 +60,14 @@ public class Spark {
     /// - returns: Void
     public static func setupStorage(storage: Storagable) {
         UserDefaults.sharedInstance = UserDefaults(storage)
+    }
+    
+    /// Toggle to enable or disable console log output.
+    ///
+    /// - parameter enable: Set True to enable console log, False as not.
+    /// - returns: Void
+    public static func toggleConsoleLogger(enable: Bool) {
+        LoggerManager.sharedInstance.toggleConsoleLogger(enable)
     }
 }
 

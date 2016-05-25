@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 
@@ -77,13 +89,13 @@ class AuthManager {
         return true
     }
     
-    func getAuthorization() -> String? {
+    func getAuthorization() -> [String: String]? {
         guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
             return nil
         }
         
         if let accessTokenString = self.accessToken?.accessTokenString {
-            return "Bearer " + accessTokenString
+            return ["Authorization": "Bearer " + accessTokenString]
         }
         
         return nil
@@ -127,15 +139,15 @@ class AuthManager {
         
         let query = url.queryParameters
         if let error = query["error"] {
-            print("ErrorCode: \(error)")
+            Logger.error("ErrorCode: \(error)")
             if let description = query["error_description"] {
-                print("Error description: \(description.decodeString!)")
+                Logger.error("Error description: \(description.decodeString!)")
             }
         } else if let authCode = query["code"] {
             do {
                 return try OAuthClient().fetchAccessTokenFromOAuthCode(authCode, clientAccount: clientAccount!, redirectUri: redirectUri!)
             }  catch let error as NSError {
-                print("Failed to fetch access token: \(error.localizedFailureReason)")
+                Logger.error("Failed to fetch access token: \(error.localizedFailureReason)")
             }
         }
         
@@ -170,7 +182,7 @@ class AuthManager {
             
         } catch let error as NSError {
             deauthorize()
-            print("Failed to refresh token: \(error.localizedFailureReason)")
+            Logger.error("Failed to refresh token: \(error.localizedFailureReason)")
             NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.RefreshAccessTokenFailed, object: nil)
             return false
         }

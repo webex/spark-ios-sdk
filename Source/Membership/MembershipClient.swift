@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import Foundation
 
@@ -20,7 +32,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - returns: Void
     public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         
-        let query = HttpParameters([
+        let query = RequestParameter([
             "roomId": roomId,
             "personId": personId,
             "personEmail": personEmail,
@@ -45,7 +57,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     public func createWithPersonId(roomId roomId: String, personId: String? = nil, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
-        let body = HttpParameters([
+        let body = RequestParameter([
             "roomId": roomId,
             "personId": personId,
             "isModerator": isModerator])
@@ -68,7 +80,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     public func createWithPersonEmail(roomId roomId: String, personEmail: String? = nil, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
-        let body = HttpParameters([
+        let body = RequestParameter([
             "roomId": roomId,
             "personEmail": personEmail,
             "isModerator": isModerator])
@@ -108,7 +120,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     public func update(membershipId membershipId: String, isModerator: Bool, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.PUT)
-            .body(HttpParameters(["isModerator": isModerator]))
+            .body(RequestParameter(["isModerator": isModerator]))
             .path(membershipId)
             .queue(queue)
             .build()

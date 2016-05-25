@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "SparkSDK"
-  s.version = "0.9.146"
+  s.version = "0.9.147"
   s.summary = "Spark iOS SDK"
   s.homepage = "https://developer.ciscospark.com"
   s.license = "MIT"
@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.dependency 'AlamofireObjectMapper', '~> 3.0.0'
   s.dependency 'SwiftyJSON', '~> 2.3.2'
   s.dependency 'Starscream', '~> 1.1.3'
-  s.dependency 'KeychainAccess'
+  s.dependency 'KeychainAccess', '~> 2.3.5'
+  s.dependency 'CocoaLumberjack/Swift', '~> 2.3.0'
 end
 

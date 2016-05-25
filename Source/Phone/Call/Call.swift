@@ -1,4 +1,16 @@
-//  Copyright © 2016 Cisco Systems, Inc. All rights reserved.
+// Copyright 2016 Cisco Systems Inc
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import ObjectMapper
 
@@ -116,11 +128,10 @@ public class Call {
             switch $0.result {
             case .Success(let value):
                 self.updateCallInfo(value)
-                print("Success: leave call")
+                Logger.info("Success: leave call")
                 completionHandler?(true)
             case .Failure(let error):
-                print("Failure: \(error.localizedFailureReason)")
-                assertionFailure("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure: \(error.localizedFailureReason)")
                 completionHandler?(false)
             }
         }
@@ -138,11 +149,10 @@ public class Call {
         CallClient().decline(callUrl!, deviceUrl: deviceUrl!) {
             switch $0.result {
             case .Success:
-                print("Success: reject call")
+                Logger.info("Success: reject call")
                 completionHandler?(true)
             case .Failure(let error):
-                print("Failure: \(error.localizedFailureReason)")
-                assertionFailure("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure: \(error.localizedFailureReason)")
                 completionHandler?(false)
             }
         }
@@ -194,7 +204,7 @@ public class Call {
         mediaEngine.start(mediaSession)
         setupMediaView(renderView.local, renderView.remote)
         
-        let localInfo = createLocalInfo(mediaEngine.getLocalSdp())
+        var localInfo = createLocalInfo(mediaEngine.getLocalSdp())
         localInfo.updateValue(["address": address], forKey: "invitee")
         CallClient().join(localInfo) {
             self.onJoinCallCompleted($0, completionHandler: completionHandler)
@@ -218,10 +228,9 @@ public class Call {
             switch $0.result {
             case .Success(let value):
                 self.updateCallInfo(value)
-                print("Success: update media")
+                Logger.info("Success: update media")
             case .Failure(let error):
-                print("Failure: \(error.localizedFailureReason)")
-                assertionFailure("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure: \(error.localizedFailureReason)")
             }
         }
     }
@@ -258,12 +267,12 @@ public class Call {
         self.info = info
     }
     
-    private func createLocalInfo(localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> HttpParameters {
+    private func createLocalInfo(localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> RequestParameter {
         let mediaInfo = MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted)
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)
         let localMedias = [["type": "SDP", "localSdp": mediaInfoJSON!]]
         
-        return HttpParameters(["deviceUrl": deviceUrl!, "localMedias": localMedias])
+        return RequestParameter(["deviceUrl": deviceUrl!, "localMedias": localMedias])
     }
     
     private func onJoinCallCompleted(response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
@@ -273,18 +282,17 @@ public class Call {
             if let remoteSdp = self.info?.remoteSdp {
                 self.mediaEngine.setRemoteSdp(remoteSdp)
             } else {
-                assertionFailure("Failure - remoteSdp is nil")
+                Logger.error("Failure: remoteSdp is nil")
             }
             self.mediaEngine.startMedia()
             CallManager.sharedInstance.addCall(self.url, call: self)
             from = info?.hostEmail
             
-            print("Success: join call")
+            Logger.info("Success: join call")
             completionHandler?(true)
             
         case .Failure(let error):
-            print("Failure: \(error.localizedFailureReason)")
-            assertionFailure("Failure: \(error.localizedFailureReason)")
+            Logger.error("Failure: \(error.localizedFailureReason)")
             completionHandler?(false)
         }
     }
@@ -293,10 +301,9 @@ public class Call {
         switch response.result {
         case .Success(let value):
             updateCallInfo(value)
-            print("Success: fetch call info")
+            Logger.info("Success: fetch call info")
         case .Failure(let error):
-            print("Failure: \(error.localizedFailureReason)")
-            assertionFailure("Failure: \(error.localizedFailureReason)")
+            Logger.error("Failure: \(error.localizedFailureReason)")
         }
     }
 }

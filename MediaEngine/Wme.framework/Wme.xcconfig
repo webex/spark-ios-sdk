@@ -6,9 +6,8 @@
 //  Copyright © 2016 cisco. All rights reserved.
 //
 
-Lumberjack = $(SRCROOT)/Vendor/CocoaLumberjack/Lumberjack
-WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine5.4.0
-HEADER_SEARCH_PATHS = $(inherited) "$(Lumberjack)" "$(WEBEX_MEDIA_ENGINE)/sdk/include" "$(WEBEX_MEDIA_ENGINE)/external/include" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wrtp" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wqos" "$(WEBEX_MEDIA_ENGINE)/external/include/ios" "$(WEBEX_MEDIA_ENGINE)/external/include/client"
+WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine5.10.0
+HEADER_SEARCH_PATHS = $(inherited) "$(WEBEX_MEDIA_ENGINE)/sdk/include" "$(WEBEX_MEDIA_ENGINE)/external/include" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wrtp" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wqos" "$(WEBEX_MEDIA_ENGINE)/external/include/ios" "$(WEBEX_MEDIA_ENGINE)/external/include/client"
 LIBRARY_SEARCH_PATHS = $(inherited) "$(WEBEX_MEDIA_ENGINE)/sdk/libs/$(BASE_CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)" "$(WEBEX_MEDIA_ENGINE)/external/libs/$(BASE_CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)"
 
 OTHER_LDFLAGS = $(inherited) $(OTHER_LDFLAGS_INTEGRATION_TESTS) $(OTHER_LDFLAGS_REVEAL) -ObjC -Wl,-search_paths_first -licucore -lsqlite3 -lz -lcrypto -lssl -lutil_ios -lsafec -lresolv -lwbx_aec -lwbx_cng -lwbx_dagc -lwbx_plc -lwbx_resample -lwbx_aagc -lwbx_vad -lwbx_tsm -lwbx_sa -lwbxaecodec -ltcaec -ltcagc -ltcaudio -lwbxaudioengine -lwmeclient -lwrtp_ios -lwqos_ios -lwseutil -ltp_ios -lwseclient -lwsertp -lsrtp_ios -lqoem -lMediaSession -lsdp -lopenh264 -lnattool -lrsfec -lmariqos -framework VideoToolbox
