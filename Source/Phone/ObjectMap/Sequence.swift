@@ -28,9 +28,9 @@ struct Sequence: Mappable {
     }
     
     mutating func mapping(map: Map) {
-        entries <- map["entries"]
-        rangeStart <- map["rangeStart"]
-        rangeEnd <- map["rangeEnd"]
+        entries <- (map["entries"], UInt64Transform())
+        rangeStart <- (map["rangeStart"], UInt64Transform())
+        rangeEnd <- (map["rangeEnd"], UInt64Transform())
     }
     
     func getEntries() -> [UInt64] {
@@ -87,5 +87,23 @@ struct Sequence: Mappable {
     
     func inRange(value: UInt64) -> Bool {
         return value >= getRangeStart() && value <= getRangeEnd() 
+    }
+    
+    class UInt64Transform: TransformType {
+        typealias Object = UInt64
+        typealias JSON = String
+        
+        func transformFromJSON(value: AnyObject?) -> Object?{
+            if let number = value as? NSNumber {
+                let uint64Value = number.unsignedLongLongValue
+                return uint64Value
+            }
+            
+            return nil
+        }
+        
+        func transformToJSON(value: Object?) -> JSON? {
+            return nil
+        }
     }
 }

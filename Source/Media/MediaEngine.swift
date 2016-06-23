@@ -31,10 +31,18 @@ class MediaEngine {
         return mediaEngine.activeMediaSession.audioMuted
     }
     
+    var audioOutputMuted: Bool {
+        return mediaEngine.activeMediaSession.audioOutputMuted
+    }
+    
     var videoMuted: Bool {
         return mediaEngine.activeMediaSession.videoMuted
     }
     
+    var videoOutputMuted: Bool {
+        return mediaEngine.activeMediaSession.videoOutputMuted
+    }
+
     init() {
         WmeLogManager.sharedInstance().addLogger(MediaEngineCustomLogger())
     }
@@ -43,8 +51,7 @@ class MediaEngine {
         self.mediaSession = mediaSession
         
         stopMedia()
-        
-        mediaEngine.start()
+
         mediaEngine.configureAudioSession()
         applyDefaultMediaSettings()
         
@@ -56,8 +63,8 @@ class MediaEngine {
         mediaEngineObserver.startObserving()
     }
     
-    func getLocalSdp() -> String {
-        mediaEngine.createSdpOffer()
+    func getLocalSdp(mediaSession: MediaSession) -> String {
+        mediaEngine.createSdpOffer(mediaSession)
         return mediaEngine.localWmeSdpOffer
     }
     
@@ -65,19 +72,31 @@ class MediaEngine {
         mediaEngine.receiveSdpAnswer(mediaSession, sdp: sdp, featureToggles: [:])
     }
     
-    func toggleVideo() {
+    func toggleSendingVideo() {
         if !isMediaStarted() {
             return
         }
         
         if videoMuted {
-            mediaEngine.unMuteVideo()
+            mediaEngine.unmuteVideo()
         } else {
             mediaEngine.muteVideo()
         }
     }
     
-    func toggleAudio() {
+    func toggleReceivingVideo() {
+        if !isMediaStarted() {
+            return
+        }
+        
+        if videoOutputMuted {
+            mediaEngine.unmuteVideoOutput()
+        } else {
+            mediaEngine.muteVideoOutput()
+        }
+    }
+    
+    func toggleSendingAudio() {
         if !isMediaStarted() {
             return
         }
@@ -89,6 +108,18 @@ class MediaEngine {
         }
     }
     
+    func toggleReceivingAudio() {
+        if !isMediaStarted() {
+            return
+        }
+        
+        if audioOutputMuted {
+            mediaEngine.unmuteAudioOutput()
+        } else {
+            mediaEngine.muteAudioOutput()
+        }
+    }
+
     func startMedia() {
         if isMediaStarted() {
             return
@@ -126,6 +157,17 @@ class MediaEngine {
     func configureAudioSession() {
         mediaEngine.configureAudioSession()
     }
+
+    func performReachabilityCheck(clusterInfo: [NSObject : AnyObject], completionHandler: ReachabilityCheckHandler) {
+        mediaEngine.performStunReachabilityCheck(clusterInfo) {
+            result in
+            completionHandler(result)
+        }
+    }
+    
+    func clearReachabilityData() {
+        mediaEngine.clearReachabilityData()
+    }
     
     private func isMediaStarted() -> Bool {
         guard mediaEngine.mediaAgentsCreated else {
@@ -153,21 +195,12 @@ class MediaEngine {
     }
     
     private func setDefaultCamera() {
-        if let defaultFacingMode = UserDefaults.sharedInstance.facingMode {
-            let isFront: Bool
-            
-            if defaultFacingMode == Call.FacingMode.User.rawValue {
-                isFront = true
-            } else {
-                isFront = false
-            }
-            mediaEngine.setDefaultVideoCamera(isFront)
-        }
+        let isFront = Phone.sharedInstance.defaultFacingMode == Call.FacingMode.User
+        mediaEngine.setDefaultVideoCamera(isFront)
+        
     }
     
     private func setDefaultAudioRoute() {
-        if let isSpeaker = UserDefaults.sharedInstance.loudSpeaker {
-            mediaEngine.switchSpeaker(isSpeaker)
-        }
+        mediaEngine.switchSpeaker(Phone.sharedInstance.defaultLoudSpeaker)
     }
 }

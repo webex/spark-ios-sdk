@@ -183,7 +183,7 @@ class AuthManager {
         } catch let error as NSError {
             deauthorize()
             Logger.error("Failed to refresh token: \(error.localizedFailureReason)")
-            NSNotificationCenter.defaultCenter().postNotificationName(Notifications.Phone.RefreshAccessTokenFailed, object: nil)
+            PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
             return false
         }
         

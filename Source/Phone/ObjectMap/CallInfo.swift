@@ -67,7 +67,6 @@ struct CallInfo: Mappable {
     }
     
     var remoteParticipantants: [Participant] {
-        
         return allParticipantants.filter({$0.id != myself?.id})
     }
     
@@ -93,6 +92,10 @@ struct CallInfo: Mappable {
     
     var selfAudioMuted: Bool? {
         return selfMediaInfo?.audioMuted
+    }
+    
+    var selfVideoInactive: Bool? {
+        return myself?.status?.videoStatus == "INACTIVE"
     }
     
     var selfVideoMuted: Bool? {
@@ -163,6 +166,29 @@ struct CallInfo: Mappable {
     
     var hasAtLeastOneRemoteParticipantantDeclined: Bool {
         return remoteParticipantants.filter({$0.state == ParticipantState.Declined}).count >= 1
+    }
+    
+    var isIncomingCall: Bool {
+        return fullState?.state == "ACTIVE" && myself?.alertType?.action == "FULL"
+    }
+    
+    // TODO: only valid in one-on-one call
+    var remoteVideoMuted: Bool {
+        let p = remoteParticipantants[0]
+        if p.state == ParticipantState.Joined && p.status?.videoStatus == "RECVONLY" {
+            return true
+        }
+        
+        return false
+    }
+    
+    var remoteAudioMuted: Bool {
+        let p = remoteParticipantants[0]
+        if p.state == ParticipantState.Joined && p.status?.audioStatus == "RECVONLY" {
+            return true
+        }
+        
+        return false
     }
 
     // MARK: utils functions

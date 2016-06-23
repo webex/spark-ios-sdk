@@ -7,6 +7,8 @@ typedef NS_ENUM(NSInteger, MediaEngineSdpDirection) {
 };
 typedef int AudioMuteState;
 
+typedef void(^ReachabilityCheckHandler)(NSString* result);
+
 
 @class MediaSession;
 @class Sdp;
@@ -26,9 +28,8 @@ typedef int AudioMuteState;
 @property (nonatomic) BOOL alreadyWarnedNetworkCongestion;
 @property (nonatomic) BOOL localVideoDisabled;
 @property (nonatomic) BOOL callConnected;
-@property (nonatomic) BOOL crashWhenMediaEngineError;
 @property (nonatomic, readonly, getter=isSimulcastEnabled) BOOL simulcastEnabled;
-
+@property (nonatomic, readonly) NSString *reachabilityResult;
 //
 // Shared Instance class method. We should only have one instance of the Media Engine
 // during execution. This is a good way to manage that. If the instance is not yet created,
@@ -36,14 +37,8 @@ typedef int AudioMuteState;
 //
 + (MediaEngine *)sharedInstance;
 
-- (void)start;
-- (void)stop;
-
-- (void)createSdpOffer;
-- (void)createSdpOfferForScreenRecvOnly;
-- (void)setSdpDirection:(MediaEngineSdpDirection)newDirection;
+- (void)createSdpOffer:(MediaSession *)mediaSession;
 - (void)receiveSdpAnswer:(MediaSession *)mediaSession sdp:(NSString *)sdp featureToggles:(NSDictionary *)featureToggles;
-- (void)setSdpDirection:(MediaEngineSdpDirection)newDirection mediaType:(NSString *)mediaType;
 
 - (void)onMediaReady:(unsigned long)mid direction:(int)direction mediaType: (int)mediaType track: (void*)pTrack;
 - (void)OnMediaBlocked:(unsigned long)mid vid:(unsigned long)vid blocked:(bool)blocked;
@@ -69,21 +64,16 @@ typedef int AudioMuteState;
 - (BOOL)endMediaSession:(MediaSession *)mediaSession;
 
 //
-// Start or stop the self-view. This can be done without being in a conversation
-//
-- (void)startSelfView:(MediaSession *)mediaSession;
-- (void)stopSelfView;
-//
-// join or leave screen sharing. sharingId is unique id of sharing
-//
-- (void)joinSharing:(NSString *)sharingId;
-- (void)leaveSharing:(NSString *)sharingId;
-
-//
 // Turn on or off the video stream
 //
 - (void)muteVideo;
-- (void)unMuteVideo;
+- (void)unmuteVideo;
+
+//
+// Turn on or off the video output stream
+//
+- (void)muteVideoOutput;
+- (void)unmuteVideoOutput;
 
 //
 // Turn on or off the audio stream
@@ -97,9 +87,6 @@ typedef int AudioMuteState;
 - (void)muteAudioOutput;
 - (void)unmuteAudioOutput;
 
-- (void)pushAudioMuteStateAndMuteAll;
-- (void)popAudioMuteState;
-
 //
 // Switch Camera (front and back)
 //
@@ -111,23 +98,9 @@ typedef int AudioMuteState;
 - (void)switchSpeaker:(BOOL)isSpeaker;
 - (BOOL)isSpeaker;
 
-- (void)startSendingVideoFile:(NSString*)videoFilename isLoop:(BOOL)isLoop;
-- (void)stopSendingVideoFile;
 
-- (void)startSendingAudioFile:(NSString*)audioFilename isLoop:(BOOL)isLoop;
-- (void)stopSendingAudioFile;
-
-- (void)startRecordingVideoFile:(NSString*)videoFilename;
-- (void)stopRecordingVideoFile;
-
-- (void)startRecordingAudioFile:(NSString*)audioFilename;
-- (void)stopRecordingAudioFile;
-
-- (void)dumpAudioDebugFiles:(NSUInteger)duration;
-- (NSMutableDictionary *)audioDumpFiles;
-- (void)removeAudioDebugFiles;
-
-- (NSDictionary *)mediaStatistics;
-- (NSDictionary *)packetStatistics;
+//Reachability Check
+- (void)performStunReachabilityCheck:(NSDictionary*)clusterInfo completionHandler:(ReachabilityCheckHandler)handler;
+- (void)clearReachabilityData;
 
 @end

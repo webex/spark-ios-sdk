@@ -69,7 +69,7 @@ class DeviceService: CompletionHandlerType<Device> {
             self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
         }
         
-        UserDefaults.sharedInstance.removeDeviceUrl()
+        deviceUrl = nil
     }
     
     private func onRegisterDeviceCompleted(response: ServiceResponse<Device>, completionHandler: Bool -> Void) {

@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
+#import "MediaConstraint.h"
 
 @class MediaRenderView;
-@class MediaStatistics;
 
 typedef enum  {
     mediaSessionIdle = 0,
@@ -13,6 +13,8 @@ typedef enum  {
 
 // The MediaSession encapsulates the information needed to start, manage, and end a MediaSession
 @interface MediaSession : NSObject
+
+@property (nonatomic) MediaConstraint *mediaConstraint;
 
 @property (nonatomic) mediaSessionConnectionState audioConnectionState;
 @property (nonatomic) mediaSessionConnectionState videoConnectionState;
@@ -39,8 +41,10 @@ typedef enum  {
 @property (nonatomic) BOOL previewVideo;
 @property (nonatomic) BOOL sendAudio;
 @property (nonatomic) BOOL audioMuted;
+@property (nonatomic) BOOL audioOutputMuted;
 @property (nonatomic, getter=isAudioMutedByInterruption) BOOL audioMutedByInterruption;
 @property (nonatomic) BOOL videoMuted;
+@property (nonatomic) BOOL videoOutputMuted;
 @property (nonatomic, readonly, getter=isMediaActive) BOOL mediaActive;
 @property (nonatomic, readonly, getter=isReceivingMedia) BOOL receivingMedia;
 @property (nonatomic) BOOL receivedAtLeastOneVideoPacket;
@@ -48,8 +52,6 @@ typedef enum  {
 @property (nonatomic) BOOL sentAtLeastOneVideoPacket;
 @property (nonatomic) BOOL sentAtLeastOneAudioPacket;
 @property (nonatomic) float outputVolumeAtEndOfCall;
-@property (nonatomic) NSDictionary *mediaStatistics;
-@property (nonatomic) NSDictionary *packetStatistics;
 
 // Height and Width are reported by the WME
 @property (nonatomic) uint32_t videoDecoderHeight;

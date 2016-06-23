@@ -57,29 +57,14 @@ struct Participant: Mappable {
             guard let state = value as? String else {
                 return nil
             }
-            
-            switch state {
-            case "UNKNOWN":
-                return ParticipantState.Unknown
-            case "IDLE":
-                return ParticipantState.Idle
-            case "NOTIFIED":
-                return ParticipantState.Notified
-            case "JOINED":
-                return ParticipantState.Joined
-            case "LEFT":
-                return ParticipantState.Left
-            case "DECLINED":
-                return ParticipantState.Declined
-            default:
-                return ParticipantState.Unknown
-            }
+            return ParticipantState(rawValue: state)
         }
 
         func transformToJSON(value: Object?) -> JSON? {
-            return nil
+            guard let state = value else {
+                return nil
+            }
+            return state.rawValue
         }
     }
-
-    
 }

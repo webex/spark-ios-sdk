@@ -99,14 +99,25 @@ Below is code of a demo of the SDK usage
     
     // Calling example
     // Make a call
-    var outgoingCall: Call?
-    Spark.phone.dial("coworker@acm.com", renderView: RenderView(...)) { call in
-        outgoingCall = call
+    var outgoingCall =  Spark.phone.dial("coworker@acm.com", option: MediaOption.AudioVideo(local: ..., remote: ...)) { success in
+        if !success {
+            print("Failed to dail")
+        }
     }
     
-    // Recive a call
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(showCallToastView(_:)), name: Notifications.Phone.Incoming, ...)
-    @objc func showCallToastView(notification: NSNotification) {
-        var incomingCall = notification.call
+    // Recieve a call
+    class IncomingCallViewController: UIViewController, PhoneObserver {
+        override func viewWillAppear(...) {
+            ...
+            PhoneNotificationCenter.sharedInstance.addObserver(self)
+        }
+        override func viewWillDisappear(...) {
+            ...
+            PhoneNotificationCenter.sharedInstance.removeObserver(self)
+        }
+        func callIncoming(call: Call) {
+        // Show incoming call toast view
+        }
+        ...
     }
     ```

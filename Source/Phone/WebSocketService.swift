@@ -41,6 +41,10 @@ class WebSocketService: WebSocketDelegate {
     func connect(webSocketUrl: NSURL) {
         if socket == nil {
             socket = createWebSocket(webSocketUrl)
+            guard socket != nil else {
+                Logger.error("Skip connection due to failure of creating socket")
+                return
+            }
         }
         
         if socket!.isConnected {
@@ -72,9 +76,14 @@ class WebSocketService: WebSocketDelegate {
         socket = nil
     }
     
-    private func reconnect() {        
+    private func reconnect() {
         guard socket != nil else {
             Logger.warn("Web socket has not been connected")
+            return
+        }
+        
+        guard !socket!.isConnected else {
+            Logger.warn("Web socket has already connected")
             return
         }
         
@@ -84,13 +93,19 @@ class WebSocketService: WebSocketDelegate {
     }
     
     private func createWebSocket(webSocketUrl: NSURL) -> WebSocket? {
+        // Need to check authorization, avoid crash when logout as soon as login
+        guard let authorization = AuthManager.sharedInstance.getAuthorization() else {
+            Logger.error("Failed to create web socket due to no authorization")
+            return nil
+        }
+        
         socket = WebSocket(url: webSocketUrl)
         if socket == nil {
             Logger.error("Failed to create web socket")
             return nil
         }
         
-        socket?.headers.unionInPlace(AuthManager.sharedInstance.getAuthorization()!)
+        socket?.headers.unionInPlace(authorization)
         socket?.voipEnabled = true
         socket?.selfSignedSSL = true
         socket?.delegate = self
@@ -117,6 +132,8 @@ class WebSocketService: WebSocketDelegate {
         connectionRetryCounter.reset()
         scheduleMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
+        
+        ReachabilityService.sharedInstance.fetch()
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
@@ -177,19 +194,13 @@ class WebSocketService: WebSocketDelegate {
             let eventData = message["data"]
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
-                    handleCallEvent(eventType, event: eventData)
+                    Logger.info("locus event: \(eventData.object)")
+                    CallManager.sharedInstance.handleCallEvent(eventData.object)
                 }
             }
         }
         
         pendingMessages.removeAll()
-    }
-    
-    private func handleCallEvent(eventType: String, event: JSON) {
-        Logger.info("locus event: \(event.object)")
-        
-        let userInfo: [NSObject: AnyObject] = [Notifications.Locus.NotificationKey: event.object]
-        NSNotificationCenter.defaultCenter().postNotificationName(eventType, object: nil, userInfo: userInfo)
     }
     
     // MARK: - Web Socket Timers

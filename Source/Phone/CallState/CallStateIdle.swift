@@ -36,6 +36,6 @@ class CallStateIdle: CallState {
     
     private func doActionWhenOutgoing() {
         call.state = CallStateOutgoing(call)
-        postNotification(Notifications.Call.Ringing)
+        callNotificationCenter.notifyCallRinging(call)
     }
 }

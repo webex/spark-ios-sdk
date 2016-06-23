@@ -13,7 +13,7 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (85% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (89% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -33,6 +33,9 @@
                 <a href="Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
               </li>
               <li class="nav-group-task">
@@ -46,6 +49,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
@@ -62,6 +68,15 @@
             <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Enums/DisconnectionType.html">DisconnectionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/MediaChangeType.html">MediaChangeType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/MediaOption.html">MediaOption</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/Result.html">Result</a>
               </li>
               <li class="nav-group-task">
@@ -70,18 +85,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Extensions.html">Extensions</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="Extensions/NSNotification.html">NSNotification</a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/Storagable.html">Storagable</a>
+                <a href="Protocols/CallObserver.html">CallObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/PhoneObserver.html">PhoneObserver</a>
               </li>
             </ul>
           </li>
@@ -95,13 +105,7 @@
                 <a href="Structs/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/Notifications.html">Notifications</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="Structs/Person.html">Person</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Structs/RenderView.html">RenderView</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Room.html">Room</a>
@@ -216,15 +220,26 @@ Spark.phone.register() { success in
 
     <span class="c1">// Calling example</span>
     <span class="c1">// Make a call</span>
-    <span class="k">var</span> <span class="nv">outgoingCall</span><span class="p">:</span> <span class="kt">Call</span><span class="p">?</span>
-    <span class="kt">Spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="s">"coworker@acm.com"</span><span class="p">,</span> <span class="nv">renderView</span><span class="p">:</span> <span class="kt">RenderView</span><span class="p">(</span><span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
-        <span class="n">outgoingCall</span> <span class="o">=</span> <span class="n">call</span>
+    <span class="k">var</span> <span class="nv">outgoingCall</span> <span class="o">=</span>  <span class="kt">Spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="s">"coworker@acm.com"</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="kt">AudioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">success</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Failed to dail"</span><span class="p">)</span>
+        <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="c1">// Recive a call</span>
-    <span class="kt">NSNotificationCenter</span><span class="o">.</span><span class="nf">defaultCenter</span><span class="p">()</span><span class="o">.</span><span class="nf">addObserver</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="nv">selector</span><span class="p">:</span> <span class="err">#</span><span class="nf">selector</span><span class="p">(</span><span class="nf">showCallToastView</span><span class="p">(</span><span class="nv">_</span><span class="p">:)),</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">Notifications</span><span class="o">.</span><span class="kt">Phone</span><span class="o">.</span><span class="kt">Incoming</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
-    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">showCallToastView</span><span class="p">(</span><span class="nv">notification</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">var</span> <span class="nv">incomingCall</span> <span class="o">=</span> <span class="n">notification</span><span class="o">.</span><span class="n">call</span>
+    <span class="c1">// Recieve a call</span>
+    <span class="kd">class</span> <span class="kt">IncomingCallViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">PhoneObserver</span> <span class="p">{</span>
+        <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillAppear</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">...</span>
+            <span class="kt">PhoneNotificationCenter</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">addObserver</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewWillDisappear</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">...</span>
+            <span class="kt">PhoneNotificationCenter</span><span class="o">.</span><span class="n">sharedInstance</span><span class="o">.</span><span class="nf">removeObserver</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="kd">func</span> <span class="nf">callIncoming</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Show incoming call toast view</span>
+        <span class="p">}</span>
+        <span class="o">...</span>
     <span class="p">}</span>
     <span class="err">```</span>
 </code></pre>
@@ -232,7 +247,7 @@ Spark.phone.register() { success in
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-05-25)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-06-23)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -17,5 +17,6 @@ import Foundation
 extension Metric {
     struct Call {
         static let Rating = "meetup_call_user_rating"
+        static let ActivatingVideo = "video_license_activation"
     }
 }

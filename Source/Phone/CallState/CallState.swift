@@ -18,6 +18,7 @@ class CallState {
     
     weak var call: Call!
     let callManager = CallManager.sharedInstance
+    let callNotificationCenter = CallNotificationCenter.sharedInstance
     
     init(_ call: Call) {
         self.call = call
@@ -32,10 +33,5 @@ class CallState {
     }
     
     func update() {
-    }
-    
-    final func postNotification(notification: String) {
-        NSNotificationCenter.defaultCenter().postNotificationName(notification, object: call, userInfo: nil)
-        Logger.info("Post notification: \(notification)")
     }
 }

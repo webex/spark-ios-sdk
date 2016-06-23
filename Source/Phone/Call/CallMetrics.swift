@@ -54,6 +54,11 @@ class CallMetrics {
         MetricsEngine.sharedInstance.trackMetric(metric)
     }
     
+    func reportVideoLicenseActivation() {
+        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.Generic)
+        MetricsEngine.sharedInstance.trackMetric(metric)
+    }
+    
     private func createBasicCallData(callInfo: CallInfo) -> Metric.DataType {
         return ["locusId": callInfo.callUrl!,
                 "locusTimestamp": callInfo.lastActive!,

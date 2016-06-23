@@ -18,7 +18,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.147"
+    public static let version = "0.9.148"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
@@ -52,14 +52,6 @@ public class Spark {
     /// - returns: Void
     public static func initWith(accessToken accessToken: String) {
         AuthManager.sharedInstance.authorize(token: accessToken)
-    }
-
-    /// Setup storage plugin to SDK. Different clients may have different storage requirements, for example, security requirements.
-    ///
-    /// - parameter storage: The storage plugin implemented by client.
-    /// - returns: Void
-    public static func setupStorage(storage: Storagable) {
-        UserDefaults.sharedInstance = UserDefaults(storage)
     }
     
     /// Toggle to enable or disable console log output.

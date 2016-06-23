@@ -20,12 +20,14 @@ struct MediaInfo: Mappable {
     var audioMuted: Bool?
     var videoMuted: Bool?
     var csis: [UInt]?
+    var reachabilities: [String /* media cluster tag */ : Reachability]?
     var type: String? = "SDP"
 
-    init(sdp: String, audioMuted: Bool, videoMuted: Bool) {
+    init(sdp: String, audioMuted: Bool, videoMuted: Bool, reachabilities: [String: Reachability]?) {
         self.sdp = sdp
         self.audioMuted = audioMuted
         self.videoMuted = videoMuted
+        self.reachabilities = reachabilities
     }
     
     init?(_ map: Map){
@@ -36,6 +38,7 @@ struct MediaInfo: Mappable {
         audioMuted <- map["audioMuted"]
         videoMuted <- map["videoMuted"]
         csis <- map["csis"]
+        reachabilities <- map["reachability"]
         type <- map["type"]
     }
 }

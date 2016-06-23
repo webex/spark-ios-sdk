@@ -34,6 +34,7 @@ class MemoryLoggerStorage {
         blocks[blockIndex] += message + "\n"
         if blocks[blockIndex].characters.count > BlockSize {
             blockIndex = (blockIndex + 1) % BlockCount
+            blocks[blockIndex] = ""
         }
         objc_sync_exit(self)
     }

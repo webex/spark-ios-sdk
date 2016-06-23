@@ -14,11 +14,11 @@
 
 import Foundation
 
-enum ParticipantState {
-    case Unknown
-    case Idle
-    case Notified
-    case Joined
-    case Left
-    case Declined
+enum ParticipantState : String {
+    case Unknown = "UNKNOWN"
+    case Idle = "IDLE"
+    case Notified = "NOTIFIED"
+    case Joined = "JOINED"
+    case Left = "LEFT"
+    case Declined = "DECLINED"
 }

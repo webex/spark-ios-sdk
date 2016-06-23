@@ -1,7 +1,8 @@
 
 #import <Foundation/Foundation.h>
 #import "CustomLogger.h"
-#import "WmeLogger.h"
+
+@class WmeLogger;
 
 @interface WmeLogManager : NSObject
 

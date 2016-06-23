@@ -17,16 +17,29 @@ import Foundation
 class NotificationObserver: NSObject {
     
     let notificationCenter = NSNotificationCenter.defaultCenter()
+    var isObserving = false
     
     final func startObserving() {
+        guard !isObserving else {
+            return
+        }
+        
         let notificationhandlerMap = getNotificationHandlerMap()
         for (notification, selector) in notificationhandlerMap {
             addObserver(Selector(selector), name: notification)
         }
+        
+        isObserving = true
     }
     
     final func stopObserving() {
+        guard isObserving else {
+            return
+        }
+        
         notificationCenter.removeObserver(self)
+        
+        isObserving = false
     }
     
     func getNotificationHandlerMap() -> [String: String] {

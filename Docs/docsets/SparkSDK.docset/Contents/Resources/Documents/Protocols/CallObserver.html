@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CallObserver Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/CallObserver" class="dashAnchor"></a>
+    <a title="CallObserver Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">SparkSDK Docs</a> (89% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">SparkSDK Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        CallObserver Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MembershipClient.html">MembershipClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PersonClient.html">PersonClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RoomClient.html">RoomClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/WebhookClient.html">WebhookClient</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/DisconnectionType.html">DisconnectionType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MediaChangeType.html">MediaChangeType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MediaOption.html">MediaOption</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/RoomType.html">RoomType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/CallObserver.html">CallObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/PhoneObserver.html">PhoneObserver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Membership.html">Membership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Person.html">Person</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Room.html">Room</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Webhook.html">Webhook</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>CallObserver</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CallObserver</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>The CallObserver protocol defines callback methods that observer object must implement to respond to call notification.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP8SparkSDK12CallObserver19callDidBeginRingingFCS_4CallT_"></a>
+                    <a name="//apple_ref/swift/Method/callDidBeginRinging(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP8SparkSDK12CallObserver19callDidBeginRingingFCS_4CallT_">callDidBeginRinging(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when remote participant(s) is ringing.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">callDidBeginRinging</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>call</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call object for the notification</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP8SparkSDK12CallObserver14callDidConnectFCS_4CallT_"></a>
+                    <a name="//apple_ref/swift/Method/callDidConnect(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP8SparkSDK12CallObserver14callDidConnectFCS_4CallT_">callDidConnect(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when remote participant(s) answered and call gets connected.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">callDidConnect</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>call</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call object for the notification</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP8SparkSDK12CallObserver17callDidDisconnectFTCS_4Call17disconnectionTypeOS_17DisconnectionType_T_"></a>
+                    <a name="//apple_ref/swift/Method/callDidDisconnect(_:disconnectionType:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP8SparkSDK12CallObserver17callDidDisconnectFTCS_4Call17disconnectionTypeOS_17DisconnectionType_T_">callDidDisconnect(_:disconnectionType:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when call gets disconnected (hangup, cancelled, get declined or other self device pickup the call).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">callDidDisconnect</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">,</span> <span class="nv">disconnectionType</span><span class="p">:</span> <span class="kt">DisconnectionType</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>call</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call object for the notification</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>disconnectionType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call disconnection type, for example, RemoteLeft (remote participant left).</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP8SparkSDK12CallObserver20remoteMediaDidChangeFTCS_4Call15mediaChangeTypeOS_15MediaChangeType_T_"></a>
+                    <a name="//apple_ref/swift/Method/remoteMediaDidChange(_:mediaChangeType:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP8SparkSDK12CallObserver20remoteMediaDidChangeFTCS_4Call15mediaChangeTypeOS_15MediaChangeType_T_">remoteMediaDidChange(_:mediaChangeType:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when remote participant(s) muted/unmuted video/audio.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">remoteMediaDidChange</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">,</span> <span class="nv">mediaChangeType</span><span class="p">:</span> <span class="kt">MediaChangeType</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>call</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call object for the notification</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>mediaChangeType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Remote media change type, for example, RemoteVideoMuted (remote participant muted video).</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-06-23)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

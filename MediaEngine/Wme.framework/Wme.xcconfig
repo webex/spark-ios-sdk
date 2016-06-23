@@ -6,7 +6,7 @@
 //  Copyright © 2016 cisco. All rights reserved.
 //
 
-WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine5.10.0
+WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine5.12
 HEADER_SEARCH_PATHS = $(inherited) "$(WEBEX_MEDIA_ENGINE)/sdk/include" "$(WEBEX_MEDIA_ENGINE)/external/include" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wrtp" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wqos" "$(WEBEX_MEDIA_ENGINE)/external/include/ios" "$(WEBEX_MEDIA_ENGINE)/external/include/client"
 LIBRARY_SEARCH_PATHS = $(inherited) "$(WEBEX_MEDIA_ENGINE)/sdk/libs/$(BASE_CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)" "$(WEBEX_MEDIA_ENGINE)/external/libs/$(BASE_CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)"
 

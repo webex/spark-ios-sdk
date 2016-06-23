@@ -31,13 +31,13 @@ class CallStateConnected: CallState {
     private func doActionWhenLocalLeft() {
         callManager.removeCall(call.url)
         call.state = CallStateLocalLeft(call)
-        postNotification(Notifications.Call.Disconnected)
+        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalLeft)
     }
     
     private func doActionWhenRemoteLeft() {
         callManager.removeCall(call.url)
         call.hangup(nil)
         call.state = CallStateRemoteLeft(call)
-        postNotification(Notifications.Call.Disconnected)
+        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteLeft)
     }
 }

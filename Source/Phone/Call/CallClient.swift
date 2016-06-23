@@ -101,4 +101,16 @@ class CallClient: CompletionHandlerType<CallInfo>{
         
         request.responseObject(completionHandler)
     }
+    
+    func fetchCallInfos(queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+        let request = requestBuilder()
+            .method(.GET)
+            .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
+            .path("loci")
+            .keyPath("loci")
+            .queue(queue)
+            .build()
+        
+        request.responseArray(completionHandler)
+    }
 }
