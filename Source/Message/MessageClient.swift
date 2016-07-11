@@ -53,18 +53,60 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter roomId: The room id.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter toPersonId: The id of the recipient when sending a private1:1 message.
-    /// - parameter toPersonEmail: The email address of the recipient when sendinga private 1:1 message.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func create(roomId roomId: String? = nil, text: String? = nil, files: String? = nil, toPersonId: String? = nil, toPersonEmail: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    public func postToRoom(roomId roomId: String, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "text": text,
-            "files": files,
-            "toPersonId": toPersonId,
-            "toPersonEmail": toPersonEmail])
+            "files": files])
+        
+        let request = requestBuilder()
+            .method(.POST)
+            .body(body)
+            .queue(queue)
+            .build()
+        
+        request.responseObject(completionHandler)
+    }
+    
+    /// Posts a plain text message, and optionally, a media content attachment, to a person.
+    ///
+    /// - parameter personId: The id of the recipient when sending a private1:1 message.
+    /// - parameter text: The plain text message to post to the room.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func postToPerson(personId personId: String, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+        let body = RequestParameter([
+            "toPersonId": personId,
+            "text": text,
+            "files": files])
+        
+        let request = requestBuilder()
+            .method(.POST)
+            .body(body)
+            .queue(queue)
+            .build()
+        
+        request.responseObject(completionHandler)
+    }
+    
+    /// Posts a plain text message, and optionally, a media content attachment, to a person.
+    ///
+    /// - parameter personEmail: The email address of the recipient when sendinga private 1:1 message.
+    /// - parameter text: The plain text message to post to the room.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func postToPerson(personEmail personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+        let body = RequestParameter([
+            "toPersonEmail": personEmail.toString(),
+            "text": text,
+            "files": files])
         
         let request = requestBuilder()
             .method(.POST)

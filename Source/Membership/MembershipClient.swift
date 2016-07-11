@@ -30,12 +30,12 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         
         let query = RequestParameter([
             "roomId": roomId,
             "personId": personId,
-            "personEmail": personEmail,
+            "personEmail": personEmail?.toString(),
             "max": max])
         
         let request = requestBuilder()
@@ -56,7 +56,7 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func createWithPersonId(roomId roomId: String, personId: String? = nil, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    public func create(roomId roomId: String, personId: String, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personId": personId,
@@ -79,10 +79,10 @@ public class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func createWithPersonEmail(roomId roomId: String, personEmail: String? = nil, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    public func create(roomId roomId: String, personEmail: EmailAddress, isModerator: Bool? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
-            "personEmail": personEmail,
+            "personEmail": personEmail.toString(),
             "isModerator": isModerator])
         
         let request = requestBuilder()

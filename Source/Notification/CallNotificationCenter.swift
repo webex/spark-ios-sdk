@@ -61,4 +61,10 @@ public class CallNotificationCenter {
             observer.remoteMediaDidChange(call, mediaChangeType: mediaUpdatedType)
         }
     }
+    
+    func notifyEnableDTMFChanged(call: Call) {
+        for observer in observers {
+            observer.enableDTMFDidChange(call, sendingDTMFEnabled: call.sendingDTMFEnabled)
+        }
+    }
 }

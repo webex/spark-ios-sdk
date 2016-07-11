@@ -29,10 +29,10 @@ public class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(email email: String? = nil, displayName: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    public func list(email email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.GET)
-            .query(RequestParameter(["email": email, "displayName": displayName, "max": max]))
+            .query(RequestParameter(["email": email?.toString(), "displayName": displayName, "max": max]))
             .keyPath("items")
             .queue(queue)
             .build()

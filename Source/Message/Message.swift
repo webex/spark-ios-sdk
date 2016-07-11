@@ -25,7 +25,7 @@ public struct Message: Mappable {
     public var personId: String?
     
     /// The person email.
-    public var personEmail: String?
+    public var personEmail: EmailAddress?
     
     /// The room id.
     public var roomId: String?
@@ -40,7 +40,7 @@ public struct Message: Mappable {
     public var toPersonId: String?
     
     /// The email address of the recipient when sendinga private 1:1 message.
-    public var toPersonEmail: String?
+    public var toPersonEmail: EmailAddress?
     
     /// The timestamp that the message being created.
     public var created: String?
@@ -57,12 +57,25 @@ public struct Message: Mappable {
     public mutating func mapping(map: Map) {
         id <- map["id"]
         personId <- map["personId"]
-        personEmail <- map["personEmail"]
+        personEmail <- (map["personEmail"], EmailTransform())
         roomId <- map["roomId"]
         text <- map["text"]
         files <- map["files"]
         toPersonId <- map["toPersonId"]
-        toPersonEmail <- map["toPersonEmail"]
-        created <- map["files"]
+        toPersonEmail <- (map["toPersonEmail"], EmailTransform())
+        created <- map["created"]
+    }
+}
+
+class EmailTransform: TransformType {
+    typealias Object = EmailAddress
+    typealias JSON = String
+    
+    func transformFromJSON(value: AnyObject?) -> Object?{
+        return EmailAddress.fromString(value as! String)
+    }
+    
+    func transformToJSON(value: Object?) -> JSON? {
+        return nil
     }
 }

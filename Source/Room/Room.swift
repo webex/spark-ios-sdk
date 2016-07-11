@@ -18,19 +18,33 @@ import ObjectMapper
 // Room type.
 public enum RoomType: String {
     /// 1-to-1 room
-    case Direct
+    case Direct  = "direct"
     /// Group room
-    case Group
+    case Group = "group"
 }
 
 /// Room contents.
 public struct Room: Mappable {
+    /// The id of this room.
     public var id: String?
+    
+    /// The title of this room.
     public var title: String?
+    
+    /// The type of this room.
     public var type: RoomType?
+    
+    /// Indicate if this room is locked.
     public var isLocked: Bool?
+    
+    /// Last activity of this room.
     public var lastActivity: String?
+    
+    /// The timestamp that this room being created.
     public var created: String?
+    
+    /// The team Id that this room associated with.
+    public var teamId: String?
 
     /// Room constructor.
     ///
@@ -44,25 +58,10 @@ public struct Room: Mappable {
     public mutating func mapping(map: Map) {
         id <- map["id"]
         title <- map["title"]
-        type <- (map["type"], RoomTypeTransform())
+        type <- (map["type"], EnumTransform<RoomType>())
         isLocked <- map["isLocked"]
         lastActivity <- map["lastActivity"]
         created <- map["created"]
-    }
-    
-    private class RoomTypeTransform: TransformType {
-        typealias Object = RoomType
-        typealias JSON = String
-        
-        func transformFromJSON(value: AnyObject?) -> Object? {
-            guard let state = value as? String else {
-                return nil
-            }
-            return RoomType(rawValue: state)
-        }
-        
-        func transformToJSON(value: Object?) -> JSON? {
-            return nil
-        }
+        teamId <- map["teamId"]
     }
 }

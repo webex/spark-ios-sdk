@@ -79,7 +79,7 @@ Below is code of a demo of the SDK usage
         print("\(room.title!), created \(room.created!): \(room.id!)")
         
         // Add a coworker to the room
-        try Spark.memberships.createWithPersonEmail(roomId: room.id!, personEmail: "coworker@acm.com")
+        try Spark.memberships.create(roomId: room.id!, personEmail: "coworker@acm.com")
 
         // List the members of the room
         let memberships = try Spark.memberships.list(roomId: room.id!)
@@ -88,10 +88,10 @@ Below is code of a demo of the SDK usage
         }
 
         // Post a text message to the room
-        try Spark.messages.create(roomId: room.id!, text: "Hello World")
+        try Spark.messages.postToRoom(roomId: room.id!, text: "Hello World")
 
         // Share a file with the room
-        try Spark.messages.create(roomId: room.id!, files: "http://example.com/hello_world.jpg")
+        try Spark.messages.postToRoom(roomId: room.id!, files: "http://example.com/hello_world.jpg")
         
     } catch let error as NSError {
         print("Error: \(error.localizedFailureReason)")

@@ -14,7 +14,7 @@
     <a title="CallObserver Protocol Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (89% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (91% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -40,6 +40,9 @@
                 <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
               </li>
               <li class="nav-group-task">
@@ -59,6 +62,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TeamClient.html">TeamClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TeamMembershipClient.html">TeamMembershipClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/WebhookClient.html">WebhookClient</a>
@@ -82,6 +91,23 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/RoomType.html">RoomType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -115,6 +141,12 @@
                 <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Structs/Team.html">Team</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TeamMembership.html">TeamMembership</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Webhook.html">Webhook</a>
               </li>
             </ul>
@@ -131,7 +163,7 @@
 
                 </div>
               </div>
-            <p>The CallObserver protocol defines callback methods that observer object must implement to respond to call notification.</p>
+            <p>The CallObserver protocol defines callback methods that observer object implement to respond to call notification.</p>
 
           </section>
           <section class="section task-group-section">
@@ -144,6 +176,9 @@
                     <a name="//apple_ref/swift/Method/callDidBeginRinging(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP8SparkSDK12CallObserver19callDidBeginRingingFCS_4CallT_">callDidBeginRinging(_:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -151,6 +186,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) is ringing.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
@@ -191,6 +231,9 @@
                     <a name="//apple_ref/swift/Method/callDidConnect(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP8SparkSDK12CallObserver14callDidConnectFCS_4CallT_">callDidConnect(_:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -198,6 +241,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) answered and call gets connected.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
@@ -243,6 +291,9 @@
                     <a name="//apple_ref/swift/Method/callDidDisconnect(_:disconnectionType:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP8SparkSDK12CallObserver17callDidDisconnectFTCS_4Call17disconnectionTypeOS_17DisconnectionType_T_">callDidDisconnect(_:disconnectionType:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -250,6 +301,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when call gets disconnected (hangup, cancelled, get declined or other self device pickup the call).</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
@@ -308,6 +364,9 @@
                     <a name="//apple_ref/swift/Method/remoteMediaDidChange(_:mediaChangeType:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FP8SparkSDK12CallObserver20remoteMediaDidChangeFTCS_4Call15mediaChangeTypeOS_15MediaChangeType_T_">remoteMediaDidChange(_:mediaChangeType:)</a>
                     </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
                   </div>
                   <div class="height-container">
                     <div class="pointer-container"></div>
@@ -315,6 +374,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) muted/unmuted video/audio.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
 
                       </div>
                       <div class="declaration">
@@ -366,12 +430,85 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FP8SparkSDK12CallObserver19enableDTMFDidChangeFTCS_4Call18sendingDTMFEnabledSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/enableDTMFDidChange(_:sendingDTMFEnabled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FP8SparkSDK12CallObserver19enableDTMFDidChangeFTCS_4Call18sendingDTMFEnabledSb_T_">enableDTMFDidChange(_:sendingDTMFEnabled:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Default implementation
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when self participant enable DTMF change.</p>
+
+                      </div>
+                      <h4>Default Implementation</h4>
+                      <div class="default_impl abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">enableDTMFDidChange</span><span class="p">(</span><span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">,</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>call</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Call object for the notification</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>sendingDTMFEnabled</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The new value of sendingDTMFEnabled.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-06-23)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-07-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

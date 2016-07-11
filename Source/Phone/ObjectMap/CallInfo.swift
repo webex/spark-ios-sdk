@@ -106,6 +106,10 @@ struct CallInfo: Mappable {
         return thisDevice?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
+    var enableDTMF: Bool? {
+        return selfParticipantant?.enableDTMF
+    }
+    
     var lastActive: String? {
         return fullState?.lastActive
     }

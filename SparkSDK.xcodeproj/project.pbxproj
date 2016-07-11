@@ -20,6 +20,13 @@
 		3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57961CEDA351006124B0 /* String+Extension.swift */; };
 		3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */; };
 		3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */; };
+		3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1A91D24AD4A0016A072 /* Team.swift */; };
+		3D66B1AD1D24AD4A0016A072 /* TeamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AA1D24AD4A0016A072 /* TeamClient.swift */; };
+		3D66B1AE1D24AD4A0016A072 /* TeamClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AB1D24AD4A0016A072 /* TeamClient+Sync.swift */; };
+		3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AF1D24AD570016A072 /* TeamMembership.swift */; };
+		3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */; };
+		3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */; };
+		3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */; };
 		3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */; };
 		3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */; };
 		3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */; };
@@ -121,6 +128,13 @@
 		3D1E57961CEDA351006124B0 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
 		3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExponentialBackOffCounter.swift; sourceTree = "<group>"; };
+		3D66B1A91D24AD4A0016A072 /* Team.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Team.swift; path = Source/Team/Team.swift; sourceTree = "<group>"; };
+		3D66B1AA1D24AD4A0016A072 /* TeamClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamClient.swift; path = Source/Team/TeamClient.swift; sourceTree = "<group>"; };
+		3D66B1AB1D24AD4A0016A072 /* TeamClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TeamClient+Sync.swift"; path = "Source/Team/TeamClient+Sync.swift"; sourceTree = "<group>"; };
+		3D66B1AF1D24AD570016A072 /* TeamMembership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembership.swift; path = Source/TeamMembership/TeamMembership.swift; sourceTree = "<group>"; };
+		3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipClient.swift; path = Source/TeamMembership/TeamMembershipClient.swift; sourceTree = "<group>"; };
+		3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TeamMembershipClient+Sync.swift"; path = "Source/TeamMembership/TeamMembershipClient+Sync.swift"; sourceTree = "<group>"; };
+		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
 		3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestParameter.swift; sourceTree = "<group>"; };
 		3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoLicense.swift; sourceTree = "<group>"; };
@@ -242,6 +256,28 @@
 			name = Notification;
 			sourceTree = "<group>";
 		};
+		3D66B1A71D24ACF60016A072 /* Team */ = {
+			isa = PBXGroup;
+			children = (
+				3D66B1A91D24AD4A0016A072 /* Team.swift */,
+				3D66B1AA1D24AD4A0016A072 /* TeamClient.swift */,
+				3D66B1AB1D24AD4A0016A072 /* TeamClient+Sync.swift */,
+			);
+			name = Team;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		3D66B1A81D24ACFF0016A072 /* TeamMembership */ = {
+			isa = PBXGroup;
+			children = (
+				3D66B1AF1D24AD570016A072 /* TeamMembership.swift */,
+				3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */,
+				3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */,
+			);
+			name = TeamMembership;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		5D67C64C1CF04E6400758F6B /* Logger */ = {
 			isa = PBXGroup;
 			children = (
@@ -310,6 +346,8 @@
 				B91E75801CE2D7B70080EAE0 /* Room */,
 				B91E75891CE2D7B70080EAE0 /* Utils */,
 				B91E75911CE2D7B70080EAE0 /* Webhook */,
+				3D66B1A71D24ACF60016A072 /* Team */,
+				3D66B1A81D24ACFF0016A072 /* TeamMembership */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -490,6 +528,7 @@
 				3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */,
 				B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */,
 				3D1E57961CEDA351006124B0 /* String+Extension.swift */,
+				3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -627,8 +666,10 @@
 				3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */,
 				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
 				B91E75C91CE2D7B70080EAE0 /* AlertHint.swift in Sources */,
+				3D66B1AD1D24AD4A0016A072 /* TeamClient.swift in Sources */,
 				B91E75BC1CE2D7B70080EAE0 /* CallStateIncoming.swift in Sources */,
 				B91E75B31CE2D7B70080EAE0 /* Call.swift in Sources */,
+				3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */,
 				5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */,
 				B91E75A51CE2D7B70080EAE0 /* MembershipClient+Sync.swift in Sources */,
 				5D1A5D091CF8130E00313515 /* ReachabilityTransportStatus.swift in Sources */,
@@ -653,6 +694,7 @@
 				B91E75E21CE2D7B70080EAE0 /* NotificationObserver.swift in Sources */,
 				B91E75A91CE2D7B70080EAE0 /* MessageClient.swift in Sources */,
 				B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */,
+				3D66B1AE1D24AD4A0016A072 /* TeamClient+Sync.swift in Sources */,
 				B91E75A61CE2D7B70080EAE0 /* MembershipClient.swift in Sources */,
 				3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */,
 				3D0AA8CB1D0521570094A658 /* PhoneObserver.swift in Sources */,
@@ -664,6 +706,7 @@
 				B91E75B11CE2D7B70080EAE0 /* PersonClient+Sync.swift in Sources */,
 				3D0AA8C91D0521570094A658 /* CallObserver.swift in Sources */,
 				B91E75B91CE2D7B70080EAE0 /* CallState.swift in Sources */,
+				3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */,
 				5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */,
 				B91E75CB1CE2D7B70080EAE0 /* CallEvent.swift in Sources */,
 				3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */,
@@ -699,6 +742,7 @@
 				B91E75DA1CE2D7B70080EAE0 /* RoomClient.swift in Sources */,
 				B91E75C21CE2D7B70080EAE0 /* CallStateOutgoing.swift in Sources */,
 				5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */,
+				3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */,
 				B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */,
 				B91E75B61CE2D7B70080EAE0 /* CallManager.swift in Sources */,
 				B91E75D51CE2D7B70080EAE0 /* Sequence.swift in Sources */,
@@ -708,9 +752,11 @@
 				5D1A5D0B1CF821D000313515 /* MediaEngineReachabilityFeedback.swift in Sources */,
 				B91E75CA1CE2D7B70080EAE0 /* AlertType.swift in Sources */,
 				B91E75BA1CE2D7B70080EAE0 /* CallStateConnected.swift in Sources */,
+				3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */,
 				B91E75D21CE2D7B70080EAE0 /* ParticipantInfo.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,
 				B91E75C61CE2D7B70080EAE0 /* Device.swift in Sources */,
+				3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

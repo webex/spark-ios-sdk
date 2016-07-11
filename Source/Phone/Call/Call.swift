@@ -109,6 +109,15 @@ public class Call {
         return mediaEngine.isFrontCamera() ? .User : .Environment
     }
     
+    /// True if the DTMF keypad can be enabled for Client.
+    public var sendingDTMFEnabled: Bool {
+        if let enableDTMF = info?.enableDTMF {
+            return enableDTMF
+        } else {
+            return false
+        }
+    }
+    
     var info: CallInfo?
     var state: CallState!
     var url: String { return (info?.callUrl)! }
@@ -119,9 +128,11 @@ public class Call {
     private let mediaSession = MediaSession()
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     private let reachabilityService = ReachabilityService.sharedInstance
+    private var dtmfQueue: DtmfQueue!
     
     init() {
         state = CallStateIdle(self)
+        dtmfQueue = DtmfQueue(self)
     }
     
     init(_ info: CallInfo) {
@@ -130,6 +141,7 @@ public class Call {
         from = info.hostEmail
         
         state = CallStateIncoming(self)
+        dtmfQueue = DtmfQueue(self)
     }
     
     /// Answers an incoming call. Only applies to incoming calls.
@@ -192,6 +204,20 @@ public class Call {
                 Logger.error("Failure: \(error.localizedFailureReason)")
                 completionHandler?(false)
             }
+        }
+    }
+    
+    /// Sends DTMF events to remote destination.
+    ///
+    /// - parameter dtmf: Valid DTMF events. 0-9, *, #, and A-D.
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - returns: Void
+    /// - note: This function is expected to run on main thread.
+    public func sendDTMF(dtmf: String, completionHandler: CompletionHandler?) {
+        if sendingDTMFEnabled {
+            dtmfQueue!.push(dtmf, completionHandler: completionHandler)
+        } else {
+            completionHandler?(false)
         }
     }
     
@@ -301,6 +327,7 @@ public class Call {
         switch (result) {
         case .True:
             handleRemoteMediaChange(newInfo)
+            handleEnableDTMFChange(newInfo)
             setCallInfo(newInfo)
             state.update()
         case .DeSync:
@@ -331,12 +358,22 @@ public class Call {
         CallNotificationCenter.sharedInstance.notifyRemoteMediaChanged(self, mediaUpdatedType: mediaChangeType!)
     }
     
+    private func handleEnableDTMFChange(newInfo: CallInfo) {
+        if isDTMFEnabledChanged(newInfo) {
+            CallNotificationCenter.sharedInstance.notifyEnableDTMFChanged(self)
+        }
+    }
+    
     private func isRemoteVideoStateChanged(newInfo: CallInfo) -> Bool {
         return info!.remoteVideoMuted != newInfo.remoteVideoMuted
     }
     
     private func isRemoteAudioStateChanged(newInfo: CallInfo) -> Bool {
         return info!.remoteAudioMuted != newInfo.remoteAudioMuted
+    }
+    
+    private func isDTMFEnabledChanged(newInfo: CallInfo) -> Bool {
+        return info!.enableDTMF != newInfo.enableDTMF
     }
     
     private func setupMediaOption(option: MediaOption) {

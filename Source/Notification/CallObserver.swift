@@ -34,7 +34,7 @@ public enum MediaChangeType {
     case RemoteAudioUnmuted
 }
 
-/// The CallObserver protocol defines callback methods that observer object must implement to respond to call notification.
+/// The CallObserver protocol defines callback methods that observer object implement to respond to call notification.
 public protocol CallObserver: AnyObject {
     
     /// Callback when remote participant(s) is ringing.
@@ -61,4 +61,30 @@ public protocol CallObserver: AnyObject {
     /// - parameter mediaChangeType: Remote media change type, for example, RemoteVideoMuted (remote participant muted video).
     /// - returns: Void
     func remoteMediaDidChange(call: Call, mediaChangeType: MediaChangeType)
+    
+    /// Callback when self participant enable DTMF change.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter sendingDTMFEnabled: The new value of sendingDTMFEnabled.
+    /// - returns: Void
+    func enableDTMFDidChange(call: Call, sendingDTMFEnabled: Bool)
+}
+
+/// The default empty callback methods for CallObserver protocol.
+public extension CallObserver {
+    
+    func callDidBeginRinging(call: Call) {
+    }
+    
+    func callDidConnect(call: Call) {
+    }
+    
+    func callDidDisconnect(call: Call, disconnectionType: DisconnectionType) {
+    }
+    
+    func remoteMediaDidChange(call: Call, mediaChangeType: MediaChangeType) {
+    }
+    
+    func enableDTMFDidChange(call: Call, sendingDTMFEnabled: Bool) {
+    }
 }

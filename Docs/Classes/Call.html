@@ -14,7 +14,7 @@
     <a title="Call Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (89% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (91% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -40,6 +40,9 @@
                 <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
               </li>
               <li class="nav-group-task">
@@ -59,6 +62,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TeamClient.html">TeamClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/TeamMembershipClient.html">TeamMembershipClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/WebhookClient.html">WebhookClient</a>
@@ -82,6 +91,23 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/RoomType.html">RoomType</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -113,6 +139,12 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/ServiceResponse.html">ServiceResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Team.html">Team</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/TeamMembership.html">TeamMembership</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Webhook.html">Webhook</a>
@@ -521,6 +553,33 @@ For an incoming call this is the email address / phone number / SIP address of t
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC8SparkSDK4Call18sendingDTMFEnabledSb"></a>
+                    <a name="//apple_ref/swift/Property/sendingDTMFEnabled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC8SparkSDK4Call18sendingDTMFEnabledSb">sendingDTMFEnabled</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>True if the DTMF keypad can be enabled for Client.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
@@ -695,6 +754,77 @@ For an incoming call this is the email address / phone number / SIP address of t
                         <h4>Parameters</h4>
                         <table class="graybox">
                           <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed once the action is completed. True means success, False means failure.</p>
+
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC8SparkSDK4Call8sendDTMFFTSS17completionHandlerGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/sendDTMF(_:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK4Call8sendDTMFFTSS17completionHandlerGSqFSbT___T_">sendDTMF(_:completionHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sends DTMF events to remote destination.</p>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function is expected to run on main thread.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendDTMF</span><span class="p">(</span><span class="nv">dtmf</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt">CompletionHandler</span><span class="p">?)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dtmf</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Valid DTMF events. 0-9, *, #, and A-D.</p>
+
+                                </div>
+                              </td>
+                            </tr>
                             <tr>
                               <td>
                                 <code>
@@ -1031,7 +1161,7 @@ For an incoming call this is the email address / phone number / SIP address of t
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-06-23)</p>
+          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-07-11)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -29,6 +29,7 @@ struct Participant: Mappable {
     var guest: Bool?
     var alertHint: AlertHint?
     var alertType: AlertType?
+    var enableDTMF: Bool?
     
     init?(_ map: Map){
     }
@@ -47,6 +48,7 @@ struct Participant: Mappable {
         guest <- map["guest"]
         alertHint <- map["alertHint"]
         alertType <- map["alertType"]
+        enableDTMF <- map["enableDTMF"]
     }
     
     class ParticipantStateTransform: TransformType {

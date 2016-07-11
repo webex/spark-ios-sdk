@@ -23,7 +23,7 @@ extension MembershipClient {
     /// - parameter personEmail: Limit results to a specific person by email address.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: String? = nil, max: Int? = nil) throws -> [Membership] {
+    public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil) throws -> [Membership] {
         return try SyncUtil.getArray(roomId, personId, personEmail, max, async: list)
     }
     
@@ -33,8 +33,8 @@ extension MembershipClient {
     /// - parameter personId: The person id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func createWithPersonId(roomId roomId: String, personId: String? = nil, isModerator: Bool? = nil) throws -> Membership {
-        return try SyncUtil.getObject(roomId, personId, isModerator, async: createWithPersonId)
+    public func create(roomId roomId: String, personId: String, isModerator: Bool? = nil) throws -> Membership {
+        return try SyncUtil.getObject(roomId, personId, isModerator, async: create)
     }
     
     /// Add someone to a room by email address; optionally making them a moderator.
@@ -43,8 +43,8 @@ extension MembershipClient {
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func createWithPersonEmail(roomId roomId: String, personEmail: String? = nil, isModerator: Bool? = nil) throws -> Membership {
-        return try SyncUtil.getObject(roomId, personEmail, isModerator, async: createWithPersonEmail)
+    public func create(roomId roomId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> Membership {
+        return try SyncUtil.getObject(roomId, personEmail, isModerator, async: create)
     }
     
     /// Get details for a membership by id.

@@ -23,15 +23,16 @@ public class RoomClient: CompletionHandlerType<Room> {
 
     /// List rooms. By default, lists rooms to which the authenticated user belongs.
     ///
+    /// - parameter teamId: Limit the rooms to those associated with a team, by ID.
     /// - parameter max: Limit the maximum number of rooms in the response.
     /// - parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(max max: Int? = nil, type: RoomType? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    public func list(teamId teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.GET)
-            .query(RequestParameter(["max": max, "type": type?.rawValue]))
+            .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue]))
             .keyPath("items")
             .queue(queue)
             .build()
@@ -42,13 +43,14 @@ public class RoomClient: CompletionHandlerType<Room> {
     /// Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
     ///
     /// - parameter title: A user-friendly name for the room.
+    /// - parameter teamId: The ID for the team with which this room is associated.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func create(title title: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    public func create(title title: String, teamId: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.POST)
-            .body(RequestParameter(["title": title]))
+            .body(RequestParameter(["title": title, "teamId": teamId]))
             .queue(queue)
             .build()
         

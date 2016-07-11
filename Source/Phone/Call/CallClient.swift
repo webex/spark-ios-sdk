@@ -81,6 +81,31 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
+    func sendDtmf(participantUrl: String, deviceUrl: String, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
+        var dtmfInfo: [String: AnyObject] = [
+            "tones": events,
+            "correlationId": correlationId]
+        if volume != nil {
+            dtmfInfo["volume"] = volume
+        }
+        if durationMillis != nil {
+            dtmfInfo["durationMillis"] = durationMillis
+        }
+        let body:[String: Any?] = [
+            "deviceUrl": deviceUrl,
+            "dtmf": dtmfInfo]
+        
+        let request = requestBuilder()
+            .method(.POST)
+            .baseUrl(participantUrl)
+            .body(RequestParameter(body))
+            .path("sendDtmf")
+            .queue(queue)
+            .build()
+        
+        request.responseJSON(completionHandler)
+    }
+    
     func updateMedia(mediaUrl: String, localInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
             .method(.PUT)

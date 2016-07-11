@@ -14,7 +14,7 @@
 
 import Foundation
 
-/// The PhoneObserver protocol defines callback methods that observer object must implement to respond to phone notification.
+/// The PhoneObserver protocol defines callback methods that observer object implement to respond to phone notification.
 public protocol PhoneObserver: AnyObject {
     
     /// Callback when call is incoming.
@@ -27,4 +27,14 @@ public protocol PhoneObserver: AnyObject {
     ///
     /// - returns: Void
     func refreshAccessTokenFailed()
+}
+
+/// The default empty callback methods for PhoneObserver protocol.
+public extension PhoneObserver {
+    
+    func callIncoming(call: Call) {
+    }
+    
+    func refreshAccessTokenFailed() {
+    }
 }

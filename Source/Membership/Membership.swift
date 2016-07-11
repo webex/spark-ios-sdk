@@ -16,7 +16,7 @@ import Foundation
 import ObjectMapper
 
 /// Membership contents.
-public struct Membership: Mappable {
+public struct Membership: Mappable, Equatable {
     
     /// The id of this membership.
     public var id: String?
@@ -25,7 +25,7 @@ public struct Membership: Mappable {
     public var personId: String?
     
     /// The email address of the person.
-    public var personEmail: String?
+    public var personEmail: EmailAddress?
     
     /// The id of the room.
     public var roomId: String?
@@ -51,10 +51,25 @@ public struct Membership: Mappable {
     public mutating func mapping(map: Map) {
         id <- map["id"]
         personId <- map["personId"]
-        personEmail <- map["personEmail"]
+        personEmail <- (map["personEmail"], EmailTransform())
         roomId <- map["roomId"]
         isModerator <- map["isModerator"]
         isMonitor <- map["isMonitor"]
         created <- map["created"]
     }
+}
+
+/// Membership Equatable implementation. Check if two memberships are equal.
+public func ==(lhs: Membership, rhs: Membership) -> Bool {
+    if lhs.id == rhs.id  &&
+        lhs.personId == rhs.personId &&
+        lhs.personEmail == rhs.personEmail &&
+        lhs.roomId == rhs.roomId &&
+        lhs.isModerator == rhs.isModerator &&
+        lhs.isMonitor == rhs.isMonitor &&
+        lhs.created == rhs.created  {
+        return true
+    }
+    
+    return false
 }

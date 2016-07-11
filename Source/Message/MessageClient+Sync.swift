@@ -33,11 +33,29 @@ extension MessageClient {
     /// - parameter roomId: The room id.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter toPersonId: The id of the recipient when sending a private1:1 message.
-    /// - parameter toPersonEmail: The email address of the recipient when sendinga private 1:1 message.
     /// - returns: Message
-    public func create(roomId roomId: String? = nil, text: String? = nil, files: String? = nil, toPersonId: String? = nil, toPersonEmail: String? = nil) throws -> Message {
-        return try SyncUtil.getObject(roomId, text, files, toPersonId, toPersonEmail, async: create)
+    public func postToRoom(roomId roomId: String, text: String? = nil, files: String? = nil) throws -> Message {
+        return try SyncUtil.getObject(roomId, text, files, async: postToRoom)
+    }
+    
+    /// Posts a plain text message, and optionally, a media content attachment, to a person.
+    ///
+    /// - parameter personId: The id of the recipient when sending a private 1:1 message.
+    /// - parameter text: The plain text message to post to the room.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - returns: Message
+    public func postToPerson(personId personId: String, text: String? = nil, files: String? = nil) throws -> Message {
+        return try SyncUtil.getObject(personId, text, files, async: postToPerson)
+    }
+    
+    /// Posts a plain text message, and optionally, a media content attachment, to a person.
+    ///
+    /// - parameter personEmail: The email address of the recipient when sendinga private 1:1 message.
+    /// - parameter text: The plain text message to post to the room.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - returns: Message
+    public func postToPerson(personEmail personEmail: EmailAddress, text: String? = nil, files: String? = nil) throws -> Message {
+        return try SyncUtil.getObject(personEmail, text, files, async: postToPerson)
     }
     
     /// Shows details for a message by message id.

@@ -22,7 +22,7 @@ public struct Person: Mappable {
     public var id: String?
     
     /// The emails of this person.
-    public var emails: [String]?
+    public var emails: [EmailAddress]?
     
     /// The display name of this person.
     public var displayName: String?
@@ -44,9 +44,28 @@ public struct Person: Mappable {
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         id <- map["id"]
-        emails <- map["emails"]
+        emails <- (map["emails"], EmailsTransform())
         displayName <- map["displayName"]
         avatar <- map["avatar"]
         created <- map["created"]
+    }
+    
+    class EmailsTransform: TransformType {
+        typealias Object = [EmailAddress]
+        typealias JSON = [String]
+        
+        func transformFromJSON(value: AnyObject?) -> Object?{
+            var emails: [EmailAddress] = []
+            let emailStrings = value as! [String]
+            for emailString in emailStrings {
+                emails.append(EmailAddress.fromString(emailString)!)
+            }
+            
+            return emails
+        }
+        
+        func transformToJSON(value: Object?) -> JSON? {
+            return nil
+        }
     }
 }

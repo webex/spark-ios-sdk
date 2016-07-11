@@ -18,7 +18,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "0.9.148"
+    public static let version = "0.9.149"
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
@@ -108,6 +108,25 @@ extension Spark {
     /// However, this API was designed to be extensible and forms the foundation for supporting a wide array of platform events in future releases.
     public static var webhooks: WebhookClient {
         return WebhookClient()
+    }
+    
+    /// Teams are groups of people with a set of rooms that are visible to all members of that team. 
+    /// This API is used to manage the teams themselves. 
+    /// Teams are create and deleted with this API. You can also update a team to change its team, for example.
+    ///
+    /// - note:
+    ///     - To manage people in a team see the Team Memberships API.
+    ///     - To manage team rooms see the Rooms API.
+    public static var teams: TeamClient {
+        return TeamClient()
+    }
+    
+    /// Team Memberships represent a person's relationship to a team. 
+    /// Use this API to list members of any team that you're in or create memberships to invite someone to a team. 
+    /// Team memberships can also be updated to make someome a moderator or deleted to remove them from the team.
+    /// Just like in the Spark app, you must be a member of the team in order to list its memberships or invite people.
+    public static var teamMemberships: TeamMembershipClient {
+        return TeamMembershipClient()
     }
 
     /// Phone allows your app to make media calls on Spark.

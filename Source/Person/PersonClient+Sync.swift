@@ -22,7 +22,7 @@ extension PersonClient {
     /// - parameter displayName: List people whose name starts with this string.
     /// - parameter max: Limit the maximum number of people in the response.
     /// - returns: People array
-    public func list(email email: String? = nil, displayName: String? = nil, max: Int? = nil) throws -> [Person] {
+    public func list(email email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil) throws -> [Person] {
         return try SyncUtil.getArray(email, displayName, max, async: list)
     }
     
