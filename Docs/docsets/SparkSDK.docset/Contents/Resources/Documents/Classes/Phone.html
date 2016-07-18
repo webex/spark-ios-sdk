@@ -14,7 +14,7 @@
     <a title="Phone Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (91% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -32,6 +32,12 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/Status.html">– Status</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
@@ -53,6 +59,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
@@ -227,7 +236,7 @@ True as using loud speaker, False as not.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span> <span class="o">=</span> <span class="kt">Call</span><span class="o">.</span><span class="kt">FacingMode</span><span class="o">.</span><span class="kt">User</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="o">.</span><span class="kt">FacingMode</span><span class="o">.</span><span class="kt">User</span></code></pre>
 
                         </div>
                       </div>
@@ -410,7 +419,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Call</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Call.html">Call</a></span></code></pre>
 
                         </div>
                       </div>
@@ -570,7 +579,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestMediaAccess</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt">MediaAccessType</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestMediaAccess</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone/MediaAccessType.html">MediaAccessType</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -621,7 +630,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
         </section>
         <section id="footer">
           <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-07-18)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

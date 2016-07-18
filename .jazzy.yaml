@@ -1,0 +1,8 @@
+xcodebuild_arguments: [-workspace, SparkSDK.xcworkspace, -scheme,SparkSDK]
+clean: true
+author: Cisco
+author_url: https://developer.ciscospark.com
+output: Docs
+#min_acl: private
+#source_directory: ../source/
+#module: SparkBnB

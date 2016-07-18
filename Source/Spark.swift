@@ -15,6 +15,8 @@
 import Foundation
 import UIKit
 
+
+/// The main entry point into the SDK. Contains methods for initializing the SDK and verifying developer and end user credentials.
 public class Spark {
     
     /// The version number of this SDK.

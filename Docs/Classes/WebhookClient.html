@@ -14,7 +14,7 @@
     <a title="WebhookClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (91% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -32,6 +32,12 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/Status.html">– Status</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
@@ -53,6 +59,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
@@ -162,7 +171,7 @@
             <h1>WebhookClient</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">WebhookClient</span><span class="p">:</span> <span class="kt">CompletionHandlerType</span><span class="o">&lt;</span><span class="kt">Webhook</span><span class="o">&gt;</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">WebhookClient</span><span class="p">:</span> <span class="kt"><a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Webhook.html">Webhook</a></span><span class="o">&gt;</span></code></pre>
 
                 </div>
               </div>
@@ -664,7 +673,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">max</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">Webhook</span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="n">max</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/Webhook.html">Webhook</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -716,7 +725,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">targetUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Webhook</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">targetUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">resource</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">event</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">filter</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Webhook.html">Webhook</a></span></code></pre>
 
                         </div>
                       </div>
@@ -820,7 +829,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">webhookId</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Webhook</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="n">webhookId</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Webhook.html">Webhook</a></span></code></pre>
 
                         </div>
                       </div>
@@ -872,7 +881,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">webhookId</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">targetUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Webhook</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="n">webhookId</span> <span class="nv">webhookId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">targetUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Webhook.html">Webhook</a></span></code></pre>
 
                         </div>
                       </div>
@@ -988,7 +997,7 @@
         </section>
         <section id="footer">
           <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-07-18)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

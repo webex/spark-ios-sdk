@@ -14,7 +14,7 @@
     <a title="Spark Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (91% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -32,6 +32,12 @@
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Classes/Call.html">Call</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/Status.html">– Status</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
@@ -53,6 +59,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone.html">Phone</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
@@ -160,7 +169,13 @@
         <section>
           <section class="section">
             <h1>Spark</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Spark</span></code></pre>
+
+                </div>
+              </div>
+            <p>The main entry point into the SDK. Contains methods for initializing the SDK and verifying developer and end user credentials.</p>
 
           </section>
           <section class="section task-group-section">
@@ -186,7 +201,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">version</span> <span class="o">=</span> <span class="s">"0.9.142"</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">version</span> <span class="o">=</span> <span class="s">"0.9.150"</span></code></pre>
 
                         </div>
                       </div>
@@ -490,7 +505,7 @@ You can also update a room to change its title, for example.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">rooms</span><span class="p">:</span> <span class="kt">RoomClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">rooms</span><span class="p">:</span> <span class="kt"><a href="../Classes/RoomClient.html">RoomClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -525,7 +540,7 @@ Future releases of the API will allow for more complete user administration.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">people</span><span class="p">:</span> <span class="kt">PersonClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">people</span><span class="p">:</span> <span class="kt"><a href="../Classes/PersonClient.html">PersonClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -555,7 +570,7 @@ Just like in the Spark app, you must be a member of the room in order to list it
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="kt">MembershipClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="kt"><a href="../Classes/MembershipClient.html">MembershipClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -585,7 +600,7 @@ Just like in the Spark app, you must be a member of the room in order to target 
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">messages</span><span class="p">:</span> <span class="kt">MessageClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">messages</span><span class="p">:</span> <span class="kt"><a href="../Classes/MessageClient.html">MessageClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -616,7 +631,7 @@ However, this API was designed to be extensible and forms the foundation for sup
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">webhooks</span><span class="p">:</span> <span class="kt">WebhookClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">webhooks</span><span class="p">:</span> <span class="kt"><a href="../Classes/WebhookClient.html">WebhookClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -654,7 +669,7 @@ Teams are create and deleted with this API. You can also update a team to change
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">teams</span><span class="p">:</span> <span class="kt">TeamClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">teams</span><span class="p">:</span> <span class="kt"><a href="../Classes/TeamClient.html">TeamClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -684,7 +699,7 @@ Just like in the Spark app, you must be a member of the team in order to list it
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">teamMemberships</span><span class="p">:</span> <span class="kt">TeamMembershipClient</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">teamMemberships</span><span class="p">:</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html">TeamMembershipClient</a></span></code></pre>
 
                         </div>
                       </div>
@@ -711,7 +726,7 @@ Just like in the Spark app, you must be a member of the team in order to list it
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt">Phone</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span></code></pre>
 
                         </div>
                       </div>
@@ -724,7 +739,7 @@ Just like in the Spark app, you must be a member of the team in order to list it
         </section>
         <section id="footer">
           <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-07-18)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.6.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
