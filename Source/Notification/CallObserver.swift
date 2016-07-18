@@ -26,12 +26,36 @@ public enum DisconnectionType : String {
     case OtherDeviceConnected
 }
 
-/// The MediaChangeType enum defines remote media change type.
-public enum MediaChangeType {
+/// The RemoteMediaChangeType enum defines remote media change type.
+public enum RemoteMediaChangeType {
+    /// Video is muted at remote side.
     case RemoteVideoMuted
+    /// Video is unmuted at remote side.
     case RemoteVideoUnmuted
+    /// Stop receiving video from media server, but remote side may still send video to media server.
+    case RemoteVideoOutputMuted
+    /// Receive video from media server.
+    case RemoteVideoOutputUnmuted
+    /// Audio is muted at remote side.
     case RemoteAudioMuted
+    /// Audio is unmuted at remote side.
     case RemoteAudioUnmuted
+    /// Stop receiving audio from media server, but remote side may still send audio to media server.
+    case RemoteAudioOutputMuted
+    /// Receive audio from media server.
+    case RemoteAudioOutputUnmuted
+}
+
+/// The LocalMediaChangeType enum defines local media change type.
+public enum LocalMediaChangeType {
+    /// Video is muted at local side.
+    case LocalVideoMuted
+    /// Video is unmuted at local side.
+    case LocalVideoUnmuted
+    /// Audio is muted at local side.
+    case LocalAudioMuted
+    /// Audio is unmuted at local side.
+    case LocalAudioUnmuted
 }
 
 /// The CallObserver protocol defines callback methods that observer object implement to respond to call notification.
@@ -58,10 +82,47 @@ public protocol CallObserver: AnyObject {
     /// Callback when remote participant(s) muted/unmuted video/audio.
     ///
     /// - parameter call: Call object for the notification
-    /// - parameter mediaChangeType: Remote media change type, for example, RemoteVideoMuted (remote participant muted video).
+    /// - parameter remoteMediaChangeType: Remote media change type, for example, RemoteVideoMuted (remote participant muted video).
     /// - returns: Void
-    func remoteMediaDidChange(call: Call, mediaChangeType: MediaChangeType)
+    func remoteMediaDidChange(call: Call, remoteMediaChangeType: RemoteMediaChangeType)
     
+    /// Callback when local host muted/unmuted video/audio.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter localMediaChangeType: Local media change type, for example, LocalVideoMuted (local host muted video).
+    /// - returns: Void
+    func localMediaDidChange(call: Call, localMediaChangeType: LocalMediaChangeType)
+    
+    /// Callback when facing mode is changed.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter facingMode: Facing mode (front/back camera)
+    /// - returns: Void
+    func facingModeDidChange(call: Call, facingMode: Call.FacingMode)
+    
+    /// Callback when loud speaker is changed.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter isLoudSpeakerSelected: True if loud speaker is selected, false if not.
+    /// - returns: Void
+    func loudSpeakerDidChange(call: Call, isLoudSpeakerSelected: Bool)
+    
+    /// Callback when remote view size is changed.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter height: Height for remote view.
+    /// - parameter width: Width for remote view.
+    /// - returns: Void
+    func remoteViewSizeDidChange(call: Call, height: UInt32, width: UInt32)
+    
+    /// Callback when local view size is changed.
+    ///
+    /// - parameter call: Call object for the notification
+    /// - parameter height: Height for local view.
+    /// - parameter width: Width for local view.
+    /// - returns: Void
+    func localViewSizeDidChange(call: Call, height: UInt32, width: UInt32)
+
     /// Callback when self participant enable DTMF change.
     ///
     /// - parameter call: Call object for the notification
@@ -82,9 +143,24 @@ public extension CallObserver {
     func callDidDisconnect(call: Call, disconnectionType: DisconnectionType) {
     }
     
-    func remoteMediaDidChange(call: Call, mediaChangeType: MediaChangeType) {
+    func remoteMediaDidChange(call: Call, remoteMediaChangeType: RemoteMediaChangeType) {
     }
-    
+
+    func localMediaDidChange(call: Call, localMediaChangeType: LocalMediaChangeType) {
+    }
+
+    func facingModeDidChange(call: Call, facingMode: Call.FacingMode) {
+    }
+
+    func loudSpeakerDidChange(call: Call, isLoudSpeakerSelected: Bool) {
+    }
+
+    func remoteViewSizeDidChange(call: Call, height: UInt32, width: UInt32) {
+    }
+
+    func localViewSizeDidChange(call: Call, height: UInt32, width: UInt32) {
+    }
+
     func enableDTMFDidChange(call: Call, sendingDTMFEnabled: Bool) {
     }
 }

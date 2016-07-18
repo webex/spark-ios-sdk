@@ -69,18 +69,12 @@ public class Call {
     
     /// True if client is sending video.
     public var sendingVideo: Bool {
-        if let videoInactive = self.info?.selfVideoInactive {
-            return !videoInactive && !mediaSession.videoMuted
-        }
-        return false
+        return mediaSession.hasVideo && !mediaSession.videoMuted
     }
     
     /// True if client is receiving video.
     public var receivingVideo: Bool {
-        if let videoInactive = self.info?.selfVideoInactive {
-            return !videoInactive && !mediaSession.videoOutputMuted
-        }
-        return false
+        return mediaSession.hasVideo && !mediaSession.videoOutputMuted
     }
     
     /// True if remote is sending audio.
@@ -101,12 +95,32 @@ public class Call {
     
     /// True if loud speaker is selected as the output device for this call.
     public var loudSpeaker: Bool {
-        return mediaEngine.isSpeaker()
+        return mediaSession.isSpeakerSelected()
     }
     
     /// Camera facing mode selected for this call.
     public var facingMode: FacingMode {
-        return mediaEngine.isFrontCamera() ? .User : .Environment
+        return mediaSession.isFrontCameraSelected() ? .User : .Environment
+    }
+    
+    /// Local video render view height.
+    public var localVideoViewHeight: UInt32 {
+        return mediaSession.localVideoViewHeight
+    }
+    
+    /// Local video render view width.
+    public var localVideoViewWidth: UInt32 {
+        return mediaSession.localVideoViewWidth
+    }
+    
+    /// Remote video render view height.
+    public var remoteVideoViewHeight: UInt32 {
+        return mediaSession.remoteVideoViewHeight
+    }
+    
+    /// Remote video render view width.
+    public var remoteVideoViewWidth: UInt32 {
+        return mediaSession.remoteVideoViewWidth
     }
     
     /// True if the DTMF keypad can be enabled for Client.
@@ -122,10 +136,8 @@ public class Call {
     var state: CallState!
     var url: String { return (info?.callUrl)! }
     
-    private let mediaEngine = MediaEngine.sharedInstance
-    
-    // TODO: need to consider MediaSession management
-    private let mediaSession = MediaSession()
+    private let mediaEngine = MediaEngineWrapper.sharedInstance
+    private let mediaSession = MediaSessionWrapper()
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     private let reachabilityService = ReachabilityService.sharedInstance
     private var dtmfQueue: DtmfQueue!
@@ -152,10 +164,9 @@ public class Call {
     /// - note: This function is expected to run on main thread.
     public func answer(option option: MediaOption, completionHandler: CompletionHandler?) {
         let answerAction: () -> Void = {
-            self.setupMediaOption(option)
-            self.mediaEngine.start(self.mediaSession)
+            self.prepareMediaSession(option)
             
-            let localInfo = self.createLocalInfo(self.mediaEngine.getLocalSdp(self.mediaSession))
+            let localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
             CallClient().join(self.url, localInfo: localInfo) {
                 self.onJoinCallCompleted($0, completionHandler: completionHandler)
             }
@@ -170,7 +181,7 @@ public class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     public func hangup(completionHandler: CompletionHandler?) {
-        mediaEngine.stopMedia()
+        mediaSession.stopMedia()
         
         let participantUrl = info?.selfParticipantUrl
         CallClient().leave(participantUrl!, deviceUrl: deviceUrl!) {
@@ -192,7 +203,7 @@ public class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     public func reject(completionHandler: CompletionHandler?) {
-        mediaEngine.stopMedia()
+        mediaSession.stopMedia()
         
         let callUrl = info?.callUrl
         CallClient().decline(callUrl!, deviceUrl: deviceUrl!) {
@@ -225,44 +236,42 @@ public class Call {
     ///
     /// - note: This function is expected to run on main thread.
     public func toggleSendingVideo() {
-        mediaEngine.toggleSendingVideo()
+        mediaSession.toggleSendingVideo()
     }
     
     /// If receiving video then stop receiving video. If not receiving video then start receiving video.
     ///
     /// - note: This function is expected to run on main thread.
     public func toggleReceivingVideo() {
-        mediaEngine.toggleReceivingVideo()
+        mediaSession.toggleReceivingVideo()
     }
     
     /// If sending audio then stop sending audio. If not sending audio then start sending audio.
     ///
     /// - note: This function is expected to run on main thread.
     public func toggleSendingAudio() {
-        mediaEngine.toggleSendingAudio()
+        mediaSession.toggleSendingAudio()
     }
     
     /// If receiving audio then stop receiving audio. If not receiving audio then start receiving audio.
     ///
     /// - note: This function is expected to run on main thread.
     public func toggleReceivingAudio() {
-        mediaEngine.toggleReceivingAudio()
+        mediaSession.toggleReceivingAudio()
     }
     
     /// Toggle camera facing mode between front camera and back camera.
     ///
     /// - note: This function is expected to run on main thread.
     public func toggleFacingMode() {
-        mediaEngine.toggleFacingMode()
+        mediaSession.toggleFacingMode()
     }
     
     /// Toggle loud speaker.
     ///
-    /// - parameter isSpeaker: True if use loud speaker as the output device, False as not.
-    /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    public func toggleLoudSpeaker(isSpeaker: Bool) {
-        mediaEngine.toggleLoudSpeaker(isSpeaker)
+    public func toggleLoudSpeaker() {
+        mediaSession.toggleLoudSpeaker()
     }
     
     /// Send feed back to Spark.
@@ -279,10 +288,9 @@ public class Call {
     
     func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
         let dialAction: () -> Void = {
-            self.setupMediaOption(option)
-            self.mediaEngine.start(self.mediaSession)
+            self.prepareMediaSession(option)
             
-            var localInfo = self.createLocalInfo(self.mediaEngine.getLocalSdp(self.mediaSession))
+            var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
             localInfo.updateValue(["address": address], forKey: "invitee")
             CallClient().join(localInfo) {
                 self.onJoinCallCompleted($0, completionHandler: completionHandler)
@@ -337,17 +345,21 @@ public class Call {
         }
     }
     
+    func isMediaSessionAssociated(session: MediaSession) -> Bool {
+        return mediaSession.isMediaSessionAssociated(session)
+    }
+    
     private func handleRemoteMediaChange(newInfo: CallInfo) {
-        var mediaChangeType: MediaChangeType?
+        var mediaChangeType: RemoteMediaChangeType?
         
         if isRemoteVideoStateChanged(newInfo) {
             mediaChangeType = newInfo.remoteVideoMuted ?
-                MediaChangeType.RemoteVideoMuted : MediaChangeType.RemoteVideoUnmuted
+                RemoteMediaChangeType.RemoteVideoMuted : RemoteMediaChangeType.RemoteVideoUnmuted
         }
         
         if isRemoteAudioStateChanged(newInfo) {
             mediaChangeType = newInfo.remoteAudioMuted ?
-                MediaChangeType.RemoteAudioMuted : MediaChangeType.RemoteAudioUnmuted
+                RemoteMediaChangeType.RemoteAudioMuted : RemoteMediaChangeType.RemoteAudioUnmuted
         }
         
         guard mediaChangeType != nil else {
@@ -376,20 +388,8 @@ public class Call {
         return info!.enableDTMF != newInfo.enableDTMF
     }
     
-    private func setupMediaOption(option: MediaOption) {
-        switch (option) {
-        case .AudioOnly:
-            // setup constraint
-            let constraint = Wme.MediaConstraintFlag.Audio.rawValue
-            mediaSession.mediaConstraint = Wme.MediaConstraint(constraint: constraint)
-        case .AudioVideo(let local, let remote):
-            // setup constraint
-            let constraint = Wme.MediaConstraintFlag.Audio.rawValue | Wme.MediaConstraintFlag.Video.rawValue
-            mediaSession.mediaConstraint = Wme.MediaConstraint(constraint: constraint)
-            // setup render view
-            mediaSession.localPreviewView = local
-            mediaSession.renderView = remote
-        }
+    private func prepareMediaSession(option: MediaOption) {
+        mediaSession.prepare(option)
     }
     
     private func fetchCallInfo() {
@@ -413,11 +413,11 @@ public class Call {
         case .Success(let value):
             updateCallInfo(value)
             if let remoteSdp = self.info?.remoteSdp {
-                self.mediaEngine.setRemoteSdp(remoteSdp)
+                self.mediaSession.setRemoteSdp(remoteSdp)
             } else {
                 Logger.error("Failure: remoteSdp is nil")
             }
-            self.mediaEngine.startMedia()
+            self.mediaSession.startMedia()
             CallManager.sharedInstance.addCall(self.url, call: self)
             from = info?.hostEmail
             
@@ -425,6 +425,7 @@ public class Call {
             completionHandler?(true)
             
         case .Failure(let error):
+            self.mediaSession.stopMedia()
             Logger.error("Failure: \(error.localizedFailureReason)")
             completionHandler?(false)
         }

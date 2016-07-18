@@ -37,7 +37,7 @@ public struct Webhook : Mappable {
     public var filter: String?
     
     /// The timestamp that the webhook being created.
-    public var created: String?
+    public var created: NSDate?
     
     /// Webhook constructor.
     ///
@@ -56,6 +56,6 @@ public struct Webhook : Mappable {
         event <- map["event"]
         name <- map["name"]
         filter <- map["filter"]
-        created <- map["created"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }

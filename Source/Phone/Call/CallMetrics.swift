@@ -65,7 +65,7 @@ class CallMetrics {
                 "deviceUrl": DeviceService.sharedInstance.deviceUrl!,
                 "participantId": callInfo.selfId!,
                 "isGroup": !callInfo.isOneOnOne,
-                "wmeVersion": MediaEngine.sharedInstance.WMEVersion
+                "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
         ]
     }
 }

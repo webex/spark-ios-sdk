@@ -41,7 +41,7 @@ public struct Room: Mappable {
     public var lastActivity: String?
     
     /// The timestamp that this room being created.
-    public var created: String?
+    public var created: NSDate?
     
     /// The team Id that this room associated with.
     public var teamId: String?
@@ -61,7 +61,7 @@ public struct Room: Mappable {
         type <- (map["type"], EnumTransform<RoomType>())
         isLocked <- map["isLocked"]
         lastActivity <- map["lastActivity"]
-        created <- map["created"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         teamId <- map["teamId"]
     }
 }

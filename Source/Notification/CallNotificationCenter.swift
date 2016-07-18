@@ -56,9 +56,39 @@ public class CallNotificationCenter {
         }
     }
     
-    func notifyRemoteMediaChanged(call: Call, mediaUpdatedType: MediaChangeType) {
+    func notifyRemoteMediaChanged(call: Call, mediaUpdatedType: RemoteMediaChangeType) {
         for observer in observers {
-            observer.remoteMediaDidChange(call, mediaChangeType: mediaUpdatedType)
+            observer.remoteMediaDidChange(call, remoteMediaChangeType: mediaUpdatedType)
+        }
+    }
+    
+    func notifyLocalMediaChanged(call: Call, mediaUpdatedType: LocalMediaChangeType) {
+        for observer in observers {
+            observer.localMediaDidChange(call, localMediaChangeType: mediaUpdatedType)
+        }
+    }
+    
+    func notifyFacingModeChanged(call: Call, facingMode: Call.FacingMode) {
+        for observer in observers {
+            observer.facingModeDidChange(call, facingMode: facingMode)
+        }
+    }
+    
+    func notifyLoudSpeakerChanged(call: Call, isLoudSpeakerSelected: Bool) {
+        for observer in observers {
+            observer.loudSpeakerDidChange(call, isLoudSpeakerSelected: isLoudSpeakerSelected)
+        }
+    }
+    
+    func notifyRemoteViewSizeChanged(call: Call, height: UInt32, width: UInt32) {
+        for observer in observers {
+            observer.remoteViewSizeDidChange(call, height: height, width: width)
+        }
+    }
+    
+    func notifyLocalViewSizeChanged(call: Call, height: UInt32, width: UInt32) {
+        for observer in observers {
+            observer.localViewSizeDidChange(call, height: height, width: width)
         }
     }
     

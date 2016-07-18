@@ -37,7 +37,7 @@ public struct Membership: Mappable, Equatable {
     public var isMonitor: Bool?
     
     /// The timestamp that the membership being created.
-    public var created: String?
+    public var created: NSDate?
     
     /// Membership constructor.
     ///
@@ -55,7 +55,7 @@ public struct Membership: Mappable, Equatable {
         roomId <- map["roomId"]
         isModerator <- map["isModerator"]
         isMonitor <- map["isMonitor"]
-        created <- map["created"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
 

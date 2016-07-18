@@ -43,7 +43,7 @@ public struct Message: Mappable {
     public var toPersonEmail: EmailAddress?
     
     /// The timestamp that the message being created.
-    public var created: String?
+    public var created: NSDate?
     
     /// Message constructor.
     ///
@@ -63,7 +63,7 @@ public struct Message: Mappable {
         files <- map["files"]
         toPersonId <- map["toPersonId"]
         toPersonEmail <- (map["toPersonEmail"], EmailTransform())
-        created <- map["created"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
 

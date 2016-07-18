@@ -105,7 +105,7 @@ class MetricsEngine {
     }
     
     private func constructPayloadFromMetric(metric: Metric) -> Metric.DataType {
-        let postTime = TimestampFormatter.currentUtcFormattedTimestamp()
+        let postTime = TimestampFormatter.nowInUTC()
         var payload: Metric.DataType = ["key": metric.name,
                                         "postTime": postTime,
                                         "time": metric.time,

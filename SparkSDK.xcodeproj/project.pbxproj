@@ -29,6 +29,7 @@
 		3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */; };
 		3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */; };
 		3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */; };
+		3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */; };
 		3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */; };
 		3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */; };
 		5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */; };
@@ -43,8 +44,11 @@
 		5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6641CF4525C00758F6B /* MediaCluster.swift */; };
 		5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */; };
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
+		5D93AEB91D29E0C700196F6F /* TimestampFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEB81D29E0C700196F6F /* TimestampFormatter.swift */; };
+		5D93AEBD1D2B3AB400196F6F /* MediaSessionWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEBC1D2B3AB400196F6F /* MediaSessionWrapper.swift */; };
+		5D93AEBF1D2B590000196F6F /* MediaSessionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEBE1D2B590000196F6F /* MediaSessionObserver.swift */; };
 		5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */; };
-		61D11B6DCA017A4EB01081B9 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC736E40C6FA750F68A7C7D4 /* Pods.framework */; };
+		8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */; };
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
 		B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75331CE2D7B70080EAE0 /* AuthManager.swift */; };
@@ -56,7 +60,7 @@
 		B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753D1CE2D7B70080EAE0 /* ServiceResponse.swift */; };
 		B91E75A01CE2D7B70080EAE0 /* SyncUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753E1CE2D7B70080EAE0 /* SyncUtil.swift */; };
 		B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753F1CE2D7B70080EAE0 /* UserAgent.swift */; };
-		B91E75A21CE2D7B70080EAE0 /* MediaEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75411CE2D7B70080EAE0 /* MediaEngine.swift */; };
+		B91E75A21CE2D7B70080EAE0 /* MediaEngineWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75411CE2D7B70080EAE0 /* MediaEngineWrapper.swift */; };
 		B91E75A31CE2D7B70080EAE0 /* MediaEngineObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75421CE2D7B70080EAE0 /* MediaEngineObserver.swift */; };
 		B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75441CE2D7B70080EAE0 /* Membership.swift */; };
 		B91E75A51CE2D7B70080EAE0 /* MembershipClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75451CE2D7B70080EAE0 /* MembershipClient+Sync.swift */; };
@@ -114,7 +118,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0938E19A696B68FAA4504A7C /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		3D0AA8C11D05211C0094A658 /* WeakArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakArray.swift; sourceTree = "<group>"; };
 		3D0AA8C41D0521570094A658 /* CallNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallNotificationCenter.swift; path = Notification/CallNotificationCenter.swift; sourceTree = "<group>"; };
 		3D0AA8C51D0521570094A658 /* CallObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallObserver.swift; path = Notification/CallObserver.swift; sourceTree = "<group>"; };
@@ -137,9 +140,9 @@
 		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
 		3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestParameter.swift; sourceTree = "<group>"; };
+		3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DtmfQueue.swift; sourceTree = "<group>"; };
 		3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoLicense.swift; sourceTree = "<group>"; };
 		3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
-		4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceAddress.swift; sourceTree = "<group>"; };
 		5D10539A1D066CF6004B30B7 /* MediaOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaOption.swift; sourceTree = "<group>"; };
 		5D1A5D011CF6FB3A00313515 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -152,7 +155,11 @@
 		5D67C6641CF4525C00758F6B /* MediaCluster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCluster.swift; sourceTree = "<group>"; };
 		5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaClusterClient.swift; sourceTree = "<group>"; };
 		5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
+		5D93AEB81D29E0C700196F6F /* TimestampFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimestampFormatter.swift; sourceTree = "<group>"; };
+		5D93AEBC1D2B3AB400196F6F /* MediaSessionWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaSessionWrapper.swift; sourceTree = "<group>"; };
+		5D93AEBE1D2B590000196F6F /* MediaSessionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaSessionObserver.swift; sourceTree = "<group>"; };
 		5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateDisconnected.swift; sourceTree = "<group>"; };
+		6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B900B6A41CE2DB3100DC83CB /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = MediaEngine/Wme.framework; sourceTree = "<group>"; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
@@ -165,7 +172,7 @@
 		B91E753D1CE2D7B70080EAE0 /* ServiceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceResponse.swift; sourceTree = "<group>"; };
 		B91E753E1CE2D7B70080EAE0 /* SyncUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncUtil.swift; sourceTree = "<group>"; };
 		B91E753F1CE2D7B70080EAE0 /* UserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserAgent.swift; sourceTree = "<group>"; };
-		B91E75411CE2D7B70080EAE0 /* MediaEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaEngine.swift; sourceTree = "<group>"; };
+		B91E75411CE2D7B70080EAE0 /* MediaEngineWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaEngineWrapper.swift; sourceTree = "<group>"; };
 		B91E75421CE2D7B70080EAE0 /* MediaEngineObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaEngineObserver.swift; sourceTree = "<group>"; };
 		B91E75441CE2D7B70080EAE0 /* Membership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Membership.swift; sourceTree = "<group>"; };
 		B91E75451CE2D7B70080EAE0 /* MembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MembershipClient+Sync.swift"; sourceTree = "<group>"; };
@@ -220,7 +227,8 @@
 		B91E75921CE2D7B70080EAE0 /* Webhook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webhook.swift; sourceTree = "<group>"; };
 		B91E75931CE2D7B70080EAE0 /* WebHookClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WebHookClient+Sync.swift"; sourceTree = "<group>"; };
 		B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebhookClient.swift; sourceTree = "<group>"; };
-		EC736E40C6FA750F68A7C7D4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,7 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */,
-				61D11B6DCA017A4EB01081B9 /* Pods.framework in Frameworks */,
+				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,8 +247,8 @@
 		20E5E3BD68BFD3198EE748AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0938E19A696B68FAA4504A7C /* Pods.debug.xcconfig */,
-				4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */,
+				C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */,
+				EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -306,7 +314,7 @@
 			isa = PBXGroup;
 			children = (
 				B900B6A41CE2DB3100DC83CB /* Wme.framework */,
-				EC736E40C6FA750F68A7C7D4 /* Pods.framework */,
+				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -383,8 +391,10 @@
 		B91E75401CE2D7B70080EAE0 /* Media */ = {
 			isa = PBXGroup;
 			children = (
-				B91E75411CE2D7B70080EAE0 /* MediaEngine.swift */,
 				B91E75421CE2D7B70080EAE0 /* MediaEngineObserver.swift */,
+				B91E75411CE2D7B70080EAE0 /* MediaEngineWrapper.swift */,
+				5D93AEBE1D2B590000196F6F /* MediaSessionObserver.swift */,
+				5D93AEBC1D2B3AB400196F6F /* MediaSessionWrapper.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -449,6 +459,7 @@
 		B91E75571CE2D7B70080EAE0 /* Call */ = {
 			isa = PBXGroup;
 			children = (
+				3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */,
 				B91E75581CE2D7B70080EAE0 /* Call.swift */,
 				B91E75591CE2D7B70080EAE0 /* CallClient.swift */,
 				B91E755A1CE2D7B70080EAE0 /* CallInfoSequence.swift */,
@@ -516,9 +527,6 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */,
-				3D0AA8C11D05211C0094A658 /* WeakArray.swift */,
-				3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
 				3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */,
@@ -529,6 +537,10 @@
 				B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */,
 				3D1E57961CEDA351006124B0 /* String+Extension.swift */,
 				3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */,
+				5D93AEB81D29E0C700196F6F /* TimestampFormatter.swift */,
+				3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */,
+				3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */,
+				3D0AA8C11D05211C0094A658 /* WeakArray.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -561,12 +573,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B91E752D1CE2D6FF0080EAE0 /* Build configuration list for PBXNativeTarget "SparkSDK" */;
 			buildPhases = (
-				085E4AB464E936E73ACE59E9 /* Check Pods Manifest.lock */,
+				085E4AB464E936E73ACE59E9 /* [CP] Check Pods Manifest.lock */,
 				B91E75201CE2D6FF0080EAE0 /* Sources */,
 				B91E75211CE2D6FF0080EAE0 /* Frameworks */,
 				B91E75221CE2D6FF0080EAE0 /* Headers */,
 				B91E75231CE2D6FF0080EAE0 /* Resources */,
-				2B2A32C79D9D980F993492E1 /* Copy Pods Resources */,
+				2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -619,14 +631,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		085E4AB464E936E73ACE59E9 /* Check Pods Manifest.lock */ = {
+		085E4AB464E936E73ACE59E9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -634,19 +646,19 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		2B2A32C79D9D980F993492E1 /* Copy Pods Resources */ = {
+		2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -656,6 +668,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */,
 				5D67C6521CF04E6400758F6B /* LogManager.swift in Sources */,
 				B91E75A01CE2D7B70080EAE0 /* SyncUtil.swift in Sources */,
 				B91E75E71CE2D7B70080EAE0 /* WebHookClient+Sync.swift in Sources */,
@@ -682,11 +695,14 @@
 				B91E75B41CE2D7B70080EAE0 /* CallClient.swift in Sources */,
 				B91E75BB1CE2D7B70080EAE0 /* CallStateIdle.swift in Sources */,
 				B91E75A81CE2D7B70080EAE0 /* MessageClient+Sync.swift in Sources */,
+				5D93AEB91D29E0C700196F6F /* TimestampFormatter.swift in Sources */,
+				5D93AEBD1D2B3AB400196F6F /* MediaSessionWrapper.swift in Sources */,
 				3D0AA8C21D05211C0094A658 /* WeakArray.swift in Sources */,
 				B91E75D11CE2D7B70080EAE0 /* ParticipantDevice.swift in Sources */,
 				B91E75981CE2D7B70080EAE0 /* ConnectController.swift in Sources */,
 				B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */,
 				B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */,
+				5D93AEBF1D2B590000196F6F /* MediaSessionObserver.swift in Sources */,
 				B91E75AA1CE2D7B70080EAE0 /* Metric+Names.swift in Sources */,
 				B91E75CC1CE2D7B70080EAE0 /* CallInfo.swift in Sources */,
 				B91E75AC1CE2D7B70080EAE0 /* MetricsBuffer.swift in Sources */,
@@ -726,7 +742,7 @@
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
-				B91E75A21CE2D7B70080EAE0 /* MediaEngine.swift in Sources */,
+				B91E75A21CE2D7B70080EAE0 /* MediaEngineWrapper.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* Logger.swift in Sources */,
 				B91E75A31CE2D7B70080EAE0 /* MediaEngineObserver.swift in Sources */,
 				3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */,
@@ -856,7 +872,7 @@
 		};
 		B91E752E1CE2D6FF0080EAE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0938E19A696B68FAA4504A7C /* Pods.debug.xcconfig */;
+			baseConfigurationReference = C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -879,7 +895,7 @@
 		};
 		B91E752F1CE2D6FF0080EAE0 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4D65734E716FD096F0DAC2CA /* Pods.release.xcconfig */;
+			baseConfigurationReference = EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */;
 			buildSettings = {
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;

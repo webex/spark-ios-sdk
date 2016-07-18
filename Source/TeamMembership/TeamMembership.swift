@@ -37,7 +37,7 @@ public struct TeamMembership: Mappable, Equatable {
     public var isModerator: Bool?
     
     /// The timestamp that the team membership being created.
-    public var created: String?
+    public var created: NSDate?
     
     /// TeamMembership constructor.
     ///
@@ -55,7 +55,7 @@ public struct TeamMembership: Mappable, Equatable {
         personEmail <- (map["personEmail"], EmailTransform())
         personDisplayName <- map["personDisplayName"]
         isModerator <- map["isModerator"]
-        created <- map["created"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
 

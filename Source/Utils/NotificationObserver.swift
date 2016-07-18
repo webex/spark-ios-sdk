@@ -24,11 +24,16 @@ class NotificationObserver: NSObject {
             return
         }
         
-        let notificationhandlerMap = getNotificationHandlerMap()
-        for (notification, selector) in notificationhandlerMap {
-            addObserver(Selector(selector), name: notification)
+        addObserversFromMap(nil)
+        isObserving = true
+    }
+    
+    final func startObserving(sender: AnyObject?) {
+        guard !isObserving else {
+            return
         }
         
+        addObserversFromMap(sender)
         isObserving = true
     }
     
@@ -38,7 +43,6 @@ class NotificationObserver: NSObject {
         }
         
         notificationCenter.removeObserver(self)
-        
         isObserving = false
     }
     
@@ -46,7 +50,14 @@ class NotificationObserver: NSObject {
         return [String: String]()
     }
     
-    private func addObserver(selector: Selector, name: String) {
-        notificationCenter.addObserver(self, selector: selector, name: name, object: nil)
+    private func addObserver(selector: Selector, name: String, sender: AnyObject?) {
+        notificationCenter.addObserver(self, selector: selector, name: name, object: sender)
+    }
+    
+    private func addObserversFromMap(sender: AnyObject?) {
+        let notificationhandlerMap = getNotificationHandlerMap()
+        for (notification, selector) in notificationhandlerMap {
+            addObserver(Selector(selector), name: notification, sender: sender)
+        }
     }
 }

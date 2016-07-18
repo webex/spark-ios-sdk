@@ -96,7 +96,7 @@ class ReachabilityService {
             case .Success(let value):
                 clusterInfo = value
                 if let group = clusterInfo?.group {
-                    MediaEngine.sharedInstance.performReachabilityCheck(group) {
+                    MediaEngineWrapper.sharedInstance.performReachabilityCheck(group) {
                         completionHandler($0)
                     }
                 }
@@ -107,6 +107,6 @@ class ReachabilityService {
     }
     
     private func clearReachabilityData() {
-        MediaEngine.sharedInstance.clearReachabilityData()
+        MediaEngineWrapper.sharedInstance.clearReachabilityData()
     }
 }

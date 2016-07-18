@@ -94,10 +94,6 @@ struct CallInfo: Mappable {
         return selfMediaInfo?.audioMuted
     }
     
-    var selfVideoInactive: Bool? {
-        return myself?.status?.videoStatus == "INACTIVE"
-    }
-    
     var selfVideoMuted: Bool? {
         return selfMediaInfo?.videoMuted
     }

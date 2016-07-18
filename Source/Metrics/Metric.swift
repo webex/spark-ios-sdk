@@ -57,7 +57,7 @@ struct Metric {
         self.type = type
         self.environment = environment
         self.category = category
-        self.time = TimestampFormatter.currentUtcFormattedTimestamp()
+        self.time = TimestampFormatter.nowInUTC()
         
         // TODO: need to check it when app supports background mode
         self.isBackground = false

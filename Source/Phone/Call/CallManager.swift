@@ -29,14 +29,12 @@ class CallManager {
         Logger.info("Remove call for call url:\(url)")
     }
     
-    // TODO: need to check in which case call is active
-    func getActiveCall() -> Call? {
+    func findCallByMediaSession(session: MediaSession) -> Call? {
         for call in callInstances.values {
-            if call.status == Call.Status.Connected {
+            if call.isMediaSessionAssociated(session) {
                 return call
             }
         }
-        
         return nil
     }
     

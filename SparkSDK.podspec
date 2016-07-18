@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "SparkSDK"
-  s.version = "0.9.149"
+  s.version = "0.9.150"
   s.summary = "Spark iOS SDK"
   s.homepage = "https://developer.ciscospark.com"
   s.license = "Apache License, Version 2.0"

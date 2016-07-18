@@ -13,75 +13,14 @@
 // limitations under the License.
 
 import Foundation
-import AVFoundation
 
 class MediaEngineObserver: NotificationObserver {
-    
-    private var activeCall: Call? {
-        return CallManager.sharedInstance.getActiveCall()
-    }
-    
     override func getNotificationHandlerMap() -> [String: String] {
-        return [
-            MediaEngineDidMuteVideoNotification:             "onMediaEngineDidMuteVideo:",
-            MediaEngineDidUnMuteVideoNotification:           "onMediaEngineDidUnMuteVideo:",
-            MediaEngineDidMuteAudioNotification:             "onMediaEngineDidMuteAudio:",
-            MediaEngineDidUnMuteAudioNotification:           "onMediaEngineDidUnMuteAudio:",
-            MediaEngineDidConnectNotification:               "onMediaEngineDidConnect:",
-            MediaEngineDidDisconnectNotification:            "onMediaEngineDidDisconnect:",
-            MediaEngineDidFailToConnectNotification:         "onMediaEngineDidFail:",
-            MediaEngineDidSendFirstVideoDataNotification:    "onMediaEngineNotification:",
-            MediaEngineDidSendFirstAudioDataNotification:    "onMediaEngineNotification:",
-            MediaEngineDidReceiveFirstVideoDataNotification: "onMediaEngineNotification:",
-            AVAudioSessionRouteChangeNotification:           "onMediaEngineAudioSessionRouteChangeNotification:"]
+        return [MediaEngineDidEncounterErrorNotification: "onMediaEngineDidEncounterError:"]
     }
     
-    @objc private func onMediaEngineDidMuteVideo(notification: NSNotification) {
-        if let call = activeCall {
-            let sendingAudio = call.sendingAudio
-            call.updateMedia(sendingAudio, false)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteVideo(notification: NSNotification) {
-        if let call = activeCall {
-            let sendingAudio = call.sendingAudio
-            call.updateMedia(sendingAudio, true)
-        }
-        
-    }
-    
-    @objc private func onMediaEngineDidMuteAudio(notification: NSNotification) {
-        if let call = activeCall {
-            let sendingVideo = call.sendingVideo
-            call.updateMedia(false, sendingVideo)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteAudio(notification: NSNotification) {
-        if let call = activeCall {
-            let sendingVideo = call.sendingVideo
-            call.updateMedia(true, sendingVideo)
-        }
-    }
-    
-    @objc private func onMediaEngineDidConnect(notification: NSNotification) {
-        Logger.info(notification.description)
-    }
-    
-    @objc private func onMediaEngineDidDisconnect(notification: NSNotification) {
-        Logger.info(notification.description)
-    }
-    
-    @objc private func onMediaEngineDidFail(notification: NSNotification) {
-        Logger.info(notification.description)
-    }
-    
-    @objc private func onMediaEngineNotification(notification: NSNotification) {
-        Logger.info(notification.description)
-    }
-    
-    @objc private func onMediaEngineAudioSessionRouteChangeNotification(notification: NSNotification) {
+    @objc private func onMediaEngineDidEncounterError(notification: NSNotification) {
+        // TODO: handle engine errors
         Logger.info(notification.description)
     }
 }

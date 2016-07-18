@@ -21,7 +21,7 @@ class InterfaceAddress {
 
     static func getSortedAddresses() -> [Item] {
         var addresses = [Item]()
-        let hostAddr = Wme.NetUtils.getHostAddresses()
+        let hostAddr = NetUtils.getHostAddresses()
         for element in hostAddr {
             addresses.append((ifaName: element.ifaName, ifaAddr: element.ifaAddr))
         }

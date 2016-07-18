@@ -102,7 +102,12 @@ class DeviceService: CompletionHandlerType<Device> {
             deviceName = "notset"
         }
         
-        let deviceType = currentDevice.isiPad() ?  "IPAD" : "IPHONE"
+        var deviceType = "UNKNOWN"
+        if isPad() {
+            deviceType = "IPAD"
+        } else if isPhone() {
+            deviceType = "IPHONE"
+        }
         
         let deviceParameters:[String: Any?] = [
             "deviceName": deviceName,
@@ -115,6 +120,14 @@ class DeviceService: CompletionHandlerType<Device> {
             "capabilities": ["sdpSupported":true, "groupCallSupported":true]]
         
         return RequestParameter(deviceParameters)
+    }
+    
+    private func isPad() -> Bool {
+        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+    }
+    
+    private func isPhone() -> Bool {
+        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone
     }
 }
 
