@@ -1,3 +1,5 @@
+[![Travis CI](https://travis-ci.com/ciscospark/spark-ios-sdk.svg?token=CERaGQRzqYiFzg82Pjv1&branch=master)](https://travis-ci.com/ciscospark/spark-ios-sdk)
+
 # SparkSDK
 
 Spark iOS SDK written in swift.
