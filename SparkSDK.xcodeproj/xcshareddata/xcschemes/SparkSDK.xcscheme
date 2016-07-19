@@ -28,7 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3D15B70A1D3E176C003BB682"
+               BuildableName = "SparkSDKTests.xctest"
+               BlueprintName = "SparkSDKTests"
+               ReferencedContainer = "container:SparkSDK.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "B91E75241CE2D6FF0080EAE0"
+            BuildableName = "SparkSDK.framework"
+            BlueprintName = "SparkSDK"
+            ReferencedContainer = "container:SparkSDK.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -51,6 +70,13 @@
             ReferencedContainer = "container:SparkSDK.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "CLIENTSECRET"
+            value = "$(CLIENTSECRET)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

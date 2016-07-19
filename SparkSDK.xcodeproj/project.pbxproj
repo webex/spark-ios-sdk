@@ -12,13 +12,29 @@
 		3D0AA8C91D0521570094A658 /* CallObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0AA8C51D0521570094A658 /* CallObserver.swift */; };
 		3D0AA8CA1D0521570094A658 /* PhoneNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0AA8C61D0521570094A658 /* PhoneNotificationCenter.swift */; };
 		3D0AA8CB1D0521570094A658 /* PhoneObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0AA8C71D0521570094A658 /* PhoneObserver.swift */; };
+		3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */; };
 		3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E578E1CEDA348006124B0 /* ClientAccount.swift */; };
 		3D1E57921CEDA348006124B0 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E578F1CEDA348006124B0 /* KeychainManager.swift */; };
 		3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57901CEDA348006124B0 /* OAuthClient.swift */; };
 		3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */; };
 		3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */; };
 		3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57961CEDA351006124B0 /* String+Extension.swift */; };
+		3D2D51071D3E2173005FC665 /* Wme.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */; };
+		3D3131431D3EF932007717B2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F11D3EF82500205DF6 /* Config.swift */; };
+		3D31314F1D3EF932007717B2 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FD1D3EF82500205DF6 /* Utils.swift */; };
+		3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F31D3EF82500205DF6 /* MembershipTests.swift */; };
+		3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F41D3EF82500205DF6 /* MessageTests.swift */; };
+		3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F51D3EF82500205DF6 /* PeopleTests.swift */; };
+		3D31B7891D41B7F500D8DB55 /* PhoneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F61D3EF82500205DF6 /* PhoneTests.swift */; };
+		3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F71D3EF82500205DF6 /* RoomTests.swift */; };
+		3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F81D3EF82500205DF6 /* SequenceTests.swift */; };
+		3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */; };
+		3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FA1D3EF82500205DF6 /* TeamTests.swift */; };
+		3D31B78E1D41B7F500D8DB55 /* WeakArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FE1D3EF82500205DF6 /* WeakArrayTests.swift */; };
+		3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */; };
+		3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FB1D3EF82500205DF6 /* TestRoom.swift */; };
+		3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FC1D3EF82500205DF6 /* TestTeam.swift */; };
 		3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */; };
 		3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1A91D24AD4A0016A072 /* Team.swift */; };
 		3D66B1AD1D24AD4A0016A072 /* TeamClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AA1D24AD4A0016A072 /* TeamClient.swift */; };
@@ -26,12 +42,15 @@
 		3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AF1D24AD570016A072 /* TeamMembership.swift */; };
 		3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */; };
 		3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */; };
+		3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */; };
 		3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */; };
+		3D9E1A261D3EF4AC007E570C /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */; };
 		3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */; };
 		3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */; };
 		3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */; };
 		3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */; };
+		4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */; };
 		5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */; };
 		5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D10539A1D066CF6004B30B7 /* MediaOption.swift */; };
 		5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5D011CF6FB3A00313515 /* Reachability.swift */; };
@@ -117,12 +136,39 @@
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3D15B7111D3E176C003BB682 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B91E751C1CE2D6FF0080EAE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B91E75241CE2D6FF0080EAE0;
+			remoteInfo = SparkSDK;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3D2D51061D3E2168005FC665 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3D2D51071D3E2173005FC665 /* Wme.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.releasetest.xcconfig"; sourceTree = "<group>"; };
+		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3D0AA8C11D05211C0094A658 /* WeakArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakArray.swift; sourceTree = "<group>"; };
 		3D0AA8C41D0521570094A658 /* CallNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallNotificationCenter.swift; path = Notification/CallNotificationCenter.swift; sourceTree = "<group>"; };
 		3D0AA8C51D0521570094A658 /* CallObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CallObserver.swift; path = Notification/CallObserver.swift; sourceTree = "<group>"; };
 		3D0AA8C61D0521570094A658 /* PhoneNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneNotificationCenter.swift; path = Notification/PhoneNotificationCenter.swift; sourceTree = "<group>"; };
 		3D0AA8C71D0521570094A658 /* PhoneObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneObserver.swift; path = Notification/PhoneObserver.swift; sourceTree = "<group>"; };
+		3D15B70B1D3E176C003BB682 /* SparkSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D1E578E1CEDA348006124B0 /* ClientAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientAccount.swift; sourceTree = "<group>"; };
 		3D1E578F1CEDA348006124B0 /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		3D1E57901CEDA348006124B0 /* OAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthClient.swift; sourceTree = "<group>"; };
@@ -137,7 +183,22 @@
 		3D66B1AF1D24AD570016A072 /* TeamMembership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembership.swift; path = Source/TeamMembership/TeamMembership.swift; sourceTree = "<group>"; };
 		3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipClient.swift; path = Source/TeamMembership/TeamMembershipClient.swift; sourceTree = "<group>"; };
 		3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TeamMembershipClient+Sync.swift"; path = "Source/TeamMembership/TeamMembershipClient+Sync.swift"; sourceTree = "<group>"; };
+		3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestUserFactory.swift; path = Tests/TestUserFactory.swift; sourceTree = SOURCE_ROOT; };
 		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
+		3DA099F11D3EF82500205DF6 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Tests/Config.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F31D3EF82500205DF6 /* MembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MembershipTests.swift; path = Tests/MembershipTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F41D3EF82500205DF6 /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTests.swift; path = Tests/MessageTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F51D3EF82500205DF6 /* PeopleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PeopleTests.swift; path = Tests/PeopleTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F61D3EF82500205DF6 /* PhoneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneTests.swift; path = Tests/PhoneTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F71D3EF82500205DF6 /* RoomTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoomTests.swift; path = Tests/RoomTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F81D3EF82500205DF6 /* SequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SequenceTests.swift; path = Tests/SequenceTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipTests.swift; path = Tests/TeamMembershipTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FA1D3EF82500205DF6 /* TeamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamTests.swift; path = Tests/TeamTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FB1D3EF82500205DF6 /* TestRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestRoom.swift; path = Tests/TestRoom.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FC1D3EF82500205DF6 /* TestTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestTeam.swift; path = Tests/TestTeam.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FD1D3EF82500205DF6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Tests/Utils.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FE1D3EF82500205DF6 /* WeakArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeakArrayTests.swift; path = Tests/WeakArrayTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebhookTests.swift; path = Tests/WebhookTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
 		3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestParameter.swift; sourceTree = "<group>"; };
 		3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DtmfQueue.swift; sourceTree = "<group>"; };
@@ -228,10 +289,22 @@
 		B91E75931CE2D7B70080EAE0 /* WebHookClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WebHookClient+Sync.swift"; sourceTree = "<group>"; };
 		B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebhookClient.swift; sourceTree = "<group>"; };
 		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.releasetest.xcconfig"; sourceTree = "<group>"; };
 		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
+		EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		3D15B7081D3E176C003BB682 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D9E1A261D3EF4AC007E570C /* Wme.framework in Frameworks */,
+				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
+				4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91E75211CE2D6FF0080EAE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -249,6 +322,10 @@
 			children = (
 				C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */,
 				EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */,
+				15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */,
+				EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */,
+				E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */,
+				03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -262,6 +339,29 @@
 				3D0AA8C71D0521570094A658 /* PhoneObserver.swift */,
 			);
 			name = Notification;
+			sourceTree = "<group>";
+		};
+		3D15B70C1D3E176C003BB682 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				3DA099F31D3EF82500205DF6 /* MembershipTests.swift */,
+				3DA099F41D3EF82500205DF6 /* MessageTests.swift */,
+				3DA099F51D3EF82500205DF6 /* PeopleTests.swift */,
+				3DA099F61D3EF82500205DF6 /* PhoneTests.swift */,
+				3DA099F71D3EF82500205DF6 /* RoomTests.swift */,
+				3DA099F81D3EF82500205DF6 /* SequenceTests.swift */,
+				3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */,
+				3DA099FA1D3EF82500205DF6 /* TeamTests.swift */,
+				3DA099FE1D3EF82500205DF6 /* WeakArrayTests.swift */,
+				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
+				3DA099FB1D3EF82500205DF6 /* TestRoom.swift */,
+				3DA099FC1D3EF82500205DF6 /* TestTeam.swift */,
+				3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */,
+				3DA099FD1D3EF82500205DF6 /* Utils.swift */,
+				3DA099F11D3EF82500205DF6 /* Config.swift */,
+			);
+			name = Tests;
+			path = SparkSDKTests;
 			sourceTree = "<group>";
 		};
 		3D66B1A71D24ACF60016A072 /* Team */ = {
@@ -315,6 +415,7 @@
 			children = (
 				B900B6A41CE2DB3100DC83CB /* Wme.framework */,
 				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
+				04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -323,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				B91E75301CE2D7B70080EAE0 /* Source */,
+				3D15B70C1D3E176C003BB682 /* Tests */,
 				B91E75261CE2D6FF0080EAE0 /* Products */,
 				20E5E3BD68BFD3198EE748AE /* Pods */,
 				8838B91D70254D46671B19F1 /* Frameworks */,
@@ -333,6 +435,7 @@
 			isa = PBXGroup;
 			children = (
 				B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */,
+				3D15B70B1D3E176C003BB682 /* SparkSDKTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -569,6 +672,28 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		3D15B70A1D3E176C003BB682 /* SparkSDKTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3D15B7151D3E176C003BB682 /* Build configuration list for PBXNativeTarget "SparkSDKTests" */;
+			buildPhases = (
+				0E6529EA775956DE9D984C24 /* [CP] Check Pods Manifest.lock */,
+				3D15B7071D3E176C003BB682 /* Sources */,
+				3D15B7081D3E176C003BB682 /* Frameworks */,
+				3D15B7091D3E176C003BB682 /* Resources */,
+				D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */,
+				8724ACA0DDEFC147B4AF9C21 /* [CP] Copy Pods Resources */,
+				3D2D51061D3E2168005FC665 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3D15B7121D3E176C003BB682 /* PBXTargetDependency */,
+			);
+			name = SparkSDKTests;
+			productName = SparkSDKTests;
+			productReference = 3D15B70B1D3E176C003BB682 /* SparkSDKTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B91E75241CE2D6FF0080EAE0 /* SparkSDK */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B91E752D1CE2D6FF0080EAE0 /* Build configuration list for PBXNativeTarget "SparkSDK" */;
@@ -595,9 +720,13 @@
 		B91E751C1CE2D6FF0080EAE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = Cisco;
 				TargetAttributes = {
+					3D15B70A1D3E176C003BB682 = {
+						CreatedOnToolsVersion = 7.3;
+					};
 					B91E75241CE2D6FF0080EAE0 = {
 						CreatedOnToolsVersion = 7.3;
 					};
@@ -616,11 +745,19 @@
 			projectRoot = "";
 			targets = (
 				B91E75241CE2D6FF0080EAE0 /* SparkSDK */,
+				3D15B70A1D3E176C003BB682 /* SparkSDKTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3D15B7091D3E176C003BB682 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91E75231CE2D6FF0080EAE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -632,6 +769,21 @@
 
 /* Begin PBXShellScriptBuildPhase section */
 		085E4AB464E936E73ACE59E9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		0E6529EA775956DE9D984C24 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -661,9 +813,61 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8724ACA0DDEFC147B4AF9C21 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3D15B7071D3E176C003BB682 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */,
+				3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */,
+				3D3131431D3EF932007717B2 /* Config.swift in Sources */,
+				3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */,
+				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,
+				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
+				3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */,
+				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
+				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
+				3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */,
+				3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */,
+				3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */,
+				3D31B7891D41B7F500D8DB55 /* PhoneTests.swift in Sources */,
+				3D31314F1D3EF932007717B2 /* Utils.swift in Sources */,
+				3D31B78E1D41B7F500D8DB55 /* WeakArrayTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B91E75201CE2D6FF0080EAE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -778,7 +982,127 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		3D15B7121D3E176C003BB682 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B91E75241CE2D6FF0080EAE0 /* SparkSDK */;
+			targetProxy = 3D15B7111D3E176C003BB682 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		3D15B7131D3E176C003BB682 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MediaEngine",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3D15B7141D3E176C003BB682 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MediaEngine",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		3D3131541D3F0420007717B2 /* ReleaseTest */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = ReleaseTest;
+		};
+		3D3131551D3F0420007717B2 /* ReleaseTest */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MediaEngine",
+				);
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "$PROJECT_DIR/Source/Utils/SparkSDK-Bridging-Header.h";
+			};
+			name = ReleaseTest;
+		};
+		3D3131561D3F0420007717B2 /* ReleaseTest */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MediaEngine",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = ReleaseTest;
+		};
 		B91E752B1CE2D6FF0080EAE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -817,7 +1141,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -860,7 +1184,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -885,6 +1209,7 @@
 				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -908,6 +1233,7 @@
 				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -919,11 +1245,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3D15B7151D3E176C003BB682 /* Build configuration list for PBXNativeTarget "SparkSDKTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3D15B7131D3E176C003BB682 /* Debug */,
+				3D15B7141D3E176C003BB682 /* Release */,
+				3D3131561D3F0420007717B2 /* ReleaseTest */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B91E751F1CE2D6FF0080EAE0 /* Build configuration list for PBXProject "SparkSDK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B91E752B1CE2D6FF0080EAE0 /* Debug */,
 				B91E752C1CE2D6FF0080EAE0 /* Release */,
+				3D3131541D3F0420007717B2 /* ReleaseTest */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -933,6 +1270,7 @@
 			buildConfigurations = (
 				B91E752E1CE2D6FF0080EAE0 /* Debug */,
 				B91E752F1CE2D6FF0080EAE0 /* Release */,
+				3D3131551D3F0420007717B2 /* ReleaseTest */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
