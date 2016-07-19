@@ -15,7 +15,7 @@
 import Foundation
 import ObjectMapper
 
-// Room type.
+/// Room type.
 public enum RoomType: String {
     /// 1-to-1 room
     case Direct  = "direct"

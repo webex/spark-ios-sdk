@@ -16,13 +16,21 @@ import Foundation
 
 /// The DisconnectionType enum defines call disconnection type.
 public enum DisconnectionType : String {
+    /// Disconnect due to local left
     case LocalLeft
+    /// Disconnect due to local declined
     case LocalDeclined
+    /// Disconnect due to local cancelled
     case LocalCancelled
+    /// Disconnect due to remote left
     case RemoteLeft
+    /// Disconnect due to remote declined
     case RemoteDeclined
+    /// Disconnect due to remote cancelled
     case RemoteCancelled
+    /// Disconnect due to other device declined
     case OtherDeviceDeclined
+    /// Disconnect due to other device connected
     case OtherDeviceConnected
 }
 
@@ -134,33 +142,43 @@ public protocol CallObserver: AnyObject {
 /// The default empty callback methods for CallObserver protocol.
 public extension CallObserver {
     
+    /// Empty default implementation
     func callDidBeginRinging(call: Call) {
     }
     
+    /// Empty default implementation
     func callDidConnect(call: Call) {
     }
     
+    /// Empty default implementation
     func callDidDisconnect(call: Call, disconnectionType: DisconnectionType) {
     }
     
+    /// Empty default implementation
     func remoteMediaDidChange(call: Call, remoteMediaChangeType: RemoteMediaChangeType) {
     }
 
+    /// Empty default implementation
     func localMediaDidChange(call: Call, localMediaChangeType: LocalMediaChangeType) {
     }
 
+    /// Empty default implementation
     func facingModeDidChange(call: Call, facingMode: Call.FacingMode) {
     }
 
+    /// Empty default implementation
     func loudSpeakerDidChange(call: Call, isLoudSpeakerSelected: Bool) {
     }
 
+    /// Empty default implementation
     func remoteViewSizeDidChange(call: Call, height: UInt32, width: UInt32) {
     }
 
+    /// Empty default implementation
     func localViewSizeDidChange(call: Call, height: UInt32, width: UInt32) {
     }
 
+    /// Empty default implementation
     func enableDTMFDidChange(call: Call, sendingDTMFEnabled: Bool) {
     }
 }

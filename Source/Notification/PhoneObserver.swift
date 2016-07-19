@@ -32,9 +32,11 @@ public protocol PhoneObserver: AnyObject {
 /// The default empty callback methods for PhoneObserver protocol.
 public extension PhoneObserver {
     
+    /// Empty default implementation
     func callIncoming(call: Call) {
     }
     
+    /// Empty default implementation
     func refreshAccessTokenFailed() {
     }
 }

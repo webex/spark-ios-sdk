@@ -14,6 +14,8 @@
 
 import Foundation
 
+
+/// The data type include email validation and equatable implementation.
 public class EmailAddress: Equatable {
     private var address: String
     
