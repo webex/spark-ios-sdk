@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "SparkSDK"
-  s.version = "0.9.150"
+  s.version = "1.0.0"
   s.summary = "Spark iOS SDK"
   s.homepage = "https://developer.ciscospark.com"
   s.license = "Apache License, Version 2.0"
@@ -14,10 +14,9 @@ Pod::Spec.new do |s|
   s.vendored_frameworks = "MediaEngine/Wme.framework"
   s.dependency 'Alamofire', '~> 3.3.1'
   s.dependency 'ObjectMapper', '~> 1.2.0'
-  s.dependency 'AlamofireObjectMapper', '~> 3.0.0'
+  s.dependency 'AlamofireObjectMapper', '= 3.0.0'
   s.dependency 'SwiftyJSON', '~> 2.3.2'
   s.dependency 'Starscream', '~> 1.1.3'
   s.dependency 'KeychainAccess', '~> 2.3.5'
   s.dependency 'CocoaLumberjack/Swift', '~> 2.3.0'
 end
-
