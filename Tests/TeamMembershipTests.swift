@@ -19,8 +19,6 @@ import Nimble
 
 class TeamMembershipSpec: QuickSpec {
     
-    private let InvalidId = "abc"
-    
     private var team: TestTeam?
     private var teamId: String {
         return team!.id!
@@ -130,7 +128,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teamMemberships.create(teamId: self.InvalidId, personId: self.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.create(teamId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -191,7 +189,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teamMemberships.list(teamId: self.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.list(teamId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -214,7 +212,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-               expect{try Spark.teamMemberships.get(membershipId: self.InvalidId)}.to(throwError())
+               expect{try Spark.teamMemberships.get(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -252,7 +250,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teamMemberships.update(membershipId: self.InvalidId, isModerator: false)}.to(throwError())
+                expect{try Spark.teamMemberships.update(membershipId: Config.InvalidId, isModerator: false)}.to(throwError())
             }
         }
         
@@ -277,7 +275,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teamMemberships.delete(membershipId: self.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.delete(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
     }

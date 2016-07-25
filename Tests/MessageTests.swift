@@ -21,8 +21,6 @@ class MessageSpec: QuickSpec {
     
     private let Text = "test text"
     private let FileUrl = "https://developer.ciscospark.com/index.html"
-    private let InvalidId = "abc"
-    private let InvalideEmail = EmailAddress.fromString("abc@a.aa")
     private var other: TestUser!
     
     private var room: TestRoom?
@@ -104,7 +102,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid room Id") {
-                let message = try? Spark.messages.postToRoom(roomId: self.InvalidId, text: self.Text)
+                let message = try? Spark.messages.postToRoom(roomId: Config.InvalidId, text: self.Text)
                 expect(message).to(beNil())
             }
         }
@@ -159,7 +157,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid person Id") {
-                let message = try? Spark.messages.postToPerson(personId: self.InvalidId, text: self.Text)
+                let message = try? Spark.messages.postToPerson(personId: Config.InvalidId, text: self.Text)
                 expect(message).to(beNil())
             }
         }
@@ -214,8 +212,8 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid person email") {
-                let message = try? Spark.messages.postToPerson(personEmail: self.InvalideEmail!, text: self.Text)
-                expect(message).to(beNil())
+                let message = try? Spark.messages.postToPerson(personEmail: Config.InvalidEmail, text: self.Text)
+                expect(message).notTo(beNil())
             }
         }
         
@@ -292,7 +290,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid room Id") {
-                expect{try Spark.messages.list(roomId: self.InvalidId)}.to(throwError())
+                expect{try Spark.messages.list(roomId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -318,7 +316,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid message Id") {
-                expect{try Spark.messages.get(messageId: self.InvalidId)}.to(throwError())
+                expect{try Spark.messages.get(messageId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -336,7 +334,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid message Id") {
-                expect{try Spark.messages.delete(messageId: self.InvalidId)}.to(throwError())
+                expect{try Spark.messages.delete(messageId: Config.InvalidId)}.to(throwError())
             }
         }
     }

@@ -22,7 +22,6 @@ class RoomSpec: QuickSpec {
     private let RoomTitle  = "room_for_testing"
     private let SpecialTitle = "@@@ &&&_%%%"
     private let UpdatedRoomTitle  = "room_for_testing_updated"
-    private let InvalidId = "abc"
     private let RoomCountMin = 1
     private let RoomCountMax = 100    //TO BE DETERMINED
     private let RoomCountValid = 10
@@ -133,7 +132,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid roomId") {
-                expect{try Spark.rooms.update(roomId: self.InvalidId, title: self.UpdatedRoomTitle)}.to(throwError())
+                expect{try Spark.rooms.update(roomId: Config.InvalidId, title: self.UpdatedRoomTitle)}.to(throwError())
             }
             
             it("sync with roomId and specialTitle") {
@@ -184,7 +183,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid RoomId") {
-                expect{try Spark.rooms.delete(roomId: self.InvalidId)}.to(throwError())
+                expect{try Spark.rooms.delete(roomId: Config.InvalidId)}.to(throwError())
             }
             
             it("sync with empty RoomId") {
@@ -226,7 +225,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid roomId") {
-                expect{try Spark.rooms.get(roomId: self.InvalidId)}.to(throwError())
+                expect{try Spark.rooms.get(roomId: Config.InvalidId)}.to(throwError())
             }
             
             it("sync with emptyRoomId") {

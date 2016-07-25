@@ -25,8 +25,6 @@ class MembershipSpec: QuickSpec {
     private var roomId: String {
         return room!.id!
     }
-    private let InvalidEmail = EmailAddress.fromString("a@a.com")!
-    private let InvalidId = "abc"
     private var other: TestUser!
     
     private func validate(membership: Membership) {
@@ -92,16 +90,16 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid roomId and personId") {
-                expect{try Spark.memberships.create(roomId: self.InvalidId, personId: self.other.personId!)}.to(throwError())
+                expect{try Spark.memberships.create(roomId: Config.InvalidId, personId: self.other.personId!)}.to(throwError())
 
             }
             
             it("with roomId and invalid personId") {
-                expect{try Spark.memberships.create(roomId: self.roomId, personId: self.InvalidId)}.to(throwError())
+                expect{try Spark.memberships.create(roomId: self.roomId, personId: Config.InvalidId)}.to(throwError())
             }
             
             it("with invalid roomId and invalid personId") {
-                expect{try Spark.memberships.create(roomId: self.InvalidId, personId: self.InvalidId)}.to(throwError())
+                expect{try Spark.memberships.create(roomId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
             }
             
             it("with roomId and personId and true moderator") {
@@ -168,15 +166,11 @@ class MembershipSpec: QuickSpec {
             }
 
             it("with invalid roomId and personEmail") {
-                expect{try Spark.memberships.create(roomId: self.InvalidId, personEmail: self.other.email!)}.to(throwError())
+                expect{try Spark.memberships.create(roomId: Config.InvalidId, personEmail: self.other.email!)}.to(throwError())
             }
             
             it("with roomId and invalid personEmail") {
-                expect{try Spark.memberships.create(roomId: self.roomId, personEmail: self.InvalidEmail)}.notTo(throwError())
-            }
-            
-            it("with invalid roomId and invalid personEmail") {
-                expect{try Spark.memberships.create(roomId: self.InvalidId, personEmail: self.InvalidEmail)}.to(throwError())
+                expect{try Spark.memberships.create(roomId: self.roomId, personEmail: Config.InvalidEmail)}.notTo(throwError())
             }
         }
         
@@ -255,7 +249,7 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid Id") {
-                expect{try Spark.memberships.get(membershipId: self.InvalidId)}.to(throwError())
+                expect{try Spark.memberships.get(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -291,7 +285,7 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.memberships.update(membershipId: self.InvalidId, isModerator: true)}.to(throwError())
+                expect{try Spark.memberships.update(membershipId: Config.InvalidId, isModerator: true)}.to(throwError())
             }
         }
         
@@ -308,7 +302,7 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.memberships.delete(membershipId: self.InvalidId)}.to(throwError())
+                expect{try Spark.memberships.delete(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
     }

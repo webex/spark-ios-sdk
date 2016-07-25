@@ -19,8 +19,6 @@ import Nimble
 
 class TeamSpec: QuickSpec {
     
-    private let InvalidId = "abc"
-    
     private func validate(team: Team) {
         expect(team.id).notTo(beNil())
         expect(team.name).notTo(beNil())
@@ -115,7 +113,7 @@ class TeamSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teams.get(teamId: self.InvalidId)}.to(throwError())
+                expect{try Spark.teams.get(teamId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -169,7 +167,7 @@ class TeamSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teams.update(teamId: self.InvalidId, name: self.InvalidId)}.to(throwError())
+                expect{try Spark.teams.update(teamId: Config.InvalidId, name: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -188,7 +186,7 @@ class TeamSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.teams.delete(teamId: self.InvalidId)}.to(throwError())
+                expect{try Spark.teams.delete(teamId: Config.InvalidId)}.to(throwError())
             }
         }
     }
