@@ -1,5 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+#### 1.0.0 Releases
+
+- `1.0.0` Releases - [1.0.0](#100)
+
 #### 0.9.149 Releases
 
 - `0.9.149` Releases - [0.9.149](#09149)
@@ -21,6 +25,16 @@ All notable changes to this project will be documented in this file.
 - `0.9.137` Releases - [0.9.137](#09137)
 
 ---
+## [1.0.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.0.0)
+Released on 2016-07-25.
+
+#### Added
+- Travis CI
+
+#### Updated
+- Media engine refactor
+- Use NSDate for object mapper 
+
 ## [0.9.149](https://github.com/ciscospark/spark-ios-sdk/releases/tag/0.9.149)
 Released on 2016-07-11.
 
