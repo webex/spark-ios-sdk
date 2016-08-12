@@ -1,4 +1,4 @@
-[![Travis CI](https://travis-ci.com/ciscospark/spark-ios-sdk.svg?token=CERaGQRzqYiFzg82Pjv1&branch=master)](https://travis-ci.com/ciscospark/spark-ios-sdk)
+[![Travis CI](https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/ciscospark/spark-ios-sdk)
 
 # SparkSDK
 
@@ -21,7 +21,6 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
 
     ```ruby
     source 'https://github.com/CocoaPods/Specs.git'
-    source 'https://github.com/ciscospark/CocoaPodSpecs.git'
     
     platform :ios, '8.0'
     use_frameworks!
