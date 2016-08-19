@@ -25,7 +25,9 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
     platform :ios, '8.0'
     use_frameworks!
     
-    pod 'SparkSDK'
+    target 'SparkSDKDemo' do
+        pod 'SparkSDK'
+    end
     ```
 
 1. Install SparkSDK from your project directory:
@@ -40,7 +42,6 @@ Below is code of a demo of the SDK usage
 1. Setup SDK with Spark access token 
    ```swift
    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        
         let sparkAccessToken = "Yjc5ZTYyMDEt..."
         Spark.initWith(accessToken: sparkAccessToken)
         return true
@@ -49,7 +50,6 @@ Below is code of a demo of the SDK usage
 1. Setup SDK with app infomation, and authorize access to Spark service
    ```swift
    class LoginViewController: UIViewController {
-    
         @IBAction func loginWithSpark(sender: AnyObject) {
             let clientId = "C90f769..."
             let clientSecret = "64e252..."
@@ -117,7 +117,7 @@ Below is code of a demo of the SDK usage
             PhoneNotificationCenter.sharedInstance.removeObserver(self)
         }
         func callIncoming(call: Call) {
-        // Show incoming call toast view
+            // Show incoming call toast view
         }
         ...
     }
