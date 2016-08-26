@@ -23,8 +23,8 @@ import Foundation
 class DeviceService: CompletionHandlerType<Device> {
     static let sharedInstance = DeviceService()
     
-    private var device: Device?
-    private let client: DeviceClient = DeviceClient()
+    fileprivate var device: Device?
+    fileprivate let client: DeviceClient = DeviceClient()
     
     var deviceUrl: String? {
         get {
@@ -40,7 +40,7 @@ class DeviceService: CompletionHandlerType<Device> {
         return device?.webSocketUrl
     }
     
-    func getServiceUrl(service: String) -> String? {
+    func getServiceUrl(_ service: String) -> String? {
         if let services = device?.services {
             return services[service + "ServiceUrl"]
         }
@@ -48,7 +48,7 @@ class DeviceService: CompletionHandlerType<Device> {
         return nil
     }
     
-    func registerDevice(completionHandler: Bool -> Void) {
+    func registerDevice(_ completionHandler: @escaping (Bool) -> Void) {
         let deviceInfo = createDeviceInfo()
         if deviceUrl == nil {
             client.create(deviceInfo) {
@@ -64,45 +64,45 @@ class DeviceService: CompletionHandlerType<Device> {
         }
     }
     
-    func deregisterDevice(completionHandler: Bool -> Void) {
+    func deregisterDevice(_ completionHandler: @escaping (Bool) -> Void) {
         if deviceUrl == nil {
             completionHandler(true)
             return
         }
         
         client.delete(deviceUrl!) {
-            (response: ServiceResponse<AnyObject>) in
+            (response: ServiceResponse<Any>) in
             self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
         }
         
         deviceUrl = nil
     }
     
-    private func onRegisterDeviceCompleted(response: ServiceResponse<Device>, completionHandler: Bool -> Void) {
+    fileprivate func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
         switch response.result {
-        case .Success(let value):
+        case .success(let value):
             self.device = value
             self.deviceUrl = self.device?.deviceUrl
             completionHandler(true)
-        case .Failure(let error):
+        case .failure(let error):
             Logger.error("Failed to register device: \(error.localizedFailureReason)")
             completionHandler(false)
         }
     }
     
-    private func onDeregisterDeviceCompleted(response: ServiceResponse<AnyObject>, completionHandler: Bool -> Void) {
+    fileprivate func onDeregisterDeviceCompleted(_ response: ServiceResponse<Any>, completionHandler: (Bool) -> Void) {
         switch response.result {
-        case .Success:
+        case .success:
             completionHandler(true)
-        case .Failure(let error):
+        case .failure(let error):
             Logger.error("Failed to deregister device: \(error.localizedFailureReason)")
             completionHandler(false)
         }
     }
     
-    private func createDeviceInfo() -> RequestParameter {
+    fileprivate func createDeviceInfo() -> RequestParameter {
         
-        let currentDevice = UIDevice.currentDevice()
+        let currentDevice = UIDevice.current
         var deviceName = currentDevice.name
         if (deviceName.isEmpty) {
             deviceName = "notset"
@@ -128,12 +128,12 @@ class DeviceService: CompletionHandlerType<Device> {
         return RequestParameter(deviceParameters)
     }
     
-    private func isPad() -> Bool {
-        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+    fileprivate func isPad() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
     }
     
-    private func isPhone() -> Bool {
-        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone
+    fileprivate func isPhone() -> Bool {
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone
     }
 }
 

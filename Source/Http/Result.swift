@@ -24,8 +24,8 @@ import Foundation
 public enum Result<T> {
     
     /// Result for Success, with the expected object.
-    case Success(T)
+    case success(T)
     
     /// Result for Failure, with the error message.
-    case Failure(NSError)
+    case failure(NSError)
 }

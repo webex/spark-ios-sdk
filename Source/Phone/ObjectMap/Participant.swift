@@ -40,7 +40,7 @@ struct Participant: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         isCreator <- map["isCreator"]
         id <- map["id"]
         url <- map["url"]
@@ -61,14 +61,14 @@ struct Participant: Mappable {
         typealias Object = ParticipantState
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> Object? {
             guard let state = value as? String else {
                 return nil
             }
             return ParticipantState(rawValue: state)
         }
 
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             guard let state = value else {
                 return nil
             }

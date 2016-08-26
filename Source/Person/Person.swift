@@ -37,7 +37,7 @@ public struct Person: Mappable {
     public var avatar: String?
     
     /// The timestamp that this person being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Person constructor.
     ///
@@ -48,7 +48,7 @@ public struct Person: Mappable {
     /// Person mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         emails <- (map["emails"], EmailsTransform())
         displayName <- map["displayName"]
@@ -60,7 +60,7 @@ public struct Person: Mappable {
         typealias Object = [EmailAddress]
         typealias JSON = [String]
         
-        func transformFromJSON(value: AnyObject?) -> Object?{
+        func transformFromJSON(_ value: Any?) -> Object?{
             var emails: [EmailAddress] = []
             let emailStrings = value as! [String]
             for emailString in emailStrings {
@@ -70,7 +70,7 @@ public struct Person: Mappable {
             return emails
         }
         
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             return nil
         }
     }

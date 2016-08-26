@@ -29,23 +29,23 @@ struct Error {
     
     /// Error code.
     enum Code: Int {
-        case ServiceRequestFailed   = -7000
+        case serviceRequestFailed   = -7000
     }
     
     /// Converts the error data to NSError
-    static func requestErrorWithData(data: NSData) -> NSError {
+    static func requestErrorWithData(_ data: Data) -> NSError {
         var failureReason = "Service request failed without error message"
         if let errorMessage = JSON(data: data)["message"].string {
             failureReason = errorMessage
         }
-        return Error.errorWithCode(Error.Code.ServiceRequestFailed, failureReason: failureReason)
+        return Error.errorWithCode(Error.Code.serviceRequestFailed, failureReason: failureReason)
     }
     
-    private static func errorWithCode(code: Code, failureReason: String) -> NSError {
+    fileprivate static func errorWithCode(_ code: Code, failureReason: String) -> NSError {
         return errorWithCode(code.rawValue, failureReason: failureReason)
     }
     
-    private static func errorWithCode(code: Int, failureReason: String) -> NSError {
+    fileprivate static func errorWithCode(_ code: Int, failureReason: String) -> NSError {
         let userInfo = [NSLocalizedFailureReasonErrorKey: failureReason]
         return NSError(domain: Domain, code: code, userInfo: userInfo)
     }

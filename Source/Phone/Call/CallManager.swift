@@ -23,19 +23,19 @@ import ObjectMapper
 class CallManager {
     
     static let sharedInstance = CallManager()
-    private var callInstances = [String: Call]()
+    fileprivate var callInstances = [String: Call]()
     
-    func addCall(url: String, call: Call) {
+    func addCall(_ url: String, call: Call) {
         callInstances.updateValue(call, forKey: url)
         Logger.info("Add call for call url:\(url)")
     }
     
-    func removeCall(url: String) {
-        callInstances.removeValueForKey(url)
+    func removeCall(_ url: String) {
+        callInstances.removeValue(forKey: url)
         Logger.info("Remove call for call url:\(url)")
     }
     
-    func findCallByMediaSession(session: MediaSession) -> Call? {
+    func findCallByMediaSession(_ session: MediaSession) -> Call? {
         for call in callInstances.values {
             if call.isMediaSessionAssociated(session) {
                 return call
@@ -44,7 +44,7 @@ class CallManager {
         return nil
     }
     
-    func handleCallEvent(event: AnyObject) {
+    func handleCallEvent(_ event: Any) {
         guard let callEvent = Mapper<CallEvent>().map(event) else {
             return
         }
@@ -62,16 +62,16 @@ class CallManager {
         Logger.info("Fetch call infos")
         CallClient().fetchCallInfos() {
             switch $0.result {
-            case .Success(let value):
+            case .success(let value):
                 self.handleActiveCalls(value)
                 Logger.info("Success: fetch call infos")
-            case .Failure(let error):
+            case .failure(let error):
                 Logger.error("Failure: \(error.localizedFailureReason)")
             }
         }
     }
     
-    private func handleCallInfo(callInfo: CallInfo) {
+    fileprivate func handleCallInfo(_ callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
             return
         }
@@ -94,13 +94,13 @@ class CallManager {
         }
     }
     
-    private func handleActiveCalls(callInfos: [CallInfo]) {
+    fileprivate func handleActiveCalls(_ callInfos: [CallInfo]) {
         for callInfo in callInfos {
             handleCallInfo(callInfo)
         }
     }
 
-    private func doActionWhenIncoming(callInfo: CallInfo) {
+    fileprivate func doActionWhenIncoming(_ callInfo: CallInfo) {
         let incomingCall = Call(callInfo)
         addCall(incomingCall.url, call: incomingCall)
 
@@ -109,7 +109,7 @@ class CallManager {
         Logger.info("Receive incoming call")
     }
     
-    private func doActionWhenJoinedOnOtherDevice(callInfo: CallInfo) {
+    fileprivate func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
         // TODO: need to support other device joined case
         let call = Call(callInfo)
         addCall(call.url, call: call)

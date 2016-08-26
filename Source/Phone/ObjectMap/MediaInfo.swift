@@ -39,7 +39,7 @@ struct MediaInfo: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         sdp <- map["sdp"]
         audioMuted <- map["audioMuted"]
         videoMuted <- map["videoMuted"]

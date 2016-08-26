@@ -24,11 +24,11 @@ class VideoLicense {
     
     static let sharedInstance = VideoLicense()
     
-    private let userDefaults = UserDefaults.sharedInstance
+    fileprivate let userDefaults = UserDefaults.sharedInstance
     
-    func checkActivation(completion: (isActivated: Bool) -> Void) {
+    func checkActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
         guard needActivation() else {
-            completion(isActivated: true)
+            completion(true)
             return
         }
         
@@ -44,28 +44,28 @@ class VideoLicense {
         userDefaults.removeVideoLicenseSetting()
     }
     
-    private func promptForActivation(completion: (isActivated: Bool) -> Void) {
+    fileprivate func promptForActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
         let AlertTitle = "Activate License"
         let AlertMessage = "To enable video calls, activate a free video license (H.264 AVC) from Cisco. By selecting 'Activate', you accept the Cisco End User License Agreement and Notices."
         
-        let alertController = UIAlertController(title: AlertTitle, message: AlertMessage, preferredStyle: UIAlertControllerStyle.Alert)
+        let alertController = UIAlertController(title: AlertTitle, message: AlertMessage, preferredStyle: UIAlertControllerStyle.alert)
         
-        alertController.addAction(UIAlertAction(title: "Activate", style: UIAlertActionStyle.Default) { _ in
+        alertController.addAction(UIAlertAction(title: "Activate", style: UIAlertActionStyle.default) { _ in
             self.activateLicense()
-            completion(isActivated: true)
+            completion(true)
             })
-        alertController.addAction(UIAlertAction(title: "View License", style: UIAlertActionStyle.Default) { _ in
-            completion(isActivated: false)
+        alertController.addAction(UIAlertAction(title: "View License", style: UIAlertActionStyle.default) { _ in
+            completion(false)
             self.viewLicense()
             })
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) { _ in
-            completion(isActivated: false)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { _ in
+            completion(false)
             })
         
         alertController.present(true, completion: nil)
     }
     
-    private func needActivation() -> Bool {
+    fileprivate func needActivation() -> Bool {
         if userDefaults.isVideoLicenseActivated || userDefaults.isVideoLicenseActivationDisabled {
             return false
         }
@@ -73,16 +73,16 @@ class VideoLicense {
         return true
     }
     
-    private func activateLicense() {
+    fileprivate func activateLicense() {
         userDefaults.isVideoLicenseActivated = true
         CallMetrics.sharedInstance.reportVideoLicenseActivation()
     }
     
-    private func viewLicense() {
-        guard let url = NSURL(string: "http://www.openh264.org/BINARY_LICENSE.txt") else {
+    fileprivate func viewLicense() {
+        guard let url = URL(string: "http://www.openh264.org/BINARY_LICENSE.txt") else {
             return
         }
         
-        UIApplication.sharedApplication().openURL(url)
+        UIApplication.shared.openURL(url)
     }
 }

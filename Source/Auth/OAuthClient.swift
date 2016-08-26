@@ -22,7 +22,7 @@ import Foundation
 
 class OAuthClient: CompletionHandlerType<AccessToken> {
     
-    private func requestBuilder() -> ServiceRequest.Builder {
+    fileprivate func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder()
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
@@ -31,7 +31,7 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
     
     // MARK:- Async API
     
-    func fetchAccessTokenFromOAuthCode(code: String, clientAccount: ClientAccount, redirectUri: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func fetchAccessTokenFromOAuthCode(_ code: String, _ clientAccount: ClientAccount, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let query = RequestParameter(["grant_type": "authorization_code",
             "redirect_uri": redirectUri,
             "code": code,
@@ -39,7 +39,7 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
             "client_secret": clientAccount.clientSecret])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .query(query)
             .queue(queue)
             .build()
@@ -47,14 +47,14 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
         request.responseObject(completionHandler)
     }
     
-    func refreshOAuthAccessTokenFromRefreshToken(refreshToken: String, clientAccount: ClientAccount, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func refreshOAuthAccessTokenFromRefreshToken(_ refreshToken: String, _ clientAccount: ClientAccount, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let query = RequestParameter(["grant_type": "refresh_token",
             "refresh_token": refreshToken,
             "client_id": clientAccount.clientId,
             "client_secret": clientAccount.clientSecret])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .query(query)
             .queue(queue)
             .build()
@@ -64,11 +64,11 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
     
     // MARK:- Sync API
     
-    func fetchAccessTokenFromOAuthCode(code: String, clientAccount: ClientAccount, redirectUri: String) throws -> AccessToken {
-        return try SyncUtil.getObject(code, clientAccount, redirectUri, async: fetchAccessTokenFromOAuthCode)
+    func fetchAccessTokenFromOAuthCode(_ code: String, clientAccount: ClientAccount, redirectUri: String) throws -> AccessToken {
+		return try SyncUtil.getObject(code, clientAccount, redirectUri, async: fetchAccessTokenFromOAuthCode)
     }
     
-    func refreshAccessTokenFromRefreshToken(refreshToken: String, clientAccount: ClientAccount) throws -> AccessToken {
+    func refreshAccessTokenFromRefreshToken(_ refreshToken: String, clientAccount: ClientAccount) throws -> AccessToken {
         return try SyncUtil.getObject(refreshToken, clientAccount, async: refreshOAuthAccessTokenFromRefreshToken)
     }
 }

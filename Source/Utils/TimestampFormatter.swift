@@ -22,13 +22,13 @@ import Foundation
 
 class TimestampFormatter {
     static func nowInUTC() -> String {
-        return dateFormatterUTC().stringFromDate(NSDate())
+        return dateFormatterUTC().string(from: Date())
     }
 
-    private static func dateFormatterUTC() -> NSDateFormatter {
-        let formatter = NSDateFormatter()
+    fileprivate static func dateFormatterUTC() -> DateFormatter {
+        let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-        formatter.timeZone = NSTimeZone(abbreviation: "UTC")
+        formatter.timeZone = TimeZone(abbreviation: "UTC")
         
         return formatter
     }

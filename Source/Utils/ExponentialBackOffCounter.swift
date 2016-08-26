@@ -21,10 +21,10 @@
 import Foundation
 
 struct ExponentialBackOffCounter {
-    private var minimum: Double
-    private var maximum: Double
-    private var multiplier: Double
-    private var current: Double?
+    fileprivate var minimum: Double
+    fileprivate var maximum: Double
+    fileprivate var multiplier: Double
+    fileprivate var current: Double?
     
     init(minimum: Double, maximum: Double, multiplier: Double) {
         self.minimum = minimum

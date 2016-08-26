@@ -38,7 +38,7 @@ struct CallInfo: Mappable {
     }
 
     var allDevices: [ParticipantDevice] {
-        return allParticipantants.flatMap({$0.devices}).reduce([], combine: +)
+        return allParticipantants.flatMap({$0.devices}).reduce([], +)
     }
     
     var selfDevices: [ParticipantDevice] {
@@ -57,7 +57,7 @@ struct CallInfo: Mappable {
     }
     
     var remoteDevices: [ParticipantDevice] {
-        return remoteParticipantants.flatMap({$0.devices}).reduce([], combine: +)
+        return remoteParticipantants.flatMap({$0.devices}).reduce([], +)
     }
 
     var allParticipantants: [Participant] {
@@ -198,27 +198,27 @@ struct CallInfo: Mappable {
     }
 
     // MARK: utils functions
-    func participantsContiansEmailDomain(emailDomain: String) -> Bool {
+    func participantsContiansEmailDomain(_ emailDomain: String) -> Bool {
         return allParticipantants.filter({
             guard let email = $0.person?.email else {
                 return false
             }
-            return email.lowercaseString.hasSuffix(emailDomain.lowercaseString)
+            return email.lowercased().hasSuffix(emailDomain.lowercased())
         }).count > 0
     }
     
-    func allParticipantantsWithType(type: String) -> [Participant] {
+    func allParticipantantsWithType(_ type: String) -> [Participant] {
         return allParticipantants.filter({$0.type == type})
     }
     
-    func selfDevicesWithState(state: String) -> [ParticipantDevice] {
+    func selfDevicesWithState(_ state: String) -> [ParticipantDevice] {
         return selfDevices.filter({$0.state == state})
     }
     
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         callUrl <- map["url"]
         participants <- map["participants"]
         myself <- map["self"]

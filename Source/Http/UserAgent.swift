@@ -28,7 +28,7 @@ class UserAgent {
     
     init(identity: String) {
         let buildVersion = Spark.version
-        let currentDevice = UIDevice .currentDevice()
+        let currentDevice = UIDevice.current
         let systemName = currentDevice.systemName
         let systemVersion = currentDevice.systemVersion
         let platform = self.platform()
@@ -36,9 +36,9 @@ class UserAgent {
         userAgentString = "\(identity)/\(buildVersion) (\(systemName) \(systemVersion); \(platform))"
     }
     
-    private func platform() -> String {
+    fileprivate func platform() -> String {
         var sysinfo = utsname()
         uname(&sysinfo)
-        return NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: NSASCIIStringEncoding)! as String
+        return NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: String.Encoding.ascii.rawValue)! as String
     }
 }

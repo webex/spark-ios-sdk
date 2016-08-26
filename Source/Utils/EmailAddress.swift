@@ -22,10 +22,10 @@ import Foundation
 
 
 /// The data type include email validation and equatable implementation.
-public class EmailAddress: Equatable {
-    private var address: String
+open class EmailAddress: Equatable {
+    fileprivate var address: String
     
-    private init(_ address: String) {
+    fileprivate init(_ address: String) {
         self.address = address
     }
     
@@ -33,7 +33,7 @@ public class EmailAddress: Equatable {
     ///
     /// - parameter address: The email address string.
     /// - returns: EmailAddress
-    public static func fromString(address: String) -> EmailAddress? {
+    open static func fromString(_ address: String) -> EmailAddress? {
         guard isValid(address) else {
             return nil
         }
@@ -44,15 +44,15 @@ public class EmailAddress: Equatable {
     /// Get email address string from EmailAddress
     ///
     /// - returns: String
-    public func toString() -> String {
+    open func toString() -> String {
         return address
     }
     
-    private static func isValid(address: String) -> Bool {
+    fileprivate static func isValid(_ address: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         
-        return emailTest.evaluateWithObject(address)
+        return emailTest.evaluate(with: address)
     }
 }
 

@@ -28,7 +28,7 @@ struct AlertHint: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         action <- map["action"]
         expiration <- map["expiration"]
     }

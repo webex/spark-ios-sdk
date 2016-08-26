@@ -22,10 +22,10 @@ import Foundation
 
 extension String {
     var decodeString: String? {
-        return self.stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
+        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
     }
     
     var encodeString: String? {
-        return self.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLHostAllowedCharacterSet())
+        return self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)
     }
 }

@@ -31,7 +31,7 @@ struct ParticipantDevice: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         url <- map["url"]
         deviceType <- map["deviceType"]
         featureToggles <- map["featureToggles"]

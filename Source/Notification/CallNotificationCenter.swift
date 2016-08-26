@@ -21,86 +21,72 @@
 import Foundation
 
 /// The CallNotificationCenter class is used to add & remove call observer.
-public class CallNotificationCenter {
+open class CallNotificationCenter {
     
     /// Returns the singleton CallNotificationCenter.
-    public static let sharedInstance = CallNotificationCenter()
+    open static let sharedInstance = CallNotificationCenter()
     
-    private var observers = WeakArray<CallObserver>()
+	fileprivate var observers = NSHashTable<AnyObject>.weakObjects()
     
     /// Add call observer
     ///
     /// - parameter observer: CallObserver object to add.
     /// - returns: Void
-    public func addObserver(observer: CallObserver) {
-        observers.append(observer)
+    open func addObserver(_ observer: CallObserver) {
+        observers.add(observer)
     }
     
     /// Remove call observer
     ///
     /// - parameter observer: CallObserver object to remove.
     /// - returns: Void
-    public func removeObserver(observer: CallObserver) {
+    open func removeObserver(_ observer: CallObserver) {
         observers.remove(observer)
     }
     
-    func notifyCallRinging(call: Call) {
-        for observer in observers {
-            observer.callDidBeginRinging(call)
-        }
+    func notifyCallRinging(_ call: Call) {
+        fire { $0.callDidBeginRinging(call) }
     }
     
-    func notifyCallConnected(call: Call) {
-        for observer in observers {
-            observer.callDidConnect(call)
-        }
+    func notifyCallConnected(_ call: Call) {
+        fire { $0.callDidConnect(call) }
     }
     
-    func notifyCallDisconnected(call: Call, disconnectionType: DisconnectionType) {
-        for observer in observers {
-            observer.callDidDisconnect(call, disconnectionType: disconnectionType)
-        }
+    func notifyCallDisconnected(_ call: Call, disconnectionType: DisconnectionType) {
+        fire { $0.callDidDisconnect(call, disconnectionType: disconnectionType) }
     }
     
-    func notifyRemoteMediaChanged(call: Call, mediaUpdatedType: RemoteMediaChangeType) {
-        for observer in observers {
-            observer.remoteMediaDidChange(call, remoteMediaChangeType: mediaUpdatedType)
-        }
+    func notifyRemoteMediaChanged(_ call: Call, mediaUpdatedType: RemoteMediaChangeType) {
+        fire { $0.remoteMediaDidChange(call, remoteMediaChangeType: mediaUpdatedType) }
     }
     
-    func notifyLocalMediaChanged(call: Call, mediaUpdatedType: LocalMediaChangeType) {
-        for observer in observers {
-            observer.localMediaDidChange(call, localMediaChangeType: mediaUpdatedType)
-        }
+    func notifyLocalMediaChanged(_ call: Call, mediaUpdatedType: LocalMediaChangeType) {
+        fire { $0.localMediaDidChange(call, localMediaChangeType: mediaUpdatedType) }
     }
     
-    func notifyFacingModeChanged(call: Call, facingMode: Call.FacingMode) {
-        for observer in observers {
-            observer.facingModeDidChange(call, facingMode: facingMode)
-        }
+    func notifyFacingModeChanged(_ call: Call, facingMode: Call.FacingMode) {
+        fire { $0.facingModeDidChange(call, facingMode: facingMode) }
     }
     
-    func notifyLoudSpeakerChanged(call: Call, isLoudSpeakerSelected: Bool) {
-        for observer in observers {
-            observer.loudSpeakerDidChange(call, isLoudSpeakerSelected: isLoudSpeakerSelected)
-        }
+    func notifyLoudSpeakerChanged(_ call: Call, isLoudSpeakerSelected: Bool) {
+        fire { $0.loudSpeakerDidChange(call, isLoudSpeakerSelected: isLoudSpeakerSelected) }
     }
     
-    func notifyRemoteViewSizeChanged(call: Call, height: UInt32, width: UInt32) {
-        for observer in observers {
-            observer.remoteViewSizeDidChange(call, height: height, width: width)
-        }
+    func notifyRemoteViewSizeChanged(_ call: Call, height: UInt32, width: UInt32) {
+        fire { $0.remoteViewSizeDidChange(call, height: height, width: width) }
     }
     
-    func notifyLocalViewSizeChanged(call: Call, height: UInt32, width: UInt32) {
-        for observer in observers {
-            observer.localViewSizeDidChange(call, height: height, width: width)
-        }
+    func notifyLocalViewSizeChanged(_ call: Call, height: UInt32, width: UInt32) {
+        fire { $0.localViewSizeDidChange(call, height: height, width: width) }
     }
     
-    func notifyEnableDTMFChanged(call: Call) {
-        for observer in observers {
-            observer.enableDTMFDidChange(call, sendingDTMFEnabled: call.sendingDTMFEnabled)
-        }
+    func notifyEnableDTMFChanged(_ call: Call) {
+		fire { $0.enableDTMFDidChange(call, sendingDTMFEnabled: call.sendingDTMFEnabled) }
     }
+	
+	private func fire(_ closure:(_ observer: CallObserver) -> Void) {
+		for observer in observers.allObjects as! [CallObserver] {
+			closure(observer)
+		}
+	}
 }

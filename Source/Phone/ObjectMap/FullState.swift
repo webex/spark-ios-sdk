@@ -31,7 +31,7 @@ struct FullState: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         active <- map["active"]
         count <- map["count"]
         locked <- map["locked"]

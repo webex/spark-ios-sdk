@@ -21,38 +21,40 @@
 import Foundation
 
 /// The PhoneNotificationCenter class is used to add & remove phone observer.
-public class PhoneNotificationCenter {
+open class PhoneNotificationCenter {
     
     /// Returns the singleton PhoneNotificationCenter.
-    public static let sharedInstance = PhoneNotificationCenter()
+    open static let sharedInstance = PhoneNotificationCenter()
     
-    private var observers = WeakArray<PhoneObserver>()
-    
+	fileprivate var observers = NSHashTable<AnyObject>.weakObjects()
+	
     /// Add phone observer
     ///
     /// - parameter observer: PhoneObserver object to add.
     /// - returns: Void
-    public func addObserver(observer: PhoneObserver) {
-        observers.append(observer)
+    open func addObserver(_ observer: PhoneObserver) {
+        observers.add(observer)
     }
     
     /// Remove phone observer
     ///
     /// - parameter observer: PhoneObserver object to remove.
     /// - returns: Void
-    public func removeObserver(observer: PhoneObserver) {
+    open func removeObserver(_ observer: PhoneObserver) {
         observers.remove(observer)
     }
     
-    func notifyIncomingCall(call: Call) {
-        for observer in observers {
-            observer.callIncoming(call)
-        }
+    func notifyIncomingCall(_ call: Call) {
+		fire { $0.callIncoming(call) }
     }
     
     func notifyRefreshAccessTokenFailed() {
-        for observer in observers {
-            observer.refreshAccessTokenFailed()
-        }
+		fire { $0.refreshAccessTokenFailed() }
     }
+	
+	private func fire(_ closure:(_ observer: PhoneObserver) -> Void) {
+		for observer in observers.allObjects as! [PhoneObserver] {
+			closure(observer)
+		}
+	}
 }

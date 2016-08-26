@@ -21,9 +21,9 @@
 import Foundation
 
 /// Webhook HTTP client.
-public class WebhookClient: CompletionHandlerType<Webhook> {
+open class WebhookClient: CompletionHandlerType<Webhook> {
     
-    private func requestBuilder() -> ServiceRequest.Builder {
+    fileprivate func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("webhooks")
     }
     
@@ -33,9 +33,9 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(max max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .query(RequestParameter(["max": max]))
             .keyPath("items")
             .queue(queue)
@@ -54,7 +54,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func create(name name: String, targetUrl: String, resource: String, event: String, filter: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,
@@ -63,7 +63,7 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
             "filter": filter])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(body)
             .queue(queue)
             .build()
@@ -77,9 +77,9 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func get(webhookId webhookId: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func get(webhookId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .path(webhookId)
             .queue(queue)
             .build()
@@ -95,9 +95,9 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func update(webhookId webhookId: String, name: String, targetUrl: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let request = requestBuilder()
-            .method(.PUT)
+            .method(.put)
             .body(RequestParameter(["name": name, "targetUrl": targetUrl]))
             .path(webhookId)
             .queue(queue)
@@ -112,9 +112,9 @@ public class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func delete(webhookId webhookId: String, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
+    open func delete(webhookId: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
         let request = requestBuilder()
-            .method(.DELETE)
+            .method(.delete)
             .path(webhookId)
             .queue(queue)
             .build()

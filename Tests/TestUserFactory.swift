@@ -36,14 +36,14 @@ class TestUserFactory {
         let headers = ["Authorization": "Bearer \(token.value)",
                        "Content-Type": "application/json"]
         
-        let body: [String: AnyObject] = ["clientId": client.id,
-                                         "clientSecret": client.secret,
-                                         "emailTemplate": email,
-                                         "displayName": userName,
-                                         "password": "P@ssw0rd123",
-                                         "entitlements": entitlements,
-                                         "authCodeOnly": "false",
-                                         "scopes": scopes]
+        let body: [String: Any] = ["clientId": client.id,
+                                   "clientSecret": client.secret,
+                                   "emailTemplate": email,
+                                   "displayName": userName,
+                                   "password": "P@ssw0rd123",
+                                   "entitlements": entitlements,
+                                   "authCodeOnly": "false",
+                                   "scopes": scopes]
         var user = TestUser()
         let semaphore = dispatch_semaphore_create(0)
         let queue = dispatch_queue_create("create-user-queue", nil)

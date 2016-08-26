@@ -49,7 +49,7 @@ public struct Message: Mappable {
     public var toPersonEmail: EmailAddress?
     
     /// The timestamp that the message being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Message constructor.
     ///
@@ -60,7 +60,7 @@ public struct Message: Mappable {
     /// Message mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         personId <- map["personId"]
         personEmail <- (map["personEmail"], EmailTransform())
@@ -77,11 +77,11 @@ class EmailTransform: TransformType {
     typealias Object = EmailAddress
     typealias JSON = String
     
-    func transformFromJSON(value: AnyObject?) -> Object?{
+    func transformFromJSON(_ value: Any?) -> Object? {
         return EmailAddress.fromString(value as! String)
     }
     
-    func transformToJSON(value: Object?) -> JSON? {
+    func transformToJSON(_ value: Object?) -> JSON? {
         return nil
     }
 }

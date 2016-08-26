@@ -30,7 +30,7 @@ struct ParticipantStatus: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         audioStatus <- map["audioStatus"]
         videoStatus <- map["videoStatus"]
         csis <- map["csis"]

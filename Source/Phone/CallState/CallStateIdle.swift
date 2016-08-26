@@ -32,15 +32,15 @@ class CallStateIdle: CallState {
         }
     }
     
-    private func isMakingOutgoingCall() -> Bool {
+    fileprivate func isMakingOutgoingCall() -> Bool {
         return info.hasJoinedOnThisDevice && isRemoteParticipantantsIdleOrNotified()
     }
     
-    private func isRemoteParticipantantsIdleOrNotified() -> Bool {
+    fileprivate func isRemoteParticipantantsIdleOrNotified() -> Bool {
         return info.remoteParticipantants.filter({$0.state != ParticipantState.Idle && $0.state != ParticipantState.Notified}).isEmpty
     }
     
-    private func doActionWhenOutgoing() {
+    fileprivate func doActionWhenOutgoing() {
         call.state = CallStateOutgoing(call)
         callNotificationCenter.notifyCallRinging(call)
     }

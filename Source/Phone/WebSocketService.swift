@@ -26,13 +26,13 @@ class WebSocketService: WebSocketDelegate {
     
     static let sharedInstance = WebSocketService()
     
-    private var socket: WebSocket?
-    private let MessageBatchingIntervalInSec = 0.5
-    private let ConnectionTimeoutIntervalInSec = 60.0
-    private var connectionTimeoutTimer: NSTimer?
-    private var messageBatchingTimer: NSTimer?
-    private var connectionRetryCounter: ExponentialBackOffCounter
-    private var pendingMessages: [JSON]
+    fileprivate var socket: WebSocket?
+    fileprivate let MessageBatchingIntervalInSec = 0.5
+    fileprivate let ConnectionTimeoutIntervalInSec = 60.0
+    fileprivate var connectionTimeoutTimer: Timer?
+    fileprivate var messageBatchingTimer: Timer?
+    fileprivate var connectionRetryCounter: ExponentialBackOffCounter
+    fileprivate var pendingMessages: [JSON]
     
     init() {
         connectionRetryCounter = ExponentialBackOffCounter(minimum: 0.5, maximum: 32, multiplier: 2)
@@ -44,7 +44,7 @@ class WebSocketService: WebSocketDelegate {
         cancelMessageBatchingTimer()
     }
     
-    func connect(webSocketUrl: NSURL) {
+    func connect(_ webSocketUrl: URL) {
         if socket == nil {
             socket = createWebSocket(webSocketUrl)
             guard socket != nil else {
@@ -82,7 +82,7 @@ class WebSocketService: WebSocketDelegate {
         socket = nil
     }
     
-    private func reconnect() {
+    fileprivate func reconnect() {
         guard socket != nil else {
             Logger.warn("Web socket has not been connected")
             return
@@ -98,7 +98,7 @@ class WebSocketService: WebSocketDelegate {
         socket?.connect()
     }
     
-    private func createWebSocket(webSocketUrl: NSURL) -> WebSocket? {
+    fileprivate func createWebSocket(_ webSocketUrl: URL) -> WebSocket? {
         // Need to check authorization, avoid crash when logout as soon as login
         guard let authorization = AuthManager.sharedInstance.getAuthorization() else {
             Logger.error("Failed to create web socket due to no authorization")
@@ -119,20 +119,16 @@ class WebSocketService: WebSocketDelegate {
         return socket
     }
     
-    private func despatch_main_after(delay: Double, closure: () -> Void) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(),
-            closure
+    fileprivate func despatch_main_after(_ delay: Double, closure: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
+            execute: closure
         )
     }
     
     // MARK: - Websocket Delegate Methods.
     
-    func websocketDidConnect(socket: WebSocket) {
+    func websocketDidConnect(_ socket: WebSocket) {
         Logger.info("Websocket is connected")
     
         connectionRetryCounter.reset()
@@ -142,11 +138,11 @@ class WebSocketService: WebSocketDelegate {
         ReachabilityService.sharedInstance.fetch()
     }
     
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+    func websocketDidDisconnect(_ socket: WebSocket, error: NSError?) {
         cancelMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
         
-        guard let code = error?.code, discription = error?.localizedDescription else {
+        guard let code = error?.code, let discription = error?.localizedDescription else {
             return
         }
         Logger.info("Websocket is disconnected: \(code), \(discription)")
@@ -157,7 +153,7 @@ class WebSocketService: WebSocketDelegate {
         }
         
         let backoffTime = connectionRetryCounter.next()
-        if code > Int(WebSocket.CloseCode.Normal.rawValue) {
+        if code > Int(WebSocket.CloseCode.normal.rawValue) {
             // Abnormal disconnection, re-register device.
             self.socket = nil
             Logger.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
@@ -173,11 +169,11 @@ class WebSocketService: WebSocketDelegate {
         }
     }
     
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+    func websocketDidReceiveMessage(_ socket: WebSocket, text: String) {
         Logger.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
+    func websocketDidReceiveData(_ socket: WebSocket, data: Data) {
         let json = JSON(data: data)
         ackMessage(socket, messageId: json["id"].string!)
         pendingMessages.append(json)
@@ -185,17 +181,17 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Websocket Event Handler
     
-    private func ackMessage(socket: WebSocket, messageId: String) {
+    fileprivate func ackMessage(_ socket: WebSocket, messageId: String) {
         let ack = JSON(["type": "ack", "messageId": messageId])
         do {
-            let ackData: NSData = try ack.rawData(options: .PrettyPrinted)
-            socket.writeData(ackData)
+            let ackData: Data = try ack.rawData(options: .prettyPrinted)
+			socket.write(data: ackData)
         } catch {
             Logger.error("Failed to acknowledge message")
         }
     }
     
-    private func processMessages() {
+    fileprivate func processMessages() {
         for message in pendingMessages {
             let eventData = message["data"]
             if let eventType = eventData["eventType"].string {
@@ -211,33 +207,33 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Web Socket Timers
     
-    private func scheduledTimerWithTimeInterval(timeInterval: NSTimeInterval, selector: Selector, repeats: Bool) -> NSTimer {
-        return NSTimer.scheduledTimerWithTimeInterval(timeInterval, target: self, selector: selector, userInfo: nil, repeats: repeats)
+    fileprivate func scheduledTimerWithTimeInterval(_ timeInterval: TimeInterval, selector: Selector, repeats: Bool) -> Timer {
+        return Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: repeats)
     }
     
-    private func scheduleMessageBatchingTimer() {
+    fileprivate func scheduleMessageBatchingTimer() {
         messageBatchingTimer = scheduledTimerWithTimeInterval(MessageBatchingIntervalInSec, selector: #selector(onMessagesBatchingTimerFired), repeats: true)
     }
     
-    private func cancelMessageBatchingTimer() {
+    fileprivate func cancelMessageBatchingTimer() {
         messageBatchingTimer?.invalidate()
         messageBatchingTimer = nil
     }
     
-    private func scheduleConnectionTimeoutTimer() {
+    fileprivate func scheduleConnectionTimeoutTimer() {
         connectionTimeoutTimer = scheduledTimerWithTimeInterval(ConnectionTimeoutIntervalInSec, selector: #selector(onConnectionTimeOutTimerFired), repeats: false)
     }
     
-    private func cancelConnectionTimeOutTimer() {
+    fileprivate func cancelConnectionTimeOutTimer() {
         connectionTimeoutTimer?.invalidate()
         connectionTimeoutTimer = nil
     }
 
-    @objc private func onMessagesBatchingTimerFired() {
+    @objc fileprivate func onMessagesBatchingTimerFired() {
         processMessages()
     }
     
-    @objc private func onConnectionTimeOutTimerFired() {
+    @objc fileprivate func onConnectionTimeOutTimerFired() {
         Logger.info("Connect timed out, try to reconnect")
         reconnect()
     }

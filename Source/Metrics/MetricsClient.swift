@@ -21,11 +21,11 @@
 import Foundation
 
 class MetricsClient {
-    func post(metrics: RequestParameter, completionHandler: ServiceResponse<AnyObject> -> Void) {
+    func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = ServiceRequest.Builder()
             .baseUrl(DeviceService.sharedInstance.getServiceUrl("metrics")!)
             .path("metrics")
-            .method(.POST)
+            .method(.post)
             .body(metrics)
             .build()
         

@@ -24,22 +24,22 @@ class CallInfoSequence {
     
     enum OverwriteResult {
         // the value passed in is newer than the current CallInfo
-        case True
+        case `true`
         // the value passed in is older than or equal to the current CallInfo
-        case False
+        case `false`
         // there are inconsistencies between the two versions - they both contain overlapping unique values
-        case DeSync
+        case deSync
     }
     
     enum CompareResult {
-        case GreaterThan
-        case LessThan
-        case Equal
-        case DeSync
+        case greaterThan
+        case lessThan
+        case equal
+        case deSync
     }
     
     // calculate "only in a's" list and "only in b's" list
-    static func populateSets(a: Sequence, _ b: Sequence) -> ([UInt64], [UInt64]) {
+    static func populateSets(_ a: Sequence, _ b: Sequence) -> ([UInt64], [UInt64]) {
         
         var aOnly = [UInt64]()
         var bOnly = [UInt64]()
@@ -118,19 +118,19 @@ class CallInfoSequence {
         return (aOnly, bOnly)
     }
     
-    static func compare(a: Sequence, _ b: Sequence) -> CompareResult {
+    static func compare(_ a: Sequence, _ b: Sequence) -> CompareResult {
     
         var aOnly = [UInt64]()
         var bOnly = [UInt64]()
         
         // if all of a's values are less than b's, b is newer
         if a.getCompareLastValue() < b.getCompareFirstValue() {
-            return CompareResult.LessThan
+            return CompareResult.lessThan
         }
         
         // if all of a's values are greater than b's, a is newer
         if a.getCompareFirstValue() > b.getCompareLastValue() {
-            return CompareResult.GreaterThan
+            return CompareResult.greaterThan
         }
         
         // calculate "only in a's" list and "only in b's" list
@@ -139,65 +139,65 @@ class CallInfoSequence {
         if aOnly.isEmpty && bOnly.isEmpty {
             // both sets are completely empty, use range to figure out order
             if a.getRangeEnd() > b.getRangeEnd() {
-                return CompareResult.GreaterThan
+                return CompareResult.greaterThan
             } else if a.getRangeEnd() < b.getRangeEnd() {
-                return CompareResult.LessThan
+                return CompareResult.lessThan
             } else if a.getRangeStart() < b.getRangeStart() {
-                return CompareResult.GreaterThan
+                return CompareResult.greaterThan
             } else if a.getRangeStart() > b.getRangeStart() {
-                return CompareResult.LessThan
+                return CompareResult.lessThan
             } else {
-                return CompareResult.Equal
+                return CompareResult.equal
             }
         }
         
         // If b has nothing unique and a does, then a is newer
         if !aOnly.isEmpty && bOnly.isEmpty {
-            return CompareResult.GreaterThan
+            return CompareResult.greaterThan
         }
         
         // if I have nothing unique but b does, then b is newer
         if !bOnly.isEmpty && aOnly.isEmpty {
-            return CompareResult.LessThan
+            return CompareResult.lessThan
         }
         
         // both have unique entries...
         // if a unique value in one list is within the min and max value in the others list then we are desync'd
         for i in aOnly {
             if i > b.getCompareFirstValue() && i < b.getCompareLastValue() {
-                return CompareResult.DeSync
+                return CompareResult.deSync
             }
         }
         for i in bOnly {
             if i > a.getCompareFirstValue() && i < a.getCompareLastValue() {
-                return CompareResult.DeSync
+                return CompareResult.deSync
             }
         }
         
         // aOnly and bOnly are 2 non-overlapping sets.  compare first item in both
         if aOnly[0] > bOnly[0] {
-            return CompareResult.GreaterThan
+            return CompareResult.greaterThan
         } else {
-            return CompareResult.LessThan
+            return CompareResult.lessThan
         }
     }
     
-    static func overwrite(oldValue oldValue: Sequence, newValue: Sequence) -> OverwriteResult {
+    static func overwrite(oldValue: Sequence, newValue: Sequence) -> OverwriteResult {
         
         // special case the empty sequence.  If you are currently empty then say update no matter what
         if oldValue.isEmpty() || newValue.isEmpty() {
-            return OverwriteResult.True
+            return OverwriteResult.true
         } else {
             let compareResult = compare(oldValue, newValue)
             switch (compareResult) {
-            case CompareResult.GreaterThan:
-                return OverwriteResult.False
-            case CompareResult.LessThan:
-                return OverwriteResult.True
-            case CompareResult.Equal:
-                return OverwriteResult.False
-            case CompareResult.DeSync:
-                return OverwriteResult.DeSync
+            case CompareResult.greaterThan:
+                return OverwriteResult.false
+            case CompareResult.lessThan:
+                return OverwriteResult.true
+            case CompareResult.equal:
+                return OverwriteResult.false
+            case CompareResult.deSync:
+                return OverwriteResult.deSync
             }
         }
     }

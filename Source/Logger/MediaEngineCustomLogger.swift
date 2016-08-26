@@ -25,25 +25,25 @@ import Wme
 class MediaEngineCustomLogger : CustomLogger {
     
     // May have some different log level setting on media engine
-    let wmedefaultLevel = DDLogLevel.Info
+    let wmedefaultLevel = DDLogLevel.info
     
-    @objc func logVerbose(message: String!, file: String!, function: String!, line: UInt) {
+    @objc func logVerbose(_ message: String!, file: String!, function: String!, line: UInt) {
         Logger.verbose(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
-    @objc func logDebug(message: String!, file: String!, function: String!, line: UInt) {
+    @objc func logDebug(_ message: String!, file: String!, function: String!, line: UInt) {
         Logger.debug(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
-    @objc func logInfo(message: String!, file: String!, function: String!, line: UInt) {
+    @objc func logInfo(_ message: String!, file: String!, function: String!, line: UInt) {
         Logger.info(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
-    @objc func logWarn(message: String!, file: String!, function: String!, line: UInt) {
+    @objc func logWarn(_ message: String!, file: String!, function: String!, line: UInt) {
         Logger.warn(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
-    @objc func logError(message: String!, file: String!, function: String!, line: UInt) {
+    @objc func logError(_ message: String!, file: String!, function: String!, line: UInt) {
         Logger.error(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
 }

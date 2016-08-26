@@ -24,25 +24,25 @@ import KeychainAccess
 struct KeychainManager {
     static let sharedInstance = KeychainManager()
     
-    private let AccessTokenKey = "SparkSDK.AccessToken"
-    private let ClientAccountKey = "SparkSDK.ClientAccount"
+    fileprivate let AccessTokenKey = "SparkSDK.AccessToken"
+    fileprivate let ClientAccountKey = "SparkSDK.ClientAccount"
     
     
     // MARK:- ClientAccount API
     
     func fetchClientAccount() -> ClientAccount? {
         if let data = fetchDataWithKey(ClientAccountKey) {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(data) as? ClientAccount
+            return NSKeyedUnarchiver.unarchiveObject(with: data) as? ClientAccount
         }
         
         return nil
     }
     
-    func storeClientAccount(clientAccount: ClientAccount?) {
+    func storeClientAccount(_ clientAccount: ClientAccount?) {
         if clientAccount == nil {
             removeData(ClientAccountKey)
         } else {
-            let data = NSKeyedArchiver.archivedDataWithRootObject(clientAccount!)
+            let data = NSKeyedArchiver.archivedData(withRootObject: clientAccount!)
             storeDataWithKey(ClientAccountKey, data: data)
         }
     }
@@ -51,23 +51,23 @@ struct KeychainManager {
     
     func fetchAccessToken() -> AccessToken? {
         if let data = fetchDataWithKey(AccessTokenKey) {
-            return NSKeyedUnarchiver.unarchiveObjectWithData(data) as? AccessToken
+            return NSKeyedUnarchiver.unarchiveObject(with: data) as? AccessToken
         }
         
         return nil
     }
 
-    func storeAccessToken(accessToken: AccessToken?) {
+    func storeAccessToken(_ accessToken: AccessToken?) {
         if accessToken == nil {
             removeData(AccessTokenKey)
         } else {
-            let data = NSKeyedArchiver.archivedDataWithRootObject(accessToken!)
+            let data = NSKeyedArchiver.archivedData(withRootObject: accessToken!)
             storeDataWithKey(AccessTokenKey, data: data)
         }
     }
     
     // MARK:- Common utility API
-    private func removeData(key: String) {
+    fileprivate func removeData(_ key: String) {
         let keychain = getKeychainWithKey(key)
         do {
             try keychain.remove(key)
@@ -76,9 +76,9 @@ struct KeychainManager {
         }
     }
     
-    private func fetchDataWithKey(key: String) -> NSData? {
+    fileprivate func fetchDataWithKey(_ key: String) -> Data? {
         let keychain = getKeychainWithKey(key)
-        var data: NSData?
+        var data: Data?
         do {
             try data = keychain.getData(key)
         } catch let error {
@@ -87,18 +87,18 @@ struct KeychainManager {
         return data
     }
     
-    private func storeDataWithKey(key: String, data: NSData) {
+    fileprivate func storeDataWithKey(_ key: String, data: Data) {
         let keychain = getKeychainWithKey(key)
         keychain[data: key] = data
     }
     
-    private func getKeychainWithKey(key: String) -> Keychain {
+    fileprivate func getKeychainWithKey(_ key: String) -> Keychain {
         let service = getKeychainServiceWithKey(key)
         return Keychain(service: service)
     }
     
-    private func getKeychainServiceWithKey(key: String) -> String {
-        let bundleId = NSBundle.mainBundle().bundleIdentifier ?? ""
+    fileprivate func getKeychainServiceWithKey(_ key: String) -> String {
+        let bundleId = Bundle.main.bundleIdentifier ?? ""
         return "\(bundleId).\(key)"
     }
 }

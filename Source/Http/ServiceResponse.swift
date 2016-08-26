@@ -24,12 +24,12 @@ import Foundation
 public struct ServiceResponse<T> {
     
     /// Represents a response to an HTTP URL load.
-    public let response: NSHTTPURLResponse?
+    public let response: HTTPURLResponse?
     
     /// Result for a service request.
     public let result: Result<T>
     
-    init(_ response: NSHTTPURLResponse?, _ result: Result<T>) {
+    init(_ response: HTTPURLResponse?, _ result: Result<T>) {
         self.response = response
         self.result = result
     }

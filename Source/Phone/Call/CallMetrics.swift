@@ -45,9 +45,9 @@ struct Feedback {
 class CallMetrics {
     static let sharedInstance = CallMetrics()
     
-    private let TestUserEmailDomain = "example.com"
+    fileprivate let TestUserEmailDomain = "example.com"
     
-    func submitFeedback(feedback: Feedback, callInfo: CallInfo) {
+    func submitFeedback(_ feedback: Feedback, callInfo: CallInfo) {
         var data: Metric.DataType = createBasicCallData(callInfo)
         data.unionInPlace(feedback.metricData)
         
@@ -61,11 +61,11 @@ class CallMetrics {
     }
     
     func reportVideoLicenseActivation() {
-        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.Generic)
+        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
         MetricsEngine.sharedInstance.trackMetric(metric)
     }
     
-    private func createBasicCallData(callInfo: CallInfo) -> Metric.DataType {
+    fileprivate func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
         return ["locusId": callInfo.callUrl!,
                 "locusTimestamp": callInfo.lastActive!,
                 "deviceUrl": DeviceService.sharedInstance.deviceUrl!,

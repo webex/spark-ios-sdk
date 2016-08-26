@@ -26,7 +26,7 @@ extension TeamClient {
     ///
     /// - parameter max: Limit the maximum number of teams in the response.
     /// - returns: [Team]
-    public func list(max: Int? = nil) throws -> [Team] {
+    public func list(_ max: Int? = nil) throws -> [Team] {
         return try SyncUtil.getArray(max, async: list)
     }
     
@@ -35,7 +35,7 @@ extension TeamClient {
     ///
     /// - parameter title: A user-friendly name for the team.
     /// - returns: Team
-    public func create(name name: String) throws -> Team {
+    public func create(name: String) throws -> Team {
         return try SyncUtil.getObject(name, async: create)
     }
     
@@ -44,7 +44,7 @@ extension TeamClient {
     ///
     /// - parameter teamId: A team id
     /// - returns: Team
-    public func get(teamId teamId: String) throws -> Team {
+    public func get(teamId: String) throws -> Team {
         return try SyncUtil.getObject(teamId, async: get)
     }
     
@@ -53,7 +53,7 @@ extension TeamClient {
     /// - parameter teamId: The team id.
     /// - parameter name: A user-friendly name for the team.
     /// - returns: Team
-    public func update(teamId teamId: String, name: String) throws -> Team {
+    public func update(teamId: String, name: String) throws -> Team {
         return try SyncUtil.getObject(teamId, name, async: update)
     }
     
@@ -61,7 +61,7 @@ extension TeamClient {
     ///
     /// - parameter teamId: The team id.
     /// - returns: Void
-    public func delete(teamId teamId: String) throws {
+    public func delete(teamId: String) throws {
         try SyncUtil.deleteObject(teamId, async: delete)
     }
 }

@@ -24,18 +24,18 @@ import CocoaLumberjack
 class MemoryLoggerStorage {
 
     // configs
-    private let BlockSize = 10*1024
-    private let BlockCount = 10
+    fileprivate let BlockSize = 10*1024
+    fileprivate let BlockCount = 10
 
     // storage
-    private var blocks: [String]
-    private var blockIndex = 0
+    fileprivate var blocks: [String]
+    fileprivate var blockIndex = 0
     
     init() {
-        blocks = [String](count: BlockCount, repeatedValue: "")
+        blocks = [String](repeating: "", count: BlockCount)
     }
     
-    func write(message: String) {
+    func write(_ message: String) {
         objc_sync_enter(self)
         blocks[blockIndex] += message + "\n"
         if blocks[blockIndex].characters.count > BlockSize {
@@ -58,8 +58,8 @@ class MemoryLoggerStorage {
 
 class MemoryLogger : DDAbstractLogger {
 
-    private let storage = MemoryLoggerStorage()
-    private var internalLogFormatter: DDLogFormatter?
+    fileprivate let storage = MemoryLoggerStorage()
+    fileprivate var internalLogFormatter: DDLogFormatter?
     
     // workaround for log formatter.
     // see: https://github.com/CocoaLumberjack/CocoaLumberjack/issues/643
@@ -73,13 +73,13 @@ class MemoryLogger : DDAbstractLogger {
         }
     }
 
-    override func logMessage(logMessage: DDLogMessage!) {
+    override func logMessage(_ logMessage: DDLogMessage!) {
         var message = logMessage.message
         if let logFormatter = internalLogFormatter {
             message = logFormatter.formatLogMessage(logMessage)
         }
         
-        storage.write(message)
+        storage.write(message!)
     }
     
     func getLogs() -> String {

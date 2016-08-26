@@ -21,16 +21,16 @@
 import AVFoundation
 
 /// Represents a Spark phone device.
-public class Phone {
+open class Phone {
     
     /// Privacy control of media access type.
     public enum MediaAccessType {
         /// Access to microphone.
-        case Audio
+        case audio
         /// Access to camera.
-        case Video
+        case video
         /// Access to both microphone and camera.
-        case AudioVideo
+        case audioVideo
     }
     
     static let sharedInstance = Phone()
@@ -39,24 +39,24 @@ public class Phone {
     /// True as using loud speaker, False as not.
     ///
     /// - note: The setting is not persistent.
-    public var defaultFacingMode = Call.FacingMode.User
+    open var defaultFacingMode = Call.FacingMode.User
     
     /// Default camera facing mode, used as the default when dialing or answering a call.
     ///
     /// - note: The setting is not persistent
-    public var defaultLoudSpeaker = true
+    open var defaultLoudSpeaker = true
 
-    private let deviceService    = DeviceService.sharedInstance
-    private let webSocketService = WebSocketService.sharedInstance
-    private let reachabilityService = ReachabilityService.sharedInstance
-    private let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
+    fileprivate let deviceService    = DeviceService.sharedInstance
+    fileprivate let webSocketService = WebSocketService.sharedInstance
+    fileprivate let reachabilityService = ReachabilityService.sharedInstance
+    fileprivate let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
     ///
     /// - parameter completionHandler: A closure to be executed once the registration is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    public func register(completionHandler: (Bool -> Void)?) {
+    open func register(_ completionHandler: ((Bool) -> Void)?) {
         guard AuthManager.sharedInstance.authorized() else {
             Logger.error("Skip registering device due to no authorization")
             return
@@ -66,7 +66,7 @@ public class Phone {
             if success {
                 self.applicationLifecycleObserver.startObserving()
                 CallManager.sharedInstance.fetchActiveCalls()
-                self.webSocketService.connect(NSURL(string: self.deviceService.webSocketUrl!)!)
+                self.webSocketService.connect(URL(string: self.deviceService.webSocketUrl!)!)
                 completionHandler?(true)
             } else {
                 completionHandler?(false)
@@ -80,7 +80,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    public func deregister(completionHandler: (Bool -> Void)?) {
+    open func deregister(_ completionHandler: ((Bool) -> Void)?) {
         reachabilityService.clear()
         applicationLifecycleObserver.stopObserving()
         webSocketService.disconnect()
@@ -100,7 +100,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
-    public func dial(address: String, option: MediaOption, completionHandler: (Bool) -> Void) -> Call {
+    open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
         let call = Call()
         call.dial(address, option: option) { success in
             if success {
@@ -116,7 +116,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
-    public func requestVideoCodecActivation() {
+    open func requestVideoCodecActivation() {
         VideoLicense.sharedInstance.checkActivation() { isActivated in
             if isActivated {
                 Logger.info("Video license has been activated")
@@ -130,7 +130,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: The function is expected to be called only by Cisco application. 3rd-party application should NOT call this API.
-    public func disableVideoCodecActivation() {
+    open func disableVideoCodecActivation() {
         VideoLicense.sharedInstance.disableActivation()
     }
     
@@ -140,17 +140,17 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means access granted, and False means not.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    public func requestMediaAccess(type: MediaAccessType, completionHandler: (Bool -> Void)?) {
+    open func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
         switch (type) {
-        case .Audio:
+        case .audio:
             requestMediaAccess(AVMediaTypeAudio) {
                 completionHandler?($0)
             }
-        case .Video:
+        case .video:
             requestMediaAccess(AVMediaTypeVideo) {
                 completionHandler?($0)
             }
-        case .AudioVideo:
+        case .audioVideo:
             requestMediaAccess(AVMediaTypeAudio) {
                 if !$0 {
                     completionHandler?(false)
@@ -163,10 +163,10 @@ public class Phone {
         }
     }
     
-    private func requestMediaAccess(mediaType: String, completionHandler: (Bool -> Void)?) {
-        AVCaptureDevice.requestAccessForMediaType(mediaType) {
+    fileprivate func requestMediaAccess(_ mediaType: String, completionHandler: ((Bool) -> Void)?) {
+        AVCaptureDevice.requestAccess(forMediaType: mediaType) {
             let granted = $0
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 completionHandler?(granted)
             }
         }

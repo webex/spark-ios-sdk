@@ -43,7 +43,7 @@ public struct TeamMembership: Mappable, Equatable {
     public var isModerator: Bool?
     
     /// The timestamp that the team membership being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// TeamMembership constructor.
     ///
@@ -54,7 +54,7 @@ public struct TeamMembership: Mappable, Equatable {
     /// TeamMembership mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         teamId <- map["teamId"]
         personId <- map["personId"]

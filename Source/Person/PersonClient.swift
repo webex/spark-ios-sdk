@@ -21,9 +21,9 @@
 import Foundation
 
 /// Person HTTP client
-public class PersonClient: CompletionHandlerType<Person> {
+open class PersonClient: CompletionHandlerType<Person> {
     
-    private func requestBuilder() -> ServiceRequest.Builder {
+    fileprivate func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("people")
     }
     
@@ -35,9 +35,9 @@ public class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(email email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    open func list(email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .query(RequestParameter(["email": email?.toString(), "displayName": displayName, "max": max]))
             .keyPath("items")
             .queue(queue)
@@ -52,9 +52,9 @@ public class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func get(personId personId: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler){
+    open func get(personId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler){
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .path(personId)
             .queue(queue)
             .build()
@@ -67,9 +67,9 @@ public class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func getMe(queue queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler){
+    open func getMe(queue: DispatchQueue? = nil, completionHandler: ObjectHandler){
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .path("me")
             .queue(queue)
             .build()

@@ -27,9 +27,9 @@ class ReachabilityService {
     static let sharedInstance = ReachabilityService()
     var feedback: MediaEngineReachabilityFeedback?
     
-    private var hostAddresses: [InterfaceAddress.Item]?
-    private var lastFetchData: NSDate?
-    private let MaxAge = NSTimeInterval(7200) // 7200 sec = 2 hours
+    fileprivate var hostAddresses: [InterfaceAddress.Item]?
+    fileprivate var lastFetchData: Date?
+    fileprivate let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
 
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
@@ -61,7 +61,7 @@ class ReachabilityService {
         clearReachabilityData()
     }
     
-    private func isHostAddressChanged() -> Bool {
+    fileprivate func isHostAddressChanged() -> Bool {
         if hostAddresses == nil {
             return true
         }
@@ -74,7 +74,7 @@ class ReachabilityService {
         return true
     }
     
-    private func isLastFetchLongEnough() -> Bool {
+    fileprivate func isLastFetchLongEnough() -> Bool {
         if lastFetchData == nil {
             return true
         }
@@ -86,33 +86,33 @@ class ReachabilityService {
         return false
     }
     
-    private func updateHostAddresses() {
+    fileprivate func updateHostAddresses() {
         hostAddresses = InterfaceAddress.getSortedAddresses()
     }
     
-    private func updateFetchDate() {
-        lastFetchData = NSDate()
+    fileprivate func updateFetchDate() {
+        lastFetchData = Date()
     }
     
-    private func performReachabilityCheck(completionHandler: ReachabilityCheckHandler) {
+    fileprivate func performReachabilityCheck(_ completionHandler: ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
         MediaClusterClient().get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
-            case .Success(let value):
+            case .success(let value):
                 clusterInfo = value
                 if let group = clusterInfo?.group {
                     MediaEngineWrapper.sharedInstance.performReachabilityCheck(group) {
                         completionHandler($0)
                     }
                 }
-            case .Failure(let error):
+            case .failure(let error):
                 Logger.error("Failure: \(error.localizedFailureReason)")
             }
         }
     }
     
-    private func clearReachabilityData() {
+    fileprivate func clearReachabilityData() {
         MediaEngineWrapper.sharedInstance.clearReachabilityData()
     }
 }

@@ -30,7 +30,7 @@ struct CallEvent : Mappable {
     init?(_ map: Map) {
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         id <- map["id"]
         callUrl <- map["locusUrl"]
         callInfo <- map["locus"]

@@ -66,7 +66,7 @@ class AuthManager {
         }
     }
     
-    func authorize(clientAccount clientAccount: ClientAccount, scope: String, redirectUri: String, controller: UIViewController) {
+    func authorize(clientAccount: ClientAccount, scope: String, redirectUri: String, controller: UIViewController) {
         self.clientAccount = clientAccount
         self.scope = scope
         self.redirectUri = redirectUri
@@ -74,7 +74,7 @@ class AuthManager {
         authorizeFromController(controller)
     }
     
-    func authorize(token token: String) {
+    func authorize(token: String) {
         accessToken = AccessToken(accessToken: token)
     }
     
@@ -107,7 +107,7 @@ class AuthManager {
         return nil
     }
     
-    private func authorizeFromController(controller: UIViewController) {
+    private func authorizeFromController(_ controller: UIViewController) {
         guard isOAuthMode else {
             return
         }
@@ -122,24 +122,24 @@ class AuthManager {
         }
         
         let navigationController = UINavigationController(rootViewController: web)
-        controller.presentViewController(navigationController, animated: true, completion: nil)
+        controller.present(navigationController, animated: true, completion: nil)
     }
     
-    private func createAuthCodeRequestURL() -> NSURL {
-        let components = NSURLComponents(string: "https://api.ciscospark.com/v1/authorize")!
+    private func createAuthCodeRequestURL() -> URL {
+        var components = URLComponents(string: "https://api.ciscospark.com/v1/authorize")!
         components.queryItems = [
-            NSURLQueryItem(name: "client_id", value: (clientAccount?.clientId)!),
-            NSURLQueryItem(name: "response_type", value: "code"),
-            NSURLQueryItem(name: "redirect_uri", value: redirectUri!.encodeString),
-            NSURLQueryItem(name: "scope", value: scope!.encodeString),
-            NSURLQueryItem(name: "state", value: "set_state_here")]
+            URLQueryItem(name: "client_id", value: (clientAccount?.clientId)!),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "redirect_uri", value: redirectUri!.encodeString),
+            URLQueryItem(name: "scope", value: scope!.encodeString),
+            URLQueryItem(name: "state", value: "set_state_here")]
         components.percentEncodedQuery = components.query
         
-        return components.URL!
+        return components.url!
     }
     
-    private func fetchAccessTokenFromRedirectUri(url: NSURL) -> AccessToken? {
-        guard url.absoluteString.lowercaseString.containsString(redirectUri!.lowercaseString) else {
+    private func fetchAccessTokenFromRedirectUri(_ url: URL) -> AccessToken? {
+        guard url.absoluteString.lowercased().contains(redirectUri!.lowercased()) else {
             return nil
         }
         
@@ -160,7 +160,7 @@ class AuthManager {
         return nil
     }
     
-    private func refreshAccessTokenWithExpirationBuffer(bufferInMinutes: Int) -> Bool {
+    fileprivate func refreshAccessTokenWithExpirationBuffer(_ bufferInMinutes: Int) -> Bool {
         guard accessTokenWillExpireInMinutes(bufferInMinutes) else {
             return true
         }
@@ -168,18 +168,18 @@ class AuthManager {
         return refreshAccessToken()
     }
     
-    private func accessTokenWillExpireInMinutes(minutes: Int) -> Bool {
+    fileprivate func accessTokenWillExpireInMinutes(_ minutes: Int) -> Bool {
         // Assume access token (authorized with signle token instead of OAuth parameters) won't expire.
         guard isOAuthMode else {
             return false
         }
         
-        let thresholdDate = NSDate(timeInterval: Double(minutes*60), sinceDate: NSDate())
+        let thresholdDate = Date(timeInterval: Double(minutes*60), since: Date())
         let expirationdate = accessToken!.accessTokenExpirationDate
         return thresholdDate.isAfterDate(expirationdate)
     }
     
-    private func refreshAccessToken() -> Bool {
+    fileprivate func refreshAccessToken() -> Bool {
         do {
             let accessToken = try OAuthClient().refreshAccessTokenFromRefreshToken((self.accessToken?.refreshTokenString)!, clientAccount: clientAccount!)
             accessToken.refreshTokenString = self.accessToken?.refreshTokenString

@@ -22,36 +22,36 @@ import Foundation
 
 class DtmfQueue {
     
-    typealias CompletionHandler = Bool -> Void
+    typealias CompletionHandler = (Bool) -> Void
     
     var queue: [(event: String, completionHandler: CompletionHandler?)]
-    let dispatchQueue: dispatch_queue_t
+    let dispatchQueue: DispatchQueue
     weak var call: Call!
     var correlationId: Int
     var waitingForResponse: Bool
     
-    private let deviceUrl = DeviceService.sharedInstance.deviceUrl
+    fileprivate let deviceUrl = DeviceService.sharedInstance.deviceUrl
     
     init(_ call: Call) {
         queue = []
         correlationId = 1
         self.call = call
-        dispatchQueue = dispatch_queue_create("CallDtmfQueueDispatchQueue", DISPATCH_QUEUE_SERIAL)
+        dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue", attributes: [])
         waitingForResponse = false
     }
     
-    func isValidEvents(events: String) -> Bool {
-        let characterset = NSCharacterSet(charactersInString: "1234567890*#ABCDabcd")
-        if events.rangeOfCharacterFromSet(characterset.invertedSet) != nil {
+    func isValidEvents(_ events: String) -> Bool {
+        let characterset = CharacterSet(charactersIn: "1234567890*#ABCDabcd")
+        if events.rangeOfCharacter(from: characterset.inverted) != nil {
             return false
         } else {
             return true
         }
     }
     
-    func push(event: String, completionHandler: CompletionHandler?) {
+    func push(_ event: String, completionHandler: CompletionHandler?) {
         if isValidEvents(event) {
-            dispatch_async(dispatchQueue) {
+            dispatchQueue.async {
                 self.queue.append((event, completionHandler))
                 self.sendDtmfEvents(completionHandler)
             }
@@ -62,8 +62,8 @@ class DtmfQueue {
         }
     }
     
-    func sendDtmfEvents(completionHandler: CompletionHandler?) {
-        dispatch_async(dispatchQueue) {
+    func sendDtmfEvents(_ completionHandler: CompletionHandler?) {
+        dispatchQueue.async {
             if self.queue.count > 0 && !self.waitingForResponse {
                 var events = [String]()
                 var completionHandlers = [CompletionHandler?]()
@@ -72,24 +72,24 @@ class DtmfQueue {
                     completionHandlers.append(item.completionHandler)
                 }
                 
-                let dtmfEvents = events.joinWithSeparator("")
+                let dtmfEvents = events.joined(separator: "")
                 Logger.info("send Dtmf events \(dtmfEvents)")
                 
                 let participantUrl = self.call.info?.selfParticipantUrl
                 self.waitingForResponse = true
                 CallClient().sendDtmf(participantUrl!, deviceUrl: self.deviceUrl!, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
                     switch $0.result {
-                    case .Success:
+                    case .success:
                         Logger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
                         for completion in completionHandlers {
-                            dispatch_async(dispatch_get_main_queue()) {
+                            DispatchQueue.main.async {
                                 completion?(true)
                             }
                         }
-                    case .Failure(let error):
+                    case .failure(let error):
                         Logger.error("Failure: \(error.localizedFailureReason)")
                         for completion in completionHandlers {
-                            dispatch_async(dispatch_get_main_queue()) {
+                            DispatchQueue.main.async {
                                 completion?(false)
                             }
                         }
