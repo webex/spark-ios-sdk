@@ -55,7 +55,7 @@ class TeamMembershipSpec: QuickSpec {
                     
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beFalse())
                     
@@ -69,7 +69,7 @@ class TeamMembershipSpec: QuickSpec {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: true)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beTrue())
                     
@@ -83,7 +83,7 @@ class TeamMembershipSpec: QuickSpec {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: false)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beFalse())
                     
@@ -97,7 +97,7 @@ class TeamMembershipSpec: QuickSpec {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beFalse())
                     
@@ -111,7 +111,7 @@ class TeamMembershipSpec: QuickSpec {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!, isModerator: true)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beTrue())
                 } catch let error as NSError {
@@ -124,7 +124,7 @@ class TeamMembershipSpec: QuickSpec {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!)
                     
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beFalse())
                     
@@ -150,10 +150,10 @@ class TeamMembershipSpec: QuickSpec {
                     
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership1 = try Spark.teamMemberships.create(teamId: testTeam.id!, personId: user.personId!)
-                    self.validate(membership1)
+                    self.validate(membership: membership1)
                     
                     let membership2 = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
-                    self.validate(membership2)
+                    self.validate(membership: membership2)
                     
                     let memberships = try Spark.teamMemberships.list(teamId: testTeam.id!)
                     expect(memberships.contains{$0.teamId == testTeam.id}).to(beTrue())
@@ -169,7 +169,7 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     let memberships = try Spark.teamMemberships.list(teamId: self.teamId, max: 1)
                     expect(memberships.contains{$0.teamId == self.teamId}).to(beTrue())
@@ -184,7 +184,7 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     let memberships = try Spark.teamMemberships.list(teamId: self.teamId, max: -1)
                     expect(memberships.isEmpty).to(beFalse())
@@ -206,10 +206,10 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     let membershipFromGet = try Spark.teamMemberships.get(membershipId: membership.id!)
-                    self.validate(membershipFromGet)
+                    self.validate(membership: membershipFromGet)
                     expect(membershipFromGet).to(equal(membership))
                     
                 } catch let error as NSError {
@@ -229,10 +229,10 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: false)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     let membershipFromUpdate = try Spark.teamMemberships.update(membershipId: membership.id!, isModerator: true)
-                    self.validate(membershipFromUpdate)
+                    self.validate(membership: membershipFromUpdate)
                     expect(membershipFromUpdate.isModerator).to(beTrue())
                     
                 } catch let error as NSError {
@@ -244,10 +244,10 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: true)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     let membershipFromUpdate = try Spark.teamMemberships.update(membershipId: membership.id!, isModerator: false)
-                    self.validate(membershipFromUpdate)
+                    self.validate(membership: membershipFromUpdate)
                     expect(membershipFromUpdate.isModerator).to(beFalse())
                     
                 } catch let error as NSError {
@@ -267,7 +267,7 @@ class TeamMembershipSpec: QuickSpec {
                 do {
                     let user = TestUserFactory.sharedInstance.createUser()
                     let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     expect{try Spark.teamMemberships.delete(membershipId: membership.id!)}.notTo(throwError())
                     

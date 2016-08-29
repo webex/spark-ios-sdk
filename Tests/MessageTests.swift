@@ -35,11 +35,11 @@ class MessageSpec: QuickSpec {
     }
     
     private func getISO8601Date() -> String {
-        let formatter = NSDateFormatter()
-        let enUSPosixLocale = NSLocale(localeIdentifier: "en_US_POSIX")
+        let formatter = DateFormatter()
+        let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
         formatter.locale = enUSPosixLocale
         formatter.dateFormat = "yyyy-MM-dd\'T\'HH:mm:ss.SSSXXX"
-        return formatter.stringFromDate(NSDate())
+        return formatter.string(from: Date())
     }
     
     private func validate(message: Message) {
@@ -58,7 +58,7 @@ class MessageSpec: QuickSpec {
         }
         
         afterSuite {
-            Utils.wait(Config.TestcaseInterval)
+            Utils.wait(interval: Config.TestcaseInterval)
         }
         
         // MARK: - Post message to room
@@ -67,9 +67,9 @@ class MessageSpec: QuickSpec {
             
             it("with text") {
                 do {
-                    let message = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text)
+					let message = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.text).to(equal(self.Text))
                     
                 } catch let error as NSError {
@@ -81,7 +81,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToRoom(roomId: self.roomId, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.files).notTo(beNil())
                     
                 } catch let error as NSError {
@@ -93,7 +93,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.text).to(equal(self.Text))
                     expect(message.files).notTo(beNil())
                     
@@ -121,7 +121,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personId: (self.other.personId)!, text: self.Text)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
                     expect(message.text).to(equal(self.Text))
                     
@@ -134,7 +134,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personId: (self.other.personId)!, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
                     expect(message.files).notTo(beNil())
                     
@@ -147,7 +147,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personId: (self.other.personId)!, text: self.Text, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
                     expect(message.text).to(equal(self.Text))
                     expect(message.files).notTo(beNil())
@@ -176,7 +176,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personEmail: (self.other.email)!, text: self.Text)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
                     expect(message.text).to(equal(self.Text))
                     
@@ -189,7 +189,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personEmail: (self.other.email)!, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
                     expect(message.files).notTo(beNil())
                     
@@ -202,7 +202,7 @@ class MessageSpec: QuickSpec {
                 do {
                     let message = try Spark.messages.postToPerson(personEmail: (self.other.email)!, text: self.Text, files: self.FileUrl)
                     
-                    self.validate(message)
+                    self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
                     expect(message.text).to(equal(self.Text))
                     expect(message.files).notTo(beNil())
@@ -252,7 +252,7 @@ class MessageSpec: QuickSpec {
             it("before a date") {
                 do {
                     let message1 = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text)
-                    Utils.wait(Config.TestcaseInterval)
+                    Utils.wait(interval: Config.TestcaseInterval)
                     let now = self.getISO8601Date()
                     let message2 = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text)
                     
@@ -307,10 +307,10 @@ class MessageSpec: QuickSpec {
             it("normal") {
                 do {
                     let messageFromCreate = try Spark.messages.postToRoom(roomId: self.roomId, text: self.Text)
-                    self.validate(messageFromCreate)
+                    self.validate(message: messageFromCreate)
                     
                     let messageFromGet = try Spark.messages.get(messageId: (messageFromCreate.id)!)
-                    self.validate(messageFromGet)
+                    self.validate(message: messageFromGet)
                     
                     expect(messageFromGet.id).to(equal(messageFromCreate.id))
                     expect(messageFromGet.text).to(equal(messageFromCreate.text))

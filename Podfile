@@ -18,6 +18,6 @@ end
 
 target 'SparkSDKTests' do
 	shared_pods
-	#pod 'Quick', '0.9.2' #no swift3 branch
-	#pod 'Nimble', '4.1.0' #no swift3 branch
+	pod 'Quick', :git => 'https://github.com/norio-nomura/Quick.git', :branch => 'nn-swift-3-compatibility'
+	pod 'Nimble', :git => 'https://github.com/norio-nomura/Nimble.git', :branch => 'nn-swift-3-compatibility' 
 end

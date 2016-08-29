@@ -54,13 +54,13 @@ class RoomSpec: QuickSpec {
         describe("create a room") {
             
             afterEach {
-                Utils.wait(Config.TestcaseInterval)
+                Utils.wait(interval: Config.TestcaseInterval)
             }
             
             it("sync with title") {
                 do {
                     let room = try Spark.rooms.create(title: self.RoomTitle)
-                    self.validate(room)
+                    self.validate(room: room)
                     
                     expect(room.title).to(equal(self.RoomTitle))
                     
@@ -72,7 +72,7 @@ class RoomSpec: QuickSpec {
             it("sync with emptyTitle") {
                 do {
                     let room = try Spark.rooms.create(title: "")
-                    self.validate(room)
+                    self.validate(room: room)
                     
                 } catch let error as NSError {
                     fail("Failed to create room, \(error.localizedFailureReason)")
@@ -82,7 +82,7 @@ class RoomSpec: QuickSpec {
             it("sync with specialTitle") {
                 do {
                     let room = try Spark.rooms.create(title: self.SpecialTitle)
-                    self.validate(room)
+                    self.validate(room: room)
                     
                     expect(room.title).to(equal(self.SpecialTitle))
                     
@@ -113,12 +113,12 @@ class RoomSpec: QuickSpec {
             beforeEach {
                 room = TestRoom()
                 if room != nil {
-                    self.validate(room!.room!)
+                    self.validate(room: room!.room!)
                 }
             }
             
             afterEach {
-                Utils.wait(Config.TestcaseInterval)
+                Utils.wait(interval: Config.TestcaseInterval)
             }
             
             it("sync with roomId and title") {
@@ -128,7 +128,7 @@ class RoomSpec: QuickSpec {
                 
                 do {
                     let updatedRoom = try Spark.rooms.update(roomId: room!.id!, title: self.UpdatedRoomTitle)
-                    self.validate(updatedRoom)
+                    self.validate(room: updatedRoom)
                     expect(updatedRoom.id).notTo(beNil())
                     expect(updatedRoom.title).to(equal(self.UpdatedRoomTitle))
                     
@@ -165,13 +165,13 @@ class RoomSpec: QuickSpec {
             beforeEach {
                 do {
                     room = try Spark.rooms.create(title: self.RoomTitle)
-                    self.validate(room!)
+                    self.validate(room: room!)
                     
                 } catch let error as NSError {
                     fail("Failed to create team, \(error.localizedFailureReason)")
                 }
                 
-                Utils.wait(Config.TestcaseInterval)
+                Utils.wait(interval: Config.TestcaseInterval)
             }
             
             it("sync with roomId") {
@@ -206,12 +206,12 @@ class RoomSpec: QuickSpec {
             beforeEach {
                 room = TestRoom()
                 if room != nil {
-                    self.validate(room!.room!)
+                    self.validate(room: room!.room!)
                 }
             }
             
             afterEach {
-                Utils.wait(Config.TestcaseInterval)
+                Utils.wait(interval: Config.TestcaseInterval)
             }
             
             it("sync with roomId") {
@@ -221,7 +221,7 @@ class RoomSpec: QuickSpec {
                 
                 do {
                     let roomDetails = try Spark.rooms.get(roomId: room!.id!)
-                    self.validate(roomDetails)
+                    self.validate(room: roomDetails)
                     expect(roomDetails.id!).to(equal(room?.id!))
                     expect(roomDetails.title!).to(equal(room?.title!))
                     
@@ -261,12 +261,12 @@ class RoomSpec: QuickSpec {
             beforeEach {
                 room = TestRoom()
                 if room != nil {
-                    self.validate(room!.room!)
+                    self.validate(room: room!.room!)
                 }
             }
             
             afterEach {
-                Utils.wait(Config.TestcaseInterval)
+                Utils.wait(interval: Config.TestcaseInterval)
             }
             
             it("sync with nothing") {
@@ -294,7 +294,7 @@ class RoomSpec: QuickSpec {
                     let rooms = try Spark.rooms.list(max: self.RoomCountValid)
                     expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountValid))
                     expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
-                    self.validate(rooms[0])
+                    self.validate(room: rooms[0])
                     
                 } catch let error as NSError {
                     fail("Failed to list room, \(error.localizedFailureReason)")
@@ -323,7 +323,7 @@ class RoomSpec: QuickSpec {
                 do {
                     let rooms = try Spark.rooms.list(max: self.RoomCountMin)
                     expect(rooms.count).to(equal(self.RoomCountMin))
-                    self.validate(rooms[0])
+                    self.validate(room: rooms[0])
                     
                 } catch let error as NSError {
                     fail("Failed to get room, \(error.localizedFailureReason)")
@@ -353,7 +353,7 @@ class RoomSpec: QuickSpec {
                     let rooms = try Spark.rooms.list(max: self.RoomCountMax)
                     expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountMax))
                     expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
-                    self.validate(rooms[0])
+                    self.validate(room: rooms[0])
                     
                 } catch let error as NSError {
                     fail("Failed to get room, \(error.localizedFailureReason)")

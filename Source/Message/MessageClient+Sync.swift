@@ -40,7 +40,7 @@ extension MessageClient {
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
     /// - returns: Message
-    public func postToRoomSync(roomId: String, text: String? = nil, files: String? = nil) throws -> Message {
+    public func postToRoom(roomId: String, text: String? = nil, files: String? = nil) throws -> Message {
         return try SyncUtil.getObject(roomId, text, files, async: postToRoom)
     }
     

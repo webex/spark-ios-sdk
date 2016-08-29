@@ -22,17 +22,17 @@ import Foundation
 
 class Utils {
     
-    static func waitBefore(interval: NSTimeInterval, closure: () -> Void) {
-        NSThread.sleepForTimeInterval(interval)
+    static func waitBefore(interval: TimeInterval, closure: () -> Void) {
+        Thread.sleep(forTimeInterval: interval)
         closure()
     }
     
-    static func waitAfter(interval: NSTimeInterval, closure: () -> Void) {
+    static func waitAfter(interval: TimeInterval, closure: () -> Void) {
         closure()
-        NSThread.sleepForTimeInterval(interval)
-    }
+		Thread.sleep(forTimeInterval: interval)
+	}
     
-    static func wait(interval: NSTimeInterval) {
-        NSThread.sleepForTimeInterval(interval)
-    }
+    static func wait(interval: TimeInterval) {
+		Thread.sleep(forTimeInterval: interval)
+	}
 }
