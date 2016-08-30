@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/SparkSDK/MediaEngine"', 'ENABLE_BITCODE' => 'NO'}
   s.vendored_frameworks = "MediaEngine/Wme.framework"
   s.dependency 'Alamofire', '~> 4.0-beta'
-  s.dependency 'ObjectMapper', '~> 1.2.0'
+  s.dependency 'ObjectMapper', '~> 1.3.0'
   s.dependency 'AlamofireObjectMapper', '= 3.0.0'
   s.dependency 'SwiftyJSON', '~> 2.3.2'
   s.dependency 'Starscream', '~> 1.1.3'
