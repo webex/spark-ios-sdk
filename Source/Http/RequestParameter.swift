@@ -23,17 +23,13 @@ import Foundation
 struct RequestParameter {
     fileprivate var storage: [String: Any] = [:]
     
-    init(_ parameters: [String: Any?] = [:]) {
+    init(_ parameters: [String: Any] = [:]) {
         for (key, value) in parameters {
-            if value == nil {
-                continue
-            }
-            
             switch value {
             case let bool as Bool:
                 storage.updateValue(String(bool) as Any, forKey: key)
             default:
-				storage.updateValue(value, forKey: key)
+				storage.updateValue(value, forKey: key)					
             }
         }
     }

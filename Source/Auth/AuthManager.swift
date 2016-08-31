@@ -130,8 +130,8 @@ class AuthManager {
         components.queryItems = [
             URLQueryItem(name: "client_id", value: (clientAccount?.clientId)!),
             URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "redirect_uri", value: redirectUri!.encodeString),
-            URLQueryItem(name: "scope", value: scope!.encodeString),
+            URLQueryItem(name: "redirect_uri", value: redirectUri!.encodeQueryParamString),
+            URLQueryItem(name: "scope", value: scope!.encodeQueryParamString),
             URLQueryItem(name: "state", value: "set_state_here")]
         components.percentEncodedQuery = components.query
         
@@ -147,7 +147,7 @@ class AuthManager {
         if let error = query["error"] {
             Logger.error("ErrorCode: \(error)")
             if let description = query["error_description"] {
-                Logger.error("Error description: \(description.decodeString!)")
+                Logger.error("Error description: \(description.decodeString)")
             }
         } else if let authCode = query["code"] {
             do {

@@ -21,11 +21,14 @@
 import Foundation
 
 extension String {
-    var decodeString: String? {
-        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
+	private static let allowedQueryCharactersPlusSpace = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~ ")
+
+	
+	var decodeString: String {
+        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding!
     }
     
-    var encodeString: String? {
-        return self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlHostAllowed)
+    var encodeQueryParamString: String {
+		return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)!.replacingOccurrences(of: " ", with: "+")
     }
 }
