@@ -48,7 +48,7 @@ class AuthManager {
         }
         set {
             accessTokenCache = newValue
-            KeychainManager.sharedInstance.storeAccessToken(newValue)
+			KeychainManager.sharedInstance.store(accessToken: newValue)
         }
     }
     
@@ -62,7 +62,7 @@ class AuthManager {
         }
         set {
             clientAccountCache = newValue
-            KeychainManager.sharedInstance.storeClientAccount(newValue)
+			KeychainManager.sharedInstance.store(clientAccount: newValue)
         }
     }
     
@@ -71,7 +71,7 @@ class AuthManager {
         self.scope = scope
         self.redirectUri = redirectUri
         
-        authorizeFromController(controller)
+		authorizeFrom(controller: controller)
     }
     
     func authorize(token: String) {
@@ -107,7 +107,7 @@ class AuthManager {
         return nil
     }
     
-    private func authorizeFromController(_ controller: UIViewController) {
+    private func authorizeFrom(controller: UIViewController) {
         guard isOAuthMode else {
             return
         }
@@ -160,7 +160,7 @@ class AuthManager {
         return nil
     }
     
-    fileprivate func refreshAccessTokenWithExpirationBuffer(_ bufferInMinutes: Int) -> Bool {
+    private func refreshAccessTokenWithExpirationBuffer(_ bufferInMinutes: Int) -> Bool {
         guard accessTokenWillExpireInMinutes(bufferInMinutes) else {
             return true
         }
@@ -168,7 +168,7 @@ class AuthManager {
         return refreshAccessToken()
     }
     
-    fileprivate func accessTokenWillExpireInMinutes(_ minutes: Int) -> Bool {
+    private func accessTokenWillExpireInMinutes(_ minutes: Int) -> Bool {
         // Assume access token (authorized with signle token instead of OAuth parameters) won't expire.
         guard isOAuthMode else {
             return false
@@ -179,7 +179,7 @@ class AuthManager {
         return thresholdDate.isAfterDate(expirationdate)
     }
     
-    fileprivate func refreshAccessToken() -> Bool {
+    private func refreshAccessToken() -> Bool {
         do {
             let accessToken = try OAuthClient().refreshAccessTokenFromRefreshToken((self.accessToken?.refreshTokenString)!, clientAccount: clientAccount!)
             accessToken.refreshTokenString = self.accessToken?.refreshTokenString

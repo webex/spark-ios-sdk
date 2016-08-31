@@ -69,7 +69,7 @@ struct SyncUtil {
         try _ = getObject(sync(async)(i))
     }
     
-    fileprivate static func getObject<T>(_ response: ServiceResponse<T>) throws -> T {
+    private static func getObject<T>(_ response: ServiceResponse<T>) throws -> T {
         var t: T
         switch response.result {
         case .success(let value):
@@ -80,7 +80,7 @@ struct SyncUtil {
         return t
     }
     
-    fileprivate static func getArray<T>(_ response: ServiceResponse<[T]>) throws -> [T] {
+    private static func getArray<T>(_ response: ServiceResponse<[T]>) throws -> [T] {
         var t: [T]
         switch response.result {
         case .success(let value):
@@ -93,7 +93,7 @@ struct SyncUtil {
     
     // MARK: - generic API to transform async to sync
         
-    fileprivate static func sync<I, T>(_ async: @escaping (I, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I) -> T {
+    private static func sync<I, T>(_ async: @escaping (I, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I) -> T {
         return { i in
             let semaphore = DispatchSemaphore(value: 0)
             let queue = DispatchQueue.global()
@@ -109,23 +109,23 @@ struct SyncUtil {
         }
     }
     
-    fileprivate static func sync<T>(_ async: @escaping (_ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (Void) -> T {
+    private static func sync<T>(_ async: @escaping (_ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (Void) -> T {
         return sync({async($1, $2)})
     }
     
-    fileprivate static func sync<I0, I1, T>(_ async: @escaping (I0, I1, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1) -> T {
+    private static func sync<I0, I1, T>(_ async: @escaping (I0, I1, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1) -> T {
         return sync({async($0.0, $0.1, $1, $2)})
     }
     
-    fileprivate static func sync<I0, I1, I2, T>(_ async: @escaping (I0, I1, I2, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2) -> T {
+    private static func sync<I0, I1, I2, T>(_ async: @escaping (I0, I1, I2, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2) -> T {
         return sync({async($0.0, $0.1, $0.2, $1, $2)})
     }
     
-    fileprivate static func sync<I0, I1, I2, I3, T>(_ async: @escaping (I0, I1, I2, I3, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2, I3) -> T {
+    private static func sync<I0, I1, I2, I3, T>(_ async: @escaping (I0, I1, I2, I3, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2, I3) -> T {
         return sync({async($0.0, $0.1, $0.2, $0.3, $1, $2)})
     }
     
-    fileprivate static func sync<I0, I1, I2, I3, I4, T>(_ async: @escaping (I0, I1, I2, I3, I4, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2, I3, I4) -> T {
+    private static func sync<I0, I1, I2, I3, I4, T>(_ async: @escaping (I0, I1, I2, I3, I4, _ queue: Queue?, _ completionHandler: @escaping (T) -> Void) -> Void) -> (I0, I1, I2, I3, I4) -> T {
         return sync({async($0.0, $0.1, $0.2, $0.3, $0.4, $1, $2)})
     }
 }

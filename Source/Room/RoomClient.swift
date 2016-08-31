@@ -23,7 +23,7 @@ import Foundation
 /// Room HTTP client
 open class RoomClient: CompletionHandlerType<Room> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("rooms")
     }
 

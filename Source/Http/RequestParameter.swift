@@ -21,7 +21,7 @@
 import Foundation
 
 struct RequestParameter {
-    fileprivate var storage: [String: Any] = [:]
+    private var storage: [String: Any] = [:]
     
     init(_ parameters: [String: Any] = [:]) {
         for (key, value) in parameters {

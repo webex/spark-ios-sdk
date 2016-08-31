@@ -24,7 +24,7 @@ class VideoLicense {
     
     static let sharedInstance = VideoLicense()
     
-    fileprivate let userDefaults = UserDefaults.sharedInstance
+    private let userDefaults = UserDefaults.sharedInstance
     
     func checkActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
         guard needActivation() else {
@@ -44,7 +44,7 @@ class VideoLicense {
         userDefaults.removeVideoLicenseSetting()
     }
     
-    fileprivate func promptForActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
+    private func promptForActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
         let AlertTitle = "Activate License"
         let AlertMessage = "To enable video calls, activate a free video license (H.264 AVC) from Cisco. By selecting 'Activate', you accept the Cisco End User License Agreement and Notices."
         
@@ -65,7 +65,7 @@ class VideoLicense {
         alertController.present(true, completion: nil)
     }
     
-    fileprivate func needActivation() -> Bool {
+    private func needActivation() -> Bool {
         if userDefaults.isVideoLicenseActivated || userDefaults.isVideoLicenseActivationDisabled {
             return false
         }
@@ -73,12 +73,12 @@ class VideoLicense {
         return true
     }
     
-    fileprivate func activateLicense() {
+    private func activateLicense() {
         userDefaults.isVideoLicenseActivated = true
         CallMetrics.sharedInstance.reportVideoLicenseActivation()
     }
     
-    fileprivate func viewLicense() {
+    private func viewLicense() {
         guard let url = URL(string: "http://www.openh264.org/BINARY_LICENSE.txt") else {
             return
         }

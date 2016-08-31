@@ -22,7 +22,7 @@ import Foundation
 import SwiftyJSON
 
 /// Errors when getting service reponse for a request.
-struct Error {
+struct SparkError {
     
     /// Domain of this error.
     static let Domain = "com.ciscospark.error"
@@ -33,20 +33,20 @@ struct Error {
     }
     
     /// Converts the error data to NSError
-    static func requestErrorWithData(_ data: Data) -> NSError {
+    static func requestErrorWith(data: Data) -> NSError {
         var failureReason = "Service request failed without error message"
         if let errorMessage = JSON(data: data)["message"].string {
             failureReason = errorMessage
         }
-        return Error.errorWithCode(Error.Code.serviceRequestFailed, failureReason: failureReason)
+		return errorWith(code: SparkError.Code.serviceRequestFailed, failureReason: failureReason)
     }
     
-    fileprivate static func errorWithCode(_ code: Code, failureReason: String) -> NSError {
-        return errorWithCode(code.rawValue, failureReason: failureReason)
+    private static func errorWith(code: Code, failureReason: String) -> NSError {
+		return errorWith(code: code.rawValue, failureReason: failureReason)
     }
     
-    fileprivate static func errorWithCode(_ code: Int, failureReason: String) -> NSError {
+    private static func errorWith(code: Int, failureReason: String) -> NSError {
         let userInfo = [NSLocalizedFailureReasonErrorKey: failureReason]
-        return NSError(domain: Domain, code: code, userInfo: userInfo)
+		return NSError(domain: Domain, code: code, userInfo: userInfo)
     }
 }

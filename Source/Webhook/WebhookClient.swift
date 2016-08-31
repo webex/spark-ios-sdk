@@ -23,7 +23,7 @@ import Foundation
 /// Webhook HTTP client.
 open class WebhookClient: CompletionHandlerType<Webhook> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("webhooks")
     }
     

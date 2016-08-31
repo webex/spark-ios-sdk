@@ -24,12 +24,12 @@ import CocoaLumberjack
 class MemoryLoggerStorage {
 
     // configs
-    fileprivate let BlockSize = 10*1024
-    fileprivate let BlockCount = 10
+    private let BlockSize = 10*1024
+    private let BlockCount = 10
 
     // storage
-    fileprivate var blocks: [String]
-    fileprivate var blockIndex = 0
+    private var blocks: [String]
+    private var blockIndex = 0
     
     init() {
         blocks = [String](repeating: "", count: BlockCount)
@@ -58,8 +58,8 @@ class MemoryLoggerStorage {
 
 class MemoryLogger : DDAbstractLogger {
 
-    fileprivate let storage = MemoryLoggerStorage()
-    fileprivate var internalLogFormatter: DDLogFormatter?
+    private let storage = MemoryLoggerStorage()
+    private var internalLogFormatter: DDLogFormatter?
     
     // workaround for log formatter.
     // see: https://github.com/CocoaLumberjack/CocoaLumberjack/issues/643

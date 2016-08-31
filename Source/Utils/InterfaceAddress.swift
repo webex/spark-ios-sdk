@@ -50,7 +50,7 @@ class InterfaceAddress {
         return true
     }
     
-    fileprivate static func isSameAddress(oldAddr: Item, newAddr: Item) -> Bool {
+    private static func isSameAddress(oldAddr: Item, newAddr: Item) -> Bool {
         return oldAddr.ifaName == newAddr.ifaName && oldAddr.ifaAddr == newAddr.ifaAddr
     }
 }

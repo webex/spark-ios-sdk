@@ -46,10 +46,10 @@ open class Phone {
     /// - note: The setting is not persistent
     open var defaultLoudSpeaker = true
 
-    fileprivate let deviceService    = DeviceService.sharedInstance
-    fileprivate let webSocketService = WebSocketService.sharedInstance
-    fileprivate let reachabilityService = ReachabilityService.sharedInstance
-    fileprivate let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
+    private let deviceService    = DeviceService.sharedInstance
+    private let webSocketService = WebSocketService.sharedInstance
+    private let reachabilityService = ReachabilityService.sharedInstance
+    private let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
     ///
@@ -102,7 +102,7 @@ open class Phone {
     /// - note: This function is expected to run on main thread.
     open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
         let call = Call()
-        call.dial(address, option: option) { success in
+        call.dial(address: address, option: option) { success in
             if success {
                 completionHandler(true)
             } else {
@@ -163,7 +163,7 @@ open class Phone {
         }
     }
     
-    fileprivate func requestMediaAccess(_ mediaType: String, completionHandler: ((Bool) -> Void)?) {
+    private func requestMediaAccess(_ mediaType: String, completionHandler: ((Bool) -> Void)?) {
         AVCaptureDevice.requestAccess(forMediaType: mediaType) {
             let granted = $0
             DispatchQueue.main.async {

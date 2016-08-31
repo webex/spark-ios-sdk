@@ -25,7 +25,7 @@ class MediaEngineObserver: NotificationObserver {
 		return [(Notification.Name.MediaEngineDidEncounterError, #selector(MediaEngineObserver.onMediaEngineDidEncounterError(_:)))]
     }
     
-    @objc fileprivate func onMediaEngineDidEncounterError(_ notification: Notification) {
+    @objc private func onMediaEngineDidEncounterError(_ notification: Notification) {
         // TODO: handle engine errors
         Logger.info(notification.description)
     }

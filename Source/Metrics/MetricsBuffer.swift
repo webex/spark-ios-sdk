@@ -21,7 +21,7 @@
 import Foundation
 
 class MetricsBuffer {
-    fileprivate var metrics: [Metric] = []
+    private var metrics: [Metric] = []
     
     var count: Int {
         return metrics.count

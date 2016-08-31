@@ -23,7 +23,7 @@ import Foundation
 /// TeamMembership HTTP client.
 open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("team/memberships")
     }
     

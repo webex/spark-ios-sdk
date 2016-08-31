@@ -23,8 +23,8 @@ import Wme
 
 class MediaEngineWrapper {
     static let sharedInstance = MediaEngineWrapper()
-    fileprivate let mediaEngine = MediaEngine.sharedInstance()
-    fileprivate var mediaEngineObserver = MediaEngineObserver()
+    private let mediaEngine = MediaEngine.sharedInstance()
+    private var mediaEngineObserver = MediaEngineObserver()
     
     var WMEVersion: String {
         return MediaEngine.wmeVersion()

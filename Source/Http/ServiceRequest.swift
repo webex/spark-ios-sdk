@@ -25,19 +25,19 @@ import ObjectMapper
 
 class ServiceRequest {
     
-    fileprivate var url: URLStringConvertible {
+    private var url: URLStringConvertible {
         return URL(string: baseUrl)!.appendingPathComponent(path)
     }
     
-    fileprivate var headers: [String: String]
-    fileprivate var method: Alamofire.HTTPMethod
-    fileprivate var baseUrl: String
-    fileprivate var path: String
-    fileprivate var authRequired: Bool
-    fileprivate var body: RequestParameter?
-    fileprivate var query: RequestParameter?
-    fileprivate var keyPath: String?
-    fileprivate var queue: DispatchQueue?
+    private var headers: [String: String]
+    private var method: Alamofire.HTTPMethod
+    private var baseUrl: String
+    private var path: String
+    private var authRequired: Bool
+    private var body: RequestParameter?
+    private var query: RequestParameter?
+    private var keyPath: String?
+    private var queue: DispatchQueue?
     
     
     init() {
@@ -52,7 +52,7 @@ class ServiceRequest {
     }
     
     class Builder {
-        fileprivate var request = ServiceRequest()
+        private var request = ServiceRequest()
         
         func build() -> ServiceRequest {
             return request
@@ -118,7 +118,7 @@ class ServiceRequest {
             case .failure(var error):
                 if response.response != nil {
                     if let data = response.data {
-                        error = Error.requestErrorWithData(data)
+						error = SparkError.requestErrorWith(data: data)
                     }
                 }
                 result = .failure(error)
@@ -140,9 +140,9 @@ class ServiceRequest {
                 result = .success(value)
                 
             case .failure(var error):
-                if response.response != nil {
+				if response.response != nil {
                     if let data = response.data {
-                        error = Error.requestErrorWithData(data)
+						error = SparkError.requestErrorWith(data: data)
                     }
                 }
                 result = .failure(error)
@@ -166,7 +166,7 @@ class ServiceRequest {
             case .failure(var error):
                 if response.response != nil {
                     if let data = response.data {
-                        error = Error.requestErrorWithData(data)
+						error = SparkError.requestErrorWith(data: data)
                     }
                 }
                 result = .failure(error)

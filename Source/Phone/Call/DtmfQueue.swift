@@ -30,13 +30,13 @@ class DtmfQueue {
     var correlationId: Int
     var waitingForResponse: Bool
     
-    fileprivate let deviceUrl = DeviceService.sharedInstance.deviceUrl
+    private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     
     init(_ call: Call) {
         queue = []
         correlationId = 1
         self.call = call
-        dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue", attributes: [])
+        dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue")
         waitingForResponse = false
     }
     

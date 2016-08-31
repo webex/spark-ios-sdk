@@ -21,7 +21,7 @@
 import Foundation
 
 class DeviceClient: CompletionHandlerType<Device> {
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
     }
     

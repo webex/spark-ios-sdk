@@ -23,11 +23,11 @@ import Foundation
 class UserDefaults {
     static var sharedInstance = UserDefaults()
     
-    fileprivate let storage = Foundation.UserDefaults.standard
+    private let storage = Foundation.UserDefaults.standard
     
-    fileprivate let DeviceUrl = "deviceUrlKey"
-    fileprivate let IsVideoLicenseActivationDisabled = "isVideoLicenseActivationDisabledKey"
-    fileprivate let IsVideoLicenseActivated = "isVideoLicenseActivatedKey"
+    private let DeviceUrl = "deviceUrlKey"
+    private let IsVideoLicenseActivationDisabled = "isVideoLicenseActivationDisabledKey"
+    private let IsVideoLicenseActivated = "isVideoLicenseActivatedKey"
     
     var deviceUrl: String? {
         get {

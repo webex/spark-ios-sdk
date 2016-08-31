@@ -61,7 +61,7 @@ class ConnectController: UIViewController, WKNavigationDelegate {
         super.viewWillAppear(animated)
         if !webView.canGoBack {
             if nil != startURL {
-                loadURL(startURL!)
+				load(url: startURL!)
             }
             else {
                 webView.loadHTMLString("There is no `startURL`", baseURL: nil)
@@ -72,7 +72,7 @@ class ConnectController: UIViewController, WKNavigationDelegate {
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
 		if let url = navigationAction.request.url, let parseAccessCode = self.tryParseAccessCodeFrom {
 			if parseAccessCode(url) {
-				self.dismiss(true)
+				self.dismiss(animated: true)
 				return decisionHandler(.cancel)
 			}
 		}
@@ -82,12 +82,12 @@ class ConnectController: UIViewController, WKNavigationDelegate {
     var startURL: URL? {
         didSet(oldURL) {
             if nil != startURL && nil == oldURL && isViewLoaded {
-                loadURL(startURL!)
+				load(url: startURL!)
             }
         }
     }
     
-    func loadURL(_ url: URL) {
+    func load(url: URL) {
         webView.load(URLRequest(url: url))
     }
     
@@ -100,14 +100,14 @@ class ConnectController: UIViewController, WKNavigationDelegate {
     }
     
     func cancel(_ sender: Any?) {
-        dismiss(true, animated: (sender != nil))
+		dismiss(asCancel: true, animated: (sender != nil))
     }
     
-    func dismiss(_ animated: Bool) {
-        dismiss(false, animated: animated)
+    func dismiss(animated: Bool) {
+		dismiss(asCancel: false, animated: animated)
     }
     
-    func dismiss(_ asCancel: Bool, animated: Bool) {
+    func dismiss(asCancel: Bool, animated: Bool) {
         webView.stopLoading()
         
         self.onWillDismiss?(asCancel)

@@ -24,8 +24,8 @@ import KeychainAccess
 struct KeychainManager {
     static let sharedInstance = KeychainManager()
     
-    fileprivate let AccessTokenKey = "SparkSDK.AccessToken"
-    fileprivate let ClientAccountKey = "SparkSDK.ClientAccount"
+    private let AccessTokenKey = "SparkSDK.AccessToken"
+    private let ClientAccountKey = "SparkSDK.ClientAccount"
     
     
     // MARK:- ClientAccount API
@@ -38,7 +38,7 @@ struct KeychainManager {
         return nil
     }
     
-    func storeClientAccount(_ clientAccount: ClientAccount?) {
+    func store(clientAccount: ClientAccount?) {
         if clientAccount == nil {
             removeData(ClientAccountKey)
         } else {
@@ -57,7 +57,7 @@ struct KeychainManager {
         return nil
     }
 
-    func storeAccessToken(_ accessToken: AccessToken?) {
+    func store(accessToken: AccessToken?) {
         if accessToken == nil {
             removeData(AccessTokenKey)
         } else {
@@ -67,7 +67,7 @@ struct KeychainManager {
     }
     
     // MARK:- Common utility API
-    fileprivate func removeData(_ key: String) {
+    private func removeData(_ key: String) {
         let keychain = getKeychainWithKey(key)
         do {
             try keychain.remove(key)
@@ -76,7 +76,7 @@ struct KeychainManager {
         }
     }
     
-    fileprivate func fetchDataWithKey(_ key: String) -> Data? {
+    private func fetchDataWithKey(_ key: String) -> Data? {
         let keychain = getKeychainWithKey(key)
         var data: Data?
         do {
@@ -87,17 +87,17 @@ struct KeychainManager {
         return data
     }
     
-    fileprivate func storeDataWithKey(_ key: String, data: Data) {
+    private func storeDataWithKey(_ key: String, data: Data) {
         let keychain = getKeychainWithKey(key)
         keychain[data: key] = data
     }
     
-    fileprivate func getKeychainWithKey(_ key: String) -> Keychain {
+    private func getKeychainWithKey(_ key: String) -> Keychain {
         let service = getKeychainServiceWithKey(key)
         return Keychain(service: service)
     }
     
-    fileprivate func getKeychainServiceWithKey(_ key: String) -> String {
+    private func getKeychainServiceWithKey(_ key: String) -> String {
         let bundleId = Bundle.main.bundleIdentifier ?? ""
         return "\(bundleId).\(key)"
     }

@@ -23,7 +23,7 @@ import AVFoundation
 import Wme
 
 class MediaSessionObserver: NotificationObserver {
-    fileprivate let callNotificationCenter = CallNotificationCenter.sharedInstance
+    private let callNotificationCenter = CallNotificationCenter.sharedInstance
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [
@@ -41,85 +41,85 @@ class MediaSessionObserver: NotificationObserver {
             (.MediaEngineDidChangeAudioRoute,      #selector(onMediaEngineDidChangeAudioRoute(_:)))]
     }
     
-    @objc fileprivate func onMediaEngineDidSwitchCameras(_ notification: Notification) {
+    @objc private func onMediaEngineDidSwitchCameras(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyFacingModeChanged(call, facingMode: call.facingMode)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidChangeLocalViewSize(_ notification: Notification) {
+    @objc private func onMediaEngineDidChangeLocalViewSize(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyLocalViewSizeChanged(call, height: call.localVideoViewHeight, width: call.localVideoViewWidth)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidChangeRemoteViewSize(_ notification: Notification) {
+    @objc private func onMediaEngineDidChangeRemoteViewSize(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyRemoteViewSizeChanged(call, height: call.remoteVideoViewHeight, width: call.remoteVideoViewWidth)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidMuteVideo(_ notification: Notification) {
+    @objc private func onMediaEngineDidMuteVideo(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
-            call.updateMedia(call.sendingAudio, false)
+            call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: false)
             callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localVideoMuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidUnMuteVideo(_ notification: Notification) {
+    @objc private func onMediaEngineDidUnMuteVideo(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
-            call.updateMedia(call.sendingAudio, true)
+			call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: true)
             callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localVideoUnmuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidMuteVideoOutput(_ notification: Notification) {
+    @objc private func onMediaEngineDidMuteVideoOutput(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteVideoOutputMuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidUnMuteVideoOutput(_ notification: Notification) {
+    @objc private func onMediaEngineDidUnMuteVideoOutput(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteVideoOutputUnmuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidMuteAudio(_ notification: Notification) {
+    @objc private func onMediaEngineDidMuteAudio(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
-            call.updateMedia(false, call.sendingVideo)
+            call.updateMedia(sendingAudio: false, sendingVideo: call.sendingVideo)
             callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localAudioMuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidUnMuteAudio(_ notification: Notification) {
+    @objc private func onMediaEngineDidUnMuteAudio(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
-            call.updateMedia(true, call.sendingVideo)
+            call.updateMedia(sendingAudio: true, sendingVideo: call.sendingVideo)
             callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localAudioUnmuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidMuteAudioOutput(_ notification: Notification) {
+    @objc private func onMediaEngineDidMuteAudioOutput(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteAudioOutputMuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidUnMuteAudioOutput(_ notification: Notification) {
+    @objc private func onMediaEngineDidUnMuteAudioOutput(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteAudioOutputUnmuted)
         }
     }
     
-    @objc fileprivate func onMediaEngineDidChangeAudioRoute(_ notification: Notification) {
+    @objc private func onMediaEngineDidChangeAudioRoute(_ notification: Notification) {
         if let call = getCallFromNotification(notification) {
             callNotificationCenter.notifyLoudSpeakerChanged(call, isLoudSpeakerSelected: call.loudSpeaker)
         }
     }
     
-    fileprivate func getCallFromNotification(_ notification: Notification) -> Call? {
+    private func getCallFromNotification(_ notification: Notification) -> Call? {
         if let session = notification.object as? MediaSession {
-            return CallManager.sharedInstance.findCallByMediaSession(session)
+			return CallManager.sharedInstance.findCallBy(mediaSession: session)
         }
         return nil
     }

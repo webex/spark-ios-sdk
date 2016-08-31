@@ -23,7 +23,7 @@ import Foundation
 /// Person HTTP client
 open class PersonClient: CompletionHandlerType<Person> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("people")
     }
     

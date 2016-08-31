@@ -45,7 +45,7 @@ class Logger {
         log(message(), level: level, flag: DDLogFlag.error, file: file, function: function, line: line, asynchronous: false)
     }
     
-    static fileprivate func log(_ message: @autoclosure () -> String, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
+    static private func log(_ message: @autoclosure () -> String, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
         guard LoggerManager.sharedInstance.hasSetup() else {
             return
         }

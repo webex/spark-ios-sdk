@@ -23,7 +23,7 @@ import Foundation
 /// Team HTTP client
 open class TeamClient: CompletionHandlerType<Team> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("teams")
     }
     
@@ -33,7 +33,7 @@ open class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(_ max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["max": max]))

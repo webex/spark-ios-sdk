@@ -23,8 +23,8 @@ import Foundation
 class DeviceService: CompletionHandlerType<Device> {
     static let sharedInstance = DeviceService()
     
-    fileprivate var device: Device?
-    fileprivate let client: DeviceClient = DeviceClient()
+    private var device: Device?
+    private let client: DeviceClient = DeviceClient()
     
     var deviceUrl: String? {
         get {
@@ -78,7 +78,7 @@ class DeviceService: CompletionHandlerType<Device> {
         deviceUrl = nil
     }
     
-    fileprivate func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
+    private func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
         switch response.result {
         case .success(let value):
             self.device = value
@@ -90,7 +90,7 @@ class DeviceService: CompletionHandlerType<Device> {
         }
     }
     
-    fileprivate func onDeregisterDeviceCompleted(_ response: ServiceResponse<Any>, completionHandler: (Bool) -> Void) {
+    private func onDeregisterDeviceCompleted(_ response: ServiceResponse<Any>, completionHandler: (Bool) -> Void) {
         switch response.result {
         case .success:
             completionHandler(true)
@@ -100,7 +100,7 @@ class DeviceService: CompletionHandlerType<Device> {
         }
     }
     
-    fileprivate func createDeviceInfo() -> RequestParameter {
+    private func createDeviceInfo() -> RequestParameter {
         
         let currentDevice = UIDevice.current
         var deviceName = currentDevice.name
@@ -128,11 +128,11 @@ class DeviceService: CompletionHandlerType<Device> {
         return RequestParameter(deviceParameters)
     }
     
-    fileprivate func isPad() -> Bool {
+    private func isPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
     }
     
-    fileprivate func isPhone() -> Bool {
+    private func isPhone() -> Bool {
         return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone
     }
 }

@@ -24,8 +24,8 @@ class ClientAccount: NSObject, NSCoding {
     var clientId: String
     var clientSecret: String
     
-    fileprivate let clientIdKey = "clientIdKey"
-    fileprivate let clientSecretKey = "clientSecretKey"
+    private let clientIdKey = "clientIdKey"
+    private let clientSecretKey = "clientSecretKey"
     
     init(clientId: String, clientSecret: String) {
         self.clientId = clientId

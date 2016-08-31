@@ -22,8 +22,8 @@ import Foundation
 import Wme
 
 class MediaSessionWrapper {
-    fileprivate let mediaSession = MediaSession()
-    fileprivate let mediaSessionObserver = MediaSessionObserver()
+    private let mediaSession = MediaSession()
+    private let mediaSessionObserver = MediaSessionObserver()
     
     
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
@@ -137,17 +137,17 @@ class MediaSessionWrapper {
     }
     
     // MARK: - Default settings
-    fileprivate func applyDefaultMediaSettings() {
+    private func applyDefaultMediaSettings() {
         setDefaultFacingMode()
         setDefaultAudioOutput()
     }
     
-    fileprivate func setDefaultFacingMode() {
+    private func setDefaultFacingMode() {
         let isFront = Phone.sharedInstance.defaultFacingMode == Call.FacingMode.User
         mediaSession.setDefaultCamera(isFront)
     }
     
-    fileprivate func setDefaultAudioOutput() {
+    private func setDefaultAudioOutput() {
         mediaSession.setDefaultAudioOutput(Phone.sharedInstance.defaultLoudSpeaker)
     }
     

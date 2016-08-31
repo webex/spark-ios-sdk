@@ -21,7 +21,7 @@
 import Foundation
 
 class MediaClusterClient: CompletionHandlerType<MediaCluster> {
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().baseUrl(DeviceService.sharedInstance.getServiceUrl("calliopeDiscovery")!)
     }
     

@@ -36,19 +36,19 @@ class CallStateOutgoing: CallState {
         }
     }
     
-    fileprivate func doActionWhenConnected() {
+    private func doActionWhenConnected() {
         call.state = CallStateConnected(call)
         callNotificationCenter.notifyCallConnected(call)
     }
     
-    fileprivate func doActionWhenLocalCancelled() {
-        callManager.removeCall(call.url)
+    private func doActionWhenLocalCancelled() {
+		callManager.removeCallWith(url: call.url)
         call.state = CallStateLocalCancelled(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
     }
     
-    fileprivate func doActionWhenRemoteDeclined() {
-        callManager.removeCall(call.url)
+    private func doActionWhenRemoteDeclined() {
+        callManager.removeCallWith(url: call.url)
         call.hangup(nil)
         call.state = CallStateRemoteDeclined(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)

@@ -45,14 +45,14 @@ struct Feedback {
 class CallMetrics {
     static let sharedInstance = CallMetrics()
     
-    fileprivate let TestUserEmailDomain = "example.com"
+    private let TestUserEmailDomain = "example.com"
     
-    func submitFeedback(_ feedback: Feedback, callInfo: CallInfo) {
+    func submit(feedback: Feedback, callInfo: CallInfo) {
         var data: Metric.DataType = createBasicCallData(callInfo)
         data.unionInPlace(feedback.metricData)
         
         var environment = MetricsEnvironment.Production
-        if callInfo.participantsContiansEmailDomain(TestUserEmailDomain) {
+		if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
             environment = MetricsEnvironment.Test
         }
         
@@ -65,7 +65,7 @@ class CallMetrics {
         MetricsEngine.sharedInstance.trackMetric(metric)
     }
     
-    fileprivate func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
+    private func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
         return ["locusId": callInfo.callUrl!,
                 "locusTimestamp": callInfo.lastActive!,
                 "deviceUrl": DeviceService.sharedInstance.deviceUrl!,

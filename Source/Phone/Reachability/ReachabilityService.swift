@@ -27,9 +27,9 @@ class ReachabilityService {
     static let sharedInstance = ReachabilityService()
     var feedback: MediaEngineReachabilityFeedback?
     
-    fileprivate var hostAddresses: [InterfaceAddress.Item]?
-    fileprivate var lastFetchData: Date?
-    fileprivate let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
+    private var hostAddresses: [InterfaceAddress.Item]?
+    private var lastFetchData: Date?
+    private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
 
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
@@ -61,7 +61,7 @@ class ReachabilityService {
         clearReachabilityData()
     }
     
-    fileprivate func isHostAddressChanged() -> Bool {
+    private func isHostAddressChanged() -> Bool {
         if hostAddresses == nil {
             return true
         }
@@ -74,7 +74,7 @@ class ReachabilityService {
         return true
     }
     
-    fileprivate func isLastFetchLongEnough() -> Bool {
+    private func isLastFetchLongEnough() -> Bool {
         if lastFetchData == nil {
             return true
         }
@@ -86,15 +86,15 @@ class ReachabilityService {
         return false
     }
     
-    fileprivate func updateHostAddresses() {
+    private func updateHostAddresses() {
         hostAddresses = InterfaceAddress.getSortedAddresses()
     }
     
-    fileprivate func updateFetchDate() {
+    private func updateFetchDate() {
         lastFetchData = Date()
     }
     
-    fileprivate func performReachabilityCheck(_ completionHandler: ReachabilityCheckHandler) {
+    private func performReachabilityCheck(_ completionHandler: ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
         MediaClusterClient().get() {
             (response: ServiceResponse<MediaCluster>) in
@@ -112,7 +112,7 @@ class ReachabilityService {
         }
     }
     
-    fileprivate func clearReachabilityData() {
+    private func clearReachabilityData() {
         MediaEngineWrapper.sharedInstance.clearReachabilityData()
     }
 }

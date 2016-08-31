@@ -22,7 +22,7 @@ import Foundation
 
 class OAuthClient: CompletionHandlerType<AccessToken> {
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder()
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])

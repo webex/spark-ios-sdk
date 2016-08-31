@@ -193,7 +193,7 @@ open class Call {
         CallClient().leave(participantUrl!, deviceUrl: deviceUrl!) {
             switch $0.result {
             case .success(let value):
-                self.updateCallInfo(value)
+				self.update(callInfo: value)
                 Logger.info("Success: leave call")
                 completionHandler?(true)
             case .failure(let error):
@@ -230,7 +230,7 @@ open class Call {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func sendDTMF(_ dtmf: String, completionHandler: CompletionHandler?) {
+    open func send(dtmf: String, completionHandler: CompletionHandler?) {
         if sendingDTMFEnabled {
             dtmfQueue!.push(dtmf, completionHandler: completionHandler)
         } else {
@@ -287,12 +287,12 @@ open class Call {
     /// - parameter includeLogs: True if to include logs, False as not.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func sendFeedback(_ rating: Int, comments: String? = nil, includeLogs: Bool = false) {
+    open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        CallMetrics.sharedInstance.submitFeedback(feedback, callInfo: info!)
+		CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!)
     }
     
-    func dial(_ address: String, option: MediaOption, completionHandler: CompletionHandler?) {
+    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
         let dialAction: () -> Void = {
             self.prepareMediaSession(option)
             
@@ -308,7 +308,7 @@ open class Call {
         doCallAction(dialAction, option: option, completionHandler: completionHandler)
     }
     
-    func updateMedia(_ sendingAudio: Bool, _ sendingVideo: Bool){
+    func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
         let mediaUrl = info?.selfMediaUrl
         assert(mediaUrl != nil, "mediaUrl is nil")
         
@@ -322,7 +322,7 @@ open class Call {
         CallClient().updateMedia(mediaUrl!, localInfo: localInfo) {
             switch $0.result {
             case .success(let value):
-                self.updateCallInfo(value)
+				self.update(callInfo: value)
                 Logger.info("Success: update media")
             case .failure(let error):
                 Logger.error("Failure: \(error.localizedFailureReason)")
@@ -330,7 +330,7 @@ open class Call {
         }
     }
     
-    func updateCallInfo(_ newInfo: CallInfo) {
+    func update(callInfo newInfo: CallInfo) {
         if self.info == nil {
             setCallInfo(newInfo)
             state.update()
@@ -417,14 +417,14 @@ open class Call {
     private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
         switch response.result {
         case .success(let value):
-            updateCallInfo(value)
+			update(callInfo: value)
             if let remoteSdp = self.info?.remoteSdp {
                 self.mediaSession.setRemoteSdp(remoteSdp)
             } else {
                 Logger.error("Failure: remoteSdp is nil")
             }
             self.mediaSession.startMedia()
-            CallManager.sharedInstance.addCall(self.url, call: self)
+			CallManager.sharedInstance.addCallWith(url: self.url, call: self)
             from = info?.hostEmail
             
             Logger.info("Success: join call")
@@ -440,7 +440,7 @@ open class Call {
     private func onFetchCallInfoCompleted(_ response: ServiceResponse<CallInfo>) {
         switch response.result {
         case .success(let value):
-            updateCallInfo(value)
+			update(callInfo: value)
             Logger.info("Success: fetch call info")
         case .failure(let error):
             Logger.error("Failure: \(error.localizedFailureReason)")

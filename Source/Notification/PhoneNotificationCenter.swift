@@ -26,13 +26,13 @@ open class PhoneNotificationCenter {
     /// Returns the singleton PhoneNotificationCenter.
     open static let sharedInstance = PhoneNotificationCenter()
     
-	fileprivate var observers = NSHashTable<AnyObject>.weakObjects()
+	private var observers = NSHashTable<AnyObject>.weakObjects()
 	
     /// Add phone observer
     ///
     /// - parameter observer: PhoneObserver object to add.
     /// - returns: Void
-    open func addObserver(_ observer: PhoneObserver) {
+    open func add(observer: PhoneObserver) {
         observers.add(observer)
     }
     
@@ -40,7 +40,7 @@ open class PhoneNotificationCenter {
     ///
     /// - parameter observer: PhoneObserver object to remove.
     /// - returns: Void
-    open func removeObserver(_ observer: PhoneObserver) {
+    open func remove(observer: PhoneObserver) {
         observers.remove(observer)
     }
     

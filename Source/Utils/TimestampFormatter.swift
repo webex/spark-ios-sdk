@@ -25,7 +25,7 @@ class TimestampFormatter {
         return dateFormatterUTC().string(from: Date())
     }
 
-    fileprivate static func dateFormatterUTC() -> DateFormatter {
+    private static func dateFormatterUTC() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         formatter.timeZone = TimeZone(abbreviation: "UTC")

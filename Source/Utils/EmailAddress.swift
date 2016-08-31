@@ -25,7 +25,7 @@ import Foundation
 open class EmailAddress: Equatable {
     fileprivate var address: String
     
-    fileprivate init(_ address: String) {
+    private init(_ address: String) {
         self.address = address
     }
     
@@ -48,7 +48,7 @@ open class EmailAddress: Equatable {
         return address
     }
     
-    fileprivate static func isValid(_ address: String) -> Bool {
+    private static func isValid(_ address: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         

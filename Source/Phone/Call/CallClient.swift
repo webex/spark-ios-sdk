@@ -23,7 +23,7 @@ import Foundation
 // TODO: need to discuss if use term - "locus"
 class CallClient: CompletionHandlerType<CallInfo>{
     
-    fileprivate func requestBuilder() -> ServiceRequest.Builder {
+    private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().keyPath("locus")
     }
     

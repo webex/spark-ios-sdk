@@ -25,10 +25,10 @@ class MetricsEngine {
     
     static let sharedInstance = MetricsEngine()
     
-    fileprivate let MetricsBufferLimit = 50
-    fileprivate let MetricsFlushIntervalSeconds: Double = 30
-    fileprivate var metricsBuffer = MetricsBuffer()
-    fileprivate var periodicFlushTimer: Timer!
+    private let MetricsBufferLimit = 50
+    private let MetricsFlushIntervalSeconds: Double = 30
+    private var metricsBuffer = MetricsBuffer()
+    private var periodicFlushTimer: Timer!
     
     init() {
         periodicFlushTimer = Timer(timeInterval: MetricsFlushIntervalSeconds,
@@ -94,7 +94,7 @@ class MetricsEngine {
         }
     }
     
-    fileprivate func postMetrics(_ payload: RequestParameter, completionHandler: CompletionHandlerType?) {
+    private func postMetrics(_ payload: RequestParameter, completionHandler: CompletionHandlerType?) {
         MetricsClient().post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {
@@ -110,7 +110,7 @@ class MetricsEngine {
         }
     }
     
-    fileprivate func constructPayloadFromMetric(_ metric: Metric) -> Metric.DataType {
+    private func constructPayloadFromMetric(_ metric: Metric) -> Metric.DataType {
         let postTime = TimestampFormatter.nowInUTC()
         var payload: Metric.DataType = ["key": metric.name,
                                         "postTime": postTime,
@@ -127,7 +127,7 @@ class MetricsEngine {
     //
     // Manually flush any buffered metrics. Useful when we are going to background mode
     //
-    @objc fileprivate func flush() {
+    @objc private func flush() {
         if metricsBuffer.count > 0 {
             trackMetrics(metricsBuffer.popAll(), completionHandler: nil)
         }

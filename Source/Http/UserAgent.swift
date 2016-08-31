@@ -36,7 +36,7 @@ class UserAgent {
         userAgentString = "\(identity)/\(buildVersion) (\(systemName) \(systemVersion); \(platform))"
     }
     
-    fileprivate func platform() -> String {
+    private func platform() -> String {
         var sysinfo = utsname()
         uname(&sysinfo)
         return NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: String.Encoding.ascii.rawValue)! as String

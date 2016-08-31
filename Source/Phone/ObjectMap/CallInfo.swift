@@ -117,7 +117,7 @@ struct CallInfo: Mappable {
     }
     
     var isOneOnOne: Bool {
-        return allParticipantantsWithType("USER").count == 2
+		return allParticipantantsWith(type: "USER").count == 2
     }
     
     var isBridge: Bool {
@@ -132,7 +132,7 @@ struct CallInfo: Mappable {
         if !hasJoined {
             return false
         }
-        return !(selfDevicesWithState("JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+		return !(selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
     }
 
     var hasJoinedOnOtherDevice: Bool {
@@ -140,8 +140,8 @@ struct CallInfo: Mappable {
             return false
         }
         
-        return  (selfDevicesWithState("JOINED").count > 1 )
-            || (selfDevicesWithState("JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+		return  (selfDevicesWith(state: "JOINED").count > 1 )
+			|| (selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
     }
 
     var hasLeft: Bool {
@@ -198,7 +198,7 @@ struct CallInfo: Mappable {
     }
 
     // MARK: utils functions
-    func participantsContiansEmailDomain(_ emailDomain: String) -> Bool {
+    func participantsContain(emailDomain: String) -> Bool {
         return allParticipantants.filter({
             guard let email = $0.person?.email else {
                 return false
@@ -207,11 +207,11 @@ struct CallInfo: Mappable {
         }).count > 0
     }
     
-    func allParticipantantsWithType(_ type: String) -> [Participant] {
+    func allParticipantantsWith(type: String) -> [Participant] {
         return allParticipantants.filter({$0.type == type})
     }
     
-    func selfDevicesWithState(_ state: String) -> [ParticipantDevice] {
+    func selfDevicesWith(state: String) -> [ParticipantDevice] {
         return selfDevices.filter({$0.state == state})
     }
     
