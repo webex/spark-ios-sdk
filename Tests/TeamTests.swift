@@ -89,7 +89,7 @@ class TeamSpec: QuickSpec {
             
             it("with max value") {
                 do {
-                    let teams = try Spark.teams.list(1)
+                    let teams = try Spark.teams.list(max: 1)
                     expect(teams.count).to(beLessThanOrEqualTo(1))
                     
                 } catch let error as NSError {
@@ -98,7 +98,7 @@ class TeamSpec: QuickSpec {
             }
             
             it("with invalid max") {
-                expect{try Spark.teams.list(-1)}.to(throwError())
+				expect{try Spark.teams.list(max: -1)}.to(throwError())
             }
         }
         

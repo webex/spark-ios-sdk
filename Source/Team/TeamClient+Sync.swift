@@ -26,7 +26,7 @@ extension TeamClient {
     ///
     /// - parameter max: Limit the maximum number of teams in the response.
     /// - returns: [Team]
-    public func list(_ max: Int? = nil) throws -> [Team] {
+    public func list(max: Int? = nil) throws -> [Team] {
         return try SyncUtil.getArray(max, async: list)
     }
     
