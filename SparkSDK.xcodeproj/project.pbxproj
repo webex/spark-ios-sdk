@@ -71,7 +71,7 @@
 		B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75331CE2D7B70080EAE0 /* AuthManager.swift */; };
 		B91E75981CE2D7B70080EAE0 /* ConnectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75351CE2D7B70080EAE0 /* ConnectController.swift */; };
 		B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */; };
-		B91E759B1CE2D7B70080EAE0 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75391CE2D7B70080EAE0 /* Error.swift */; };
+		B91E759B1CE2D7B70080EAE0 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75391CE2D7B70080EAE0 /* SparkError.swift */; };
 		B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753B1CE2D7B70080EAE0 /* Result.swift */; };
 		B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */; };
 		B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753D1CE2D7B70080EAE0 /* ServiceResponse.swift */; };
@@ -223,7 +223,7 @@
 		B91E75331CE2D7B70080EAE0 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B91E75351CE2D7B70080EAE0 /* ConnectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectController.swift; sourceTree = "<group>"; };
 		B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionHandlerType.swift; sourceTree = "<group>"; };
-		B91E75391CE2D7B70080EAE0 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		B91E75391CE2D7B70080EAE0 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
 		B91E753B1CE2D7B70080EAE0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceRequest.swift; sourceTree = "<group>"; };
 		B91E753D1CE2D7B70080EAE0 /* ServiceResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceResponse.swift; sourceTree = "<group>"; };
@@ -476,7 +476,7 @@
 			children = (
 				3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */,
 				B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */,
-				B91E75391CE2D7B70080EAE0 /* Error.swift */,
+				B91E75391CE2D7B70080EAE0 /* SparkError.swift */,
 				B91E753B1CE2D7B70080EAE0 /* Result.swift */,
 				B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */,
 				B91E753D1CE2D7B70080EAE0 /* ServiceResponse.swift */,
@@ -946,7 +946,7 @@
 				3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */,
 				B91E75D01CE2D7B70080EAE0 /* Participant.swift in Sources */,
 				B91E75C71CE2D7B70080EAE0 /* DeviceClient.swift in Sources */,
-				B91E759B1CE2D7B70080EAE0 /* Error.swift in Sources */,
+				B91E759B1CE2D7B70080EAE0 /* SparkError.swift in Sources */,
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
 				B91E75CF1CE2D7B70080EAE0 /* MediaInfo.swift in Sources */,
 				5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */,
