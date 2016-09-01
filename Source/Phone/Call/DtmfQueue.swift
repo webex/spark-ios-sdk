@@ -87,7 +87,7 @@ class DtmfQueue {
                             }
                         }
                     case .failure(let error):
-                        Logger.error("Failure: \(error.localizedFailureReason)")
+                        Logger.error("Failure", error: error)
                         for completion in completionHandlers {
                             DispatchQueue.main.async {
                                 completion?(false)

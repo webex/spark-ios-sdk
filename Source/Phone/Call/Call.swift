@@ -197,7 +197,7 @@ open class Call {
                 Logger.info("Success: leave call")
                 completionHandler?(true)
             case .failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure", error: error)
                 completionHandler?(false)
             }
         }
@@ -218,7 +218,7 @@ open class Call {
                 Logger.info("Success: reject call")
                 completionHandler?(true)
             case .failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure", error: error)
                 completionHandler?(false)
             }
         }
@@ -325,7 +325,7 @@ open class Call {
 				self.update(callInfo: value)
                 Logger.info("Success: update media")
             case .failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure", error: error)
             }
         }
     }
@@ -432,7 +432,7 @@ open class Call {
             
         case .failure(let error):
             self.mediaSession.stopMedia()
-            Logger.error("Failure: \(error.localizedFailureReason)")
+            Logger.error("Failure", error: error)
             completionHandler?(false)
         }
     }
@@ -443,7 +443,7 @@ open class Call {
 			update(callInfo: value)
             Logger.info("Success: fetch call info")
         case .failure(let error):
-            Logger.error("Failure: \(error.localizedFailureReason)")
+            Logger.error("Failure", error: error)
         }
     }
     

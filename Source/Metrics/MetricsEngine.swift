@@ -103,7 +103,7 @@ class MetricsEngine {
                 completionHandler?(true)
                 
             case .failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure", error: error)
                 completionHandler?(false)
                 break
             }

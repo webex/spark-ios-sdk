@@ -108,7 +108,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         _ = request.responseObject(queue: queue, keyPath: keyPath) {
-            (response: Response<T, NSError>) in
+            (response: Response<T>) in
             var result: Result<T>
             
             switch response.result {
@@ -132,7 +132,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         _ = request.responseArray(queue: queue, keyPath: keyPath){
-            (response: Response<[T], NSError>) in
+            (response: Response<[T]>) in
             var result: Result<[T]>
             
             switch response.result {
@@ -156,7 +156,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         request.responseJSON(queue: queue){
-            (response: Response<Any, NSError>) in
+            (response: Response<Any>) in
             var result: Result<Any>
             
             switch response.result {

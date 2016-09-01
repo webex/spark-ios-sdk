@@ -85,7 +85,7 @@ class DeviceService: CompletionHandlerType<Device> {
             self.deviceUrl = self.device?.deviceUrl
             completionHandler(true)
         case .failure(let error):
-            Logger.error("Failed to register device: \(error.localizedFailureReason)")
+            Logger.error("Failed to register device", error: error)
             completionHandler(false)
         }
     }
@@ -95,8 +95,8 @@ class DeviceService: CompletionHandlerType<Device> {
         case .success:
             completionHandler(true)
         case .failure(let error):
-            Logger.error("Failed to deregister device: \(error.localizedFailureReason)")
-            completionHandler(false)
+            Logger.error("Failed to deregister device", error: error)
+			completionHandler(false)
         }
     }
     

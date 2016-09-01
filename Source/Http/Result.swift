@@ -27,5 +27,5 @@ public enum Result<T> {
     case success(T)
     
     /// Result for Failure, with the error message.
-    case failure(NSError)
+    case failure(Error)
 }

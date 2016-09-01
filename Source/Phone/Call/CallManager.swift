@@ -66,7 +66,7 @@ class CallManager {
                 self.handleActiveCalls(value)
                 Logger.info("Success: fetch call infos")
             case .failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+                Logger.error("Failure", error: error)
             }
         }
     }
