@@ -7,8 +7,8 @@ def shared_pods
 	pod 'ObjectMapper', :git => 'https://github.com/Hearst-DD/ObjectMapper.git', :branch => 'swift-3'
 	pod 'AlamofireObjectMapper', :git => 'https://github.com/asynchrony/AlamofireObjectMapper.git', :branch => 'swift-3'
 	pod 'SwiftyJSON', :git => 'https://github.com/asynchrony/SwiftyJSON.git', :branch => 'swift3'
-	pod 'Starscream', :git => 'https://github.com/asynchrony/Starscream.git', :branch => 'swift3'
-	pod 'KeychainAccess', :git => 'https://github.com/asynchrony/KeychainAccess.git', :branch => 'swift-3.0'
+	pod 'Starscream', :git => 'https://github.com/daltoniam/Starscream.git', :branch => 'swift3'
+	pod 'KeychainAccess', :git => 'https://github.com/kishikawakatsumi/KeychainAccess.git', :branch => 'swift-3.0'
 	pod 'CocoaLumberjack/Swift', :git => 'https://github.com/asynchrony/CocoaLumberjack.git', :branch => 'swift3'
 end
 
