@@ -37,7 +37,7 @@ extension TeamMembershipClient {
     /// - parameter personId: The person ID.
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
-    public func create(teamId: String, personId: String, isModerator: Bool? = nil) throws -> TeamMembership {
+	public func create(teamId: String, personId: String, isModerator: Bool = false) throws -> TeamMembership {
         return try SyncUtil.getObject(teamId, personId, isModerator, async: create)
     }
     
@@ -47,7 +47,7 @@ extension TeamMembershipClient {
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
-    public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> TeamMembership {
+    public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false) throws -> TeamMembership {
         return try SyncUtil.getObject(teamId, personEmail, isModerator, async: create)
     }
     

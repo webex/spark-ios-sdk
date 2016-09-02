@@ -62,7 +62,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personId: String, isModerator: Bool? = nil, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personId": personId,
@@ -85,7 +85,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personEmail: EmailAddress, isModerator: Bool? = nil, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personEmail": personEmail.toString(),

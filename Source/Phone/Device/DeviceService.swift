@@ -103,19 +103,18 @@ class DeviceService: CompletionHandlerType<Device> {
     private func createDeviceInfo() -> RequestParameter {
         
         let currentDevice = UIDevice.current
-        var deviceName = currentDevice.name
-        if (deviceName.isEmpty) {
-            deviceName = "notset"
-        }
+		let deviceName = currentDevice.name.isEmpty ? "notset" : currentDevice.name
         
-        var deviceType = "UNKNOWN"
+		let deviceType: String
         if isPad() {
             deviceType = "IPAD"
         } else if isPhone() {
             deviceType = "IPHONE"
-        }
+		} else {
+			deviceType = "UNKNOWN"
+		}
         
-        let deviceParameters:[String: Any?] = [
+        let deviceParameters:[String: Any] = [
             "deviceName": deviceName,
             "name": currentDevice.name,
             "model": currentDevice.model,

@@ -37,7 +37,7 @@ class TestUserFactory {
                        "Content-Type": "application/json"]
         
         let body: [String: Any] = ["clientId": client.id,
-                                   "clientSecret": client.secret,
+                                   "clientSecret": client.secret!,
                                    "emailTemplate": email,
                                    "displayName": userName,
                                    "password": "P@ssw0rd123",

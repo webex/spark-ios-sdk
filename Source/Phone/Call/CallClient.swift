@@ -97,7 +97,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         if durationMillis != nil {
             dtmfInfo["durationMillis"] = durationMillis
         }
-        let body:[String: Any?] = [
+        let body:[String: Any] = [
             "deviceUrl": deviceUrl,
             "dtmf": dtmfInfo]
         

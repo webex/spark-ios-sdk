@@ -39,7 +39,7 @@ extension MembershipClient {
     /// - parameter personId: The person id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func create(roomId: String, personId: String, isModerator: Bool? = nil) throws -> Membership {
+    public func create(roomId: String, personId: String, isModerator: Bool = false) throws -> Membership {
         return try SyncUtil.getObject(roomId, personId, isModerator, async: create)
     }
     
@@ -49,7 +49,7 @@ extension MembershipClient {
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> Membership {
+    public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false) throws -> Membership {
         return try SyncUtil.getObject(roomId, personEmail, isModerator, async: create)
     }
     
