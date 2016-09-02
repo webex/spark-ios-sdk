@@ -33,7 +33,7 @@ struct Sequence: Mappable {
     init?(_ map: Map) {
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         entries <- (map["entries"], UInt64Transform())
         rangeStart <- (map["rangeStart"], UInt64Transform())
         rangeEnd <- (map["rangeEnd"], UInt64Transform())
@@ -91,7 +91,7 @@ struct Sequence: Mappable {
         return retVal
     }
     
-    func inRange(value: UInt64) -> Bool {
+    func inRange(_ value: UInt64) -> Bool {
         return value >= getRangeStart() && value <= getRangeEnd() 
     }
     
@@ -99,16 +99,16 @@ struct Sequence: Mappable {
         typealias Object = UInt64
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object?{
+        func transformFromJSON(_ value: Any?) -> Object?{
             if let number = value as? NSNumber {
-                let uint64Value = number.unsignedLongLongValue
+                let uint64Value = number.uint64Value
                 return uint64Value
             }
             
             return nil
         }
         
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             return nil
         }
     }

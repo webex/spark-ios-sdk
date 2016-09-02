@@ -19,39 +19,34 @@
 // THE SOFTWARE.
 
 import Foundation
-import Quick
-import Nimble
-@testable import SparkSDK
+import SwiftyJSON
 
-extension WeakArray {
-    var count: Int {
-        var count = 0
-        self.forEach{_ in count += 1}
-        return count
+/// Errors when getting service reponse for a request.
+struct SparkError {
+    
+    /// Domain of this error.
+    static let Domain = "com.ciscospark.error"
+    
+    /// Error code.
+    enum Code: Int {
+        case serviceRequestFailed   = -7000
     }
-}
-
-class WeakArraySpec: QuickSpec {
-    class Test {}
-
-    override func spec() {
-        describe("Weak Array") {
-            it("Append & remove item") {
-                let arr = WeakArray<Test>()
-                let t: Test? = Test()
-                arr.append(t)
-                expect(arr.count).to(equal(1))
-                arr.remove(t)
-                expect(arr.count).to(equal(0))
-            }
-            
-            it("Append duplicated items") {
-                let arr = WeakArray<Test>()
-                let t: Test? = Test()
-                arr.append(t)
-                arr.append(t)
-                expect(arr.count).to(equal(1))
-            }
+    
+    /// Converts the error data to NSError
+    static func requestErrorWith(data: Data) -> NSError {
+        var failureReason = "Service request failed without error message"
+        if let errorMessage = JSON(data: data)["message"].string {
+            failureReason = errorMessage
         }
+		return errorWith(code: SparkError.Code.serviceRequestFailed, failureReason: failureReason)
+    }
+    
+    private static func errorWith(code: Code, failureReason: String) -> NSError {
+		return errorWith(code: code.rawValue, failureReason: failureReason)
+    }
+    
+    private static func errorWith(code: Int, failureReason: String) -> NSError {
+        let userInfo = [NSLocalizedFailureReasonErrorKey: failureReason]
+		return NSError(domain: Domain, code: code, userInfo: userInfo)
     }
 }

@@ -27,7 +27,7 @@ extension TeamMembershipClient {
     /// - parameter teamId: Limit results to a specific team, by ID.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: TeamMembership array
-    public func list(teamId teamId: String, max: Int? = nil) throws -> [TeamMembership] {
+    public func list(teamId: String, max: Int? = nil) throws -> [TeamMembership] {
         return try SyncUtil.getArray(teamId, max, async: list)
     }
     
@@ -37,7 +37,7 @@ extension TeamMembershipClient {
     /// - parameter personId: The person ID.
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
-    public func create(teamId teamId: String, personId: String, isModerator: Bool? = nil) throws -> TeamMembership {
+    public func create(teamId: String, personId: String, isModerator: Bool? = nil) throws -> TeamMembership {
         return try SyncUtil.getObject(teamId, personId, isModerator, async: create)
     }
     
@@ -47,7 +47,7 @@ extension TeamMembershipClient {
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
-    public func create(teamId teamId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> TeamMembership {
+    public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> TeamMembership {
         return try SyncUtil.getObject(teamId, personEmail, isModerator, async: create)
     }
     
@@ -55,7 +55,7 @@ extension TeamMembershipClient {
     ///
     /// - parameter membershipId: The membership ID.
     /// - returns: TeamMembership
-    public func get(membershipId membershipId: String) throws -> TeamMembership {
+    public func get(membershipId: String) throws -> TeamMembership {
         return try SyncUtil.getObject(membershipId, async: get)
     }
     
@@ -64,7 +64,7 @@ extension TeamMembershipClient {
     /// - parameter membershipId: The membership ID.
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
-    public func update(membershipId membershipId: String, isModerator: Bool) throws -> TeamMembership {
+    public func update(membershipId: String, isModerator: Bool) throws -> TeamMembership {
         return try SyncUtil.getObject(membershipId, isModerator, async: update)
     }
     
@@ -72,7 +72,7 @@ extension TeamMembershipClient {
     ///
     /// - parameter membershipId: The membership ID.
     /// - returns: Void
-    public func delete(membershipId membershipId: String) throws {
+    public func delete(membershipId: String) throws {
         try SyncUtil.deleteObject(membershipId, async: delete)
     }
 }

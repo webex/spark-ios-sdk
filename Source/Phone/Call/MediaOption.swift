@@ -23,15 +23,15 @@ import Foundation
 /// Media option specifies a media call type.
 public enum MediaOption {
     /// Call with audio only.
-    case AudioOnly
+    case audioOnly
     /// Call with both audio and video.
-    case AudioVideo(local: MediaRenderView, remote: MediaRenderView)
+    case audioVideo(local: MediaRenderView, remote: MediaRenderView)
     
     var hasVideo: Bool {
         switch self {
-        case .AudioOnly:
+        case .audioOnly:
             return false
-        case .AudioVideo:
+        case .audioVideo:
             return true
         }
     }

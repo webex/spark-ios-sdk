@@ -27,7 +27,7 @@ class MediaEngineWrapper {
     private var mediaEngineObserver = MediaEngineObserver()
     
     var WMEVersion: String {
-        return MediaEngine.WMEVersion()
+        return MediaEngine.wmeVersion()
     }
 
     init() {
@@ -35,14 +35,14 @@ class MediaEngineWrapper {
         mediaEngineObserver.startObserving()
     }
 
-    func performReachabilityCheck(clusterInfo: [NSObject : AnyObject], completionHandler: ReachabilityCheckHandler) {
-        mediaEngine.performStunReachabilityCheck(clusterInfo) {
+    func performReachabilityCheck(_ clusterInfo: [AnyHashable:Any], completionHandler: ReachabilityCheckHandler) {
+        mediaEngine?.performStunReachabilityCheck(clusterInfo) {
             result in
             completionHandler(result)
         }
     }
     
     func clearReachabilityData() {
-        mediaEngine.clearReachabilityData()
+        mediaEngine?.clearReachabilityData()
     }
 }

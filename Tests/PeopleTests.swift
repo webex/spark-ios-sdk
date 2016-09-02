@@ -53,7 +53,7 @@ class PeopleSpec: QuickSpec {
                 
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: self.PeopleCountValid)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountValid))
@@ -69,7 +69,7 @@ class PeopleSpec: QuickSpec {
             it("with emailAddress") {
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
@@ -85,7 +85,7 @@ class PeopleSpec: QuickSpec {
             it("with displayName") {
                 do {
                     let peoples = try Spark.people.list(email: nil, displayName: self.other.name!)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
@@ -101,7 +101,7 @@ class PeopleSpec: QuickSpec {
             it("with displayName and maxCount") {
                 do {
                     let peoples = try Spark.people.list(email: nil, displayName: self.other.name, max: self.PeopleCountMax)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
@@ -127,7 +127,7 @@ class PeopleSpec: QuickSpec {
             it("with email and maxCount") {
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!, displayName: nil, max: self.PeopleCountMax)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
@@ -156,7 +156,7 @@ class PeopleSpec: QuickSpec {
             it("with emailAddress and displayName") {
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!)
-                    self.validate(peoples[0])
+                    self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
                     
                     expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
@@ -196,7 +196,7 @@ class PeopleSpec: QuickSpec {
             it("me") {
                 do {
                     let person = try Spark.people.getMe()
-                    self.validate(person)
+                    self.validate(person: person)
                     expect(person.avatar).to(beNil())
                     
                     expect(person.displayName).to(equal(self.me.name))
@@ -210,7 +210,7 @@ class PeopleSpec: QuickSpec {
             it("with personId") {
                 do {
                     let person = try Spark.people.get(personId: self.me.id!)
-                    self.validate(person)
+                    self.validate(person: person)
                     expect(person.avatar).to(beNil())
                     
                     expect(person.displayName).to(equal(self.me.name))

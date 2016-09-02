@@ -29,7 +29,7 @@ struct Device: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         deviceUrl <- map["url"]
         webSocketUrl <- map["webSocketUrl"]
         services <- map["services"]

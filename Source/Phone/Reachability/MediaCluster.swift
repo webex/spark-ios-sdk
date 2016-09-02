@@ -28,7 +28,7 @@ struct MediaCluster: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         statusCode <- map["statusCode"]
         group <- map["clusters"]
     }

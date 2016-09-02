@@ -43,7 +43,7 @@ public struct Membership: Mappable, Equatable {
     public var isMonitor: Bool?
     
     /// The timestamp that the membership being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Membership constructor.
     ///
@@ -54,7 +54,7 @@ public struct Membership: Mappable, Equatable {
     /// Membership mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         personId <- map["personId"]
         personEmail <- (map["personEmail"], EmailTransform())

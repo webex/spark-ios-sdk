@@ -21,11 +21,11 @@
 import Foundation
 
 class MediaEngineObserver: NotificationObserver {
-    override func getNotificationHandlerMap() -> [String: String] {
-        return [MediaEngineDidEncounterErrorNotification: "onMediaEngineDidEncounterError:"]
+    override func notificationMapping() -> [(Notification.Name, Selector)] {
+		return [(Notification.Name.MediaEngineDidEncounterError, #selector(MediaEngineObserver.onMediaEngineDidEncounterError(_:)))]
     }
     
-    @objc private func onMediaEngineDidEncounterError(notification: NSNotification) {
+    @objc private func onMediaEngineDidEncounterError(_ notification: Notification) {
         // TODO: handle engine errors
         Logger.info(notification.description)
     }

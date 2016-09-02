@@ -30,7 +30,7 @@ struct Reachability: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         https <- map["https"]
         tcp <- map["tcp"]
         udp <- map["udp"]

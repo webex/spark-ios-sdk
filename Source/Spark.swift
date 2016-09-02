@@ -24,18 +24,18 @@ import UIKit
 
 
 /// The main entry point into the SDK. Contains methods for initializing the SDK and verifying developer and end user credentials.
-public class Spark {
+open class Spark {
     
     /// The version number of this SDK.
-    public static let version = "1.0.0"
+    open static let version = "1.0.0"
     
     /// Indicates whether the SDK has been authorized.
-    public static func authorized() -> Bool {
+    open static func authorized() -> Bool {
         return AuthManager.sharedInstance.authorized()
     }
     
     /// Deauthorize the SDK. If phone is registered, deregister the phone first.
-    public static func deauthorize() {
+    open static func deauthorize() {
         AuthManager.sharedInstance.deauthorize()
     }
     
@@ -47,7 +47,7 @@ public class Spark {
     /// - parameter redirectUri: Redirect URI, must match one of the URIs provided during app registration.
     /// - parameter controller: View controller being redirected from and back when during OAuth flow.
     /// - returns: Void
-    public static func initWith(clientId clientId: String, clientSecret: String, scope: String, redirectUri: String, controller: UIViewController) {
+    open static func initWith(clientId: String, clientSecret: String, scope: String, redirectUri: String, controller: UIViewController) {
         let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
         AuthManager.sharedInstance.authorize(clientAccount: clientAccount,
                                              scope: scope,
@@ -59,7 +59,7 @@ public class Spark {
     ///
     /// - parameter clientId: The access token.
     /// - returns: Void
-    public static func initWith(accessToken accessToken: String) {
+    open static func initWith(accessToken: String) {
         AuthManager.sharedInstance.authorize(token: accessToken)
     }
     
@@ -67,7 +67,7 @@ public class Spark {
     ///
     /// - parameter enable: Set True to enable console log, False as not.
     /// - returns: Void
-    public static func toggleConsoleLogger(enable: Bool) {
+    open static func toggleConsoleLogger(_ enable: Bool) {
         LoggerManager.sharedInstance.toggleConsoleLogger(enable)
     }
 }

@@ -26,7 +26,7 @@ class MediaSessionWrapper {
     private let mediaSessionObserver = MediaSessionObserver()
     
     
-    func isMediaSessionAssociated(session: MediaSession) -> Bool {
+    func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
         return session == mediaSession
     }
     
@@ -36,7 +36,7 @@ class MediaSessionWrapper {
         return mediaSession.localSdpOffer
     }
     
-    func setRemoteSdp(sdp: String) {
+    func setRemoteSdp(_ sdp: String) {
         mediaSession.receiveRemoteSdpAnswer(sdp)
     }
     
@@ -152,16 +152,16 @@ class MediaSessionWrapper {
     }
     
     // MARK: - lifecycle
-    func prepare(mediaOption: MediaOption) {
+    func prepare(_ mediaOption: MediaOption) {
         var constraint: MediaConstraint!
         var localView: MediaRenderView? = nil
         var remoteView: MediaRenderView? = nil
 
         switch (mediaOption) {
-        case .AudioOnly:
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.Audio.rawValue)
-        case .AudioVideo(let local, let remote):
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.Audio.rawValue | MediaConstraintFlag.Video.rawValue)
+        case .audioOnly:
+            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
+        case .audioVideo(let local, let remote):
+            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
             localView = local
             remoteView = remote
         }

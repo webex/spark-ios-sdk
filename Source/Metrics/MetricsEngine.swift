@@ -21,23 +21,23 @@
 import Foundation
 
 class MetricsEngine {
-    typealias CompletionHandlerType = Bool -> Void
+    typealias CompletionHandlerType = (Bool) -> Void
     
     static let sharedInstance = MetricsEngine()
     
     private let MetricsBufferLimit = 50
     private let MetricsFlushIntervalSeconds: Double = 30
     private var metricsBuffer = MetricsBuffer()
-    private var periodicFlushTimer: NSTimer!
+    private var periodicFlushTimer: Timer!
     
     init() {
-        periodicFlushTimer = NSTimer(timeInterval: MetricsFlushIntervalSeconds,
+        periodicFlushTimer = Timer(timeInterval: MetricsFlushIntervalSeconds,
                                         target: self,
                                         selector: #selector(flush),
                                         userInfo: nil,
                                         repeats: true)
         
-        NSRunLoop.currentRunLoop().addTimer(periodicFlushTimer, forMode: NSRunLoopCommonModes)
+        RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
     }
     
     deinit {
@@ -48,7 +48,7 @@ class MetricsEngine {
     // Track a particular Metric. This will buffer the Metric and eventually send a batch of Metrics over the 
     // network to the Metrics Endpoint
     //
-    func trackMetric(metric: Metric) {
+    func trackMetric(_ metric: Metric) {
         metricsBuffer.addMetric(metric)
         
         if metricsBuffer.count > MetricsBufferLimit {
@@ -60,7 +60,7 @@ class MetricsEngine {
     // Track a set of Metrics. This will buffer the Metrics and eventually send a batch of Metrics over the 
     // network to the Metrics Endpoint
     //
-    func trackMetrics(metrics: [Metric]) {
+    func trackMetrics(_ metrics: [Metric]) {
         metricsBuffer.addMetrics(metrics)
         
         if metricsBuffer.count > MetricsBufferLimit {
@@ -72,7 +72,7 @@ class MetricsEngine {
     // Track a set of Metrics. This will send the Metrics over the network to the Metrics Endpoint immediately
     // without buffering metrics parameter is array of Metrics objects
     //
-    func trackMetrics(metrics: [Metric], completionHandler: CompletionHandlerType? = nil) {
+    func trackMetrics(_ metrics: [Metric], completionHandler: CompletionHandlerType? = nil) {
         if isDebuggerAttached() {
             Logger.warn("Skipping metric while debugging")
             return
@@ -94,23 +94,23 @@ class MetricsEngine {
         }
     }
     
-    private func postMetrics(payload: RequestParameter, completionHandler: CompletionHandlerType?) {
+    private func postMetrics(_ payload: RequestParameter, completionHandler: CompletionHandlerType?) {
         MetricsClient().post(payload) {
-            (response: ServiceResponse<AnyObject>) in
+            (response: ServiceResponse<Any>) in
             switch response.result {
-            case .Success:
+            case .success:
                 Logger.info("Success: post metrics")
                 completionHandler?(true)
                 
-            case .Failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+            case .failure(let error):
+                Logger.error("Failure", error: error)
                 completionHandler?(false)
                 break
             }
         }
     }
     
-    private func constructPayloadFromMetric(metric: Metric) -> Metric.DataType {
+    private func constructPayloadFromMetric(_ metric: Metric) -> Metric.DataType {
         let postTime = TimestampFormatter.nowInUTC()
         var payload: Metric.DataType = ["key": metric.name,
                                         "postTime": postTime,

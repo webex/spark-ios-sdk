@@ -31,27 +31,25 @@ class TestUserFactory {
     private let client = Client()
     
     func createUser() -> TestUser {
-        let userName = NSUUID().UUIDString
+        let userName = NSUUID().uuidString
         let email = userName + "@squared.example.com"
         let headers = ["Authorization": "Bearer \(token.value)",
                        "Content-Type": "application/json"]
         
-        let body: [String: AnyObject] = ["clientId": client.id,
-                                         "clientSecret": client.secret,
-                                         "emailTemplate": email,
-                                         "displayName": userName,
-                                         "password": "P@ssw0rd123",
-                                         "entitlements": entitlements,
-                                         "authCodeOnly": "false",
-                                         "scopes": scopes]
+        let body: [String: Any] = ["clientId": client.id,
+                                   "clientSecret": client.secret,
+                                   "emailTemplate": email,
+                                   "displayName": userName,
+                                   "password": "P@ssw0rd123",
+                                   "entitlements": entitlements,
+                                   "authCodeOnly": "false",
+                                   "scopes": scopes]
         var user = TestUser()
-        let semaphore = dispatch_semaphore_create(0)
-        let queue = dispatch_queue_create("create-user-queue", nil)
-        Alamofire.request(.POST, testUserUrl, parameters: body, encoding: .JSON, headers: headers)
-            .responseJSON(queue: queue) { response in
-                
+        let semaphore = DispatchSemaphore(value: 0)
+		let queue = DispatchQueue(label: "create-user-queue")
+		Alamofire.request(testUserUrl, withMethod: .post, parameters: body, encoding: .json, headers: headers).responseJSON(queue: queue) { response in
                 switch response.result {
-                case .Success:
+                case .success:
                     if let value = response.result.value {
                         let json = JSON(value)
                         user.token = json["token"]["access_token"].stringValue
@@ -59,16 +57,16 @@ class TestUserFactory {
                         user.email = EmailAddress.fromString(json["user"]["email"].stringValue)
                         user.name = json["user"]["name"].stringValue
                         user.orgId = json["user"]["orgId"].stringValue
-                        user.personId = self.getPersonIdFromUserId(user.id!)
+						user.personId = self.getPersonIdFromUserId(id: user.id!)
                         
-                        dispatch_semaphore_signal(semaphore)
+                        semaphore.signal()
                     }
-                case .Failure(let error):
+                case .failure(let error):
                     print(error)
-                    dispatch_semaphore_signal(semaphore)
+					semaphore.signal()
                 }
         }
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+		_ = semaphore.wait(timeout: DispatchTime.distantFuture)
         
         return user
     }
@@ -87,10 +85,10 @@ class TestUserFactory {
     
     private func getPersonIdFromUserId(id: String) -> String {
         let utf8 = "ciscospark://us/PEOPLE/" + id
-        let data = utf8.dataUsingEncoding(NSUTF8StringEncoding)
-        var base64 = data!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        let data = utf8.data(using: String.Encoding.utf8)
+        var base64 = data!.base64EncodedString(options: [])
         
-        base64 = removePadding(base64)
+        base64 = removePadding(base64: base64)
         return base64
     }
 }
@@ -106,13 +104,12 @@ private struct Client {
     }
     
     private func getBase64Credentials() -> String {
-        let credentialData = "\(id):\(secret)".dataUsingEncoding(NSUTF8StringEncoding)!
-        return credentialData.base64EncodedStringWithOptions([])
+		let credentialData = "\(id):\(secret)".data(using: String.Encoding.utf8)!
+        return credentialData.base64EncodedString(options: [])
     }
     
     private func getSecret() -> String {
-        let envDict = NSProcessInfo.processInfo().environment
-        
+        let envDict = ProcessInfo().environment        
         guard let secret = envDict["CLIENTSECRET"] else {
             print("Failed to get client secret from env")
             return ""
@@ -139,23 +136,24 @@ private struct AccessToken {
                     "scope": "webexsquare:admin Identity:SCIM"]
         
         var adminToken = ""
-        let semaphore = dispatch_semaphore_create(0)
-        let queue = dispatch_queue_create("create-token-queue", nil)
-        Alamofire.request(.POST, accessTokenUrl, parameters: body, headers: headers)
-            .responseJSON(queue: queue) { response in
-                switch response.result {
-                case .Success:
-                    if let value = response.result.value {
-                        let json = JSON(value)
-                        adminToken = json["access_token"].stringValue
-                        dispatch_semaphore_signal(semaphore)
-                    }
-                case .Failure(let error):
-                    print(error)
-                    dispatch_semaphore_signal(semaphore)
-                }
-        }
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        let semaphore = DispatchSemaphore(value: 0)
+		let queue = DispatchQueue(label: "create-token-queue")
+
+		
+		Alamofire.request(accessTokenUrl, withMethod: .post, parameters: body, headers: headers).responseJSON(queue: queue) { response in
+			switch response.result {
+			case .success:
+				if let value = response.result.value {
+					let json = JSON(value)
+					adminToken = json["access_token"].stringValue
+					semaphore.signal()
+				}
+			case .failure(let error):
+				print(error)
+				semaphore.signal()
+			}
+		}
+		_ = semaphore.wait(timeout: DispatchTime.distantFuture)
         return adminToken
     }
 }

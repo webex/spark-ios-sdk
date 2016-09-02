@@ -20,13 +20,13 @@
 
 import Foundation
 
-extension NSURL {
+extension URL {
     var queryParameters: [String: String] {
         var queryParameters = [String: String]()
-        let pairs  = self.query?.componentsSeparatedByString("&") ?? []
+        let pairs  = self.query?.components(separatedBy: "&") ?? []
         
         for pair in pairs {
-            let kv = pair.componentsSeparatedByString("=")
+            let kv = pair.components(separatedBy: "=")
             queryParameters.updateValue(kv[1], forKey: kv[0])
         }
         

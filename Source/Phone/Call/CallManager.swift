@@ -25,17 +25,17 @@ class CallManager {
     static let sharedInstance = CallManager()
     private var callInstances = [String: Call]()
     
-    func addCall(url: String, call: Call) {
+    func addCallWith(url: String, call: Call) {
         callInstances.updateValue(call, forKey: url)
         Logger.info("Add call for call url:\(url)")
     }
     
-    func removeCall(url: String) {
-        callInstances.removeValueForKey(url)
+    func removeCallWith(url: String) {
+        callInstances.removeValue(forKey: url)
         Logger.info("Remove call for call url:\(url)")
     }
     
-    func findCallByMediaSession(session: MediaSession) -> Call? {
+    func findCallBy(mediaSession session: MediaSession) -> Call? {
         for call in callInstances.values {
             if call.isMediaSessionAssociated(session) {
                 return call
@@ -44,7 +44,7 @@ class CallManager {
         return nil
     }
     
-    func handleCallEvent(event: AnyObject) {
+    func handle(callEventJson event: Any) {
         guard let callEvent = Mapper<CallEvent>().map(event) else {
             return
         }
@@ -55,23 +55,23 @@ class CallManager {
         
         Logger.info(callEvent.type!)
         
-        handleCallInfo(callInfo)
+		handle(callInfo: callInfo)
     }
     
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
         CallClient().fetchCallInfos() {
             switch $0.result {
-            case .Success(let value):
+            case .success(let value):
                 self.handleActiveCalls(value)
                 Logger.info("Success: fetch call infos")
-            case .Failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+            case .failure(let error):
+                Logger.error("Failure", error: error)
             }
         }
     }
     
-    private func handleCallInfo(callInfo: CallInfo) {
+    private func handle(callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
             return
         }
@@ -83,7 +83,7 @@ class CallManager {
         
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
-            call.updateCallInfo(callInfo)
+			call.update(callInfo: callInfo)
             return
         }
         
@@ -94,24 +94,24 @@ class CallManager {
         }
     }
     
-    private func handleActiveCalls(callInfos: [CallInfo]) {
+    private func handleActiveCalls(_ callInfos: [CallInfo]) {
         for callInfo in callInfos {
-            handleCallInfo(callInfo)
+			handle(callInfo: callInfo)
         }
     }
 
-    private func doActionWhenIncoming(callInfo: CallInfo) {
+    private func doActionWhenIncoming(_ callInfo: CallInfo) {
         let incomingCall = Call(callInfo)
-        addCall(incomingCall.url, call: incomingCall)
+		addCallWith(url: incomingCall.url, call: incomingCall)
 
         PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
         
         Logger.info("Receive incoming call")
     }
     
-    private func doActionWhenJoinedOnOtherDevice(callInfo: CallInfo) {
+    private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
         // TODO: need to support other device joined case
         let call = Call(callInfo)
-        addCall(call.url, call: call)
+		addCallWith(url: call.url, call: call)
     }
 }

@@ -20,8 +20,8 @@
 
 import Foundation
 
-extension NSDate {
-    func isAfterDate(date: NSDate) -> Bool {
-        return self.compare(date) == .OrderedDescending
+extension Date {
+    func isAfterDate(_ date: Date) -> Bool {
+        return self.compare(date) == .orderedDescending
     }
 }

@@ -27,7 +27,7 @@ struct MediaEngineReachabilityFeedback: Mappable {
     init?(_ map: Map){
     }
     
-    mutating func mapping(map: Map) {
+    mutating func mapping(_ map: Map) {
         reachabilities <- map["reachability"]
     }
 }

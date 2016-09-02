@@ -28,8 +28,8 @@ class ReachabilityService {
     var feedback: MediaEngineReachabilityFeedback?
     
     private var hostAddresses: [InterfaceAddress.Item]?
-    private var lastFetchData: NSDate?
-    private let MaxAge = NSTimeInterval(7200) // 7200 sec = 2 hours
+    private var lastFetchData: Date?
+    private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
 
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
@@ -91,23 +91,23 @@ class ReachabilityService {
     }
     
     private func updateFetchDate() {
-        lastFetchData = NSDate()
+        lastFetchData = Date()
     }
     
-    private func performReachabilityCheck(completionHandler: ReachabilityCheckHandler) {
+    private func performReachabilityCheck(_ completionHandler: ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
         MediaClusterClient().get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
-            case .Success(let value):
+            case .success(let value):
                 clusterInfo = value
                 if let group = clusterInfo?.group {
                     MediaEngineWrapper.sharedInstance.performReachabilityCheck(group) {
                         completionHandler($0)
                     }
                 }
-            case .Failure(let error):
-                Logger.error("Failure: \(error.localizedFailureReason)")
+            case .failure(let error):
+                Logger.error("Failure", error: error)
             }
         }
     }

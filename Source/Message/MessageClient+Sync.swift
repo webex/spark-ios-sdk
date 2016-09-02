@@ -30,8 +30,8 @@ extension MessageClient {
     /// - parameter beforeMessage: List messages sent before a message by id.
     /// - parameter max: Limit the maximum number of messages in the response.
     /// - returns: Messages array
-    public func list(roomId roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil) throws -> [Message] {
-        return try SyncUtil.getArray(roomId, before, beforeMessage, max, async: list)
+    public func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil) throws -> [Message] {
+        return try SyncUtil.getArray(roomId, before, beforeMessage, max, async: list(roomId:before:beforeMessage:max:queue:completionHandler:))
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a room.
@@ -40,8 +40,8 @@ extension MessageClient {
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
     /// - returns: Message
-    public func postToRoom(roomId roomId: String, text: String? = nil, files: String? = nil) throws -> Message {
-        return try SyncUtil.getObject(roomId, text, files, async: postToRoom)
+    public func postTo(roomId: String, text: String? = nil, files: String? = nil) throws -> Message {
+        return try SyncUtil.getObject(roomId, text, files, async: postTo(roomId:text:files:queue:completionHandler:))
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a person.
@@ -50,8 +50,8 @@ extension MessageClient {
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
     /// - returns: Message
-    public func postToPerson(personId personId: String, text: String? = nil, files: String? = nil) throws -> Message {
-        return try SyncUtil.getObject(personId, text, files, async: postToPerson)
+    public func postTo(personId: String, text: String? = nil, files: String? = nil) throws -> Message {
+		return try SyncUtil.getObject(personId, text, files, async: postTo(personId:text:files:queue:completionHandler:))
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a person.
@@ -60,23 +60,23 @@ extension MessageClient {
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
     /// - returns: Message
-    public func postToPerson(personEmail personEmail: EmailAddress, text: String? = nil, files: String? = nil) throws -> Message {
-        return try SyncUtil.getObject(personEmail, text, files, async: postToPerson)
+    public func postTo(personEmail: EmailAddress, text: String? = nil, files: String? = nil) throws -> Message {
+        return try SyncUtil.getObject(personEmail, text, files, async: postTo(personEmail:text:files:queue:completionHandler:))
     }
     
     /// Shows details for a message by message id.
     ///
     /// - parameter messageId: The message id.
     /// - returns: Message
-    public func get(messageId messageId: String) throws -> Message {
-        return try SyncUtil.getObject(messageId, async: get)
+    public func get(messageId: String) throws -> Message {
+        return try SyncUtil.getObject(messageId, async: get(messageId:queue:completionHandler:))
     }
     
     /// Deletes a message by message id.
     ///
     /// - parameter messageId: The message id.
     /// - returns: Void
-    public func delete(messageId messageId: String) throws {
-        try SyncUtil.deleteObject(messageId, async: delete)
+    public func delete(messageId: String) throws {
+        try SyncUtil.deleteObject(messageId, async: delete(messageId:queue:completionHandler:))
     }
 }

@@ -43,7 +43,7 @@ public struct Webhook : Mappable {
     public var filter: String?
     
     /// The timestamp that the webhook being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Webhook constructor.
     ///
@@ -54,7 +54,7 @@ public struct Webhook : Mappable {
     /// Webhook mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         name <- map["name"]
         targetUrl <- map["targetUrl"]

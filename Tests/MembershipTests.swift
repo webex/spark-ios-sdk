@@ -52,7 +52,7 @@ class MembershipSpec: QuickSpec {
         }
         
         afterSuite {
-            Utils.wait(Config.TestcaseInterval)
+            Utils.wait(interval: Config.TestcaseInterval)
         }
         
         // MARK: - Create a membership by personId
@@ -62,7 +62,7 @@ class MembershipSpec: QuickSpec {
             it("with roomId and personId and flase moderator") {
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     expect(membership.personId).to(equal(self.other.personId))
                     expect(membership.roomId).to(equal(self.roomId))
@@ -80,7 +80,7 @@ class MembershipSpec: QuickSpec {
             it("with roomId and personId") {
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     expect(membership.personId).to(equal(self.other.personId!))
                     expect(membership.roomId).to(equal(self.roomId))
@@ -138,7 +138,7 @@ class MembershipSpec: QuickSpec {
                 
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personEmail: self.other.email!, isModerator: false)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     expect(membership.personId).to(equal(self.other.personId!))
                     expect(membership.roomId).to(equal(self.roomId))
@@ -156,7 +156,7 @@ class MembershipSpec: QuickSpec {
             it("with roomId and personEmail") {
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personEmail: self.other.email!)
-                    self.validate(membership)
+                    self.validate(membership: membership)
                     
                     expect(membership.personId).to(equal(self.other.personId!))
                     expect(membership.roomId).to(equal(self.roomId))
@@ -200,7 +200,7 @@ class MembershipSpec: QuickSpec {
             it("with nothing") {
                 do {
                     let memberships = try Spark.memberships.list()
-                    self.validate(memberships[0])
+                    self.validate(membership: memberships[0])
                     
                 }  catch let error as NSError {
                     fail("Failed to list membership, \(error.localizedFailureReason)")
@@ -210,7 +210,7 @@ class MembershipSpec: QuickSpec {
             it("with roomId and personId and valid max") {
                 do {
                     let memberships = try Spark.memberships.list(roomId: self.roomId, personId: self.other.personId!, personEmail: self.other.email!, max: self.MembershipCountValid)
-                    self.validate(memberships[0])
+                    self.validate(membership: memberships[0])
                     
                     expect(memberships[0].personId).to(equal(self.other.personId!))
                     expect(memberships[0].roomId).to(equal(self.roomId))

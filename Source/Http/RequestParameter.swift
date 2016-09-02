@@ -21,30 +21,24 @@
 import Foundation
 
 struct RequestParameter {
-    private var storage: [String: AnyObject] = [:]
+    private var storage: [String: Any] = [:]
     
-    init(_ parameters: [String: Any?] = [:]) {
+    init(_ parameters: [String: Any] = [:]) {
         for (key, value) in parameters {
-            if value == nil {
-                continue
-            }
-            
             switch value {
             case let bool as Bool:
-                storage.updateValue(String(bool), forKey: key)
-            case let anyObject as AnyObject:
-                storage.updateValue(anyObject, forKey: key)
+                storage.updateValue(String(bool) as Any, forKey: key)
             default:
-                break
+				storage.updateValue(value, forKey: key)					
             }
         }
     }
     
-    func value() -> [String: AnyObject] {
+    func value() -> [String: Any] {
         return storage
     }
     
-    mutating func updateValue(value: AnyObject, forKey key: String) {
+    mutating func updateValue(_ value: Any, forKey key: String) {
         storage.updateValue(value, forKey: key)
     }
 }

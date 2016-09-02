@@ -23,8 +23,8 @@ import WebKit
 class ConnectController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     
-    var onWillDismiss: ((didCancel: Bool) -> Void)?
-    var tryParseAccessCodeFrom: ((url: NSURL) -> Bool)?
+    var onWillDismiss: ((_ didCancel: Bool) -> Void)?
+    var tryParseAccessCodeFrom: ((_ url: URL) -> Bool)?
     
     var cancelButton: UIBarButtonItem?
     
@@ -33,7 +33,7 @@ class ConnectController: UIViewController, WKNavigationDelegate {
         super.init(nibName: nil, bundle: nil)
     }
     
-    init(URL: NSURL, parseAccessCodeFrom: ((url: NSURL) -> Bool)) {
+    init(URL: URL, parseAccessCodeFrom: ((_ url: URL) -> Bool)) {
         super.init(nibName: nil, bundle: nil)
         self.startURL = URL
         self.tryParseAccessCodeFrom = parseAccessCodeFrom
@@ -51,17 +51,17 @@ class ConnectController: UIViewController, WKNavigationDelegate {
         
         self.webView.navigationDelegate = self
         
-        self.view.backgroundColor = UIColor.whiteColor()
+        self.view.backgroundColor = .white
         
-        self.cancelButton = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(ConnectController.cancel(_:)))
+        self.cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(ConnectController.cancel(_:)))
         self.navigationItem.rightBarButtonItem = self.cancelButton
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if !webView.canGoBack {
             if nil != startURL {
-                loadURL(startURL!)
+				load(url: startURL!)
             }
             else {
                 webView.loadHTMLString("There is no `startURL`", baseURL: nil)
@@ -69,51 +69,49 @@ class ConnectController: UIViewController, WKNavigationDelegate {
         }
     }
     
-    func webView(webView: WKWebView,
-        decidePolicyForNavigationAction navigationAction: WKNavigationAction,
-        decisionHandler: (WKNavigationActionPolicy) -> Void) {
-            if let url = navigationAction.request.URL, parseAccessCode = self.tryParseAccessCodeFrom {
-                if parseAccessCode(url: url) {
-                    self.dismiss(true)
-                    return decisionHandler(.Cancel)
-                }
-            }
-            return decisionHandler(.Allow)
-    }
+	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
+		if let url = navigationAction.request.url, let parseAccessCode = self.tryParseAccessCodeFrom {
+			if parseAccessCode(url) {
+				self.dismiss(animated: true)
+				return decisionHandler(.cancel)
+			}
+		}
+		return decisionHandler(.allow)
+	}
     
-    var startURL: NSURL? {
+    var startURL: URL? {
         didSet(oldURL) {
-            if nil != startURL && nil == oldURL && isViewLoaded() {
-                loadURL(startURL!)
+            if nil != startURL && nil == oldURL && isViewLoaded {
+				load(url: startURL!)
             }
         }
     }
     
-    func loadURL(url: NSURL) {
-        webView.loadRequest(NSURLRequest(URL: url))
+    func load(url: URL) {
+        webView.load(URLRequest(url: url))
     }
     
-    func showHideBackButton(show: Bool) {
-        navigationItem.leftBarButtonItem = show ? UIBarButtonItem(barButtonSystemItem: .Rewind, target: self, action: #selector(ConnectController.goBack(_:))) : nil
+    func showHideBackButton(_ show: Bool) {
+        navigationItem.leftBarButtonItem = show ? UIBarButtonItem(barButtonSystemItem: .rewind, target: self, action: #selector(ConnectController.goBack(_:))) : nil
     }
     
-    func goBack(sender: AnyObject?) {
+    func goBack(_ sender: Any?) {
         webView.goBack()
     }
     
-    func cancel(sender: AnyObject?) {
-        dismiss(true, animated: (sender != nil))
+    func cancel(_ sender: Any?) {
+		dismiss(asCancel: true, animated: (sender != nil))
     }
     
     func dismiss(animated: Bool) {
-        dismiss(false, animated: animated)
+		dismiss(asCancel: false, animated: animated)
     }
     
     func dismiss(asCancel: Bool, animated: Bool) {
         webView.stopLoading()
         
-        self.onWillDismiss?(didCancel: asCancel)
-        presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+        self.onWillDismiss?(asCancel)
+        presentingViewController?.dismiss(animated: animated, completion: nil)
     }
     
 }

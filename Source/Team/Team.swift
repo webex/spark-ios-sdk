@@ -31,7 +31,7 @@ public struct Team: Mappable, Equatable {
     public var name: String?
     
     /// The timestamp that this team being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Team constructor.
     ///
@@ -42,7 +42,7 @@ public struct Team: Mappable, Equatable {
     /// Team mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         name <- map["name"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))

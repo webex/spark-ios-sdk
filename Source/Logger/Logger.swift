@@ -23,35 +23,41 @@ import CocoaLumberjack
 
 class Logger {
     
-    static let defaultLevel = DDLogLevel.Info
+    static let defaultLevel = DDLogLevel.info
     
-    static func verbose(@autoclosure message: () -> String, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.Verbose, file: file, function: function, line: line)
+    static func verbose(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), level: level, flag: DDLogFlag.verbose, file: file, function: function, line: line)
     }
     
-    static func debug(@autoclosure message: () -> String, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.Debug, file: file, function: function, line: line)
+    static func debug(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), level: level, flag: DDLogFlag.debug, file: file, function: function, line: line)
     }
     
-    static func info(@autoclosure message: () -> String, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.Info, file: file, function: function, line: line)
+    static func info(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), level: level, flag: DDLogFlag.info, file: file, function: function, line: line)
     }
     
-    static func warn(@autoclosure message: () -> String, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.Warning, file: file, function: function, line: line)
+    static func warn(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), level: level, flag: DDLogFlag.warning, file: file, function: function, line: line)
     }
     
-    static func error(@autoclosure message: () -> String, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.Error, file: file, function: function, line: line, asynchronous: false)
+	static func error(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), level: level, flag: DDLogFlag.error, file: file, function: function, line: line, asynchronous: false)
     }
     
-    static private func log(@autoclosure message: () -> String, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: AnyObject? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
+    static private func log(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
         guard LoggerManager.sharedInstance.hasSetup() else {
             return
         }
 
         if level.rawValue & flag.rawValue != 0 {
-            let logMessage = DDLogMessage(message: message(), level: level, flag: flag, context: context, file: file, function: function, line: line, tag: tag, options: [.CopyFile, .CopyFunction], timestamp: nil)
+			let actualMessage: String
+			if let error = error as? NSError {
+				actualMessage = "\(message()): \(error.localizedFailureReason)"
+			} else {
+				actualMessage = message()
+			}
+            let logMessage = DDLogMessage(message: actualMessage, level: level, flag: flag, context: context, file: file, function: function, line: line, tag: tag, options: [.copyFile, .copyFunction], timestamp: nil)
             ddlog.log(asynchronous, message: logMessage)
         }
     }

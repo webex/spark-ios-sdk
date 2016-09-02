@@ -33,12 +33,12 @@ class ClientAccount: NSObject, NSCoding {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        clientId = aDecoder.decodeObjectForKey(clientIdKey) as! String
-        clientSecret = aDecoder.decodeObjectForKey(clientSecretKey) as! String
+        clientId = aDecoder.decodeObject(forKey: clientIdKey) as! String
+        clientSecret = aDecoder.decodeObject(forKey: clientSecretKey) as! String
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(clientId, forKey: clientIdKey)
-        aCoder.encodeObject(clientSecret, forKey: clientSecretKey)
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(clientId, forKey: clientIdKey)
+        aCoder.encode(clientSecret, forKey: clientSecretKey)
     }
 }

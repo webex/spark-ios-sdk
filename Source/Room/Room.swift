@@ -47,7 +47,7 @@ public struct Room: Mappable {
     public var lastActivity: String?
     
     /// The timestamp that this room being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// The team Id that this room associated with.
     public var teamId: String?
@@ -61,7 +61,7 @@ public struct Room: Mappable {
     /// Room mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public mutating func mapping(_ map: Map) {
         id <- map["id"]
         title <- map["title"]
         type <- (map["type"], EnumTransform<RoomType>())
