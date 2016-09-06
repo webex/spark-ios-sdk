@@ -108,7 +108,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         _ = request.responseObject(queue: queue, keyPath: keyPath) {
-            (response: Response<T>) in
+            (response: DataResponse<T>) in
             var result: Result<T>
             
             switch response.result {
@@ -132,7 +132,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         _ = request.responseArray(queue: queue, keyPath: keyPath){
-            (response: Response<[T]>) in
+            (response: DataResponse<[T]>) in
             var result: Result<[T]>
             
             switch response.result {
@@ -156,7 +156,7 @@ class ServiceRequest {
         let request = createAlamofireRequest()
         
         request.responseJSON(queue: queue){
-            (response: Response<Any>) in
+            (response: DataResponse<Any>) in
             var result: Result<Any>
             
             switch response.result {
@@ -176,7 +176,7 @@ class ServiceRequest {
         }
     }
     
-	private func createAlamofireRequest() -> Alamofire.Request {
+	private func createAlamofireRequest() -> Alamofire.DataRequest {
 		if authRequired {
 			if let authorization = AuthManager.sharedInstance.getAuthorization() {
 				headers.unionInPlace(authorization)
@@ -195,7 +195,7 @@ class ServiceRequest {
 			encoding = .url
 		}
 		
-		return Alamofire.request(url, withMethod: method, parameters: parameters, encoding: encoding, headers: headers).validate()
+		return Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers).validate()
 	}
 
 }
