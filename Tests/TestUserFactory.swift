@@ -33,11 +33,11 @@ class TestUserFactory {
     func createUser() -> TestUser {
         let userName = NSUUID().uuidString
         let email = userName + "@squared.example.com"
-        let headers = ["Authorization": "Bearer \(token.value)",
+        let headers = ["Authorization": "Bearer \(token.value!)",
                        "Content-Type": "application/json"]
         
         let body: [String: Any] = ["clientId": client.id,
-                                   "clientSecret": client.secret!,
+                                   "clientSecret": client.secret,
                                    "emailTemplate": email,
                                    "displayName": userName,
                                    "password": "P@ssw0rd123",
@@ -95,20 +95,15 @@ class TestUserFactory {
 
 private struct Client {
     let id = "Cc5ce08d6eb24526c2af47c8ad39e58db1e07d3c53cbd4c9d359a5c471344c2fb"
-    var secret: String!
-    var base64Credentials: String!
+    let secret: String
+    let base64Credentials: String
     
     init() {
-        secret = getSecret()
-        base64Credentials = getBase64Credentials()
+        secret = Client.getSecret()
+		base64Credentials = "\(id):\(secret)".data(using: String.Encoding.utf8)!.base64EncodedString(options: [])
     }
-    
-    private func getBase64Credentials() -> String {
-		let credentialData = "\(id):\(secret)".data(using: String.Encoding.utf8)!
-        return credentialData.base64EncodedString(options: [])
-    }
-    
-    private func getSecret() -> String {
+       
+    private static func getSecret() -> String {
         let envDict = ProcessInfo().environment        
         guard let secret = envDict["CLIENTSECRET"] else {
             print("Failed to get client secret from env")

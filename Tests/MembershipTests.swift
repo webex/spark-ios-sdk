@@ -59,7 +59,7 @@ class MembershipSpec: QuickSpec {
         
         describe("create a membership by personId") {
             
-            it("with roomId and personId and flase moderator") {
+            it("with roomId and personId and false moderator") {
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
                     self.validate(membership: membership)
@@ -134,7 +134,7 @@ class MembershipSpec: QuickSpec {
         
         describe("create a membership by personEmail") {
             
-            it("with roomId and personEmail and flase moderator") {
+            it("with roomId and personEmail and false moderator") {
                 
                 do {
                     let membership = try Spark.memberships.create(roomId: self.roomId, personEmail: self.other.email!, isModerator: false)
