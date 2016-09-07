@@ -140,7 +140,7 @@ open class Call {
     
     var info: CallInfo?
     var state: CallState!
-    var url: String { return (info?.callUrl)! }
+    var url: String { return info?.callUrl ?? "" }
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession = MediaSessionWrapper()
@@ -331,13 +331,13 @@ open class Call {
     }
     
     func update(callInfo newInfo: CallInfo) {
-        if self.info == nil {
+        guard let info = self.info else {
             setCallInfo(newInfo)
             state.update()
             return
         }
         
-        let result = CallInfoSequence.overwrite(oldValue: self.info!.sequence!, newValue: newInfo.sequence!)
+        let result = CallInfoSequence.overwrite(oldValue: info.sequence!, newValue: newInfo.sequence!)
         switch (result) {
         case .true:
             handleRemoteMediaChange(newInfo)
@@ -383,15 +383,18 @@ open class Call {
     }
     
     private func isRemoteVideoStateChanged(_ newInfo: CallInfo) -> Bool {
-        return info!.remoteVideoMuted != newInfo.remoteVideoMuted
+		guard let info = self.info else { return true }
+        return info.remoteVideoMuted != newInfo.remoteVideoMuted
     }
     
     private func isRemoteAudioStateChanged(_ newInfo: CallInfo) -> Bool {
-        return info!.remoteAudioMuted != newInfo.remoteAudioMuted
+		guard let info = self.info else { return true }
+        return info.remoteAudioMuted != newInfo.remoteAudioMuted
     }
     
     private func isDTMFEnabledChanged(_ newInfo: CallInfo) -> Bool {
-        return info!.enableDTMF != newInfo.enableDTMF
+		guard let info = self.info else { return true }
+        return info.enableDTMF != newInfo.enableDTMF
     }
     
     private func prepareMediaSession(_ option: MediaOption) {

@@ -26,6 +26,8 @@ class CallManager {
     private var callInstances = [String: Call]()
     
     func addCallWith(url: String, call: Call) {
+		guard url.characters.count > 0 else { return }
+		
         callInstances.updateValue(call, forKey: url)
         Logger.info("Add call for call url:\(url)")
     }

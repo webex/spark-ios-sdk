@@ -21,7 +21,7 @@
 import Foundation
 import ObjectMapper
 
-struct CallInfo: Mappable {
+struct CallInfo {
     var callUrl: String?
     var participants: [Participant]?
     var myself: Participant?
@@ -214,16 +214,17 @@ struct CallInfo: Mappable {
     func selfDevicesWith(state: String) -> [ParticipantDevice] {
         return selfDevices.filter({$0.state == state})
     }
-    
-    init?(_ map: Map){
-    }
-    
-    mutating func mapping(_ map: Map) {
-        callUrl <- map["url"]
-        participants <- map["participants"]
-        myself <- map["self"]
-        host <- map["host"]
-        fullState <- map["fullState"]
-        sequence <- map["sequence"]
-    }
+}
+
+extension CallInfo: Mappable {
+	init?(_ map: Map) { }
+	
+	mutating func mapping(_ map: Map) {
+		callUrl <- map["url"]
+		participants <- map["participants"]
+		myself <- map["self"]
+		host <- map["host"]
+		fullState <- map["fullState"]
+		sequence <- map["sequence"]
+	}
 }
