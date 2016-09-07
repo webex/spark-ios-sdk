@@ -33,7 +33,7 @@ class TestUserFactory {
     func createUser() -> TestUser {
         let userName = NSUUID().uuidString
         let email = userName + "@squared.example.com"
-        let headers = ["Authorization": "Bearer \(token.value!)",
+        let headers = ["Authorization": "Bearer \(token.value)",
                        "Content-Type": "application/json"]
         
         let body: [String: Any] = ["clientId": client.id,
@@ -115,26 +115,22 @@ private struct Client {
 }
 
 private struct AccessToken {
-    var value: String!
-    
-    private let accessTokenUrl = "https://idbroker.webex.com/idb/oauth2/v1/access_token"
-    private let client = Client()
+    let value: String
     
     init() {
-        value = getBearerAccessToken()
-    }
+        value = AccessToken.getBearerAccessToken()
+	}
     
-    private func getBearerAccessToken() -> String {
-        let headers = ["Authorization": "Basic \(client.base64Credentials)"]
-        
+    private static func getBearerAccessToken() -> String {
+		let accessTokenUrl = "https://idbroker.webex.com/idb/oauth2/v1/access_token"		
+
+		let headers = ["Authorization": "Basic \(Client().base64Credentials)"]
         let body = ["grant_type": "client_credentials",
                     "scope": "webexsquare:admin Identity:SCIM"]
-        
         var adminToken = ""
         let semaphore = DispatchSemaphore(value: 0)
 		let queue = DispatchQueue(label: "create-token-queue")
 
-		
 		Alamofire.request(accessTokenUrl, method: .post, parameters: body, headers: headers).responseJSON(queue: queue) { response in
 			switch response.result {
 			case .success:
