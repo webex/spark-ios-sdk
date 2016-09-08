@@ -33,7 +33,7 @@ class ConnectController: UIViewController, WKNavigationDelegate {
         super.init(nibName: nil, bundle: nil)
     }
     
-    init(URL: URL, parseAccessCodeFrom: ((_ url: URL) -> Bool)) {
+    init(URL: URL, parseAccessCodeFrom: @escaping ((_ url: URL) -> Bool)) {
         super.init(nibName: nil, bundle: nil)
         self.startURL = URL
         self.tryParseAccessCodeFrom = parseAccessCodeFrom

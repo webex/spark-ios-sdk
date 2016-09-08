@@ -36,7 +36,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    open func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         
         let query = RequestParameter([
             "roomId": roomId,
@@ -62,7 +62,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personId": personId,
@@ -85,7 +85,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personEmail": personEmail.toString(),
@@ -106,7 +106,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(membershipId)
@@ -123,7 +123,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["isModerator": isModerator]))
@@ -140,7 +140,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    open func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(membershipId)

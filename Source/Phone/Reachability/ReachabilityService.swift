@@ -94,7 +94,7 @@ class ReachabilityService {
         lastFetchData = Date()
     }
     
-    private func performReachabilityCheck(_ completionHandler: ReachabilityCheckHandler) {
+    private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
         MediaClusterClient().get() {
             (response: ServiceResponse<MediaCluster>) in

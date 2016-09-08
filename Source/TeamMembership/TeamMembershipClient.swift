@@ -34,7 +34,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(teamId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    open func list(teamId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let query = RequestParameter([
             "teamId": teamId,
             "max": max])
@@ -57,7 +57,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "teamId": teamId,
             "personId": personId,
@@ -80,7 +80,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "teamId": teamId,
             "personEmail": personEmail.toString(),
@@ -101,7 +101,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(membershipId)
@@ -118,7 +118,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["isModerator": isModerator]))
@@ -135,7 +135,7 @@ open class TeamMembershipClient: CompletionHandlerType<TeamMembership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    open func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(membershipId)

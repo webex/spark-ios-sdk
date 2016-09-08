@@ -35,7 +35,7 @@ class MediaEngineWrapper {
         mediaEngineObserver.startObserving()
     }
 
-    func performReachabilityCheck(_ clusterInfo: [AnyHashable:Any], completionHandler: ReachabilityCheckHandler) {
+    func performReachabilityCheck(_ clusterInfo: [AnyHashable:Any], completionHandler: @escaping ReachabilityCheckHandler) {
         mediaEngine?.performStunReachabilityCheck(clusterInfo) {
             result in
             completionHandler(result)

@@ -25,7 +25,7 @@ class MediaClusterClient: CompletionHandlerType<MediaCluster> {
         return ServiceRequest.Builder().baseUrl(DeviceService.sharedInstance.getServiceUrl("calliopeDiscovery")!)
     }
     
-    func get(queue: DispatchQueue? = nil, completionHandler: ObjectHandler){
+    func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
             .method(.get)
             .path("clusters")

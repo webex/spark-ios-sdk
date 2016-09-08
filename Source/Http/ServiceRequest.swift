@@ -186,13 +186,13 @@ class ServiceRequest {
 		let encoding: ParameterEncoding
 		if let body = body {
 			parameters = body.value()
-			encoding = .json
+			encoding = JSONEncoding.default
 		} else if let query = query {
 			parameters = query.value()
-			encoding = .url
+			encoding = URLEncoding.default
 		} else {
 			parameters = nil
-			encoding = .url
+			encoding = URLEncoding.default
 		}
 		
 		return Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers).validate()

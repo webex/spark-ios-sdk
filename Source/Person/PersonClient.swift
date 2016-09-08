@@ -35,7 +35,7 @@ open class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    open func list(email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["email": email?.toString(), "displayName": displayName, "max": max]))
@@ -52,7 +52,7 @@ open class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(personId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler){
+    open func get(personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
             .method(.get)
             .path(personId)
@@ -67,7 +67,7 @@ open class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func getMe(queue: DispatchQueue? = nil, completionHandler: ObjectHandler){
+    open func getMe(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
             .method(.get)
             .path("me")

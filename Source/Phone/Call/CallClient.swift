@@ -27,7 +27,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         return ServiceRequest.Builder().keyPath("locus")
     }
     
-    func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
@@ -39,7 +39,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func join(_ callUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func join(_ callUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .body(localInfo)
@@ -51,7 +51,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func leave(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func leave(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(participantUrl)
@@ -63,7 +63,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func decline(_ callUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    func decline(_ callUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(callUrl)
@@ -75,7 +75,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
-    func alert(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    func alert(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(participantUrl)
@@ -87,7 +87,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
-    func sendDtmf(_ participantUrl: String, deviceUrl: String, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    func sendDtmf(_ participantUrl: String, deviceUrl: String, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         var dtmfInfo: [String:Any] = [
             "tones": events,
             "correlationId": correlationId]
@@ -112,7 +112,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
-    func updateMedia(_ mediaUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func updateMedia(_ mediaUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(mediaUrl)
@@ -123,7 +123,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func fetchCallInfo(_ callUrl: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func fetchCallInfo(_ callUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .baseUrl(callUrl)
@@ -133,7 +133,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseObject(completionHandler)
     }
     
-    func fetchCallInfos(_ queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    func fetchCallInfos(_ queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)

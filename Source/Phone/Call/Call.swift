@@ -24,7 +24,7 @@ import ObjectMapper
 open class Call {
     
     /// Completion handler for a call operation.
-    public typealias CompletionHandler = @escaping (Bool) -> Void
+    public typealias CompletionHandler = (Bool) -> Void
     
     /// Camera facing mode.
     public enum FacingMode: String {

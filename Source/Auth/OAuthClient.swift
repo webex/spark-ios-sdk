@@ -31,7 +31,7 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
     
     // MARK:- Async API
     
-    func fetchAccessTokenFromOAuthCode(_ code: String, _ clientAccount: ClientAccount, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func fetchAccessTokenFromOAuthCode(_ code: String, _ clientAccount: ClientAccount, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let query = RequestParameter(["grant_type": "authorization_code",
             "redirect_uri": redirectUri,
             "code": code,
@@ -47,7 +47,7 @@ class OAuthClient: CompletionHandlerType<AccessToken> {
         request.responseObject(completionHandler)
     }
     
-    func refreshOAuthAccessTokenFromRefreshToken(_ refreshToken: String, _ clientAccount: ClientAccount, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    func refreshOAuthAccessTokenFromRefreshToken(_ refreshToken: String, _ clientAccount: ClientAccount, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let query = RequestParameter(["grant_type": "refresh_token",
             "refresh_token": refreshToken,
             "client_id": clientAccount.clientId,

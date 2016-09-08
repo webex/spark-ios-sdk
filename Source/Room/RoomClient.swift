@@ -35,7 +35,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: ArrayHandler) {
+    open func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue]))
@@ -53,7 +53,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .body(RequestParameter(["title": title, "teamId": teamId]))
@@ -69,7 +69,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(roomId)
@@ -86,7 +86,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: ObjectHandler) {
+    open func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["title": title]))
@@ -103,7 +103,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: AnyHandler) {
+    open func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(roomId)
