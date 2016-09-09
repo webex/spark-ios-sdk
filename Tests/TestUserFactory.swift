@@ -47,7 +47,7 @@ class TestUserFactory {
         var user = TestUser()
         let semaphore = DispatchSemaphore(value: 0)
 		let queue = DispatchQueue(label: "create-user-queue")
-		Alamofire.request(testUserUrl, method: .post, parameters: body, encoding: .json, headers: headers).responseJSON(queue: queue) { response in
+		Alamofire.request(testUserUrl, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON(queue: queue) { response in
                 switch response.result {
                 case .success:
                     if let value = response.result.value {
