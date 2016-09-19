@@ -113,7 +113,7 @@ class WebSocketService: WebSocketDelegate {
         
         socket?.headers.unionInPlace(authorization)
         socket?.voipEnabled = true
-        socket?.selfSignedSSL = true
+        socket?.disableSSLCertValidation = true
         socket?.delegate = self
         
         return socket
@@ -128,7 +128,7 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Websocket Delegate Methods.
     
-    func websocketDidConnect(_ socket: WebSocket) {
+    func websocketDidConnect(socket: WebSocket) {
         Logger.info("Websocket is connected")
     
         connectionRetryCounter.reset()
@@ -138,7 +138,7 @@ class WebSocketService: WebSocketDelegate {
         ReachabilityService.sharedInstance.fetch()
     }
     
-    func websocketDidDisconnect(_ socket: WebSocket, error: NSError?) {
+    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         cancelMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
         
@@ -169,11 +169,11 @@ class WebSocketService: WebSocketDelegate {
         }
     }
     
-    func websocketDidReceiveMessage(_ socket: WebSocket, text: String) {
+    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
         Logger.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(_ socket: WebSocket, data: Data) {
+    func websocketDidReceiveData(socket: WebSocket, data: Data) {
         let json = JSON(data: data)
         ackMessage(socket, messageId: json["id"].string!)
         pendingMessages.append(json)

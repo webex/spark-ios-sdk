@@ -27,10 +27,10 @@ struct ParticipantStatus: Mappable {
     var videoStatus: String?
     var csis: [UInt]?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         audioStatus <- map["audioStatus"]
         videoStatus <- map["videoStatus"]
         csis <- map["csis"]

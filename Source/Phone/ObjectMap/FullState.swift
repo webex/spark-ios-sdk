@@ -28,10 +28,10 @@ struct FullState: Mappable {
     var lastActive: String?
     var state: String?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         active <- map["active"]
         count <- map["count"]
         locked <- map["locked"]

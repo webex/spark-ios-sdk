@@ -31,10 +31,10 @@ struct MediaConnection: Mappable {
     var keepAliveUrl: String?
     var keepAliveSecs: Int?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         mediaId <- map["mediaId"]
         type <- map["type"]
         localSdp <- (map["localSdp"], MediaTransform())
@@ -50,7 +50,10 @@ struct MediaConnection: Mappable {
         typealias JSON = String
         
         func transformFromJSON(_ value: Any?) -> Object? {
-            let mediaInfo = Mapper<MediaInfo>().map(value as? String)
+            guard let stringValue = value as? String else {
+                return nil
+            }
+            let mediaInfo = Mapper<MediaInfo>().map(JSONString: stringValue)
             return mediaInfo
             
         }

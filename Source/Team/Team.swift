@@ -36,13 +36,13 @@ public struct Team: Mappable, Equatable {
     /// Team constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Team mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(_ map: Map) {
+    public mutating func mapping(map: Map) {
         id <- map["id"]
         name <- map["name"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))

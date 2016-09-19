@@ -25,10 +25,10 @@ struct MediaCluster: Mappable {
     var statusCode: Int?
     var group: [String /* media cluster tag */ : [String /* transport */ : [String] /* transport address */ ]]?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         statusCode <- map["statusCode"]
         group <- map["clusters"]
     }

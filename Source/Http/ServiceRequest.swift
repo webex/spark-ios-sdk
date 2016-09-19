@@ -25,7 +25,7 @@ import ObjectMapper
 
 class ServiceRequest {
     
-    private var url: URLStringConvertible {
+    private var url: URL {
         return URL(string: baseUrl)!.appendingPathComponent(path)
     }
     

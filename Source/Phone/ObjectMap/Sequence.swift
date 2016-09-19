@@ -30,10 +30,10 @@ struct Sequence: Mappable {
     init() { // test purpose only
     }
     
-    init?(_ map: Map) {
+    init?(map: Map) {
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         entries <- (map["entries"], UInt64Transform())
         rangeStart <- (map["rangeStart"], UInt64Transform())
         rangeEnd <- (map["rangeEnd"], UInt64Transform())

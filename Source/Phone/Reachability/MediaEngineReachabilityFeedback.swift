@@ -24,10 +24,10 @@ import ObjectMapper
 struct MediaEngineReachabilityFeedback: Mappable {
     var reachabilities: [String /* media cluster tag */ : Reachability]?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         reachabilities <- map["reachability"]
     }
 }

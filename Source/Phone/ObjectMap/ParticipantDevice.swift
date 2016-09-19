@@ -28,10 +28,10 @@ struct ParticipantDevice: Mappable {
     var mediaConnections: [MediaConnection]?
     var state: String?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         url <- map["url"]
         deviceType <- map["deviceType"]
         featureToggles <- map["featureToggles"]

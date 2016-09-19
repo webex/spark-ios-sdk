@@ -55,13 +55,13 @@ public struct Room: Mappable {
     /// Room constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Room mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(_ map: Map) {
+    public mutating func mapping(map: Map) {
         id <- map["id"]
         title <- map["title"]
         type <- (map["type"], EnumTransform<RoomType>())

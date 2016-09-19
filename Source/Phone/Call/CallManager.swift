@@ -47,7 +47,11 @@ class CallManager {
     }
     
     func handle(callEventJson event: Any) {
-        guard let callEvent = Mapper<CallEvent>().map(event) else {
+        guard let eventJson = event as? [String: Any] else {
+            return
+        }
+        
+        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
             return
         }
         

@@ -36,10 +36,10 @@ struct MediaInfo: Mappable {
         self.reachabilities = reachabilities
     }
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         sdp <- map["sdp"]
         audioMuted <- map["audioMuted"]
         videoMuted <- map["videoMuted"]

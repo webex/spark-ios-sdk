@@ -48,13 +48,13 @@ public struct TeamMembership: Mappable, Equatable {
     /// TeamMembership constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// TeamMembership mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(_ map: Map) {
+    public mutating func mapping(map: Map) {
         id <- map["id"]
         teamId <- map["teamId"]
         personId <- map["personId"]

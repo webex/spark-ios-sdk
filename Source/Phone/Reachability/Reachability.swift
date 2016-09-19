@@ -27,10 +27,10 @@ struct Reachability: Mappable {
     var udp: ReachabilityTransportStatus?
     var xtls: ReachabilityTransportStatus?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         https <- map["https"]
         tcp <- map["tcp"]
         udp <- map["udp"]

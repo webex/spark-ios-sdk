@@ -217,9 +217,9 @@ struct CallInfo {
 }
 
 extension CallInfo: Mappable {
-	init?(_ map: Map) { }
+	init?(map: Map) { }
 	
-	mutating func mapping(_ map: Map) {
+	mutating func mapping(map: Map) {
 		callUrl <- map["url"]
 		participants <- map["participants"]
 		myself <- map["self"]

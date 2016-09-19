@@ -37,10 +37,10 @@ struct Participant: Mappable {
     var alertType: AlertType?
     var enableDTMF: Bool?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         isCreator <- map["isCreator"]
         id <- map["id"]
         url <- map["url"]

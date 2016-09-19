@@ -25,10 +25,10 @@ struct ReachabilityTransportStatus: Mappable {
     var latencyInMilliseconds: Int?
     var reachable: Bool?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         latencyInMilliseconds <- (map["latencyInMilliseconds"], StringAndIntTransform())
         reachable <- (map["reachable"], StringAndBoolTransform())
     }

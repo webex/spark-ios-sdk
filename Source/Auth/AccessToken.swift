@@ -49,11 +49,11 @@ class AccessToken: NSObject, NSCoding, Mappable {
     
     // MARK:- Mappable
     
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         accessTokenCreation = Date().timeIntervalSinceReferenceDate
     }
     
-    func mapping(_ map: Map) {
+    func mapping(map: Map) {
         accessTokenString <- map["access_token"]
         accessTokenExpiration <- map["expires_in"]
         refreshTokenString <- map["refresh_token"]

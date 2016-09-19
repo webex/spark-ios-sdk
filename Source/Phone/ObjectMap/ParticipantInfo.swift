@@ -26,10 +26,10 @@ struct ParticipantInfo: Mappable {
     var email: String?
     var name: String?
 
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
-    mutating func mapping(_ map: Map) {
+    mutating func mapping(map: Map) {
         id <- map["id"]
         email <- map["email"]
         name <- map["name"]

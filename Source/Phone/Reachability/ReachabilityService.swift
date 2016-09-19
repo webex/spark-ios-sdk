@@ -39,7 +39,7 @@ class ReachabilityService {
             Logger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
             performReachabilityCheck() {
                 if let value = $0 {
-                    self.feedback = Mapper<MediaEngineReachabilityFeedback>().map(value)
+                    self.feedback = Mapper<MediaEngineReachabilityFeedback>().map(JSONString: value)
 
                     // update only when getting success feedback
                     self.updateHostAddresses()
