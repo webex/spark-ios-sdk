@@ -6,10 +6,10 @@ def shared_pods
 	pod 'Alamofire', '~> 4.0.0'
 	pod 'ObjectMapper', '~> 2.0.0'
 	pod 'AlamofireObjectMapper', '~> 4.0.0'
-	pod 'SwiftyJSON', :git => 'https://github.com/asynchrony/SwiftyJSON.git', :branch => 'swift3'
+	pod 'SwiftyJSON', '~> 3.1.0'
 	pod 'Starscream', '~> 2.0.0'
 	pod 'KeychainAccess', '~> 3.0.0'
-	pod 'CocoaLumberjack/Swift', :git => 'https://github.com/asynchrony/CocoaLumberjack.git', :branch => 'swift3'
+	pod 'CocoaLumberjack/Swift', '~> 3.0.0'
 end
 
 target 'SparkSDK' do
@@ -18,6 +18,6 @@ end
 
 target 'SparkSDKTests' do
 	shared_pods
-	pod 'Quick', :git => 'https://github.com/Quick/Quick.git', :branch => 'swift-3.0'
-	pod 'Nimble', :git => 'https://github.com/Quick/Nimble.git', :branch => 'master' 
+	pod 'Quick', '~> 0.10.0'
+	pod 'Nimble', '~> 5.0.0'
 end

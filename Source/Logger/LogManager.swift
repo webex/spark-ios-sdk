@@ -24,7 +24,7 @@ import CocoaLumberjack.DDDispatchQueueLogFormatter
 
 class LogFormatter : DDDispatchQueueLogFormatter {
     
-    override func formatLogMessage(_ logMessage: DDLogMessage!) -> String! {
+    override func format(message logMessage: DDLogMessage!) -> String! {
 		let timestamp: String = string(from: logMessage.timestamp)
 		let queueThread: String = queueThreadLabel(for: logMessage)
 

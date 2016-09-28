@@ -73,10 +73,10 @@ class MemoryLogger : DDAbstractLogger {
         }
     }
 
-    override func logMessage(_ logMessage: DDLogMessage!) {
+    override func log(message logMessage: DDLogMessage!) {
         var message = logMessage.message
         if let logFormatter = internalLogFormatter {
-            message = logFormatter.formatLogMessage(logMessage)
+            message = logFormatter.format(message: logMessage)
         }
         
         storage.write(message!)

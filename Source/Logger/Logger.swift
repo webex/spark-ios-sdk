@@ -58,7 +58,7 @@ class Logger {
 				actualMessage = message()
 			}
             let logMessage = DDLogMessage(message: actualMessage, level: level, flag: flag, context: context, file: file, function: function, line: line, tag: tag, options: [.copyFile, .copyFunction], timestamp: nil)
-            ddlog.log(asynchronous, message: logMessage)
+            ddlog.log(asynchronous: asynchronous, message: logMessage)
         }
     }
 }
