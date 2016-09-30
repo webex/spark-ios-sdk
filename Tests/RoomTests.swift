@@ -72,7 +72,7 @@ class RoomSpec: QuickSpec {
             it("sync with emptyTitle") {
                 do {
                     let room = try Spark.rooms.create(title: "")
-                    self.validate(room)
+                    expect(room.id).to(beNil())
                     
                 } catch let error as NSError {
                     fail("Failed to create room, \(error.localizedFailureReason)")
