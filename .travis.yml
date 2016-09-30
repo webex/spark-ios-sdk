@@ -21,6 +21,9 @@ env:
     - DESTINATION="OS=9.3,name=iPhone 6s Plus" CONFIGURATION="ReleaseTest"    
     - DESTINATION="OS=10.0,name=iPhone 6s"      CONFIGURATION="Debug"
     - DESTINATION="OS=10.0,name=iPhone 6s"      CONFIGURATION="ReleaseTest"
+before_install:
+  - gem install cocoapods --pre
+  - bundle exec pod repo update
 
 script:
   - set -o pipefail
