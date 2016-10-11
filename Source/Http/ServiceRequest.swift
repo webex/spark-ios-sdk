@@ -107,7 +107,7 @@ class ServiceRequest {
     func responseObject<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<T>) -> Void) {
         let request = createAlamofireRequest()
         
-        _ = request.responseObject(queue: queue, keyPath: keyPath) {
+        request.responseObject(queue: queue, keyPath: keyPath) {
             (response: DataResponse<T>) in
             var result: Result<T>
             
@@ -131,7 +131,7 @@ class ServiceRequest {
     func responseArray<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<[T]>) -> Void){
         let request = createAlamofireRequest()
         
-        _ = request.responseArray(queue: queue, keyPath: keyPath){
+        request.responseArray(queue: queue, keyPath: keyPath){
             (response: DataResponse<[T]>) in
             var result: Result<[T]>
             
