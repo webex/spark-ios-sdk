@@ -62,7 +62,7 @@ open class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func postTo(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func post(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "text": text,
@@ -85,7 +85,7 @@ open class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func postTo(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func post(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonId": personId,
             "text": text,
@@ -108,7 +108,7 @@ open class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func postTo(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func post(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonEmail": personEmail.toString(),
             "text": text,

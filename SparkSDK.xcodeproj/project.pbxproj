@@ -184,7 +184,7 @@
 		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
 		3DA099F11D3EF82500205DF6 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Tests/Config.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F31D3EF82500205DF6 /* MembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MembershipTests.swift; path = Tests/MembershipTests.swift; sourceTree = SOURCE_ROOT; };
-		3DA099F41D3EF82500205DF6 /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MessageTests.swift; path = Tests/MessageTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099F41D3EF82500205DF6 /* MessageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = MessageTests.swift; path = Tests/MessageTests.swift; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		3DA099F51D3EF82500205DF6 /* PeopleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PeopleTests.swift; path = Tests/PeopleTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F61D3EF82500205DF6 /* PhoneTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneTests.swift; path = Tests/PhoneTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F71D3EF82500205DF6 /* RoomTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoomTests.swift; path = Tests/RoomTests.swift; sourceTree = SOURCE_ROOT; };
@@ -235,8 +235,8 @@
 		B91E75451CE2D7B70080EAE0 /* MembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MembershipClient+Sync.swift"; sourceTree = "<group>"; };
 		B91E75461CE2D7B70080EAE0 /* MembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MembershipClient.swift; sourceTree = "<group>"; };
 		B91E75481CE2D7B70080EAE0 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		B91E75491CE2D7B70080EAE0 /* MessageClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageClient+Sync.swift"; sourceTree = "<group>"; };
-		B91E754A1CE2D7B70080EAE0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClient.swift; sourceTree = "<group>"; };
+		B91E75491CE2D7B70080EAE0 /* MessageClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "MessageClient+Sync.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B91E754A1CE2D7B70080EAE0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		B91E754C1CE2D7B70080EAE0 /* Metric+Names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Metric+Names.swift"; sourceTree = "<group>"; };
 		B91E754D1CE2D7B70080EAE0 /* Metric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metric.swift; sourceTree = "<group>"; };
 		B91E754E1CE2D7B70080EAE0 /* MetricsBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricsBuffer.swift; sourceTree = "<group>"; };
