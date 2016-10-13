@@ -23,25 +23,16 @@ import Foundation
 struct RequestParameter {
     private var storage: [String: Any] = [:]
     
-    init(_ parameters: [String: Any] = [:]) {
+    init(_ parameters: [String: Any?] = [:]) {
         for (key, value) in parameters {
-			let realValue: Any
-			switch value {
-			case let optional as Any?:
-				if let unwrappedValue = optional {
-					realValue = unwrappedValue
-				} else {
-					continue
-				}
-			default:
-				realValue = value
-			}
-			
+            guard let realValue = value else {
+                continue
+            }
             switch realValue {
-			case let bool as Bool:
-				storage.updateValue(String(bool) as Any, forKey: key)
+            case let bool as Bool:
+                storage.updateValue(String(bool), forKey: key)
             default:
-				storage.updateValue(realValue, forKey: key)					
+                storage.updateValue(realValue, forKey: key)
             }
         }
     }
