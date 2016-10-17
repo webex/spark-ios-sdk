@@ -176,40 +176,38 @@ class ServiceRequest {
         }
     }
     
-	private func createAlamofireRequest() -> Alamofire.DataRequest {
-		if authRequired {
-			if let authorization = AuthManager.sharedInstance.getAuthorization() {
-				headers.unionInPlace(authorization)
-			}
-		}
-		let parameters: [String:Any]?
-		let encoding: ParameterEncoding
-        var requestUrl = url
-		if let body = body {
-			parameters = body.value()
-			encoding = JSONEncoding.default
+    private func createAlamofireRequest() -> Alamofire.DataRequest {
+        if authRequired {
+            if let authorization = AuthManager.sharedInstance.getAuthorization() {
+                headers.unionInPlace(authorization)
+            }
+        }
+        
+        let urlRequestConvertible: URLRequestConvertible
+        do {
+            var urlRequest = try URLRequest(url: url, method: method, headers: headers)
+            if let body = body {
+                urlRequest = try JSONEncoding.default.encode(urlRequest, with: body.value())
+            }
             if let query = query {
-                do {
-                    let urlRequest = try URLRequest(url: url, method: method, headers: headers)
-                    let encodedURLRequest = try URLEncoding.default.encode(urlRequest, with: query.value())
-                    if let queryEncodedUrl = encodedURLRequest.url {
-                        requestUrl = queryEncodedUrl
-                    } else {
-                        Logger.error("Failed to encode query parameters for url \(url)")
-                    }
-                } catch {
-                    Logger.error("Failed to encode query parameters for url \(url)", error: error)
+                urlRequest = try URLEncoding.default.encode(urlRequest, with: query.value())
+            }
+            urlRequestConvertible = urlRequest
+        } catch {
+            class ErrorRequestConvertible : URLRequestConvertible {
+                private let error: Error
+                init(_ error: Error) {
+                    self.error = error
+                }
+                
+                func asURLRequest() throws -> URLRequest {
+                    throw self.error
                 }
             }
-		} else if let query = query {
-			parameters = query.value()
-			encoding = URLEncoding.default
-		} else {
-			parameters = nil
-			encoding = URLEncoding.default
-		}
-		
-		return Alamofire.request(requestUrl, method: method, parameters: parameters, encoding: encoding, headers: headers).validate()
-	}
+            urlRequestConvertible = ErrorRequestConvertible(error)
+        }
+
+        return Alamofire.request(urlRequestConvertible).validate()
+    }
 }
 
