@@ -37,12 +37,12 @@ public struct Person: Mappable {
     public var avatar: String?
     
     /// The timestamp that this person being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Person constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Person mapping from JSON.
@@ -60,7 +60,7 @@ public struct Person: Mappable {
         typealias Object = [EmailAddress]
         typealias JSON = [String]
         
-        func transformFromJSON(value: AnyObject?) -> Object?{
+        func transformFromJSON(_ value: Any?) -> Object?{
             var emails: [EmailAddress] = []
             let emailStrings = value as! [String]
             for emailString in emailStrings {
@@ -70,7 +70,7 @@ public struct Person: Mappable {
             return emails
         }
         
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             return nil
         }
     }

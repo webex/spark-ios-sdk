@@ -37,7 +37,7 @@ struct Participant: Mappable {
     var alertType: AlertType?
     var enableDTMF: Bool?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {
@@ -61,14 +61,14 @@ struct Participant: Mappable {
         typealias Object = ParticipantState
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> Object? {
             guard let state = value as? String else {
                 return nil
             }
             return ParticipantState(rawValue: state)
         }
 
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             guard let state = value else {
                 return nil
             }

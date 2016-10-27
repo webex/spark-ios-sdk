@@ -33,6 +33,7 @@ class TeamSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
+			print("Config.selfUser.token: \(Config.selfUser.token)")
             Spark.initWith(accessToken: Config.selfUser.token!)
         }
         
@@ -44,7 +45,7 @@ class TeamSpec: QuickSpec {
                     let teamName = "test team"
                     let team = try Spark.teams.create(name: teamName)
                     
-                    self.validate(team)
+                    self.validate(team: team)
                     expect(team.name).to(equal(teamName))
                     
                 } catch let error as NSError {
@@ -62,7 +63,7 @@ class TeamSpec: QuickSpec {
                     let teamName = "@@@ &&&"
                     let team = try Spark.teams.create(name: teamName)
                     
-                    self.validate(team)
+                    self.validate(team: team)
                     expect(team.name).to(equal(teamName))
                     
                 } catch let error as NSError {
@@ -88,7 +89,7 @@ class TeamSpec: QuickSpec {
             
             it("with max value") {
                 do {
-                    let teams = try Spark.teams.list(1)
+                    let teams = try Spark.teams.list(max: 1)
                     expect(teams.count).to(beLessThanOrEqualTo(1))
                     
                 } catch let error as NSError {
@@ -97,7 +98,7 @@ class TeamSpec: QuickSpec {
             }
             
             it("with invalid max") {
-                expect{try Spark.teams.list(-1)}.to(throwError())
+				expect{try Spark.teams.list(max: -1)}.to(throwError())
             }
         }
         
@@ -110,7 +111,7 @@ class TeamSpec: QuickSpec {
                     let team = try Spark.teams.create(name: teamName)
                     let teamFromGet = try Spark.teams.get(teamId: team.id!)
                     
-                    self.validate(teamFromGet)
+                    self.validate(team: teamFromGet)
                     expect(teamFromGet).to(equal(team))
                     
                 } catch let error as NSError {
@@ -133,7 +134,7 @@ class TeamSpec: QuickSpec {
                     let newTeamName = "new test team"
                     let teamFromUpdate = try Spark.teams.update(teamId: team.id!, name: newTeamName)
                     
-                    self.validate(teamFromUpdate)
+                    self.validate(team: teamFromUpdate)
                     expect(teamFromUpdate.id).to(equal(team.id))
                     expect(teamFromUpdate.created).to(equal(team.created))
                     expect(teamFromUpdate.name).to(equal(newTeamName))
@@ -148,7 +149,7 @@ class TeamSpec: QuickSpec {
                     let team = try Spark.teams.create(name: "test team")
                     let teamFromUpdate = try Spark.teams.update(teamId: team.id!, name: "")
                     
-                    self.validate(teamFromUpdate)
+                    self.validate(team: teamFromUpdate)
                     expect(teamFromUpdate.id).to(equal(team.id))
                     expect(teamFromUpdate.created).to(equal(team.created))
                     expect(teamFromUpdate.name).to(equal(""))
@@ -164,7 +165,7 @@ class TeamSpec: QuickSpec {
                     let teamName = "@@@ &&&"
                     let teamFromUpdate = try Spark.teams.update(teamId: team.id!, name: teamName)
                     
-                    self.validate(team)
+                    self.validate(team: team)
                     expect(teamFromUpdate.name).to(equal(teamName))
                     
                 } catch let error as NSError {

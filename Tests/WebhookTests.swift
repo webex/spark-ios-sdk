@@ -37,7 +37,7 @@ class WebhookSpec: QuickSpec {
         }
         
         afterSuite {
-            Utils.wait(Config.TestcaseInterval)
+            Utils.wait(interval: Config.TestcaseInterval)
         }
         
         describe("Webhook API") {
@@ -78,7 +78,7 @@ class WebhookSpec: QuickSpec {
             
             it("Update webhook") {
                 do {
-                    try Spark.webhooks.update(webhookId: webhookId, name: "myWebhook1", targetUrl: "https://example.com/myWebhook1")
+                    _ = try Spark.webhooks.update(webhookId: webhookId, name: "myWebhook1", targetUrl: "https://example.com/myWebhook1")
                 } catch let error as NSError {
                     fail("Failed to update webhook, \(error.localizedFailureReason)")
                 }

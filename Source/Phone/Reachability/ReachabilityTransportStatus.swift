@@ -25,7 +25,7 @@ struct ReachabilityTransportStatus: Mappable {
     var latencyInMilliseconds: Int?
     var reachable: Bool?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {
@@ -37,7 +37,7 @@ struct ReachabilityTransportStatus: Mappable {
         typealias Object = Int
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> Object? {
             if let inputString = value as? String {
                 return Int(inputString)
             } else if let inputInt = value as? Int {
@@ -46,7 +46,7 @@ struct ReachabilityTransportStatus: Mappable {
             return nil
         }
         
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             guard let input = value else {
                 return nil
             }
@@ -58,9 +58,9 @@ struct ReachabilityTransportStatus: Mappable {
         typealias Object = Bool
         typealias JSON = String
         
-        func transformFromJSON(value: AnyObject?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> Object? {
             if let inputString = value as? String {
-                switch inputString.lowercaseString {
+                switch inputString.lowercased() {
                 case "true": return true
                 case "false": return false
                 default: return nil
@@ -71,7 +71,7 @@ struct ReachabilityTransportStatus: Mappable {
             return nil
         }
         
-        func transformToJSON(value: Object?) -> JSON? {
+        func transformToJSON(_ value: Object?) -> JSON? {
             guard let input = value else {
                 return nil
             }

@@ -31,12 +31,12 @@ public struct Team: Mappable, Equatable {
     public var name: String?
     
     /// The timestamp that this team being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Team constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Team mapping from JSON.

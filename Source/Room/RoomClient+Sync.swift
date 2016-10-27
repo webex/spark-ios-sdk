@@ -28,7 +28,7 @@ extension RoomClient {
     /// - parameter max: Limit the maximum number of rooms in the response.
     /// - parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
     /// - returns: Room array
-    public func list(teamId teamId: String? = nil, max: Int? = nil, type: RoomType? = nil) throws -> [Room] {
+    public func list(teamId: String? = nil, max: Int? = nil, type: RoomType? = nil) throws -> [Room] {
         return try SyncUtil.getArray(teamId, max, type, async: list)
     }
     
@@ -37,7 +37,7 @@ extension RoomClient {
     /// - parameter title: A user-friendly name for the room.
     /// - parameter teamId: The ID for the team with which this room is associated.
     /// - returns: Room
-    public func create(title title: String, teamId: String? = nil) throws -> Room {
+    public func create(title: String, teamId: String? = nil) throws -> Room {
         return try SyncUtil.getObject(title, teamId, async: create)
     }
     
@@ -45,7 +45,7 @@ extension RoomClient {
     ///
     /// - parameter roomId: The room id.
     /// - returns: Room
-    public func get(roomId roomId: String) throws -> Room  {
+    public func get(roomId: String) throws -> Room  {
         return try SyncUtil.getObject(roomId, async: get)
     }
     
@@ -54,7 +54,7 @@ extension RoomClient {
     /// - parameter roomId: The room id.
     /// - parameter title: A user-friendly name for the room.
     /// - returns: Room
-    public func update(roomId roomId: String, title: String) throws -> Room {
+    public func update(roomId: String, title: String) throws -> Room {
         return try SyncUtil.getObject(roomId, title, async: update)
     }
     
@@ -62,7 +62,7 @@ extension RoomClient {
     ///
     /// - parameter roomId: The room id.
     /// - returns: Void
-    public func delete(roomId roomId: String) throws {
+    public func delete(roomId: String) throws {
         try SyncUtil.deleteObject(roomId, async: delete)
     }
 }

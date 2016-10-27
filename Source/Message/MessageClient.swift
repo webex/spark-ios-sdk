@@ -21,7 +21,7 @@
 import Foundation
 
 /// Message HTTP client.
-public class MessageClient: CompletionHandlerType<Message> {
+open class MessageClient: CompletionHandlerType<Message> {
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("messages")
@@ -37,7 +37,7 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(roomId roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    open func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let query = RequestParameter([
             "roomId": roomId,
             "before": before,
@@ -45,7 +45,7 @@ public class MessageClient: CompletionHandlerType<Message> {
             "max": max])
         
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .query(query)
             .keyPath("items")
             .queue(queue)
@@ -62,14 +62,14 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func postToRoom(roomId roomId: String, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func post(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "text": text,
             "files": files])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(body)
             .queue(queue)
             .build()
@@ -85,14 +85,14 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func postToPerson(personId personId: String, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func post(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonId": personId,
             "text": text,
             "files": files])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(body)
             .queue(queue)
             .build()
@@ -108,14 +108,14 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func postToPerson(personEmail personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func post(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonEmail": personEmail.toString(),
             "text": text,
             "files": files])
         
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(body)
             .queue(queue)
             .build()
@@ -129,9 +129,9 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func get(messageId messageId: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler){
+    open func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .path(messageId)
             .queue(queue)
             .build()
@@ -145,9 +145,9 @@ public class MessageClient: CompletionHandlerType<Message> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func delete(messageId messageId: String, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
+    open func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
-            .method(.DELETE)
+            .method(.delete)
             .path(messageId)
             .queue(queue)
             .build()

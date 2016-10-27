@@ -26,7 +26,7 @@ struct ParticipantInfo: Mappable {
     var email: String?
     var name: String?
 
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

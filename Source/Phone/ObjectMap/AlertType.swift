@@ -24,7 +24,7 @@ import ObjectMapper
 struct AlertType: Mappable {
     var action: String?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

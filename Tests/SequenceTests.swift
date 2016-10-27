@@ -43,7 +43,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -60,7 +60,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 195
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -77,7 +77,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -94,7 +94,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 95
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -111,7 +111,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -128,7 +128,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is less than") {
@@ -145,7 +145,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 90
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.LessThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
             }
             
             it("result is greater than") {
@@ -162,7 +162,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.GreaterThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.greaterThan))
             }
             
             it("result is greater than") {
@@ -179,7 +179,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 95
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.GreaterThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.greaterThan))
             }
             
             it("result is greater than") {
@@ -196,7 +196,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.GreaterThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.greaterThan))
             }
             
             it("result is greater than") {
@@ -213,7 +213,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.GreaterThan))
+                expect(result).to(equal(CallInfoSequence.CompareResult.greaterThan))
             }
             
             it("result is equal") {
@@ -230,7 +230,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.Equal))
+                expect(result).to(equal(CallInfoSequence.CompareResult.equal))
             }
             
             it("result is equal") {
@@ -247,7 +247,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.Equal))
+                expect(result).to(equal(CallInfoSequence.CompareResult.equal))
             }
             
             it("result is equal") {
@@ -264,7 +264,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 75
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.Equal))
+                expect(result).to(equal(CallInfoSequence.CompareResult.equal))
             }
             
             it("result is desync") {
@@ -281,7 +281,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.DeSync))
+                expect(result).to(equal(CallInfoSequence.CompareResult.deSync))
             }
             
             it("result is desync") {
@@ -298,7 +298,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 90
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.DeSync))
+                expect(result).to(equal(CallInfoSequence.CompareResult.deSync))
             }
             
             it("result is desync") {
@@ -315,7 +315,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 0
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.DeSync))
+                expect(result).to(equal(CallInfoSequence.CompareResult.deSync))
             }
             
             it("result is desync") {
@@ -332,7 +332,7 @@ class SequenceSpec: QuickSpec {
                 incoming.rangeEnd = 90
                 
                 let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.DeSync))
+                expect(result).to(equal(CallInfoSequence.CompareResult.deSync))
             }
         }
     }

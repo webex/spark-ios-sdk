@@ -28,7 +28,7 @@ struct FullState: Mappable {
     var lastActive: String?
     var state: String?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

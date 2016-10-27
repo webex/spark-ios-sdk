@@ -43,12 +43,12 @@ public struct Webhook : Mappable {
     public var filter: String?
     
     /// The timestamp that the webhook being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Webhook constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map) {
+    public init?(map: Map) {
     }
     
     /// Webhook mapping from JSON.

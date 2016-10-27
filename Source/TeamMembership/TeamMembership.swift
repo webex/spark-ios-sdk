@@ -43,12 +43,12 @@ public struct TeamMembership: Mappable, Equatable {
     public var isModerator: Bool?
     
     /// The timestamp that the team membership being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// TeamMembership constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// TeamMembership mapping from JSON.

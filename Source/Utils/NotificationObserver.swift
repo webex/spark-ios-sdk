@@ -22,19 +22,14 @@ import Foundation
 
 class NotificationObserver: NSObject {
     
-    let notificationCenter = NSNotificationCenter.defaultCenter()
+    let notificationCenter = NotificationCenter.default
     var isObserving = false
     
     final func startObserving() {
-        guard !isObserving else {
-            return
-        }
-        
-        addObserversFromMap(nil)
-        isObserving = true
-    }
+        startObserving(nil)
+	}
     
-    final func startObserving(sender: AnyObject?) {
+    final func startObserving(_ sender: Any?) {
         guard !isObserving else {
             return
         }
@@ -52,18 +47,18 @@ class NotificationObserver: NSObject {
         isObserving = false
     }
     
-    func getNotificationHandlerMap() -> [String: String] {
-        return [String: String]()
+    func notificationMapping() -> [(Notification.Name, Selector)] {
+        return Array<(Notification.Name, Selector)>()
     }
     
-    private func addObserver(selector: Selector, name: String, sender: AnyObject?) {
+    private func addObserver(_ selector: Selector, name: Notification.Name, sender: Any?) {
         notificationCenter.addObserver(self, selector: selector, name: name, object: sender)
     }
     
-    private func addObserversFromMap(sender: AnyObject?) {
-        let notificationhandlerMap = getNotificationHandlerMap()
+    private func addObserversFromMap(_ sender: Any?) {
+        let notificationhandlerMap = notificationMapping()
         for (notification, selector) in notificationhandlerMap {
-            addObserver(Selector(selector), name: notification, sender: sender)
+            addObserver(selector, name: notification, sender: sender)
         }
     }
 }

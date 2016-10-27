@@ -29,8 +29,8 @@ class WebSocketService: WebSocketDelegate {
     private var socket: WebSocket?
     private let MessageBatchingIntervalInSec = 0.5
     private let ConnectionTimeoutIntervalInSec = 60.0
-    private var connectionTimeoutTimer: NSTimer?
-    private var messageBatchingTimer: NSTimer?
+    private var connectionTimeoutTimer: Timer?
+    private var messageBatchingTimer: Timer?
     private var connectionRetryCounter: ExponentialBackOffCounter
     private var pendingMessages: [JSON]
     
@@ -44,7 +44,7 @@ class WebSocketService: WebSocketDelegate {
         cancelMessageBatchingTimer()
     }
     
-    func connect(webSocketUrl: NSURL) {
+    func connect(_ webSocketUrl: URL) {
         if socket == nil {
             socket = createWebSocket(webSocketUrl)
             guard socket != nil else {
@@ -98,7 +98,7 @@ class WebSocketService: WebSocketDelegate {
         socket?.connect()
     }
     
-    private func createWebSocket(webSocketUrl: NSURL) -> WebSocket? {
+    private func createWebSocket(_ webSocketUrl: URL) -> WebSocket? {
         // Need to check authorization, avoid crash when logout as soon as login
         guard let authorization = AuthManager.sharedInstance.getAuthorization() else {
             Logger.error("Failed to create web socket due to no authorization")
@@ -113,20 +113,16 @@ class WebSocketService: WebSocketDelegate {
         
         socket?.headers.unionInPlace(authorization)
         socket?.voipEnabled = true
-        socket?.selfSignedSSL = true
+        socket?.disableSSLCertValidation = true
         socket?.delegate = self
         
         return socket
     }
     
-    private func despatch_main_after(delay: Double, closure: () -> Void) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(),
-            closure
+    private func despatch_main_after(_ delay: Double, closure: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
+            execute: closure
         )
     }
     
@@ -146,7 +142,7 @@ class WebSocketService: WebSocketDelegate {
         cancelMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
         
-        guard let code = error?.code, discription = error?.localizedDescription else {
+        guard let code = error?.code, let discription = error?.localizedDescription else {
             return
         }
         Logger.info("Websocket is disconnected: \(code), \(discription)")
@@ -157,7 +153,7 @@ class WebSocketService: WebSocketDelegate {
         }
         
         let backoffTime = connectionRetryCounter.next()
-        if code > Int(WebSocket.CloseCode.Normal.rawValue) {
+        if code > Int(WebSocket.CloseCode.normal.rawValue) {
             // Abnormal disconnection, re-register device.
             self.socket = nil
             Logger.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
@@ -177,7 +173,7 @@ class WebSocketService: WebSocketDelegate {
         Logger.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: NSData) {
+    func websocketDidReceiveData(socket: WebSocket, data: Data) {
         let json = JSON(data: data)
         ackMessage(socket, messageId: json["id"].string!)
         pendingMessages.append(json)
@@ -185,11 +181,11 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Websocket Event Handler
     
-    private func ackMessage(socket: WebSocket, messageId: String) {
+    private func ackMessage(_ socket: WebSocket, messageId: String) {
         let ack = JSON(["type": "ack", "messageId": messageId])
         do {
-            let ackData: NSData = try ack.rawData(options: .PrettyPrinted)
-            socket.writeData(ackData)
+            let ackData: Data = try ack.rawData(options: .prettyPrinted)
+			socket.write(data: ackData)
         } catch {
             Logger.error("Failed to acknowledge message")
         }
@@ -201,7 +197,7 @@ class WebSocketService: WebSocketDelegate {
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
                     Logger.info("locus event: \(eventData.object)")
-                    CallManager.sharedInstance.handleCallEvent(eventData.object)
+					CallManager.sharedInstance.handle(callEventJson: eventData.object)
                 }
             }
         }
@@ -211,8 +207,8 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Web Socket Timers
     
-    private func scheduledTimerWithTimeInterval(timeInterval: NSTimeInterval, selector: Selector, repeats: Bool) -> NSTimer {
-        return NSTimer.scheduledTimerWithTimeInterval(timeInterval, target: self, selector: selector, userInfo: nil, repeats: repeats)
+    private func scheduledTimerWithTimeInterval(_ timeInterval: TimeInterval, selector: Selector, repeats: Bool) -> Timer {
+        return Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: selector, userInfo: nil, repeats: repeats)
     }
     
     private func scheduleMessageBatchingTimer() {

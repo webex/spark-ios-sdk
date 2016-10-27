@@ -24,17 +24,17 @@ import ObjectMapper
 class AccessToken: NSObject, NSCoding, Mappable {
     
     var accessTokenString: String?
-    var accessTokenExpiration: NSTimeInterval?
+    var accessTokenExpiration: TimeInterval?
     var refreshTokenString: String?
-    var refreshTokenExpiration: NSTimeInterval?
-    var accessTokenCreation: NSTimeInterval?
+    var refreshTokenExpiration: TimeInterval?
+    var accessTokenCreation: TimeInterval?
     
-    var accessTokenExpirationDate: NSDate {
-        return NSDate(timeInterval: accessTokenExpiration!, sinceDate: accessTokenCreationDate)
+    var accessTokenExpirationDate: Date {
+        return Date(timeInterval: accessTokenExpiration!, since: accessTokenCreationDate)
     }
     
-    var accessTokenCreationDate: NSDate {
-        return NSDate(timeIntervalSinceReferenceDate: accessTokenCreation!)
+    var accessTokenCreationDate: Date {
+        return Date(timeIntervalSinceReferenceDate: accessTokenCreation!)
     }
     
     private let accessTokenKey = "accessTokenKey"
@@ -49,8 +49,8 @@ class AccessToken: NSObject, NSCoding, Mappable {
     
     // MARK:- Mappable
     
-    required init?(_ map: Map) {
-        accessTokenCreation = NSDate().timeIntervalSinceReferenceDate
+    required init?(map: Map) {
+        accessTokenCreation = Date().timeIntervalSinceReferenceDate
     }
     
     func mapping(map: Map) {
@@ -63,14 +63,14 @@ class AccessToken: NSObject, NSCoding, Mappable {
     // MARK:- NSCoding
     
     required init?(coder aDecoder: NSCoder) {
-        accessTokenString = aDecoder.decodeObjectForKey(accessTokenKey) as? String
-        accessTokenExpiration = aDecoder.decodeDoubleForKey(accessTokenExpirationKey)
-        refreshTokenString = aDecoder.decodeObjectForKey(refreshTokenKey) as? String
-        refreshTokenExpiration = aDecoder.decodeDoubleForKey(refreshTokenExpirationKey)
-        accessTokenCreation = aDecoder.decodeDoubleForKey(accessTokenCreationKey)
+        accessTokenString = aDecoder.decodeObject(forKey: accessTokenKey) as? String
+        accessTokenExpiration = aDecoder.decodeDouble(forKey: accessTokenExpirationKey)
+        refreshTokenString = aDecoder.decodeObject(forKey: refreshTokenKey) as? String
+        refreshTokenExpiration = aDecoder.decodeDouble(forKey: refreshTokenExpirationKey)
+        accessTokenCreation = aDecoder.decodeDouble(forKey: accessTokenCreationKey)
     }
     
-    func encodeWithCoder(aCoder: NSCoder) {
+    func encode(with aCoder: NSCoder) {
         encodeObject(accessTokenString, forKey: accessTokenKey, aCoder: aCoder)
         encodeDouble(accessTokenExpiration, forKey: accessTokenExpirationKey, aCoder: aCoder)
         encodeObject(refreshTokenString, forKey: refreshTokenKey, aCoder: aCoder)
@@ -78,19 +78,19 @@ class AccessToken: NSObject, NSCoding, Mappable {
         encodeDouble(accessTokenCreation, forKey: accessTokenCreationKey, aCoder: aCoder)
     }
     
-    private func encodeObject(objv: AnyObject?, forKey key: String, aCoder: NSCoder) {
+    private func encodeObject(_ objv: Any?, forKey key: String, aCoder: NSCoder) {
         guard objv != nil else {
             return
         }
         
-        aCoder.encodeObject(objv, forKey: key)
+        aCoder.encode(objv, forKey: key)
     }
     
-    private func encodeDouble(realv: Double?, forKey key: String, aCoder: NSCoder) {
+    private func encodeDouble(_ realv: Double?, forKey key: String, aCoder: NSCoder) {
         guard let realValue = realv else {
             return
         }
         
-        aCoder.encodeDouble(realValue, forKey: key)
+        aCoder.encode(realValue, forKey: key)
     }
 }

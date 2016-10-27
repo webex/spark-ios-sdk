@@ -21,7 +21,7 @@
 import Foundation
 
 /// Team HTTP client
-public class TeamClient: CompletionHandlerType<Team> {
+open class TeamClient: CompletionHandlerType<Team> {
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("teams")
@@ -33,9 +33,9 @@ public class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(max: Int? = nil, queue: dispatch_queue_t? = nil, completionHandler: ArrayHandler) {
+    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .query(RequestParameter(["max": max]))
             .keyPath("items")
             .queue(queue)
@@ -51,9 +51,9 @@ public class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func create(name name: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func create(name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(RequestParameter(["name": name]))
             .queue(queue)
             .build()
@@ -68,9 +68,9 @@ public class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func get(teamId teamId: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler){
+    open func get(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
-            .method(.GET)
+            .method(.get)
             .path(teamId)
             .queue(queue)
             .build()
@@ -85,9 +85,9 @@ public class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func update(teamId teamId: String, name: String, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    open func update(teamId: String, name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
-            .method(.PUT)
+            .method(.put)
             .body(RequestParameter(["name": name]))
             .path(teamId)
             .queue(queue)
@@ -102,9 +102,9 @@ public class TeamClient: CompletionHandlerType<Team> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func delete(teamId teamId: String, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
+    open func delete(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
-            .method(.DELETE)
+            .method(.delete)
             .path(teamId)
             .queue(queue)
             .build()

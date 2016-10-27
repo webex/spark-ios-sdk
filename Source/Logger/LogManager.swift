@@ -24,21 +24,21 @@ import CocoaLumberjack.DDDispatchQueueLogFormatter
 
 class LogFormatter : DDDispatchQueueLogFormatter {
     
-    override func formatLogMessage(logMessage: DDLogMessage!) -> String! {
-        let timestamp: String = stringFromDate(logMessage.timestamp)
-        let queueThreadLabel: String = queueThreadLabelForLogMessage(logMessage)
+    override func format(message logMessage: DDLogMessage!) -> String! {
+		let timestamp: String = string(from: logMessage.timestamp)
+		let queueThread: String = queueThreadLabel(for: logMessage)
 
         var level: String
         switch (logMessage.flag) {
-        case DDLogFlag.Error:   level = "E"
-        case DDLogFlag.Warning: level = "W"
-        case DDLogFlag.Info:    level = "I"
-        case DDLogFlag.Debug:   level = "D"
-        case DDLogFlag.Verbose: level = "V"
+        case DDLogFlag.error:   level = "E"
+        case DDLogFlag.warning: level = "W"
+        case DDLogFlag.info:    level = "I"
+        case DDLogFlag.debug:   level = "D"
+        case DDLogFlag.verbose: level = "V"
         default:                level = "V"
         }
         
-        return level + " " + timestamp + " " + "[" + queueThreadLabel + "]" + " | " + logMessage.function + ": " + logMessage.message
+        return level + " " + timestamp + " " + "[" + queueThread + "]" + " | " + logMessage.function + ": " + logMessage.message
     }
 }
 
@@ -53,24 +53,24 @@ class LoggerManager {
         // Console logger is added by default
         consoleLogger = DDTTYLogger()
         consoleLogger.logFormatter = LogFormatter()
-        DDLog.addLogger(consoleLogger)
+        DDLog.add(consoleLogger)
         isConsoleLoggerAdded = true
         
         // Always add memory logger
         memoryLogger = MemoryLogger()
         memoryLogger.logFormatter = LogFormatter()
-        DDLog.addLogger(memoryLogger)
+        DDLog.add(memoryLogger)
     }
     
     func hasSetup() -> Bool {
         return true
     }
     
-    func toggleConsoleLogger(enable: Bool) {
+    func toggleConsoleLogger(_ enable: Bool) {
         if isConsoleLoggerAdded && !enable {
-            DDLog.removeLogger(consoleLogger)
+            DDLog.remove(consoleLogger)
         } else if !isConsoleLoggerAdded && enable {
-            DDLog.addLogger(consoleLogger)
+            DDLog.add(consoleLogger)
         }
     }
     

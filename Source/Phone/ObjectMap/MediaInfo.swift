@@ -36,7 +36,7 @@ struct MediaInfo: Mappable {
         self.reachabilities = reachabilities
     }
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

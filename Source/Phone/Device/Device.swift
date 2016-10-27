@@ -26,7 +26,7 @@ struct Device: Mappable {
     var webSocketUrl: String?
     var services: [String: String]?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

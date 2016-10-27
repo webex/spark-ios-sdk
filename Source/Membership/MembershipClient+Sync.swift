@@ -29,7 +29,7 @@ extension MembershipClient {
     /// - parameter personEmail: Limit results to a specific person by email address.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil) throws -> [Membership] {
+    public func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil) throws -> [Membership] {
         return try SyncUtil.getArray(roomId, personId, personEmail, max, async: list)
     }
     
@@ -39,7 +39,7 @@ extension MembershipClient {
     /// - parameter personId: The person id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func create(roomId roomId: String, personId: String, isModerator: Bool? = nil) throws -> Membership {
+    public func create(roomId: String, personId: String, isModerator: Bool = false) throws -> Membership {
         return try SyncUtil.getObject(roomId, personId, isModerator, async: create)
     }
     
@@ -49,7 +49,7 @@ extension MembershipClient {
     /// - parameter personEmail: The email address.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func create(roomId roomId: String, personEmail: EmailAddress, isModerator: Bool? = nil) throws -> Membership {
+    public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false) throws -> Membership {
         return try SyncUtil.getObject(roomId, personEmail, isModerator, async: create)
     }
     
@@ -57,7 +57,7 @@ extension MembershipClient {
     ///
     /// - parameter membershipId: The membership id.
     /// - returns: Membership
-    public func get(membershipId membershipId: String) throws -> Membership {
+    public func get(membershipId: String) throws -> Membership {
         return try SyncUtil.getObject(membershipId, async: get)
     }
     
@@ -66,7 +66,7 @@ extension MembershipClient {
     /// - parameter membershipId: The membership id.
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
-    public func update(membershipId membershipId: String, isModerator: Bool) throws -> Membership {
+    public func update(membershipId: String, isModerator: Bool) throws -> Membership {
         return try SyncUtil.getObject(membershipId, isModerator, async: update)
     }
     
@@ -74,7 +74,7 @@ extension MembershipClient {
     ///
     /// - parameter membershipId: The membership id.
     /// - returns: Void
-    public func delete(membershipId membershipId: String) throws {
+    public func delete(membershipId: String) throws {
         try SyncUtil.deleteObject(membershipId, async: delete)
     }
 }

@@ -27,7 +27,7 @@ struct ParticipantStatus: Mappable {
     var videoStatus: String?
     var csis: [UInt]?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

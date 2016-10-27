@@ -43,12 +43,12 @@ public struct Membership: Mappable, Equatable {
     public var isMonitor: Bool?
     
     /// The timestamp that the membership being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// Membership constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Membership mapping from JSON.

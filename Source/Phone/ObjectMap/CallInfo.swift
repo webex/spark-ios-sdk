@@ -21,7 +21,7 @@
 import Foundation
 import ObjectMapper
 
-struct CallInfo: Mappable {
+struct CallInfo {
     var callUrl: String?
     var participants: [Participant]?
     var myself: Participant?
@@ -38,7 +38,7 @@ struct CallInfo: Mappable {
     }
 
     var allDevices: [ParticipantDevice] {
-        return allParticipantants.flatMap({$0.devices}).reduce([], combine: +)
+        return allParticipantants.flatMap({$0.devices}).reduce([], +)
     }
     
     var selfDevices: [ParticipantDevice] {
@@ -57,7 +57,7 @@ struct CallInfo: Mappable {
     }
     
     var remoteDevices: [ParticipantDevice] {
-        return remoteParticipantants.flatMap({$0.devices}).reduce([], combine: +)
+        return remoteParticipantants.flatMap({$0.devices}).reduce([], +)
     }
 
     var allParticipantants: [Participant] {
@@ -117,7 +117,7 @@ struct CallInfo: Mappable {
     }
     
     var isOneOnOne: Bool {
-        return allParticipantantsWithType("USER").count == 2
+		return allParticipantantsWith(type: "USER").count == 2
     }
     
     var isBridge: Bool {
@@ -132,7 +132,7 @@ struct CallInfo: Mappable {
         if !hasJoined {
             return false
         }
-        return !(selfDevicesWithState("JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+		return !(selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
     }
 
     var hasJoinedOnOtherDevice: Bool {
@@ -140,8 +140,8 @@ struct CallInfo: Mappable {
             return false
         }
         
-        return  (selfDevicesWithState("JOINED").count > 1 )
-            || (selfDevicesWithState("JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+		return  (selfDevicesWith(state: "JOINED").count > 1 )
+			|| (selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
     }
 
     var hasLeft: Bool {
@@ -198,32 +198,33 @@ struct CallInfo: Mappable {
     }
 
     // MARK: utils functions
-    func participantsContiansEmailDomain(emailDomain: String) -> Bool {
+    func participantsContain(emailDomain: String) -> Bool {
         return allParticipantants.filter({
             guard let email = $0.person?.email else {
                 return false
             }
-            return email.lowercaseString.hasSuffix(emailDomain.lowercaseString)
+            return email.lowercased().hasSuffix(emailDomain.lowercased())
         }).count > 0
     }
     
-    func allParticipantantsWithType(type: String) -> [Participant] {
+    func allParticipantantsWith(type: String) -> [Participant] {
         return allParticipantants.filter({$0.type == type})
     }
     
-    func selfDevicesWithState(state: String) -> [ParticipantDevice] {
+    func selfDevicesWith(state: String) -> [ParticipantDevice] {
         return selfDevices.filter({$0.state == state})
     }
-    
-    init?(_ map: Map){
-    }
-    
-    mutating func mapping(map: Map) {
-        callUrl <- map["url"]
-        participants <- map["participants"]
-        myself <- map["self"]
-        host <- map["host"]
-        fullState <- map["fullState"]
-        sequence <- map["sequence"]
-    }
+}
+
+extension CallInfo: Mappable {
+	init?(map: Map) { }
+	
+	mutating func mapping(map: Map) {
+		callUrl <- map["url"]
+		participants <- map["participants"]
+		myself <- map["self"]
+		host <- map["host"]
+		fullState <- map["fullState"]
+		sequence <- map["sequence"]
+	}
 }

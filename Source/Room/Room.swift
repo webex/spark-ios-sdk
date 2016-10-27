@@ -47,7 +47,7 @@ public struct Room: Mappable {
     public var lastActivity: String?
     
     /// The timestamp that this room being created.
-    public var created: NSDate?
+    public var created: Date?
     
     /// The team Id that this room associated with.
     public var teamId: String?
@@ -55,7 +55,7 @@ public struct Room: Mappable {
     /// Room constructor.
     ///
     /// - note: for internal use only.
-    public init?(_ map: Map){
+    public init?(map: Map){
     }
     
     /// Room mapping from JSON.

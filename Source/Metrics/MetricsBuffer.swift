@@ -27,12 +27,12 @@ class MetricsBuffer {
         return metrics.count
     }
     
-    func addMetric(metric: Metric) {
+    func addMetric(_ metric: Metric) {
         metrics.append(metric)
     }
     
-    func addMetrics(metrics: [Metric]) {
-        self.metrics.appendContentsOf(metrics)
+    func addMetrics(_ metrics: [Metric]) {
+        self.metrics.append(contentsOf: metrics)
     }
     
     func popAll() -> [Metric] {

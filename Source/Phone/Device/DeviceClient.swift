@@ -25,9 +25,9 @@ class DeviceClient: CompletionHandlerType<Device> {
         return ServiceRequest.Builder().baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
     }
     
-    func create(deviceInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func create(_ deviceInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
-            .method(.POST)
+            .method(.post)
             .body(deviceInfo)
             .queue(queue)
             .build()
@@ -35,9 +35,9 @@ class DeviceClient: CompletionHandlerType<Device> {
         request.responseObject(completionHandler)
     }
     
-    func update(deviceUrl: String, deviceInfo: RequestParameter, queue: dispatch_queue_t? = nil, completionHandler: ObjectHandler) {
+    func update(_ deviceUrl: String, deviceInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
-            .method(.PUT)
+            .method(.put)
             .baseUrl(deviceUrl)
             .body(deviceInfo)
             .queue(queue)
@@ -46,9 +46,9 @@ class DeviceClient: CompletionHandlerType<Device> {
         request.responseObject(completionHandler)
     }
     
-    func delete(deviceUrl: String, queue: dispatch_queue_t? = nil, completionHandler: AnyObjectHandler) {
+    func delete(_ deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
-            .method(.DELETE)
+            .method(.delete)
             .baseUrl(deviceUrl)
             .queue(queue)
             .build()

@@ -28,14 +28,14 @@ class InterfaceAddress {
     static func getSortedAddresses() -> [Item] {
         var addresses = [Item]()
         let hostAddr = NetUtils.getHostAddresses()
-        for element in hostAddr {
+        for element in hostAddr! {
             addresses.append((ifaName: element.ifaName, ifaAddr: element.ifaAddr))
         }
         
-        return addresses.sort{$0.ifaName+$0.ifaAddr < $1.ifaName+$1.ifaAddr}
+        return addresses.sorted{$0.ifaName+$0.ifaAddr < $1.ifaName+$1.ifaAddr}
     }
     
-    static func isSameSortedAddresses(oldAddrs oldAddrs: [Item], newAddrs: [Item]) -> Bool {
+    static func isSameSortedAddresses(oldAddrs: [Item], newAddrs: [Item]) -> Bool {
         if oldAddrs.count != newAddrs.count {
             return false
         }
@@ -50,7 +50,7 @@ class InterfaceAddress {
         return true
     }
     
-    private static func isSameAddress(oldAddr oldAddr: Item, newAddr: Item) -> Bool {
+    private static func isSameAddress(oldAddr: Item, newAddr: Item) -> Bool {
         return oldAddr.ifaName == newAddr.ifaName && oldAddr.ifaAddr == newAddr.ifaAddr
     }
 }

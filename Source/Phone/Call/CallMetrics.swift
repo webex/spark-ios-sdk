@@ -47,12 +47,12 @@ class CallMetrics {
     
     private let TestUserEmailDomain = "example.com"
     
-    func submitFeedback(feedback: Feedback, callInfo: CallInfo) {
+    func submit(feedback: Feedback, callInfo: CallInfo) {
         var data: Metric.DataType = createBasicCallData(callInfo)
         data.unionInPlace(feedback.metricData)
         
         var environment = MetricsEnvironment.Production
-        if callInfo.participantsContiansEmailDomain(TestUserEmailDomain) {
+		if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
             environment = MetricsEnvironment.Test
         }
         
@@ -61,11 +61,11 @@ class CallMetrics {
     }
     
     func reportVideoLicenseActivation() {
-        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.Generic)
+        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
         MetricsEngine.sharedInstance.trackMetric(metric)
     }
     
-    private func createBasicCallData(callInfo: CallInfo) -> Metric.DataType {
+    private func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
         return ["locusId": callInfo.callUrl!,
                 "locusTimestamp": callInfo.lastActive!,
                 "deviceUrl": DeviceService.sharedInstance.deviceUrl!,

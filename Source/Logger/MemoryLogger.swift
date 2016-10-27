@@ -32,10 +32,10 @@ class MemoryLoggerStorage {
     private var blockIndex = 0
     
     init() {
-        blocks = [String](count: BlockCount, repeatedValue: "")
+        blocks = [String](repeating: "", count: BlockCount)
     }
     
-    func write(message: String) {
+    func write(_ message: String) {
         objc_sync_enter(self)
         blocks[blockIndex] += message + "\n"
         if blocks[blockIndex].characters.count > BlockSize {
@@ -73,13 +73,13 @@ class MemoryLogger : DDAbstractLogger {
         }
     }
 
-    override func logMessage(logMessage: DDLogMessage!) {
+    override func log(message logMessage: DDLogMessage!) {
         var message = logMessage.message
         if let logFormatter = internalLogFormatter {
-            message = logFormatter.formatLogMessage(logMessage)
+            message = logFormatter.format(message: logMessage)
         }
         
-        storage.write(message)
+        storage.write(message!)
     }
     
     func getLogs() -> String {

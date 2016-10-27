@@ -40,7 +40,7 @@ class DeviceService: CompletionHandlerType<Device> {
         return device?.webSocketUrl
     }
     
-    func getServiceUrl(service: String) -> String? {
+    func getServiceUrl(_ service: String) -> String? {
         if let services = device?.services {
             return services[service + "ServiceUrl"]
         }
@@ -48,7 +48,7 @@ class DeviceService: CompletionHandlerType<Device> {
         return nil
     }
     
-    func registerDevice(completionHandler: Bool -> Void) {
+    func registerDevice(_ completionHandler: @escaping (Bool) -> Void) {
         let deviceInfo = createDeviceInfo()
         if deviceUrl == nil {
             client.create(deviceInfo) {
@@ -64,58 +64,57 @@ class DeviceService: CompletionHandlerType<Device> {
         }
     }
     
-    func deregisterDevice(completionHandler: Bool -> Void) {
+    func deregisterDevice(_ completionHandler: @escaping (Bool) -> Void) {
         if deviceUrl == nil {
             completionHandler(true)
             return
         }
         
         client.delete(deviceUrl!) {
-            (response: ServiceResponse<AnyObject>) in
+            (response: ServiceResponse<Any>) in
             self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
         }
         
         deviceUrl = nil
     }
     
-    private func onRegisterDeviceCompleted(response: ServiceResponse<Device>, completionHandler: Bool -> Void) {
+    private func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
         switch response.result {
-        case .Success(let value):
+        case .success(let value):
             self.device = value
             self.deviceUrl = self.device?.deviceUrl
             completionHandler(true)
-        case .Failure(let error):
-            Logger.error("Failed to register device: \(error.localizedFailureReason)")
+        case .failure(let error):
+            Logger.error("Failed to register device", error: error)
             completionHandler(false)
         }
     }
     
-    private func onDeregisterDeviceCompleted(response: ServiceResponse<AnyObject>, completionHandler: Bool -> Void) {
+    private func onDeregisterDeviceCompleted(_ response: ServiceResponse<Any>, completionHandler: (Bool) -> Void) {
         switch response.result {
-        case .Success:
+        case .success:
             completionHandler(true)
-        case .Failure(let error):
-            Logger.error("Failed to deregister device: \(error.localizedFailureReason)")
-            completionHandler(false)
+        case .failure(let error):
+            Logger.error("Failed to deregister device", error: error)
+			completionHandler(false)
         }
     }
     
     private func createDeviceInfo() -> RequestParameter {
         
-        let currentDevice = UIDevice.currentDevice()
-        var deviceName = currentDevice.name
-        if (deviceName.isEmpty) {
-            deviceName = "notset"
-        }
+        let currentDevice = UIDevice.current
+		let deviceName = currentDevice.name.isEmpty ? "notset" : currentDevice.name
         
-        var deviceType = "UNKNOWN"
+		let deviceType: String
         if isPad() {
             deviceType = "IPAD"
         } else if isPhone() {
             deviceType = "IPHONE"
-        }
+		} else {
+			deviceType = "UNKNOWN"
+		}
         
-        let deviceParameters:[String: Any?] = [
+        let deviceParameters:[String: Any] = [
             "deviceName": deviceName,
             "name": currentDevice.name,
             "model": currentDevice.model,
@@ -129,11 +128,11 @@ class DeviceService: CompletionHandlerType<Device> {
     }
     
     private func isPad() -> Bool {
-        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
     }
     
     private func isPhone() -> Bool {
-        return UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone
+        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone
     }
 }
 

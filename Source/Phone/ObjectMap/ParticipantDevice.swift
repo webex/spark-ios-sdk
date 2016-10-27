@@ -28,7 +28,7 @@ struct ParticipantDevice: Mappable {
     var mediaConnections: [MediaConnection]?
     var state: String?
     
-    init?(_ map: Map){
+    init?(map: Map){
     }
     
     mutating func mapping(map: Map) {

@@ -23,7 +23,7 @@ import Foundation
 class UserDefaults {
     static var sharedInstance = UserDefaults()
     
-    private let storage = NSUserDefaults.standardUserDefaults()
+    private let storage = Foundation.UserDefaults.standard
     
     private let DeviceUrl = "deviceUrlKey"
     private let IsVideoLicenseActivationDisabled = "isVideoLicenseActivationDisabledKey"
@@ -31,37 +31,37 @@ class UserDefaults {
     
     var deviceUrl: String? {
         get {
-            return storage.stringForKey(DeviceUrl)
+            return storage.string(forKey: DeviceUrl)
         }
         set {
             if newValue == nil {
-                storage.removeObjectForKey(DeviceUrl)
+                storage.removeObject(forKey: DeviceUrl)
             } else {
-                storage.setObject(newValue, forKey: DeviceUrl)
+                storage.set(newValue, forKey: DeviceUrl)
             }
         }
     }
     
     var isVideoLicenseActivationDisabled: Bool {
         get {
-            return storage.boolForKey(IsVideoLicenseActivationDisabled)
+            return storage.bool(forKey: IsVideoLicenseActivationDisabled)
         }
         set {
-            storage.setBool(newValue, forKey: IsVideoLicenseActivationDisabled)
+            storage.set(newValue, forKey: IsVideoLicenseActivationDisabled)
         }
     }
     
     var isVideoLicenseActivated: Bool {
         get {
-            return storage.boolForKey(IsVideoLicenseActivated)
+            return storage.bool(forKey: IsVideoLicenseActivated)
         }
         set {
-            storage.setBool(newValue, forKey: IsVideoLicenseActivated)
+            storage.set(newValue, forKey: IsVideoLicenseActivated)
         }
     }
     
     func removeVideoLicenseSetting() {
-        storage.removeObjectForKey(IsVideoLicenseActivationDisabled)
-        storage.removeObjectForKey(IsVideoLicenseActivated)
+        storage.removeObject(forKey: IsVideoLicenseActivationDisabled)
+        storage.removeObject(forKey: IsVideoLicenseActivated)
     }
 }

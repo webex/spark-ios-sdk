@@ -28,9 +28,9 @@ enum MetricsEnvironment: String {
 
 enum MetricsCategory {
     // TODO: may need to update the category for SDK?
-    case Conversation
-    case Avatar
-    case Generic
+    case conversation
+    case avatar
+    case generic
 }
 
 enum MetricsType: String {
@@ -41,7 +41,7 @@ enum MetricsType: String {
 }
 
 struct Metric {
-    typealias DataType = [String: AnyObject]
+    typealias DataType = [String: Any]
     
     var name: String
     var data: DataType
@@ -69,38 +69,38 @@ struct Metric {
         self.isBackground = false
     }
     
-    static func incrementMetricWithName(name: String, category: MetricsCategory) -> Metric {
+    static func incrementMetricWithName(_ name: String, category: MetricsCategory) -> Metric {
         return incrementMetricWithName(name, environment: MetricsEnvironment.Default, category: category)
     }
     
-    static func incrementMetricWithName(name: String, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
+    static func incrementMetricWithName(_ name: String, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
         let data: DataType = [DataKey: ""]
         return Metric(name: name, data: data, type: MetricsType.Increment, environment: environment, category: category)
     }
     
-    static func durationMetricWithName(name: String, milliseconds: Int, category: MetricsCategory) -> Metric {
+    static func durationMetricWithName(_ name: String, milliseconds: Int, category: MetricsCategory) -> Metric {
         return durationMetricWithName(name, milliseconds: milliseconds, environment: MetricsEnvironment.Default, category: category)
     }
     
-    static func durationMetricWithName(name: String, milliseconds: Int, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
+    static func durationMetricWithName(_ name: String, milliseconds: Int, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
         let data: DataType = [DataKey: String(milliseconds)]
         return Metric(name: name, data: data, type: MetricsType.Duration, environment: environment, category: category)
     }
     
-    static func gaugeMetricWithName(name: String, value: Int, category: MetricsCategory) -> Metric {
+    static func gaugeMetricWithName(_ name: String, value: Int, category: MetricsCategory) -> Metric {
         return gaugeMetricWithName(name, value: value, environment: MetricsEnvironment.Default, category: category)
     }
     
-    static func gaugeMetricWithName(name: String, value: Int, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
+    static func gaugeMetricWithName(_ name: String, value: Int, environment: MetricsEnvironment, category: MetricsCategory) -> Metric {
         let data: DataType = [DataKey: String(value)]
         return Metric(name: name, data: data, type: MetricsType.Gauge, environment: environment, category: category)
     }
     
-    static func genericMetricWithName(name: String, data: DataType) -> Metric {
+    static func genericMetricWithName(_ name: String, data: DataType) -> Metric {
         return genericMetricWithName(name, data: data, environment: MetricsEnvironment.Default)
     }
     
-    static func genericMetricWithName(name: String, data: DataType, environment: MetricsEnvironment) -> Metric {
-        return Metric(name: name, data: data, type: MetricsType.Generic, environment: environment, category: MetricsCategory.Generic)
+    static func genericMetricWithName(_ name: String, data: DataType, environment: MetricsEnvironment) -> Metric {
+        return Metric(name: name, data: data, type: MetricsType.Generic, environment: environment, category: MetricsCategory.generic)
     }
 }
