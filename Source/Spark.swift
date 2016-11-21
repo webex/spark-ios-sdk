@@ -39,6 +39,16 @@ open class Spark {
         AuthManager.sharedInstance.deauthorize()
     }
     
+    /// Returns the access token of the SparkSDK if the user is logged in to Spark.
+    public static func accessToken() -> String? {
+        if let authorization = AuthManager.sharedInstance.getAuthorization(),
+        let token = authorization["Authorization"],
+        let spaceIndex = token.characters.index(of: " ") {
+            return token.substring(from: token.characters.index(after: spaceIndex))
+        }
+        return nil
+    }
+
     /// Initialize the SDK using client id, client secret, scope and redirect URI.
     ///
     /// - parameter clientId: The client id issued when creating your app.
