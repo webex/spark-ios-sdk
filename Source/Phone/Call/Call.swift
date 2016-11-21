@@ -309,20 +309,18 @@ open class Call {
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
-        let mediaUrl = info?.selfMediaUrl
-        assert(mediaUrl != nil, "mediaUrl is nil")
-        
-        let mediaInfo = info?.selfMediaInfo
-        assert(mediaInfo != nil, "mediaInfo is nil")
-        
+        guard let mediaUrl = info?.selfMediaUrl, let mediaInfo = info?.selfMediaInfo else {
+            return
+        }
+
         let audioMuted = !sendingAudio
         let videoMuted = !sendingVideo
-        
-        let localInfo = createLocalInfo((mediaInfo?.sdp)!, audioMuted: audioMuted, videoMuted: videoMuted)
-        CallClient().updateMedia(mediaUrl!, localInfo: localInfo) {
+
+        let localInfo = createLocalInfo((mediaInfo.sdp)!, audioMuted: audioMuted, videoMuted: videoMuted)
+        CallClient().updateMedia(mediaUrl, localInfo: localInfo) {
             switch $0.result {
             case .success(let value):
-				self.update(callInfo: value)
+                self.update(callInfo: value)
                 Logger.info("Success: update media")
             case .failure(let error):
                 Logger.error("Failure", error: error)
