@@ -95,7 +95,7 @@ class AuthManager : AuthenticationStrategy {
         clientAccount = nil
     }
     
-    func accessToken() -> String? {
+    private func accessToken() -> String? {
         guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
             return nil
         }

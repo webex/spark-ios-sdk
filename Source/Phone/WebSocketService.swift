@@ -45,45 +45,59 @@ class WebSocketService: WebSocketDelegate {
     }
     
     func connect(_ webSocketUrl: URL) {
-        if socket == nil {
-            socket = createWebSocket(webSocketUrl)
-            guard socket != nil else {
-                Logger.error("Skip connection due to failure of creating socket")
-                return
+        if let socket = socket {
+            connect(webSocket: socket)
+        } else {
+            AuthManager.sharedInstance.accessToken { (accessToken) in
+                // Need to check authorization, avoid crash when logout as soon as login
+                guard let accessToken = accessToken else {
+                    Logger.error("Failed to create web socket due to no authorization")
+                    return
+                }
+                
+                let socket = WebSocket(url: webSocketUrl)        
+                socket.headers["Authorization"] = "Bearer " + accessToken
+                socket.voipEnabled = true
+                socket.disableSSLCertValidation = true
+                socket.delegate = self
+                self.socket = socket
+                self.connect(webSocket: socket)   
             }
         }
-        
-        if socket!.isConnected {
+    }
+    
+    private func connect(webSocket socket: WebSocket) {
+        if socket.isConnected {
             Logger.warn("Web socket is already connected")
             return
         }
         
         Logger.info("Web socket is being connected")
         
-        socket?.connect()
+        socket.connect()
         
         scheduleConnectionTimeoutTimer()
     }
     
     func disconnect() {
-        guard socket != nil else {
+        guard let socket = socket else {
             Logger.warn("Web socket has not been connected")
             return
         }
         
-        guard socket!.isConnected else {
+        guard socket.isConnected else {
             Logger.warn("Web socket is already disconnected")
             return
         }
         
         Logger.info("Web socket is being disconnected")
         
-        socket?.disconnect()
-        socket = nil
+        socket.disconnect()
+        self.socket = nil
     }
     
     private func reconnect() {
-        guard let socket = self.socket else {
+        guard let socket = socket else {
             Logger.warn("Web socket has not been connected")
             return
         }
@@ -97,28 +111,7 @@ class WebSocketService: WebSocketDelegate {
         
         socket.connect()
     }
-    
-    private func createWebSocket(_ webSocketUrl: URL) -> WebSocket? {
-        // Need to check authorization, avoid crash when logout as soon as login
-        guard let accessToken = AuthManager.sharedInstance.accessToken() else {
-            Logger.error("Failed to create web socket due to no authorization")
-            return nil
-        }
-        
-        socket = WebSocket(url: webSocketUrl)
-        guard let socket = socket else {
-            Logger.error("Failed to create web socket")
-            return nil			
-        }
-        
-        socket.headers["Authorization"] = "Bearer " + accessToken
-        socket.voipEnabled = true
-        socket.disableSSLCertValidation = true
-        socket.delegate = self
-        
-        return socket
-    }
-    
+     
     private func despatch_main_after(_ delay: Double, closure: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
