@@ -22,14 +22,13 @@ import Foundation
 
 /// Team HTTP client
 open class TeamClient {
-	
-	/// Alias for closure to handle a service response along with a Team object.
-	public typealias ObjectHandler = (ServiceResponse<Team>) -> Void
-	
-	/// Alias for closure to handle a service response along with a Team array.
-	public typealias ArrayHandler = (ServiceResponse<[Team]>) -> Void
-
-	
+    
+    /// Alias for closure to handle a service response along with a Team object.
+    public typealias ObjectHandler = (ServiceResponse<Team>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Team array.
+    public typealias ArrayHandler = (ServiceResponse<[Team]>) -> Void
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("teams")
     }

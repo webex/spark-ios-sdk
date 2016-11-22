@@ -22,13 +22,13 @@ import Foundation
 
 /// Person HTTP client
 open class PersonClient {
-	
-	/// Alias for closure to handle a service response along with a Person object.
-	public typealias ObjectHandler = (ServiceResponse<Person>) -> Void
-	
-	/// Alias for closure to handle a service response along with a Person array.
-	public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
-	
+    
+    /// Alias for closure to handle a service response along with a Person object.
+    public typealias ObjectHandler = (ServiceResponse<Person>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Person array.
+    public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("people")
     }

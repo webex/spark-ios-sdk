@@ -31,7 +31,7 @@ open class Spark {
     
     /// Indicates whether the SDK has been authorized.
     open static func authorized() -> Bool {
-        return AuthManager.sharedInstance.authorized()
+        return AuthManager.sharedInstance.authorized
     }
     
     /// Deauthorize the SDK. If phone is registered, deregister the phone first.
@@ -41,12 +41,7 @@ open class Spark {
     
     /// Returns the access token of the SparkSDK if the user is logged in to Spark.
     public static func accessToken() -> String? {
-        if let authorization = AuthManager.sharedInstance.getAuthorization(),
-        let token = authorization["Authorization"],
-        let spaceIndex = token.characters.index(of: " ") {
-            return token.substring(from: token.characters.index(after: spaceIndex))
-        }
-        return nil
+        return AuthManager.sharedInstance.accessToken()
     }
 
     /// Initialize the SDK using client id, client secret, scope and redirect URI.

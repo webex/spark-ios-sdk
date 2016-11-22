@@ -57,7 +57,8 @@ open class Phone {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func register(_ completionHandler: ((Bool) -> Void)?) {
-        guard AuthManager.sharedInstance.authorized() else {
+        // XXX This guard means that the completion handler may never be fired
+        guard AuthManager.sharedInstance.authorized else {
             Logger.error("Skip registering device due to no authorization")
             return
         }
@@ -67,10 +68,8 @@ open class Phone {
                 self.applicationLifecycleObserver.startObserving()
                 CallManager.sharedInstance.fetchActiveCalls()
                 self.webSocketService.connect(URL(string: self.deviceService.webSocketUrl!)!)
-                completionHandler?(true)
-            } else {
-                completionHandler?(false)
             }
+            completionHandler?(success)
         }
     }
     
@@ -85,11 +84,7 @@ open class Phone {
         applicationLifecycleObserver.stopObserving()
         webSocketService.disconnect()
         deviceService.deregisterDevice() { success in
-            if success {
-                completionHandler?(true)
-            } else {
-                completionHandler?(false)
-            }
+            completionHandler?(success)
         }
     }
     
@@ -103,11 +98,7 @@ open class Phone {
     open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
         let call = Call()
         call.dial(address: address, option: option) { success in
-            if success {
-                completionHandler(true)
-            } else {
-                completionHandler(false)
-            }
+            completionHandler(success)
         }
         return call
     }

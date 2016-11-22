@@ -22,9 +22,10 @@ import Foundation
 
 // TODO: need to discuss if use term - "locus"
 class CallClient {
-	typealias ObjectHandler = (ServiceResponse<CallInfo>) -> Void
-	typealias ArrayHandler = (ServiceResponse<[CallInfo]>) -> Void
-	
+    
+    typealias ObjectHandler = (ServiceResponse<CallInfo>) -> Void
+    typealias ArrayHandler = (ServiceResponse<[CallInfo]>) -> Void
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().keyPath("locus")
     }

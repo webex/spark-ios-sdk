@@ -21,8 +21,9 @@
 import Foundation
 
 class DeviceClient {
-	typealias ObjectHandler = (ServiceResponse<Device>) -> Void
-
+    
+    typealias ObjectHandler = (ServiceResponse<Device>) -> Void
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
     }

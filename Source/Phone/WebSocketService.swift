@@ -83,38 +83,38 @@ class WebSocketService: WebSocketDelegate {
     }
     
     private func reconnect() {
-        guard socket != nil else {
+        guard let socket = self.socket else {
             Logger.warn("Web socket has not been connected")
             return
         }
         
-        guard !socket!.isConnected else {
+        guard !socket.isConnected else {
             Logger.warn("Web socket has already connected")
             return
         }
         
         Logger.info("Web socket is being reconnected")
         
-        socket?.connect()
+        socket.connect()
     }
     
     private func createWebSocket(_ webSocketUrl: URL) -> WebSocket? {
         // Need to check authorization, avoid crash when logout as soon as login
-        guard let authorization = AuthManager.sharedInstance.getAuthorization() else {
+        guard let accessToken = AuthManager.sharedInstance.accessToken() else {
             Logger.error("Failed to create web socket due to no authorization")
             return nil
         }
         
         socket = WebSocket(url: webSocketUrl)
-        if socket == nil {
+        guard let socket = socket else {
             Logger.error("Failed to create web socket")
-            return nil
+            return nil			
         }
         
-        socket?.headers.unionInPlace(authorization)
-        socket?.voipEnabled = true
-        socket?.disableSSLCertValidation = true
-        socket?.delegate = self
+        socket.headers["Authorization"] = "Bearer " + accessToken
+        socket.voipEnabled = true
+        socket.disableSSLCertValidation = true
+        socket.delegate = self
         
         return socket
     }
@@ -185,7 +185,7 @@ class WebSocketService: WebSocketDelegate {
         let ack = JSON(["type": "ack", "messageId": messageId])
         do {
             let ackData: Data = try ack.rawData(options: .prettyPrinted)
-			socket.write(data: ackData)
+            socket.write(data: ackData)
         } catch {
             Logger.error("Failed to acknowledge message")
         }
@@ -197,7 +197,7 @@ class WebSocketService: WebSocketDelegate {
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
                     Logger.info("locus event: \(eventData.object)")
-					CallManager.sharedInstance.handle(callEventJson: eventData.object)
+                    CallManager.sharedInstance.handle(callEventJson: eventData.object)
                 }
             }
         }

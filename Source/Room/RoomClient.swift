@@ -22,17 +22,17 @@ import Foundation
 
 /// Room HTTP client
 open class RoomClient {
-	
-	/// Alias for closure to handle a service response along with a Room object.
-	public typealias ObjectHandler = (ServiceResponse<Room>) -> Void
-	
-	/// Alias for closure to handle a service response along with a Room array.
-	public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
-	
+    
+    /// Alias for closure to handle a service response along with a Room object.
+    public typealias ObjectHandler = (ServiceResponse<Room>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Room array.
+    public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("rooms")
     }
-
+    
     /// List rooms. By default, lists rooms to which the authenticated user belongs.
     ///
     /// - parameter teamId: Limit the rooms to those associated with a team, by ID.

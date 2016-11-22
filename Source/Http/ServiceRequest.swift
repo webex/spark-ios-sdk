@@ -43,7 +43,7 @@ class ServiceRequest {
     init() {
         let userAgent = UserAgent.sharedInstance.userAgentString
         self.headers = ["Content-Type": "application/json",
-                        "User-Agent": userAgent!]
+                        "User-Agent": userAgent]
         
         self.authRequired = true
         self.baseUrl = "https://api.ciscospark.com/v1"
@@ -105,109 +105,122 @@ class ServiceRequest {
     }
     
     func responseObject<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<T>) -> Void) {
-        let request = createAlamofireRequest()
-        
-        request.responseObject(queue: queue, keyPath: keyPath) {
-            (response: DataResponse<T>) in
-            var result: Result<T>
-            
-            switch response.result {
-            case .success(let value):
-                result = .success(value)
+        let queue = self.queue
+        let keyPath = self.keyPath
+        createAlamofireRequest() { request in             
+            request.responseObject(queue: queue, keyPath: keyPath) {
+                (response: DataResponse<T>) in
+                var result: Result<T>
                 
-            case .failure(var error):
-                if response.response != nil {
-                    if let data = response.data {
-						error = SparkError.requestErrorWith(data: data)
+                switch response.result {
+                case .success(let value):
+                    result = .success(value)
+                    
+                case .failure(var error):
+                    if response.response != nil {
+                        if let data = response.data {
+                            error = SparkError.requestErrorWith(data: data)
+                        }
                     }
+                    result = .failure(error)
                 }
-                result = .failure(error)
+                
+                completionHandler(ServiceResponse(response.response, result))
             }
-            
-            completionHandler(ServiceResponse(response.response, result))
         }
     }
     
-    func responseArray<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<[T]>) -> Void){
-        let request = createAlamofireRequest()
-        
-        request.responseArray(queue: queue, keyPath: keyPath){
-            (response: DataResponse<[T]>) in
-            var result: Result<[T]>
-            
-            switch response.result {
-            case .success(let value):
-                result = .success(value)
+    func responseArray<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<[T]>) -> Void) {
+        let queue = self.queue
+        let keyPath = self.keyPath
+        createAlamofireRequest() { request in         
+            request.responseArray(queue: queue, keyPath: keyPath) {
+                (response: DataResponse<[T]>) in
+                var result: Result<[T]>
                 
-            case .failure(var error):
-				if response.response != nil {
-                    if let data = response.data {
-						error = SparkError.requestErrorWith(data: data)
+                switch response.result {
+                case .success(let value):
+                    result = .success(value)
+                    
+                case .failure(var error):
+                                            if response.response != nil {
+                        if let data = response.data {
+                            error = SparkError.requestErrorWith(data: data)
+                        }
                     }
+                    result = .failure(error)
                 }
-                result = .failure(error)
+                
+                completionHandler(ServiceResponse(response.response, result))
             }
-            
-            completionHandler(ServiceResponse(response.response, result))
         }
     }
     
-    func responseJSON(_ completionHandler: @escaping (ServiceResponse<Any>) -> Void){
-        let request = createAlamofireRequest()
-        
-        request.responseJSON(queue: queue){
-            (response: DataResponse<Any>) in
-            var result: Result<Any>
-            
-            switch response.result {
-            case .success(let value):
-                result = .success(value)
+    func responseJSON(_ completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
+        let queue = self.queue
+        createAlamofireRequest() { request in         
+            request.responseJSON(queue: queue) {
+                (response: DataResponse<Any>) in
+                var result: Result<Any>
                 
-            case .failure(var error):
-                if response.response != nil {
-                    if let data = response.data {
-						error = SparkError.requestErrorWith(data: data)
+                switch response.result {
+                case .success(let value):
+                    result = .success(value)
+                    
+                case .failure(var error):
+                    if response.response != nil {
+                        if let data = response.data {
+                            error = SparkError.requestErrorWith(data: data)
+                        }
                     }
+                    result = .failure(error)
                 }
-                result = .failure(error)
-            }
-            
-            completionHandler(ServiceResponse(response.response, result))
+                
+                completionHandler(ServiceResponse(response.response, result))
+            }   
         }
     }
     
-    private func createAlamofireRequest() -> Alamofire.DataRequest {
+    private func createAlamofireRequest(completionHandler: @escaping (Alamofire.DataRequest) -> Void) {
+        let accessTokenCallback: (String?) -> Void = { accessToken in 
+            if let accessToken = accessToken {
+                self.headers["Authorization"] = "Bearer " + accessToken
+            }
+            
+            let urlRequestConvertible: URLRequestConvertible
+            do {
+                var urlRequest = try URLRequest(url: self.url, method: self.method, headers: self.headers)
+                if let body = self.body {
+                    urlRequest = try JSONEncoding.default.encode(urlRequest, with: body.value())
+                }
+                if let query = self.query {
+                    urlRequest = try URLEncoding.default.encode(urlRequest, with: query.value())
+                }
+                urlRequestConvertible = urlRequest
+            } catch {
+                class ErrorRequestConvertible : URLRequestConvertible {
+                    private let error: Error
+                    init(_ error: Error) {
+                        self.error = error
+                    }
+                    
+                    func asURLRequest() throws -> URLRequest {
+                        throw self.error
+                    }
+                }
+                urlRequestConvertible = ErrorRequestConvertible(error)
+            }
+            
+            completionHandler(Alamofire.request(urlRequestConvertible).validate())
+        }
+        
         if authRequired {
-            if let authorization = AuthManager.sharedInstance.getAuthorization() {
-                headers.unionInPlace(authorization)
+            AuthManager.sharedInstance.accessToken { (accessToken) in
+                accessTokenCallback(accessToken)
             }
+        } else {
+            accessTokenCallback(nil)
         }
-        
-        let urlRequestConvertible: URLRequestConvertible
-        do {
-            var urlRequest = try URLRequest(url: url, method: method, headers: headers)
-            if let body = body {
-                urlRequest = try JSONEncoding.default.encode(urlRequest, with: body.value())
-            }
-            if let query = query {
-                urlRequest = try URLEncoding.default.encode(urlRequest, with: query.value())
-            }
-            urlRequestConvertible = urlRequest
-        } catch {
-            class ErrorRequestConvertible : URLRequestConvertible {
-                private let error: Error
-                init(_ error: Error) {
-                    self.error = error
-                }
-                
-                func asURLRequest() throws -> URLRequest {
-                    throw self.error
-                }
-            }
-            urlRequestConvertible = ErrorRequestConvertible(error)
-        }
-
-        return Alamofire.request(urlRequestConvertible).validate()
     }
 }
 

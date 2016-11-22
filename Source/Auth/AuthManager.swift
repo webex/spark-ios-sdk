@@ -20,7 +20,7 @@
 
 import Foundation
 
-class AuthManager {
+class AuthManager : AuthenticationStrategy {
     
     static var sharedInstance = AuthManager()
     
@@ -38,7 +38,7 @@ class AuthManager {
         return clientAccount != nil
     }
     
-    private var accessToken: AccessToken? {
+    private var accessTokenObject: AccessToken? {
         get {
             if accessTokenCache == nil {
                 accessTokenCache = KeychainManager.sharedInstance.fetchAccessToken()
@@ -48,7 +48,7 @@ class AuthManager {
         }
         set {
             accessTokenCache = newValue
-			KeychainManager.sharedInstance.store(accessToken: newValue)
+            KeychainManager.sharedInstance.store(accessToken: newValue)
         }
     }
     
@@ -62,49 +62,48 @@ class AuthManager {
         }
         set {
             clientAccountCache = newValue
-			KeychainManager.sharedInstance.store(clientAccount: newValue)
+            KeychainManager.sharedInstance.store(clientAccount: newValue)
         }
     }
     
+    var authorized: Bool {
+        get {
+            guard let _ = accessTokenObject?.accessTokenString else {
+                return false
+            }
+            
+            return refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes)			
+        }
+    }
+	
+    // XXX This is basically the init for the OAuthStrategy
     func authorize(clientAccount: ClientAccount, scope: String, redirectUri: String, controller: UIViewController) {
         self.clientAccount = clientAccount
         self.scope = scope
         self.redirectUri = redirectUri
         
-		authorizeFrom(controller: controller)
+        authorizeFrom(controller: controller)
     }
-    
+	
+    // XXX This is basically the init for the SimpleStrategy
     func authorize(token: String) {
-        accessToken = AccessToken(accessToken: token)
+        accessTokenObject = AccessToken(accessToken: token)
     }
     
     func deauthorize() {
-        accessToken = nil
+        accessTokenObject = nil
         clientAccount = nil
     }
     
-    func authorized() -> Bool {
-        guard let _ = accessToken?.accessTokenString else {
-            return false
-        }
-        
-        guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
-            return false
-        }
-        
-        return true
-    }
-    
-    func getAuthorization() -> [String: String]? {
+    func accessToken() -> String? {
         guard refreshAccessTokenWithExpirationBuffer(AccessTokenExpirationBufferInMinutes) else {
             return nil
         }
-        
-        if let accessTokenString = self.accessToken?.accessTokenString {
-            return ["Authorization": "Bearer " + accessTokenString]
-        }
-        
-        return nil
+        return self.accessTokenObject?.accessTokenString 
+    }
+    
+    func accessToken(completionHandler: @escaping (String?) -> Void) {
+        completionHandler(accessToken())
     }
     
     private func authorizeFrom(controller: UIViewController) {
@@ -114,8 +113,8 @@ class AuthManager {
         
         let url = createAuthCodeRequestURL()
         let web = ConnectController(URL: url) { url in
-            if let accessToken = self.fetchAccessTokenFromRedirectUri(url) {
-                self.accessToken = accessToken
+            if let accessTokenObject = self.fetchAccessTokenFromRedirectUri(url) {
+                self.accessTokenObject = accessTokenObject
                 return true
             }
             return false
@@ -160,6 +159,7 @@ class AuthManager {
         return nil
     }
     
+    // XXX this refresh call is blocking and so is dangerous to use from the UI thread
     private func refreshAccessTokenWithExpirationBuffer(_ bufferInMinutes: Int) -> Bool {
         guard accessTokenWillExpireInMinutes(bufferInMinutes) else {
             return true
@@ -175,16 +175,16 @@ class AuthManager {
         }
         
         let thresholdDate = Date(timeInterval: Double(minutes*60), since: Date())
-        let expirationdate = accessToken!.accessTokenExpirationDate
+        let expirationdate = accessTokenObject!.accessTokenExpirationDate
         return thresholdDate.isAfterDate(expirationdate)
     }
     
     private func refreshAccessToken() -> Bool {
         do {
-            let accessToken = try OAuthClient().refreshAccessTokenFromRefreshToken((self.accessToken?.refreshTokenString)!, clientAccount: clientAccount!)
-            accessToken.refreshTokenString = self.accessToken?.refreshTokenString
-            accessToken.refreshTokenExpiration = self.accessToken?.refreshTokenExpiration
-            self.accessToken = accessToken
+            let accessTokenObject = try OAuthClient().refreshAccessTokenFromRefreshToken((self.accessTokenObject?.refreshTokenString)!, clientAccount: clientAccount!)
+            accessTokenObject.refreshTokenString = self.accessTokenObject?.refreshTokenString
+            accessTokenObject.refreshTokenExpiration = self.accessTokenObject?.refreshTokenExpiration
+            self.accessTokenObject = accessTokenObject
             
         } catch let error as NSError {
             deauthorize()
