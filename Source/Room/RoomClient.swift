@@ -21,8 +21,14 @@
 import Foundation
 
 /// Room HTTP client
-open class RoomClient: CompletionHandlerType<Room> {
-    
+open class RoomClient {
+	
+	/// Alias for closure to handle a service response along with a Room object.
+	public typealias ObjectHandler = (ServiceResponse<Room>) -> Void
+	
+	/// Alias for closure to handle a service response along with a Room array.
+	public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("rooms")
     }

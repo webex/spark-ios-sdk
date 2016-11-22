@@ -21,8 +21,14 @@
 import Foundation
 
 /// Person HTTP client
-open class PersonClient: CompletionHandlerType<Person> {
-    
+open class PersonClient {
+	
+	/// Alias for closure to handle a service response along with a Person object.
+	public typealias ObjectHandler = (ServiceResponse<Person>) -> Void
+	
+	/// Alias for closure to handle a service response along with a Person array.
+	public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("people")
     }
@@ -52,7 +58,7 @@ open class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    open func get(personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(personId)
@@ -67,7 +73,7 @@ open class PersonClient: CompletionHandlerType<Person> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func getMe(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    open func getMe(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path("me")

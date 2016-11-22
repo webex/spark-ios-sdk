@@ -21,8 +21,14 @@
 import Foundation
 
 /// Webhook HTTP client.
-open class WebhookClient: CompletionHandlerType<Webhook> {
-    
+open class WebhookClient {
+	
+	/// Alias for closure to handle a service response along with a Webhook object.
+	public typealias ObjectHandler = (ServiceResponse<Webhook>) -> Void
+	
+	/// Alias for closure to handle a service response along with a Webhook array.
+	public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("webhooks")
     }

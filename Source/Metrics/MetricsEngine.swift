@@ -21,8 +21,6 @@
 import Foundation
 
 class MetricsEngine {
-    typealias CompletionHandlerType = (Bool) -> Void
-    
     static let sharedInstance = MetricsEngine()
     
     private let MetricsBufferLimit = 50
@@ -72,7 +70,7 @@ class MetricsEngine {
     // Track a set of Metrics. This will send the Metrics over the network to the Metrics Endpoint immediately
     // without buffering metrics parameter is array of Metrics objects
     //
-    func trackMetrics(_ metrics: [Metric], completionHandler: CompletionHandlerType? = nil) {
+    func trackMetrics(_ metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
         if isDebuggerAttached() {
             Logger.warn("Skipping metric while debugging")
             return
@@ -94,7 +92,7 @@ class MetricsEngine {
         }
     }
     
-    private func postMetrics(_ payload: RequestParameter, completionHandler: CompletionHandlerType?) {
+    private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
         MetricsClient().post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {

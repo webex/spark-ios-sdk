@@ -20,8 +20,9 @@
 
 import Foundation
 
-class OAuthClient: CompletionHandlerType<AccessToken> {
-    
+class OAuthClient {
+	typealias ObjectHandler = (ServiceResponse<AccessToken>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder()
             .path("access_token")

@@ -70,7 +70,7 @@
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
 		B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75331CE2D7B70080EAE0 /* AuthManager.swift */; };
 		B91E75981CE2D7B70080EAE0 /* ConnectController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75351CE2D7B70080EAE0 /* ConnectController.swift */; };
-		B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */; };
+		B91E759A1CE2D7B70080EAE0 /* CommonTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75381CE2D7B70080EAE0 /* CommonTypes.swift */; };
 		B91E759B1CE2D7B70080EAE0 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75391CE2D7B70080EAE0 /* SparkError.swift */; };
 		B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753B1CE2D7B70080EAE0 /* Result.swift */; };
 		B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */; };
@@ -222,7 +222,7 @@
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
 		B91E75331CE2D7B70080EAE0 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		B91E75351CE2D7B70080EAE0 /* ConnectController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectController.swift; sourceTree = "<group>"; };
-		B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionHandlerType.swift; sourceTree = "<group>"; };
+		B91E75381CE2D7B70080EAE0 /* CommonTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommonTypes.swift; path = ../Http/CommonTypes.swift; sourceTree = "<group>"; };
 		B91E75391CE2D7B70080EAE0 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
 		B91E753B1CE2D7B70080EAE0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceRequest.swift; sourceTree = "<group>"; };
@@ -475,7 +475,6 @@
 			isa = PBXGroup;
 			children = (
 				3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */,
-				B91E75381CE2D7B70080EAE0 /* CompletionHandlerType.swift */,
 				B91E75391CE2D7B70080EAE0 /* SparkError.swift */,
 				B91E753B1CE2D7B70080EAE0 /* Result.swift */,
 				B91E753C1CE2D7B70080EAE0 /* ServiceRequest.swift */,
@@ -625,6 +624,7 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				B91E75381CE2D7B70080EAE0 /* CommonTypes.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
 				3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */,
@@ -936,7 +936,7 @@
 				5D67C6541CF04E6400758F6B /* MemoryLogger.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
-				B91E759A1CE2D7B70080EAE0 /* CompletionHandlerType.swift in Sources */,
+				B91E759A1CE2D7B70080EAE0 /* CommonTypes.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,

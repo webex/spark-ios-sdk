@@ -21,8 +21,14 @@
 import Foundation
 
 /// Message HTTP client.
-open class MessageClient: CompletionHandlerType<Message> {
-    
+open class MessageClient {
+	
+	/// Alias for closure to handle a service response along with a Message object.
+	public typealias ObjectHandler = (ServiceResponse<Message>) -> Void
+	
+	/// Alias for closure to handle a service response along with a Message array.
+	public typealias ArrayHandler = (ServiceResponse<[Message]>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().path("messages")
     }

@@ -20,7 +20,7 @@
 
 import Foundation
 
-class DeviceService: CompletionHandlerType<Device> {
+class DeviceService {
     static let sharedInstance = DeviceService()
     
     private var device: Device?

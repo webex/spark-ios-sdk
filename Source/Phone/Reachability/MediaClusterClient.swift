@@ -20,12 +20,14 @@
 
 import Foundation
 
-class MediaClusterClient: CompletionHandlerType<MediaCluster> {
+class MediaClusterClient {
+	typealias ObjectHandler = (ServiceResponse<MediaCluster>) -> Void
+	
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder().baseUrl(DeviceService.sharedInstance.getServiceUrl("calliopeDiscovery")!)
     }
     
-    func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path("clusters")
