@@ -58,7 +58,6 @@ class WebSocketService: WebSocketDelegate {
                 let socket = WebSocket(url: webSocketUrl)        
                 socket.headers["Authorization"] = "Bearer " + accessToken
                 socket.voipEnabled = true
-                socket.disableSSLCertValidation = true
                 socket.delegate = self
                 self.socket = socket
                 self.connect(webSocket: socket)   
@@ -111,7 +110,7 @@ class WebSocketService: WebSocketDelegate {
         
         socket.connect()
     }
-     
+
     private func despatch_main_after(_ delay: Double, closure: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
