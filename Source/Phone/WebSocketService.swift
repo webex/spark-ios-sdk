@@ -113,7 +113,6 @@ class WebSocketService: WebSocketDelegate {
         
         socket?.headers.unionInPlace(authorization)
         socket?.voipEnabled = true
-        socket?.disableSSLCertValidation = true
         socket?.delegate = self
         
         return socket
