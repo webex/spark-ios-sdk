@@ -20,8 +20,6 @@
 
 import Foundation
 
-public protocol AuthenticationStrategy : class {
-    var authorized: Bool { get }
-    func deauthorize()
-    func accessToken(completionHandler: @escaping (String?) -> Void)
+public protocol OAuthStorage : class {
+    var authenticationInfo: OAuthAuthenticationInfo? { get set }
 }

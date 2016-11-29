@@ -39,11 +39,11 @@ struct KeychainManager {
     }
     
     func store(clientAccount: ClientAccount?) {
-        if clientAccount == nil {
-            removeData(ClientAccountKey)
-        } else {
-            let data = NSKeyedArchiver.archivedData(withRootObject: clientAccount!)
+        if let clientAccount = clientAccount {
+            let data = NSKeyedArchiver.archivedData(withRootObject: clientAccount)
             storeDataWithKey(ClientAccountKey, data: data)
+        } else {
+            removeData(ClientAccountKey)
         }
     }
     
@@ -58,11 +58,11 @@ struct KeychainManager {
     }
 
     func store(accessToken: AccessToken?) {
-        if accessToken == nil {
-            removeData(AccessTokenKey)
-        } else {
-            let data = NSKeyedArchiver.archivedData(withRootObject: accessToken!)
+        if let accessToken = accessToken {
+            let data = NSKeyedArchiver.archivedData(withRootObject: accessToken)
             storeDataWithKey(AccessTokenKey, data: data)
+        } else {
+            removeData(AccessTokenKey)
         }
     }
     

@@ -20,8 +20,9 @@
 
 import Foundation
 
-public protocol AuthenticationStrategy : class {
-    var authorized: Bool { get }
-    func deauthorize()
-    func accessToken(completionHandler: @escaping (String?) -> Void)
+public struct OAuthAuthenticationInfo {
+    public let accessToken: String
+    public let accessTokenExpirationDate: Date
+    public let refreshToken: String
+    public let refreshTokenExpirationDate: Date
 }

@@ -27,14 +27,10 @@ class AccessToken: NSObject, NSCoding, Mappable {
     var accessTokenExpiration: TimeInterval?
     var refreshTokenString: String?
     var refreshTokenExpiration: TimeInterval?
-    var accessTokenCreation: TimeInterval?
+    var accessTokenCreationDate: Date
     
     var accessTokenExpirationDate: Date {
         return Date(timeInterval: accessTokenExpiration!, since: accessTokenCreationDate)
-    }
-    
-    var accessTokenCreationDate: Date {
-        return Date(timeIntervalSinceReferenceDate: accessTokenCreation!)
     }
     
     private let accessTokenKey = "accessTokenKey"
@@ -44,13 +40,14 @@ class AccessToken: NSObject, NSCoding, Mappable {
     private let accessTokenCreationKey = "accessTokenCreationKey"
     
     init(accessToken: String) {
-        self.accessTokenString = accessToken
+        accessTokenCreationDate = Date()
+        accessTokenString = accessToken
     }
     
     // MARK:- Mappable
     
     required init?(map: Map) {
-        accessTokenCreation = Date().timeIntervalSinceReferenceDate
+        accessTokenCreationDate = Date()
     }
     
     func mapping(map: Map) {
@@ -67,7 +64,7 @@ class AccessToken: NSObject, NSCoding, Mappable {
         accessTokenExpiration = aDecoder.decodeDouble(forKey: accessTokenExpirationKey)
         refreshTokenString = aDecoder.decodeObject(forKey: refreshTokenKey) as? String
         refreshTokenExpiration = aDecoder.decodeDouble(forKey: refreshTokenExpirationKey)
-        accessTokenCreation = aDecoder.decodeDouble(forKey: accessTokenCreationKey)
+        accessTokenCreationDate = Date(timeIntervalSinceReferenceDate:aDecoder.decodeDouble(forKey: accessTokenCreationKey))
     }
     
     func encode(with aCoder: NSCoder) {
@@ -75,7 +72,7 @@ class AccessToken: NSObject, NSCoding, Mappable {
         encodeDouble(accessTokenExpiration, forKey: accessTokenExpirationKey, aCoder: aCoder)
         encodeObject(refreshTokenString, forKey: refreshTokenKey, aCoder: aCoder)
         encodeDouble(refreshTokenExpiration, forKey: refreshTokenExpirationKey, aCoder: aCoder)
-        encodeDouble(accessTokenCreation, forKey: accessTokenCreationKey, aCoder: aCoder)
+        encodeDouble(accessTokenCreationDate.timeIntervalSinceReferenceDate, forKey: accessTokenCreationKey, aCoder: aCoder)
     }
     
     private func encodeObject(_ objv: Any?, forKey key: String, aCoder: NSCoder) {

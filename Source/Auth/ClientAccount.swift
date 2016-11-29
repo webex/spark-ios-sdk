@@ -21,8 +21,8 @@
 import Foundation
 
 class ClientAccount: NSObject, NSCoding {
-    var clientId: String
-    var clientSecret: String
+    let clientId: String
+    let clientSecret: String
     
     private let clientIdKey = "clientIdKey"
     private let clientSecretKey = "clientSecretKey"

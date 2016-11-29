@@ -98,14 +98,14 @@ struct SyncUtil {
             let semaphore = DispatchSemaphore(value: 0)
             let queue = DispatchQueue.global()
             
-            var t: T!
+            var t: T?
             async(i, queue) {
                 t = $0
                 semaphore.signal()
             }
             _ = semaphore.wait(timeout: DispatchTime.distantFuture)
             
-            return t
+            return t!
         }
     }
     
