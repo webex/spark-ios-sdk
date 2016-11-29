@@ -26,21 +26,42 @@ class ApplicationLifecycleObserver: NotificationObserver {
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
-                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground))]
+                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground)),
+                (SparkBackgroundCallNotifications.SparkCallIncomingInBackground.name, #selector(onIncomingCallInBackground)),
+                (SparkBackgroundCallNotifications.SparkCallDeclinedInBackground.name, #selector(onDeclinedCallInBackground)),
+        ]
     }
     
     func onApplicationDidBecomeActive() {
         Logger.info("Application did become active")
         
         CallManager.sharedInstance.fetchActiveCalls()
-        if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
-            WebSocketService.sharedInstance.connect(URL(string: webSocketUrl)!)
-        }
+        self.openWebSocket()
     }
-    
+
     func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
         
         WebSocketService.sharedInstance.disconnect()
+    }
+
+    func onIncomingCallInBackground() {
+        Logger.info("Incoming call when app in background")
+
+        self.openWebSocket()
+    }
+
+    func onDeclinedCallInBackground() {
+        guard UIApplication.shared.applicationState == .background else {
+            return
+        }
+        Logger.info("Incoming call declined when app in background")
+        WebSocketService.sharedInstance.disconnect()
+    }
+
+    private func openWebSocket() {
+        if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
+            WebSocketService.sharedInstance.connect(URL(string: webSocketUrl)!)
+        }
     }
 }
