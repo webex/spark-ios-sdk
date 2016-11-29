@@ -27,7 +27,7 @@ import UIKit
 open class Spark {
     
     /// The version number of this SDK.
-    open static let version = "1.0.0"
+    open static let version = "1.1.0"
     
     /// Indicates whether the SDK has been authorized.
     open static func authorized() -> Bool {
