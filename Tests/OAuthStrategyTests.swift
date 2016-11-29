@@ -163,6 +163,18 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqualWithAccuracy(authInfo?.refreshTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, dayAfterTomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
     }
     
+    func testWhenAccessTokenIsAlmostExpiredButRefreshTokenIsNotThenNewAccessTokenIsReturnedFromService() {
+        let testObject = createTestObject()
+        
+        let almostExpired = now.addingTimeInterval(14*60)
+        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: almostExpired,
+                                                             refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        testObject.accessToken() { _ in
+        }
+
+        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_callCount, 1)
+    }
+    
     func testWhenAccessTokenRefreshFailsThenDeauthorized() {
         let testObject = createTestObject()
         

@@ -56,6 +56,7 @@
 		5AC09EBB1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EBA1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift */; };
 		5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */; };
 		5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */; };
+		5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */; };
 		5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */; };
 		5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D10539A1D066CF6004B30B7 /* MediaOption.swift */; };
 		5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5D011CF6FB3A00313515 /* Reachability.swift */; };
@@ -214,6 +215,7 @@
 		5AC09EBA1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthAuthenticationInfo.swift; sourceTree = "<group>"; };
 		5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthStrategyTests.swift; path = Tests/OAuthStrategyTests.swift; sourceTree = SOURCE_ROOT; };
 		5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthKeychainStorageTests.swift; path = Tests/OAuthKeychainStorageTests.swift; sourceTree = SOURCE_ROOT; };
+		5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleAuthStrategy.swift; sourceTree = "<group>"; };
 		5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceAddress.swift; sourceTree = "<group>"; };
 		5D10539A1D066CF6004B30B7 /* MediaOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaOption.swift; sourceTree = "<group>"; };
 		5D1A5D011CF6FB3A00313515 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -488,6 +490,7 @@
 				5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */,
 				5AC09EB81DE63C66005F38BC /* OAuthStorage.swift */,
 				5AC09EBA1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift */,
+				5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -968,6 +971,7 @@
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
 				B91E75A21CE2D7B70080EAE0 /* MediaEngineWrapper.swift in Sources */,
+				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* Logger.swift in Sources */,
 				B91E75A31CE2D7B70080EAE0 /* MediaEngineObserver.swift in Sources */,
 				3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */,

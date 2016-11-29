@@ -20,18 +20,11 @@
 
 import Foundation
 
-// XXX We need to notify of failure to reauthenticate 
-// PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
-
-// XXX We don't use an expiration buffer on getting the access token
-
 public protocol SparkViewControllerProvider {
     var viewController: UIViewController { get }
 }
 
 public class OAuthStrategy : AuthenticationStrategy {
-    private let AccessTokenExpirationBufferInMinutes = 15
-
     private let clientAccount: ClientAccount
     private let scope: String
     private let redirectUri: String
@@ -103,8 +96,8 @@ public class OAuthStrategy : AuthenticationStrategy {
             completionHandler(nil)
             return
         }
-        
-        if authenticationInfo.accessTokenExpirationDate > Date() {
+        let buffer: TimeInterval = 15 * 60
+        if authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
             completionHandler(authenticationInfo.accessToken)
         } else {
             oauthClient.refreshOAuthAccessTokenFromRefreshToken(authenticationInfo.refreshToken, clientAccount) { response in
@@ -113,8 +106,10 @@ public class OAuthStrategy : AuthenticationStrategy {
                     if let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {
                         self.storage.authenticationInfo = authInfo
                     }
-                case .failure(_):
+                case .failure(let error):
                     self.deauthorize()
+                    Logger.error("Failed to refresh token", error: error)
+                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
                 }
                 completionHandler(self.storage.authenticationInfo?.accessToken)
             }
