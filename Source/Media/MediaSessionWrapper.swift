@@ -23,8 +23,11 @@ import Wme
 
 class MediaSessionWrapper {
     private let mediaSession = MediaSession()
-    private let mediaSessionObserver = MediaSessionObserver()
+    private let mediaSessionObserver: MediaSessionObserver
     
+    init(callManager: CallManager) {
+        mediaSessionObserver = MediaSessionObserver(callManager: callManager)
+    }
     
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
         return session == mediaSession

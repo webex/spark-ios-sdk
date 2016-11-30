@@ -24,6 +24,11 @@ import Wme
 
 class MediaSessionObserver: NotificationObserver {
     private let callNotificationCenter = CallNotificationCenter.sharedInstance
+    private let callManager: CallManager
+    
+    init(callManager: CallManager) {
+        self.callManager = callManager
+    }
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [
@@ -119,7 +124,7 @@ class MediaSessionObserver: NotificationObserver {
     
     private func getCallFromNotification(_ notification: Notification) -> Call? {
         if let session = notification.object as? MediaSession {
-			return CallManager.sharedInstance.findCallBy(mediaSession: session)
+            return callManager.findCallBy(mediaSession: session)
         }
         return nil
     }

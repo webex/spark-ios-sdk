@@ -55,11 +55,13 @@ public class Phone {
     private let reachabilityService = ReachabilityService.sharedInstance
     private let applicationLifecycleObserver: ApplicationLifecycleObserver
     private let authenticationStrategy: AuthenticationStrategy
+    private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService) {
+    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager) {
         self.authenticationStrategy = authenticationStrategy
         self.applicationLifecycleObserver = applicationLifecycleObserver
         self.webSocketService = webSocketService
+        self.callManager = callManager
     }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
@@ -77,7 +79,7 @@ public class Phone {
         deviceService.registerDevice() { success in
             if success {
                 self.applicationLifecycleObserver.startObserving()
-                CallManager.sharedInstance.fetchActiveCalls()
+                self.callManager.fetchActiveCalls()
                 self.webSocketService.connect(URL(string: self.deviceService.webSocketUrl!)!)
             }
             completionHandler?(success)
@@ -107,7 +109,7 @@ public class Phone {
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
     public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = Call(authenticationStrategy: authenticationStrategy)
+        let call = Call(authenticationStrategy: authenticationStrategy, callManager: callManager)
         call.dial(address: address, option: option) { success in
             completionHandler(success)
         }

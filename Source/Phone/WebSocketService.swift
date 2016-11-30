@@ -32,9 +32,11 @@ class WebSocketService: WebSocketDelegate {
     private var connectionRetryCounter: ExponentialBackOffCounter
     private var pendingMessages: [JSON]
     private let authenticationStrategy: AuthenticationStrategy
+    private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         self.authenticationStrategy = authenticationStrategy
+        self.callManager = callManager
         connectionRetryCounter = ExponentialBackOffCounter(minimum: 0.5, maximum: 32, multiplier: 2)
         pendingMessages = [JSON]()
     }
@@ -189,7 +191,7 @@ class WebSocketService: WebSocketDelegate {
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
                     Logger.info("locus event: \(eventData.object)")
-                    CallManager.sharedInstance.handle(callEventJson: eventData.object)
+                    callManager.handle(callEventJson: eventData.object)
                 }
             }
         }

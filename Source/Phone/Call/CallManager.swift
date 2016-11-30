@@ -22,9 +22,7 @@ import ObjectMapper
 
 class CallManager {
     
-    static let sharedInstance = SparkInstance.sharedInstance.callManager
     private var callInstances = [String: Call]()
-    
     private let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
@@ -113,7 +111,7 @@ class CallManager {
     }
 
     private func doActionWhenIncoming(_ callInfo: CallInfo) {
-        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy)
+        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
         addCallWith(url: incomingCall.url, call: incomingCall)
 
         PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
@@ -123,7 +121,7 @@ class CallManager {
     
     private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
         // TODO: need to support other device joined case
-        let call = Call(callInfo, authenticationStrategy: authenticationStrategy)
+        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
         addCallWith(url: call.url, call: call)
     }
 }

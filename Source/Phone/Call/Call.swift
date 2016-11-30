@@ -143,21 +143,26 @@ open class Call {
     var url: String { return info?.callUrl ?? "" }
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
-    private let mediaSession = MediaSessionWrapper()
+    private let mediaSession: MediaSessionWrapper
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     private let reachabilityService = ReachabilityService.sharedInstance
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
+    private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
+        self.callManager = callManager
+        mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy) {
+    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         self.info = info
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
+        self.callManager = callManager
+        mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
         
@@ -353,7 +358,7 @@ open class Call {
     }
     
     func removeFromCallManager() {
-        CallManager.sharedInstance.removeCallWith(url: url)
+        callManager.removeCallWith(url: url)
     }
     
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
@@ -432,7 +437,7 @@ open class Call {
                 Logger.error("Failure: remoteSdp is nil")
             }
             self.mediaSession.startMedia()
-            CallManager.sharedInstance.addCallWith(url: self.url, call: self)
+            callManager.addCallWith(url: self.url, call: self)
             from = info?.hostEmail
             
             Logger.info("Success: join call")
