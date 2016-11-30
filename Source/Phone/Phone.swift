@@ -109,7 +109,7 @@ public class Phone {
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
     public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = Call(authenticationStrategy: authenticationStrategy, callManager: callManager)
+        let call = callManager.createOutgoingCall()
         call.dial(address: address, option: option) { success in
             completionHandler(success)
         }

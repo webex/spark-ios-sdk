@@ -21,6 +21,7 @@
 import Foundation
 import Starscream
 import SwiftyJSON
+import ObjectMapper
 
 class WebSocketService: WebSocketDelegate {
     
@@ -191,12 +192,30 @@ class WebSocketService: WebSocketDelegate {
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
                     Logger.info("locus event: \(eventData.object)")
-                    callManager.handle(callEventJson: eventData.object)
+                    handle(callEventJson: eventData.object)
                 }
             }
         }
         
         pendingMessages.removeAll()
+    }
+    
+    private func handle(callEventJson event: Any) {
+        guard let eventJson = event as? [String: Any] else {
+            return
+        }
+        
+        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
+            return
+        }
+        
+        guard let callInfo = callEvent.callInfo else {
+            return
+        }
+        
+        Logger.info(callEvent.type!)
+        
+        callManager.handle(callInfo: callInfo)
     }
     
     // MARK: - Web Socket Timers

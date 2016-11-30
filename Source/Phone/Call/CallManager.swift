@@ -18,8 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ObjectMapper
-
 class CallManager {
     
     private var callInstances = [String: Call]()
@@ -50,30 +48,14 @@ class CallManager {
         return nil
     }
     
-    func handle(callEventJson event: Any) {
-        guard let eventJson = event as? [String: Any] else {
-            return
-        }
-        
-        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
-            return
-        }
-        
-        guard let callInfo = callEvent.callInfo else {
-            return
-        }
-        
-        Logger.info(callEvent.type!)
-        
-        handle(callInfo: callInfo)
-    }
-    
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
         CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos() {
             switch $0.result {
-            case .success(let value):
-                self.handleActiveCalls(value)
+            case .success(let callInfos):
+                for callInfo in callInfos {
+                    self.handle(callInfo: callInfo)
+                }
                 Logger.info("Success: fetch call infos")
             case .failure(let error):
                 Logger.error("Failure", error: error)
@@ -81,7 +63,7 @@ class CallManager {
         }
     }
     
-    private func handle(callInfo: CallInfo) {
+    func handle(callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
             return
         }
@@ -104,10 +86,8 @@ class CallManager {
         }
     }
     
-    private func handleActiveCalls(_ callInfos: [CallInfo]) {
-        for callInfo in callInfos {
-            handle(callInfo: callInfo)
-        }
+    func createOutgoingCall() -> Call {
+        return Call(authenticationStrategy: authenticationStrategy, callManager: self)
     }
 
     private func doActionWhenIncoming(_ callInfo: CallInfo) {
