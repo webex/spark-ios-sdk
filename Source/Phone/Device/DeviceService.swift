@@ -100,23 +100,23 @@ class DeviceService {
             completionHandler(true)
         case .failure(let error):
             Logger.error("Failed to deregister device", error: error)
-			completionHandler(false)
+            completionHandler(false)
         }
     }
     
     private func createDeviceInfo() -> RequestParameter {
         
         let currentDevice = UIDevice.current
-		let deviceName = currentDevice.name.isEmpty ? "notset" : currentDevice.name
+        let deviceName = currentDevice.name.isEmpty ? "notset" : currentDevice.name
         
-		let deviceType: String
+        let deviceType: String
         if isPad() {
             deviceType = "IPAD"
         } else if isPhone() {
             deviceType = "IPHONE"
-		} else {
-			deviceType = "UNKNOWN"
-		}
+        } else {
+            deviceType = "UNKNOWN"
+        }
         
         let deviceParameters:[String: Any] = [
             "deviceName": deviceName,

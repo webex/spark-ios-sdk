@@ -145,23 +145,25 @@ open class Call {
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession: MediaSessionWrapper
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
-    private let reachabilityService = ReachabilityService.sharedInstance
+    private let reachabilityService: ReachabilityService
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
     private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager, reachabilityService: ReachabilityService) {
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
         self.callManager = callManager
+        self.reachabilityService = reachabilityService
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
+    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager, reachabilityService: ReachabilityService) {
         self.info = info
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
         self.callManager = callManager
+        self.reachabilityService = reachabilityService
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail

@@ -14,6 +14,7 @@ class SparkInstance {
     static var sharedInstance: SparkInstance {
         get {
             if actualSharedInstance == nil {
+                Logger.warn("Detected use of deprecated SparkSDK API.")
                 let actualSharedInstance = SparkInstance()
        
                 let keychain = getKeychain()
@@ -80,19 +81,18 @@ class SparkInstance {
     
     let authenticationStrategy: AuthenticationStrategyProxy
     let callMetrics: CallMetrics
-    let reachabilityService: ReachabilityService
     let deviceService: DeviceService
     let phone: Phone
     
     init() {
         authenticationStrategy = AuthenticationStrategyProxy()
         callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy)
-        reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
-        let callManager = CallManager(authenticationStrategy: authenticationStrategy)
-        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
+        let reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
+        let callManager = CallManager(authenticationStrategy: authenticationStrategy, reachabilityService: reachabilityService)
+        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager, reachabilityService: reachabilityService)
         let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager)
         deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
-        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager)
+        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, reachabilityService: reachabilityService)
     }
     
     func set(authenticationStrategy: AuthenticationStrategy) {

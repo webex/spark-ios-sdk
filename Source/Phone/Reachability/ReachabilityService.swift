@@ -24,7 +24,6 @@ import ObjectMapper
 class ReachabilityService {
     
     typealias ReachabilityHandler = (String?) -> Void
-    static let sharedInstance = SparkInstance.sharedInstance.reachabilityService
     var feedback: MediaEngineReachabilityFeedback?
     
     private var hostAddresses: [InterfaceAddress.Item]?

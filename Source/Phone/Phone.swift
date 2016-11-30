@@ -52,16 +52,17 @@ public class Phone {
 
     private let deviceService    = DeviceService.sharedInstance
     private let webSocketService: WebSocketService
-    private let reachabilityService = ReachabilityService.sharedInstance
+    private let reachabilityService: ReachabilityService
     private let applicationLifecycleObserver: ApplicationLifecycleObserver
     private let authenticationStrategy: AuthenticationStrategy
     private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager) {
+    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager, reachabilityService: ReachabilityService) {
         self.authenticationStrategy = authenticationStrategy
         self.applicationLifecycleObserver = applicationLifecycleObserver
         self.webSocketService = webSocketService
         self.callManager = callManager
+        self.reachabilityService = reachabilityService
     }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.

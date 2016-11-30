@@ -22,9 +22,11 @@ class CallManager {
     
     private var callInstances = [String: Call]()
     private let authenticationStrategy: AuthenticationStrategy
+    private let reachabilityService: ReachabilityService
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, reachabilityService: ReachabilityService) {
         self.authenticationStrategy = authenticationStrategy
+        self.reachabilityService = reachabilityService
     }
     
     func addCallWith(url: String, call: Call) {
@@ -87,11 +89,11 @@ class CallManager {
     }
     
     func createOutgoingCall() -> Call {
-        return Call(authenticationStrategy: authenticationStrategy, callManager: self)
+        return Call(authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
     }
 
     private func doActionWhenIncoming(_ callInfo: CallInfo) {
-        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
+        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
         addCallWith(url: incomingCall.url, call: incomingCall)
 
         PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
@@ -101,7 +103,7 @@ class CallManager {
     
     private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
         // TODO: need to support other device joined case
-        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
+        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
         addCallWith(url: call.url, call: call)
     }
 }
