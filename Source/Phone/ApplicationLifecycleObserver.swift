@@ -29,17 +29,19 @@ class ApplicationLifecycleObserver: NotificationObserver {
     
     private let webSocketService: WebSocketService
     private let callManager: CallManager
+    private let deviceService: DeviceService
     
-    init(webSocketService: WebSocketService, callManager: CallManager) {
+    init(webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
         self.webSocketService = webSocketService
         self.callManager = callManager
+        self.deviceService = deviceService
     }
     
     func onApplicationDidBecomeActive() {
         Logger.info("Application did become active")
         
         callManager.fetchActiveCalls()
-        if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
+        if let webSocketUrl = deviceService.webSocketUrl {
             webSocketService.connect(URL(string: webSocketUrl)!)
         }
     }

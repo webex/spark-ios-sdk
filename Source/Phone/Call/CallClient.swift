@@ -27,9 +27,11 @@ class CallClient {
     typealias ArrayHandler = (ServiceResponse<[CallInfo]>) -> Void
     
     private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
@@ -39,7 +41,7 @@ class CallClient {
     func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
-            .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
+            .baseUrl(deviceService.getServiceUrl("locus")!)
             .body(localInfo)
             .path("loci/call")
             .queue(queue)
@@ -145,7 +147,7 @@ class CallClient {
     func fetchCallInfos(_ queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
-            .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
+            .baseUrl(deviceService.getServiceUrl("locus")!)
             .path("loci")
             .keyPath("loci")
             .queue(queue)

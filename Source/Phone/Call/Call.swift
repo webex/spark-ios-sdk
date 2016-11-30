@@ -144,23 +144,25 @@ open class Call {
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession: MediaSessionWrapper
-    private let deviceUrl = DeviceService.sharedInstance.deviceUrl
+    private let deviceUrl: String
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
     private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
-        callClient = CallClient(authenticationStrategy: authenticationStrategy)
+    init(callManager: CallManager, callClient: CallClient, deviceUrl: String) {
         self.callManager = callManager
+        self.callClient = callClient
+        self.deviceUrl = deviceUrl
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
+    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String) {
         self.info = info
-        callClient = CallClient(authenticationStrategy: authenticationStrategy)
         self.callManager = callManager
+        self.callClient = callClient
+        self.deviceUrl = deviceUrl
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
@@ -197,7 +199,7 @@ open class Call {
         mediaSession.stopMedia()
         
         let participantUrl = info?.selfParticipantUrl
-        callClient.leave(participantUrl!, deviceUrl: deviceUrl!) {
+        callClient.leave(participantUrl!, deviceUrl: deviceUrl) {
             switch $0.result {
             case .success(let value):
 				self.update(callInfo: value)
@@ -219,7 +221,7 @@ open class Call {
         mediaSession.stopMedia()
         
         let callUrl = info?.callUrl
-        callClient.decline(callUrl!, deviceUrl: deviceUrl!) {
+        callClient.decline(callUrl!, deviceUrl: deviceUrl) {
             switch $0.result {
             case .success:
                 Logger.info("Success: reject call")
@@ -423,7 +425,7 @@ open class Call {
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)
         let localMedias = [["type": "SDP", "localSdp": mediaInfoJSON!]]
         
-        return RequestParameter(["deviceUrl": deviceUrl!, "localMedias": localMedias])
+        return RequestParameter(["deviceUrl": deviceUrl, "localMedias": localMedias])
     }
     
     private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {

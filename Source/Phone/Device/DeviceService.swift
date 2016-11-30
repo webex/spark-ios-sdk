@@ -84,10 +84,15 @@ class DeviceService {
     
     private func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
         switch response.result {
-        case .success(let value):
-            self.device = value
-            self.deviceUrl = self.device?.deviceUrl
-            completionHandler(true)
+        case .success(let device):
+            if let deviceUrl = device.deviceUrl {
+                self.device = device
+                self.deviceUrl = deviceUrl
+                completionHandler(true)
+            } else {
+                Logger.error("Missing device URL when registering device")
+                completionHandler(false)
+            }
         case .failure(let error):
             Logger.error("Failed to register device", error: error)
             completionHandler(false)

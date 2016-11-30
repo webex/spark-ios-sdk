@@ -23,14 +23,16 @@ class CallManager {
     private var callInstances = [String: Call]()
     private let authenticationStrategy: AuthenticationStrategy
     private let reachabilityService: ReachabilityService
+    private let deviceService: DeviceService
+    
     var localReachabilityInfo: [String /* media cluster tag */ : Reachability]? {
         return reachabilityService.feedback?.reachabilities
     }
-
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
         self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
+        self.deviceService = deviceService
     }
     
     func addCallWith(url: String, call: Call) {
@@ -56,7 +58,7 @@ class CallManager {
     
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
-        CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos() {
+        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() {
             switch $0.result {
             case .success(let callInfos):
                 for callInfo in callInfos {
@@ -92,32 +94,21 @@ class CallManager {
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
             call.update(callInfo: callInfo)
-            return
-        }
-        
-        if callInfo.isIncomingCall {
-            doActionWhenIncoming(callInfo)
-        } else if callInfo.hasJoinedOnOtherDevice {
-            doActionWhenJoinedOnOtherDevice(callInfo)
+        } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice {
+            let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl)
+            addCallWith(url: callUrl, call: call)
+
+            if callInfo.isIncomingCall {
+                PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
+                Logger.info("Receive incoming call")
+            }
+            // TODO: need to support other device joined case
         }
     }
     
     func createOutgoingCall() -> Call {
-        return Call(authenticationStrategy: authenticationStrategy, callManager: self)
-    }
-
-    private func doActionWhenIncoming(_ callInfo: CallInfo) {
-        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
-        addCallWith(url: incomingCall.url, call: incomingCall)
-
-        PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
-        
-        Logger.info("Receive incoming call")
-    }
-    
-    private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
-        // TODO: need to support other device joined case
-        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
-        addCallWith(url: call.url, call: call)
+        let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!)
     }
 }
