@@ -24,13 +24,18 @@ import ObjectMapper
 class ReachabilityService {
     
     typealias ReachabilityHandler = (String?) -> Void
-    static let sharedInstance = ReachabilityService()
+    static let sharedInstance = SparkInstance.sharedInstance.reachabilityService
     var feedback: MediaEngineReachabilityFeedback?
     
     private var hostAddresses: [InterfaceAddress.Item]?
     private var lastFetchData: Date?
     private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
-
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
         let isMaxAgeReached = isLastFetchLongEnough()
@@ -96,7 +101,7 @@ class ReachabilityService {
     
     private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
-        MediaClusterClient().get() {
+        MediaClusterClient(authenticationStrategy: authenticationStrategy).get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
             case .success(let value):

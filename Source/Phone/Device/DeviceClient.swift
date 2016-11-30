@@ -24,8 +24,14 @@ class DeviceClient {
     
     typealias ObjectHandler = (ServiceResponse<Device>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
+        return ServiceRequest.Builder(authenticationStrategy).baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
     }
     
     func create(_ deviceInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {

@@ -33,9 +33,10 @@ class ServiceRequest {
     private let query: RequestParameter?
     private let keyPath: String?
     private let queue: DispatchQueue?
+    private let authenticationStrategy: AuthenticationStrategy
     
-    
-    private init(url: URL, headers: [String: String], method: Alamofire.HTTPMethod, authRequired: Bool, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
+    private init(authenticationStrategy: AuthenticationStrategy, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, authRequired: Bool, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
+        self.authenticationStrategy = authenticationStrategy
         self.url = url
         self.headers = headers
         self.method = method
@@ -48,6 +49,7 @@ class ServiceRequest {
     
     class Builder {
         
+        private let authenticationStrategy: AuthenticationStrategy
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod
         private var baseUrl: String
@@ -59,7 +61,8 @@ class ServiceRequest {
         private var queue: DispatchQueue?
         
         
-        init() {
+        init(_ authenticationStrategy: AuthenticationStrategy) {
+            self.authenticationStrategy = authenticationStrategy
             let userAgent = UserAgent.sharedInstance.userAgentString
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": userAgent]
@@ -71,7 +74,7 @@ class ServiceRequest {
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(url: URL(string: baseUrl)!.appendingPathComponent(path), headers: headers, method: method, authRequired: authRequired, body: body, query: query, keyPath: keyPath, queue: queue)
+            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: URL(string: baseUrl)!.appendingPathComponent(path), headers: headers, method: method, authRequired: authRequired, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -231,8 +234,9 @@ class ServiceRequest {
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
+        // XXX get rid of authRequired and replace it with just using a always-failing auth strategy
         if authRequired {
-            AuthManager.sharedInstance.accessToken { (accessToken) in
+            authenticationStrategy.accessToken { (accessToken) in
                 accessTokenCallback(accessToken)
             }
         } else {

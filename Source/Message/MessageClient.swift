@@ -29,8 +29,14 @@ open class MessageClient {
     /// Alias for closure to handle a service response along with a Message array.
     public typealias ArrayHandler = (ServiceResponse<[Message]>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    public init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("messages")
+        return ServiceRequest.Builder(authenticationStrategy).path("messages")
     }
     
     /// Lists all messages in a room. If present, includes the associated media content attachment for each message.

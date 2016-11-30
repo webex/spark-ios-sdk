@@ -29,8 +29,14 @@ open class RoomClient {
     /// Alias for closure to handle a service response along with a Room array.
     public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    public init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("rooms")
+        return ServiceRequest.Builder(authenticationStrategy).path("rooms")
     }
     
     /// List rooms. By default, lists rooms to which the authenticated user belongs.

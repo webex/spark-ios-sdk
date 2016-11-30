@@ -29,13 +29,15 @@ class DtmfQueue {
     weak var call: Call!
     var correlationId: Int
     var waitingForResponse: Bool
-    
+    private let callClient: CallClient
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     
-    init(_ call: Call) {
+    
+    init(_ call: Call, callClient: CallClient) {
+        self.call = call
+        self.callClient = callClient
         queue = []
         correlationId = 1
-        self.call = call
         dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue")
         waitingForResponse = false
     }
@@ -77,7 +79,7 @@ class DtmfQueue {
                 
                 let participantUrl = self.call.info?.selfParticipantUrl
                 self.waitingForResponse = true
-                CallClient().sendDtmf(participantUrl!, deviceUrl: self.deviceUrl!, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
+                self.callClient.sendDtmf(participantUrl!, deviceUrl: self.deviceUrl!, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
                     switch $0.result {
                     case .success:
                         Logger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")

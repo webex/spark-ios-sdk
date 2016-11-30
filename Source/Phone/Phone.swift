@@ -21,7 +21,7 @@
 import AVFoundation
 
 /// Represents a Spark phone device.
-open class Phone {
+public class Phone {
     
     /// Privacy control of media access type.
     public enum MediaAccessType {
@@ -33,7 +33,11 @@ open class Phone {
         case audioVideo
     }
     
-    static let sharedInstance = Phone()
+    static var sharedInstance: Phone {
+        get {
+            return SparkInstance.sharedInstance.phone
+        }
+    }
 
     /// Default loud speaker mode, used as the default when dialing or answering a call.
     /// True as using loud speaker, False as not.
@@ -47,9 +51,16 @@ open class Phone {
     open var defaultLoudSpeaker = true
 
     private let deviceService    = DeviceService.sharedInstance
-    private let webSocketService = WebSocketService.sharedInstance
+    private let webSocketService: WebSocketService
     private let reachabilityService = ReachabilityService.sharedInstance
-    private let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
+    private let applicationLifecycleObserver: ApplicationLifecycleObserver
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.applicationLifecycleObserver = applicationLifecycleObserver
+        self.webSocketService = webSocketService
+    }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
     ///
@@ -58,7 +69,7 @@ open class Phone {
     /// - note: This function is expected to run on main thread.
     open func register(_ completionHandler: ((Bool) -> Void)?) {
         // XXX This guard means that the completion handler may never be fired
-        guard AuthManager.sharedInstance.authorized else {
+        guard authenticationStrategy.authorized else {
             Logger.error("Skip registering device due to no authorization")
             return
         }
@@ -96,7 +107,7 @@ open class Phone {
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
     open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = Call()
+        let call = Call(authenticationStrategy: authenticationStrategy)
         call.dial(address: address, option: option) { success in
             completionHandler(success)
         }

@@ -29,8 +29,14 @@ open class WebhookClient {
     /// Alias for closure to handle a service response along with a Webhook array.
     public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    public init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("webhooks")
+        return ServiceRequest.Builder(authenticationStrategy).path("webhooks")
     }
     
     /// Lists all webhooks.

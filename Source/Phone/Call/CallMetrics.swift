@@ -43,9 +43,15 @@ struct Feedback {
 }
 
 class CallMetrics {
-    static let sharedInstance = CallMetrics()
+    
+    static let sharedInstance = SparkInstance.sharedInstance.callMetrics
     
     private let TestUserEmailDomain = "example.com"
+    private let metricsEngine: MetricsEngine
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy)
+    }
     
     func submit(feedback: Feedback, callInfo: CallInfo) {
         var data: Metric.DataType = createBasicCallData(callInfo)
@@ -57,12 +63,12 @@ class CallMetrics {
         }
         
         let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: environment)
-        MetricsEngine.sharedInstance.trackMetric(metric)
+        metricsEngine.trackMetric(metric)
     }
     
     func reportVideoLicenseActivation() {
         let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
-        MetricsEngine.sharedInstance.trackMetric(metric)
+        metricsEngine.trackMetric(metric)
     }
     
     private func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {

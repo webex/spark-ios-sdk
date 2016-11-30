@@ -21,10 +21,14 @@
 import Foundation
 
 class DeviceService {
-    static let sharedInstance = DeviceService()
+    static let sharedInstance = SparkInstance.sharedInstance.deviceService
     
     private var device: Device?
-    private let client: DeviceClient = DeviceClient()
+    private let client: DeviceClient
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        client = DeviceClient(authenticationStrategy: authenticationStrategy)
+    }
     
     var deviceUrl: String? {
         get {

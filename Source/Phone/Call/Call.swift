@@ -147,19 +147,22 @@ open class Call {
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
     private let reachabilityService = ReachabilityService.sharedInstance
     private var dtmfQueue: DtmfQueue!
+    private let callClient: CallClient
     
-    init() {
+    init(authenticationStrategy: AuthenticationStrategy) {
+        callClient = CallClient(authenticationStrategy: authenticationStrategy)
         state = CallStateIdle(self)
-        dtmfQueue = DtmfQueue(self)
+        dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo) {
+    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy) {
         self.info = info
+        callClient = CallClient(authenticationStrategy: authenticationStrategy)
         to = info.selfEmail
         from = info.hostEmail
         
         state = CallStateIncoming(self)
-        dtmfQueue = DtmfQueue(self)
+        dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
     /// Answers an incoming call. Only applies to incoming calls.
@@ -173,7 +176,7 @@ open class Call {
             self.prepareMediaSession(option)
             
             let localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-            CallClient().join(self.url, localInfo: localInfo) {
+            self.callClient.join(self.url, localInfo: localInfo) {
                 self.onJoinCallCompleted($0, completionHandler: completionHandler)
             }
         }
@@ -190,7 +193,7 @@ open class Call {
         mediaSession.stopMedia()
         
         let participantUrl = info?.selfParticipantUrl
-        CallClient().leave(participantUrl!, deviceUrl: deviceUrl!) {
+        callClient.leave(participantUrl!, deviceUrl: deviceUrl!) {
             switch $0.result {
             case .success(let value):
 				self.update(callInfo: value)
@@ -212,7 +215,7 @@ open class Call {
         mediaSession.stopMedia()
         
         let callUrl = info?.callUrl
-        CallClient().decline(callUrl!, deviceUrl: deviceUrl!) {
+        callClient.decline(callUrl!, deviceUrl: deviceUrl!) {
             switch $0.result {
             case .success:
                 Logger.info("Success: reject call")
@@ -298,7 +301,7 @@ open class Call {
             
             var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
             localInfo.updateValue(["address": address], forKey: "invitee")
-            CallClient().join(localInfo) {
+            self.callClient.join(localInfo) {
                 self.onJoinCallCompleted($0, completionHandler: completionHandler)
             }
             
@@ -317,7 +320,7 @@ open class Call {
         let videoMuted = !sendingVideo
 
         let localInfo = createLocalInfo((mediaInfo.sdp)!, audioMuted: audioMuted, videoMuted: videoMuted)
-        CallClient().updateMedia(mediaUrl, localInfo: localInfo) {
+        callClient.updateMedia(mediaUrl, localInfo: localInfo) {
             switch $0.result {
             case .success(let value):
                 self.update(callInfo: value)
@@ -400,7 +403,7 @@ open class Call {
     }
     
     private func fetchCallInfo() {
-        CallClient().fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
+        callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
     }
     
     private func setCallInfo(_ info: CallInfo) {

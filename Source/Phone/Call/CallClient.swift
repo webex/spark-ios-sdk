@@ -26,8 +26,14 @@ class CallClient {
     typealias ObjectHandler = (ServiceResponse<CallInfo>) -> Void
     typealias ArrayHandler = (ServiceResponse<[CallInfo]>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().keyPath("locus")
+        return ServiceRequest.Builder(authenticationStrategy).keyPath("locus")
     }
     
     func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {

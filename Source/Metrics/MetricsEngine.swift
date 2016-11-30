@@ -21,19 +21,20 @@
 import Foundation
 
 class MetricsEngine {
-    static let sharedInstance = MetricsEngine()
-    
+
     private let MetricsBufferLimit = 50
     private let MetricsFlushIntervalSeconds: Double = 30
     private var metricsBuffer = MetricsBuffer()
     private var periodicFlushTimer: Timer!
+    private let authenticationStrategy: AuthenticationStrategy
     
-    init() {
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
         periodicFlushTimer = Timer(timeInterval: MetricsFlushIntervalSeconds,
-                                        target: self,
-                                        selector: #selector(flush),
-                                        userInfo: nil,
-                                        repeats: true)
+                                   target: self,
+                                   selector: #selector(flush),
+                                   userInfo: nil,
+                                   repeats: true)
         
         RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
     }
@@ -93,7 +94,7 @@ class MetricsEngine {
     }
     
     private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
-        MetricsClient().post(payload) {
+        MetricsClient(authenticationStrategy: authenticationStrategy).post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {
             case .success:

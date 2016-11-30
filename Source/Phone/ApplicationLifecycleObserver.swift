@@ -22,25 +22,31 @@ import Foundation
 
 class ApplicationLifecycleObserver: NotificationObserver {
     
-    static let sharedInstance = ApplicationLifecycleObserver()
-    
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
                 (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground))]
     }
     
+    private let webSocketService: WebSocketService
+    private let callManager: CallManager
+    
+    init(webSocketService: WebSocketService, callManager: CallManager) {
+        self.webSocketService = webSocketService
+        self.callManager = callManager
+    }
+    
     func onApplicationDidBecomeActive() {
         Logger.info("Application did become active")
         
-        CallManager.sharedInstance.fetchActiveCalls()
+        callManager.fetchActiveCalls()
         if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
-            WebSocketService.sharedInstance.connect(URL(string: webSocketUrl)!)
+            webSocketService.connect(URL(string: webSocketUrl)!)
         }
     }
     
     func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
         
-        WebSocketService.sharedInstance.disconnect()
+        webSocketService.disconnect()
     }
 }

@@ -24,8 +24,14 @@ class MediaClusterClient {
     
     typealias ObjectHandler = (ServiceResponse<MediaCluster>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+    
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().baseUrl(DeviceService.sharedInstance.getServiceUrl("calliopeDiscovery")!)
+        return ServiceRequest.Builder(authenticationStrategy).baseUrl(DeviceService.sharedInstance.getServiceUrl("calliopeDiscovery")!)
     }
     
     func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {

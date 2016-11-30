@@ -29,8 +29,14 @@ open class TeamClient {
     /// Alias for closure to handle a service response along with a Team array.
     public typealias ArrayHandler = (ServiceResponse<[Team]>) -> Void
     
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    public init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
+
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("teams")
+        return ServiceRequest.Builder(authenticationStrategy).path("teams")
     }
     
     /// Lists teams to which the authenticated user belongs.

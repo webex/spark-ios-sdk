@@ -24,8 +24,6 @@ import SwiftyJSON
 
 class WebSocketService: WebSocketDelegate {
     
-    static let sharedInstance = WebSocketService()
-    
     private var socket: WebSocket?
     private let MessageBatchingIntervalInSec = 0.5
     private let ConnectionTimeoutIntervalInSec = 60.0
@@ -33,8 +31,10 @@ class WebSocketService: WebSocketDelegate {
     private var messageBatchingTimer: Timer?
     private var connectionRetryCounter: ExponentialBackOffCounter
     private var pendingMessages: [JSON]
+    private let authenticationStrategy: AuthenticationStrategy
     
-    init() {
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
         connectionRetryCounter = ExponentialBackOffCounter(minimum: 0.5, maximum: 32, multiplier: 2)
         pendingMessages = [JSON]()
     }
@@ -48,7 +48,7 @@ class WebSocketService: WebSocketDelegate {
         if let socket = socket {
             connect(webSocket: socket)
         } else {
-            AuthManager.sharedInstance.accessToken { (accessToken) in
+            authenticationStrategy.accessToken { accessToken in
                 // Need to check authorization, avoid crash when logout as soon as login
                 guard let accessToken = accessToken else {
                     Logger.error("Failed to create web socket due to no authorization")
