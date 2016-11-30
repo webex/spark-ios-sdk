@@ -39,7 +39,7 @@ Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPod
 ## Example
 Below is code of a demo of the SDK usage
 
-1. Setup SDK with Spark access token 
+1. Setup SDK with Spark access token
    ```swift
    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         let sparkAccessToken = "Yjc5ZTYyMDEt..."
