@@ -31,14 +31,14 @@ public class Spark {
     
     /// Indicates whether the SDK has been authorized.
     public static func authorized() -> Bool {
-        // XXX Currently this is not going to work correctly when bringing back up a previously authorized OAuth
-        
         return SparkInstance.sharedInstance.authenticationStrategy.authorized
     }
     
     /// Deauthorize the SDK. If phone is registered, deregister the phone first.
     public static func deauthorize() {
         SparkInstance.sharedInstance.authenticationStrategy.deauthorize()
+        SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(nil)
+        SparkInstance.clearGlobalAuthenticationStrategyInformation()
     }
     
     /// Retrieves the access token of the SparkSDK if the user is logged in to Spark.
@@ -58,6 +58,7 @@ public class Spark {
         let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
         let oauthStrategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri)
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(oauthStrategy)
+        SparkInstance.saveGlobalOAuth(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
         
         oauthStrategy.authorize(parentViewController: controller, completionHandler: nil)
     }
@@ -69,6 +70,7 @@ public class Spark {
     public static func initWith(accessToken: String) {
         let simpleAuthStrategy = SimpleAuthStrategy(accessToken: accessToken)
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(simpleAuthStrategy)
+        SparkInstance.saveGlobalSimpleAccessToken(accessToken)
     }
     
     /// Toggle to enable or disable console log output.
@@ -151,7 +153,3 @@ extension Spark {
         return SparkInstance.sharedInstance.phone
     }
 }
-
-
-
-
