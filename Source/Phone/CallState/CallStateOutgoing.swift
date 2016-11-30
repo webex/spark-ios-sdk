@@ -42,13 +42,13 @@ class CallStateOutgoing: CallState {
     }
     
     private func doActionWhenLocalCancelled() {
-		callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.state = CallStateLocalCancelled(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
     }
     
     private func doActionWhenRemoteDeclined() {
-        callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.hangup(nil)
         call.state = CallStateRemoteDeclined(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)

@@ -48,25 +48,25 @@ class CallStateIncoming: CallState {
     }
     
     private func doActionWhenLocalDeclined() {
-		callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.state = CallStateLocalDeclined(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalDeclined)
     }
     
     private func doActionWhenOtherDeviceConnected() {
-		callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.state = CallStateOtherDeviceConnected(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.OtherDeviceConnected)
     }
     
     private func doActionWhenOtherDeviceDeclined() {
-		callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.state = CallStateOtherDeviceDeclined(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.OtherDeviceDeclined)
     }
     
     private func doActionWhenRemoteCancelled() {
-		callManager.removeCallWith(url: call.url)
+        call.removeFromCallManager()
         call.state = CallStateRemoteCancelled(call)
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteCancelled)
     }

@@ -23,7 +23,6 @@ import Foundation
 class CallState {
     
     weak var call: Call!
-    let callManager = CallManager.sharedInstance
     let callNotificationCenter = CallNotificationCenter.sharedInstance
     
     init(_ call: Call) {

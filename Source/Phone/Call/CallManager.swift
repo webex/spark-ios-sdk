@@ -32,7 +32,7 @@ class CallManager {
     }
     
     func addCallWith(url: String, call: Call) {
-		guard url.characters.count > 0 else { return }
+        guard url.characters.count > 0 else { return }
 		
         callInstances.updateValue(call, forKey: url)
         Logger.info("Add call for call url:\(url)")
@@ -67,7 +67,7 @@ class CallManager {
         
         Logger.info(callEvent.type!)
         
-		handle(callInfo: callInfo)
+        handle(callInfo: callInfo)
     }
     
     func fetchActiveCalls() {
@@ -95,7 +95,7 @@ class CallManager {
         
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
-			call.update(callInfo: callInfo)
+            call.update(callInfo: callInfo)
             return
         }
         
@@ -108,13 +108,13 @@ class CallManager {
     
     private func handleActiveCalls(_ callInfos: [CallInfo]) {
         for callInfo in callInfos {
-			handle(callInfo: callInfo)
+            handle(callInfo: callInfo)
         }
     }
 
     private func doActionWhenIncoming(_ callInfo: CallInfo) {
         let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy)
-		addCallWith(url: incomingCall.url, call: incomingCall)
+        addCallWith(url: incomingCall.url, call: incomingCall)
 
         PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
         

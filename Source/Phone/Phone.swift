@@ -43,12 +43,12 @@ public class Phone {
     /// True as using loud speaker, False as not.
     ///
     /// - note: The setting is not persistent.
-    open var defaultFacingMode = Call.FacingMode.User
+    public var defaultFacingMode = Call.FacingMode.User
     
     /// Default camera facing mode, used as the default when dialing or answering a call.
     ///
     /// - note: The setting is not persistent
-    open var defaultLoudSpeaker = true
+    public var defaultLoudSpeaker = true
 
     private let deviceService    = DeviceService.sharedInstance
     private let webSocketService: WebSocketService
@@ -67,7 +67,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the registration is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func register(_ completionHandler: ((Bool) -> Void)?) {
+    public func register(_ completionHandler: ((Bool) -> Void)?) {
         // XXX This guard means that the completion handler may never be fired
         guard authenticationStrategy.authorized else {
             Logger.error("Skip registering device due to no authorization")
@@ -90,7 +90,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func deregister(_ completionHandler: ((Bool) -> Void)?) {
+    public func deregister(_ completionHandler: ((Bool) -> Void)?) {
         reachabilityService.clear()
         applicationLifecycleObserver.stopObserving()
         webSocketService.disconnect()
@@ -106,7 +106,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
-    open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
+    public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
         let call = Call(authenticationStrategy: authenticationStrategy)
         call.dial(address: address, option: option) { success in
             completionHandler(success)
@@ -118,7 +118,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
-    open func requestVideoCodecActivation() {
+    public func requestVideoCodecActivation() {
         VideoLicense.sharedInstance.checkActivation() { isActivated in
             if isActivated {
                 Logger.info("Video license has been activated")
@@ -132,7 +132,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: The function is expected to be called only by Cisco application. 3rd-party application should NOT call this API.
-    open func disableVideoCodecActivation() {
+    public func disableVideoCodecActivation() {
         VideoLicense.sharedInstance.disableActivation()
     }
     
@@ -142,7 +142,7 @@ public class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means access granted, and False means not.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
+    public func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
         switch (type) {
         case .audio:
             requestMediaAccess(AVMediaTypeAudio) {

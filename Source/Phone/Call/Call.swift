@@ -292,7 +292,7 @@ open class Call {
     /// - note: This function is expected to run on main thread.
     open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-		CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!)
+        CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!)
     }
     
     func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
@@ -350,6 +350,10 @@ open class Call {
         default:
             break
         }
+    }
+    
+    func removeFromCallManager() {
+        CallManager.sharedInstance.removeCallWith(url: url)
     }
     
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
@@ -428,7 +432,7 @@ open class Call {
                 Logger.error("Failure: remoteSdp is nil")
             }
             self.mediaSession.startMedia()
-			CallManager.sharedInstance.addCallWith(url: self.url, call: self)
+            CallManager.sharedInstance.addCallWith(url: self.url, call: self)
             from = info?.hostEmail
             
             Logger.info("Success: join call")
