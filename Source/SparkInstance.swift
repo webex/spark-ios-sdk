@@ -87,12 +87,11 @@ class SparkInstance {
     init() {
         authenticationStrategy = AuthenticationStrategyProxy()
         callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy)
-        let reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
-        let callManager = CallManager(authenticationStrategy: authenticationStrategy, reachabilityService: reachabilityService)
-        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager, reachabilityService: reachabilityService)
+        let callManager = CallManager(authenticationStrategy: authenticationStrategy)
+        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
         let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager)
         deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
-        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, reachabilityService: reachabilityService)
+        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager)
     }
     
     func set(authenticationStrategy: AuthenticationStrategy) {

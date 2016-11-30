@@ -27,7 +27,7 @@ class ReachabilityService {
     var feedback: MediaEngineReachabilityFeedback?
     
     private var hostAddresses: [InterfaceAddress.Item]?
-    private var lastFetchData: Date?
+    private var lastFetchDate: Date?
     private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
     private let authenticationStrategy: AuthenticationStrategy
     
@@ -37,7 +37,7 @@ class ReachabilityService {
     
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
-        let isMaxAgeReached = isLastFetchLongEnough()
+        let isMaxAgeReached = isDataOutOfDate()
         
         if isAddressChanged || isMaxAgeReached {
             Logger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
@@ -61,7 +61,7 @@ class ReachabilityService {
     
     func clear() {
         hostAddresses = nil
-        lastFetchData = nil
+        lastFetchDate = nil
         clearReachabilityData()
     }
     
@@ -78,16 +78,12 @@ class ReachabilityService {
         return true
     }
     
-    private func isLastFetchLongEnough() -> Bool {
-        if lastFetchData == nil {
+    private func isDataOutOfDate() -> Bool {
+        if let lastFetchDate = lastFetchDate {
+            return lastFetchDate.timeIntervalSinceNow > MaxAge
+        } else {
             return true
         }
-        
-        if lastFetchData!.timeIntervalSinceNow > MaxAge {
-            return true
-        }
-        
-        return false
     }
     
     private func updateHostAddresses() {
@@ -95,7 +91,7 @@ class ReachabilityService {
     }
     
     private func updateFetchDate() {
-        lastFetchData = Date()
+        lastFetchDate = Date()
     }
     
     private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {

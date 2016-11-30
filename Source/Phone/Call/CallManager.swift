@@ -23,10 +23,14 @@ class CallManager {
     private var callInstances = [String: Call]()
     private let authenticationStrategy: AuthenticationStrategy
     private let reachabilityService: ReachabilityService
+    var localReachabilityInfo: [String /* media cluster tag */ : Reachability]? {
+        return reachabilityService.feedback?.reachabilities
+    }
+
     
-    init(authenticationStrategy: AuthenticationStrategy, reachabilityService: ReachabilityService) {
+    init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy
-        self.reachabilityService = reachabilityService
+        self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
     }
     
     func addCallWith(url: String, call: Call) {
@@ -65,6 +69,16 @@ class CallManager {
         }
     }
     
+    func prepareToHandleCalls() {
+        // TODO until this class has prepared to handle calls, it should probably not be asked to handle calls!
+        reachabilityService.fetch() // TODO should have a callback to know when we're done fetching
+    }
+    
+    func clearReachabilityState() {
+        // XXX This is only a partial clearing of data, consider not clearing this at all, as it may be worthless to do so
+        reachabilityService.clear()
+    }
+    
     func handle(callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
             return
@@ -89,11 +103,11 @@ class CallManager {
     }
     
     func createOutgoingCall() -> Call {
-        return Call(authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
+        return Call(authenticationStrategy: authenticationStrategy, callManager: self)
     }
 
     private func doActionWhenIncoming(_ callInfo: CallInfo) {
-        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
+        let incomingCall = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
         addCallWith(url: incomingCall.url, call: incomingCall)
 
         PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
@@ -103,7 +117,7 @@ class CallManager {
     
     private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
         // TODO: need to support other device joined case
-        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self, reachabilityService: reachabilityService)
+        let call = Call(callInfo, authenticationStrategy: authenticationStrategy, callManager: self)
         addCallWith(url: call.url, call: call)
     }
 }

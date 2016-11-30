@@ -34,12 +34,10 @@ class WebSocketService: WebSocketDelegate {
     private var pendingMessages: [JSON]
     private let authenticationStrategy: AuthenticationStrategy
     private let callManager: CallManager
-    private let reachabilityService: ReachabilityService
     
-    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager, reachabilityService: ReachabilityService) {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         self.authenticationStrategy = authenticationStrategy
         self.callManager = callManager
-        self.reachabilityService = reachabilityService
         connectionRetryCounter = ExponentialBackOffCounter(minimum: 0.5, maximum: 32, multiplier: 2)
         pendingMessages = [JSON]()
     }
@@ -132,7 +130,7 @@ class WebSocketService: WebSocketDelegate {
         scheduleMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
         
-        reachabilityService.fetch()
+        callManager.prepareToHandleCalls()
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {

@@ -145,25 +145,22 @@ open class Call {
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession: MediaSessionWrapper
     private let deviceUrl = DeviceService.sharedInstance.deviceUrl
-    private let reachabilityService: ReachabilityService
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
     private let callManager: CallManager
     
-    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager, reachabilityService: ReachabilityService) {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
         self.callManager = callManager
-        self.reachabilityService = reachabilityService
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager, reachabilityService: ReachabilityService) {
+    init(_ info: CallInfo, authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         self.info = info
         callClient = CallClient(authenticationStrategy: authenticationStrategy)
         self.callManager = callManager
-        self.reachabilityService = reachabilityService
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
@@ -422,7 +419,7 @@ open class Call {
     }
     
     private func createLocalInfo(_ localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> RequestParameter {
-        let mediaInfo = MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: reachabilityService.feedback?.reachabilities)
+        let mediaInfo = MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: callManager.localReachabilityInfo)
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)
         let localMedias = [["type": "SDP", "localSdp": mediaInfoJSON!]]
         
