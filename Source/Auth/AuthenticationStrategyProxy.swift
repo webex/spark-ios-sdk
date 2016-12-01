@@ -8,12 +8,10 @@ class AuthenticationStrategyProxy: AuthenticationStrategy {
     }
     
     var authorized: Bool {
-        get {
-            if let delegate = delegate {
-                return delegate.authorized
-            } else {
-                return false
-            }
+        if let delegate = delegate {
+            return delegate.authorized
+        } else {
+            return false
         }
     }
     

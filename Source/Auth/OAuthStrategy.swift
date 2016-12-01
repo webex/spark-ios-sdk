@@ -32,12 +32,10 @@ public class OAuthStrategy : AuthenticationStrategy {
     private let oauthClient: OAuthClient
     
     public var authorized: Bool { 
-        get {
-            if let authenticationInfo = storage.authenticationInfo {
-                return authenticationInfo.refreshTokenExpirationDate > Date()
-            } else {
-                return false
-            }
+        if let authenticationInfo = storage.authenticationInfo {
+            return authenticationInfo.refreshTokenExpirationDate > Date()
+        } else {
+            return false
         }
     }
     

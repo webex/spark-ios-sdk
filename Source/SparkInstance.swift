@@ -12,31 +12,29 @@ class SparkInstance {
     private static let simpleAccessTokenKey = "simpleAccessTokenKey"
     
     static var sharedInstance: SparkInstance {
-        get {
-            if actualSharedInstance == nil {
-                Logger.warn("Detected use of deprecated SparkSDK API.")
-                let actualSharedInstance = SparkInstance()
-       
-                let keychain = getKeychain()
-                do {
-                    if let clientId = try keychain.get(clientIdKey),
-                        let clientSecret = try keychain.get(clientSecretKey),
-                        let scope = try keychain.get(scopeKey),
-                        let redirectUri = try keychain.get(redirectUriKey) {
-                        let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
-                        let oauthStrategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri)
-                        actualSharedInstance.set(authenticationStrategy: oauthStrategy)
-                    } else if let simpleAccessToken = try keychain.get(simpleAccessTokenKey) {
-                        actualSharedInstance.set(authenticationStrategy: SimpleAuthStrategy(accessToken: simpleAccessToken))
-                    }
-                } catch let error {
-                    Logger.error("Failed to get global authentication strategy information", error: error)
+        if actualSharedInstance == nil {
+            Logger.warn("Detected use of deprecated SparkSDK API.")
+            let actualSharedInstance = SparkInstance()
+   
+            let keychain = getKeychain()
+            do {
+                if let clientId = try keychain.get(clientIdKey),
+                    let clientSecret = try keychain.get(clientSecretKey),
+                    let scope = try keychain.get(scopeKey),
+                    let redirectUri = try keychain.get(redirectUriKey) {
+                    let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
+                    let oauthStrategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri)
+                    actualSharedInstance.set(authenticationStrategy: oauthStrategy)
+                } else if let simpleAccessToken = try keychain.get(simpleAccessTokenKey) {
+                    actualSharedInstance.set(authenticationStrategy: SimpleAuthStrategy(accessToken: simpleAccessToken))
                 }
-                
-                self.actualSharedInstance = actualSharedInstance
+            } catch let error {
+                Logger.error("Failed to get global authentication strategy information", error: error)
             }
-            return actualSharedInstance!
+            
+            self.actualSharedInstance = actualSharedInstance
         }
+        return actualSharedInstance!
     }
     
     static func saveGlobalOAuth(clientId: String, clientSecret: String, scope: String, redirectUri: String) {

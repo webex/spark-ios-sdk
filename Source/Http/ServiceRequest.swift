@@ -63,9 +63,8 @@ class ServiceRequest {
         
         init(_ authenticationStrategy: AuthenticationStrategy) {
             self.authenticationStrategy = authenticationStrategy
-            let userAgent = UserAgent.sharedInstance.userAgentString
             self.headers = ["Content-Type": "application/json",
-                            "User-Agent": userAgent]
+                            "User-Agent": UserAgent.string]
             
             self.authRequired = true
             self.baseUrl = "https://api.ciscospark.com/v1"

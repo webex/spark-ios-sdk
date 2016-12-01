@@ -39,9 +39,7 @@ class VideoLicense {
     }
     
     var needsActivation: Bool {
-        get {
-            return !userDefaults.isVideoLicenseActivated && !userDefaults.isVideoLicenseActivationDisabled
-        }
+        return !userDefaults.isVideoLicenseActivated && !userDefaults.isVideoLicenseActivationDisabled
     }
     
     func disableActivation() {

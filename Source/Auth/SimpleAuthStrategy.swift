@@ -5,9 +5,7 @@ class SimpleAuthStrategy: AuthenticationStrategy {
     private var accessToken: String?
     
     var authorized: Bool {
-        get {
-            return accessToken != nil
-        }
+        return accessToken != nil
     }
     
     init(accessToken: String?) {

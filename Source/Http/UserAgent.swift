@@ -22,18 +22,15 @@ import Foundation
 
 class UserAgent {
     // TODO: need to check the id
-    static let sharedInstance = UserAgent(identity: "spark_ios_sdk")
     
-    let userAgentString: String
-    
-    init(identity: String) {
+    static var string: String {
         let buildVersion = Spark.version
         let currentDevice = UIDevice.current
         let systemName = currentDevice.systemName
         let systemVersion = currentDevice.systemVersion
         let platform = UserAgent.platform()
         
-        userAgentString = "\(identity)/\(buildVersion) (\(systemName) \(systemVersion); \(platform))"
+        return "spark_ios_sdk/\(buildVersion) (\(systemName) \(systemVersion); \(platform))"
     }
     
     private static func platform() -> String {
