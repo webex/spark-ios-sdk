@@ -32,21 +32,33 @@ public class Phone {
         /// Access to both microphone and camera.
         case audioVideo
     }
-    
-    static var sharedInstance: Phone {
-        return SparkInstance.sharedInstance.phone
-    }
 
+    /// Default camera facing mode, used as the default when dialing or answering a call.
+    ///
+    /// - note: The setting is not persistent
+    @available(*, deprecated, message: "Use PhoneSettings.defaultFacingMode instead")
+    public var defaultFacingMode: Call.FacingMode {
+        get {
+            return PhoneSettings.defaultFacingMode
+        }
+        set {
+            PhoneSettings.defaultFacingMode = newValue
+        }
+    }
+    
     /// Default loud speaker mode, used as the default when dialing or answering a call.
     /// True as using loud speaker, False as not.
     ///
     /// - note: The setting is not persistent.
-    public var defaultFacingMode = Call.FacingMode.User
-    
-    /// Default camera facing mode, used as the default when dialing or answering a call.
-    ///
-    /// - note: The setting is not persistent
-    public var defaultLoudSpeaker = true
+    @available(*, deprecated, message: "Use PhoneSettings.defaultLoudSpeaker instead")
+    public var defaultLoudSpeaker: Bool {
+        get {
+            return PhoneSettings.defaultLoudSpeaker
+        }
+        set {
+            PhoneSettings.defaultLoudSpeaker = newValue
+        }
+    }
 
     private let authenticationStrategy: AuthenticationStrategy
     private let applicationLifecycleObserver: ApplicationLifecycleObserver

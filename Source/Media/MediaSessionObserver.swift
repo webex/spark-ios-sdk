@@ -32,7 +32,7 @@ class MediaSessionObserver: NotificationObserver {
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [
-			(.MediaEngineDidSwitchCameras,         #selector(onMediaEngineDidSwitchCameras(_:))),
+            (.MediaEngineDidSwitchCameras,         #selector(onMediaEngineDidSwitchCameras(_:))),
             (.MediaEngineDidChangeLocalViewSize,   #selector(onMediaEngineDidChangeLocalViewSize(_:))),
             (.MediaEngineDidChangeRemoteViewSize,  #selector(onMediaEngineDidChangeRemoteViewSize(_:))),
             (.MediaEngineDidMuteVideo,             #selector(onMediaEngineDidMuteVideo(_:))),

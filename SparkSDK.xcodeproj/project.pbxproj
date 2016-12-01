@@ -50,6 +50,7 @@
 		4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */; };
 		5A4CFDBE1DEE3CFD0054D884 /* SparkInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDBD1DEE3CFD0054D884 /* SparkInstance.swift */; };
 		5A4CFDC01DEE3F660054D884 /* AuthenticationStrategyProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */; };
+		5A4CFDC21DF0B29C0054D884 /* PhoneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */; };
 		5AC09EB31DE4D02C005F38BC /* AuthenticationStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */; };
 		5AC09EB51DE61822005F38BC /* OAuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */; };
 		5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */; };
@@ -209,6 +210,7 @@
 		3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
 		5A4CFDBD1DEE3CFD0054D884 /* SparkInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkInstance.swift; sourceTree = "<group>"; };
 		5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationStrategyProxy.swift; sourceTree = "<group>"; };
+		5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneSettings.swift; sourceTree = "<group>"; };
 		5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationStrategy.swift; sourceTree = "<group>"; };
 		5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthStrategy.swift; sourceTree = "<group>"; };
 		5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthKeychainStorage.swift; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 				3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */,
 				B91E757E1CE2D7B70080EAE0 /* Phone.swift */,
 				B91E757F1CE2D7B70080EAE0 /* WebSocketService.swift */,
+				5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */,
 			);
 			path = Phone;
 			sourceTree = "<group>";
@@ -979,6 +982,7 @@
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
 				B91E75CF1CE2D7B70080EAE0 /* MediaInfo.swift in Sources */,
 				5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */,
+				5A4CFDC21DF0B29C0054D884 /* PhoneSettings.swift in Sources */,
 				B91E75D41CE2D7B70080EAE0 /* ParticipantStatus.swift in Sources */,
 				5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */,
 				B91E75D91CE2D7B70080EAE0 /* RoomClient+Sync.swift in Sources */,

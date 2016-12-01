@@ -192,7 +192,7 @@ open class Call {
     private func joinCallFor(mediaOption: MediaOption, outgoingAddress: String? = nil, completionHandler: CompletionHandler?) {
         verifyLicenseFor(mediaOption: mediaOption) { verified in
             if verified {
-                self.prepareMediaSession(mediaOption)
+                self.mediaSession.prepare(mediaOption)
                 
                 var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
                 if let address = outgoingAddress {
@@ -410,22 +410,18 @@ open class Call {
     }
     
     private func isRemoteVideoStateChanged(_ newInfo: CallInfo) -> Bool {
-		guard let info = self.info else { return true }
+        guard let info = self.info else { return true }
         return info.remoteVideoMuted != newInfo.remoteVideoMuted
     }
     
     private func isRemoteAudioStateChanged(_ newInfo: CallInfo) -> Bool {
-		guard let info = self.info else { return true }
+        guard let info = self.info else { return true }
         return info.remoteAudioMuted != newInfo.remoteAudioMuted
     }
     
     private func isDTMFEnabledChanged(_ newInfo: CallInfo) -> Bool {
-		guard let info = self.info else { return true }
+        guard let info = self.info else { return true }
         return info.enableDTMF != newInfo.enableDTMF
-    }
-    
-    private func prepareMediaSession(_ option: MediaOption) {
-        mediaSession.prepare(option)
     }
     
     private func fetchCallInfo() {

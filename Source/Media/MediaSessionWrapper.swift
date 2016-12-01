@@ -141,17 +141,9 @@ class MediaSessionWrapper {
     
     // MARK: - Default settings
     private func applyDefaultMediaSettings() {
-        setDefaultFacingMode()
-        setDefaultAudioOutput()
-    }
-    
-    private func setDefaultFacingMode() {
-        let isFront = Phone.sharedInstance.defaultFacingMode == Call.FacingMode.User
+        let isFront = PhoneSettings.defaultFacingMode == Call.FacingMode.User
         mediaSession.setDefaultCamera(isFront)
-    }
-    
-    private func setDefaultAudioOutput() {
-        mediaSession.setDefaultAudioOutput(Phone.sharedInstance.defaultLoudSpeaker)
+        mediaSession.setDefaultAudioOutput(PhoneSettings.defaultLoudSpeaker)
     }
     
     // MARK: - lifecycle
