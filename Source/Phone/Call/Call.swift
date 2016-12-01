@@ -344,7 +344,7 @@ open class Call {
     
     func update(callInfo newInfo: CallInfo) {
         guard let info = self.info else {
-            setCallInfo(newInfo)
+            self.info = newInfo
             state.update()
             return
         }
@@ -353,8 +353,10 @@ open class Call {
         switch (result) {
         case .true:
             handleRemoteMediaChange(newInfo)
+            // XXX as a side-effect, handleRemoteMediaChange MAY set self.info = newInfo. If this happens, 
+            // handleEnableDTMFChange will be screwed up and not detect changes between the old and new info
             handleEnableDTMFChange(newInfo)
-            setCallInfo(newInfo)
+            self.info = newInfo
             state.update()
         case .deSync:
             fetchCallInfo()
@@ -388,7 +390,7 @@ open class Call {
             return
         }
         
-        setCallInfo(newInfo)
+        self.info = newInfo
         CallNotificationCenter.sharedInstance.notifyRemoteMediaChanged(self, mediaUpdatedType: mediaChangeType!)
     }
     
@@ -419,10 +421,6 @@ open class Call {
     
     private func fetchCallInfo() {
         callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
-    }
-    
-    private func setCallInfo(_ info: CallInfo) {
-        self.info = info
     }
     
     private func createLocalInfo(_ localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> RequestParameter {
