@@ -149,21 +149,27 @@ open class Call {
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
     private let callManager: CallManager
+    private let callMetrics: CallMetrics
+    private let videoLicense: VideoLicense
     
-    init(callManager: CallManager, callClient: CallClient, deviceUrl: String) {
+    init(callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics, videoLicense: VideoLicense) {
         self.callManager = callManager
         self.callClient = callClient
         self.deviceUrl = deviceUrl
+        self.callMetrics = callMetrics
+        self.videoLicense = videoLicense
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String) {
+    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics, videoLicense: VideoLicense) {
         self.info = info
         self.callManager = callManager
         self.callClient = callClient
         self.deviceUrl = deviceUrl
+        self.callMetrics = callMetrics
+        self.videoLicense = videoLicense
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
@@ -299,7 +305,7 @@ open class Call {
     /// - note: This function is expected to run on main thread.
     open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!, deviceUrl: deviceUrl)
+        callMetrics.submit(feedback: feedback, callInfo: info!, deviceUrl: deviceUrl)
     }
     
     func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
@@ -471,7 +477,7 @@ open class Call {
             return
         }
         
-        VideoLicense.sharedInstance.checkActivation() { isActivated in
+        videoLicense.checkActivation() { isActivated in
             if isActivated {
                 action()
             } else {

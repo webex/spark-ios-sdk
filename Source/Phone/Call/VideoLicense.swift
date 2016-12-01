@@ -22,12 +22,15 @@ import Foundation
 
 class VideoLicense {
     
-    static let sharedInstance = VideoLicense()
-    
+    private let callMetrics: CallMetrics
     private let userDefaults = UserDefaults.sharedInstance
     
+    init(callMetrics: CallMetrics) {
+        self.callMetrics = callMetrics
+    }
+    
     func checkActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
-        guard needActivation() else {
+        guard needsActivation else {
             completion(true)
             return
         }
@@ -35,13 +38,14 @@ class VideoLicense {
         promptForActivation(completion)
     }
     
-    func disableActivation() {
-        userDefaults.isVideoLicenseActivationDisabled = true
+    var needsActivation: Bool {
+        get {
+            return !userDefaults.isVideoLicenseActivated && !userDefaults.isVideoLicenseActivationDisabled
+        }
     }
     
-    // It's used for development only, to reset video license settings.
-    func resetActivation() {
-        userDefaults.removeVideoLicenseSetting()
+    func disableActivation() {
+        userDefaults.isVideoLicenseActivationDisabled = true
     }
     
     private func promptForActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
@@ -65,24 +69,20 @@ class VideoLicense {
         alertController.present(true, completion: nil)
     }
     
-    private func needActivation() -> Bool {
-        if userDefaults.isVideoLicenseActivated || userDefaults.isVideoLicenseActivationDisabled {
-            return false
-        }
-        
-        return true
-    }
-    
     private func activateLicense() {
         userDefaults.isVideoLicenseActivated = true
-        CallMetrics.sharedInstance.reportVideoLicenseActivation()
+        callMetrics.reportVideoLicenseActivation()
     }
     
     private func viewLicense() {
         guard let url = URL(string: "http://www.openh264.org/BINARY_LICENSE.txt") else {
             return
         }
-        
         UIApplication.shared.openURL(url)
+    }
+    
+    // Used for development only, to reset video license settings.
+    func resetActivation() {
+        userDefaults.resetVideoLicenseActivation()
     }
 }

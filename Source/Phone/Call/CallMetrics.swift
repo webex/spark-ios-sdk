@@ -43,9 +43,7 @@ struct Feedback {
 }
 
 class CallMetrics {
-    
-    static let sharedInstance = SparkInstance.sharedInstance.callMetrics
-    
+        
     private let TestUserEmailDomain = "example.com"
     private let metricsEngine: MetricsEngine
     

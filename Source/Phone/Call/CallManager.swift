@@ -24,6 +24,8 @@ class CallManager {
     private let authenticationStrategy: AuthenticationStrategy
     private let reachabilityService: ReachabilityService
     private let deviceService: DeviceService
+    private let callMetrics: CallMetrics
+    private let videoLicense: VideoLicense
     
     var localReachabilityInfo: [String /* media cluster tag */ : Reachability]? {
         return reachabilityService.feedback?.reachabilities
@@ -33,6 +35,8 @@ class CallManager {
         self.authenticationStrategy = authenticationStrategy
         self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         self.deviceService = deviceService
+        self.callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        self.videoLicense = VideoLicense(callMetrics: callMetrics)
     }
     
     func addCallWith(url: String, call: Call) {
@@ -96,7 +100,7 @@ class CallManager {
             call.update(callInfo: callInfo)
         } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
             let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl)
+            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics, videoLicense: videoLicense)
             addCallWith(url: callUrl, call: call)
 
             if callInfo.isIncomingCall {
@@ -109,6 +113,20 @@ class CallManager {
     
     func createOutgoingCall() -> Call {
         let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!)
+        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!, callMetrics: callMetrics, videoLicense: videoLicense)
+    }
+    
+    func requestVideoCodecActivation() {
+        videoLicense.checkActivation() { isActivated in
+            if isActivated {
+                Logger.info("Video license has been activated")
+            } else {
+                Logger.warn("Video license has not been activated")
+            }
+        }
+    }
+    
+    func disableVideoCodecActivation() {
+        videoLicense.disableActivation()
     }
 }

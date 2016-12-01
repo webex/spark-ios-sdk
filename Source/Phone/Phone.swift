@@ -119,13 +119,7 @@ public class Phone {
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
     public func requestVideoCodecActivation() {
-        VideoLicense.sharedInstance.checkActivation() { isActivated in
-            if isActivated {
-                Logger.info("Video license has been activated")
-            } else {
-                Logger.warn("Video license has not been activated")
-            }
-        }
+        callManager.requestVideoCodecActivation()
     }
     
     /// Prevents the SDK from checking H.264 video codec license activation.
@@ -133,7 +127,7 @@ public class Phone {
     /// - returns: Void
     /// - note: The function is expected to be called only by Cisco application. 3rd-party application should NOT call this API.
     public func disableVideoCodecActivation() {
-        VideoLicense.sharedInstance.disableActivation()
+        callManager.disableVideoCodecActivation()
     }
     
     /// Requests access for media (audio and video), user can change the settings in iOS device settings.

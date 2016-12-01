@@ -78,15 +78,14 @@ class SparkInstance {
     private static func getKeychain() -> Keychain {
         return Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.deprecated.global")
     }
+
     
     let authenticationStrategy: AuthenticationStrategyProxy
-    let callMetrics: CallMetrics
     let phone: Phone
     
     init() {
         authenticationStrategy = AuthenticationStrategyProxy()
         let deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
-        callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         let callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
         let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
