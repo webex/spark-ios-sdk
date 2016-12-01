@@ -29,13 +29,13 @@ class VideoLicense {
         self.callMetrics = callMetrics
     }
     
-    func checkActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
+    func checkActivation(completionHandler: ((_ isActivated: Bool) -> Void)?) {
         guard needsActivation else {
-            completion(true)
+            completionHandler?(true)
             return
         }
         
-        promptForActivation(completion)
+        promptForActivation(completionHandler)
     }
     
     var needsActivation: Bool {
@@ -48,7 +48,7 @@ class VideoLicense {
         userDefaults.isVideoLicenseActivationDisabled = true
     }
     
-    private func promptForActivation(_ completion: @escaping (_ isActivated: Bool) -> Void) {
+    private func promptForActivation(_ completion: ((_ isActivated: Bool) -> Void)?) {
         let AlertTitle = "Activate License"
         let AlertMessage = "To enable video calls, activate a free video license (H.264 AVC) from Cisco. By selecting 'Activate', you accept the Cisco End User License Agreement and Notices."
         
@@ -56,14 +56,17 @@ class VideoLicense {
         
         alertController.addAction(UIAlertAction(title: "Activate", style: UIAlertActionStyle.default) { _ in
             self.activateLicense()
-            completion(true)
+            Logger.info("Video license has been activated")
+            completion?(true)
             })
         alertController.addAction(UIAlertAction(title: "View License", style: UIAlertActionStyle.default) { _ in
-            completion(false)
+            completion?(false)
+            Logger.info("Video license opened for viewing")
             self.viewLicense()
             })
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { _ in
-            completion(false)
+            Logger.warn("Video license has not been activated")
+            completion?(false)
             })
         
         alertController.present(true, completion: nil)

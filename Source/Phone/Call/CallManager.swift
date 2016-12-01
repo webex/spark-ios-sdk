@@ -62,8 +62,8 @@ class CallManager {
     
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
-        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() {
-            switch $0.result {
+        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() { response in
+            switch response.result {
             case .success(let callInfos):
                 for callInfo in callInfos {
                     self.handle(callInfo: callInfo)
@@ -100,7 +100,7 @@ class CallManager {
             call.update(callInfo: callInfo)
         } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
             let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics, videoLicense: videoLicense)
+            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics)
             addCallWith(url: callUrl, call: call)
 
             if callInfo.isIncomingCall {
@@ -113,17 +113,11 @@ class CallManager {
     
     func createOutgoingCall() -> Call {
         let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!, callMetrics: callMetrics, videoLicense: videoLicense)
+        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!, callMetrics: callMetrics)
     }
     
-    func requestVideoCodecActivation() {
-        videoLicense.checkActivation() { isActivated in
-            if isActivated {
-                Logger.info("Video license has been activated")
-            } else {
-                Logger.warn("Video license has not been activated")
-            }
-        }
+    func requestVideoCodecActivation(completionHandler: ((_ isActivated: Bool) -> Void)? = nil) {
+        videoLicense.checkActivation(completionHandler: completionHandler)
     }
     
     func disableVideoCodecActivation() {

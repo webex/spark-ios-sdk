@@ -150,26 +150,23 @@ open class Call {
     private let callClient: CallClient
     private let callManager: CallManager
     private let callMetrics: CallMetrics
-    private let videoLicense: VideoLicense
     
-    init(callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics, videoLicense: VideoLicense) {
+    init(callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
         self.callManager = callManager
         self.callClient = callClient
         self.deviceUrl = deviceUrl
         self.callMetrics = callMetrics
-        self.videoLicense = videoLicense
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle(self)
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
-    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics, videoLicense: VideoLicense) {
+    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
         self.info = info
         self.callManager = callManager
         self.callClient = callClient
         self.deviceUrl = deviceUrl
         self.callMetrics = callMetrics
-        self.videoLicense = videoLicense
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
@@ -185,16 +182,38 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func answer(option: MediaOption, completionHandler: CompletionHandler?) {
-        let answerAction: () -> Void = {
-            self.prepareMediaSession(option)
-            
-            let localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-            self.callClient.join(self.url, localInfo: localInfo) {
-                self.onJoinCallCompleted($0, completionHandler: completionHandler)
+        joinCallFor(mediaOption: option, completionHandler: completionHandler)
+    }
+    
+    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
+        joinCallFor(mediaOption: option, outgoingAddress: address, completionHandler: completionHandler)
+    }
+    
+    private func joinCallFor(mediaOption: MediaOption, outgoingAddress: String? = nil, completionHandler: CompletionHandler?) {
+        verifyLicenseFor(mediaOption: mediaOption) { verified in
+            if verified {
+                self.prepareMediaSession(mediaOption)
+                
+                var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
+                if let address = outgoingAddress {
+                    localInfo.updateValue(["address": address], forKey: "invitee")
+                    self.to = address
+                }
+                self.callClient.join(localInfo) { response in
+                    self.onJoinCallCompleted(response, completionHandler: completionHandler)
+                }
+            } else {
+                completionHandler?(false)
             }
         }
-        
-        doCallAction(answerAction, option: option, completionHandler: completionHandler)
+    }
+    
+    private func verifyLicenseFor(mediaOption: MediaOption, completionHandler: @escaping CompletionHandler) {
+        guard mediaOption.hasVideo else {
+            completionHandler(true)
+            return
+        }
+        callManager.requestVideoCodecActivation(completionHandler: completionHandler)
     }
     
     /// Disconnects the active call. Applies to both incoming and outgoing calls.
@@ -206,8 +225,8 @@ open class Call {
         mediaSession.stopMedia()
         
         let participantUrl = info?.selfParticipantUrl
-        callClient.leave(participantUrl!, deviceUrl: deviceUrl) {
-            switch $0.result {
+        callClient.leave(participantUrl!, deviceUrl: deviceUrl) { response in
+            switch response.result {
             case .success(let value):
 				self.update(callInfo: value)
                 Logger.info("Success: leave call")
@@ -228,8 +247,8 @@ open class Call {
         mediaSession.stopMedia()
         
         let callUrl = info?.callUrl
-        callClient.decline(callUrl!, deviceUrl: deviceUrl) {
-            switch $0.result {
+        callClient.decline(callUrl!, deviceUrl: deviceUrl) { response in
+            switch response.result {
             case .success:
                 Logger.info("Success: reject call")
                 completionHandler?(true)
@@ -308,37 +327,21 @@ open class Call {
         callMetrics.submit(feedback: feedback, callInfo: info!, deviceUrl: deviceUrl)
     }
     
-    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
-        let dialAction: () -> Void = {
-            self.prepareMediaSession(option)
-            
-            var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-            localInfo.updateValue(["address": address], forKey: "invitee")
-            self.callClient.join(localInfo) {
-                self.onJoinCallCompleted($0, completionHandler: completionHandler)
-            }
-            
-            self.to = address
-        }
-        
-        doCallAction(dialAction, option: option, completionHandler: completionHandler)
-    }
-    
     private var selfMediaConnection: MediaConnection? {
         return info?.selfDevices.filter({$0.url == deviceUrl}).first?.mediaConnections?.first
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
-        guard let mediaUrl = info?.selfMediaUrl, let mediaInfo = selfMediaConnection?.localSdp else {
+        guard let mediaUrl = info?.selfMediaUrl, let localSdpString = selfMediaConnection?.localSdp?.sdp else {
             return
         }
 
         let audioMuted = !sendingAudio
         let videoMuted = !sendingVideo
 
-        let localInfo = createLocalInfo((mediaInfo.sdp)!, audioMuted: audioMuted, videoMuted: videoMuted)
-        callClient.updateMedia(mediaUrl, localInfo: localInfo) {
-            switch $0.result {
+        let localInfo = createLocalInfo(localSdpString, audioMuted: audioMuted, videoMuted: videoMuted)
+        callClient.updateMedia(mediaUrl, localInfo: localInfo) { response in
+            switch response.result {
             case .success(let value):
                 self.update(callInfo: value)
                 Logger.info("Success: update media")
@@ -464,26 +467,10 @@ open class Call {
     private func onFetchCallInfoCompleted(_ response: ServiceResponse<CallInfo>) {
         switch response.result {
         case .success(let value):
-			update(callInfo: value)
+            update(callInfo: value)
             Logger.info("Success: fetch call info")
         case .failure(let error):
             Logger.error("Failure", error: error)
-        }
-    }
-    
-    private func doCallAction(_ action: @escaping () -> Void, option: MediaOption, completionHandler: CompletionHandler?) {
-        guard option.hasVideo else {
-            action()
-            return
-        }
-        
-        videoLicense.checkActivation() { isActivated in
-            if isActivated {
-                action()
-            } else {
-                Logger.warn("Video license has not been activated")
-                completionHandler?(false)
-            }
         }
     }
 }
