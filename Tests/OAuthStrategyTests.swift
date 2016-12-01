@@ -144,7 +144,8 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientAccount?.clientSecret, "clientSecret1")
 
         if let completionHandler = oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler {
-            let accessTokenObject = AccessToken(accessToken: "accessToken2")
+            let accessTokenObject = AccessToken(JSONString: "{}")!
+            accessTokenObject.accessTokenString = "accessToken2"
             accessTokenObject.accessTokenCreationDate = now
             accessTokenObject.accessTokenExpiration = OAuthStrategyTests.oneDay
             accessTokenObject.refreshTokenString = "refreshToken1"

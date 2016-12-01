@@ -39,11 +39,6 @@ class AccessToken: NSObject, NSCoding, Mappable {
     private let refreshTokenExpirationKey = "refreshTokenExpirationKey"
     private let accessTokenCreationKey = "accessTokenCreationKey"
     
-    init(accessToken: String) {
-        accessTokenCreationDate = Date()
-        accessTokenString = accessToken
-    }
-    
     // MARK:- Mappable
     
     required init?(map: Map) {
