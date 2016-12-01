@@ -54,11 +54,19 @@ class CallMetrics {
     }
     
     func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: String) {
-        var data: Metric.DataType = createBasicCallData(callInfo, deviceUrl: deviceUrl)
+        var data: Metric.DataType = [
+            "locusId": callInfo.callUrl!,
+            "locusTimestamp": callInfo.lastActive!,
+            "deviceUrl": deviceUrl,
+            "participantId": callInfo.myself!.id!,
+            "isGroup": !callInfo.isOneOnOne,
+            "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
+        ]
+
         data.unionInPlace(feedback.metricData)
         
         var environment = MetricsEnvironment.Production
-		if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
+        if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
             environment = MetricsEnvironment.Test
         }
         
@@ -69,15 +77,5 @@ class CallMetrics {
     func reportVideoLicenseActivation() {
         let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
         metricsEngine.trackMetric(metric)
-    }
-    
-    private func createBasicCallData(_ callInfo: CallInfo, deviceUrl: String) -> Metric.DataType {
-        return ["locusId": callInfo.callUrl!,
-                "locusTimestamp": callInfo.lastActive!,
-                "deviceUrl": deviceUrl,
-                "participantId": callInfo.myself!.id!,
-                "isGroup": !callInfo.isOneOnOne,
-                "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
-        ]
     }
 }
