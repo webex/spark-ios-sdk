@@ -144,7 +144,8 @@ open class Call {
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession: MediaSessionWrapper
-    private let deviceUrl: String
+    // XXX reduce scope
+    let deviceUrl: String
     private var dtmfQueue: DtmfQueue!
     private let callClient: CallClient
     private let callManager: CallManager
@@ -298,7 +299,7 @@ open class Call {
     /// - note: This function is expected to run on main thread.
     open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!)
+        CallMetrics.sharedInstance.submit(feedback: feedback, callInfo: info!, deviceUrl: deviceUrl)
     }
     
     func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
@@ -317,8 +318,12 @@ open class Call {
         doCallAction(dialAction, option: option, completionHandler: completionHandler)
     }
     
+    private var selfMediaConnection: MediaConnection? {
+        return info?.selfDevices.filter({$0.url == deviceUrl}).first?.mediaConnections?.first
+    }
+    
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
-        guard let mediaUrl = info?.selfMediaUrl, let mediaInfo = info?.selfMediaInfo else {
+        guard let mediaUrl = info?.selfMediaUrl, let mediaInfo = selfMediaConnection?.localSdp else {
             return
         }
 
@@ -431,8 +436,9 @@ open class Call {
     private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
         switch response.result {
         case .success(let value):
-			update(callInfo: value)
-            if let remoteSdp = self.info?.remoteSdp {
+            update(callInfo: value)
+            
+            if let remoteSdp = selfMediaConnection?.remoteSdp?.sdp {
                 self.mediaSession.setRemoteSdp(remoteSdp)
             } else {
                 Logger.error("Failure: remoteSdp is nil")

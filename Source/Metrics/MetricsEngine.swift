@@ -27,9 +27,11 @@ class MetricsEngine {
     private var metricsBuffer = MetricsBuffer()
     private var periodicFlushTimer: Timer!
     private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
         periodicFlushTimer = Timer(timeInterval: MetricsFlushIntervalSeconds,
                                    target: self,
                                    selector: #selector(flush),
@@ -94,7 +96,7 @@ class MetricsEngine {
     }
     
     private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
-        MetricsClient(authenticationStrategy: authenticationStrategy).post(payload) {
+        MetricsClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {
             case .success:

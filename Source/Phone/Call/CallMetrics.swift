@@ -49,12 +49,12 @@ class CallMetrics {
     private let TestUserEmailDomain = "example.com"
     private let metricsEngine: MetricsEngine
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy)
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
     }
     
-    func submit(feedback: Feedback, callInfo: CallInfo) {
-        var data: Metric.DataType = createBasicCallData(callInfo)
+    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: String) {
+        var data: Metric.DataType = createBasicCallData(callInfo, deviceUrl: deviceUrl)
         data.unionInPlace(feedback.metricData)
         
         var environment = MetricsEnvironment.Production
@@ -71,11 +71,11 @@ class CallMetrics {
         metricsEngine.trackMetric(metric)
     }
     
-    private func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
+    private func createBasicCallData(_ callInfo: CallInfo, deviceUrl: String) -> Metric.DataType {
         return ["locusId": callInfo.callUrl!,
                 "locusTimestamp": callInfo.lastActive!,
-                "deviceUrl": DeviceService.sharedInstance.deviceUrl!,
-                "participantId": callInfo.selfId!,
+                "deviceUrl": deviceUrl,
+                "participantId": callInfo.myself!.id!,
                 "isGroup": !callInfo.isOneOnOne,
                 "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
         ]

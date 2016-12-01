@@ -28,13 +28,14 @@ class CallStateIncoming: CallState {
     
     override func update() {
         if info.hasAtLeastOneRemoteParticipantantJoined {
-            if info.hasJoinedOnThisDevice {
+            let deviceUrl: String = call.deviceUrl
+            if info.hasJoinedOnThisDevice(deviceUrl: deviceUrl) {
                 doActionWhenConnected()
-            } else if info.hasJoinedOnOtherDevice {
+            } else if info.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
                 doActionWhenOtherDeviceConnected()
-            } else if info.hasDeclined {
+            } else if info.hasDeclined(deviceUrl: deviceUrl) {
                 doActionWhenLocalDeclined()
-            } else if info.hasDeclinedOnOtherDevice {
+            } else if info.hasDeclinedOnOtherDevice(deviceUrl: deviceUrl) {
                 doActionWhenOtherDeviceDeclined()
             }
         } else if info.hasAtLeastOneRemoteParticipantantLeft {

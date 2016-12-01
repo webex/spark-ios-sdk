@@ -30,9 +30,11 @@ class ReachabilityService {
     private var lastFetchDate: Date?
     private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
     private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
     }
     
     func fetch() {
@@ -96,7 +98,7 @@ class ReachabilityService {
     
     private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
-        MediaClusterClient(authenticationStrategy: authenticationStrategy).get() {
+        MediaClusterClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
             case .success(let value):

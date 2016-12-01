@@ -31,7 +31,7 @@ class CallManager {
     
     init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
-        self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy)
+        self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         self.deviceService = deviceService
     }
     
@@ -94,7 +94,7 @@ class CallManager {
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
             call.update(callInfo: callInfo)
-        } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice {
+        } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
             let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
             let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl)
             addCallWith(url: callUrl, call: call)

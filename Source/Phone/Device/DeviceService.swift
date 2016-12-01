@@ -21,7 +21,6 @@
 import Foundation
 
 class DeviceService {
-    static let sharedInstance = SparkInstance.sharedInstance.deviceService
     
     private var device: Device?
     private let client: DeviceClient

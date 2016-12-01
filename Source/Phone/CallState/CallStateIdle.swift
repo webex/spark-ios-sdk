@@ -33,7 +33,7 @@ class CallStateIdle: CallState {
     }
     
     private func isMakingOutgoingCall() -> Bool {
-        return info.hasJoinedOnThisDevice && isRemoteParticipantantsIdleOrNotified()
+        return info.hasJoinedOnThisDevice(deviceUrl: call.deviceUrl) && isRemoteParticipantantsIdleOrNotified()
     }
     
     private func isRemoteParticipantantsIdleOrNotified() -> Bool {

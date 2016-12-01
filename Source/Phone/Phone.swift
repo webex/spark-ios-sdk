@@ -34,9 +34,7 @@ public class Phone {
     }
     
     static var sharedInstance: Phone {
-        get {
-            return SparkInstance.sharedInstance.phone
-        }
+        return SparkInstance.sharedInstance.phone
     }
 
     /// Default loud speaker mode, used as the default when dialing or answering a call.
@@ -50,17 +48,18 @@ public class Phone {
     /// - note: The setting is not persistent
     public var defaultLoudSpeaker = true
 
-    private let deviceService    = DeviceService.sharedInstance
-    private let webSocketService: WebSocketService
-    private let applicationLifecycleObserver: ApplicationLifecycleObserver
     private let authenticationStrategy: AuthenticationStrategy
+    private let applicationLifecycleObserver: ApplicationLifecycleObserver
+    private let webSocketService: WebSocketService
     private let callManager: CallManager
+    private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager) {
+    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
         self.applicationLifecycleObserver = applicationLifecycleObserver
         self.webSocketService = webSocketService
         self.callManager = callManager
+        self.deviceService = deviceService
     }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.

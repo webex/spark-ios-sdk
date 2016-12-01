@@ -21,15 +21,18 @@
 import Foundation
 
 class MetricsClient {
+   
     private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
     }
     
     func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = ServiceRequest.Builder(authenticationStrategy)
-            .baseUrl(DeviceService.sharedInstance.getServiceUrl("metrics")!)
+            .baseUrl(deviceService.getServiceUrl("metrics")!)
             .path("metrics")
             .method(.post)
             .body(metrics)
