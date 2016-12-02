@@ -25,10 +25,9 @@ class OAuthClient {
     typealias ObjectHandler = (ServiceResponse<AccessToken>) -> Void
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(SimpleAuthStrategy(accessToken: nil))
+        return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
-            .authRequired(false)
     }
     
     // MARK:- Async API

@@ -2,14 +2,22 @@
 import Foundation
 
 class SimpleAuthStrategy: AuthenticationStrategy {
+    static func neverAuthorized() -> AuthenticationStrategy {
+        return SimpleAuthStrategy(possibleAccessToken: nil)
+    }
+    
     private var accessToken: String?
     
     var authorized: Bool {
         return accessToken != nil
     }
     
-    init(accessToken: String?) {
-        self.accessToken = accessToken
+    private init(possibleAccessToken: String?) {
+        self.accessToken = possibleAccessToken
+    }
+    
+    convenience init(accessToken: String) {
+        self.init(possibleAccessToken: accessToken)
     }
     
     func deauthorize() {

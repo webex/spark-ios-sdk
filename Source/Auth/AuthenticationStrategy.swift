@@ -23,5 +23,5 @@ import Foundation
 public protocol AuthenticationStrategy : class {
     var authorized: Bool { get }
     func deauthorize()
-    func accessToken(completionHandler: @escaping (String?) -> Void)
+    func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
 }

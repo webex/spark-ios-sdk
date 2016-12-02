@@ -28,19 +28,17 @@ class ServiceRequest {
     private let url: URL    
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
-    private let authRequired: Bool
     private let body: RequestParameter?
     private let query: RequestParameter?
     private let keyPath: String?
     private let queue: DispatchQueue?
     private let authenticationStrategy: AuthenticationStrategy
     
-    private init(authenticationStrategy: AuthenticationStrategy, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, authRequired: Bool, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
+    private init(authenticationStrategy: AuthenticationStrategy, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticationStrategy = authenticationStrategy
         self.url = url
         self.headers = headers
         self.method = method
-        self.authRequired = authRequired
         self.body = body
         self.query = query
         self.keyPath = keyPath
@@ -54,7 +52,6 @@ class ServiceRequest {
         private var method: Alamofire.HTTPMethod
         private var baseUrl: String
         private var path: String
-        private var authRequired: Bool
         private var body: RequestParameter?
         private var query: RequestParameter?
         private var keyPath: String?
@@ -66,14 +63,13 @@ class ServiceRequest {
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string]
             
-            self.authRequired = true
             self.baseUrl = "https://api.ciscospark.com/v1"
             self.method = .get
             self.path = ""
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: URL(string: baseUrl)!.appendingPathComponent(path), headers: headers, method: method, authRequired: authRequired, body: body, query: query, keyPath: keyPath, queue: queue)
+            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: URL(string: baseUrl)!.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -113,11 +109,6 @@ class ServiceRequest {
         
         func queue(_ queue: DispatchQueue?) -> Builder {
             self.queue = queue
-            return self
-        }
-        
-        func authRequired(_ authRequired: Bool) -> Builder {
-            self.authRequired = authRequired
             return self
         }
     }
@@ -233,13 +224,8 @@ class ServiceRequest {
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
-        // XXX get rid of authRequired and replace it with just using a always-failing auth strategy
-        if authRequired {
-            authenticationStrategy.accessToken { (accessToken) in
-                accessTokenCallback(accessToken)
-            }
-        } else {
-            accessTokenCallback(nil)
+        authenticationStrategy.accessToken { accessToken in
+            accessTokenCallback(accessToken)
         }
     }
 }
