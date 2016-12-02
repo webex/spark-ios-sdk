@@ -63,14 +63,4 @@ class OAuthClient {
         
         request.responseObject(completionHandler)
     }
-    
-    // MARK:- Sync API
-    
-    func fetchAccessTokenFromOAuthCode(_ code: String, clientAccount: ClientAccount, redirectUri: String) throws -> AccessToken {
-		return try SyncUtil.getObject(code, clientAccount, redirectUri, async: fetchAccessTokenFromOAuthCode)
-    }
-    
-    func refreshAccessTokenFromRefreshToken(_ refreshToken: String, clientAccount: ClientAccount) throws -> AccessToken {
-        return try SyncUtil.getObject(refreshToken, clientAccount, async: refreshOAuthAccessTokenFromRefreshToken)
-    }
 }

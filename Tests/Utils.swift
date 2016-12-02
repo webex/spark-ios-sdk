@@ -35,18 +35,4 @@ class Utils {
     static func wait(interval: TimeInterval) {
 		Thread.sleep(forTimeInterval: interval)
 	}
-    
-    static private let SecClass = kSecClass as String
-    static private let SecClassGenericPassword = kSecClassGenericPassword as String
-    static private let SecClassInternetPassword = kSecClassInternetPassword as String
-    static private let SecClassCertificate = kSecClassCertificate as String
-    static private let SecClassKey = kSecClassKey as String
-    static private let SecClassIdentity = kSecClassIdentity as String
-    static private let SecItemClasses: [String] = [SecClassGenericPassword, SecClassInternetPassword, SecClassCertificate, SecClassKey, SecClassIdentity]
-    
-    static func clearSecureData() {
-        for secItemClass in SecItemClasses {
-            SecItemDelete([SecClass: secItemClass] as CFDictionary)
-        }
-    }
 }

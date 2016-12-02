@@ -19,37 +19,56 @@
 // THE SOFTWARE.
 
 import Foundation
+import KeychainAccess
 import XCTest
 @testable import SparkSDK
 
-class OAuthKeychainStorageTests: XCTestCase {
-    override func setUp() {
-        Utils.clearSecureData()
+class MockKeychain: KeychainProtocol {
+    var data = [String:String]()
+    
+    func get(_ key: String) throws -> String? {
+        return data[key]
     }
     
-    override func tearDown() {
-        Utils.clearSecureData()
+    func remove(_ key: String) throws {
+        data.removeValue(forKey: key)
+    }
+    
+    func set(_ value: String, key: String) throws {
+        data[key] = value
+    }
+}
+
+class OAuthKeychainStorageTests: XCTestCase {
+    private var keychain: MockKeychain!
+    
+    override func setUp() {
+        keychain = MockKeychain()
+    }
+
+    private func createTestObject() -> OAuthKeychainStorage {
+        return OAuthKeychainStorage(keychain: keychain)
     }
     
     func testWhenLoginInformationIsSavedItCanBeRetrieved() {
         let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
-        let testObject1 = OAuthKeychainStorage()
+        let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         XCTAssertTrue(auth(testObject1.authenticationInfo, isEqualTo: info))
         
-        let testObject2 = OAuthKeychainStorage()
+        let testObject2 = createTestObject()
         XCTAssertTrue(auth(testObject2.authenticationInfo, isEqualTo: info))
     }
     
     func testWhenLoginInformationIsClearedThenItIsNil() {
         let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
-        let testObject1 = OAuthKeychainStorage()
+        let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         testObject1.authenticationInfo = nil
         
-        let testObject2 = OAuthKeychainStorage()
+        let testObject2 = createTestObject()
         XCTAssertNil(testObject2.authenticationInfo)
     }
     

@@ -21,6 +21,14 @@
 import Foundation
 import KeychainAccess
 
+protocol KeychainProtocol {
+    func get(_ key: String) throws -> String?
+    func remove(_ key: String) throws
+    func set(_ value: String, key: String) throws
+}
+
+extension Keychain: KeychainProtocol {}
+
 public class OAuthKeychainStorage : OAuthStorage {
 
     private let accessTokenKey = "accessToken"
@@ -28,8 +36,16 @@ public class OAuthKeychainStorage : OAuthStorage {
     private let refreshTokenKey = "refreshToken"
     private let refreshTokenExpirationDateKey = "refreshTokenExpirationDate"
     
-    private let keychain = Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.oauth")
     private var cachedAuthenticationInfo: OAuthAuthenticationInfo?
+    private let keychain: KeychainProtocol
+    
+    public convenience init() {
+        self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.oauth"))
+    }
+    
+    init(keychain: KeychainProtocol) {
+        self.keychain = keychain
+    }
     
     public var authenticationInfo: OAuthAuthenticationInfo? { 
         get {

@@ -18,20 +18,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
 
-public protocol SparkViewControllerProvider {
-    var viewController: UIViewController { get }
-}
 
+/// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
 public class OAuthStrategy : AuthenticationStrategy {
     private let clientAccount: ClientAccount
     private let scope: String
     private let redirectUri: String
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
+    private let oauthLauncher: OAuthLauncher
     
-    public var authorized: Bool { 
+    /// Returns true if the user has already been authorized
+    public var authorized: Bool {
         if let authenticationInfo = storage.authenticationInfo {
             return authenticationInfo.refreshTokenExpirationDate > Date()
         } else {
@@ -39,35 +40,45 @@ public class OAuthStrategy : AuthenticationStrategy {
         }
     }
     
-    private struct SimpleSparkViewControllerProvider : SparkViewControllerProvider {
-        let viewController: UIViewController
-    }
-    
-    init(clientAccount: ClientAccount, scope: String, redirectUri: String, storage: OAuthStorage = OAuthKeychainStorage(), oauthClient: OAuthClient = OAuthClient()) {
+    init(clientAccount: ClientAccount, scope: String, redirectUri: String,
+         storage: OAuthStorage = OAuthKeychainStorage(),
+         oauthClient: OAuthClient = OAuthClient(),
+         oauthLauncher: OAuthLauncher = OAuthLauncher()) {
         self.clientAccount = clientAccount
         self.scope = scope
         self.redirectUri = redirectUri
         self.storage = storage
         self.oauthClient = oauthClient
+        self.oauthLauncher = oauthLauncher
     }
     
-    func authorize(parentViewController: UIViewController, completionHandler: ((Bool) -> Void)?) {
+    ///
+    public func authorize(parentViewController: UIViewController, completionHandler: ((Bool) -> Void)? = nil) {
         let url = createAuthCodeRequestURL()
-        let web = ConnectController(URL: url) { url in
-            let success: Bool
-            if let accessTokenObject = self.fetchAccessTokenFromRedirectUri(url),
-                let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {
-                self.storage.authenticationInfo = authInfo
-                success = true
+        oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
+            if let oauthCode = oauthCode {
+                self.oauthClient.fetchAccessTokenFromOAuthCode(oauthCode, self.clientAccount, redirectUri: self.redirectUri) { response in
+                    switch response.result {
+                    case .success(let result):
+                        self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
+                    case .failure(let error):
+                        Logger.error("Failure retrieving the access token from the oauth code", error: error)
+                    }
+                    completionHandler?(self.authorized)
+                }
             } else {
-                success = false
+                completionHandler?(false)
             }
-            completionHandler?(success)
-            return success
         }
-        
-        let navigationController = UINavigationController(rootViewController: web)
-        parentViewController.present(navigationController, animated: true, completion: nil)
+    }
+    
+    private func createAuthCodeRequestURL() -> URL {
+        return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+            + "&client_id=" + clientAccount.clientId.encodeQueryParamString
+            + "&redirect_uri=" + redirectUri.encodeQueryParamString
+            + "&scope=" + scope.encodeQueryParamString
+            + "&state=iossdkstate"
+        )!
     }
     
     private static func authenticationInfoFrom(accessTokenObject: AccessToken) -> OAuthAuthenticationInfo? {
@@ -113,40 +124,4 @@ public class OAuthStrategy : AuthenticationStrategy {
             }
         }
     }
-    
-    private func createAuthCodeRequestURL() -> URL {
-        var components = URLComponents(string: "https://api.ciscospark.com/v1/authorize")!
-        components.queryItems = [
-            URLQueryItem(name: "client_id", value: clientAccount.clientId),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "redirect_uri", value: redirectUri.encodeQueryParamString),
-            URLQueryItem(name: "scope", value: scope.encodeQueryParamString),
-            URLQueryItem(name: "state", value: "set_state_here")]
-        components.percentEncodedQuery = components.query
-        
-        return components.url!
-    }
-    
-    private func fetchAccessTokenFromRedirectUri(_ url: URL) -> AccessToken? {
-        guard url.absoluteString.lowercased().contains(redirectUri.lowercased()) else {
-            return nil
-        }
-        
-        let query = url.queryParameters
-        if let error = query["error"] {
-            Logger.error("ErrorCode: \(error)")
-            if let description = query["error_description"] {
-                Logger.error("Error description: \(description.decodeString)")
-            }
-        } else if let authCode = query["code"] {
-            do {
-                return try OAuthClient().fetchAccessTokenFromOAuthCode(authCode, clientAccount: clientAccount, redirectUri: redirectUri)
-            }  catch let error as NSError {
-                Logger.error("Failed to fetch access token: \(error.localizedFailureReason)")
-            }
-        }
-
-        return nil
-    }
-
 }
