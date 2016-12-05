@@ -54,7 +54,7 @@ open class WebhookClient: CompletionHandlerType<Webhook> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String?, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,

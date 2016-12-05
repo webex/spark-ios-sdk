@@ -38,7 +38,7 @@ extension WebhookClient {
     /// - parameter event: The event type for the webhook.
     /// - parameter filter: The filter that defines the webhook scope.
     /// - returns: Webhook
-    public func create(name: String, targetUrl: String, resource: String, event: String, filter: String) throws -> Webhook {
+    public func create(name: String, targetUrl: String, resource: String, event: String, filter: String?) throws -> Webhook {
 		return try SyncUtil.getObject(name, targetUrl, resource, event, filter, async: create)
     }
     
