@@ -40,8 +40,8 @@ public class JWTAuthStrategy: AuthenticationStrategy {
             return false
         }
         let payloadSegment = segments[1]
-        if let payloadData = base64decode(payloadSegment),
-            let payload = (try? JSONSerialization.jsonObject(with: payloadData, options: JSONSerialization.ReadingOptions(rawValue: 0))) as? [String: Any],
+        if let payloadData = base64UrlDecode(payloadSegment),
+            let payload = (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any],
             let expiration = payload["exp"] as? TimeInterval {
             return Date(timeIntervalSince1970: expiration) > Date()
         } else {
@@ -59,8 +59,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         if let token = jwtAccessTokenCreationResult.token,
             let tokenExpiration = jwtAccessTokenCreationResult.tokenExpiration {
             let tokenExpirationDate = Date(timeInterval: tokenExpiration, since: jwtAccessTokenCreationResult.tokenCreationDate)
-            return JWTAuthenticationInfo(token: token,
-                                           tokenExpirationDate: tokenExpirationDate)
+            return JWTAuthenticationInfo(token: token, tokenExpirationDate: tokenExpirationDate)
         }
         return nil
     }
@@ -94,18 +93,25 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         }
     }
     
-    private func base64decode(_ input:String) -> Data? {
-        let rem = input.characters.count % 4
-        
-        var ending = ""
-        if rem > 0 {
-            let amount = 4 - rem
-            ending = String(repeating: "=", count: amount)
+    
+    /*
+     BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
+     */
+    private func base64UrlDecode(_ base64UrlString: String) -> Data? {
+        var base64String = base64UrlString
+        base64String = base64String.replacingOccurrences(of: "-", with: "+")
+        base64String = base64String.replacingOccurrences(of: "_", with: "/")
+        switch base64String.characters.count % 4 {
+        case 0:
+            break
+        case 2: 
+            base64String += "=="
+        case 3:
+            base64String += "="
+        default:
+            Logger.error("Base64Url encoded string could not be correctly decoded")
+            return nil
         }
-        
-        let base64 = input.replacingOccurrences(of: "-", with: "+", options: NSString.CompareOptions(rawValue: 0), range: nil)
-            .replacingOccurrences(of: "_", with: "/", options: NSString.CompareOptions(rawValue: 0), range: nil) + ending
-        
-        return Data(base64Encoded: base64, options: NSData.Base64DecodingOptions(rawValue: 0))
+        return Data(base64Encoded: base64String)
     }
 }
