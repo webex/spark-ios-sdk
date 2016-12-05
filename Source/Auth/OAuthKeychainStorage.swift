@@ -18,18 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
 import KeychainAccess
 
-protocol KeychainProtocol {
-    func get(_ key: String) throws -> String?
-    func remove(_ key: String) throws
-    func set(_ value: String, key: String) throws
-}
 
-extension Keychain: KeychainProtocol {}
-
-public class OAuthKeychainStorage : OAuthStorage {
+public class OAuthKeychainStorage: OAuthStorage {
 
     private let accessTokenKey = "accessToken"
     private let accessTokenExpirationDateKey = "accessTokenExpirationDate"

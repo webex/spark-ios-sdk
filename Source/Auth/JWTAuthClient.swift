@@ -20,31 +20,33 @@
 
 import Foundation
 
-class AuthenticationStrategyProxy: AuthenticationStrategy {
-    private var delegate: AuthenticationStrategy?
-    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
-        self.delegate = delegate
+class JWTAuthClient {
+    
+    typealias ObjectHandler = (ServiceResponse<JWTAccessTokenCreationResult>) -> Void
+    
+    private func requestBuilder() -> ServiceRequest.Builder {
+        return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
+            .path("jwt/login")
     }
     
-    var authorized: Bool {
-        if let delegate = delegate {
-            return delegate.authorized
-        } else {
-            return false
-        }
+    // MARK:- Async API
+    
+    func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {        
+        let request = requestBuilder()
+            .method(.post)
+            .headers(["Authorization": jwt,
+                      "Content-Type": "text/plain",
+                      "Cache-Control": "no-cache",
+                      "Accept-Encoding": "none"])
+            .queue(queue)
+            .build()
+        
+        request.responseObject(completionHandler)
     }
     
-    func deauthorize() {
-        if let delegate = delegate {
-            return delegate.deauthorize()
-        }
-    }
+    // MARK:- Sync API
     
-    func accessToken(completionHandler: @escaping (String?) -> Void) {
-        if let delegate = delegate {
-            return delegate.accessToken(completionHandler: completionHandler)
-        } else {
-            completionHandler(nil)
-        }
+    func fetchTokenFromJWT(_ jwt: String) throws -> JWTAccessTokenCreationResult {
+        return try SyncUtil.getObject(jwt, async: fetchTokenFromJWT)
     }
 }

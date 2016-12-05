@@ -18,8 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
 
+
+/// A protocol for generic authentication strategies in Spark. Each authentication strategy
+/// is responsible for providing an accessToken used throughout Spark.
 public protocol AuthenticationStrategy : class {
     var authorized: Bool { get }
     func deauthorize()

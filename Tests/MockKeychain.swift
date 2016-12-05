@@ -18,33 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
 
-class AuthenticationStrategyProxy: AuthenticationStrategy {
-    private var delegate: AuthenticationStrategy?
-    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
-        self.delegate = delegate
+import Foundation
+@testable import SparkSDK
+
+
+class MockKeychain: KeychainProtocol {
+    var data = [String:String]()
+    
+    func get(_ key: String) throws -> String? {
+        return data[key]
     }
     
-    var authorized: Bool {
-        if let delegate = delegate {
-            return delegate.authorized
-        } else {
-            return false
-        }
+    func remove(_ key: String) throws {
+        data.removeValue(forKey: key)
     }
     
-    func deauthorize() {
-        if let delegate = delegate {
-            return delegate.deauthorize()
-        }
-    }
-    
-    func accessToken(completionHandler: @escaping (String?) -> Void) {
-        if let delegate = delegate {
-            return delegate.accessToken(completionHandler: completionHandler)
-        } else {
-            completionHandler(nil)
-        }
+    func set(_ value: String, key: String) throws {
+        data[key] = value
     }
 }

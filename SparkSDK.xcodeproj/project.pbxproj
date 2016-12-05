@@ -61,6 +61,16 @@
 		5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */; };
 		5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */; };
 		5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */; };
+		5AFB6E901DF5C5110027E989 /* JWTAccessTokenCreationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8A1DF5C5110027E989 /* JWTAccessTokenCreationResult.swift */; };
+		5AFB6E911DF5C5110027E989 /* JWTAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8B1DF5C5110027E989 /* JWTAuthClient.swift */; };
+		5AFB6E921DF5C5110027E989 /* JWTAuthenticationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8C1DF5C5110027E989 /* JWTAuthenticationInfo.swift */; };
+		5AFB6E931DF5C5110027E989 /* JWTAuthKeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8D1DF5C5110027E989 /* JWTAuthKeychainStorage.swift */; };
+		5AFB6E941DF5C5110027E989 /* JWTAuthStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8E1DF5C5110027E989 /* JWTAuthStorage.swift */; };
+		5AFB6E951DF5C5110027E989 /* JWTAuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E8F1DF5C5110027E989 /* JWTAuthStrategy.swift */; };
+		5AFB6E991DF5C6500027E989 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E981DF5C6500027E989 /* KeychainProtocol.swift */; };
+		5AFB6E9B1DF5C6E90027E989 /* MockKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E9A1DF5C6E90027E989 /* MockKeychain.swift */; };
+		5AFB6E9C1DF5C7720027E989 /* JWTAuthKeychainStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E961DF5C5D50027E989 /* JWTAuthKeychainStorageTests.swift */; };
+		5AFB6E9D1DF5C7770027E989 /* JWTAuthStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFB6E881DF5C4DF0027E989 /* JWTAuthStrategyTests.swift */; };
 		5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */; };
 		5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D10539A1D066CF6004B30B7 /* MediaOption.swift */; };
 		5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5D011CF6FB3A00313515 /* Reachability.swift */; };
@@ -223,6 +233,16 @@
 		5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthStrategyTests.swift; path = Tests/OAuthStrategyTests.swift; sourceTree = SOURCE_ROOT; };
 		5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthKeychainStorageTests.swift; path = Tests/OAuthKeychainStorageTests.swift; sourceTree = SOURCE_ROOT; };
 		5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleAuthStrategy.swift; sourceTree = "<group>"; };
+		5AFB6E881DF5C4DF0027E989 /* JWTAuthStrategyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthStrategyTests.swift; path = Tests/JWTAuthStrategyTests.swift; sourceTree = SOURCE_ROOT; };
+		5AFB6E8A1DF5C5110027E989 /* JWTAccessTokenCreationResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAccessTokenCreationResult.swift; sourceTree = "<group>"; };
+		5AFB6E8B1DF5C5110027E989 /* JWTAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAuthClient.swift; sourceTree = "<group>"; };
+		5AFB6E8C1DF5C5110027E989 /* JWTAuthenticationInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAuthenticationInfo.swift; sourceTree = "<group>"; };
+		5AFB6E8D1DF5C5110027E989 /* JWTAuthKeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAuthKeychainStorage.swift; sourceTree = "<group>"; };
+		5AFB6E8E1DF5C5110027E989 /* JWTAuthStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAuthStorage.swift; sourceTree = "<group>"; };
+		5AFB6E8F1DF5C5110027E989 /* JWTAuthStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWTAuthStrategy.swift; sourceTree = "<group>"; };
+		5AFB6E961DF5C5D50027E989 /* JWTAuthKeychainStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthKeychainStorageTests.swift; path = Tests/JWTAuthKeychainStorageTests.swift; sourceTree = SOURCE_ROOT; };
+		5AFB6E981DF5C6500027E989 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
+		5AFB6E9A1DF5C6E90027E989 /* MockKeychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockKeychain.swift; path = Tests/MockKeychain.swift; sourceTree = SOURCE_ROOT; };
 		5D024F001CFBC08400D2E358 /* InterfaceAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceAddress.swift; sourceTree = "<group>"; };
 		5D10539A1D066CF6004B30B7 /* MediaOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaOption.swift; sourceTree = "<group>"; };
 		5D1A5D011CF6FB3A00313515 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -363,8 +383,11 @@
 			isa = PBXGroup;
 			children = (
 				3DA099F11D3EF82500205DF6 /* Config.swift */,
+				5AFB6E961DF5C5D50027E989 /* JWTAuthKeychainStorageTests.swift */,
+				5AFB6E881DF5C4DF0027E989 /* JWTAuthStrategyTests.swift */,
 				3DA099F31D3EF82500205DF6 /* MembershipTests.swift */,
 				3DA099F41D3EF82500205DF6 /* MessageTests.swift */,
+				5AFB6E9A1DF5C6E90027E989 /* MockKeychain.swift */,
 				5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */,
 				5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */,
 				3DA099F51D3EF82500205DF6 /* PeopleTests.swift */,
@@ -486,19 +509,26 @@
 		B91E75311CE2D7B70080EAE0 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				3D1E578E1CEDA348006124B0 /* ClientAccount.swift */,
-				3D1E57901CEDA348006124B0 /* OAuthClient.swift */,
 				B91E75321CE2D7B70080EAE0 /* AccessToken.swift */,
-				B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */,
 				5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */,
-				5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */,
-				5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */,
-				5AC09EB81DE63C66005F38BC /* OAuthStorage.swift */,
-				5AC09EBA1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift */,
-				5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */,
 				5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */,
+				3D1E578E1CEDA348006124B0 /* ClientAccount.swift */,
+				5AFB6E8A1DF5C5110027E989 /* JWTAccessTokenCreationResult.swift */,
+				5AFB6E8B1DF5C5110027E989 /* JWTAuthClient.swift */,
+				5AFB6E8C1DF5C5110027E989 /* JWTAuthenticationInfo.swift */,
+				5AFB6E8D1DF5C5110027E989 /* JWTAuthKeychainStorage.swift */,
+				5AFB6E8E1DF5C5110027E989 /* JWTAuthStorage.swift */,
+				5AFB6E8F1DF5C5110027E989 /* JWTAuthStrategy.swift */,
+				5AC09EBA1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift */,
+				3D1E57901CEDA348006124B0 /* OAuthClient.swift */,
+				5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */,
 				5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */,
+				5AC09EB81DE63C66005F38BC /* OAuthStorage.swift */,
+				5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */,
 				5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */,
+				B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */,
+				5AFA0BD41DEE376A00B6F6C9 /* SimpleAuthStrategy.swift */,
+				5AFB6E981DF5C6500027E989 /* KeychainProtocol.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -885,16 +915,19 @@
 				3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */,
 				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,
 				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
+				5AFB6E9D1DF5C7770027E989 /* JWTAuthStrategyTests.swift in Sources */,
 				3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */,
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
 				5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */,
 				3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */,
 				3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */,
+				5AFB6E9B1DF5C6E90027E989 /* MockKeychain.swift in Sources */,
 				3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */,
 				3D31B7891D41B7F500D8DB55 /* PhoneTests.swift in Sources */,
 				3D31314F1D3EF932007717B2 /* Utils.swift in Sources */,
 				5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */,
+				5AFB6E9C1DF5C7720027E989 /* JWTAuthKeychainStorageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -916,6 +949,7 @@
 				B91E75BC1CE2D7B70080EAE0 /* CallStateIncoming.swift in Sources */,
 				B91E75B31CE2D7B70080EAE0 /* Call.swift in Sources */,
 				3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */,
+				5AFB6E931DF5C5110027E989 /* JWTAuthKeychainStorage.swift in Sources */,
 				5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */,
 				B91E75A51CE2D7B70080EAE0 /* MembershipClient+Sync.swift in Sources */,
 				5D1A5D091CF8130E00313515 /* ReachabilityTransportStatus.swift in Sources */,
@@ -942,6 +976,7 @@
 				B91E75AC1CE2D7B70080EAE0 /* MetricsBuffer.swift in Sources */,
 				B91E75AD1CE2D7B70080EAE0 /* MetricsClient.swift in Sources */,
 				B91E75E21CE2D7B70080EAE0 /* NotificationObserver.swift in Sources */,
+				5AFB6E921DF5C5110027E989 /* JWTAuthenticationInfo.swift in Sources */,
 				B91E75A91CE2D7B70080EAE0 /* MessageClient.swift in Sources */,
 				3D66B1AE1D24AD4A0016A072 /* TeamClient+Sync.swift in Sources */,
 				B91E75A61CE2D7B70080EAE0 /* MembershipClient.swift in Sources */,
@@ -953,6 +988,7 @@
 				5AC09EB31DE4D02C005F38BC /* AuthenticationStrategy.swift in Sources */,
 				B91E75C81CE2D7B70080EAE0 /* DeviceService.swift in Sources */,
 				3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */,
+				5AFB6E911DF5C5110027E989 /* JWTAuthClient.swift in Sources */,
 				3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */,
 				B91E75B11CE2D7B70080EAE0 /* PersonClient+Sync.swift in Sources */,
 				5AC09EBB1DE63FD8005F38BC /* OAuthAuthenticationInfo.swift in Sources */,
@@ -972,6 +1008,7 @@
 				B91E75CD1CE2D7B70080EAE0 /* FullState.swift in Sources */,
 				3D0AA8CA1D0521570094A658 /* PhoneNotificationCenter.swift in Sources */,
 				5D67C6541CF04E6400758F6B /* MemoryLogger.swift in Sources */,
+				5AFB6E951DF5C5110027E989 /* JWTAuthStrategy.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
 				B91E759A1CE2D7B70080EAE0 /* CommonTypes.swift in Sources */,
@@ -984,13 +1021,16 @@
 				B91E75A31CE2D7B70080EAE0 /* MediaEngineObserver.swift in Sources */,
 				3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */,
 				B91E75D01CE2D7B70080EAE0 /* Participant.swift in Sources */,
+				5AFB6E941DF5C5110027E989 /* JWTAuthStorage.swift in Sources */,
 				B91E75C71CE2D7B70080EAE0 /* DeviceClient.swift in Sources */,
 				B91E759B1CE2D7B70080EAE0 /* SparkError.swift in Sources */,
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
 				B91E75CF1CE2D7B70080EAE0 /* MediaInfo.swift in Sources */,
 				5D1A5D031CF6FB3A00313515 /* Reachability.swift in Sources */,
+				5AFB6E901DF5C5110027E989 /* JWTAccessTokenCreationResult.swift in Sources */,
 				5A4CFDC21DF0B29C0054D884 /* PhoneSettings.swift in Sources */,
 				B91E75D41CE2D7B70080EAE0 /* ParticipantStatus.swift in Sources */,
+				5AFB6E991DF5C6500027E989 /* KeychainProtocol.swift in Sources */,
 				5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */,
 				B91E75D91CE2D7B70080EAE0 /* RoomClient+Sync.swift in Sources */,
 				B91E75DB1CE2D7B70080EAE0 /* Spark.swift in Sources */,

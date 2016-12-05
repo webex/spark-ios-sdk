@@ -18,33 +18,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
 
-class AuthenticationStrategyProxy: AuthenticationStrategy {
-    private var delegate: AuthenticationStrategy?
-    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
-        self.delegate = delegate
-    }
+
+/// Authentication information returned from JWT authentication mechanism
+public struct JWTAuthenticationInfo {
     
-    var authorized: Bool {
-        if let delegate = delegate {
-            return delegate.authorized
-        } else {
-            return false
-        }
-    }
+    /// Access token used throughout Spark
+    public let token: String
     
-    func deauthorize() {
-        if let delegate = delegate {
-            return delegate.deauthorize()
-        }
-    }
-    
-    func accessToken(completionHandler: @escaping (String?) -> Void) {
-        if let delegate = delegate {
-            return delegate.accessToken(completionHandler: completionHandler)
-        } else {
-            completionHandler(nil)
-        }
-    }
+    /// The date and time the access token will expire
+    public let tokenExpirationDate: Date
 }

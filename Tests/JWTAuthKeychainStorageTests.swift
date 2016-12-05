@@ -25,20 +25,19 @@ import XCTest
 @testable import SparkSDK
 
 
-class OAuthKeychainStorageTests: XCTestCase {
+class JWTAuthKeychainStorageTests: XCTestCase {
     private var keychain: MockKeychain!
     
     override func setUp() {
         keychain = MockKeychain()
-    }
-
-    private func createTestObject() -> OAuthKeychainStorage {
-        return OAuthKeychainStorage(keychain: keychain)
+    } 
+    
+    private func createTestObject() -> JWTAuthKeychainStorage {
+        return JWTAuthKeychainStorage(keychain: keychain)
     }
     
     func testWhenLoginInformationIsSavedItCanBeRetrieved() {
-        let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
-                                           refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
+        let info = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         XCTAssertTrue(auth(testObject1.authenticationInfo, isEqualTo: info))
@@ -48,8 +47,7 @@ class OAuthKeychainStorageTests: XCTestCase {
     }
     
     func testWhenLoginInformationIsClearedThenItIsNil() {
-        let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
-                                           refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
+        let info = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         testObject1.authenticationInfo = nil
@@ -58,10 +56,10 @@ class OAuthKeychainStorageTests: XCTestCase {
         XCTAssertNil(testObject2.authenticationInfo)
     }
     
-    private func auth(_ first: OAuthAuthenticationInfo?, isEqualTo second: OAuthAuthenticationInfo?) -> Bool {
+    private func auth(_ first: JWTAuthenticationInfo?, isEqualTo second: JWTAuthenticationInfo?) -> Bool {
         guard let first = first, let second = second else {
             return false
         }
-        return first.accessToken == second.accessToken && first.accessTokenExpirationDate == second.accessTokenExpirationDate && first.refreshToken == second.refreshToken && first.refreshTokenExpirationDate == second.refreshTokenExpirationDate
+        return first.token == second.token && first.tokenExpirationDate == second.tokenExpirationDate
     }
 }

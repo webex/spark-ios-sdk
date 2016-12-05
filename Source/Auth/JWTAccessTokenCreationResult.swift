@@ -19,32 +19,30 @@
 // THE SOFTWARE.
 
 import Foundation
+import ObjectMapper
 
-class AuthenticationStrategyProxy: AuthenticationStrategy {
-    private var delegate: AuthenticationStrategy?
-    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
-        self.delegate = delegate
+class JWTAccessTokenCreationResult: NSObject, Mappable {
+    
+    var token: String?
+    var tokenExpiration: TimeInterval?
+    var tokenCreationDate: Date
+    
+    var tokenExpirationDate: Date {
+        return Date(timeInterval: tokenExpiration!, since: tokenCreationDate)
     }
     
-    var authorized: Bool {
-        if let delegate = delegate {
-            return delegate.authorized
-        } else {
-            return false
-        }
+    init(token: String) {
+        self.token = token
+        tokenCreationDate = Date()
     }
     
-    func deauthorize() {
-        if let delegate = delegate {
-            return delegate.deauthorize()
-        }
-    }
+    // MARK:- Mappable
     
-    func accessToken(completionHandler: @escaping (String?) -> Void) {
-        if let delegate = delegate {
-            return delegate.accessToken(completionHandler: completionHandler)
-        } else {
-            completionHandler(nil)
-        }
+    required init?(map: Map) {
+        tokenCreationDate = Date()
+    }
+    func mapping(map: Map) {
+        token <- map["token"]
+        tokenExpiration <- map["expiresIn"]
     }
 }
