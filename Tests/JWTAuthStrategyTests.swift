@@ -25,6 +25,7 @@ import XCTest
 
 
 fileprivate class MockJWTStorage: JWTAuthStorage {
+    var jwt: String?
     var authenticationInfo: JWTAuthenticationInfo?
 }
 
@@ -57,7 +58,7 @@ class JWTAuthStrategyTests: XCTestCase {
     func testWhenValidAccessTokenThenItIsImmediatelyReturned() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: tomorrow)
+        storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: tomorrow)
         
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -70,7 +71,7 @@ class JWTAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenExistsAndJWTIsExpiredThenNilIsImmediatelyReturnedForAccessToken() {
         let testObject = createTestObject(jwt: expiredTestJWT)
 
-        storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: yesterday)
+        storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday)
         var count = 0
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -86,7 +87,7 @@ class JWTAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenExpiredButJWTIsValidThenAccessTokenIsRefreshed() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: yesterday)
+        storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday)
         var count = 0
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -104,8 +105,8 @@ class JWTAuthStrategyTests: XCTestCase {
         XCTAssertEqual(count, 1)
         
         let authInfo = storage.authenticationInfo
-        XCTAssertEqual(authInfo?.token, "accessToken2")
-        XCTAssertEqualWithAccuracy(authInfo?.tokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, tomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
+        XCTAssertEqual(authInfo?.accessToken, "accessToken2")
+        XCTAssertEqualWithAccuracy(authInfo?.accessTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, tomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
     }
     
     func testWhenAccessTokenHasNoExpirationDateThenItIsAlwaysAuthorized() {
@@ -131,7 +132,7 @@ class JWTAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenFetchFailsThenDeauthorized() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: yesterday)
+        storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday)
         var count = 0
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -150,9 +151,9 @@ class JWTAuthStrategyTests: XCTestCase {
     }
     
     func testWhenDeauthorizedThenAuthInfoIsCleared() {
+        storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: tomorrow)
         let testObject = createTestObject()
         
-        storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: yesterday)
         testObject.deauthorize()
         
         XCTAssertFalse(testObject.authorized)
@@ -160,7 +161,9 @@ class JWTAuthStrategyTests: XCTestCase {
     }
     
     private func createTestObject(jwt: String = testJWT) -> JWTAuthStrategy {
-        return JWTAuthStrategy(jwt: jwt, storage: storage, client: client)
+        let strategy = JWTAuthStrategy(storage: storage, client: client)
+        strategy.authorizedWith(jwt: jwt)
+        return strategy
     }
     
     private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTAccessTokenCreationResult> {

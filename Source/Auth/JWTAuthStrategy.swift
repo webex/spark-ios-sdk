@@ -25,8 +25,8 @@ import Foundation
 /// A JWT-based authentication strategy
 public class JWTAuthStrategy: AuthenticationStrategy {
     private var jwt: String?
-    private var client: JWTAuthClient
-    private var storage: JWTAuthStorage
+    private let client: JWTAuthClient
+    private let storage: JWTAuthStorage
     
     public var authorized: Bool {
         guard let jwt = jwt else {
@@ -50,8 +50,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         return nil
     }
     
-    init(jwt: String, storage: JWTAuthStorage = JWTAuthKeychainStorage(), client: JWTAuthClient = JWTAuthClient()) {
-        self.jwt = jwt
+    init(storage: JWTAuthStorage = JWTAuthKeychainStorage(), client: JWTAuthClient = JWTAuthClient()) {
         self.client = client
         self.storage = storage
     }
@@ -60,9 +59,13 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         if let token = jwtAccessTokenCreationResult.token,
             let tokenExpiration = jwtAccessTokenCreationResult.tokenExpiration {
             let tokenExpirationDate = Date(timeInterval: tokenExpiration, since: jwtAccessTokenCreationResult.tokenCreationDate)
-            return JWTAuthenticationInfo(token: token, tokenExpirationDate: tokenExpirationDate)
+            return JWTAuthenticationInfo(accessToken: token, accessTokenExpirationDate: tokenExpirationDate)
         }
         return nil
+    }
+    
+    public func authorizedWith(jwt: String) {
+        self.jwt = jwt
     }
     
     public func deauthorize() {
@@ -77,8 +80,8 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         }
         let buffer: TimeInterval = 15 * 60
         if let authenticationInfo = storage.authenticationInfo,
-            authenticationInfo.tokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
-            completionHandler(authenticationInfo.token)
+            authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
+            completionHandler(authenticationInfo.accessToken)
         } else {
             client.fetchTokenFromJWT(jwt) { response in
                 switch response.result {
@@ -90,7 +93,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
                     self.deauthorize()
                     Logger.error("Failed to refresh token", error: error)
                 }
-                completionHandler(self.storage.authenticationInfo?.token)
+                completionHandler(self.storage.authenticationInfo?.accessToken)
             }
         }
     }

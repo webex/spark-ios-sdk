@@ -32,12 +32,12 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         keychain = MockKeychain()
     } 
     
-    private func createTestObject() -> JWTAuthKeychainStorage {
+    private func createTestObject() -> JWTAuthStorage {
         return JWTAuthKeychainStorage(keychain: keychain)
     }
     
     func testWhenLoginInformationIsSavedItCanBeRetrieved() {
-        let info = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: Date(timeIntervalSince1970: 1))
+        let info = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         XCTAssertTrue(auth(testObject1.authenticationInfo, isEqualTo: info))
@@ -47,7 +47,7 @@ class JWTAuthKeychainStorageTests: XCTestCase {
     }
     
     func testWhenLoginInformationIsClearedThenItIsNil() {
-        let info = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: Date(timeIntervalSince1970: 1))
+        let info = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
         testObject1.authenticationInfo = nil
@@ -56,10 +56,29 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         XCTAssertNil(testObject2.authenticationInfo)
     }
     
+    func testWhenJWTIsStoredThenItCanBeCleared() {
+        let testObject1 = createTestObject()
+        testObject1.jwt = "jwt1"
+        XCTAssertEqual(testObject1.jwt, "jwt1")
+        
+        let testObject2 = createTestObject()
+        XCTAssertEqual(testObject2.jwt, "jwt1")
+    }
+    
+    func testWhenJWTIsClearedThenItIsNil() {
+        let testObject1 = createTestObject()
+        testObject1.jwt = "jwt1"
+        testObject1.jwt = nil
+        XCTAssertNil(testObject1.jwt)
+        
+        let testObject2 = createTestObject()
+        XCTAssertNil(testObject2.jwt)
+    }
+    
     private func auth(_ first: JWTAuthenticationInfo?, isEqualTo second: JWTAuthenticationInfo?) -> Bool {
         guard let first = first, let second = second else {
             return false
         }
-        return first.token == second.token && first.tokenExpirationDate == second.tokenExpirationDate
+        return first.accessToken == second.accessToken && first.accessTokenExpirationDate == second.accessTokenExpirationDate
     }
 }

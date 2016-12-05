@@ -24,6 +24,9 @@ import Foundation
 
 /// Represents a storage mechanism for JWT authorization information
 public protocol JWTAuthStorage: class {
+
+    /// The JSON Web Token information
+    var jwt: String? { get set }
     
     /// The authentication information
     var authenticationInfo: JWTAuthenticationInfo? { get set }

@@ -26,8 +26,8 @@ import Foundation
 public struct JWTAuthenticationInfo {
     
     /// Access token used throughout Spark
-    public let token: String
+    public let accessToken: String
     
     /// The date and time the access token will expire
-    public let tokenExpirationDate: Date
+    public let accessTokenExpirationDate: Date
 }

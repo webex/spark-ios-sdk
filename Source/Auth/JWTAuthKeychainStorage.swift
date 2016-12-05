@@ -25,8 +25,9 @@ import KeychainAccess
 
 public class JWTAuthKeychainStorage: JWTAuthStorage {
     
-    private let tokenKey = "token"
-    private let tokenExpirationDateKey = "tokenExpirationDate"
+    private let jwtKey = "jwtKey"
+    private let accessTokenKey = "accessTokenKey"
+    private let accessTokenExpirationDateKey = "accessTokenExpirationDateKey"
     private let keychain: KeychainProtocol
     private var cachedAuthenticationInfo: JWTAuthenticationInfo?
     
@@ -38,20 +39,42 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         self.keychain = keychain
     }
     
+    public var jwt: String? {
+        get {
+            do {
+                return try keychain.get(jwtKey) 
+            } catch let error {
+                Logger.error("Failed to get JWT with error", error: error)
+            }
+            return nil
+        }
+        set {
+            do {
+                if let newValue = newValue {
+                    try keychain.set(newValue, key: jwtKey)
+                } else {
+                    try keychain.remove(jwtKey)
+                }
+            } catch let error {
+                Logger.error("Failed to save JWT with error", error: error)
+            }
+        }
+    }
+    
     public var authenticationInfo: JWTAuthenticationInfo? { 
         get {
             if let cachedAuthenticationInfo = cachedAuthenticationInfo {
                 return cachedAuthenticationInfo
             }
             do {
-                if let token = try keychain.get(tokenKey),
-                    let tokenExpirationDateString = try keychain.get(tokenExpirationDateKey),
-                    let tokenExpirationDateDouble = Double(tokenExpirationDateString) {
-                    cachedAuthenticationInfo = JWTAuthenticationInfo(token: token,
-                                                                       tokenExpirationDate: Date(timeIntervalSinceReferenceDate: tokenExpirationDateDouble))
+                if let accessToken = try keychain.get(accessTokenKey),
+                    let expirationDateString = try keychain.get(accessTokenExpirationDateKey),
+                    let expirationDateDouble = Double(expirationDateString) {
+                    let expirationDate = Date(timeIntervalSinceReferenceDate: expirationDateDouble)
+                    cachedAuthenticationInfo = JWTAuthenticationInfo(accessToken: accessToken, accessTokenExpirationDate: expirationDate)
                 }
             } catch let error {
-                Logger.error("Failed to get authentication information with error: \(error)")
+                Logger.error("Failed to get authentication information with error", error: error)
             }
             return cachedAuthenticationInfo            
         }
@@ -59,14 +82,14 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
             cachedAuthenticationInfo = newValue
             do {
                 if let authenticationInfo = newValue {
-                    try keychain.set(authenticationInfo.token, key: tokenKey)
-                    try keychain.set(String(authenticationInfo.tokenExpirationDate.timeIntervalSinceReferenceDate), key: tokenExpirationDateKey)
+                    try keychain.set(authenticationInfo.accessToken, key: accessTokenKey)
+                    try keychain.set(String(authenticationInfo.accessTokenExpirationDate.timeIntervalSinceReferenceDate), key: accessTokenExpirationDateKey)
                 } else {
-                    try keychain.remove(tokenKey)
-                    try keychain.remove(tokenExpirationDateKey)
+                    try keychain.remove(accessTokenKey)
+                    try keychain.remove(accessTokenExpirationDateKey)
                 }
             } catch let error {
-                Logger.error("Failed to save authentication information with error: \(error)")
+                Logger.error("Failed to save authentication information with error", error: error)
             }
         }
     }  
