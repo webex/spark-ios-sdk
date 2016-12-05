@@ -21,7 +21,7 @@
 import Foundation
 
 /// Webhook HTTP client.
-open class WebhookClient {
+public class WebhookClient {
     
     /// Alias for closure to handle a service response along with a Webhook object.
     public typealias ObjectHandler = (ServiceResponse<Webhook>) -> Void
@@ -31,7 +31,7 @@ open class WebhookClient {
     
     private let authenticationStrategy: AuthenticationStrategy
     
-    public init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy
     }
     

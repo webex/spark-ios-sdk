@@ -21,7 +21,7 @@
 import Foundation
 
 /// Message HTTP client.
-open class MessageClient {
+public class MessageClient {
     
     /// Alias for closure to handle a service response along with a Message object.
     public typealias ObjectHandler = (ServiceResponse<Message>) -> Void
@@ -31,7 +31,7 @@ open class MessageClient {
     
     private let authenticationStrategy: AuthenticationStrategy
     
-    public init(authenticationStrategy: AuthenticationStrategy) {
+    init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy
     }
     
@@ -49,7 +49,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let query = RequestParameter([
             "roomId": roomId,
             "before": before,
@@ -74,7 +74,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func post(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "text": text,
@@ -97,7 +97,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func post(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonId": personId,
             "text": text,
@@ -120,7 +120,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func post(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "toPersonEmail": personEmail.toString(),
             "text": text,
@@ -141,7 +141,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    public func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
             .method(.get)
             .path(messageId)
@@ -157,7 +157,7 @@ open class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(messageId)
