@@ -50,6 +50,7 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         let info = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
+        _ = testObject1.authenticationInfo
         testObject1.authenticationInfo = nil
         
         let testObject2 = createTestObject()
@@ -68,6 +69,8 @@ class JWTAuthKeychainStorageTests: XCTestCase {
     func testWhenJWTIsClearedThenItIsNil() {
         let testObject1 = createTestObject()
         testObject1.jwt = "jwt1"
+        _ = testObject1.jwt
+        
         testObject1.jwt = nil
         XCTAssertNil(testObject1.jwt)
         

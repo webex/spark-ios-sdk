@@ -52,6 +52,7 @@ class OAuthKeychainStorageTests: XCTestCase {
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
+        _ = testObject1.authenticationInfo
         testObject1.authenticationInfo = nil
         
         let testObject2 = createTestObject()

@@ -29,6 +29,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
     private let accessTokenKey = "accessTokenKey"
     private let accessTokenExpirationDateKey = "accessTokenExpirationDateKey"
     private let keychain: KeychainProtocol
+    private var cachedJwt: String?
     private var cachedAuthenticationInfo: JWTAuthenticationInfo?
     
     public convenience init() {
@@ -42,13 +43,17 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
     public var jwt: String? {
         get {
             do {
-                return try keychain.get(jwtKey) 
+                if cachedJwt == nil, 
+                    let jwt = try keychain.get(jwtKey) {
+                    cachedJwt = jwt
+                }
             } catch let error {
                 Logger.error("Failed to get JWT with error", error: error)
             }
-            return nil
+            return cachedJwt
         }
         set {
+            cachedJwt = newValue
             do {
                 if let newValue = newValue {
                     try keychain.set(newValue, key: jwtKey)
@@ -63,11 +68,9 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
     
     public var authenticationInfo: JWTAuthenticationInfo? { 
         get {
-            if let cachedAuthenticationInfo = cachedAuthenticationInfo {
-                return cachedAuthenticationInfo
-            }
             do {
-                if let accessToken = try keychain.get(accessTokenKey),
+                if cachedAuthenticationInfo == nil,
+                    let accessToken = try keychain.get(accessTokenKey),
                     let expirationDateString = try keychain.get(accessTokenExpirationDateKey),
                     let expirationDateDouble = Double(expirationDateString) {
                     let expirationDate = Date(timeIntervalSinceReferenceDate: expirationDateDouble)
@@ -81,9 +84,9 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         set {
             cachedAuthenticationInfo = newValue
             do {
-                if let authenticationInfo = newValue {
-                    try keychain.set(authenticationInfo.accessToken, key: accessTokenKey)
-                    try keychain.set(String(authenticationInfo.accessTokenExpirationDate.timeIntervalSinceReferenceDate), key: accessTokenExpirationDateKey)
+                if let newValue = newValue {
+                    try keychain.set(newValue.accessToken, key: accessTokenKey)
+                    try keychain.set(String(newValue.accessTokenExpirationDate.timeIntervalSinceReferenceDate), key: accessTokenExpirationDateKey)
                 } else {
                     try keychain.remove(accessTokenKey)
                     try keychain.remove(accessTokenExpirationDateKey)

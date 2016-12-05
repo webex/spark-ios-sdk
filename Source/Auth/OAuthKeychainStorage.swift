@@ -43,11 +43,9 @@ public class OAuthKeychainStorage: OAuthStorage {
     
     public var authenticationInfo: OAuthAuthenticationInfo? { 
         get {
-            if let cachedAuthenticationInfo = cachedAuthenticationInfo {
-                return cachedAuthenticationInfo
-            }
             do {
-                if let accessToken = try keychain.get(accessTokenKey),
+                if cachedAuthenticationInfo == nil,
+                    let accessToken = try keychain.get(accessTokenKey),
                     let accessTokenExpirationDateString = try keychain.get(accessTokenExpirationDateKey),
                     let accessTokenExpirationDateDouble = Double(accessTokenExpirationDateString),
                     let refreshToken = try keychain.get(refreshTokenKey),
@@ -59,18 +57,18 @@ public class OAuthKeychainStorage: OAuthStorage {
                                                                        refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
                 }
             } catch let error {
-                Logger.error("Failed to get authentication information with error: \(error)")
+                Logger.error("Failed to get authentication information with error", error: error)
             }
             return cachedAuthenticationInfo            
         }
         set {
             cachedAuthenticationInfo = newValue
             do {
-                if let authenticationInfo = newValue {
-                    try keychain.set(authenticationInfo.accessToken, key: accessTokenKey)
-                    try keychain.set(String(authenticationInfo.accessTokenExpirationDate.timeIntervalSinceReferenceDate), key: accessTokenExpirationDateKey)
-                    try keychain.set(authenticationInfo.refreshToken, key: refreshTokenKey)
-                    try keychain.set(String(authenticationInfo.refreshTokenExpirationDate.timeIntervalSinceReferenceDate), key: refreshTokenExpirationDateKey)
+                if let newValue = newValue {
+                    try keychain.set(newValue.accessToken, key: accessTokenKey)
+                    try keychain.set(String(newValue.accessTokenExpirationDate.timeIntervalSinceReferenceDate), key: accessTokenExpirationDateKey)
+                    try keychain.set(newValue.refreshToken, key: refreshTokenKey)
+                    try keychain.set(String(newValue.refreshTokenExpirationDate.timeIntervalSinceReferenceDate), key: refreshTokenExpirationDateKey)
                 } else {
                     try keychain.remove(accessTokenKey)
                     try keychain.remove(accessTokenExpirationDateKey)
@@ -78,7 +76,7 @@ public class OAuthKeychainStorage: OAuthStorage {
                     try keychain.remove(refreshTokenExpirationDateKey)
                 }
             } catch let error {
-                Logger.error("Failed to save authentication information with error: \(error)")
+                Logger.error("Failed to save authentication information with error", error: error)
             }
         }
     }
