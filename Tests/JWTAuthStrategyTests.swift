@@ -46,7 +46,9 @@ class JWTAuthStrategyTests: XCTestCase {
     private var storage: MockJWTStorage!
     private var client: MockJWTClient!
     private static let testJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibGFoIiwiaXNzIjoidGhpc0lzQVRlc3QiLCJleHAiOjQxMDI0NDQ4MDB9.p4frHZUGx8Qi60P77fl09lKCRGoJFNZzUqBm2fKOfC4"
-    
+    private let expiredTestJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibGFoIiwiaXNzIjoidGhpc0lzQVRlc3QiLCJleHAiOjE0NTE2MDY0MDB9.qgOgOrakNKAgvBumc5qwbK_ypEAVRpKi7cZWev1unSY"
+    private let jwtWithoutExpiration = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaXNzIjoiaXNzMSJ9.AwLFa7xpba0YoWRYVqXdTUDSa9bvOA7H7tdmqh7zvlA"
+
     override func setUp() {
         storage = MockJWTStorage()
         client = MockJWTClient()
@@ -63,11 +65,9 @@ class JWTAuthStrategyTests: XCTestCase {
         }
         
         XCTAssertEqual(retrievedAccessToken, "accessToken1")
-        
     }
     
-    func testWhenAccessTokenAndJWTAreExpiredThenNilIsImmediatelyReturnedForAccessToken() {
-        let expiredTestJWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibGFoIiwiaXNzIjoidGhpc0lzQVRlc3QiLCJleHAiOjE0NTE2MDY0MDB9.qgOgOrakNKAgvBumc5qwbK_ypEAVRpKi7cZWev1unSY"
+    func testWhenAccessTokenExistsAndJWTIsExpiredThenNilIsImmediatelyReturnedForAccessToken() {
         let testObject = createTestObject(jwt: expiredTestJWT)
 
         storage.authenticationInfo = JWTAuthenticationInfo(token: "accessToken1", tokenExpirationDate: yesterday)
@@ -97,12 +97,8 @@ class JWTAuthStrategyTests: XCTestCase {
         
         XCTAssertEqual(client.fetchTokenFromJWT_callCount, 1)
         
-        if let completionHandler = client.fetchTokenFromJWT_completionHandler {
-            let accessTokenObject = JWTAccessTokenCreationResult(token: "accessToken2")
-            accessTokenObject.tokenCreationDate = now
-            accessTokenObject.tokenExpiration = JWTAuthStrategyTests.oneDay
-            completionHandler(ServiceResponse<JWTAccessTokenCreationResult>(nil, Result.success(accessTokenObject)))
-        }
+        let response = accessTokenResponse(accessToken: "accessToken2")
+        client.fetchTokenFromJWT_completionHandler?(response)
         
         XCTAssertEqual(retrievedAccessToken, "accessToken2")
         XCTAssertEqual(count, 1)
@@ -110,6 +106,26 @@ class JWTAuthStrategyTests: XCTestCase {
         let authInfo = storage.authenticationInfo
         XCTAssertEqual(authInfo?.token, "accessToken2")
         XCTAssertEqualWithAccuracy(authInfo?.tokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, tomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
+    }
+    
+    func testWhenAccessTokenHasNoExpirationDateThenItIsAlwaysAuthorized() {
+        let testObject = createTestObject(jwt: jwtWithoutExpiration)
+        XCTAssertTrue(testObject.authorized)
+        
+        var count = 0
+        var retrievedAccessToken: String? = nil
+        testObject.accessToken() { accessToken in
+            retrievedAccessToken = accessToken
+            count = count + 1
+        }
+
+        XCTAssertEqual(client.fetchTokenFromJWT_callCount, 1)
+        
+        let response = accessTokenResponse(accessToken: "accessToken1")
+        client.fetchTokenFromJWT_completionHandler?(response)
+        
+        XCTAssertEqual(retrievedAccessToken, "accessToken1")
+        XCTAssertEqual(count, 1)
     }
     
     func testWhenAccessTokenFetchFailsThenDeauthorized() {
@@ -145,5 +161,12 @@ class JWTAuthStrategyTests: XCTestCase {
     
     private func createTestObject(jwt: String = testJWT) -> JWTAuthStrategy {
         return JWTAuthStrategy(jwt: jwt, storage: storage, client: client)
+    }
+    
+    private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTAccessTokenCreationResult> {
+        let accessTokenObject = JWTAccessTokenCreationResult(token: accessToken)
+        accessTokenObject.tokenCreationDate = now
+        accessTokenObject.tokenExpiration = JWTAuthStrategyTests.oneDay
+        return ServiceResponse<JWTAccessTokenCreationResult>(nil, Result.success(accessTokenObject))
     }
 }

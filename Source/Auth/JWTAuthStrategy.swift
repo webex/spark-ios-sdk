@@ -24,29 +24,30 @@ import Foundation
 
 /// A JWT-based authentication strategy
 public class JWTAuthStrategy: AuthenticationStrategy {
-    private var jwt: String
+    private var jwt: String?
     private var client: JWTAuthClient
     private var storage: JWTAuthStorage
     
     public var authorized: Bool {
-        get {
-            return jwtValid && storage.authenticationInfo != nil
+        guard let jwt = jwt else {
+            return false
         }
+        if let expirationDate = expirationDateFor(jwt: jwt) {
+            return expirationDate > Date()
+        }
+        return true
     }
     
-    private var jwtValid: Bool {
+    private func expirationDateFor(jwt: String) -> Date? {
         let segments = jwt.components(separatedBy: ".")
-        if segments.count != 3 {
-            return false
-        }
         let payloadSegment = segments[1]
+        
         if let payloadData = base64UrlDecode(payloadSegment),
             let payload = (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any],
-            let expiration = payload["exp"] as? TimeInterval {
-            return Date(timeIntervalSince1970: expiration) > Date()
-        } else {
-            return false
-        }
+            let expiration = payload["exp"] as? TimeInterval { 
+            return Date(timeIntervalSince1970: expiration)
+        }            
+        return nil
     }
     
     init(jwt: String, storage: JWTAuthStorage = JWTAuthKeychainStorage(), client: JWTAuthClient = JWTAuthClient()) {
@@ -65,11 +66,12 @@ public class JWTAuthStrategy: AuthenticationStrategy {
     }
     
     public func deauthorize() {
-        self.storage.authenticationInfo = nil
+        jwt = nil
+        storage.authenticationInfo = nil
     }
     
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
-        guard authorized else {
+        guard authorized, let jwt = jwt else {
             completionHandler(nil)
             return
         }
@@ -92,7 +94,6 @@ public class JWTAuthStrategy: AuthenticationStrategy {
             }
         }
     }
-    
     
     /*
      BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
