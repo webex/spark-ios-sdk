@@ -22,14 +22,20 @@
 import Foundation
 
 
+/// A delegate to handle some events
+public protocol OAuthStrategyDelegate: class {
+    func refreshAccessTokenFailed()
+}
+
 /// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
-public class OAuthStrategy : AuthenticationStrategy {
+public class OAuthStrategy: AuthenticationStrategy {
     private let clientAccount: ClientAccount
     private let scope: String
     private let redirectUri: String
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
     private let oauthLauncher: OAuthLauncher
+    public weak var delegate: OAuthStrategyDelegate?
     
     /// Returns true if the user has already been authorized
     public var authorized: Bool {
@@ -118,6 +124,9 @@ public class OAuthStrategy : AuthenticationStrategy {
                 case .failure(let error):
                     self.deauthorize()
                     Logger.error("Failed to refresh token", error: error)
+                    self.delegate?.refreshAccessTokenFailed()
+                    
+                    // Intentional use of deprecated API for backwards compatibility
                     PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
                 }
                 completionHandler(self.storage.authenticationInfo?.accessToken)

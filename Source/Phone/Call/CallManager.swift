@@ -104,8 +104,11 @@ class CallManager {
             addCallWith(url: callUrl, call: call)
 
             if callInfo.isIncomingCall {
-                PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
+                CallNotificationCenter.sharedInstance.notifyIncomingCall(call)
                 Logger.info("Receive incoming call")
+
+                // Intentional use of deprecated API for backwards compatibility
+                PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
             }
             // TODO: need to support other device joined case
         }

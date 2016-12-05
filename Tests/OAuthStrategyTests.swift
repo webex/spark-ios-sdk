@@ -71,6 +71,14 @@ fileprivate class MockOAuthLauncher: OAuthLauncher {
     }
 }
 
+fileprivate class MockDelegate: OAuthStrategyDelegate {
+    var callCount = 0
+    
+    func refreshAccessTokenFailed() {
+        callCount += 1
+    }
+}
+
 class OAuthStrategyTests: XCTestCase {
     static let oneDay: TimeInterval = 24*60*60
     let yesterday = Date(timeIntervalSinceNow: -OAuthStrategyTests.oneDay)
@@ -80,11 +88,13 @@ class OAuthStrategyTests: XCTestCase {
     private var storage: MockStorage!
     private var oauthClient: MockOAuthClient!
     private var oauthLauncher: MockOAuthLauncher!
+    private var delegate: MockDelegate!
     
     override func setUp() {
         storage = MockStorage()
         oauthClient = MockOAuthClient()
         oauthLauncher = MockOAuthLauncher()
+        delegate = MockDelegate()
     }
     
     func testWhenRefreshTokenIsExpiredOrNotPresentThenAuthorizedIsFalse() {
@@ -176,6 +186,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(authInfo?.refreshToken, "refreshToken1")
         let dayAfterTomorrow = Date(timeInterval: OAuthStrategyTests.oneDay, since: tomorrow)
         XCTAssertEqualWithAccuracy(authInfo?.refreshTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, dayAfterTomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
+        XCTAssertEqual(delegate.callCount, 0)
     }
     
     func testWhenAccessTokenIsAlmostExpiredButRefreshTokenIsNotThenNewAccessTokenIsReturnedFromService() {
@@ -201,6 +212,7 @@ class OAuthStrategyTests: XCTestCase {
             retrievedAccessToken = accessToken
             count = count + 1
         }
+        XCTAssertEqual(delegate.callCount, 0)
         
         if let completionHandler = oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler {
             let error = NSError()
@@ -210,6 +222,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(retrievedAccessToken, nil)
         XCTAssertNil(storage.authenticationInfo)
         XCTAssertEqual(count, 1)
+        XCTAssertEqual(delegate.callCount, 1)
     }
     
     func testWhenAuthorizationIsStartedThenAuthorizationLauncherIsCorrectlyLaunched() {
@@ -353,6 +366,8 @@ class OAuthStrategyTests: XCTestCase {
     
     private func createTestObject(clientId: String = "clientId1", scope: String = "scope1", redirectUri: String = "https://example.com/oauth") -> OAuthStrategy {
         let clientAccount = ClientAccount(clientId: clientId, clientSecret: "clientSecret1")
-        return OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher)
+        let strategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher)
+        strategy.delegate = delegate
+        return strategy
     }
 }

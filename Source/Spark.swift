@@ -34,7 +34,7 @@ public class Spark {
         return SparkInstance.sharedInstance.authenticationStrategy.authorized
     }
     
-    /// Deauthorize the SDK. If phone is registered, deregister the phone first.
+    /// Deauthorize the SDK. If the phone is registered it should be deregistered before calling this method.
     public static func deauthorize() {
         SparkInstance.sharedInstance.authenticationStrategy.deauthorize()
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(nil)

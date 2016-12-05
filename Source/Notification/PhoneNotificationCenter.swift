@@ -21,18 +21,19 @@
 import Foundation
 
 /// The PhoneNotificationCenter class is used to add & remove phone observer.
-open class PhoneNotificationCenter {
+@available(*, deprecated, message: "Use CallNotificationCenter to listen for incoming calls, use OAuthStrategy to listen for refresh access token failures")
+public class PhoneNotificationCenter {
     
     /// Returns the singleton PhoneNotificationCenter.
-    open static let sharedInstance = PhoneNotificationCenter()
+    public static let sharedInstance = PhoneNotificationCenter()
     
-	private var observers = NSHashTable<AnyObject>.weakObjects()
+    private var observers = NSHashTable<AnyObject>.weakObjects()
 	
     /// Add phone observer
     ///
     /// - parameter observer: PhoneObserver object to add.
     /// - returns: Void
-    open func add(observer: PhoneObserver) {
+    public func add(observer: PhoneObserver) {
         observers.add(observer)
     }
     
@@ -40,21 +41,21 @@ open class PhoneNotificationCenter {
     ///
     /// - parameter observer: PhoneObserver object to remove.
     /// - returns: Void
-    open func remove(observer: PhoneObserver) {
+    public func remove(observer: PhoneObserver) {
         observers.remove(observer)
     }
     
     func notifyIncomingCall(_ call: Call) {
-		fire { $0.callIncoming(call) }
+        fire { $0.callIncoming(call) }
     }
     
     func notifyRefreshAccessTokenFailed() {
-		fire { $0.refreshAccessTokenFailed() }
+        fire { $0.refreshAccessTokenFailed() }
     }
 	
-	private func fire(_ closure:(_ observer: PhoneObserver) -> Void) {
-		for observer in observers.allObjects as! [PhoneObserver] {
-			closure(observer)
-		}
-	}
+    private func fire(_ closure:(_ observer: PhoneObserver) -> Void) {
+        for observer in observers.allObjects as! [PhoneObserver] {
+            closure(observer)
+        }
+    }
 }
