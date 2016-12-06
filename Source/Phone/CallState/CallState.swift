@@ -20,7 +20,7 @@
 
 import Foundation
 
-protocol CallState: class {
+protocol CallState {
     
     var status: Call.Status { get }
     
