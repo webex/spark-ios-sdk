@@ -28,26 +28,30 @@ fileprivate class MockStorage: OAuthStorage {
 
 fileprivate class MockOAuthClient: OAuthClient {
     var refreshOAuthAccessTokenFromRefreshToken_refreshToken: String?
-    var refreshOAuthAccessTokenFromRefreshToken_clientAccount: ClientAccount?
+    var refreshOAuthAccessTokenFromRefreshToken_clientId: String?
+    var refreshOAuthAccessTokenFromRefreshToken_clientSecret: String?
     var refreshOAuthAccessTokenFromRefreshToken_completionHandler: ObjectHandler?
     var refreshOAuthAccessTokenFromRefreshToken_callCount = 0
 
-    var fetchAccessTokenFromOAuthCode_code: String?
-    var fetchAccessTokenFromOAuthCode_clientAccount: ClientAccount?
+    var fetchAccessTokenFromOAuthCode_oauthCode: String?
+    var fetchAccessTokenFromOAuthCode_clientId: String?
+    var fetchAccessTokenFromOAuthCode_clientSecret: String?
     var fetchAccessTokenFromOAuthCode_redirectUri: String?
     var fetchAccessTokenFromOAuthCode_completionHandler: ObjectHandler?
     var fetchAccessTokenFromOAuthCode_callCount = 0
 
-    override func refreshOAuthAccessTokenFromRefreshToken(_ refreshToken: String, _ clientAccount: ClientAccount, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    override func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         refreshOAuthAccessTokenFromRefreshToken_refreshToken = refreshToken
-        refreshOAuthAccessTokenFromRefreshToken_clientAccount = clientAccount
+        refreshOAuthAccessTokenFromRefreshToken_clientId = clientId
+        refreshOAuthAccessTokenFromRefreshToken_clientSecret = clientSecret
         refreshOAuthAccessTokenFromRefreshToken_completionHandler = completionHandler
         refreshOAuthAccessTokenFromRefreshToken_callCount += 1
     }
     
-    override func fetchAccessTokenFromOAuthCode(_ code: String, _ clientAccount: ClientAccount, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
-        fetchAccessTokenFromOAuthCode_code = code
-        fetchAccessTokenFromOAuthCode_clientAccount = clientAccount
+    override func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        fetchAccessTokenFromOAuthCode_oauthCode = oauthCode
+        fetchAccessTokenFromOAuthCode_clientId = clientId
+        fetchAccessTokenFromOAuthCode_clientSecret = clientSecret
         fetchAccessTokenFromOAuthCode_redirectUri = redirectUri
         fetchAccessTokenFromOAuthCode_completionHandler = completionHandler
         fetchAccessTokenFromOAuthCode_callCount += 1
@@ -171,8 +175,8 @@ class OAuthStrategyTests: XCTestCase {
         
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_callCount, 1)
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_refreshToken, "refreshToken1")
-        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientAccount?.clientId, "clientId1")
-        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientAccount?.clientSecret, "clientSecret1")
+        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientId, "clientId1")
+        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientSecret, "clientSecret1")
 
         let response = accessTokenResponse(accessToken: "accessToken2", accessExpiration: OAuthStrategyTests.oneDay, refreshToken: "refreshToken1", refreshExpiration: 2 * OAuthStrategyTests.oneDay)
         oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(response)
@@ -260,10 +264,10 @@ class OAuthStrategyTests: XCTestCase {
         oauthLauncher.completionHandler?("oauthCode1")
         
         XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_callCount, 1)
-        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_code, "oauthCode1")
+        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_oauthCode, "oauthCode1")
         XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_redirectUri, "https://example.com/oauth")
-        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientAccount?.clientId, "clientId1")
-        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientAccount?.clientSecret, "clientSecret1")
+        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientId, "clientId1")
+        XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientSecret, "clientSecret1")
         
         let response = accessTokenResponse()
         oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
@@ -365,8 +369,7 @@ class OAuthStrategyTests: XCTestCase {
     }
     
     private func createTestObject(clientId: String = "clientId1", scope: String = "scope1", redirectUri: String = "https://example.com/oauth") -> OAuthStrategy {
-        let clientAccount = ClientAccount(clientId: clientId, clientSecret: "clientSecret1")
-        let strategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher)
+        let strategy = OAuthStrategy(clientId: clientId, clientSecret: "clientSecret1", scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher)
         strategy.delegate = delegate
         return strategy
     }

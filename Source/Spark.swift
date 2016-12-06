@@ -29,7 +29,103 @@ public class Spark {
     /// The version number of this SDK.
     public static let version = "1.0.0"
     
+    /// Toggle to enable or disable console log output.
+    ///
+    /// - parameter enable: Set True to enable console log, False as not.
+    /// - returns: Void
+    public static func toggleConsoleLogger(_ enable: Bool) {
+        LoggerManager.sharedInstance.toggleConsoleLogger(enable)
+    }
+    
+    /// AuthenticationStrategy allows your application to check and modify authentication state
+    public let authenticationStrategy: AuthenticationStrategy
+    
+    /// Phone allows your application to make media calls on Spark.
+    public let phone: Phone
+    
+    /// CallNotificationCenter allows your application to be notified of call events
+    public let callNotificationCenter: CallNotificationCenter
+    
+    public init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+        let deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
+        let callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
+        let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
+        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
+        callNotificationCenter = callManager.callNotificationCenter
+    }
+    
+    /// Rooms are virtual meeting places where people post messages and collaborate to get work done.
+    /// This API is used to manage the rooms themselves. Rooms are create and deleted with this API.
+    /// You can also update a room to change its title, for example.
+    ///
+    /// - note:
+    ///     - To manage people in a room see the Memberships API.
+    ///     - To post or otherwise manage room content see the Messages API.
+    public var rooms: RoomClient {
+        return RoomClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// People are registered users of the Spark application.
+    /// Currently, people can only be searched with this API.
+    /// Future releases of the API will allow for more complete user administration.
+    ///
+    /// - note: To learn more about managing people in a room see the Memberships API
+    public var people: PersonClient {
+        return PersonClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// Memberships represent a person's relationship to a room.
+    /// Use this API to list members of any room that you're in or create memberships to invite someone to a room.
+    /// Memberships can also be updated to make someome a moderator or deleted to remove them from the room.
+    /// Just like in the Spark app, you must be a member of the room in order to list its memberships or invite people.
+    public var memberships: MembershipClient {
+        return MembershipClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// Messages are how we communicate in a room.
+    /// In Spark, each message is displayed on its own line along with a timestamp and sender information.
+    /// Use this API to list, create, and delete messages. Each message can contain plain text and file attachments.
+    /// Just like in the Spark app, you must be a member of the room in order to target it with this API.
+    public var messages: MessageClient {
+        return MessageClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// Webhooks allow your app to be notified via HTTP when a specific event occurs on Spark.
+    /// For example, your app can register a webhook to be notified when a new message is posted into a specific room.
+    /// Events trigger in near real-time allowing your app and backend IT systems to stay in sync with new content and room activity.
+    /// This initial release is quite limited in that it only supports a single messages resource with a single created event.
+    /// However, this API was designed to be extensible and forms the foundation for supporting a wide array of platform events in future releases.
+    public var webhooks: WebhookClient {
+        return WebhookClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// Teams are groups of people with a set of rooms that are visible to all members of that team.
+    /// This API is used to manage the teams themselves.
+    /// Teams are create and deleted with this API. You can also update a team to change its team, for example.
+    ///
+    /// - note:
+    ///     - To manage people in a team see the Team Memberships API.
+    ///     - To manage team rooms see the Rooms API.
+    public var teams: TeamClient {
+        return TeamClient(authenticationStrategy: authenticationStrategy)
+    }
+    
+    /// Team Memberships represent a person's relationship to a team.
+    /// Use this API to list members of any team that you're in or create memberships to invite someone to a team.
+    /// Team memberships can also be updated to make someome a moderator or deleted to remove them from the team.
+    /// Just like in the Spark app, you must be a member of the team in order to list its memberships or invite people.
+    public var teamMemberships: TeamMembershipClient {
+        return TeamMembershipClient(authenticationStrategy: authenticationStrategy)
+    }
+}
+
+@available(*, deprecated)
+extension Spark {
+    
     /// Indicates whether the SDK has been authorized.
+    @available(*, deprecated, message: "Use Spark.")
     public static func authorized() -> Bool {
         return SparkInstance.sharedInstance.authenticationStrategy.authorized
     }
@@ -45,7 +141,7 @@ public class Spark {
     public static func accessToken(completionHandler: @escaping (String?) -> Void) {
         return SparkInstance.sharedInstance.authenticationStrategy.accessToken(completionHandler: completionHandler)
     }
-
+    
     /// Initialize the SDK using client id, client secret, scope and redirect URI.
     ///
     /// - parameter clientId: The client id issued when creating your app.
@@ -55,8 +151,7 @@ public class Spark {
     /// - parameter controller: View controller being redirected from and back when during OAuth flow.
     /// - returns: Void
     public static func initWith(clientId: String, clientSecret: String, scope: String, redirectUri: String, controller: UIViewController) {
-        let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
-        let oauthStrategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri)
+        let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(oauthStrategy)
         SparkInstance.saveGlobalOAuth(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
         
@@ -72,17 +167,6 @@ public class Spark {
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(simpleAuthStrategy)
         SparkInstance.saveGlobalSimpleAccessToken(accessToken)
     }
-    
-    /// Toggle to enable or disable console log output.
-    ///
-    /// - parameter enable: Set True to enable console log, False as not.
-    /// - returns: Void
-    public static func toggleConsoleLogger(_ enable: Bool) {
-        LoggerManager.sharedInstance.toggleConsoleLogger(enable)
-    }
-}
-
-extension Spark {
     
     /// Rooms are virtual meeting places where people post messages and collaborate to get work done.
     /// This API is used to manage the rooms themselves. Rooms are create and deleted with this API.

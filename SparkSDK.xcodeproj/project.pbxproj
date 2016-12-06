@@ -12,7 +12,6 @@
 		3D0AA8CA1D0521570094A658 /* PhoneNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0AA8C61D0521570094A658 /* PhoneNotificationCenter.swift */; };
 		3D0AA8CB1D0521570094A658 /* PhoneObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D0AA8C71D0521570094A658 /* PhoneObserver.swift */; };
 		3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */; };
-		3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E578E1CEDA348006124B0 /* ClientAccount.swift */; };
 		3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57901CEDA348006124B0 /* OAuthClient.swift */; };
 		3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */; };
 		3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */; };
@@ -187,7 +186,6 @@
 		3D0AA8C61D0521570094A658 /* PhoneNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneNotificationCenter.swift; path = Notification/PhoneNotificationCenter.swift; sourceTree = "<group>"; };
 		3D0AA8C71D0521570094A658 /* PhoneObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PhoneObserver.swift; path = Notification/PhoneObserver.swift; sourceTree = "<group>"; };
 		3D15B70B1D3E176C003BB682 /* SparkSDKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkSDKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D1E578E1CEDA348006124B0 /* ClientAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClientAccount.swift; sourceTree = "<group>"; };
 		3D1E57901CEDA348006124B0 /* OAuthClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthClient.swift; sourceTree = "<group>"; };
 		3D1E57941CEDA351006124B0 /* NSDate+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Extension.swift"; sourceTree = "<group>"; };
 		3D1E57951CEDA351006124B0 /* NSURL+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURL+Extension.swift"; sourceTree = "<group>"; };
@@ -512,7 +510,6 @@
 				B91E75321CE2D7B70080EAE0 /* AccessToken.swift */,
 				5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */,
 				5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */,
-				3D1E578E1CEDA348006124B0 /* ClientAccount.swift */,
 				5AFB6E8A1DF5C5110027E989 /* JWTAccessTokenCreationResult.swift */,
 				5AFB6E8B1DF5C5110027E989 /* JWTAuthClient.swift */,
 				5AFB6E8C1DF5C5110027E989 /* JWTAuthenticationInfo.swift */,
@@ -942,7 +939,6 @@
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				B91E75CE1CE2D7B70080EAE0 /* MediaConnection.swift in Sources */,
 				5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */,
-				3D1E57911CEDA348006124B0 /* ClientAccount.swift in Sources */,
 				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
 				B91E75C91CE2D7B70080EAE0 /* AlertHint.swift in Sources */,
 				3D66B1AD1D24AD4A0016A072 /* TeamClient.swift in Sources */,

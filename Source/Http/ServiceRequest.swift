@@ -62,7 +62,6 @@ class ServiceRequest {
             self.authenticationStrategy = authenticationStrategy
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string]
-            
             self.baseUrl = "https://api.ciscospark.com/v1"
             self.method = .get
             self.path = ""

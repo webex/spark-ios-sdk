@@ -24,6 +24,7 @@ import Foundation
 public class CallNotificationCenter {
     
     /// Returns the singleton CallNotificationCenter.
+    @available(*, deprecated, message: "Use Spark.callNotificationCenter instead")
     public static var sharedInstance: CallNotificationCenter {
         return SparkInstance.sharedInstance.callManager.callNotificationCenter
     }

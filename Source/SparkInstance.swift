@@ -23,6 +23,7 @@ import Foundation
 import KeychainAccess
 
 
+@available(*, deprecated, message: "Used only internally for maintaining backwards compatibility")
 class SparkInstance {
     
     private static var actualSharedInstance: SparkInstance?
@@ -44,8 +45,7 @@ class SparkInstance {
                     let clientSecret = try keychain.get(clientSecretKey),
                     let scope = try keychain.get(scopeKey),
                     let redirectUri = try keychain.get(redirectUriKey) {
-                    let clientAccount = ClientAccount(clientId: clientId, clientSecret: clientSecret)
-                    let oauthStrategy = OAuthStrategy(clientAccount: clientAccount, scope: scope, redirectUri: redirectUri)
+                    let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
                     actualSharedInstance.set(authenticationStrategy: oauthStrategy)
                 } else if let simpleAccessToken = try keychain.get(simpleAccessTokenKey) {
                     actualSharedInstance.set(authenticationStrategy: SimpleAuthStrategy(accessToken: simpleAccessToken))

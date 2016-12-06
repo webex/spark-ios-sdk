@@ -29,7 +29,9 @@ public protocol OAuthStrategyDelegate: class {
 
 /// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
 public class OAuthStrategy: AuthenticationStrategy {
-    private let clientAccount: ClientAccount
+
+    private let clientId: String
+    private let clientSecret: String
     private let scope: String
     private let redirectUri: String
     private let storage: OAuthStorage
@@ -46,11 +48,15 @@ public class OAuthStrategy: AuthenticationStrategy {
         }
     }
     
-    init(clientAccount: ClientAccount, scope: String, redirectUri: String,
-         storage: OAuthStorage = OAuthKeychainStorage(),
-         oauthClient: OAuthClient = OAuthClient(),
-         oauthLauncher: OAuthLauncher = OAuthLauncher()) {
-        self.clientAccount = clientAccount
+    public convenience init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
+                            storage: OAuthStorage = OAuthKeychainStorage()) {
+        self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher())
+    }
+    
+    init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
+         storage: OAuthStorage, oauthClient: OAuthClient, oauthLauncher: OAuthLauncher) {
+        self.clientId = clientId
+        self.clientSecret = clientSecret
         self.scope = scope
         self.redirectUri = redirectUri
         self.storage = storage
@@ -63,7 +69,7 @@ public class OAuthStrategy: AuthenticationStrategy {
         let url = createAuthCodeRequestURL()
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
-                self.oauthClient.fetchAccessTokenFromOAuthCode(oauthCode, self.clientAccount, redirectUri: self.redirectUri) { response in
+                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri) { response in
                     switch response.result {
                     case .success(let result):
                         self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
@@ -80,7 +86,7 @@ public class OAuthStrategy: AuthenticationStrategy {
     
     private func createAuthCodeRequestURL() -> URL {
         return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
-            + "&client_id=" + clientAccount.clientId.encodeQueryParamString
+            + "&client_id=" + clientId.encodeQueryParamString
             + "&redirect_uri=" + redirectUri.encodeQueryParamString
             + "&scope=" + scope.encodeQueryParamString
             + "&state=iossdkstate"
@@ -115,7 +121,7 @@ public class OAuthStrategy: AuthenticationStrategy {
         if authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
             completionHandler(authenticationInfo.accessToken)
         } else {
-            oauthClient.refreshOAuthAccessTokenFromRefreshToken(authenticationInfo.refreshToken, clientAccount) { response in
+            oauthClient.refreshAccessTokenFrom(refreshToken: authenticationInfo.refreshToken, clientId: clientId, clientSecret: clientSecret) { response in
                 switch response.result {
                 case .success(let accessTokenObject):
                     if let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {

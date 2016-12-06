@@ -30,12 +30,12 @@ class OAuthClient {
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
     }
     
-    func fetchAccessTokenFromOAuthCode(_ code: String, _ clientAccount: ClientAccount, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let query = RequestParameter(["grant_type": "authorization_code",
             "redirect_uri": redirectUri,
-            "code": code,
-            "client_id": clientAccount.clientId,
-            "client_secret": clientAccount.clientSecret])
+            "code": oauthCode,
+            "client_id": clientId,
+            "client_secret": clientSecret])
         
         let request = requestBuilder()
             .method(.post)
@@ -46,11 +46,11 @@ class OAuthClient {
         request.responseObject(completionHandler)
     }
     
-    func refreshOAuthAccessTokenFromRefreshToken(_ refreshToken: String, _ clientAccount: ClientAccount, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let query = RequestParameter(["grant_type": "refresh_token",
             "refresh_token": refreshToken,
-            "client_id": clientAccount.clientId,
-            "client_secret": clientAccount.clientSecret])
+            "client_id": clientId,
+            "client_secret": clientSecret])
         
         let request = requestBuilder()
             .method(.post)
