@@ -72,6 +72,7 @@ public class Phone {
         self.webSocketService = webSocketService
         self.callManager = callManager
         self.deviceService = deviceService
+        webSocketService.deviceReregistrationStrategy = self
     }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
@@ -178,5 +179,11 @@ public class Phone {
                 completionHandler?(granted)
             }
         }
+    }
+}
+
+extension Phone: DeviceReregistrationStrategy {
+    func reregisterDevice() {
+        register(nil)
     }
 }

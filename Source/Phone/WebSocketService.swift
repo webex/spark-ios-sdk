@@ -23,17 +23,24 @@ import Starscream
 import SwiftyJSON
 import ObjectMapper
 
+protocol DeviceReregistrationStrategy: class {
+    func reregisterDevice()
+}
+
 class WebSocketService: WebSocketDelegate {
     
-    private var socket: WebSocket?
     private let MessageBatchingIntervalInSec = 0.5
     private let ConnectionTimeoutIntervalInSec = 60.0
+
     private var connectionTimeoutTimer: Timer?
     private var messageBatchingTimer: Timer?
     private var connectionRetryCounter: ExponentialBackOffCounter
     private var pendingMessages: [JSON]
+    private var socket: WebSocket?
+
     private let authenticationStrategy: AuthenticationStrategy
     private let callManager: CallManager
+    weak var deviceReregistrationStrategy: DeviceReregistrationStrategy?
     
     init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
         self.authenticationStrategy = authenticationStrategy
@@ -153,7 +160,7 @@ class WebSocketService: WebSocketDelegate {
             self.socket = nil
             Logger.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
             despatch_main_after(backoffTime) {
-                Spark.phone.register(nil)
+                self.deviceReregistrationStrategy?.reregisterDevice()
             }
         } else {
             // Unexpected disconnection, reconnect socket.
