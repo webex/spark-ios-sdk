@@ -20,53 +20,53 @@
 
 import Foundation
 
-class CallStateIncoming: CallState, CallStateProtocol {
+class CallStateIncoming: CallStateProtocol {
 
     var status: Call.Status {
         return .Incoming
     }
     
-    func update(callInfo: CallInfo) {
+    func update(callInfo: CallInfo, for call: Call) {
         if callInfo.hasAtLeastOneRemoteParticipantantJoined {
             let deviceUrl: String = call.deviceUrl
             if callInfo.hasJoinedOnThisDevice(deviceUrl: deviceUrl) {
-                doActionWhenConnected()
+                doActionWhenConnected(call)
             } else if callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
-                doActionWhenOtherDeviceConnected()
+                doActionWhenOtherDeviceConnected(call)
             } else if callInfo.hasDeclined(deviceUrl: deviceUrl) {
-                doActionWhenLocalDeclined()
+                doActionWhenLocalDeclined(call)
             } else if callInfo.hasDeclinedOnOtherDevice(deviceUrl: deviceUrl) {
-                doActionWhenOtherDeviceDeclined()
+                doActionWhenOtherDeviceDeclined(call)
             }
         } else if callInfo.hasAtLeastOneRemoteParticipantantLeft {
-            doActionWhenRemoteCancelled()
+            doActionWhenRemoteCancelled(call)
         }
     }
 
-    private func doActionWhenConnected() {
-        call.state = CallStateConnected(call)
+    private func doActionWhenConnected(_ call: Call) {
+        call.state = CallStateConnected()
         call.callNotificationCenter.notifyCallConnected(call)
     }
     
-    private func doActionWhenLocalDeclined() {
+    private func doActionWhenLocalDeclined(_ call: Call) {
         call.removeFromCallManager()
         call.state = CallStateLocalDeclined()
         call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalDeclined)
     }
     
-    private func doActionWhenOtherDeviceConnected() {
+    private func doActionWhenOtherDeviceConnected(_ call: Call) {
         call.removeFromCallManager()
         call.state = CallStateOtherDeviceConnected()
         call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.OtherDeviceConnected)
     }
     
-    private func doActionWhenOtherDeviceDeclined() {
+    private func doActionWhenOtherDeviceDeclined(_ call: Call) {
         call.removeFromCallManager()
         call.state = CallStateOtherDeviceDeclined()
         call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.OtherDeviceDeclined)
     }
     
-    private func doActionWhenRemoteCancelled() {
+    private func doActionWhenRemoteCancelled(_ call: Call) {
         call.removeFromCallManager()
         call.state = CallStateRemoteCancelled()
         call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteCancelled)

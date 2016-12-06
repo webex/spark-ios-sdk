@@ -20,30 +20,22 @@
 
 import Foundation
 
-class CallStateConnected: CallState, CallStateProtocol {
+class CallStateConnected: CallStateProtocol {
     
     var status: Call.Status {
         return .Connected
     }
     
-    func update(callInfo: CallInfo) {
+    func update(callInfo: CallInfo, for call: Call) {
         if callInfo.hasLeft {
-            doActionWhenLocalLeft()
+            call.removeFromCallManager()
+            call.state = CallStateLocalLeft()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalLeft)
         } else if callInfo.hasAtLeastOneRemoteParticipantantLeft {
-            doActionWhenRemoteLeft()
+            call.removeFromCallManager()
+            call.hangup(nil)
+            call.state = CallStateRemoteLeft()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteLeft)
         }
-    }
-    
-    private func doActionWhenLocalLeft() {
-        call.removeFromCallManager()
-        call.state = CallStateLocalLeft()
-        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalLeft)
-    }
-    
-    private func doActionWhenRemoteLeft() {
-        call.removeFromCallManager()
-        call.hangup(nil)
-        call.state = CallStateRemoteLeft()
-        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteLeft)
     }
 }

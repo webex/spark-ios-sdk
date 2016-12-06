@@ -23,18 +23,10 @@ import Foundation
 protocol CallStateProtocol: class {
     var status: Call.Status { get }
     
-    func update(callInfo: CallInfo)
+    func update(callInfo: CallInfo, for call: Call)
 }
 
 extension CallStateProtocol {
-    func update(callInfo: CallInfo) { }
+    func update(callInfo: CallInfo, for call: Call) { }
 }
 
-class CallState {
-
-    weak var call: Call!
-    
-    init(_ call: Call) {
-        self.call = call
-    }
-}

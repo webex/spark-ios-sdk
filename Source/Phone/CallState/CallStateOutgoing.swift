@@ -20,37 +20,25 @@
 
 import Foundation
 
-class CallStateOutgoing: CallState, CallStateProtocol {
+class CallStateOutgoing: CallStateProtocol {
 
     var status: Call.Status {
         return .Ringing
     }
     
-    func update(callInfo: CallInfo) {
+    func update(callInfo: CallInfo, for call: Call) {
         if callInfo.hasLeft {
-            doActionWhenLocalCancelled()
+            call.removeFromCallManager()
+            call.state = CallStateLocalCancelled()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
         } else if callInfo.hasAtLeastOneRemoteParticipantantJoined {
-            doActionWhenConnected()
+            call.state = CallStateConnected()
+            call.callNotificationCenter.notifyCallConnected(call)
         } else if callInfo.hasAtLeastOneRemoteParticipantantDeclined {
-            doActionWhenRemoteDeclined()
+            call.removeFromCallManager()
+            call.hangup(nil)
+            call.state = CallStateRemoteDeclined()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
         }
-    }
-    
-    private func doActionWhenConnected() {
-        call.state = CallStateConnected(call)
-        call.callNotificationCenter.notifyCallConnected(call)
-    }
-    
-    private func doActionWhenLocalCancelled() {
-        call.removeFromCallManager()
-        call.state = CallStateLocalCancelled()
-        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
-    }
-    
-    private func doActionWhenRemoteDeclined() {
-        call.removeFromCallManager()
-        call.hangup(nil)
-        call.state = CallStateRemoteDeclined()
-        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
     }
 }

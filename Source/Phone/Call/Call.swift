@@ -165,7 +165,7 @@ open class Call {
         self.deviceUrl = deviceUrl
         self.callMetrics = callMetrics
         mediaSession = MediaSessionWrapper(callManager: callManager)
-        state = CallStateIdle(self)
+        state = CallStateIdle()
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
@@ -179,7 +179,7 @@ open class Call {
         to = info.selfEmail
         from = info.hostEmail
         
-        state = CallStateIncoming(self)
+        state = CallStateIncoming()
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
     
@@ -361,7 +361,7 @@ open class Call {
     func update(callInfo newInfo: CallInfo) {
         guard let info = self.info else {
             self.info = newInfo
-            state.update(callInfo: newInfo)
+            state.update(callInfo: newInfo, for: self)
             return
         }
         
@@ -373,7 +373,7 @@ open class Call {
             // handleEnableDTMFChange will be screwed up and not detect changes between the old and new info
             handleEnableDTMFChange(newInfo)
             self.info = newInfo
-            state.update(callInfo: newInfo)
+            state.update(callInfo: newInfo, for: self)
         case .deSync:
             fetchCallInfo()
         default:
