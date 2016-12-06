@@ -58,7 +58,7 @@ class JWTAuthStrategyTests: XCTestCase {
         client = MockJWTClient()
     }
     
-    func testWhenValidAccessTokenThenItIsImmediatelyReturned() {
+    func testWhenValidAccessTokenExistsThenTheAccessTokenIsImmediatelyReturned() {
         let testObject = createTestObject()
         
         storage.authenticationInfo = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: tomorrow)

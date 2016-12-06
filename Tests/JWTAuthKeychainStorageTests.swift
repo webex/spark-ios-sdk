@@ -36,7 +36,7 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         return JWTAuthKeychainStorage(keychain: keychain)
     }
     
-    func testWhenLoginInformationIsSavedItCanBeRetrieved() {
+    func testWhenLoginInformationIsSavedAuthInfoCanBeRetrieved() {
         let info = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
@@ -46,7 +46,7 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         XCTAssertTrue(auth(testObject2.authenticationInfo, isEqualTo: info))
     }
     
-    func testWhenLoginInformationIsClearedThenItIsNil() {
+    func testWhenLoginInformationIsClearedThenAuthStorageIsEmpty() {
         let info = JWTAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
@@ -57,7 +57,7 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         XCTAssertNil(testObject2.authenticationInfo)
     }
     
-    func testWhenJWTIsStoredThenItCanBeCleared() {
+    func testWhenJWTIsStoredThenJWTCanBeRetrievedFromStorage() {
         let testObject1 = createTestObject()
         testObject1.jwt = "jwt1"
         XCTAssertEqual(testObject1.jwt, "jwt1")
@@ -66,10 +66,9 @@ class JWTAuthKeychainStorageTests: XCTestCase {
         XCTAssertEqual(testObject2.jwt, "jwt1")
     }
     
-    func testWhenJWTIsClearedThenItIsNil() {
+    func testWhenJWTIsClearedThenJWTStorageIsEmpty() {
         let testObject1 = createTestObject()
         testObject1.jwt = "jwt1"
-        _ = testObject1.jwt
         
         testObject1.jwt = nil
         XCTAssertNil(testObject1.jwt)
