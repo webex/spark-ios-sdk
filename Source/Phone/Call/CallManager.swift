@@ -26,6 +26,7 @@ class CallManager {
     private let deviceService: DeviceService
     private let callMetrics: CallMetrics
     private let videoLicense: VideoLicense
+    let callNotificationCenter: CallNotificationCenter
     
     var localReachabilityInfo: [String /* media cluster tag */ : Reachability]? {
         return reachabilityService.feedback?.reachabilities
@@ -37,6 +38,7 @@ class CallManager {
         self.deviceService = deviceService
         self.callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         self.videoLicense = VideoLicense(callMetrics: callMetrics)
+        callNotificationCenter = CallNotificationCenter()
     }
     
     func addCallWith(url: String, call: Call) {
@@ -104,7 +106,7 @@ class CallManager {
             addCallWith(url: callUrl, call: call)
 
             if callInfo.isIncomingCall {
-                CallNotificationCenter.sharedInstance.notifyIncomingCall(call)
+                callNotificationCenter.notifyIncomingCall(call)
                 Logger.info("Receive incoming call")
 
                 // Intentional use of deprecated API for backwards compatibility

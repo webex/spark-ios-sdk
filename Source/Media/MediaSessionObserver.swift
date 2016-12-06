@@ -23,8 +23,11 @@ import AVFoundation
 import Wme
 
 class MediaSessionObserver: NotificationObserver {
-    private let callNotificationCenter = CallNotificationCenter.sharedInstance
+
     private let callManager: CallManager
+    private var callNotificationCenter: CallNotificationCenter {
+        return callManager.callNotificationCenter
+    }
     
     init(callManager: CallManager) {
         self.callManager = callManager

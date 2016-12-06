@@ -155,6 +155,9 @@ open class Call {
     private let callClient: CallClient
     private let callManager: CallManager
     private let callMetrics: CallMetrics
+    var callNotificationCenter: CallNotificationCenter {
+        return callManager.callNotificationCenter
+    }
     
     init(callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
         self.callManager = callManager
@@ -404,12 +407,12 @@ open class Call {
         }
         
         self.info = newInfo
-        CallNotificationCenter.sharedInstance.notifyRemoteMediaChanged(self, mediaUpdatedType: mediaChangeType!)
+        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: mediaChangeType!)
     }
     
     private func handleEnableDTMFChange(_ newInfo: CallInfo) {
         if isDTMFEnabledChanged(newInfo) {
-            CallNotificationCenter.sharedInstance.notifyEnableDTMFChanged(self)
+            callNotificationCenter.notifyEnableDTMFChanged(self)
         }
     }
     

@@ -24,6 +24,7 @@ import KeychainAccess
 
 
 class SparkInstance {
+    
     private static var actualSharedInstance: SparkInstance?
     
     private static let clientIdKey = "clientIdKey"
@@ -101,11 +102,12 @@ class SparkInstance {
     
     let authenticationStrategy: AuthenticationStrategyProxy
     let phone: Phone
+    let callManager: CallManager
     
     init() {
         authenticationStrategy = AuthenticationStrategyProxy()
         let deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
-        let callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
         let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
         phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)

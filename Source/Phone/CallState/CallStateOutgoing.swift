@@ -38,19 +38,19 @@ class CallStateOutgoing: CallState, CallStateProtocol {
     
     private func doActionWhenConnected() {
         call.state = CallStateConnected(call)
-        callNotificationCenter.notifyCallConnected(call)
+        call.callNotificationCenter.notifyCallConnected(call)
     }
     
     private func doActionWhenLocalCancelled() {
         call.removeFromCallManager()
         call.state = CallStateLocalCancelled()
-        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
+        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
     }
     
     private func doActionWhenRemoteDeclined() {
         call.removeFromCallManager()
         call.hangup(nil)
         call.state = CallStateRemoteDeclined()
-        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
+        call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
     }
 }

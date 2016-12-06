@@ -24,7 +24,9 @@ import Foundation
 public class CallNotificationCenter {
     
     /// Returns the singleton CallNotificationCenter.
-    public static let sharedInstance = CallNotificationCenter()
+    public static var sharedInstance: CallNotificationCenter {
+        return SparkInstance.sharedInstance.callManager.callNotificationCenter
+    }
     
     private var observers = NSHashTable<AnyObject>.weakObjects()
     

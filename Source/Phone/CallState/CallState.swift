@@ -33,7 +33,6 @@ extension CallStateProtocol {
 class CallState {
 
     weak var call: Call!
-    let callNotificationCenter = CallNotificationCenter.sharedInstance
     
     init(_ call: Call) {
         self.call = call
