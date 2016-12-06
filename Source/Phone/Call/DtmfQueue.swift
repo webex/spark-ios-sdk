@@ -77,7 +77,7 @@ class DtmfQueue {
                 let dtmfEvents = events.joined(separator: "")
                 Logger.info("send Dtmf events \(dtmfEvents)")
                 
-                let participantUrl = self.call.info?.selfParticipantUrl
+                let participantUrl = self.call.selfParticipantUrl
                 self.waitingForResponse = true
                 self.callClient.sendDtmf(participantUrl!, deviceUrl: self.deviceUrl, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
                     switch $0.result {

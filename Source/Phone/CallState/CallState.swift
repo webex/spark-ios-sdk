@@ -20,23 +20,22 @@
 
 import Foundation
 
-class CallState {
+protocol CallStateProtocol: class {
+    var status: Call.Status { get }
     
+    func update(callInfo: CallInfo)
+}
+
+extension CallStateProtocol {
+    func update(callInfo: CallInfo) { }
+}
+
+class CallState {
+
     weak var call: Call!
     let callNotificationCenter = CallNotificationCenter.sharedInstance
     
     init(_ call: Call) {
         self.call = call
-    }
-    
-    var info: CallInfo {
-        return call.info!
-    }
-    
-    var status: Call.Status {
-        return .Disconnected
-    }
-    
-    func update() {
     }
 }

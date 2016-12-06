@@ -20,30 +20,30 @@
 
 import Foundation
 
-class CallStateConnected: CallState {
+class CallStateConnected: CallState, CallStateProtocol {
     
-    override var status: Call.Status {
+    var status: Call.Status {
         return .Connected
     }
     
-    override func update() {
-        if info.hasLeft {
+    func update(callInfo: CallInfo) {
+        if callInfo.hasLeft {
             doActionWhenLocalLeft()
-        } else if info.hasAtLeastOneRemoteParticipantantLeft {
+        } else if callInfo.hasAtLeastOneRemoteParticipantantLeft {
             doActionWhenRemoteLeft()
         }
     }
     
     private func doActionWhenLocalLeft() {
         call.removeFromCallManager()
-        call.state = CallStateLocalLeft(call)
+        call.state = CallStateLocalLeft()
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalLeft)
     }
     
     private func doActionWhenRemoteLeft() {
         call.removeFromCallManager()
         call.hangup(nil)
-        call.state = CallStateRemoteLeft(call)
+        call.state = CallStateRemoteLeft()
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteLeft)
     }
 }

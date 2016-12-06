@@ -64,10 +64,6 @@ struct CallInfo {
         return myself?.mediaBaseUrl
     }
     
-    var selfParticipantUrl: String? {
-        return myself?.url
-    }
-    
     var enableDTMF: Bool? {
         return selfParticipantant?.enableDTMF
     }

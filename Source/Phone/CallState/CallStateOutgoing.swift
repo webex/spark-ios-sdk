@@ -20,18 +20,18 @@
 
 import Foundation
 
-class CallStateOutgoing: CallState {
+class CallStateOutgoing: CallState, CallStateProtocol {
 
-    override var status: Call.Status {
+    var status: Call.Status {
         return .Ringing
     }
     
-    override func update() {
-        if info.hasLeft {
+    func update(callInfo: CallInfo) {
+        if callInfo.hasLeft {
             doActionWhenLocalCancelled()
-        } else if info.hasAtLeastOneRemoteParticipantantJoined {
+        } else if callInfo.hasAtLeastOneRemoteParticipantantJoined {
             doActionWhenConnected()
-        } else if info.hasAtLeastOneRemoteParticipantantDeclined {
+        } else if callInfo.hasAtLeastOneRemoteParticipantantDeclined {
             doActionWhenRemoteDeclined()
         }
     }
@@ -43,14 +43,14 @@ class CallStateOutgoing: CallState {
     
     private func doActionWhenLocalCancelled() {
         call.removeFromCallManager()
-        call.state = CallStateLocalCancelled(call)
+        call.state = CallStateLocalCancelled()
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
     }
     
     private func doActionWhenRemoteDeclined() {
         call.removeFromCallManager()
         call.hangup(nil)
-        call.state = CallStateRemoteDeclined(call)
+        call.state = CallStateRemoteDeclined()
         callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
     }
 }

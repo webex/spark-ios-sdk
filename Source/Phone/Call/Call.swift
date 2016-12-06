@@ -138,8 +138,13 @@ open class Call {
         }
     }
     
-    var info: CallInfo?
-    var state: CallState!
+    private var info: CallInfo?
+    
+    var selfParticipantUrl: String? {
+        return info?.myself?.url
+    }
+    
+    var state: CallStateProtocol!
     var url: String { return info?.callUrl ?? "" }
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
@@ -224,11 +229,10 @@ open class Call {
     open func hangup(_ completionHandler: CompletionHandler?) {
         mediaSession.stopMedia()
         
-        let participantUrl = info?.selfParticipantUrl
-        callClient.leave(participantUrl!, deviceUrl: deviceUrl) { response in
+        callClient.leave(selfParticipantUrl!, deviceUrl: deviceUrl) { response in
             switch response.result {
             case .success(let value):
-				self.update(callInfo: value)
+                self.update(callInfo: value)
                 Logger.info("Success: leave call")
                 completionHandler?(true)
             case .failure(let error):
@@ -354,7 +358,7 @@ open class Call {
     func update(callInfo newInfo: CallInfo) {
         guard let info = self.info else {
             self.info = newInfo
-            state.update()
+            state.update(callInfo: newInfo)
             return
         }
         
@@ -366,7 +370,7 @@ open class Call {
             // handleEnableDTMFChange will be screwed up and not detect changes between the old and new info
             handleEnableDTMFChange(newInfo)
             self.info = newInfo
-            state.update()
+            state.update(callInfo: newInfo)
         case .deSync:
             fetchCallInfo()
         default:

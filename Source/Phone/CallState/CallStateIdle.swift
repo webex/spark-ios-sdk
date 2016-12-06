@@ -20,24 +20,24 @@
 
 import Foundation
 
-class CallStateIdle: CallState {
+class CallStateIdle: CallState, CallStateProtocol {
     
-    override var status: Call.Status {
+    var status: Call.Status {
         return .Initiated
     }
 
-    override func update() {
-        if isMakingOutgoingCall() {
+    func update(callInfo: CallInfo) {
+        if isMakingOutgoingCall(callInfo) {
             doActionWhenOutgoing()
         }
     }
     
-    private func isMakingOutgoingCall() -> Bool {
-        return info.hasJoinedOnThisDevice(deviceUrl: call.deviceUrl) && isRemoteParticipantantsIdleOrNotified()
+    private func isMakingOutgoingCall(_ callInfo: CallInfo) -> Bool {
+        return callInfo.hasJoinedOnThisDevice(deviceUrl: call.deviceUrl) && isRemoteParticipantantsIdleOrNotified(callInfo)
     }
     
-    private func isRemoteParticipantantsIdleOrNotified() -> Bool {
-        return info.remoteParticipantants.filter({$0.state != ParticipantState.Idle && $0.state != ParticipantState.Notified}).isEmpty
+    private func isRemoteParticipantantsIdleOrNotified(_ callInfo: CallInfo) -> Bool {
+        return callInfo.remoteParticipantants.filter({$0.state != ParticipantState.Idle && $0.state != ParticipantState.Notified}).isEmpty
     }
     
     private func doActionWhenOutgoing() {
