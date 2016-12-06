@@ -24,57 +24,67 @@ import Foundation
 
 /// A JWT-based authentication strategy
 public class JWTAuthStrategy: AuthenticationStrategy {
-    private var jwt: String?
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
     
     public var authorized: Bool {
-        guard let jwt = jwt else {
+        guard let payload = JWTAuthStrategy.payloadFor(jwt: storage.jwt) else {
             return false
         }
-        if let expirationDate = expirationDateFor(jwt: jwt) {
-            return expirationDate > Date()
+        
+        if let expiration = payload["exp"] as? TimeInterval {
+            return Date(timeIntervalSince1970: expiration) > Date()
         }
         return true
     }
     
-    private func expirationDateFor(jwt: String) -> Date? {
-        let segments = jwt.components(separatedBy: ".")
-        let payloadSegment = segments[1]
-        
-        if let payloadData = base64UrlDecode(payloadSegment),
-            let payload = (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any],
-            let expiration = payload["exp"] as? TimeInterval { 
-            return Date(timeIntervalSince1970: expiration)
-        }            
+    private static func payloadFor(jwt: String?) -> [String: Any]? {
+        if let segments = jwt?.components(separatedBy: "."), 
+            segments.count == 3,
+            let payloadData = JWTAuthStrategy.base64UrlDecode(segments[1]) {
+            return (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any]
+        }
         return nil
+    }
+    
+    /*
+     BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
+     */
+    private static func base64UrlDecode(_ base64UrlString: String) -> Data? {
+        var base64String = base64UrlString
+        base64String = base64String.replacingOccurrences(of: "-", with: "+")
+        base64String = base64String.replacingOccurrences(of: "_", with: "/")
+        switch base64String.characters.count % 4 {
+        case 0:
+            break
+        case 2: 
+            base64String += "=="
+        case 3:
+            base64String += "="
+        default:
+            Logger.error("Base64Url encoded string could not be correctly decoded")
+            return nil
+        }
+        return Data(base64Encoded: base64String)
     }
     
     init(storage: JWTAuthStorage = JWTAuthKeychainStorage(), client: JWTAuthClient = JWTAuthClient()) {
         self.client = client
         self.storage = storage
     }
-    
-    private static func authenticationInfoFrom(jwtAccessTokenCreationResult: JWTAccessTokenCreationResult) -> JWTAuthenticationInfo? {
-        if let token = jwtAccessTokenCreationResult.token,
-            let tokenExpiration = jwtAccessTokenCreationResult.tokenExpiration {
-            let tokenExpirationDate = Date(timeInterval: tokenExpiration, since: jwtAccessTokenCreationResult.tokenCreationDate)
-            return JWTAuthenticationInfo(accessToken: token, accessTokenExpirationDate: tokenExpirationDate)
-        }
-        return nil
-    }
-    
+     
     public func authorizedWith(jwt: String) {
-        self.jwt = jwt
+        storage.jwt = jwt
+        storage.authenticationInfo = nil
     }
     
     public func deauthorize() {
-        jwt = nil
+        storage.jwt = nil
         storage.authenticationInfo = nil
     }
     
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
-        guard authorized, let jwt = jwt else {
+        guard authorized, let jwt = storage.jwt else {
             completionHandler(nil)
             return
         }
@@ -98,24 +108,12 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         }
     }
     
-    /*
-     BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
-     */
-    private func base64UrlDecode(_ base64UrlString: String) -> Data? {
-        var base64String = base64UrlString
-        base64String = base64String.replacingOccurrences(of: "-", with: "+")
-        base64String = base64String.replacingOccurrences(of: "_", with: "/")
-        switch base64String.characters.count % 4 {
-        case 0:
-            break
-        case 2: 
-            base64String += "=="
-        case 3:
-            base64String += "="
-        default:
-            Logger.error("Base64Url encoded string could not be correctly decoded")
-            return nil
+    private static func authenticationInfoFrom(jwtAccessTokenCreationResult: JWTAccessTokenCreationResult) -> JWTAuthenticationInfo? {
+        if let token = jwtAccessTokenCreationResult.token,
+            let tokenExpiration = jwtAccessTokenCreationResult.tokenExpiration {
+            let tokenExpirationDate = Date(timeInterval: tokenExpiration, since: jwtAccessTokenCreationResult.tokenCreationDate)
+            return JWTAuthenticationInfo(accessToken: token, accessTokenExpirationDate: tokenExpirationDate)
         }
-        return Data(base64Encoded: base64String)
+        return nil
     }
 }
