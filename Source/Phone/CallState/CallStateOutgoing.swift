@@ -20,7 +20,7 @@
 
 import Foundation
 
-class CallStateOutgoing: CallStateProtocol {
+class CallStateOutgoing: CallState {
 
     var status: Call.Status {
         return .Ringing

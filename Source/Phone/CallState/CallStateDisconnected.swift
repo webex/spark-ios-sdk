@@ -20,9 +20,12 @@
 
 import Foundation
 
-class CallStateDisconnected: CallStateProtocol {
+class CallStateDisconnected: CallState {
     var status: Call.Status {
         return .Disconnected
+    }
+    
+    func update(callInfo: CallInfo, for call: Call) {
     }
 }
 

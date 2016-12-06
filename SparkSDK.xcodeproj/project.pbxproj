@@ -634,9 +634,9 @@
 		B91E755E1CE2D7B70080EAE0 /* CallState */ = {
 			isa = PBXGroup;
 			children = (
-				5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */,
 				B91E755F1CE2D7B70080EAE0 /* CallState.swift */,
 				B91E75601CE2D7B70080EAE0 /* CallStateConnected.swift */,
+				5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */,
 				B91E75611CE2D7B70080EAE0 /* CallStateIdle.swift */,
 				B91E75621CE2D7B70080EAE0 /* CallStateIncoming.swift */,
 				B91E75681CE2D7B70080EAE0 /* CallStateOutgoing.swift */,

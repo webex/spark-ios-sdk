@@ -20,13 +20,10 @@
 
 import Foundation
 
-protocol CallStateProtocol: class {
+protocol CallState: class {
+    
     var status: Call.Status { get }
     
     func update(callInfo: CallInfo, for call: Call)
-}
-
-extension CallStateProtocol {
-    func update(callInfo: CallInfo, for call: Call) { }
 }
 

@@ -144,7 +144,7 @@ open class Call {
         return info?.myself?.url
     }
     
-    var state: CallStateProtocol!
+    var state: CallState
     var url: String { return info?.callUrl ?? "" }
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
@@ -178,7 +178,6 @@ open class Call {
         mediaSession = MediaSessionWrapper(callManager: callManager)
         to = info.selfEmail
         from = info.hostEmail
-        
         state = CallStateIncoming()
         dtmfQueue = DtmfQueue(self, callClient: callClient)
     }
