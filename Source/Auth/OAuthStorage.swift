@@ -20,6 +20,9 @@
 
 import Foundation
 
+/// A mechanism to store OAuth authentication information
 public protocol OAuthStorage : class {
+    
+    /// The authentication information representing a successful login using OAuth
     var authenticationInfo: OAuthAuthenticationInfo? { get set }
 }

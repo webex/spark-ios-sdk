@@ -22,7 +22,7 @@
 import Foundation
 import KeychainAccess
 
-
+/// An OAuthStorage mechanism that uses the keychain for underlying storage
 public class OAuthKeychainStorage: OAuthStorage {
 
     private let accessTokenKey = "accessToken"
@@ -33,6 +33,7 @@ public class OAuthKeychainStorage: OAuthStorage {
     private var cachedAuthenticationInfo: OAuthAuthenticationInfo?
     private let keychain: KeychainProtocol
     
+    /// Creates a new OAuth keychain store
     public convenience init() {
         self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.oauth"))
     }
@@ -41,6 +42,7 @@ public class OAuthKeychainStorage: OAuthStorage {
         self.keychain = keychain
     }
     
+    /// See OAuthStorage.authenticationInfo
     public var authenticationInfo: OAuthAuthenticationInfo? { 
         get {
             do {

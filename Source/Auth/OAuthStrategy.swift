@@ -64,8 +64,13 @@ public class OAuthStrategy: AuthenticationStrategy {
         self.oauthLauncher = oauthLauncher
     }
     
+    /// Bring up a web-based authorization view controller and direct the user through the OAuth process.
     ///
-    public func authorize(parentViewController: UIViewController, completionHandler: ((Bool) -> Void)? = nil) {
+    /// - parameter parentViewController: the parent view controller for the OAuth view controller
+    /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to 
+    ///                                indicate if the authentication process was successful. It will be called directly after
+    ///                                the OAuth view controller has begun to dismiss itself in an animated way
+    public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
         let url = createAuthCodeRequestURL()
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
@@ -108,10 +113,12 @@ public class OAuthStrategy: AuthenticationStrategy {
         return nil
     }
     
+    /// See AuthenticationStrategy.deauthorize()
     public func deauthorize() {
         storage.authenticationInfo = nil
     }
-    
+
+    /// See AuthenticationStrategy.accessToken(completionHandler:)
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         guard authorized, let authenticationInfo = storage.authenticationInfo else {
             completionHandler(nil)

@@ -23,6 +23,7 @@ import Foundation
 import KeychainAccess
 
 
+/// Storage class that uses the device keychain
 public class JWTAuthKeychainStorage: JWTAuthStorage {
     
     private let jwtKey = "jwtKey"
@@ -32,6 +33,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
     private var cachedJwt: String?
     private var cachedAuthenticationInfo: JWTAuthenticationInfo?
     
+    /// Creates a new JWTAuthKeychainStorage
     public convenience init() {
         self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.jwtauth"))
     }
@@ -40,6 +42,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         self.keychain = keychain
     }
     
+    /// The JSON Web Token
     public var jwt: String? {
         get {
             do {
@@ -66,7 +69,8 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         }
     }
     
-    public var authenticationInfo: JWTAuthenticationInfo? { 
+    /// The authentication information
+    public var authenticationInfo: JWTAuthenticationInfo? {
         get {
             do {
                 if cachedAuthenticationInfo == nil,

@@ -27,6 +27,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
     
+    /// See AuthenticationStrategy.authorized
     public var authorized: Bool {
         guard let payload = JWTAuthStrategy.payloadFor(jwt: storage.jwt) else {
             return false
@@ -47,9 +48,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         return nil
     }
     
-    /*
-     BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
-     */
+    /// BASE64URL decoding algorithm is specified at https://tools.ietf.org/html/rfc7515#page-54
     private static func base64UrlDecode(_ base64UrlString: String) -> Data? {
         var base64String = base64UrlString
         base64String = base64String.replacingOccurrences(of: "-", with: "+")
@@ -67,22 +66,32 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         }
         return Data(base64Encoded: base64String)
     }
+
+    /// Create a new JWT authentication strategy
+    public convenience init(storage: JWTAuthStorage = JWTAuthKeychainStorage()) {
+        self.init(storage: storage, client: JWTAuthClient())
+    }
     
-    init(storage: JWTAuthStorage = JWTAuthKeychainStorage(), client: JWTAuthClient = JWTAuthClient()) {
+    init(storage: JWTAuthStorage, client: JWTAuthClient) {
         self.client = client
         self.storage = storage
     }
-     
+    
+    /// Sets the JWT authorization on the authorization strategy, clearing any existing access token information
+    ///
+    /// - parameter jwt: the new JSON Web Token to use
     public func authorizedWith(jwt: String) {
         storage.jwt = jwt
         storage.authenticationInfo = nil
     }
     
+    /// See AuthenticationStrategy.deauthorize()
     public func deauthorize() {
         storage.jwt = nil
         storage.authenticationInfo = nil
     }
     
+    /// See AuthenticationStrategy.accessToken(completionHandler:)
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         guard authorized, let jwt = storage.jwt else {
             completionHandler(nil)

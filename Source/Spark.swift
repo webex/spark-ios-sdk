@@ -125,12 +125,13 @@ public class Spark {
 extension Spark {
     
     /// Indicates whether the SDK has been authorized.
-    @available(*, deprecated, message: "Use Spark.")
+    @available(*, deprecated, message: "Use AuthenticationStrategy.authorized() instead")
     public static func authorized() -> Bool {
         return SparkInstance.sharedInstance.authenticationStrategy.authorized
     }
     
     /// Deauthorize the SDK. If the phone is registered it should be deregistered before calling this method.
+    @available(*, deprecated, message: "Use AuthenticationStrategy.deauthorize() instead")
     public static func deauthorize() {
         SparkInstance.sharedInstance.authenticationStrategy.deauthorize()
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(nil)
@@ -138,6 +139,7 @@ extension Spark {
     }
     
     /// Retrieves the access token of the SparkSDK if the user is logged in to Spark.
+    @available(*, deprecated, message: "Use AuthenticationStrategy.accessToken(completionHandler:) instead")
     public static func accessToken(completionHandler: @escaping (String?) -> Void) {
         return SparkInstance.sharedInstance.authenticationStrategy.accessToken(completionHandler: completionHandler)
     }
@@ -150,6 +152,7 @@ extension Spark {
     /// - parameter redirectUri: Redirect URI, must match one of the URIs provided during app registration.
     /// - parameter controller: View controller being redirected from and back when during OAuth flow.
     /// - returns: Void
+    @available(*, deprecated, message: "Use Spark(authenticationStrategy:) with an OAuthStrategy instead and then call OAuthStrategy.authorize(parentViewController:completionHandler:)")
     public static func initWith(clientId: String, clientSecret: String, scope: String, redirectUri: String, controller: UIViewController) {
         let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(oauthStrategy)
@@ -162,6 +165,7 @@ extension Spark {
     ///
     /// - parameter clientId: The access token.
     /// - returns: Void
+    @available(*, deprecated, message: "Use Spark(authenticationStrategy:) with a new AuthenticationStrategy of your own devising")
     public static func initWith(accessToken: String) {
         let simpleAuthStrategy = SimpleAuthStrategy(accessToken: accessToken)
         SparkInstance.sharedInstance.authenticationStrategy.setDelegateStrategy(simpleAuthStrategy)
@@ -175,6 +179,7 @@ extension Spark {
     /// - note:
     ///     - To manage people in a room see the Memberships API.
     ///     - To post or otherwise manage room content see the Messages API.
+    @available(*, deprecated, message: "Use the instance property Spark.rooms instead")
     public static var rooms: RoomClient {
         return RoomClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -184,6 +189,7 @@ extension Spark {
     /// Future releases of the API will allow for more complete user administration.
     ///
     /// - note: To learn more about managing people in a room see the Memberships API
+    @available(*, deprecated, message: "Use the instance property Spark.people instead")
     public static var people: PersonClient {
         return PersonClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -192,6 +198,7 @@ extension Spark {
     /// Use this API to list members of any room that you're in or create memberships to invite someone to a room.
     /// Memberships can also be updated to make someome a moderator or deleted to remove them from the room.
     /// Just like in the Spark app, you must be a member of the room in order to list its memberships or invite people.
+    @available(*, deprecated, message: "Use the instance property Spark.memberships instead")
     public static var memberships: MembershipClient {
         return MembershipClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -200,6 +207,7 @@ extension Spark {
     /// In Spark, each message is displayed on its own line along with a timestamp and sender information.
     /// Use this API to list, create, and delete messages. Each message can contain plain text and file attachments.
     /// Just like in the Spark app, you must be a member of the room in order to target it with this API.
+    @available(*, deprecated, message: "Use the instance property Spark.messages instead")
     public static var messages: MessageClient {
         return MessageClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -209,6 +217,7 @@ extension Spark {
     /// Events trigger in near real-time allowing your app and backend IT systems to stay in sync with new content and room activity.
     /// This initial release is quite limited in that it only supports a single messages resource with a single created event. 
     /// However, this API was designed to be extensible and forms the foundation for supporting a wide array of platform events in future releases.
+    @available(*, deprecated, message: "Use the instance property Spark.webhooks instead")
     public static var webhooks: WebhookClient {
         return WebhookClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -220,6 +229,7 @@ extension Spark {
     /// - note:
     ///     - To manage people in a team see the Team Memberships API.
     ///     - To manage team rooms see the Rooms API.
+    @available(*, deprecated, message: "Use the instance property Spark.teams instead")
     public static var teams: TeamClient {
         return TeamClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
@@ -228,11 +238,13 @@ extension Spark {
     /// Use this API to list members of any team that you're in or create memberships to invite someone to a team. 
     /// Team memberships can also be updated to make someome a moderator or deleted to remove them from the team.
     /// Just like in the Spark app, you must be a member of the team in order to list its memberships or invite people.
+    @available(*, deprecated, message: "Use the instance property Spark.teamMemberships instead")
     public static var teamMemberships: TeamMembershipClient {
         return TeamMembershipClient(authenticationStrategy: SparkInstance.sharedInstance.authenticationStrategy)
     }
 
     /// Phone allows your app to make media calls on Spark.
+    @available(*, deprecated, message: "Use the instance property Spark.phone instead")
     public static var phone: Phone {
         return SparkInstance.sharedInstance.phone
     }

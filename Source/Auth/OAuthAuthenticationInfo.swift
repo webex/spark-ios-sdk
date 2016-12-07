@@ -20,9 +20,19 @@
 
 import Foundation
 
+/// Authentication information for an OAuth authentication
 public struct OAuthAuthenticationInfo {
+    
+    /// The access token, used throughout the Spark SDK for authentication
     public let accessToken: String
+    
+    /// The date and time at which the access token will no longer be valid
     public let accessTokenExpirationDate: Date
+    
+    /// The access token, used to obtain a new access token
     public let refreshToken: String
+    
+    /// The date and time at which the refresh token will no longer be valid.
+    /// This will itself refresh every time the refresh token is used.
     public let refreshTokenExpirationDate: Date
 }

@@ -33,7 +33,7 @@ class TeamSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
-			print("Config.selfUser.token: \(Config.selfUser.token)")
+            print("Config.selfUser.token: \(Config.selfUser.token)")
             Spark.initWith(accessToken: Config.selfUser.token!)
         }
         

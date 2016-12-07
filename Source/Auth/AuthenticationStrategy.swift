@@ -25,7 +25,21 @@ import Foundation
 /// A protocol for generic authentication strategies in Spark. Each authentication strategy
 /// is responsible for providing an accessToken used throughout Spark.
 public protocol AuthenticationStrategy : class {
+    
+    /// Returns true if the user is logically authorized. This may not mean the user has a valid
+    /// access token yet, but the authentication strategy should be able to obtain one without
+    /// further user interaction.
     var authorized: Bool { get }
+    
+    /// Deauthorize the current user, clearing any persistent state. If the phone is registered it
+    /// should be deregistered before calling this method.
     func deauthorize()
+    
+    /// Returns an access token. This may involve long-running operations such as service calls,
+    /// but may also return immediately. Users should not make assumptions about how quickly this
+    /// completes.
+    /// If the access token could not be retrieved then the completion handler will be called with nil.
+    ///
+    /// - parameter completionHandler: called when retrieval of the access token is complete
     func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
 }
