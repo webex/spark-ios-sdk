@@ -39,8 +39,11 @@ class DeviceService {
         }
     }
     
-    var webSocketUrl: String? {
-        return device?.webSocketUrl
+    var webSocketUrl: URL? {
+        if let urlString = device?.webSocketUrl {
+            return URL(string: urlString)
+        }
+        return nil
     }
     
     func getServiceUrl(_ service: String) -> String? {

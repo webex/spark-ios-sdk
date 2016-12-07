@@ -42,7 +42,7 @@ class ApplicationLifecycleObserver: NotificationObserver {
         
         callManager.fetchActiveCalls()
         if let webSocketUrl = deviceService.webSocketUrl {
-            webSocketService.connect(URL(string: webSocketUrl)!)
+            webSocketService.connect(webSocketUrl)
         }
     }
     

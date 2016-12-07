@@ -91,7 +91,7 @@ public class Phone {
             if success {
                 self.applicationLifecycleObserver.startObserving()
                 self.callManager.fetchActiveCalls()
-                self.webSocketService.connect(URL(string: self.deviceService.webSocketUrl!)!)
+                self.webSocketService.connect(self.deviceService.webSocketUrl!)
             }
             completionHandler?(success)
         }
