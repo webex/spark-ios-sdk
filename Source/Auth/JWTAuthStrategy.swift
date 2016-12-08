@@ -26,17 +26,35 @@ import Foundation
 public class JWTAuthStrategy: AuthenticationStrategy {
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
+    private var tokenCompletionHandlers: [(String?) -> Void] = []
     
-    /// See AuthenticationStrategy.authorized
-    public var authorized: Bool {
-        guard let payload = JWTAuthStrategy.payloadFor(jwt: storage.jwt) else {
-            return false
+    private var unexpiredAccessToken: String? {
+        guard authorized else {
+            return nil
+        }
+        
+        let buffer: TimeInterval = 15 * 60
+        if let authenticationInfo = storage.authenticationInfo,
+            authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
+            return authenticationInfo.accessToken
+        }
+        return nil
+    }
+    
+    private var unexpiredJwt: String? {
+        guard let jwt = storage.jwt, let payload = JWTAuthStrategy.payloadFor(jwt: jwt) else {
+            return nil
         }
         
         if let expiration = payload["exp"] as? TimeInterval {
-            return Date(timeIntervalSince1970: expiration) > Date()
+            return Date(timeIntervalSince1970: expiration) > Date() ? jwt : nil
         }
-        return true
+        return jwt
+    }
+    
+    /// See AuthenticationStrategy.authorized
+    public var authorized: Bool {
+        return unexpiredJwt != nil
     }
     
     private static func payloadFor(jwt: String?) -> [String: Any]? {
@@ -93,27 +111,33 @@ public class JWTAuthStrategy: AuthenticationStrategy {
     
     /// See AuthenticationStrategy.accessToken(completionHandler:)
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
-        guard authorized, let jwt = storage.jwt else {
-            completionHandler(nil)
-            return
-        }
-        let buffer: TimeInterval = 15 * 60
-        if let authenticationInfo = storage.authenticationInfo,
-            authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
-            completionHandler(authenticationInfo.accessToken)
-        } else {
-            client.fetchTokenFromJWT(jwt) { response in
-                switch response.result {
-                case .success(let jwtAccessTokenCreationResult):
-                    if let authInfo = JWTAuthStrategy.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
-                        self.storage.authenticationInfo = authInfo
+        tokenCompletionHandlers.append(completionHandler)
+        if let jwt = unexpiredJwt, unexpiredAccessToken == nil {
+            if tokenCompletionHandlers.count == 1 {
+                client.fetchTokenFromJWT(jwt) { response in
+                    switch response.result {
+                    case .success(let jwtAccessTokenCreationResult):
+                        if let authInfo = JWTAuthStrategy.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
+                            self.storage.authenticationInfo = authInfo
+                        }
+                    case .failure(let error):
+                        self.deauthorize()
+                        Logger.error("Failed to refresh token", error: error)
                     }
-                case .failure(let error):
-                    self.deauthorize()
-                    Logger.error("Failed to refresh token", error: error)
+                    self.fireCompletionHandlers()
                 }
-                completionHandler(self.storage.authenticationInfo?.accessToken)
             }
+        } else {
+            fireCompletionHandlers()
+        }
+    }
+    
+    private func fireCompletionHandlers() {
+        let accessToken = unexpiredAccessToken
+        let handlers = tokenCompletionHandlers
+        tokenCompletionHandlers = []
+        for handler in handlers {
+            handler(accessToken)
         }
     }
     

@@ -35,7 +35,7 @@ fileprivate class MockJWTClient: JWTAuthClient {
     
     override func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {   
         fetchTokenFromJWT_completionHandler = completionHandler
-        fetchTokenFromJWT_callCount = fetchTokenFromJWT_callCount + 1
+        fetchTokenFromJWT_callCount += 1
     }
 }
 
@@ -198,6 +198,44 @@ class JWTAuthStrategyTests: XCTestCase {
         let testObject = createTestObject(jwt: jwtWithBadData)
         
         XCTAssertFalse(testObject.authorized)
+    }
+    
+    func testWhenRequestTokenTwiceThenCallServiceOnceAndCallsBothCompletionHandlersWithTheResult() {
+        let testObject = createTestObject()
+        var tokenOne: String? = nil
+        var tokenTwo: String? = nil
+        
+        testObject.accessToken() { accessToken in
+            tokenOne = accessToken
+        }
+        testObject.accessToken() { accessToken in
+            tokenTwo = accessToken
+        }
+        client.fetchTokenFromJWT_completionHandler?(accessTokenResponse(accessToken: "accessToken1"))
+        
+        XCTAssertEqual(client.fetchTokenFromJWT_callCount, 1)
+        XCTAssertEqual(tokenOne, "accessToken1")
+        XCTAssertEqual(tokenTwo, "accessToken1")
+    }
+    
+    func testGivenHaveReceivedAccessTokenWhenAskorAnotherThenTheFirstHandlerIsNotCalled() {
+        let testObject = createTestObject()
+        var tokenOneCount = 0
+        var tokenTwoCount = 0
+        
+        testObject.accessToken() { accessToken in
+            tokenOneCount += 1
+        }
+        client.fetchTokenFromJWT_completionHandler?(accessTokenResponse(accessToken: "accessToken1"))
+        
+        testObject.authorizedWith(jwt: jwtWithoutExpiration)
+        testObject.accessToken() { accessToken in
+            tokenTwoCount += 1
+        }
+        client.fetchTokenFromJWT_completionHandler?(accessTokenResponse(accessToken: "accessToken1"))
+        
+        XCTAssertEqual(tokenOneCount, 1)
+        XCTAssertEqual(tokenTwoCount, 1)
     }
     
     private func createTestObject(jwt: String = testJWT) -> JWTAuthStrategy {
