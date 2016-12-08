@@ -189,30 +189,34 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func answer(option: MediaOption, completionHandler: CompletionHandler?) {
-        joinCallFor(mediaOption: option, completionHandler: completionHandler)
-    }
-    
-    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
-        joinCallFor(mediaOption: option, outgoingAddress: address, completionHandler: completionHandler)
-    }
-    
-    private func joinCallFor(mediaOption: MediaOption, outgoingAddress: String? = nil, completionHandler: CompletionHandler?) {
-        verifyLicenseFor(mediaOption: mediaOption) { verified in
+        verifyLicenseFor(mediaOption: option) { verified in
             if verified {
-                self.mediaSession.prepare(mediaOption)
-                
-                var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-                if let address = outgoingAddress {
-                    localInfo.updateValue(["address": address], forKey: "invitee")
-                    self.to = address
-                }
-                self.callClient.join(localInfo) { response in
+                self.mediaSession.prepare(option)
+                let localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
+                self.callClient.joinExistingCallWith(callUrl: self.url, requestBody: localInfo) { response in
                     self.onJoinCallCompleted(response, completionHandler: completionHandler)
                 }
             } else {
                 completionHandler?(false)
             }
         }
+    }
+    
+    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
+        verifyLicenseFor(mediaOption: option) { verified in
+            if verified {
+                self.mediaSession.prepare(option)
+                var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
+                localInfo["invitee"] = ["address" : address]
+                self.to = address
+                self.callClient.createCallWith(requestBody: localInfo) { response in
+                    self.onJoinCallCompleted(response, completionHandler: completionHandler)
+                }
+            } else {
+                completionHandler?(false)
+            }
+        }
+
     }
     
     private func verifyLicenseFor(mediaOption: MediaOption, completionHandler: @escaping CompletionHandler) {
@@ -346,7 +350,7 @@ open class Call {
         let videoMuted = !sendingVideo
 
         let localInfo = createLocalInfo(localSdpString, audioMuted: audioMuted, videoMuted: videoMuted)
-        callClient.updateMedia(mediaUrl, localInfo: localInfo) { response in
+        callClient.updateMedia(mediaUrl, requestBody: localInfo) { response in
             switch response.result {
             case .success(let value):
                 self.update(callInfo: value)
@@ -434,12 +438,12 @@ open class Call {
         callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
     }
     
-    private func createLocalInfo(_ localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> RequestParameter {
+    private func createLocalInfo(_ localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> [String:Any?] {
         let mediaInfo = MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: callManager.localReachabilityInfo)
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)
         let localMedias = [["type": "SDP", "localSdp": mediaInfoJSON!]]
         
-        return RequestParameter(["deviceUrl": deviceUrl, "localMedias": localMedias])
+        return ["deviceUrl": deviceUrl, "localMedias": localMedias]
     }
     
     private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {

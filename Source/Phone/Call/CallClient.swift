@@ -38,24 +38,24 @@ class CallClient {
         return ServiceRequest.Builder(authenticationStrategy).keyPath("locus")
     }
     
-    func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func createCallWith(requestBody: [String:Any?], queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .baseUrl(deviceService.getServiceUrl("locus")!)
-            .body(localInfo)
             .path("loci/call")
+            .body(RequestParameter(requestBody))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func join(_ callUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func joinExistingCallWith(callUrl: String, requestBody: [String:Any?], queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
-            .body(localInfo)
-            .path("participant")
             .baseUrl(callUrl)
+            .path("participant")
+            .body(RequestParameter(requestBody))
             .queue(queue)
             .build()
         
@@ -102,13 +102,13 @@ class CallClient {
         var dtmfInfo: [String:Any] = [
             "tones": events,
             "correlationId": correlationId]
-        if volume != nil {
+        if let volume = volume {
             dtmfInfo["volume"] = volume
         }
-        if durationMillis != nil {
+        if let durationMillis = durationMillis {
             dtmfInfo["durationMillis"] = durationMillis
         }
-        let body:[String: Any] = [
+        let body: [String: Any] = [
             "deviceUrl": deviceUrl,
             "dtmf": dtmfInfo]
         
@@ -123,11 +123,11 @@ class CallClient {
         request.responseJSON(completionHandler)
     }
     
-    func updateMedia(_ mediaUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func updateMedia(_ mediaUrl: String, requestBody: [String:Any?], queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(mediaUrl)
-            .body(localInfo)
+            .body(RequestParameter(requestBody))
             .queue(queue)
             .build()
         
