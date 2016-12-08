@@ -218,7 +218,7 @@ class JWTAuthStrategyTests: XCTestCase {
         XCTAssertEqual(tokenTwo, "accessToken1")
     }
     
-    func testGivenHaveReceivedAccessTokenWhenAskorAnotherThenTheFirstHandlerIsNotCalled() {
+    func testGivenWeHaveAlreadyReceivedAnAccessTokenWhenWeAskForAnotherThenTheFirstHandlerIsNotCalledAgain() {
         let testObject = createTestObject()
         var tokenOneCount = 0
         var tokenTwoCount = 0
