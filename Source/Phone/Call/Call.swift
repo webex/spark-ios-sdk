@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ObjectMapper
 
 /// Represents a Spark call.
 open class Call {
@@ -189,34 +188,30 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func answer(option: MediaOption, completionHandler: CompletionHandler?) {
-        verifyLicenseFor(mediaOption: option) { verified in
-            if verified {
-                self.mediaSession.prepare(option)
-                let localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-                self.callClient.joinExistingCallWith(callUrl: self.url, requestBody: localInfo) { response in
-                    self.onJoinCallCompleted(response, completionHandler: completionHandler)
-                }
-            } else {
-                completionHandler?(false)
-            }
+        createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
+            self.callClient.joinExistingCall(callUrl: self.url, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
         }
     }
     
     func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
-        verifyLicenseFor(mediaOption: option) { verified in
+        to = address
+        createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
+            self.callClient.createCall(toAddress: address, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
+        }
+    }
+    
+    private func createCallConnection(mediaOption: MediaOption, completionHandler: CompletionHandler?, callCreationAction: @escaping (MediaInfo, @escaping (ServiceResponse<CallInfo>) -> Void) -> Void) {
+        verifyLicenseFor(mediaOption: mediaOption) { verified in
             if verified {
-                self.mediaSession.prepare(option)
-                var localInfo = self.createLocalInfo(self.mediaSession.getLocalSdp())
-                localInfo["invitee"] = ["address" : address]
-                self.to = address
-                self.callClient.createCallWith(requestBody: localInfo) { response in
+                self.mediaSession.prepare(mediaOption)
+                let localMediaInfo = self.localMediaInformation(localSdp: self.mediaSession.getLocalSdp())
+                callCreationAction(localMediaInfo) { response in
                     self.onJoinCallCompleted(response, completionHandler: completionHandler)
                 }
             } else {
                 completionHandler?(false)
             }
         }
-
     }
     
     private func verifyLicenseFor(mediaOption: MediaOption, completionHandler: @escaping CompletionHandler) {
@@ -227,6 +222,30 @@ open class Call {
         callManager.requestVideoCodecActivation(completionHandler: completionHandler)
     }
     
+    private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
+        switch response.result {
+        case .success(let value):
+            update(callInfo: value)
+            
+            if let remoteSdp = selfMediaConnection?.remoteSdp?.sdp {
+                self.mediaSession.setRemoteSdp(remoteSdp)
+            } else {
+                Logger.error("Failure: remoteSdp is nil")
+            }
+            self.mediaSession.startMedia()
+            callManager.addCallWith(url: self.url, call: self)
+            from = info?.hostEmail
+            
+            Logger.info("Success: join call")
+            completionHandler?(true)
+            
+        case .failure(let error):
+            self.mediaSession.stopMedia()
+            Logger.error("Failure", error: error)
+            completionHandler?(false)
+        }
+    }
+    
     /// Disconnects the active call. Applies to both incoming and outgoing calls.
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
@@ -235,7 +254,7 @@ open class Call {
     open func hangup(_ completionHandler: CompletionHandler?) {
         mediaSession.stopMedia()
         
-        callClient.leave(selfParticipantUrl!, deviceUrl: deviceUrl) { response in
+        callClient.leave(participantUrl: selfParticipantUrl!, deviceUrl: deviceUrl) { response in
             switch response.result {
             case .success(let value):
                 self.update(callInfo: value)
@@ -257,7 +276,7 @@ open class Call {
         mediaSession.stopMedia()
         
         let callUrl = info?.callUrl
-        callClient.decline(callUrl!, deviceUrl: deviceUrl) { response in
+        callClient.decline(callUrl: callUrl!, deviceUrl: deviceUrl) { response in
             switch response.result {
             case .success:
                 Logger.info("Success: reject call")
@@ -349,8 +368,8 @@ open class Call {
         let audioMuted = !sendingAudio
         let videoMuted = !sendingVideo
 
-        let localInfo = createLocalInfo(localSdpString, audioMuted: audioMuted, videoMuted: videoMuted)
-        callClient.updateMedia(mediaUrl, requestBody: localInfo) { response in
+        let localMediaInfo = localMediaInformation(localSdp: localSdpString, audioMuted: audioMuted, videoMuted: videoMuted)
+        callClient.updateMedia(mediaUrl, deviceUrl: deviceUrl, localMediaInfo: localMediaInfo) { response in
             switch response.result {
             case .success(let value):
                 self.update(callInfo: value)
@@ -438,36 +457,8 @@ open class Call {
         callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
     }
     
-    private func createLocalInfo(_ localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> [String:Any?] {
-        let mediaInfo = MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: callManager.localReachabilityInfo)
-        let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)
-        let localMedias = [["type": "SDP", "localSdp": mediaInfoJSON!]]
-        
-        return ["deviceUrl": deviceUrl, "localMedias": localMedias]
-    }
-    
-    private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
-        switch response.result {
-        case .success(let value):
-            update(callInfo: value)
-            
-            if let remoteSdp = selfMediaConnection?.remoteSdp?.sdp {
-                self.mediaSession.setRemoteSdp(remoteSdp)
-            } else {
-                Logger.error("Failure: remoteSdp is nil")
-            }
-            self.mediaSession.startMedia()
-            callManager.addCallWith(url: self.url, call: self)
-            from = info?.hostEmail
-            
-            Logger.info("Success: join call")
-            completionHandler?(true)
-            
-        case .failure(let error):
-            self.mediaSession.stopMedia()
-            Logger.error("Failure", error: error)
-            completionHandler?(false)
-        }
+    private func localMediaInformation(localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> MediaInfo {
+        return MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: callManager.localReachabilityInfo)
     }
     
     private func onFetchCallInfoCompleted(_ response: ServiceResponse<CallInfo>) {
