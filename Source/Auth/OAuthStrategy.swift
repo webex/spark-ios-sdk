@@ -24,6 +24,7 @@ import Foundation
 
 /// A delegate to handle some events
 public protocol OAuthStrategyDelegate: class {
+    /// Called when an OAuth access token could not be created from the existing refresh token
     func refreshAccessTokenFailed()
 }
 
@@ -37,6 +38,7 @@ public class OAuthStrategy: AuthenticationStrategy {
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
     private let oauthLauncher: OAuthLauncher
+    /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthStrategyDelegate?
     
     /// Returns true if the user has already been authorized
@@ -48,6 +50,15 @@ public class OAuthStrategy: AuthenticationStrategy {
         }
     }
     
+    /// Creates a new OAuth authentication strategy
+    /// 
+    /// - parameter clientId: the OAuth client id
+    /// - parameter clientSecret: the OAuth client secret
+    /// - parameter scope: space-separated string representing which permissions the application needs
+    /// - parameter redirectUri: the redirect URI that will be called when completing the authentication. This must match the redirect URI registered to your clientId.
+    /// - parameter storage: the storage mechanism for persisting authentication information
+    ///
+    /// See https://developer.ciscospark.com/authentication.html
     public convenience init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
                             storage: OAuthStorage = OAuthKeychainStorage()) {
         self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher())
