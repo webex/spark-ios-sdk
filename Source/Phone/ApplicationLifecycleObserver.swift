@@ -41,13 +41,11 @@ class ApplicationLifecycleObserver: NotificationObserver {
 
     func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
-        
-        WebSocketService.sharedInstance.disconnect()
+        self.closeWebSocket()
     }
 
     func onIncomingCallInBackground() {
         Logger.info("Incoming call when app in background")
-
         self.openWebSocket()
     }
 
@@ -56,12 +54,16 @@ class ApplicationLifecycleObserver: NotificationObserver {
             return
         }
         Logger.info("Incoming call declined when app in background")
-        WebSocketService.sharedInstance.disconnect()
+        self.closeWebSocket()
     }
 
     private func openWebSocket() {
         if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
             WebSocketService.sharedInstance.connect(URL(string: webSocketUrl)!)
         }
+    }
+
+    private func closeWebSocket() {
+        WebSocketService.sharedInstance.disconnect()
     }
 }
