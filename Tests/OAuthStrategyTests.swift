@@ -269,8 +269,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientId, "clientId1")
         XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientSecret, "clientSecret1")
         
-        let response = accessTokenResponse()
-        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
+        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse())
 
         XCTAssertEqual(count, 1)
         XCTAssertEqual(successResult, true)
@@ -317,26 +316,32 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertFalse(testObject.authorized)
     }
     
-    func testWhenAuthorizationIsStartedAndClientCallFailedThenAuthenticationFails() {
+    func testWhenAccessTokenCallFailsWhenGettingAccessTokenFromOAuthCodeThenNoLongerAuthorized() {
         let testObject = createTestObject()
         
-        var successResult: Bool? = nil
-        var count = 0
-        testObject.authorize(parentViewController: parent) { success in
-            successResult = success
-            count += 1
-        }
+        testObject.authorize(parentViewController: parent)
         
         oauthLauncher.completionHandler?("oauthCode1")
         
         let response = ServiceResponse<AccessToken>(nil, Result.failure(NSError()))
         oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
         
-        XCTAssertEqual(count, 1)
-        XCTAssertEqual(successResult, false)
+        XCTAssertFalse(testObject.authorized)
     }
     
-    func testWhenIncompleteAuthenticationInfoIsReturnedFromClientThenAuthenticationFails() {
+    func testWhenIncompleteAuthenticationInfoIsReturnedFromClientThenNoLongerAuthorized() {
+        let testObject = createTestObject()
+        
+        testObject.authorize(parentViewController: parent)
+        
+        oauthLauncher.completionHandler?("oauthCode1")
+        let response = accessTokenResponse(accessToken: nil)
+        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
+        
+        XCTAssertFalse(testObject.authorized)
+    }
+    
+    func testWhenOAuthCodeIsReturnedThenImmediatelyAuthorized() {
         let testObject = createTestObject()
         
         var successResult: Bool? = nil
@@ -347,11 +352,30 @@ class OAuthStrategyTests: XCTestCase {
         }
         
         oauthLauncher.completionHandler?("oauthCode1")
-        let response = accessTokenResponse(accessToken: nil)
-        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
         
+        XCTAssertTrue(testObject.authorized)
+        XCTAssertEqual(successResult, true)
         XCTAssertEqual(count, 1)
-        XCTAssertEqual(successResult, false)
+    }
+    
+    func testWhenProcessingOAuthCodeAndWeAskForATokenThenWeReturnTheCorrectToken() {
+        let testObject = createTestObject()
+        
+        testObject.authorize(parentViewController: parent)
+        oauthLauncher.completionHandler?("oauthCode1")
+
+        var count = 0
+        var savedToken: String? = nil
+
+        testObject.accessToken() { token in
+            count += 1
+            savedToken = token
+        }
+        
+        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse(accessToken: "micah"))
+        
+        XCTAssertEqual(savedToken, "micah")
+        XCTAssertEqual(count, 1)
     }
     
     private func accessTokenResponse(accessToken: String? = "accessToken1",
@@ -365,7 +389,6 @@ class OAuthStrategyTests: XCTestCase {
         accessTokenObject.refreshTokenString = refreshToken
         accessTokenObject.refreshTokenExpiration = refreshExpiration
         return ServiceResponse<AccessToken>(nil, Result.success(accessTokenObject))
-
     }
     
     private func createTestObject(clientId: String = "clientId1", scope: String = "scope1", redirectUri: String = "https://example.com/oauth") -> OAuthStrategy {

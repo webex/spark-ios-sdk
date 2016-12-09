@@ -24,6 +24,7 @@ import Foundation
 
 /// A delegate to handle some events
 public protocol OAuthStrategyDelegate: class {
+    
     /// Called when an OAuth access token could not be created from the existing refresh token
     func refreshAccessTokenFailed()
 }
@@ -38,11 +39,16 @@ public class OAuthStrategy: AuthenticationStrategy {
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
     private let oauthLauncher: OAuthLauncher
+    private var oauthCodeCompletionHandlers: [(ServiceResponse<AccessToken>) -> Void] = []
+    
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthStrategyDelegate?
     
     /// Returns true if the user has already been authorized
     public var authorized: Bool {
+        if(oauthCodeCompletionHandlers.count > 0) {
+            return true
+        }
         if let authenticationInfo = storage.authenticationInfo {
             return authenticationInfo.refreshTokenExpirationDate > Date()
         } else {
@@ -85,21 +91,60 @@ public class OAuthStrategy: AuthenticationStrategy {
         let url = createAuthCodeRequestURL()
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
-                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri) { response in
+                self.oauthCodeCompletionHandlers.append() { response in
                     switch response.result {
                     case .success(let result):
                         self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
                     case .failure(let error):
                         Logger.error("Failure retrieving the access token from the oauth code", error: error)
                     }
-                    completionHandler?(self.authorized)
                 }
-            } else {
-                completionHandler?(false)
+                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.fireOauthCodeCompletionHandlers)
             }
+            completionHandler?(oauthCode != nil)
         }
     }
     
+    /// See AuthenticationStrategy.accessToken(completionHandler:)
+    public func accessToken(completionHandler: @escaping (String?) -> Void) {
+        guard authorized else {
+            completionHandler(nil)
+            return
+        }
+        let buffer: TimeInterval = 15 * 60
+        if let authenticationInfo = storage.authenticationInfo, authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
+            completionHandler(authenticationInfo.accessToken)
+        } else {
+            oauthCodeCompletionHandlers.append() { response in
+                switch response.result {
+                case .success(let accessTokenObject):
+                    if let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {
+                        self.storage.authenticationInfo = authInfo
+                    }
+                case .failure(let error):
+                    self.deauthorize()
+                    Logger.error("Failed to refresh token", error: error)
+                    self.delegate?.refreshAccessTokenFailed()
+                    
+                    // Intentional use of deprecated API for backwards compatibility
+                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
+                }
+                completionHandler(self.storage.authenticationInfo?.accessToken)
+            }
+            
+            if oauthCodeCompletionHandlers.count == 1, let authenticationInfo = storage.authenticationInfo {
+                oauthClient.refreshAccessTokenFrom(refreshToken: authenticationInfo.refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: fireOauthCodeCompletionHandlers)
+            }
+        }
+    }
+	
+    private func fireOauthCodeCompletionHandlers(response: ServiceResponse<AccessToken>) {
+        for handler in oauthCodeCompletionHandlers {
+                 handler(response)
+        }
+        oauthCodeCompletionHandlers.removeAll()
+    }
+	
     private func createAuthCodeRequestURL() -> URL {
         return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
             + "&client_id=" + clientId.encodeQueryParamString
@@ -127,34 +172,5 @@ public class OAuthStrategy: AuthenticationStrategy {
     /// See AuthenticationStrategy.deauthorize()
     public func deauthorize() {
         storage.authenticationInfo = nil
-    }
-
-    /// See AuthenticationStrategy.accessToken(completionHandler:)
-    public func accessToken(completionHandler: @escaping (String?) -> Void) {
-        guard authorized, let authenticationInfo = storage.authenticationInfo else {
-            completionHandler(nil)
-            return
-        }
-        let buffer: TimeInterval = 15 * 60
-        if authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
-            completionHandler(authenticationInfo.accessToken)
-        } else {
-            oauthClient.refreshAccessTokenFrom(refreshToken: authenticationInfo.refreshToken, clientId: clientId, clientSecret: clientSecret) { response in
-                switch response.result {
-                case .success(let accessTokenObject):
-                    if let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {
-                        self.storage.authenticationInfo = authInfo
-                    }
-                case .failure(let error):
-                    self.deauthorize()
-                    Logger.error("Failed to refresh token", error: error)
-                    self.delegate?.refreshAccessTokenFailed()
-                    
-                    // Intentional use of deprecated API for backwards compatibility
-                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
-                }
-                completionHandler(self.storage.authenticationInfo?.accessToken)
-            }
-        }
     }
 }
