@@ -93,17 +93,9 @@ public class OAuthStrategy: AuthenticationStrategy {
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
                 self.fetchingAccessTokenInProcess = true
-                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri) { response in
-                    self.fetchingAccessTokenInProcess = false
-                    switch response.result {
-                    case .success(let result):
-                        self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
-                    case .failure(let error):
-                        Logger.error("Failure retrieving the access token from the oauth code", error: error)
-                    }
-                    self.fireAccessTokenCompletionHandlers()
-                }
-                
+                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
+                    Logger.error("Failure retrieving the access token from the oauth code", error: error)
+                }))
             }
             completionHandler?(oauthCode != nil)
         }
@@ -123,23 +115,29 @@ public class OAuthStrategy: AuthenticationStrategy {
             
             if !fetchingAccessTokenInProcess, let refreshToken = storage.authenticationInfo?.refreshToken {
                 fetchingAccessTokenInProcess = true
-                oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret) { response in
-                    self.fetchingAccessTokenInProcess = false
+                oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
+                    Logger.error("Failed to refresh token", error: error)
+                    self.deauthorize()
+                    self.delegate?.refreshAccessTokenFailed()
                     
-                    switch response.result {
-                    case .success(let accessTokenObject):
-                        self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
-                    case .failure(let error):
-                        self.deauthorize()
-                        Logger.error("Failed to refresh token", error: error)
-                        self.delegate?.refreshAccessTokenFailed()
-                        
-                        // Intentional use of deprecated API for backwards compatibility
-                        PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
-                    }
-                    self.fireAccessTokenCompletionHandlers()
-                }
+                    // Intentional use of deprecated API for backwards compatibility
+                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
+                }))
             }
+        }
+    }
+    
+    private func createAccessTokenHandler(errorHandler: @escaping (Error)->Void) -> OAuthClient.ObjectHandler {
+        return { response in
+            self.fetchingAccessTokenInProcess = false
+            
+            switch response.result {
+            case .success(let accessTokenObject):
+                self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
+            case .failure(let error):
+                errorHandler(error)
+            }
+            self.fireAccessTokenCompletionHandlers()
         }
     }
     
