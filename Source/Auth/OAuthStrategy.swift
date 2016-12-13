@@ -39,14 +39,14 @@ public class OAuthStrategy: AuthenticationStrategy {
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
     private let oauthLauncher: OAuthLauncher
-    private var oauthCodeCompletionHandlers: [(ServiceResponse<AccessToken>) -> Void] = []
+    private var accessTokenResponseHandlers: [(ServiceResponse<AccessToken>) -> Void] = []
     
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthStrategyDelegate?
     
     /// Returns true if the user has already been authorized
     public var authorized: Bool {
-        if(oauthCodeCompletionHandlers.count > 0) {
+        if accessTokenResponseHandlers.count > 0 {
             return true
         }
         if let authenticationInfo = storage.authenticationInfo {
@@ -91,7 +91,7 @@ public class OAuthStrategy: AuthenticationStrategy {
         let url = createAuthCodeRequestURL()
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
-                self.oauthCodeCompletionHandlers.append() { response in
+                self.accessTokenResponseHandlers.append() { response in
                     switch response.result {
                     case .success(let result):
                         self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
@@ -115,12 +115,10 @@ public class OAuthStrategy: AuthenticationStrategy {
         if let authenticationInfo = storage.authenticationInfo, authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
             completionHandler(authenticationInfo.accessToken)
         } else {
-            oauthCodeCompletionHandlers.append() { response in
+            accessTokenResponseHandlers.append() { response in
                 switch response.result {
                 case .success(let accessTokenObject):
-                    if let authInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject) {
-                        self.storage.authenticationInfo = authInfo
-                    }
+                    self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
                 case .failure(let error):
                     self.deauthorize()
                     Logger.error("Failed to refresh token", error: error)
@@ -132,17 +130,18 @@ public class OAuthStrategy: AuthenticationStrategy {
                 completionHandler(self.storage.authenticationInfo?.accessToken)
             }
             
-            if oauthCodeCompletionHandlers.count == 1, let authenticationInfo = storage.authenticationInfo {
+            if accessTokenResponseHandlers.count == 1, let authenticationInfo = storage.authenticationInfo {
                 oauthClient.refreshAccessTokenFrom(refreshToken: authenticationInfo.refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: fireOauthCodeCompletionHandlers)
             }
         }
     }
 	
     private func fireOauthCodeCompletionHandlers(response: ServiceResponse<AccessToken>) {
-        for handler in oauthCodeCompletionHandlers {
-                 handler(response)
+		let handlers = accessTokenResponseHandlers
+		accessTokenResponseHandlers = []
+        for handler in handlers {
+			handler(response)
         }
-        oauthCodeCompletionHandlers.removeAll()
     }
 	
     private func createAuthCodeRequestURL() -> URL {
