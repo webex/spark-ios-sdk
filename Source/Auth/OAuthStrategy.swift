@@ -89,8 +89,13 @@ public class OAuthStrategy: AuthenticationStrategy {
     ///                                indicate if the authentication process was successful. It will be called directly after
     ///                                the OAuth view controller has begun to dismiss itself in an animated way
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
-        let url = createAuthCodeRequestURL()
-        oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
+        let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+            + "&client_id=" + clientId.encodeQueryParamString
+            + "&redirect_uri=" + redirectUri.encodeQueryParamString
+            + "&scope=" + scope.encodeQueryParamString
+            + "&state=iossdkstate"
+            )!
+        oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
                 self.fetchingAccessTokenInProcess = true
                 self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
@@ -137,25 +142,14 @@ public class OAuthStrategy: AuthenticationStrategy {
             case .failure(let error):
                 errorHandler(error)
             }
-            self.fireAccessTokenCompletionHandlers()
+
+            let handlers = self.accessTokenCompletionHandlers
+            self.accessTokenCompletionHandlers = []
+            for handler in handlers {
+                handler(self.storage.authenticationInfo?.accessToken)
+            }
+
         }
-    }
-    
-    private func fireAccessTokenCompletionHandlers() {
-        let handlers = accessTokenCompletionHandlers
-        accessTokenCompletionHandlers = []
-        for handler in handlers {
-            handler(storage.authenticationInfo?.accessToken)
-        }
-    }
-    
-    private func createAuthCodeRequestURL() -> URL {
-        return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
-            + "&client_id=" + clientId.encodeQueryParamString
-            + "&redirect_uri=" + redirectUri.encodeQueryParamString
-            + "&scope=" + scope.encodeQueryParamString
-            + "&state=iossdkstate"
-            )!
     }
     
     private static func authenticationInfoFrom(accessTokenObject: AccessToken) -> OAuthAuthenticationInfo? {
