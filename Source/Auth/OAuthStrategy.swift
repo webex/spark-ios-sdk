@@ -89,20 +89,26 @@ public class OAuthStrategy: AuthenticationStrategy {
     ///                                indicate if the authentication process was successful. It will be called directly after
     ///                                the OAuth view controller has begun to dismiss itself in an animated way
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
-        let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
-            + "&client_id=" + clientId.encodeQueryParamString
-            + "&redirect_uri=" + redirectUri.encodeQueryParamString
-            + "&scope=" + scope.encodeQueryParamString
-            + "&state=iossdkstate"
-            )!
-        oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
-            if let oauthCode = oauthCode {
-                self.fetchingAccessTokenInProcess = true
-                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                    Logger.error("Failure retrieving the access token from the oauth code", error: error)
-                }))
+        if let encodedClientId = clientId.encodeQueryParamString,
+            let encodedRedirectUri = redirectUri.encodeQueryParamString,
+            let encodedScope = scope.encodeQueryParamString, let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+            + "&client_id=" + encodedClientId
+            + "&redirect_uri=" + encodedRedirectUri
+            + "&scope=" + encodedScope
+            + "&state=iossdkstate") {
+
+            oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
+                if let oauthCode = oauthCode {
+                    self.fetchingAccessTokenInProcess = true
+                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
+                        Logger.error("Failure retrieving the access token from the oauth code", error: error)
+                    }))
+                }
+                completionHandler?(oauthCode != nil)
             }
-            completionHandler?(oauthCode != nil)
+        } else {
+            Logger.error("Bad URL")
+            completionHandler?(false)
         }
     }
     

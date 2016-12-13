@@ -23,11 +23,11 @@ import Foundation
 extension String {
     private static let allowedQueryCharactersPlusSpace = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~ ")
     
-    var decodeString: String {
-        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding!
+    var decodeString: String? {
+        return self.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
     }
     
-    var encodeQueryParamString: String {
-        return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)!.replacingOccurrences(of: " ", with: "+")
+    var encodeQueryParamString: String? {
+        return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)?.replacingOccurrences(of: " ", with: "+")
     }
 }

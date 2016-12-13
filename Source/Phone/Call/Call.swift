@@ -150,7 +150,7 @@ open class Call {
     private let mediaSession: MediaSessionWrapper
     // XXX reduce scope
     let deviceUrl: String
-    private var dtmfQueue: DtmfQueue!
+    private var dtmfQueue: DtmfQueue
     private let callClient: CallClient
     private let callManager: CallManager
     private let callMetrics: CallMetrics
@@ -165,7 +165,7 @@ open class Call {
         self.callMetrics = callMetrics
         mediaSession = MediaSessionWrapper(callManager: callManager)
         state = CallStateIdle()
-        dtmfQueue = DtmfQueue(self, callClient: callClient)
+        dtmfQueue = DtmfQueue(callClient: callClient)
     }
     
     init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
@@ -178,7 +178,7 @@ open class Call {
         to = info.selfEmail
         from = info.hostEmail
         state = CallStateIncoming()
-        dtmfQueue = DtmfQueue(self, callClient: callClient)
+        dtmfQueue = DtmfQueue(callClient: callClient)
     }
     
     /// Answers an incoming call. Only applies to incoming calls.
@@ -296,7 +296,7 @@ open class Call {
     /// - note: This function is expected to run on main thread.
     open func send(dtmf: String, completionHandler: CompletionHandler?) {
         if sendingDTMFEnabled {
-            dtmfQueue!.push(dtmf, completionHandler: completionHandler)
+            dtmfQueue.push(participantUrl: selfParticipantUrl!, deviceUrl: deviceUrl, event: dtmf, completionHandler: completionHandler)
         } else {
             completionHandler?(false)
         }

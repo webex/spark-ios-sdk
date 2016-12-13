@@ -25,7 +25,7 @@ import ObjectMapper
 
 class ServiceRequest {
     
-    private let url: URL    
+    private let url: URL
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
     private let body: RequestParameter?
@@ -50,7 +50,7 @@ class ServiceRequest {
         private let authenticationStrategy: AuthenticationStrategy
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod
-        private var baseUrl: String
+        private var baseUrl: URL
         private var path: String
         private var body: RequestParameter?
         private var query: RequestParameter?
@@ -62,13 +62,13 @@ class ServiceRequest {
             self.authenticationStrategy = authenticationStrategy
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string]
-            self.baseUrl = "https://api.ciscospark.com/v1"
+            self.baseUrl = URL(string: "https://api.ciscospark.com/v1")!
             self.method = .get
             self.path = ""
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: URL(string: baseUrl)!.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
+            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -82,7 +82,7 @@ class ServiceRequest {
         }
         
         func baseUrl(_ baseUrl: String) -> Builder {
-            self.baseUrl = baseUrl
+            self.baseUrl = URL(string: baseUrl)!
             return self
         }
         
@@ -166,7 +166,7 @@ class ServiceRequest {
     
     func responseJSON(_ completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let queue = self.queue
-        createAlamofireRequest() { request in         
+        createAlamofireRequest() { request in
             request.responseJSON(queue: queue) {
                 (response: DataResponse<Any>) in
                 var result: Result<Any>
