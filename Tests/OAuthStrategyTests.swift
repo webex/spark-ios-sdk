@@ -372,12 +372,12 @@ class OAuthStrategyTests: XCTestCase {
             savedToken = token
         }
         
-        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse(accessToken: "micah"))
+        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse(accessToken: "accessToken1"))
         
-        XCTAssertEqual(savedToken, "micah")
+        XCTAssertEqual(savedToken, "accessToken1")
         XCTAssertEqual(count, 1)
     }
-    
+	
     private func accessTokenResponse(accessToken: String? = "accessToken1",
                                      accessExpiration: TimeInterval = OAuthStrategyTests.oneDay,
                                      refreshToken: String? = "refreshToken1",
