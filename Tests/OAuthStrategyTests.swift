@@ -32,14 +32,14 @@ fileprivate class MockOAuthClient: OAuthClient {
     var refreshOAuthAccessTokenFromRefreshToken_clientSecret: String?
     var refreshOAuthAccessTokenFromRefreshToken_completionHandler: ObjectHandler?
     var refreshOAuthAccessTokenFromRefreshToken_callCount = 0
-
+    
     var fetchAccessTokenFromOAuthCode_oauthCode: String?
     var fetchAccessTokenFromOAuthCode_clientId: String?
     var fetchAccessTokenFromOAuthCode_clientSecret: String?
     var fetchAccessTokenFromOAuthCode_redirectUri: String?
     var fetchAccessTokenFromOAuthCode_completionHandler: ObjectHandler?
     var fetchAccessTokenFromOAuthCode_callCount = 0
-
+    
     override func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         refreshOAuthAccessTokenFromRefreshToken_refreshToken = refreshToken
         refreshOAuthAccessTokenFromRefreshToken_clientId = clientId
@@ -84,17 +84,22 @@ fileprivate class MockDelegate: OAuthStrategyDelegate {
 }
 
 class OAuthStrategyTests: XCTestCase {
-    static let oneDay: TimeInterval = 24*60*60
-    let yesterday = Date(timeIntervalSinceNow: -OAuthStrategyTests.oneDay)
-    let tomorrow = Date(timeIntervalSinceNow: OAuthStrategyTests.oneDay)
-    let now = Date()
-    let parent = UIViewController()
+    var oneDay: TimeInterval = 24 * 60 * 60
+    var yesterday: Date!
+    var tomorrow: Date!
+    var parent = UIViewController()
     private var storage: MockStorage!
     private var oauthClient: MockOAuthClient!
     private var oauthLauncher: MockOAuthLauncher!
+    private var clock: MockClock!
     private var delegate: MockDelegate!
     
     override func setUp() {
+        clock = MockClock()
+        clock.currentTime = Date(timeIntervalSinceReferenceDate: 10000)
+        yesterday = Date(timeInterval: -oneDay, since: clock.currentTime)
+        tomorrow = Date(timeInterval: oneDay, since: clock.currentTime)
+        
         storage = MockStorage()
         oauthClient = MockOAuthClient()
         oauthLauncher = MockOAuthLauncher()
@@ -108,15 +113,15 @@ class OAuthStrategyTests: XCTestCase {
         
         storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: yesterday)
-
+        
         XCTAssertFalse(testObject.authorized)
-
+        
         storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
-
+        
         XCTAssertTrue(testObject.authorized)
     }
-
+    
     func testWhenDeauthorizedThenAuthenticationInformationIsCleared() {
         let testObject = createTestObject()
         
@@ -177,10 +182,10 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_refreshToken, "refreshToken1")
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientId, "clientId1")
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_clientSecret, "clientSecret1")
-
-        let response = accessTokenResponse(accessToken: "accessToken2", accessExpiration: OAuthStrategyTests.oneDay, refreshToken: "refreshToken1", refreshExpiration: 2 * OAuthStrategyTests.oneDay)
+        
+        let response = accessTokenResponse(accessToken: "accessToken2", accessExpiration: oneDay, refreshToken: "refreshToken1", refreshExpiration: 2 * oneDay)
         oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(response)
-
+        
         XCTAssertEqual(retrievedAccessToken, "accessToken2")
         XCTAssertEqual(count, 1)
         
@@ -188,7 +193,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(authInfo?.accessToken, "accessToken2")
         XCTAssertEqualWithAccuracy(authInfo?.accessTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, tomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
         XCTAssertEqual(authInfo?.refreshToken, "refreshToken1")
-        let dayAfterTomorrow = Date(timeInterval: OAuthStrategyTests.oneDay, since: tomorrow)
+        let dayAfterTomorrow = Date(timeInterval: oneDay, since: tomorrow)
         XCTAssertEqualWithAccuracy(authInfo?.refreshTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, dayAfterTomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
         XCTAssertEqual(delegate.callCount, 0)
     }
@@ -196,20 +201,20 @@ class OAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenIsAlmostExpiredButRefreshTokenIsNotThenNewAccessTokenIsReturnedFromService() {
         let testObject = createTestObject()
         
-        let almostExpired = now.addingTimeInterval(14*60)
+        let almostExpired = clock.currentTime.addingTimeInterval(14*60)
         storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: almostExpired,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         testObject.accessToken() { _ in
         }
-
+        
         XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_callCount, 1)
     }
     
     func testWhenAccessTokenRefreshFailsThenDeauthorized() {
-        let testObject = createTestObject()
-        
         storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        let testObject = createTestObject()
+        
         var count = 0
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -218,21 +223,19 @@ class OAuthStrategyTests: XCTestCase {
         }
         XCTAssertEqual(delegate.callCount, 0)
         
-        if let completionHandler = oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler {
-            let error = NSError()
-            completionHandler(ServiceResponse<AccessToken>(nil, Result.failure(error)))
-        }
+        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(ServiceResponse<AccessToken>(nil, Result.failure(NSError())))
         
+        XCTAssertEqual(count, 1)
         XCTAssertEqual(retrievedAccessToken, nil)
         XCTAssertNil(storage.authenticationInfo)
-        XCTAssertEqual(count, 1)
         XCTAssertEqual(delegate.callCount, 1)
+        XCTAssertFalse(testObject.authorized)
     }
     
     func testWhenAuthorizationIsStartedThenAuthorizationLauncherIsCorrectlyLaunched() {
         let testObject = createTestObject(clientId: "client id1?", scope: "scope : 1",
                                           redirectUri: "https://example.com/o%20auth?final=true")
-
+        
         testObject.authorize(parentViewController: parent) { _ in }
         
         XCTAssertEqual(oauthLauncher.callCount, 1)
@@ -270,11 +273,11 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(oauthClient.fetchAccessTokenFromOAuthCode_clientSecret, "clientSecret1")
         
         oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse())
-
+        
         XCTAssertEqual(count, 1)
         XCTAssertEqual(successResult, true)
     }
-
+    
     func testWhenAuthorizationIsStartedAndIsSuccessfulThenWeHaveAccessAndTokenExists() {
         let testObject = createTestObject()
         
@@ -284,7 +287,7 @@ class OAuthStrategyTests: XCTestCase {
         oauthLauncher.completionHandler?("oauthCode1")
         let response = accessTokenResponse(accessToken: "accessToken1")
         oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(response)
-
+        
         XCTAssertTrue(testObject.authorized)
         var accessToken: String? = nil
         testObject.accessToken { retrievedAccessToken in
@@ -363,10 +366,10 @@ class OAuthStrategyTests: XCTestCase {
         
         testObject.authorize(parentViewController: parent)
         oauthLauncher.completionHandler?("oauthCode1")
-
+        
         var count = 0
         var savedToken: String? = nil
-
+        
         testObject.accessToken() { token in
             count += 1
             savedToken = token
@@ -377,22 +380,68 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(savedToken, "accessToken1")
         XCTAssertEqual(count, 1)
     }
-	
+    
+    func testWhenMultipleCallsAreMadeThatRefreshAccessTokenFailsOnlyOnce() {
+        let testObject = createTestObject()
+        
+        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        
+        var firstCount = 0
+        testObject.accessToken() { accessToken in
+            firstCount += 1
+        }
+        
+        var secondCount = 0
+        testObject.accessToken() { accessToken in
+            secondCount += 1
+        }
+        
+        XCTAssertEqual(delegate.callCount, 0)
+        
+        let error = NSError()
+        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_callCount, 1)
+        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(ServiceResponse<AccessToken>(nil, Result.failure(error)))
+        
+        XCTAssertNil(storage.authenticationInfo)
+        XCTAssertEqual(firstCount, 1)
+        XCTAssertEqual(secondCount, 1)
+        XCTAssertEqual(delegate.callCount, 1)
+    }
+    
+    func testWhenAccessTokenExpiresASecondTimeThenItCanStillBeRetrieved() {
+        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        let testObject = createTestObject()
+        testObject.accessToken() { _ in }
+        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(accessTokenResponse(accessToken: "accessToken2", refreshExpiration: 14 * oneDay))
+        
+        clock.advance(by: 2 * oneDay)
+        
+        var savedToken: String? = nil
+        testObject.accessToken() { token in
+            savedToken = token
+        }
+        
+        XCTAssertEqual(oauthClient.refreshOAuthAccessTokenFromRefreshToken_callCount, 2)
+        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(accessTokenResponse(accessToken: "accessToken3"))
+
+        XCTAssertEqual(savedToken, "accessToken3")
+    }
+    
     private func accessTokenResponse(accessToken: String? = "accessToken1",
-                                     accessExpiration: TimeInterval = OAuthStrategyTests.oneDay,
+                                     accessExpiration: TimeInterval? = nil,
                                      refreshToken: String? = "refreshToken1",
-                                     refreshExpiration: TimeInterval = OAuthStrategyTests.oneDay) -> ServiceResponse<AccessToken> {
+                                     refreshExpiration: TimeInterval? = nil) -> ServiceResponse<AccessToken> {
         let accessTokenObject = AccessToken(JSONString: "{}")!
         accessTokenObject.accessTokenString = accessToken
-        accessTokenObject.accessTokenCreationDate = now
-        accessTokenObject.accessTokenExpiration = accessExpiration
+        accessTokenObject.accessTokenCreationDate = clock.currentTime
+        accessTokenObject.accessTokenExpiration = accessExpiration ?? oneDay
         accessTokenObject.refreshTokenString = refreshToken
-        accessTokenObject.refreshTokenExpiration = refreshExpiration
+        accessTokenObject.refreshTokenExpiration = refreshExpiration ?? oneDay
         return ServiceResponse<AccessToken>(nil, Result.success(accessTokenObject))
     }
     
     private func createTestObject(clientId: String = "clientId1", scope: String = "scope1", redirectUri: String = "https://example.com/oauth") -> OAuthStrategy {
-        let strategy = OAuthStrategy(clientId: clientId, clientSecret: "clientSecret1", scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher)
+        let strategy = OAuthStrategy(clientId: clientId, clientSecret: "clientSecret1", scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: oauthClient, oauthLauncher: oauthLauncher, clock: clock)
         strategy.delegate = delegate
         return strategy
     }

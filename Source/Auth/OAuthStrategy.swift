@@ -31,7 +31,7 @@ public protocol OAuthStrategyDelegate: class {
 
 /// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
 public class OAuthStrategy: AuthenticationStrategy {
-
+    
     private let clientId: String
     private let clientSecret: String
     private let scope: String
@@ -39,25 +39,25 @@ public class OAuthStrategy: AuthenticationStrategy {
     private let storage: OAuthStorage
     private let oauthClient: OAuthClient
     private let oauthLauncher: OAuthLauncher
-    private var accessTokenResponseHandlers: [(ServiceResponse<AccessToken>) -> Void] = []
+    private let clock: Clock
+    private var accessTokenCompletionHandlers: [(_ accessToken: String?) -> Void] = []
+    private var fetchingAccessTokenInProcess = false
+    
     
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthStrategyDelegate?
     
     /// Returns true if the user has already been authorized
     public var authorized: Bool {
-        if accessTokenResponseHandlers.count > 0 {
-            return true
-        }
-        if let authenticationInfo = storage.authenticationInfo {
-            return authenticationInfo.refreshTokenExpirationDate > Date()
+        if let refreshTokenExpirationDate = storage.authenticationInfo?.refreshTokenExpirationDate {
+            return refreshTokenExpirationDate > clock.currentTime
         } else {
-            return false
+            return fetchingAccessTokenInProcess
         }
     }
     
     /// Creates a new OAuth authentication strategy
-    /// 
+    ///
     /// - parameter clientId: the OAuth client id
     /// - parameter clientSecret: the OAuth client secret
     /// - parameter scope: space-separated string representing which permissions the application needs
@@ -67,11 +67,11 @@ public class OAuthStrategy: AuthenticationStrategy {
     /// See https://developer.ciscospark.com/authentication.html
     public convenience init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
                             storage: OAuthStorage = OAuthKeychainStorage()) {
-        self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher())
+        self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher(), clock: Clock())
     }
     
     init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
-         storage: OAuthStorage, oauthClient: OAuthClient, oauthLauncher: OAuthLauncher) {
+         storage: OAuthStorage, oauthClient: OAuthClient, oauthLauncher: OAuthLauncher, clock: Clock) {
         self.clientId = clientId
         self.clientSecret = clientSecret
         self.scope = scope
@@ -79,27 +79,31 @@ public class OAuthStrategy: AuthenticationStrategy {
         self.storage = storage
         self.oauthClient = oauthClient
         self.oauthLauncher = oauthLauncher
+        self.clock = clock
     }
     
     /// Bring up a web-based authorization view controller and direct the user through the OAuth process.
     ///
     /// - parameter parentViewController: the parent view controller for the OAuth view controller
-    /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to 
+    /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to
     ///                                indicate if the authentication process was successful. It will be called directly after
     ///                                the OAuth view controller has begun to dismiss itself in an animated way
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
         let url = createAuthCodeRequestURL()
         oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: url, redirectUri: redirectUri) { oauthCode in
             if let oauthCode = oauthCode {
-                self.accessTokenResponseHandlers.append() { response in
+                self.fetchingAccessTokenInProcess = true
+                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri) { response in
+                    self.fetchingAccessTokenInProcess = false
                     switch response.result {
                     case .success(let result):
                         self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: result)
                     case .failure(let error):
                         Logger.error("Failure retrieving the access token from the oauth code", error: error)
                     }
+                    self.fireAccessTokenCompletionHandlers()
                 }
-                self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.fireOauthCodeCompletionHandlers)
+                
             }
             completionHandler?(oauthCode != nil)
         }
@@ -112,45 +116,48 @@ public class OAuthStrategy: AuthenticationStrategy {
             return
         }
         let buffer: TimeInterval = 15 * 60
-        if let authenticationInfo = storage.authenticationInfo, authenticationInfo.accessTokenExpirationDate > Date(timeIntervalSinceNow: buffer) {
+        if let authenticationInfo = storage.authenticationInfo, authenticationInfo.accessTokenExpirationDate > Date(timeInterval: buffer, since: clock.currentTime) {
             completionHandler(authenticationInfo.accessToken)
         } else {
-            accessTokenResponseHandlers.append() { response in
-                switch response.result {
-                case .success(let accessTokenObject):
-                    self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
-                case .failure(let error):
-                    self.deauthorize()
-                    Logger.error("Failed to refresh token", error: error)
-                    self.delegate?.refreshAccessTokenFailed()
-                    
-                    // Intentional use of deprecated API for backwards compatibility
-                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
-                }
-                completionHandler(self.storage.authenticationInfo?.accessToken)
-            }
+            accessTokenCompletionHandlers.append(completionHandler)
             
-            if accessTokenResponseHandlers.count == 1, let authenticationInfo = storage.authenticationInfo {
-                oauthClient.refreshAccessTokenFrom(refreshToken: authenticationInfo.refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: fireOauthCodeCompletionHandlers)
+            if !fetchingAccessTokenInProcess, let refreshToken = storage.authenticationInfo?.refreshToken {
+                fetchingAccessTokenInProcess = true
+                oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret) { response in
+                    self.fetchingAccessTokenInProcess = false
+                    
+                    switch response.result {
+                    case .success(let accessTokenObject):
+                        self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
+                    case .failure(let error):
+                        self.deauthorize()
+                        Logger.error("Failed to refresh token", error: error)
+                        self.delegate?.refreshAccessTokenFailed()
+                        
+                        // Intentional use of deprecated API for backwards compatibility
+                        PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
+                    }
+                    self.fireAccessTokenCompletionHandlers()
+                }
             }
         }
     }
-	
-    private func fireOauthCodeCompletionHandlers(response: ServiceResponse<AccessToken>) {
-		let handlers = accessTokenResponseHandlers
-		accessTokenResponseHandlers = []
+    
+    private func fireAccessTokenCompletionHandlers() {
+        let handlers = accessTokenCompletionHandlers
+        accessTokenCompletionHandlers = []
         for handler in handlers {
-			handler(response)
+            handler(storage.authenticationInfo?.accessToken)
         }
     }
-	
+    
     private func createAuthCodeRequestURL() -> URL {
         return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
             + "&client_id=" + clientId.encodeQueryParamString
             + "&redirect_uri=" + redirectUri.encodeQueryParamString
             + "&scope=" + scope.encodeQueryParamString
             + "&state=iossdkstate"
-        )!
+            )!
     }
     
     private static func authenticationInfoFrom(accessTokenObject: AccessToken) -> OAuthAuthenticationInfo? {

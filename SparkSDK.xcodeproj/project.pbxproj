@@ -52,6 +52,8 @@
 		5A4CFDC21DF0B29C0054D884 /* PhoneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */; };
 		5A8B997F1DF1D43C003633E1 /* OAuthLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */; };
 		5A8B99811DF222FB003633E1 /* OAuthUrlUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */; };
+		5A9350D91E00737900374B99 /* Clock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9350D81E00737900374B99 /* Clock.swift */; };
+		5A9350DB1E00742D00374B99 /* MockClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9350DA1E00742D00374B99 /* MockClock.swift */; };
 		5AC09EB31DE4D02C005F38BC /* AuthenticationStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */; };
 		5AC09EB51DE61822005F38BC /* OAuthStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */; };
 		5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */; };
@@ -223,6 +225,8 @@
 		5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneSettings.swift; sourceTree = "<group>"; };
 		5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLauncher.swift; sourceTree = "<group>"; };
 		5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthUrlUtil.swift; sourceTree = "<group>"; };
+		5A9350D81E00737900374B99 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
+		5A9350DA1E00742D00374B99 /* MockClock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockClock.swift; path = Tests/MockClock.swift; sourceTree = SOURCE_ROOT; };
 		5AC09EB21DE4D02C005F38BC /* AuthenticationStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationStrategy.swift; sourceTree = "<group>"; };
 		5AC09EB41DE61822005F38BC /* OAuthStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthStrategy.swift; sourceTree = "<group>"; };
 		5AC09EB61DE63C27005F38BC /* OAuthKeychainStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthKeychainStorage.swift; sourceTree = "<group>"; };
@@ -385,6 +389,7 @@
 				5AFB6E881DF5C4DF0027E989 /* JWTAuthStrategyTests.swift */,
 				3DA099F31D3EF82500205DF6 /* MembershipTests.swift */,
 				3DA099F41D3EF82500205DF6 /* MessageTests.swift */,
+				5A9350DA1E00742D00374B99 /* MockClock.swift */,
 				5AFB6E9A1DF5C6E90027E989 /* MockKeychain.swift */,
 				5AFA0BD21DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift */,
 				5AFA0BD01DEE0AE400B6F6C9 /* OAuthStrategyTests.swift */,
@@ -684,6 +689,7 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				5A9350D81E00737900374B99 /* Clock.swift */,
 				B91E75381CE2D7B70080EAE0 /* CommonTypes.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
@@ -914,6 +920,7 @@
 				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
 				5AFB6E9D1DF5C7770027E989 /* JWTAuthStrategyTests.swift in Sources */,
 				3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */,
+				5A9350DB1E00742D00374B99 /* MockClock.swift in Sources */,
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
 				5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */,
@@ -1046,6 +1053,7 @@
 				5A4CFDC01DEE3F660054D884 /* AuthenticationStrategyProxy.swift in Sources */,
 				B91E75BA1CE2D7B70080EAE0 /* CallStateConnected.swift in Sources */,
 				3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */,
+				5A9350D91E00737900374B99 /* Clock.swift in Sources */,
 				B91E75D21CE2D7B70080EAE0 /* ParticipantInfo.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,
 				B91E75C61CE2D7B70080EAE0 /* Device.swift in Sources */,
