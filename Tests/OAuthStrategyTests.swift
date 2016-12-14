@@ -381,7 +381,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(count, 1)
     }
     
-    func testWhenMultipleCallsAreMadeThatRefreshAccessTokenFailsOnlyOnce() {
+    func testWhenMultipleAccessTokensAreRequestedThenRefreshIsCalledOnceAndBothReturnAndTheDelegateIsOnlyNotifiedOnce() {
         let testObject = createTestObject()
         
         storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
