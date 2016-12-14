@@ -148,22 +148,15 @@ class MediaSessionWrapper {
     
     // MARK: - lifecycle
     func prepare(_ mediaOption: MediaOption) {
-        var constraint: MediaConstraint!
-        var localView: MediaRenderView? = nil
-        var remoteView: MediaRenderView? = nil
 
         switch (mediaOption) {
         case .audioOnly:
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
+            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
         case .audioVideo(let local, let remote):
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
-            localView = local
-            remoteView = remote
+            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
+            mediaSession.localVideoView = local
+            mediaSession.remoteVideoView = remote
         }
-
-        mediaSession.mediaConstraint = constraint
-        mediaSession.localVideoView = localView
-        mediaSession.remoteVideoView = remoteView
         
         mediaSessionObserver.startObserving(mediaSession)
         mediaSession.createMediaConnection()

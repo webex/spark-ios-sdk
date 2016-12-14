@@ -78,7 +78,11 @@ class EmailTransform: TransformType {
     typealias JSON = String
     
     func transformFromJSON(_ value: Any?) -> Object? {
-        return EmailAddress.fromString(value as! String)
+        if let value = value as? String {
+            return EmailAddress.fromString(value)
+        } else {
+            return nil
+        }
     }
     
     func transformToJSON(_ value: Object?) -> JSON? {

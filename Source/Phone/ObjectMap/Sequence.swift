@@ -56,19 +56,11 @@ struct Sequence: Mappable {
     }
     
     func getEntriesFirstValue() -> UInt64 {
-        if entries.isEmpty {
-            return 0
-        } else {
-            return entries.first!
-        }
+        return entries.first ?? 0
     }
     
     func getEntriesLastValue() -> UInt64 {
-        if entries.isEmpty {
-            return 0
-        } else {
-            return entries.last!
-        }
+        return entries.last ?? 0
     }
     
     func getCompareFirstValue() -> UInt64 {

@@ -56,14 +56,14 @@ class DeviceService {
     
     func registerDevice(_ completionHandler: @escaping (Bool) -> Void) {
         let deviceInfo = createDeviceInfo()
-        if deviceUrl == nil {
-            client.create(deviceInfo) {
+
+        if let deviceUrl = deviceUrl {
+            client.update(deviceUrl, deviceInfo: deviceInfo) {
                 (response: ServiceResponse<Device>) in
                 self.onRegisterDeviceCompleted(response, completionHandler: completionHandler)
             }
-            
         } else {
-            client.update(deviceUrl!, deviceInfo: deviceInfo) {
+            client.create(deviceInfo) {
                 (response: ServiceResponse<Device>) in
                 self.onRegisterDeviceCompleted(response, completionHandler: completionHandler)
             }
@@ -71,19 +71,18 @@ class DeviceService {
     }
     
     func deregisterDevice(_ completionHandler: @escaping (Bool) -> Void) {
-        if deviceUrl == nil {
+        if let deviceUrl = deviceUrl {
+            client.delete(deviceUrl) {
+                (response: ServiceResponse<Any>) in
+                self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
+            }
+            self.deviceUrl = nil
+        } else {
             completionHandler(true)
             return
         }
-        
-        client.delete(deviceUrl!) {
-            (response: ServiceResponse<Any>) in
-            self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
-        }
-        
-        deviceUrl = nil
     }
-    
+
     private func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
         switch response.result {
         case .success(let device):

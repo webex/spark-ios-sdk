@@ -68,16 +68,12 @@ class ReachabilityService {
     }
     
     private func isHostAddressChanged() -> Bool {
-        if hostAddresses == nil {
+        if let hostAddresses = hostAddresses {
+            let newHostAddresses = InterfaceAddress.getSortedAddresses()
+            return !InterfaceAddress.isSameSortedAddresses(oldAddrs: hostAddresses, newAddrs: newHostAddresses)
+        } else {
             return true
         }
-        
-        let newHostAddresses = InterfaceAddress.getSortedAddresses()
-        if InterfaceAddress.isSameSortedAddresses(oldAddrs: hostAddresses!, newAddrs: newHostAddresses) {
-            return false
-        }
-        
-        return true
     }
     
     private func isDataOutOfDate() -> Bool {

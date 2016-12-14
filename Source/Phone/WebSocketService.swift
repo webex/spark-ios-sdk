@@ -177,7 +177,7 @@ class WebSocketService: WebSocketDelegate {
     
     func websocketDidReceiveData(socket: WebSocket, data: Data) {
         let json = JSON(data: data)
-        ackMessage(socket, messageId: json["id"].string!)
+        ackMessage(socket, messageId: json["id"].string ?? "")
         pendingMessages.append(json)
     }
     
