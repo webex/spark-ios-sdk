@@ -390,11 +390,29 @@ open class Call {
         let result = CallInfoSequence.overwrite(oldValue: info.sequence!, newValue: newInfo.sequence!)
         switch (result) {
         case .true:
-            handleRemoteMediaChange(newInfo)
-            // XXX as a side-effect, handleRemoteMediaChange MAY set self.info = newInfo. If this happens, 
-            // handleEnableDTMFChange will be screwed up and not detect changes between the old and new info
-            handleEnableDTMFChange(newInfo)
-            self.info = newInfo
+
+            if let oldInfo = self.info {
+                self.info = newInfo
+
+                if isRemoteVideoStateChanged(oldInfo: oldInfo) {
+                    notifyVideoChanged()
+                }
+
+                if isRemoteAudioStateChanged(oldInfo: oldInfo) {
+                    notifyAudioChanged()
+                }
+
+                if isDTMFEnabledChanged(oldInfo: oldInfo) {
+                    callNotificationCenter.notifyEnableDTMFChanged(self)
+                }
+
+            } else {
+                self.info = newInfo
+                notifyVideoChanged()
+                notifyAudioChanged()
+                callNotificationCenter.notifyEnableDTMFChanged(self)
+            }
+
             state.update(callInfo: newInfo, for: self)
         case .deSync:
             fetchCallInfo()
@@ -411,48 +429,35 @@ open class Call {
         return mediaSession.isMediaSessionAssociated(session)
     }
     
-    private func handleRemoteMediaChange(_ newInfo: CallInfo) {
-        var mediaChangeType: RemoteMediaChangeType?
-        
-        if isRemoteVideoStateChanged(newInfo) {
-            mediaChangeType = newInfo.remoteVideoMuted ?
-                RemoteMediaChangeType.remoteVideoMuted : RemoteMediaChangeType.remoteVideoUnmuted
-        }
-        
-        if isRemoteAudioStateChanged(newInfo) {
-            mediaChangeType = newInfo.remoteAudioMuted ?
-                RemoteMediaChangeType.remoteAudioMuted : RemoteMediaChangeType.remoteAudioUnmuted
-        }
-        
-        guard mediaChangeType != nil else {
-            return
-        }
-        
-        self.info = newInfo
-        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: mediaChangeType!)
-    }
-    
-    private func handleEnableDTMFChange(_ newInfo: CallInfo) {
-        if isDTMFEnabledChanged(newInfo) {
-            callNotificationCenter.notifyEnableDTMFChanged(self)
-        }
-    }
-    
-    private func isRemoteVideoStateChanged(_ newInfo: CallInfo) -> Bool {
+    private func isRemoteVideoStateChanged(oldInfo: CallInfo) -> Bool {
         guard let info = self.info else { return true }
-        return info.remoteVideoMuted != newInfo.remoteVideoMuted
+        return info.remoteVideoMuted != oldInfo.remoteVideoMuted
     }
     
-    private func isRemoteAudioStateChanged(_ newInfo: CallInfo) -> Bool {
+    private func isRemoteAudioStateChanged(oldInfo: CallInfo) -> Bool {
         guard let info = self.info else { return true }
-        return info.remoteAudioMuted != newInfo.remoteAudioMuted
+        return info.remoteAudioMuted != oldInfo.remoteAudioMuted
     }
     
-    private func isDTMFEnabledChanged(_ newInfo: CallInfo) -> Bool {
+    private func isDTMFEnabledChanged(oldInfo: CallInfo) -> Bool {
         guard let info = self.info else { return true }
-        return info.enableDTMF != newInfo.enableDTMF
+        return info.enableDTMF != oldInfo.enableDTMF
     }
-    
+
+    private func notifyVideoChanged() {
+        let videoChangeType = info?.remoteVideoMuted ?? false ?
+            RemoteMediaChangeType.remoteVideoMuted : RemoteMediaChangeType.remoteVideoUnmuted
+
+        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: videoChangeType)
+    }
+
+    private func notifyAudioChanged() {
+        let audioChangeType = info?.remoteAudioMuted ?? false ?
+            RemoteMediaChangeType.remoteAudioMuted : RemoteMediaChangeType.remoteAudioUnmuted
+
+        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: audioChangeType)
+    }
+
     private func fetchCallInfo() {
         callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
     }
