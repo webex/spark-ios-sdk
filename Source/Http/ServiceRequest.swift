@@ -47,6 +47,7 @@ class ServiceRequest {
     
     class Builder {
         
+        private static let apiBaseUrl: URL = URL(string: "https://api.ciscospark.com/v1")!
         private let authenticationStrategy: AuthenticationStrategy
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod
@@ -62,7 +63,7 @@ class ServiceRequest {
             self.authenticationStrategy = authenticationStrategy
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string]
-            self.baseUrl = URL(string: "https://api.ciscospark.com/v1")!
+            self.baseUrl = Builder.apiBaseUrl
             self.method = .get
             self.path = ""
         }
@@ -83,6 +84,11 @@ class ServiceRequest {
         
         func baseUrl(_ baseUrl: String) -> Builder {
             self.baseUrl = URL(string: baseUrl)!
+            return self
+        }
+        
+        func baseUrl(_ baseUrl: URL) -> Builder {
+            self.baseUrl = baseUrl
             return self
         }
         
@@ -151,7 +157,7 @@ class ServiceRequest {
                     result = .success(value)
                     
                 case .failure(var error):
-                                            if response.response != nil {
+                    if response.response != nil {
                         if let data = response.data {
                             error = SparkError.requestErrorWith(data: data)
                         }

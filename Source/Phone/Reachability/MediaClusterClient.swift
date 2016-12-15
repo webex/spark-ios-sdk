@@ -33,7 +33,7 @@ class MediaClusterClient {
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).baseUrl(deviceService.getServiceUrl("calliopeDiscovery")!)
+        return ServiceRequest.Builder(authenticationStrategy).baseUrl(deviceService.device!.calliopeDiscoveryServiceUrl)
     }
     
     func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {

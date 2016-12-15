@@ -41,8 +41,8 @@ class ApplicationLifecycleObserver: NotificationObserver {
         Logger.info("Application did become active")
         
         callManager.fetchActiveCalls()
-        if let webSocketUrl = deviceService.webSocketUrl {
-            webSocketService.connect(webSocketUrl)
+        if let device = deviceService.device {
+            webSocketService.connect(device.webSocketUrl)
         }
     }
     

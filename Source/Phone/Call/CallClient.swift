@@ -58,7 +58,7 @@ class CallClient {
 
         let request = requestBuilder()
             .method(.post)
-            .baseUrl(deviceService.getServiceUrl("locus")!)
+            .baseUrl(deviceService.device!.locusServiceUrl)
             .path("loci/call")
             .body(body(deviceUrl: deviceUrl, json: json))
             .queue(queue)
@@ -165,7 +165,7 @@ class CallClient {
     func fetchCallInfos(_ queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
-            .baseUrl(deviceService.getServiceUrl("locus")!)
+            .baseUrl(deviceService.device!.locusServiceUrl)
             .path("loci")
             .keyPath("loci")
             .queue(queue)

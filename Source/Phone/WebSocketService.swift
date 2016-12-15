@@ -220,7 +220,9 @@ class WebSocketService: WebSocketDelegate {
             return
         }
         
-        Logger.info(callEvent.type!)
+        if let callEventType = callEvent.type {
+            Logger.info(callEventType)
+        }
         
         callManager.handle(callInfo: callInfo)
     }

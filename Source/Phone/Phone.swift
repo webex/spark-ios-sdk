@@ -87,13 +87,13 @@ public class Phone {
             return
         }
         
-        deviceService.registerDevice() { success in
-            if success {
+        deviceService.registerDevice() { deviceRegistrationInformation in
+            if let deviceRegistrationInformation = deviceRegistrationInformation {
                 self.applicationLifecycleObserver.startObserving()
                 self.callManager.fetchActiveCalls()
-                self.webSocketService.connect(self.deviceService.webSocketUrl!)
+                self.webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
             }
-            completionHandler?(success)
+            completionHandler?(deviceRegistrationInformation != nil)
         }
     }
     
