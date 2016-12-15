@@ -91,7 +91,8 @@ public class OAuthStrategy: AuthenticationStrategy {
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
         if let encodedClientId = clientId.encodeQueryParamString,
             let encodedRedirectUri = redirectUri.encodeQueryParamString,
-            let encodedScope = scope.encodeQueryParamString, let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+            let encodedScope = scope.encodeQueryParamString,
+            let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
             + "&client_id=" + encodedClientId
             + "&redirect_uri=" + encodedRedirectUri
             + "&scope=" + encodedScope

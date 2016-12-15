@@ -379,40 +379,36 @@ open class Call {
             }
         }
     }
-    
+
+
     func update(callInfo newInfo: CallInfo) {
-        guard let info = self.info else {
+        guard let oldInfo = info, let oldSequence = oldInfo.sequence else {
             self.info = newInfo
+            notifyVideoChanged()
+            notifyAudioChanged()
+            callNotificationCenter.notifyEnableDTMFChanged(self)
             state.update(callInfo: newInfo, for: self)
             return
         }
-        
-        let result = CallInfoSequence.overwrite(oldValue: info.sequence!, newValue: newInfo.sequence!)
+
+        let newSequence = newInfo.sequence ?? Sequence()
+        let result = CallInfoSequence.overwrite(oldValue: oldSequence, newValue: newSequence)
+
         switch (result) {
         case .true:
+            self.info = newInfo
 
-            if let oldInfo = self.info {
-                self.info = newInfo
-
-                if isRemoteVideoStateChanged(oldInfo: oldInfo) {
-                    notifyVideoChanged()
-                }
-
-                if isRemoteAudioStateChanged(oldInfo: oldInfo) {
-                    notifyAudioChanged()
-                }
-
-                if isDTMFEnabledChanged(oldInfo: oldInfo) {
-                    callNotificationCenter.notifyEnableDTMFChanged(self)
-                }
-
-            } else {
-                self.info = newInfo
+            if (newInfo.remoteVideoMuted != oldInfo.remoteVideoMuted) {
                 notifyVideoChanged()
-                notifyAudioChanged()
-                callNotificationCenter.notifyEnableDTMFChanged(self)
             }
 
+            if (newInfo.remoteAudioMuted != oldInfo.remoteAudioMuted) {
+                notifyAudioChanged()
+            }
+
+            if (newInfo.enableDTMF != oldInfo.enableDTMF) {
+                callNotificationCenter.notifyEnableDTMFChanged(self)
+            }
             state.update(callInfo: newInfo, for: self)
         case .deSync:
             fetchCallInfo()
@@ -428,33 +424,14 @@ open class Call {
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
         return mediaSession.isMediaSessionAssociated(session)
     }
-    
-    private func isRemoteVideoStateChanged(oldInfo: CallInfo) -> Bool {
-        guard let info = self.info else { return true }
-        return info.remoteVideoMuted != oldInfo.remoteVideoMuted
-    }
-    
-    private func isRemoteAudioStateChanged(oldInfo: CallInfo) -> Bool {
-        guard let info = self.info else { return true }
-        return info.remoteAudioMuted != oldInfo.remoteAudioMuted
-    }
-    
-    private func isDTMFEnabledChanged(oldInfo: CallInfo) -> Bool {
-        guard let info = self.info else { return true }
-        return info.enableDTMF != oldInfo.enableDTMF
-    }
 
     private func notifyVideoChanged() {
-        let videoChangeType = info?.remoteVideoMuted ?? false ?
-            RemoteMediaChangeType.remoteVideoMuted : RemoteMediaChangeType.remoteVideoUnmuted
-
+        let videoChangeType = (info?.remoteVideoMuted ?? false) ? RemoteMediaChangeType.remoteVideoMuted : RemoteMediaChangeType.remoteVideoUnmuted
         callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: videoChangeType)
     }
 
     private func notifyAudioChanged() {
-        let audioChangeType = info?.remoteAudioMuted ?? false ?
-            RemoteMediaChangeType.remoteAudioMuted : RemoteMediaChangeType.remoteAudioUnmuted
-
+        let audioChangeType = (info?.remoteAudioMuted ?? false) ? RemoteMediaChangeType.remoteAudioMuted : RemoteMediaChangeType.remoteAudioUnmuted
         callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: audioChangeType)
     }
 
