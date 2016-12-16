@@ -80,13 +80,13 @@ struct CallInfo {
         return myself?.state == ParticipantState.Joined
     }
 
-    func hasJoinedOnThisDevice(deviceUrl: String) -> Bool {
-        return hasJoined && !(selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl}).isEmpty)
+    func hasJoinedOnThisDevice(deviceUrl: URL) -> Bool {
+        return hasJoined && !(selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty)
     }
 
-    func hasJoinedOnOtherDevice(deviceUrl: String) -> Bool {
+    func hasJoinedOnOtherDevice(deviceUrl: URL) -> Bool {
         return hasJoined && (selfDevicesWith(state: "JOINED").count > 1 )
-			|| (selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl}).isEmpty)
+			|| (selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty)
     }
     
     private func selfDevicesWith(state: String) -> [ParticipantDevice] {
@@ -97,18 +97,18 @@ struct CallInfo {
         return selfParticipantant?.state == ParticipantState.Left
     }
 
-    func hasDeclined(deviceUrl: String) -> Bool {
+    func hasDeclined(deviceUrl: URL) -> Bool {
         if selfParticipantant?.state != ParticipantState.Declined {
             return false
         }
-        return selfParticipantant?.deviceUrl == deviceUrl
+        return selfParticipantant?.deviceUrl == deviceUrl.absoluteString
     }
 
-    func hasDeclinedOnOtherDevice(deviceUrl: String) -> Bool {
+    func hasDeclinedOnOtherDevice(deviceUrl: URL) -> Bool {
         if selfParticipantant?.state != ParticipantState.Declined {
             return false
         }
-        return selfParticipantant?.deviceUrl != deviceUrl
+        return selfParticipantant?.deviceUrl != deviceUrl.absoluteString
     }
 
     var hasAtLeastOneRemoteParticipantantLeft: Bool {

@@ -41,9 +41,9 @@ class CallClient {
         return ServiceRequest.Builder(authenticationStrategy).keyPath("locus")
     }
     
-    private func body(deviceUrl: String, json: [String:Any?] = [:]) -> RequestParameter {
+    private func body(deviceUrl: URL, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
-        result["deviceUrl"] = deviceUrl
+        result["deviceUrl"] = deviceUrl.absoluteString
         return RequestParameter(result)
     }
     
@@ -52,7 +52,7 @@ class CallClient {
         return ["localMedias": [["type": "SDP", "localSdp": mediaInfoJSON]]]
     }
     
-    func createCall(toAddress: String, deviceUrl: String, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func createCall(toAddress: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         var json = convertToJson(mediaInfo: localMediaInfo)
         json["invitee"] = ["address" : toAddress]
 
@@ -67,7 +67,7 @@ class CallClient {
         request.responseObject(completionHandler)
     }
     
-    func joinExistingCall(callUrl: String, deviceUrl: String, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func joinExistingCall(callUrl: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let json = convertToJson(mediaInfo: localMediaInfo)
         let request = requestBuilder()
             .method(.post)
@@ -80,7 +80,7 @@ class CallClient {
         request.responseObject(completionHandler)
     }
     
-    func leave(participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func leave(participantUrl: String, deviceUrl: URL, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(participantUrl)
@@ -92,7 +92,7 @@ class CallClient {
         request.responseObject(completionHandler)
     }
     
-    func decline(callUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func decline(callUrl: String, deviceUrl: URL, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(callUrl)
@@ -117,7 +117,7 @@ class CallClient {
 //        request.responseJSON(completionHandler)
 //    }
     
-    func sendDtmf(_ participantUrl: String, deviceUrl: String, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func sendDtmf(_ participantUrl: String, deviceUrl: URL, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         var dtmfInfo: [String:Any] = [
             "tones": events,
             "correlationId" : correlationId]
@@ -140,7 +140,7 @@ class CallClient {
         request.responseJSON(completionHandler)
     }
     
-    func updateMedia(_ mediaUrl: String, deviceUrl: String, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func updateMedia(_ mediaUrl: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let json = convertToJson(mediaInfo: localMediaInfo)
         let request = requestBuilder()
             .method(.put)

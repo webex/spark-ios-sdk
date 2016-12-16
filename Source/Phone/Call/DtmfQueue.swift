@@ -47,7 +47,7 @@ class DtmfQueue {
         }
     }
     
-    func push(participantUrl: String, deviceUrl: String, event: String, completionHandler: CompletionHandler?) {
+    func push(participantUrl: String, deviceUrl: URL, event: String, completionHandler: CompletionHandler?) {
         if isValidEvents(event) {
             dispatchQueue.async {
                 self.queue.append((event, completionHandler))
@@ -60,7 +60,7 @@ class DtmfQueue {
         }
     }
     
-    private func sendDtmfEvents(participantUrl: String, deviceUrl: String, completionHandler: CompletionHandler?) {
+    private func sendDtmfEvents(participantUrl: String, deviceUrl: URL, completionHandler: CompletionHandler?) {
         dispatchQueue.async {
             if self.queue.count > 0 && !self.waitingForResponse {
                 var events = [String]()

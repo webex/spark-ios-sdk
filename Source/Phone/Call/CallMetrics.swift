@@ -51,11 +51,11 @@ class CallMetrics {
         metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
     }
     
-    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: String) {
+    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: URL) {
         var data: Metric.DataType = [
             "locusId": callInfo.callUrl!,
             "locusTimestamp": callInfo.lastActive!,
-            "deviceUrl": deviceUrl,
+            "deviceUrl": deviceUrl.absoluteString,
             "participantId": callInfo.myself!.id!,
             "isGroup": !callInfo.isOneOnOne,
             "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion

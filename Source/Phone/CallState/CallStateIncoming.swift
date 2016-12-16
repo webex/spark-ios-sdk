@@ -28,7 +28,7 @@ class CallStateIncoming: CallState {
     
     func update(callInfo: CallInfo, for call: Call) {
         if callInfo.hasAtLeastOneRemoteParticipantantJoined {
-            let deviceUrl: String = call.deviceUrl
+            let deviceUrl: URL = call.deviceUrl
             if callInfo.hasJoinedOnThisDevice(deviceUrl: deviceUrl) {
                 call.state = CallStateConnected()
                 call.callNotificationCenter.notifyCallConnected(call)

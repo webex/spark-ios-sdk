@@ -139,17 +139,17 @@ open class Call {
     
     private var info: CallInfo?
     
-    var selfParticipantUrl: String? {
+    private var selfParticipantUrl: String? {
         return info?.myself?.url
     }
     
     var state: CallState
-    var url: String { return info?.callUrl ?? "" }
+    private var url: String { return info?.callUrl ?? "" }
     
     private let mediaEngine = MediaEngineWrapper.sharedInstance
     private let mediaSession: MediaSessionWrapper
-    // XXX reduce scope
-    let deviceUrl: String
+    // XXX reduce scope to increase information hiding in this class
+    let deviceUrl: URL
     private var dtmfQueue: DtmfQueue
     private let callClient: CallClient
     private let callManager: CallManager
@@ -158,7 +158,7 @@ open class Call {
         return callManager.callNotificationCenter
     }
     
-    init(callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
+    init(callManager: CallManager, callClient: CallClient, deviceUrl: URL, callMetrics: CallMetrics) {
         self.callManager = callManager
         self.callClient = callClient
         self.deviceUrl = deviceUrl
@@ -168,7 +168,7 @@ open class Call {
         dtmfQueue = DtmfQueue(callClient: callClient)
     }
     
-    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: String, callMetrics: CallMetrics) {
+    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: URL, callMetrics: CallMetrics) {
         self.info = info
         self.callManager = callManager
         self.callClient = callClient
@@ -357,7 +357,7 @@ open class Call {
     }
     
     private var selfMediaConnection: MediaConnection? {
-        return info?.selfDevices.filter({$0.url == deviceUrl}).first?.mediaConnections?.first
+        return info?.selfDevices.filter({$0.url == deviceUrl.absoluteString}).first?.mediaConnections?.first
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {

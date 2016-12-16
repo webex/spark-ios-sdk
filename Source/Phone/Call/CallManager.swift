@@ -100,7 +100,16 @@ class CallManager {
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
             call.update(callInfo: callInfo)
-        } else if let deviceUrl = deviceService.deviceUrl, callInfo.isIncomingCall, callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
+        } else if let deviceUrlString = deviceService.deviceUrl,
+            let deviceUrl = URL(string: deviceUrlString),
+            callInfo.isIncomingCall,
+            callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
+            // XXX: Is this conditional intended to add this call even when there is no real device registration information?
+            // At the time of writing the deviceService.deviceUrl will return a saved value from the UserDefaults. When the application
+            // has been restarted and the reregistration process has not completed, other critical information such as locusServiceUrl
+            // will not be available, but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
+            // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed. 
+            // If so it needs improvement, if not it may be able to be dropped.
             let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
             let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics)
             addCallWith(url: callUrl, call: call)
@@ -118,7 +127,7 @@ class CallManager {
     
     func createOutgoingCall() -> Call {
         let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.deviceUrl!, callMetrics: callMetrics)
+        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.device!.deviceUrl, callMetrics: callMetrics)
     }
     
     func requestVideoCodecActivation(completionHandler: ((_ isActivated: Bool) -> Void)? = nil) {
