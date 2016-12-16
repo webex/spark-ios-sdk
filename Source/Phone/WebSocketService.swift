@@ -208,21 +208,15 @@ class WebSocketService: WebSocketDelegate {
     }
     
     private func handle(callEventJson event: Any) {
-        guard let eventJson = event as? [String: Any] else {
-            return
+        guard let eventJson = event as? [String: Any],
+            let callEvent = Mapper<CallEvent>().map(JSON: eventJson),
+            let callInfo = callEvent.callInfo,
+            let callEventType = callEvent.type else {
+                Logger.error("Malformed call event could not be processed as a call event \(event)")
+                return
         }
         
-        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
-            return
-        }
-        
-        guard let callInfo = callEvent.callInfo else {
-            return
-        }
-        
-        if let callEventType = callEvent.type {
-            Logger.info(callEventType)
-        }
+        Logger.info(callEventType)
         
         callManager.handle(callInfo: callInfo)
     }
