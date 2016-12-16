@@ -24,16 +24,20 @@ import ObjectMapper
 struct CallEvent : Mappable {
     var id: String?
     var callUrl: String?
-    var callInfo: CallInfo?
-    var type: String?
+    var callInfo: CallInfo
+    var type: String
     
     init?(map: Map) {
+        type = map["eventType"].valueOrFail()
+        callInfo = map["locus"].valueOrFail()
+        
+        if !map.isValid {
+            return nil
+        }
     }
     
     mutating func mapping(map: Map) {
         id <- map["id"]
         callUrl <- map["locusUrl"]
-        callInfo <- map["locus"]
-        type <- map["eventType"]
     }
 }

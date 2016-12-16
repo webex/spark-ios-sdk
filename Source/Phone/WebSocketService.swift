@@ -208,23 +208,14 @@ class WebSocketService: WebSocketDelegate {
     }
     
     private func handle(callEventJson event: Any) {
-        guard let eventJson = event as? [String: Any] else {
+        guard let eventJson = event as? [String: Any],
+            let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
             return
         }
         
-        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
-            return
-        }
+        Logger.info(callEvent.type)
         
-        guard let callInfo = callEvent.callInfo else {
-            return
-        }
-        
-        if let callEventType = callEvent.type {
-            Logger.info(callEventType)
-        }
-        
-        callManager.handle(callInfo: callInfo)
+        callManager.handle(callInfo: callEvent.callInfo)
     }
     
     // MARK: - Web Socket Timers
