@@ -22,12 +22,12 @@ import Foundation
 import ObjectMapper
 
 struct CallInfo {
-    var callUrl: String?
+    var callUrl: String? // Mandatory
     var participants: [Participant]?
     var myself: Participant?
     var host: ParticipantInfo?
     var fullState: FullState?
-    var sequence: Sequence?
+    var sequence: Sequence? // Mandatory
     
     var selfEmail: String? {
         return myself?.person?.email

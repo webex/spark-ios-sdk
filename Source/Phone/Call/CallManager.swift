@@ -89,6 +89,7 @@ class CallManager {
     
     func handle(callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
+            Logger.error("CallInfo is missing call url")
             return
         }
         
