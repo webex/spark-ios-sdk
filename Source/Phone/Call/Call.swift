@@ -252,9 +252,14 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func hangup(_ completionHandler: CompletionHandler?) {
+        guard let selfParticipantUrl = selfParticipantUrl else {
+            Logger.error("Failure: Missing self participant URL")
+            completionHandler?(false)
+            return
+        }
         mediaSession.stopMedia()
         
-        callClient.leave(participantUrl: selfParticipantUrl!, deviceUrl: deviceUrl) { response in
+        callClient.leave(participantUrl: selfParticipantUrl, deviceUrl: deviceUrl) { response in
             switch response.result {
             case .success(let value):
                 self.update(callInfo: value)
@@ -273,10 +278,14 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func reject(_ completionHandler: CompletionHandler?) {
+        guard let callUrl = info?.callUrl else {
+            Logger.error("Failure: Missing call URL")
+            completionHandler?(false)
+            return
+        }
         mediaSession.stopMedia()
         
-        let callUrl = info?.callUrl
-        callClient.decline(callUrl: callUrl!, deviceUrl: deviceUrl) { response in
+        callClient.decline(callUrl: callUrl, deviceUrl: deviceUrl) { response in
             switch response.result {
             case .success:
                 Logger.info("Success: reject call")
@@ -295,8 +304,14 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func send(dtmf: String, completionHandler: CompletionHandler?) {
+        guard let selfParticipantUrl = selfParticipantUrl else {
+            completionHandler?(false)
+            Logger.error("Failure: Missing self participant URL")
+            return
+        }
+
         if sendingDTMFEnabled {
-            dtmfQueue.push(participantUrl: selfParticipantUrl!, deviceUrl: deviceUrl, event: dtmf, completionHandler: completionHandler)
+            dtmfQueue.push(participantUrl: selfParticipantUrl, deviceUrl: deviceUrl, event: dtmf, completionHandler: completionHandler)
         } else {
             completionHandler?(false)
         }
@@ -352,8 +367,13 @@ open class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
+        guard let info = info else {
+            Logger.error("Failure: Missing call info for feedback")
+            return
+        }
+
         let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        callMetrics.submit(feedback: feedback, callInfo: info!, deviceUrl: deviceUrl)
+        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
     }
     
     private var selfMediaConnection: MediaConnection? {
