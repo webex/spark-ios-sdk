@@ -261,8 +261,8 @@ open class Call {
         
         callClient.leave(participantUrl: selfParticipantUrl, deviceUrl: deviceUrl) { response in
             switch response.result {
-            case .success(let value):
-                self.update(callInfo: value)
+            case .success(let callInfo):
+                self.update(callInfo: callInfo)
                 Logger.info("Success: leave call")
                 completionHandler?(true)
             case .failure(let error):
@@ -404,19 +404,20 @@ open class Call {
     func update(callInfo newInfo: CallInfo) {
         guard let oldInfo = info, let oldSequence = oldInfo.sequence else {
             self.info = newInfo
+            state.update(callInfo: newInfo, for: self)
             notifyVideoChanged()
             notifyAudioChanged()
             callNotificationCenter.notifyEnableDTMFChanged(self)
-            state.update(callInfo: newInfo, for: self)
             return
         }
 
-        let newSequence = newInfo.sequence ?? Sequence()
+        let newSequence = newInfo.sequence!
         let result = CallInfoSequence.overwrite(oldValue: oldSequence, newValue: newSequence)
 
         switch (result) {
         case .true:
             self.info = newInfo
+            state.update(callInfo: newInfo, for: self)
 
             if (newInfo.remoteVideoMuted != oldInfo.remoteVideoMuted) {
                 notifyVideoChanged()
@@ -429,7 +430,6 @@ open class Call {
             if (newInfo.enableDTMF != oldInfo.enableDTMF) {
                 callNotificationCenter.notifyEnableDTMFChanged(self)
             }
-            state.update(callInfo: newInfo, for: self)
         case .deSync:
             fetchCallInfo()
         default:

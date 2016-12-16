@@ -119,23 +119,6 @@ class SequenceSpec: QuickSpec {
                 var current = Sequence()
                 var incoming = Sequence()
                 
-                current.entries = [101,102,103,104,105]
-                current.rangeStart = 0
-                current.rangeEnd = 0
-                
-                incoming.entries = [102,103,104,105,106,107]
-                incoming.rangeStart = 0
-                incoming.rangeEnd = 0
-                
-                let result = CallInfoSequence.compare(current, incoming)
-                expect(result).to(equal(CallInfoSequence.CompareResult.lessThan))
-            }
-            
-            it("result is less than") {
-                
-                var current = Sequence()
-                var incoming = Sequence()
-                
                 current.entries = [100,101,102,103]
                 current.rangeStart = 75
                 current.rangeEnd = 90
