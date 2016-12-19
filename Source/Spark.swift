@@ -27,7 +27,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this SDK.
-    public static let version = "1.0.0"
+    public static let version = "1.1.0"
     
     /// Toggle to enable or disable console log output.
     ///

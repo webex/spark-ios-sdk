@@ -1,5 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+#### 1.1.0 Releases
+
+- `1.1.0` Releases - [1.1.0](#110)
+
 #### 1.0.0 Releases
 
 - `1.0.0` Releases - [1.0.0](#100)
@@ -25,6 +29,12 @@ All notable changes to this project will be documented in this file.
 - `0.9.137` Releases - [0.9.137](#09137)
 
 ---
+## [1.1.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.1.0)
+Released on 2016-11-29.
+
+#### Updated
+- Support swift 3.0
+
 ## [1.0.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.0.0)
 Released on 2016-07-25.
 
