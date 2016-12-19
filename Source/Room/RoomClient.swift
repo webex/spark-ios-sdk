@@ -29,7 +29,7 @@ public class RoomClient {
     /// Alias for closure to handle a service response along with a Room array.
     public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
     
-    private let authenticationStrategy: AuthenticationStrategy
+    let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy

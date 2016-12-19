@@ -29,7 +29,7 @@ public class PersonClient {
     /// Alias for closure to handle a service response along with a Person array.
     public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
     
-    private let authenticationStrategy: AuthenticationStrategy
+    let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy

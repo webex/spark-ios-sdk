@@ -29,7 +29,7 @@ public class WebhookClient {
     /// Alias for closure to handle a service response along with a Webhook array.
     public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
     
-    private let authenticationStrategy: AuthenticationStrategy
+    let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy

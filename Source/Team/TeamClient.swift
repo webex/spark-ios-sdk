@@ -29,7 +29,7 @@ public class TeamClient {
     /// Alias for closure to handle a service response along with a Team array.
     public typealias ArrayHandler = (ServiceResponse<[Team]>) -> Void
     
-    private let authenticationStrategy: AuthenticationStrategy
+    let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy

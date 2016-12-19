@@ -29,9 +29,7 @@ class JWTAuthClient {
             .path("jwt/login")
     }
     
-    // MARK:- Async API
-    
-    func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {        
+    func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .headers(["Authorization": jwt,
@@ -42,11 +40,5 @@ class JWTAuthClient {
             .build()
         
         request.responseObject(completionHandler)
-    }
-    
-    // MARK:- Sync API
-    
-    func fetchTokenFromJWT(_ jwt: String) throws -> JWTAccessTokenCreationResult {
-        return try SyncUtil.getObject(jwt, async: fetchTokenFromJWT)
     }
 }

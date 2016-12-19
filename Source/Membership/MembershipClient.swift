@@ -29,7 +29,7 @@ public class MembershipClient {
     /// Alias for closure to handle a service response along with a Membership array.
     public typealias ArrayHandler = (ServiceResponse<[Membership]>) -> Void
     
-    private let authenticationStrategy: AuthenticationStrategy
+    let authenticationStrategy: AuthenticationStrategy
     
     init(authenticationStrategy: AuthenticationStrategy) {
         self.authenticationStrategy = authenticationStrategy
