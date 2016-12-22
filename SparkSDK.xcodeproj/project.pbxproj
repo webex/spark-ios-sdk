@@ -47,6 +47,7 @@
 		3DEEA4F11D11418800EB73F6 /* VideoLicense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */; };
 		3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */; };
 		4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */; };
+		5A221D171E0B2CA700B4A5AF /* MediaInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A221D161E0B2CA700B4A5AF /* MediaInfoTests.swift */; };
 		5A4CFDBE1DEE3CFD0054D884 /* SparkInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDBD1DEE3CFD0054D884 /* SparkInstance.swift */; };
 		5A4CFDC01DEE3F660054D884 /* AuthenticationStrategyProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */; };
 		5A4CFDC21DF0B29C0054D884 /* PhoneSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */; };
@@ -221,6 +222,7 @@
 		3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DtmfQueue.swift; sourceTree = "<group>"; };
 		3DEEA4F01D11418800EB73F6 /* VideoLicense.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoLicense.swift; sourceTree = "<group>"; };
 		3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
+		5A221D161E0B2CA700B4A5AF /* MediaInfoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaInfoTests.swift; sourceTree = SOURCE_ROOT; };
 		5A4CFDBD1DEE3CFD0054D884 /* SparkInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkInstance.swift; sourceTree = "<group>"; };
 		5A4CFDBF1DEE3F660054D884 /* AuthenticationStrategyProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationStrategyProxy.swift; sourceTree = "<group>"; };
 		5A4CFDC11DF0B29C0054D884 /* PhoneSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneSettings.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */,
 				3DA099FD1D3EF82500205DF6 /* Utils.swift */,
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
+				5A221D161E0B2CA700B4A5AF /* MediaInfoTests.swift */,
 			);
 			name = Tests;
 			path = SparkSDKTests;
@@ -935,6 +938,7 @@
 				3D31314F1D3EF932007717B2 /* Utils.swift in Sources */,
 				5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */,
 				5AFB6E9C1DF5C7720027E989 /* JWTAuthKeychainStorageTests.swift in Sources */,
+				5A221D171E0B2CA700B4A5AF /* MediaInfoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

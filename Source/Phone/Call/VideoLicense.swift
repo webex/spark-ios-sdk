@@ -49,24 +49,26 @@ class VideoLicense {
     private func promptForActivation(_ completion: ((_ isActivated: Bool) -> Void)?) {
         let AlertTitle = "Activate License"
         let AlertMessage = "To enable video calls, activate a free video license (H.264 AVC) from Cisco. By selecting 'Activate', you accept the Cisco End User License Agreement and Notices."
-        
+
         let alertController = UIAlertController(title: AlertTitle, message: AlertMessage, preferredStyle: UIAlertControllerStyle.alert)
-        
+
         alertController.addAction(UIAlertAction(title: "Activate", style: UIAlertActionStyle.default) { _ in
             self.activateLicense()
             Logger.info("Video license has been activated")
             completion?(true)
-            })
+        })
+
         alertController.addAction(UIAlertAction(title: "View License", style: UIAlertActionStyle.default) { _ in
             completion?(false)
             Logger.info("Video license opened for viewing")
             self.viewLicense()
-            })
+        })
+
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { _ in
             Logger.warn("Video license has not been activated")
             completion?(false)
-            })
-        
+        })
+
         alertController.present(true, completion: nil)
     }
     

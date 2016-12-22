@@ -23,7 +23,7 @@ class CallManager {
     private var callInstances = [String: Call]()
     private let authenticationStrategy: AuthenticationStrategy
     private let reachabilityService: ReachabilityService
-    private let deviceService: DeviceService
+    let deviceService: DeviceService
     private let callMetrics: CallMetrics
     private let videoLicense: VideoLicense
     let callNotificationCenter: CallNotificationCenter
@@ -64,7 +64,12 @@ class CallManager {
     
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
-        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() { response in
+
+        guard let locusServiceUrl = deviceService.device?.locusServiceUrl else {
+            fatalError("FATAL ERROR: No Device Found")
+        }
+
+        CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos(locusServiceUrl: locusServiceUrl) { response in
             switch response.result {
             case .success(let callInfos):
                 for callInfo in callInfos {
@@ -106,11 +111,11 @@ class CallManager {
             (callInfo.isIncomingCall || callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl)) {
             // XXX: Is this conditional intended to add this call even when there is no real device registration information?
             // At the time of writing the deviceService.deviceUrl will return a saved value from the UserDefaults. When the application
-            // has been restarted and the reregistration process has not completed, other critical information such as locusServiceUrl
-            // will not be available, but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
+            // has been restarted and the reregistration process has not completed, other critical information may not be available, 
+            // but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
             // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed. 
             // If so it needs improvement, if not it may be able to be dropped.
-            let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+            let callClient = CallClient(authenticationStrategy: authenticationStrategy)
             let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics)
             addCallWith(url: callUrl, call: call)
 
@@ -126,7 +131,7 @@ class CallManager {
     }
     
     func createOutgoingCall() -> Call {
-        let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        let callClient = CallClient(authenticationStrategy: authenticationStrategy)
         return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.device!.deviceUrl, callMetrics: callMetrics)
     }
     
