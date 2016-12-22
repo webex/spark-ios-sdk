@@ -34,7 +34,7 @@ class TestRoom {
     
     init?() {
         do {
-            room = try Spark.rooms.create(title: "room_for_test")
+            room = try SparkTestFixture.sharedInstance!.spark.rooms.create(title: "room_for_test")
             
         } catch let error as NSError {
             fail("Failed to create room, \(error.localizedFailureReason)")
@@ -48,7 +48,7 @@ class TestRoom {
             return
         }
         do {
-            try Spark.rooms.delete(roomId: id!)
+            try SparkTestFixture.sharedInstance!.spark.rooms.delete(roomId: id!)
         } catch let error as NSError {
             fail("Failed to delete room, \(error.localizedFailureReason)")
         }

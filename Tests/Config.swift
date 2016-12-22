@@ -23,8 +23,6 @@ import SparkSDK
 
 
 struct Config {
-    static let selfUser = TestUserFactory.sharedInstance.createUser()
-    
     static let TestcaseInterval = 3.0
     static let TestcasePendingCheckTimeout = 20.0
     static let TestcasePendingCheckPollInterval = 0.2

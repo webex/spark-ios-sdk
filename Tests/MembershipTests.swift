@@ -26,6 +26,8 @@ import Alamofire
 
 class MembershipSpec: QuickSpec {
     
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
+    private var memberships: MembershipClient!
     private let MembershipCountValid = 10
     private var room: TestRoom?
     private var roomId: String {
@@ -46,8 +48,10 @@ class MembershipSpec: QuickSpec {
     override func spec() {
         
         beforeSuite {
-            Spark.initWith(accessToken: Config.selfUser.token!)
-            self.other = TestUserFactory.sharedInstance.createUser()
+            self.continueAfterFailure = false
+            XCTAssertNotNil(self.fixture)
+            self.other = self.fixture.createUser()
+            self.memberships = self.fixture.spark.memberships
             self.room = TestRoom()
         }
         
@@ -61,7 +65,7 @@ class MembershipSpec: QuickSpec {
             
             it("with roomId and personId and false moderator") {
                 do {
-                    let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
+                    let membership = try self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: false)
                     self.validate(membership: membership)
                     
                     expect(membership.personId).to(equal(self.other.personId))
@@ -70,7 +74,7 @@ class MembershipSpec: QuickSpec {
                     expect(membership.isModerator).to(beFalse())
                     expect(membership.isMonitor).to(beFalse())
                     
-                    try Spark.memberships.delete(membershipId: (membership.id)!)
+                    try self.memberships.delete(membershipId: (membership.id)!)
                     
                 } catch let error as NSError {
                     fail("Failed to create membership, \(error.localizedFailureReason)")
@@ -79,16 +83,16 @@ class MembershipSpec: QuickSpec {
             
             it("with roomId and personId") {
                 do {
-                    let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!)
+                    let membership = try self.memberships.create(roomId: self.roomId, personId: self.other.personId)
                     self.validate(membership: membership)
                     
-                    expect(membership.personId).to(equal(self.other.personId!))
+                    expect(membership.personId).to(equal(self.other.personId))
                     expect(membership.roomId).to(equal(self.roomId))
-                    expect(membership.personEmail).to(equal(self.other.email!))
+                    expect(membership.personEmail).to(equal(self.other.email))
                     expect(membership.isModerator).to(beFalse())
                     expect(membership.isMonitor).to(beFalse())
                     
-                    try Spark.memberships.delete(membershipId: (membership.id)!)
+                    try self.memberships.delete(membershipId: (membership.id)!)
                     
                 } catch let error as NSError {
                     fail("Failed to create membership, \(error.localizedFailureReason)")
@@ -96,22 +100,22 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid roomId and personId") {
-                expect{try Spark.memberships.create(roomId: Config.InvalidId, personId: self.other.personId!)}.to(throwError())
+                expect{try self.memberships.create(roomId: Config.InvalidId, personId: self.other.personId)}.to(throwError())
 
             }
             
             it("with roomId and invalid personId") {
-                expect{try Spark.memberships.create(roomId: self.roomId, personId: Config.InvalidId)}.to(throwError())
+                expect{try self.memberships.create(roomId: self.roomId, personId: Config.InvalidId)}.to(throwError())
             }
             
             it("with invalid roomId and invalid personId") {
-                expect{try Spark.memberships.create(roomId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
+                expect{try self.memberships.create(roomId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
             }
             
             it("with roomId and personId and true moderator") {
                 
                 do {
-                    let membership = try Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: true)
+                    let membership = try self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: true)
 
                     expect(membership.id).notTo(beNil())
                     expect(membership.roomId).to(equal(self.roomId))
@@ -119,7 +123,7 @@ class MembershipSpec: QuickSpec {
                     expect(membership.isModerator).to(beTrue())
                     
                     do {
-                        try Spark.memberships.delete(membershipId: (membership.id)!)
+                        try self.memberships.delete(membershipId: (membership.id)!)
                     } catch let error as NSError {
                         fail("Failed to delete membership, \(error.localizedFailureReason)")
                     }
@@ -137,16 +141,16 @@ class MembershipSpec: QuickSpec {
             it("with roomId and personEmail and false moderator") {
                 
                 do {
-                    let membership = try Spark.memberships.create(roomId: self.roomId, personEmail: self.other.email!, isModerator: false)
+                    let membership = try self.memberships.create(roomId: self.roomId, personEmail: self.other.email, isModerator: false)
                     self.validate(membership: membership)
                     
-                    expect(membership.personId).to(equal(self.other.personId!))
+                    expect(membership.personId).to(equal(self.other.personId))
                     expect(membership.roomId).to(equal(self.roomId))
-                    expect(membership.personEmail).to(equal(self.other.email!))
+                    expect(membership.personEmail).to(equal(self.other.email))
                     expect(membership.isModerator).to(beFalse())
                     expect(membership.isMonitor).to(beFalse())
                     
-                    try Spark.memberships.delete(membershipId: (membership.id)!)
+                    try self.memberships.delete(membershipId: (membership.id)!)
                     
                 } catch let error as NSError {
                     fail("Failed to create membership, \(error.localizedFailureReason)")
@@ -155,16 +159,16 @@ class MembershipSpec: QuickSpec {
             
             it("with roomId and personEmail") {
                 do {
-                    let membership = try Spark.memberships.create(roomId: self.roomId, personEmail: self.other.email!)
+                    let membership = try self.memberships.create(roomId: self.roomId, personEmail: self.other.email)
                     self.validate(membership: membership)
                     
-                    expect(membership.personId).to(equal(self.other.personId!))
+                    expect(membership.personId).to(equal(self.other.personId))
                     expect(membership.roomId).to(equal(self.roomId))
-                    expect(membership.personEmail).to(equal(self.other.email!))
+                    expect(membership.personEmail).to(equal(self.other.email))
                     expect(membership.isModerator).to(beFalse())
                     expect(membership.isMonitor).to(beFalse())
                     
-                    try Spark.memberships.delete(membershipId: (membership.id)!)
+                    try self.memberships.delete(membershipId: (membership.id)!)
                     
                 } catch let error as NSError {
                     fail("Failed to create membership, \(error.localizedFailureReason)")
@@ -172,11 +176,11 @@ class MembershipSpec: QuickSpec {
             }
 
             it("with invalid roomId and personEmail") {
-                expect{try Spark.memberships.create(roomId: Config.InvalidId, personEmail: self.other.email!)}.to(throwError())
+                expect{try self.memberships.create(roomId: Config.InvalidId, personEmail: self.other.email)}.to(throwError())
             }
             
             it("with roomId and invalid personEmail") {
-                expect{try Spark.memberships.create(roomId: self.roomId, personEmail: Config.InvalidEmail)}.notTo(throwError())
+                expect{try self.memberships.create(roomId: self.roomId, personEmail: Config.InvalidEmail)}.notTo(throwError())
             }
         }
         
@@ -186,12 +190,12 @@ class MembershipSpec: QuickSpec {
             var membership: Membership?
             
             beforeEach{
-                membership = try? Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
+                membership = try? self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: false)
             }
             
             afterEach{
                 do {
-                    try Spark.memberships.delete(membershipId: (membership?.id)!)
+                    try self.memberships.delete(membershipId: (membership?.id)!)
                 } catch let error as NSError {
                     fail("Failed to delete membership, \(error.localizedFailureReason)")
                 }
@@ -199,7 +203,7 @@ class MembershipSpec: QuickSpec {
             
             it("with nothing") {
                 do {
-                    let memberships = try Spark.memberships.list()
+                    let memberships = try self.memberships.list()
                     self.validate(membership: memberships[0])
                     
                 }  catch let error as NSError {
@@ -209,12 +213,12 @@ class MembershipSpec: QuickSpec {
             
             it("with roomId and personId and valid max") {
                 do {
-                    let memberships = try Spark.memberships.list(roomId: self.roomId, personId: self.other.personId!, max: self.MembershipCountValid)
+                    let memberships = try self.memberships.list(roomId: self.roomId, personId: self.other.personId, max: self.MembershipCountValid)
                     self.validate(membership: memberships[0])
                     
-                    expect(memberships[0].personId).to(equal(self.other.personId!))
+                    expect(memberships[0].personId).to(equal(self.other.personId))
                     expect(memberships[0].roomId).to(equal(self.roomId))
-                    expect(memberships[0].personEmail).to(equal(self.other.email!))
+                    expect(memberships[0].personEmail).to(equal(self.other.email))
                     expect(memberships[0].isModerator).to(beFalse())
                     expect(memberships[0].isMonitor).to(beFalse())
                     
@@ -230,7 +234,7 @@ class MembershipSpec: QuickSpec {
             var membership: Membership?
             
             beforeEach{
-                membership = try? Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
+                membership = try? self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: false)
                 if membership == nil {
                     fail("Failed to create membership")
                 }
@@ -238,7 +242,7 @@ class MembershipSpec: QuickSpec {
             
             afterEach{
                 do {
-                    try Spark.memberships.delete(membershipId: (membership?.id)!)
+                    try self.memberships.delete(membershipId: (membership?.id)!)
                 } catch let error as NSError {
                     fail("Failed to delete membership, \(error.localizedFailureReason)")
                 }
@@ -246,7 +250,7 @@ class MembershipSpec: QuickSpec {
             
             it("normal") {
                 do {
-                    let membershipFromGet = try Spark.memberships.get(membershipId: (membership?.id)!)
+                    let membershipFromGet = try self.memberships.get(membershipId: (membership?.id)!)
                     expect(membershipFromGet == membership!).to(beTrue())
                     
                 } catch let error as NSError {
@@ -255,7 +259,7 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid Id") {
-                expect{try Spark.memberships.get(membershipId: Config.InvalidId)}.to(throwError())
+                expect{try self.memberships.get(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -265,7 +269,7 @@ class MembershipSpec: QuickSpec {
             var membership: Membership?
             
             beforeEach{
-                membership = try? Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
+                membership = try? self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: false)
                 if membership == nil {
                     fail("Failed to create membership")
                 }
@@ -273,7 +277,7 @@ class MembershipSpec: QuickSpec {
             
             afterEach{
                 do {
-                    try Spark.memberships.delete(membershipId: (membership?.id)!)
+                    try self.memberships.delete(membershipId: (membership?.id)!)
                 } catch let error as NSError {
                     fail("Failed to delete membership, \(error.localizedFailureReason)")
                 }
@@ -281,7 +285,7 @@ class MembershipSpec: QuickSpec {
             
             it("normal") {
                 do {
-                    let membershipFromUpdate = try Spark.memberships.update(membershipId: (membership?.id)!, isModerator: true)
+                    let membershipFromUpdate = try self.memberships.update(membershipId: (membership?.id)!, isModerator: true)
                     expect(membershipFromUpdate.id).to(equal(membership?.id))
                     expect(membershipFromUpdate.isModerator).notTo(equal(membership?.isModerator))
                     
@@ -291,7 +295,7 @@ class MembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try Spark.memberships.update(membershipId: Config.InvalidId, isModerator: true)}.to(throwError())
+                expect{try self.memberships.update(membershipId: Config.InvalidId, isModerator: true)}.to(throwError())
             }
         }
         
@@ -299,16 +303,16 @@ class MembershipSpec: QuickSpec {
         
         describe("delete membership") {
             it("normal") {
-                let membership = try? Spark.memberships.create(roomId: self.roomId, personId: self.other.personId!, isModerator: false)
+                let membership = try? self.memberships.create(roomId: self.roomId, personId: self.other.personId, isModerator: false)
                 if membership == nil {
                     fail("Failed to create membership")
                 }
                 
-                expect{try Spark.memberships.delete(membershipId: (membership?.id)!)}.notTo(throwError())
+                expect{try self.memberships.delete(membershipId: (membership?.id)!)}.notTo(throwError())
             }
             
             it("with invalid id") {
-                expect{try Spark.memberships.delete(membershipId: Config.InvalidId)}.to(throwError())
+                expect{try self.memberships.delete(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
     }

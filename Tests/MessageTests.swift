@@ -27,8 +27,9 @@ class MessageSpec: QuickSpec {
     
     private let Text = "test text"
     private let FileUrl = "https://developer.ciscospark.com/index.html"
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var other: TestUser!
-    
+    private var messages: MessageClient!
     private var room: TestRoom?
     private var roomId: String {
         return room!.id!
@@ -52,9 +53,11 @@ class MessageSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
-            self.other = TestUserFactory.sharedInstance.createUser()
-            Spark.initWith(accessToken: Config.selfUser.token!)
+            self.continueAfterFailure = false
+            XCTAssertNotNil(self.fixture)
+            self.other = self.fixture.createUser()
             self.room = TestRoom()
+            self.messages = self.fixture.spark.messages
         }
         
         afterSuite {
@@ -67,7 +70,7 @@ class MessageSpec: QuickSpec {
             
             it("with text") {
                 do {
-					let message = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
                     
                     self.validate(message: message)
                     expect(message.text).to(equal(self.Text))
@@ -79,7 +82,7 @@ class MessageSpec: QuickSpec {
             
             it("with file") {
                 do {
-                    let message = try Spark.messages.post(roomId: self.roomId, files: self.FileUrl)
+                    let message = try self.messages.post(roomId: self.roomId, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.files).notTo(beNil())
@@ -91,7 +94,7 @@ class MessageSpec: QuickSpec {
             
             it("with text/file") {
                 do {
-                    let message = try Spark.messages.post(roomId: self.roomId, text: self.Text, files: self.FileUrl)
+                    let message = try self.messages.post(roomId: self.roomId, text: self.Text, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.text).to(equal(self.Text))
@@ -103,12 +106,12 @@ class MessageSpec: QuickSpec {
             }
             
             it("with nothing") {
-                let message = try? Spark.messages.post(roomId: self.roomId)
+                let message = try? self.messages.post(roomId: self.roomId)
                 expect(message).to(beNil())
             }
             
             it("with invalid room Id") {
-                let message = try? Spark.messages.post(roomId: Config.InvalidId, text: self.Text)
+                let message = try? self.messages.post(roomId: Config.InvalidId, text: self.Text)
                 expect(message).to(beNil())
             }
         }
@@ -119,7 +122,7 @@ class MessageSpec: QuickSpec {
             
             it("with text") {
                 do {
-                    let message = try Spark.messages.post(personId: (self.other.personId)!, text: self.Text)
+                    let message = try self.messages.post(personId: self.other.personId, text: self.Text)
                     
                     self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
@@ -132,7 +135,7 @@ class MessageSpec: QuickSpec {
             
             it("with file") {
                 do {
-                    let message = try Spark.messages.post(personId: (self.other.personId)!, files: self.FileUrl)
+                    let message = try self.messages.post(personId: self.other.personId, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
@@ -145,7 +148,7 @@ class MessageSpec: QuickSpec {
             
             it("with text/file") {
                 do {
-                    let message = try Spark.messages.post(personId: (self.other.personId)!, text: self.Text, files: self.FileUrl)
+                    let message = try self.messages.post(personId: self.other.personId, text: self.Text, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.toPersonId).to(equal(self.other.personId))
@@ -158,12 +161,12 @@ class MessageSpec: QuickSpec {
             }
             
             it("with nothing") {
-                let message = try? Spark.messages.post(personId: (self.other.personId)!)
+                let message = try? self.messages.post(personId: self.other.personId)
                 expect(message).to(beNil())
             }
             
             it("with invalid person Id") {
-                let message = try? Spark.messages.post(personId: Config.InvalidId, text: self.Text)
+                let message = try? self.messages.post(personId: Config.InvalidId, text: self.Text)
                 expect(message).to(beNil())
             }
         }
@@ -174,7 +177,7 @@ class MessageSpec: QuickSpec {
             
             it("with text") {
                 do {
-                    let message = try Spark.messages.post(personEmail: (self.other.email)!, text: self.Text)
+                    let message = try self.messages.post(personEmail: self.other.email, text: self.Text)
                     
                     self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
@@ -187,7 +190,7 @@ class MessageSpec: QuickSpec {
             
             it("with file") {
                 do {
-                    let message = try Spark.messages.post(personEmail: (self.other.email)!, files: self.FileUrl)
+                    let message = try self.messages.post(personEmail: self.other.email, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
@@ -200,7 +203,7 @@ class MessageSpec: QuickSpec {
             
             it("with text/file") {
                 do {
-                    let message = try Spark.messages.post(personEmail: (self.other.email)!, text: self.Text, files: self.FileUrl)
+                    let message = try self.messages.post(personEmail: self.other.email, text: self.Text, files: self.FileUrl)
                     
                     self.validate(message: message)
                     expect(message.toPersonEmail).to(equal(self.other.email))
@@ -213,12 +216,12 @@ class MessageSpec: QuickSpec {
             }
             
             it("with nothing") {
-                let message = try? Spark.messages.post(personEmail: (self.other.email)!)
+                let message = try? self.messages.post(personEmail: self.other.email)
                 expect(message).to(beNil())
             }
             
             it("with invalid person email") {
-                let message = try? Spark.messages.post(personEmail: Config.InvalidEmail, text: self.Text)
+                let message = try? self.messages.post(personEmail: Config.InvalidEmail, text: self.Text)
                 expect(message).notTo(beNil())
             }
         }
@@ -229,7 +232,7 @@ class MessageSpec: QuickSpec {
             
             it("normal") {
                 do {
-                    let messages = try Spark.messages.list(roomId: self.roomId)
+                    let messages = try self.messages.list(roomId: self.roomId)
 
                     expect(messages.isEmpty).to(beFalse())
                     
@@ -240,7 +243,7 @@ class MessageSpec: QuickSpec {
             
             it("with max value") {
                 do {
-                    let messages = try Spark.messages.list(roomId: self.roomId, max: 2)
+                    let messages = try self.messages.list(roomId: self.roomId, max: 2)
                     
                     expect(messages.count).to(equal(2))
                     
@@ -251,12 +254,12 @@ class MessageSpec: QuickSpec {
             
             it("before a date") {
                 do {
-                    let message1 = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let message1 = try self.messages.post(roomId: self.roomId, text: self.Text)
                     Utils.wait(interval: Config.TestcaseInterval)
                     let now = self.getISO8601Date()
-                    let message2 = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let message2 = try self.messages.post(roomId: self.roomId, text: self.Text)
                     
-                    let messages = try Spark.messages.list(roomId: self.roomId, before: now)
+                    let messages = try self.messages.list(roomId: self.roomId, before: now)
                     
                     expect(messages.contains() {$0.id == message1.id}).to(beTrue())
                     expect(messages.contains() {$0.id == message2.id}).to(beFalse())
@@ -268,10 +271,10 @@ class MessageSpec: QuickSpec {
             
             it("before message Id") {
                 do {
-                    let message1 = try Spark.messages.post(roomId: self.roomId, text: self.Text)
-                    let message2 = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let message1 = try self.messages.post(roomId: self.roomId, text: self.Text)
+                    let message2 = try self.messages.post(roomId: self.roomId, text: self.Text)
                     
-                    let messages = try Spark.messages.list(roomId: self.roomId, beforeMessage: message2.id!)
+                    let messages = try self.messages.list(roomId: self.roomId, beforeMessage: message2.id!)
                     
                     expect(messages.contains() {$0.id == message1.id}).to(beTrue())
                     expect(messages.contains() {$0.id == message2.id}).to(beFalse())
@@ -283,10 +286,10 @@ class MessageSpec: QuickSpec {
             
             it("before a date and message Id") {
                 do {
-                    let message = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
                     let now = self.getISO8601Date()
                     
-                    let messages = try Spark.messages.list(roomId: self.roomId, before: now, beforeMessage: message.id!)
+                    let messages = try self.messages.list(roomId: self.roomId, before: now, beforeMessage: message.id!)
                     
                     expect(messages.contains() {$0.id == message.id}).to(beFalse())
                     
@@ -296,7 +299,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid room Id") {
-                expect{try Spark.messages.list(roomId: Config.InvalidId)}.to(throwError())
+                expect{try self.messages.list(roomId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -306,10 +309,10 @@ class MessageSpec: QuickSpec {
         
             it("normal") {
                 do {
-                    let messageFromCreate = try Spark.messages.post(roomId: self.roomId, text: self.Text)
+                    let messageFromCreate = try self.messages.post(roomId: self.roomId, text: self.Text)
                     self.validate(message: messageFromCreate)
                     
-                    let messageFromGet = try Spark.messages.get(messageId: (messageFromCreate.id)!)
+                    let messageFromGet = try self.messages.get(messageId: (messageFromCreate.id)!)
                     self.validate(message: messageFromGet)
                     
                     expect(messageFromGet.id).to(equal(messageFromCreate.id))
@@ -322,7 +325,7 @@ class MessageSpec: QuickSpec {
             }
             
             it("with invalid message Id") {
-                expect{try Spark.messages.get(messageId: Config.InvalidId)}.to(throwError())
+                expect{try self.messages.get(messageId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -332,15 +335,15 @@ class MessageSpec: QuickSpec {
         
             it("normal") {
                 do {
-                    let message = try Spark.messages.post(roomId: self.roomId, text: self.Text)
-                    expect{try Spark.messages.delete(messageId: (message.id)!)}.notTo(throwError())
+                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
+                    expect{try self.messages.delete(messageId: (message.id)!)}.notTo(throwError())
                 } catch let error as NSError {
                     fail("Failed to create message, \(error.localizedFailureReason)")
                 }
             }
             
             it("with invalid message Id") {
-                expect{try Spark.messages.delete(messageId: Config.InvalidId)}.to(throwError())
+                expect{try self.messages.delete(messageId: Config.InvalidId)}.to(throwError())
             }
         }
     }
