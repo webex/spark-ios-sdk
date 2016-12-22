@@ -18,189 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Quick
-import Nimble
-import Alamofire
+import XCTest
 @testable import SparkSDK
-
-class PeopleSpec: QuickSpec {
-    
-    private var me = Config.selfUser
-    private var other: TestUser!
-    
-    private func validate(person: Person) {
-        expect(person.id).notTo(beNil())
-        expect(person.emails).notTo(beNil())
-        expect(person.displayName).notTo(beNil())
-        expect(person.created).notTo(beNil())
-    }
-    
-    override func spec() {
-        beforeSuite {
-            self.other = TestUserFactory.sharedInstance.createUser()
-            Spark.initWith(accessToken: self.me.token!)
-        }
-        
-        // MARK: - List people
-        
-        describe("list People") {
-            
-            it("with emailAddress and displayName and validCount") {
-                
-                do {
-                    let max = 10
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: max)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].displayName).to(equal(self.other.name!))
-                    expect(peoples[0].emails).to(contain(self.other.email!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with only emailAddress") {
-                do {
-                    let peoples = try Spark.people.list(email: self.other.email!)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].displayName).to(equal(self.other.name!))
-                    expect(peoples[0].emails).to(contain(self.other.email!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with displayName") {
-                do {
-                    let peoples = try Spark.people.list(email: nil, displayName: self.other.name!)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].displayName).to(contain(self.other.name!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with displayName and maxCount") {
-                do {
-                    let peoples = try Spark.people.list(email: nil, displayName: self.other.name!, max: 10)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].displayName).to(contain(self.other.name!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with email and maxCount") {
-                do {
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: nil, max: 10)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].emails).to(contain(self.other.email!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with only validCount") {
-                expect{try Spark.people.list(email: nil, displayName: nil, max: 10)}.to(throwError())
-            }
-            
-            it("with emailAddress and displayName") {
-                do {
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!)
-                    expect(peoples.count).to(equal(1))
-                    self.validate(person: peoples[0])
-                    expect(peoples[0].avatar).to(beNil())
-                    expect(peoples[0].displayName).to(contain(self.other.name!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with nothing") {
-                expect{try Spark.people.list(email: nil, displayName: nil, max: nil)}.to(throwError())
-            }
-            
-            it("with emailAddress and displayName and invalidCount") {
-                expect{try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: -1)}.to(throwError())
-            }
-            
-            it("with emailAddress and invalidCount") {
-                expect{try Spark.people.list(email: self.other.email!, displayName: nil, max: -1)}.to(throwError())
-            }
-            
-            it("with displayName and invalidCount") {
-                expect{try Spark.people.list(email: nil, displayName: self.other.name!, max: -1)}.to(throwError())
-            }
-            
-            it("with only invalidCount") {
-                expect{try Spark.people.list(email: nil, displayName: nil, max: -1)}.to(throwError())
-            }
-        }
-        
-        // MARK: - Get people
-        
-        describe("get") {
-            it("me") {
-                do {
-                    let person = try Spark.people.getMe()
-                    self.validate(person: person)
-                    expect(person.avatar).to(beNil())
-                    expect(person.displayName).to(equal(self.me.name))
-                    expect(person.emails).to(contain(self.me.email!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to get people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with personId") {
-                do {
-                    let person = try Spark.people.get(personId: self.me.id!)
-                    self.validate(person: person)
-                    expect(person.avatar).to(beNil())
-                    expect(person.displayName).to(equal(self.me.name))
-                    expect(person.emails).to(contain(self.me.email!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to get people, \(error.localizedFailureReason)")
-                }
-                
-            }
-            
-            it("with emptyId") {
-                expect{try Spark.people.get(personId:"")}.to(throwError())
-            }
-            
-            it("with wrongId") {
-                expect{try Spark.people.get(personId:"abcd")}.to(throwError())
-            }
-        }
-        
-    }
-}
 
 class XCPeopleSpec: XCTestCase {
     
     private var spark: Spark!
-    private let PeopleCountMin = 0
-    private let PeopleCountMax = 100
-    private let PeopleCountValid = 10
-    private let PeopleCountInvalid = -1
     private var me = Config.selfUser
     private var other: TestUser!
     private var otherName: String! {
@@ -227,7 +50,11 @@ class XCPeopleSpec: XCTestCase {
     }
     
     override func setUp() {
-        spark = Spark(authenticationStrategy: SimpleAuthStrategy(accessToken: Config.selfUser.token!))
+        if let token = Config.selfUser.token {
+            spark = Spark(authenticationStrategy: SimpleAuthStrategy(accessToken: token))
+        } else {
+            spark = Spark(authenticationStrategy: JWTAuthStrategy())
+        }
         other = TestUserFactory.sharedInstance.createUser() //do we need to change this?
     }
     
@@ -237,11 +64,10 @@ class XCPeopleSpec: XCTestCase {
     */
     
     func testListPeopleWithEmailAddressAndDisplayNameAndValidCount() {
-        if let people = listPeople(email: otherEmail, displayName: otherName, max: PeopleCountValid), let displayName = people[0].displayName, let emails = people[0].emails {
+        if let people = listPeople(email: otherEmail, displayName: otherName, max: 10), let displayName = people[0].displayName, let emails = people[0].emails {
+            XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertLessThanOrEqual(people.count, PeopleCountValid)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertEqual(displayName, otherName)
             XCTAssertTrue(emails.contains(otherEmail))
         } else {
@@ -249,12 +75,11 @@ class XCPeopleSpec: XCTestCase {
         }
     }
     
-    func testListPeopleWithEmailAddress() {
+    func testListPeopleWithOnlyEmailAddress() {
         if let people = listPeople(email: otherEmail, displayName: nil, max: nil), let displayName = people[0].displayName, let emails = people[0].emails {
+            XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertLessThanOrEqual(people.count, PeopleCountMax)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertEqual(displayName, otherName)
             XCTAssertTrue(emails.contains(otherEmail))
         } else {
@@ -264,10 +89,9 @@ class XCPeopleSpec: XCTestCase {
     
     func testListPeopleWithDisplayName() {
         if let people = listPeople(email: nil, displayName: otherName, max: nil), let displayName = people[0].displayName {
+            XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertLessThanOrEqual(people.count, PeopleCountMax)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertTrue(displayName.contains(otherName))
         } else {
             XCTFail("Failed to list people")
@@ -275,55 +99,36 @@ class XCPeopleSpec: XCTestCase {
     }
     
     func testListPeopleWithDisplayNameAndMaxCount() {
-        if let people = listPeople(email: nil, displayName: otherName, max: PeopleCountMax), let displayName = people[0].displayName {
+        if let people = listPeople(email: nil, displayName: otherName, max: 10), let displayName = people[0].displayName {
+            XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertLessThanOrEqual(people.count, PeopleCountMax)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertTrue(displayName.contains(otherName))
         } else {
             XCTFail("Failed to list people")
         }
     }
     
-    func testListPeopleWithDisplayNameAndMinCount() {
-        if let people = listPeople(email: nil, displayName: otherName, max: PeopleCountMin) {
-            XCTAssertEqual(people.count, PeopleCountMin)
-        } else {
-            XCTFail("Failed to list people")
-        }
-    }
-    
     func testListPeopleWithEmailAndMaxCount() {
-        if let people = listPeople(email: otherEmail, displayName: nil, max: PeopleCountMax), let emails = people[0].emails {
+        if let people = listPeople(email: otherEmail, displayName: nil, max: 10), let emails = people[0].emails {
             validate(person: people[0])
+            XCTAssertEqual(people.count, 1)
             XCTAssertNil(people[0].avatar)
-            XCTAssertLessThanOrEqual(people.count, PeopleCountMax)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertTrue(emails.contains(otherEmail))
         } else {
             XCTFail("Failed to list people")
         }
     }
     
-    func testListPeopleWithEmailAndMinCount() {
-        if let people = listPeople(email: otherEmail, displayName: nil, max: PeopleCountMin) {
-            XCTAssertEqual(people.count, PeopleCountMin)
-        } else {
-            XCTFail("Failed to list people")
-        }
-    }
-    
     func testListPeopleWithOnlyValidCount() {
-        let people = listPeople(email: nil, displayName: nil, max: PeopleCountValid)
+        let people = listPeople(email: nil, displayName: nil, max: 10)
         XCTAssertNil(people, "Unexpected successful request")
     }
     
     func testListPeopleWithEmailAndDisplayName() {
         if let people = listPeople(email: otherEmail, displayName: otherName, max: nil), let displayName = people[0].displayName {
+            XCTAssertEqual(people.count, 1)
             validate(person: people[0])
-            XCTAssertLessThanOrEqual(people.count, PeopleCountMax)
-            XCTAssertGreaterThan(people.count, PeopleCountMin)
             XCTAssertTrue(displayName.contains(otherName))
         } else {
             XCTFail("Failed to list people")
@@ -336,22 +141,22 @@ class XCPeopleSpec: XCTestCase {
     }
     
     func testListPeopleWithEmailAndDisplayNameAndInvalidCount() {
-        let people = listPeople(email: otherEmail, displayName: otherName, max: PeopleCountInvalid)
+        let people = listPeople(email: otherEmail, displayName: otherName, max: -1)
         XCTAssertNil(people, "Unexpected successful request")
     }
     
     func testListPeopleWithEmailAndInvalidCount() {
-        let people = listPeople(email: otherEmail, displayName: nil, max: PeopleCountInvalid)
+        let people = listPeople(email: otherEmail, displayName: nil, max: -1)
         XCTAssertNil(people, "Unexpected successful request")
     }
     
     func testListPeopleWithDisplayNameAndInvalidCount() {
-        let people = listPeople(email: nil, displayName: otherName, max: PeopleCountInvalid)
+        let people = listPeople(email: nil, displayName: otherName, max: -1)
         XCTAssertNil(people, "Unexpected successful request")
     }
     
     func testListPeopleWithOnlyInvalidCount() {
-        let people = listPeople(email: nil, displayName: nil, max: PeopleCountInvalid)
+        let people = listPeople(email: nil, displayName: nil, max: -1)
         XCTAssertNil(people, "Unexpected successful request")
     }
     
