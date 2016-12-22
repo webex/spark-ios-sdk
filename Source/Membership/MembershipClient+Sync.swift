@@ -27,11 +27,20 @@ extension MembershipClient {
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - returns: Memberships array
+    public func list(roomId: String? = nil, personId: String? = nil, max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personId, max, async: list)
+    }
+
+    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil) throws -> [Membership] {
-        return try SyncUtil.getArray(authenticationStrategy, roomId, personId, personEmail, max, async: list)
+    public func list(roomId: String? = nil, personEmail: EmailAddress?, max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personEmail, max, async: list)
     }
     
     /// Add someone to a room by person id; optionally making them a moderator.

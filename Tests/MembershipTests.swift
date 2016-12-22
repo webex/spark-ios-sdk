@@ -209,7 +209,7 @@ class MembershipSpec: QuickSpec {
             
             it("with roomId and personId and valid max") {
                 do {
-                    let memberships = try Spark.memberships.list(roomId: self.roomId, personId: self.other.personId!, personEmail: self.other.email!, max: self.MembershipCountValid)
+                    let memberships = try Spark.memberships.list(roomId: self.roomId, personId: self.other.personId!, max: self.MembershipCountValid)
                     self.validate(membership: memberships[0])
                     
                     expect(memberships[0].personId).to(equal(self.other.personId!))

@@ -25,10 +25,6 @@ import Alamofire
 
 class PeopleSpec: QuickSpec {
     
-    private let PeopleCountMin = 0
-    private let PeopleCountMax = 100
-    private let PeopleCountValid = 10
-    private let PeopleCountInvalid = -1
     private var me = Config.selfUser
     private var other: TestUser!
     
@@ -52,12 +48,11 @@ class PeopleSpec: QuickSpec {
             it("with emailAddress and displayName and validCount") {
                 
                 do {
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: self.PeopleCountValid)
+                    let max = 10
+                    let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: max)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountValid))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
                     expect(peoples[0].displayName).to(equal(self.other.name!))
                     expect(peoples[0].emails).to(contain(self.other.email!))
                     
@@ -66,14 +61,12 @@ class PeopleSpec: QuickSpec {
                 }
             }
             
-            it("with emailAddress") {
+            it("with only emailAddress") {
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
                     expect(peoples[0].displayName).to(equal(self.other.name!))
                     expect(peoples[0].emails).to(contain(self.other.email!))
                     
@@ -85,12 +78,9 @@ class PeopleSpec: QuickSpec {
             it("with displayName") {
                 do {
                     let peoples = try Spark.people.list(email: nil, displayName: self.other.name!)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
-                    
                     expect(peoples[0].displayName).to(contain(self.other.name!))
                     
                 } catch let error as NSError {
@@ -100,24 +90,11 @@ class PeopleSpec: QuickSpec {
             
             it("with displayName and maxCount") {
                 do {
-                    let peoples = try Spark.people.list(email: nil, displayName: self.other.name, max: self.PeopleCountMax)
+                    let peoples = try Spark.people.list(email: nil, displayName: self.other.name!, max: 10)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
                     expect(peoples[0].displayName).to(contain(self.other.name!))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with displayName and minCount") {
-                
-                do {
-                    let peoples = try Spark.people.list(email: nil, displayName: self.other.name, max: self.PeopleCountMin)
-                    expect(peoples.count).to(equal(self.PeopleCountMin))
                     
                 } catch let error as NSError {
                     fail("Failed to list people, \(error.localizedFailureReason)")
@@ -126,12 +103,10 @@ class PeopleSpec: QuickSpec {
             
             it("with email and maxCount") {
                 do {
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: nil, max: self.PeopleCountMax)
+                    let peoples = try Spark.people.list(email: self.other.email!, displayName: nil, max: 10)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
                     expect(peoples[0].emails).to(contain(self.other.email!))
                     
                 } catch let error as NSError {
@@ -139,28 +114,16 @@ class PeopleSpec: QuickSpec {
                 }
             }
             
-            it("with email and minCount") {
-                do {
-                    let peoples = try Spark.people.list(email: self.other.email!, displayName: nil, max: self.PeopleCountMin)
-                    expect(peoples.count).to(equal(self.PeopleCountMin))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list people, \(error.localizedFailureReason)")
-                }
-            }
-            
             it("with only validCount") {
-                expect{try Spark.people.list(email: nil, displayName: nil, max: self.PeopleCountValid)}.to(throwError())
+                expect{try Spark.people.list(email: nil, displayName: nil, max: 10)}.to(throwError())
             }
             
             it("with emailAddress and displayName") {
                 do {
                     let peoples = try Spark.people.list(email: self.other.email!, displayName: self.other.name!)
+                    expect(peoples.count).to(equal(1))
                     self.validate(person: peoples[0])
                     expect(peoples[0].avatar).to(beNil())
-                    
-                    expect(peoples.count).to(beLessThanOrEqualTo(self.PeopleCountMax))
-                    expect(peoples.count).to(beGreaterThan(self.PeopleCountMin))
                     expect(peoples[0].displayName).to(contain(self.other.name!))
                     
                 } catch let error as NSError {
@@ -172,21 +135,20 @@ class PeopleSpec: QuickSpec {
                 expect{try Spark.people.list(email: nil, displayName: nil, max: nil)}.to(throwError())
             }
             
-            
             it("with emailAddress and displayName and invalidCount") {
-                expect{try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: self.PeopleCountInvalid)}.to(throwError())
+                expect{try Spark.people.list(email: self.other.email!, displayName: self.other.name!, max: -1)}.to(throwError())
             }
             
             it("with emailAddress and invalidCount") {
-                expect{try Spark.people.list(email: self.other.email!, displayName: nil, max: self.PeopleCountInvalid)}.to(throwError())
+                expect{try Spark.people.list(email: self.other.email!, displayName: nil, max: -1)}.to(throwError())
             }
             
             it("with displayName and invalidCount") {
-                expect{try Spark.people.list(email: nil, displayName: self.other.name!, max: self.PeopleCountInvalid)}.to(throwError())
+                expect{try Spark.people.list(email: nil, displayName: self.other.name!, max: -1)}.to(throwError())
             }
             
             it("with only invalidCount") {
-                expect{try Spark.people.list(email: nil, displayName: nil, max: self.PeopleCountInvalid)}.to(throwError())
+                expect{try Spark.people.list(email: nil, displayName: nil, max: -1)}.to(throwError())
             }
         }
         
@@ -198,7 +160,6 @@ class PeopleSpec: QuickSpec {
                     let person = try Spark.people.getMe()
                     self.validate(person: person)
                     expect(person.avatar).to(beNil())
-                    
                     expect(person.displayName).to(equal(self.me.name))
                     expect(person.emails).to(contain(self.me.email!))
                     
@@ -212,7 +173,6 @@ class PeopleSpec: QuickSpec {
                     let person = try Spark.people.get(personId: self.me.id!)
                     self.validate(person: person)
                     expect(person.avatar).to(beNil())
-                    
                     expect(person.displayName).to(equal(self.me.name))
                     expect(person.emails).to(contain(self.me.email!))
                     

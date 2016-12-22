@@ -43,12 +43,27 @@ public class MembershipClient {
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(roomId: String? = nil, personId: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: personId, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(roomId: String? = nil, personEmail: EmailAddress?, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: nil, personEmail: personEmail, max: max, queue: queue, completionHandler: completionHandler)
+    }
+    
+    private func list(roomId: String?, personId: String?, personEmail: EmailAddress?, max: Int?, queue: DispatchQueue?, completionHandler: @escaping ArrayHandler) {
         
         let query = RequestParameter([
             "roomId": roomId,
