@@ -25,6 +25,8 @@ import Nimble
 
 class WebhookSpec: QuickSpec {
     
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
+    private var webhooks: WebhookClient!
     private var room: TestRoom?
     private var roomId: String {
         return room!.id!
@@ -32,7 +34,9 @@ class WebhookSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
-            Spark.initWith(accessToken: Config.selfUser.token!)
+            self.continueAfterFailure = false
+            XCTAssertNotNil(self.fixture)
+            self.webhooks = self.fixture.spark.webhooks
             self.room = TestRoom()
         }
         
@@ -46,7 +50,7 @@ class WebhookSpec: QuickSpec {
             it("Create webhook") {
                 do {
                     let filter = "roomId=" + self.roomId
-                    let webhook = try Spark.webhooks.create(name: "myWebhook", targetUrl: "https://example.com/myWebhook", resource: "messages", event: "created", filter: filter)
+                    let webhook = try self.webhooks.create(name: "myWebhook", targetUrl: "https://example.com/myWebhook", resource: "messages", event: "created", filter: filter)
                     expect(webhook.id).notTo(beNil())
                     
                     webhookId = webhook.id!
@@ -58,7 +62,7 @@ class WebhookSpec: QuickSpec {
             
             it("List webhook") {
                 do {
-                    let webhooks = try Spark.webhooks.list()
+                    let webhooks = try self.webhooks.list()
                     expect(webhooks.count).to(equal(1))
                     
                 } catch let error as NSError {
@@ -68,7 +72,7 @@ class WebhookSpec: QuickSpec {
             
             it("Get webhook") {
                 do {
-                    let webhookFromGet = try Spark.webhooks.get(webhookId: webhookId)
+                    let webhookFromGet = try self.webhooks.get(webhookId: webhookId)
                     expect(webhookFromGet.id).to(equal(webhookId))
                     
                 } catch let error as NSError {
@@ -78,14 +82,14 @@ class WebhookSpec: QuickSpec {
             
             it("Update webhook") {
                 do {
-                    _ = try Spark.webhooks.update(webhookId: webhookId, name: "myWebhook1", targetUrl: "https://example.com/myWebhook1")
+                    _ = try self.webhooks.update(webhookId: webhookId, name: "myWebhook1", targetUrl: "https://example.com/myWebhook1")
                 } catch let error as NSError {
                     fail("Failed to update webhook, \(error.localizedFailureReason)")
                 }
             }
             
             it("Delete webhook") {
-                expect{try Spark.webhooks.delete(webhookId: webhookId)}.notTo(throwError())
+                expect{try self.webhooks.delete(webhookId: webhookId)}.notTo(throwError())
             }
         }
     }

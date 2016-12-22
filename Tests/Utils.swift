@@ -20,9 +20,9 @@
 
 import Foundation
 import XCTest
-@testable import SparkSDK
+import SparkSDK
 
-class Utils: XCTestCase {
+class Utils {
     
     static func waitBefore(interval: TimeInterval, closure: () -> Void) {
         Thread.sleep(forTimeInterval: interval)
@@ -38,8 +38,8 @@ class Utils: XCTestCase {
         Thread.sleep(forTimeInterval: interval)
     }
     
-    func getResponse<T>(request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
-        let expect = expectation(description: "Service call")
+    static func getResponse<T>(testCase: XCTestCase, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
+        let expect = testCase.expectation(description: "Service call")
         var output: T?
         request() { response in
             switch(response.result) {
@@ -50,7 +50,7 @@ class Utils: XCTestCase {
             }
             expect.fulfill()
         }
-        waitForExpectations(timeout: 1) { error in XCTAssertNil(error, "Timeout") }
+        testCase.waitForExpectations(timeout: 1) { error in XCTAssertNil(error, "Timeout") }
         return output
     }
 }
