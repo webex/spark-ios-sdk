@@ -81,12 +81,11 @@ struct CallInfo {
     }
 
     func hasJoinedOnThisDevice(deviceUrl: URL) -> Bool {
-        return hasJoined && !(selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty)
+        return hasJoined && !selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty
     }
 
     func hasJoinedOnOtherDevice(deviceUrl: URL) -> Bool {
-        return hasJoined && (selfDevicesWith(state: "JOINED").count > 1 )
-			|| (selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty)
+        return hasJoined && !selfDevicesWith(state: "JOINED").filter({$0.url != deviceUrl.absoluteString}).isEmpty
     }
     
     private func selfDevicesWith(state: String) -> [ParticipantDevice] {

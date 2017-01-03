@@ -121,6 +121,7 @@ class CallManager {
                 // Intentional use of deprecated API for backwards compatibility
                 PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
             }
+            // TODO: need to support other device joined case
         }
     }
     
