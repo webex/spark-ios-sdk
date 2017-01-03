@@ -13,7 +13,6 @@ import SparkSDK
 @testable import SparkSDK
 
 struct TestUser {
-    let id: String
     let accessToken: String
     let email: EmailAddress
     let name: String
@@ -121,7 +120,7 @@ class SparkTestFixture {
                     let name = json["user"]["name"].string,
                     let orgId = json["user"]["orgId"].string {
                     let personId = SparkTestFixture.getPersonIdFromUserId(id: userId)
-                    user = TestUser(id: userId, accessToken: token, email: email, name: name, orgId: orgId, personId: personId)
+                    user = TestUser(accessToken: token, email: email, name: name, orgId: orgId, personId: personId)
                 }
             case .failure(let error):
                 print(error)
