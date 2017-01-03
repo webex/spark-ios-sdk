@@ -103,8 +103,7 @@ class CallManager {
             call.update(callInfo: callInfo)
         } else if let deviceUrlString = deviceService.deviceUrl,
             let deviceUrl = URL(string: deviceUrlString),
-            callInfo.isIncomingCall,
-            callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl) {
+            (callInfo.isIncomingCall || callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl)) {
             // XXX: Is this conditional intended to add this call even when there is no real device registration information?
             // At the time of writing the deviceService.deviceUrl will return a saved value from the UserDefaults. When the application
             // has been restarted and the reregistration process has not completed, other critical information such as locusServiceUrl
@@ -122,7 +121,6 @@ class CallManager {
                 // Intentional use of deprecated API for backwards compatibility
                 PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
             }
-            // TODO: need to support other device joined case
         }
     }
     
