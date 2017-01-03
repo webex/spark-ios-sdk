@@ -155,7 +155,7 @@ class XCPeopleSpec: XCTestCase {
     }
     
     func testGetWithPersonId() {
-        if let person = get(personId: fixture.selfUser.id), let emails = person.emails {
+        if let person = get(personId: fixture.selfUser.personId), let emails = person.emails {
             validate(person: person)
             XCTAssertNil(person.avatar)
             XCTAssertEqual(person.displayName, fixture.selfUser.name)
