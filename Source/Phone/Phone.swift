@@ -79,9 +79,9 @@ public class Phone {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     public func register(_ completionHandler: ((Bool) -> Void)?) {
-        // XXX This guard means that the completion handler may never be fired
         guard authenticationStrategy.authorized else {
             Logger.error("Skip registering device due to no authorization")
+            completionHandler?(false)
             return
         }
         
