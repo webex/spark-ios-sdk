@@ -23,21 +23,6 @@ import XCTest
 import SparkSDK
 
 class Utils {
-    
-    static func waitBefore(interval: TimeInterval, closure: () -> Void) {
-        Thread.sleep(forTimeInterval: interval)
-        closure()
-    }
-    
-    static func waitAfter(interval: TimeInterval, closure: () -> Void) {
-        closure()
-        Thread.sleep(forTimeInterval: interval)
-    }
-    
-    static func wait(interval: TimeInterval) {
-        Thread.sleep(forTimeInterval: interval)
-    }
-    
     static func getResponse<T>(testCase: XCTestCase, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
         let expect = testCase.expectation(description: "Service call")
         var output: T?

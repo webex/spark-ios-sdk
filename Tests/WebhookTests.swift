@@ -41,7 +41,7 @@ class WebhookSpec: QuickSpec {
         }
         
         afterSuite {
-            Utils.wait(interval: Config.TestcaseInterval)
+            Thread.sleep(forTimeInterval: Config.TestcaseInterval)
         }
         
         describe("Webhook API") {

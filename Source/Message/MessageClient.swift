@@ -74,19 +74,19 @@ public class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func post(roomId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
-        let body = RequestParameter([
-            "roomId": roomId,
-            "text": text,
-            "files": files])
-        
-        let request = requestBuilder()
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        
-        request.responseObject(completionHandler)
+    public func post(roomId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: roomId, personId: nil, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Posts a media content attachment to a room without text.
+    ///
+    /// - parameter roomId: The room id.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func post(roomId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: roomId, personId: nil, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a person.
@@ -97,32 +97,50 @@ public class MessageClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func post(personId: String, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
-        let body = RequestParameter([
-            "toPersonId": personId,
-            "text": text,
-            "files": files])
-        
-        let request = requestBuilder()
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        
-        request.responseObject(completionHandler)
+    public func post(personId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: nil, personId: personId, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Posts a media content attachment to a person without text.
+    ///
+    /// - parameter personId: The id of the recipient when sending a private1:1 message.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func post(personId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: nil, personId: personId, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
     }
     
     /// Posts a plain text message, and optionally, a media content attachment, to a person.
     ///
-    /// - parameter personEmail: The email address of the recipient when sendinga private 1:1 message.
+    /// - parameter personEmail: The email address of the recipient when sending a private 1:1 message.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func post(personEmail: EmailAddress, text: String? = nil, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personEmail: EmailAddress, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: nil, personId: nil, personEmail: personEmail, text: text, files: files, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Posts a media content attachment to a person without text.
+    ///
+    /// - parameter personEmail: The email address of the recipient when sending a private 1:1 message.
+    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func post(personEmail: EmailAddress, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        post(roomId: nil, personId: nil, personEmail: personEmail, text: nil, files: files, queue: queue, completionHandler: completionHandler)
+    }
+    
+    private func post(roomId: String?, personId: String?, personEmail: EmailAddress?, text: String?, files: String?, queue: DispatchQueue?, completionHandler: @escaping ObjectHandler) {
+        let email: String? = personEmail == nil ? nil : personEmail!.toString()
         let body = RequestParameter([
-            "toPersonEmail": personEmail.toString(),
+            "roomId": roomId,
+            "toPersonId": personId,
+            "toPersonEmail": email,
             "text": text,
             "files": files])
         
