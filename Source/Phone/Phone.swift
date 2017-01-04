@@ -22,7 +22,7 @@ import AVFoundation
 
 /// Represents a Spark phone device.
 public class Phone {
-    
+
     /// Privacy control of media access type.
     public enum MediaAccessType {
         /// Access to microphone.
@@ -61,17 +61,17 @@ public class Phone {
     }
 
     private let authenticationStrategy: AuthenticationStrategy
-    private let applicationLifecycleObserver: ApplicationLifecycleObserver
     private let webSocketService: WebSocketService
     private let callManager: CallManager
     private let deviceService: DeviceService
+    private let applicationLifecycleObserver: ApplicationLifecycleObserver
     
-    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
+    init(authenticationStrategy: AuthenticationStrategy, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
-        self.applicationLifecycleObserver = applicationLifecycleObserver
         self.webSocketService = webSocketService
         self.callManager = callManager
         self.deviceService = deviceService
+        self.applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
         webSocketService.deviceReregistrationStrategy = self
     }
     
@@ -189,5 +189,38 @@ public class Phone {
 extension Phone: DeviceReregistrationStrategy {
     func reregisterDevice() {
         register(nil)
+    }
+}
+
+fileprivate class ApplicationLifecycleObserver: NotificationObserver {
+
+    override func notificationMapping() -> [(Notification.Name, Selector)] {
+        return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
+                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground))]
+    }
+
+    private let webSocketService: WebSocketService
+    private let callManager: CallManager
+    private let deviceService: DeviceService
+
+    init(webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
+        self.webSocketService = webSocketService
+        self.callManager = callManager
+        self.deviceService = deviceService
+    }
+
+    func onApplicationDidBecomeActive() {
+        Logger.info("Application did become active")
+
+        if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
+            callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
+            webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
+        }
+    }
+
+    func onApplicationDidEnterBackground() {
+        Logger.info("Application did enter background")
+
+        webSocketService.disconnect()
     }
 }
