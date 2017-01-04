@@ -64,14 +64,12 @@ public class Phone {
     private let webSocketService: WebSocketService
     private let callManager: CallManager
     private let deviceService: DeviceService
-    private let applicationLifecycleObserver: ApplicationLifecycleObserver
-    
+
     init(authenticationStrategy: AuthenticationStrategy, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
         self.webSocketService = webSocketService
         self.callManager = callManager
         self.deviceService = deviceService
-        self.applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
         webSocketService.deviceReregistrationStrategy = self
     }
     
@@ -89,7 +87,7 @@ public class Phone {
         
         deviceService.registerDevice() { deviceRegistrationInformation in
             if let deviceRegistrationInformation = deviceRegistrationInformation {
-                self.applicationLifecycleObserver.startObserving()
+                self.startObserving()
                 self.callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
                 self.webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
             }
@@ -105,7 +103,7 @@ public class Phone {
     /// - note: This function is expected to run on main thread.
     public func deregister(_ completionHandler: ((Bool) -> Void)?) {
         callManager.clearReachabilityState()
-        applicationLifecycleObserver.stopObserving()
+        stopObserving()
         webSocketService.disconnect()
         deviceService.deregisterDevice() { success in
             completionHandler?(success)
@@ -184,32 +182,18 @@ public class Phone {
             }
         }
     }
-}
 
-extension Phone: DeviceReregistrationStrategy {
-    func reregisterDevice() {
-        register(nil)
-    }
-}
-
-fileprivate class ApplicationLifecycleObserver: NotificationObserver {
-
-    override func notificationMapping() -> [(Notification.Name, Selector)] {
-        return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
-                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground))]
+    private func startObserving() {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidEnterBackground), name: .UIApplicationDidEnterBackground, object: nil)
     }
 
-    private let webSocketService: WebSocketService
-    private let callManager: CallManager
-    private let deviceService: DeviceService
-
-    init(webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
-        self.webSocketService = webSocketService
-        self.callManager = callManager
-        self.deviceService = deviceService
+    private func stopObserving() {
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func onApplicationDidBecomeActive() {
+    @objc private func onApplicationDidBecomeActive() {
         Logger.info("Application did become active")
 
         if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
@@ -218,9 +202,15 @@ fileprivate class ApplicationLifecycleObserver: NotificationObserver {
         }
     }
 
-    func onApplicationDidEnterBackground() {
+    @objc private func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
 
         webSocketService.disconnect()
+    }
+}
+
+extension Phone: DeviceReregistrationStrategy {
+    func reregisterDevice() {
+        register(nil)
     }
 }
