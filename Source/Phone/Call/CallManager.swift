@@ -23,7 +23,7 @@ class CallManager {
     private var callInstances = [String: Call]()
     private let authenticationStrategy: AuthenticationStrategy
     private let reachabilityService: ReachabilityService
-    let deviceService: DeviceService
+    private let deviceService: DeviceService
     private let callMetrics: CallMetrics
     private let videoLicense: VideoLicense
     let callNotificationCenter: CallNotificationCenter
@@ -62,14 +62,10 @@ class CallManager {
         return nil
     }
     
-    func fetchActiveCalls() {
+    func fetchActiveCalls(deviceRegistrationInformation: DeviceRegistrationInformation) {
         Logger.info("Fetch call infos")
 
-        guard let locusServiceUrl = deviceService.device?.locusServiceUrl else {
-            fatalError("FATAL ERROR: No Device Found")
-        }
-
-        CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos(locusServiceUrl: locusServiceUrl) { response in
+        CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos(locusServiceUrl: deviceRegistrationInformation.locusServiceUrl) { response in
             switch response.result {
             case .success(let callInfos):
                 for callInfo in callInfos {
@@ -129,9 +125,11 @@ class CallManager {
         }
     }
     
-    func createOutgoingCall() -> Call {
+    func createOutgoingCall(address: String, option: MediaOption, deviceRegistrationInformation: DeviceRegistrationInformation, completionHandler: ((Bool) -> Void)?) -> Call {
         let callClient = CallClient(authenticationStrategy: authenticationStrategy)
-        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.device!.deviceUrl, callMetrics: callMetrics)
+        let call = Call(callManager: self, callClient: callClient, deviceUrl: deviceRegistrationInformation.deviceUrl, callMetrics: callMetrics)
+        call.dial(address: address, option: option, locusServiceUrl: deviceRegistrationInformation.locusServiceUrl, completionHandler: completionHandler)
+        return call
     }
     
     func requestVideoCodecActivation(completionHandler: ((_ isActivated: Bool) -> Void)? = nil) {

@@ -36,7 +36,7 @@ class DeviceService {
         client = DeviceClient(authenticationStrategy: authenticationStrategy)
     }
 
-    var device: DeviceRegistrationInformation?
+    var deviceRegistrationInformation: DeviceRegistrationInformation?
     
     var deviceUrl: String? {
         get {
@@ -87,7 +87,7 @@ class DeviceService {
                     let metricsServiceUrl = URL(string: metricsServiceUrlString) {
                     
                     deviceRegistrationInformation = DeviceRegistrationInformation(deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
-                    self.device = deviceRegistrationInformation
+                    self.deviceRegistrationInformation = deviceRegistrationInformation
                     self.deviceUrl = deviceUrlString
                 } else {
                     Logger.error("Missing required URLs when registering device")

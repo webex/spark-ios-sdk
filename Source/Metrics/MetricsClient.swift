@@ -32,7 +32,7 @@ class MetricsClient {
     
     func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = ServiceRequest.Builder(authenticationStrategy)
-            .baseUrl(deviceService.device!.metricsServiceUrl)
+            .baseUrl(deviceService.deviceRegistrationInformation!.metricsServiceUrl)
             .path("metrics")
             .method(.post)
             .body(metrics)

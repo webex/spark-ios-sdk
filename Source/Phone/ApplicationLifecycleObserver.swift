@@ -45,6 +45,10 @@ class ApplicationLifecycleObserver: NotificationObserver {
         
         callManager.fetchActiveCalls()
         openWebSocket()
+        if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
+            callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
+            webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
+        }
     }
     
     func onApplicationDidEnterBackground() {

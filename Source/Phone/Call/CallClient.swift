@@ -46,11 +46,11 @@ class CallClient {
     }
     
     private func convertToJson(mediaInfo: MediaInfo) -> [String:Any?] {
-        let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)!
+        let mediaInfoJSON = mediaInfo.toJSONString(prettyPrint: true)!
         return ["localMedias": [["type": "SDP", "localSdp": mediaInfoJSON]]]
     }
     
-    func createCall(toAddress: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, locusServiceUrl: URL, completionHandler: @escaping ObjectHandler) {
+    func createCall(toAddress: String, deviceUrl: URL, localMediaInfo: MediaInfo, locusServiceUrl: URL, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         var json = convertToJson(mediaInfo: localMediaInfo)
         json["invitee"] = ["address" : toAddress]
 
@@ -158,7 +158,7 @@ class CallClient {
         request.responseObject(completionHandler)
     }
     
-    func fetchCallInfos(_ queue: DispatchQueue? = nil, locusServiceUrl: URL, completionHandler: @escaping ArrayHandler) {
+    func fetchCallInfos(locusServiceUrl: URL, _ queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .baseUrl(locusServiceUrl)

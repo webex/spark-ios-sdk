@@ -90,7 +90,7 @@ public class Phone {
         deviceService.registerDevice() { deviceRegistrationInformation in
             if let deviceRegistrationInformation = deviceRegistrationInformation {
                 self.applicationLifecycleObserver.startObserving()
-                self.callManager.fetchActiveCalls()
+                self.callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
                 self.webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
             }
             completionHandler?(deviceRegistrationInformation != nil)
@@ -118,10 +118,13 @@ public class Phone {
     /// - parameter option: Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Call object
-    /// - note: This function is expected to run on main thread.
+    /// - note: This function is expected to run on main thread, and should only be run after the phone is registered
     public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = callManager.createOutgoingCall()
-        call.dial(address: address, option: option) { success in
+        guard let deviceRegistrationInformation = deviceService.deviceRegistrationInformation else {
+            fatalError("Attempted to dial an address before having first successfully registered the phone")
+        }
+
+        let call = callManager.createOutgoingCall(address: address, option: option, deviceRegistrationInformation: deviceRegistrationInformation) { success in
             completionHandler(success)
         }
         return call
@@ -131,6 +134,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
+    /// - note: This function is expected to run on main thread, and should only be run after the phone is registered
     public func requestVideoCodecActivation() {
         callManager.requestVideoCodecActivation()
     }

@@ -193,14 +193,10 @@ open class Call {
         }
     }
     
-    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
+    func dial(address: String, option: MediaOption, locusServiceUrl: URL, completionHandler: CompletionHandler?) {
         to = address
         createCallConnection(mediaOption: option, completionHandler: completionHandler) { [weak self] localMediaInfo, callCreationCompletion in
             if let strongSelf = self {
-                guard let locusServiceUrl = strongSelf.callManager.deviceService.device?.locusServiceUrl else {
-                    fatalError("FATAL ERROR: No device found.")
-                }
-
                 strongSelf.callClient.createCall(toAddress: address, deviceUrl: strongSelf.deviceUrl, localMediaInfo: localMediaInfo, locusServiceUrl: locusServiceUrl, completionHandler: callCreationCompletion)
             }
         }
