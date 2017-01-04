@@ -59,7 +59,7 @@ class RoomSpec: QuickSpec {
         describe("create a room") {
             
             afterEach {
-                Utils.wait(interval: Config.TestcaseInterval)
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             }
             
             it("sync with title") {
@@ -125,7 +125,7 @@ class RoomSpec: QuickSpec {
             }
             
             afterEach {
-                Utils.wait(interval: Config.TestcaseInterval)
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             }
             
             it("sync with roomId and title") {
@@ -178,7 +178,7 @@ class RoomSpec: QuickSpec {
                     fail("Failed to create team, \(error.localizedFailureReason)")
                 }
                 
-                Utils.wait(interval: Config.TestcaseInterval)
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             }
             
             it("sync with roomId") {
@@ -218,7 +218,7 @@ class RoomSpec: QuickSpec {
             }
             
             afterEach {
-                Utils.wait(interval: Config.TestcaseInterval)
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             }
             
             it("sync with roomId") {
@@ -273,7 +273,7 @@ class RoomSpec: QuickSpec {
             }
             
             afterEach {
-                Utils.wait(interval: Config.TestcaseInterval)
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             }
             
             it("sync with nothing") {

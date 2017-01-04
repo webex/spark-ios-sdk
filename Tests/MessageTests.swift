@@ -19,332 +19,292 @@
 // THE SOFTWARE.
 
 import Foundation
-import Quick
-import Nimble
+import XCTest
 @testable import SparkSDK
 
-class MessageSpec: QuickSpec {
+class MessageTests: XCTestCase {
     
-    private let Text = "test text"
-    private let FileUrl = "https://developer.ciscospark.com/index.html"
+    private let text = "test text"
+    private let fileUrl = "https://developer.ciscospark.com/index.html"
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var other: TestUser!
     private var messages: MessageClient!
     private var room: TestRoom?
-    private var roomId: String {
-        return room!.id!
+    private var roomId: String! {
+        if let room = room, let roomId = room.id {
+            return roomId
+        } else {
+            XCTFail("Missing required information about room")
+            return nil
+        }
     }
-    
+
     private func getISO8601Date() -> String {
         let formatter = DateFormatter()
         let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
         formatter.locale = enUSPosixLocale
-        formatter.dateFormat = "yyyy-MM-dd\'T\'HH:mm:ss.SSSXXX"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
         return formatter.string(from: Date())
     }
     
-    private func validate(message: Message) {
-        expect(message.id).notTo(beNil())
-        expect(message.personId).notTo(beNil())
-        expect(message.personEmail).notTo(beNil())
-        expect(message.roomId).notTo(beNil())
-        expect(message.created).notTo(beNil())
+    private func validate(message: Message?) {
+        XCTAssertNotNil(message)
+        XCTAssertNotNil(message?.id)
+        XCTAssertNotNil(message?.personId)
+        XCTAssertNotNil(message?.personEmail)
+        XCTAssertNotNil(message?.roomId)
+        XCTAssertNotNil(message?.created)
     }
     
-    override func spec() {
-        beforeSuite {
-            self.continueAfterFailure = false
-            XCTAssertNotNil(self.fixture)
-            self.other = self.fixture.createUser()
-            self.room = TestRoom()
-            self.messages = self.fixture.spark.messages
+    override func setUp() {
+        continueAfterFailure = false
+        XCTAssertNotNil(fixture)
+        if other == nil {
+            other = fixture.createUser()
         }
-        
-        afterSuite {
-            Utils.wait(interval: Config.TestcaseInterval)
-        }
-        
-        // MARK: - Post message to room
-        
-        describe("post message to room") {
-            
-            it("with text") {
-                do {
-                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    
-                    self.validate(message: message)
-                    expect(message.text).to(equal(self.Text))
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with file") {
-                do {
-                    let message = try self.messages.post(roomId: self.roomId, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with text/file") {
-                do {
-                    let message = try self.messages.post(roomId: self.roomId, text: self.Text, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.text).to(equal(self.Text))
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with nothing") {
-                let message = try? self.messages.post(roomId: self.roomId)
-                expect(message).to(beNil())
-            }
-            
-            it("with invalid room Id") {
-                let message = try? self.messages.post(roomId: Config.InvalidId, text: self.Text)
-                expect(message).to(beNil())
-            }
-        }
-        
-        // MARK: - Post message to person with person Id
-        
-        describe("post message to person with person Id") {
-            
-            it("with text") {
-                do {
-                    let message = try self.messages.post(personId: self.other.personId, text: self.Text)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonId).to(equal(self.other.personId))
-                    expect(message.text).to(equal(self.Text))
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with file") {
-                do {
-                    let message = try self.messages.post(personId: self.other.personId, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonId).to(equal(self.other.personId))
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with text/file") {
-                do {
-                    let message = try self.messages.post(personId: self.other.personId, text: self.Text, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonId).to(equal(self.other.personId))
-                    expect(message.text).to(equal(self.Text))
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with nothing") {
-                let message = try? self.messages.post(personId: self.other.personId)
-                expect(message).to(beNil())
-            }
-            
-            it("with invalid person Id") {
-                let message = try? self.messages.post(personId: Config.InvalidId, text: self.Text)
-                expect(message).to(beNil())
-            }
-        }
-        
-        // MARK: - Post message to person with person email
-
-        describe("post message to person with person email") {
-            
-            it("with text") {
-                do {
-                    let message = try self.messages.post(personEmail: self.other.email, text: self.Text)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonEmail).to(equal(self.other.email))
-                    expect(message.text).to(equal(self.Text))
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with file") {
-                do {
-                    let message = try self.messages.post(personEmail: self.other.email, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonEmail).to(equal(self.other.email))
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with text/file") {
-                do {
-                    let message = try self.messages.post(personEmail: self.other.email, text: self.Text, files: self.FileUrl)
-                    
-                    self.validate(message: message)
-                    expect(message.toPersonEmail).to(equal(self.other.email))
-                    expect(message.text).to(equal(self.Text))
-                    expect(message.files).notTo(beNil())
-                    
-                } catch let error as NSError {
-                    fail("Failed to post message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with nothing") {
-                let message = try? self.messages.post(personEmail: self.other.email)
-                expect(message).to(beNil())
-            }
-            
-            it("with invalid person email") {
-                let message = try? self.messages.post(personEmail: Config.InvalidEmail, text: self.Text)
-                expect(message).notTo(beNil())
-            }
-        }
-        
-        // MARK: - List message
-        
-        describe("list message") {
-            
-            it("normal") {
-                do {
-                    let messages = try self.messages.list(roomId: self.roomId)
-
-                    expect(messages.isEmpty).to(beFalse())
-                    
-                } catch let error as NSError {
-                    fail("Failed to list message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with max value") {
-                do {
-                    let messages = try self.messages.list(roomId: self.roomId, max: 2)
-                    
-                    expect(messages.count).to(equal(2))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("before a date") {
-                do {
-                    let message1 = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    Utils.wait(interval: Config.TestcaseInterval)
-                    let now = self.getISO8601Date()
-                    let message2 = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    
-                    let messages = try self.messages.list(roomId: self.roomId, before: now)
-                    
-                    expect(messages.contains() {$0.id == message1.id}).to(beTrue())
-                    expect(messages.contains() {$0.id == message2.id}).to(beFalse())
-
-                } catch let error as NSError {
-                    fail("Failed to list message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("before message Id") {
-                do {
-                    let message1 = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    let message2 = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    
-                    let messages = try self.messages.list(roomId: self.roomId, beforeMessage: message2.id!)
-                    
-                    expect(messages.contains() {$0.id == message1.id}).to(beTrue())
-                    expect(messages.contains() {$0.id == message2.id}).to(beFalse())
-                    
-                } catch let error as NSError {
-                    fail("Failed to list message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("before a date and message Id") {
-                do {
-                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    let now = self.getISO8601Date()
-                    
-                    let messages = try self.messages.list(roomId: self.roomId, before: now, beforeMessage: message.id!)
-                    
-                    expect(messages.contains() {$0.id == message.id}).to(beFalse())
-                    
-                } catch let error as NSError {
-                    fail("Failed to list message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with invalid room Id") {
-                expect{try self.messages.list(roomId: Config.InvalidId)}.to(throwError())
-            }
-        }
-        
-        // MARK: - Get message
-        
-        describe("get message") {
-        
-            it("normal") {
-                do {
-                    let messageFromCreate = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    self.validate(message: messageFromCreate)
-                    
-                    let messageFromGet = try self.messages.get(messageId: (messageFromCreate.id)!)
-                    self.validate(message: messageFromGet)
-                    
-                    expect(messageFromGet.id).to(equal(messageFromCreate.id))
-                    expect(messageFromGet.text).to(equal(messageFromCreate.text))
-                    
-                    
-                } catch let error as NSError {
-                    fail("Failed to get message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with invalid message Id") {
-                expect{try self.messages.get(messageId: Config.InvalidId)}.to(throwError())
-            }
-        }
-        
-        // MARK: - Delete message
-        
-        describe("delete message") {
-        
-            it("normal") {
-                do {
-                    let message = try self.messages.post(roomId: self.roomId, text: self.Text)
-                    expect{try self.messages.delete(messageId: (message.id)!)}.notTo(throwError())
-                } catch let error as NSError {
-                    fail("Failed to create message, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("with invalid message Id") {
-                expect{try self.messages.delete(messageId: Config.InvalidId)}.to(throwError())
+        room = TestRoom()
+        messages = fixture.spark.messages
+    }
+    
+    override func tearDown() {
+        if let room = room, let roomId = room.id {
+            if(!deleteRoom(roomId: roomId)) {
+                XCTFail("Failed to delete room")
             }
         }
     }
+    
+    override static func tearDown() {
+        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+        super.tearDown()
+    }
+    
+    func testPostingMessageToRoomWithTextReturnsMessage() {
+        let message = postMessage(roomId: roomId, text: text, files: nil)
+        validate(message: message)
+        XCTAssertEqual(message?.text, text)
+    }
+    
+    func testPostingMessageToRoomWithFileReturnsMessage() {
+        let message = postMessage(roomId: roomId, files: fileUrl)
+        validate(message: message)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageToRoomWithTextAndFileReturnsMessage() {
+        let message = postMessage(roomId: roomId, text: text, files: fileUrl)
+        validate(message: message)
+        XCTAssertEqual(message?.text, text)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageToInvalidRoomDoesNotReturnMessage() {
+        let message = postMessage(roomId: Config.InvalidId, text: text, files: fileUrl)
+        XCTAssertNil(message)
+    }
+    
+    func testPostingMessageUsingPersonIdWithTextReturnsMessage() {
+        let message = postMessage(personId: other.personId, text: text, files: nil)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonId, other.personId)
+        XCTAssertEqual(message?.text, text)
+    }
+    
+    func testPostingMessageUsingPersonIdWithFileReturnsMessage() {
+        let message = postMessage(personId: other.personId, files: fileUrl)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonId, other.personId)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageUsingPersonIdWithTextAndFileReturnsMessage() {
+        let message = postMessage(personId: other.personId, text: text, files: fileUrl)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonId, other.personId)
+        XCTAssertEqual(message?.text, text)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageUsingInvalidPersonIdDoesNotReturnMessage() {
+        let message = postMessage(personId: Config.InvalidId, text: text, files: fileUrl)
+        XCTAssertNil(message)
+    }
+    
+    func testPostingMessageUsingPersonEmailWithTextReturnsMessage() {
+        let message = postMessage(personEmail: other.email, text: text, files: nil)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonEmail, other.email)
+        XCTAssertEqual(message?.text, text)
+    }
+    
+    func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
+        let message = postMessage(personEmail: other.email, files: fileUrl)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonEmail, other.email)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
+        let message = postMessage(personEmail: other.email, text: text, files: fileUrl)
+        validate(message: message)
+        XCTAssertEqual(message?.toPersonEmail, other.email)
+        XCTAssertEqual(message?.text, text)
+        XCTAssertNotNil(message?.files)
+    }
+    
+    func testPostingMessageUsingInvalidPersonEmailDoesNotReturnMessage() {
+        let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: fileUrl)
+        XCTAssertNil(message)
+    }
+    
+    func testListingMessagesReturnsMessages() {
+        _ = postMessage(roomId: roomId, text: text, files: nil)
+        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: nil)
+        XCTAssertEqual(messageArray?.isEmpty, false)
+    }
+    
+    func testListingMessagesWithMaxValueOf2ReturnsOnly2Messages() {
+        _ = postMessage(roomId: roomId, text: text, files: nil)
+        _ = postMessage(roomId: roomId, text: text, files: nil)
+        _ = postMessage(roomId: roomId, text: text, files: nil)
+        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: 2)
+        XCTAssertEqual(messageArray?.count, 2)
+    }
+    
+    func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
+        let message1 = postMessage(roomId: roomId, text: text, files: nil)
+        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+        let now = self.getISO8601Date()
+        let message2 = postMessage(roomId: roomId, text: text, files: nil)
+        let messageArray = listMessages(roomId: roomId, before: now, beforeMessage: nil, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+    }
+    
+    func testListingMessagesPostedBeforeAMessageIdReturnsOnlyMessagesPostedBeforeThatMessage() {
+        let message1 = postMessage(roomId: roomId, text: text, files: nil)
+        let message2 = postMessage(roomId: roomId, text: text, files: nil)
+        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: message2?.id, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+    }
+    
+    func testListingMessagesBeforeADateAndAMessageIdReturnsMessagesPostedBeforeThatDateAndMessage() {
+        let message1 = postMessage(roomId: roomId, text: text, files: nil)
+        Thread.sleep(forTimeInterval: 0.1)
+        let now = self.getISO8601Date()
+        Thread.sleep(forTimeInterval: 0.1)
+        let message2 = postMessage(roomId: roomId, text: text, files: nil)
+        let message3 = postMessage(roomId: roomId, text: text, files: nil)
+        let messageArray = listMessages(roomId: roomId, before: now, beforeMessage: message3?.id, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+    }
+    
+    func testListingMessageWithInvalidRoomIdDoesNotReturnMessage() {
+        let messageArray = listMessages(roomId: Config.InvalidId, before: nil, beforeMessage: nil, max: nil)
+        XCTAssertNil(messageArray)
+    }
+    
+    func testGettingMessageReturnsMessage() {
+        let messageFromCreate = postMessage(roomId: roomId, text: text, files: fileUrl)
+        validate(message: messageFromCreate)
+        if let messageFromCreateId = messageFromCreate?.id {
+            let messageFromGet = getMessage(messageId: messageFromCreateId)
+            validate(message: messageFromGet)
+            XCTAssertEqual(messageFromGet?.id, messageFromCreate?.id)
+            XCTAssertEqual(messageFromGet?.text, messageFromCreate?.text)
+        } else {
+            XCTFail("Failed to get message")
+        }
+    }
+    
+    func testGettingMessageWithInvalidMessageIdFails() {
+        let message = getMessage(messageId: Config.InvalidId)
+        XCTAssertNil(message)
+    }
+    
+    func testDeletingMessageRemovesMessageAndItCanNoLongerBeRetrieved() {
+        let message = postMessage(roomId: roomId, text: text, files: nil)
+        XCTAssertNotNil(message?.id)
+        let messageId = message?.id
+        XCTAssertTrue(deleteMessage(messageId: messageId!))
+        XCTAssertNil(getMessage(messageId: messageId!))
+    }
+    
+    func testDeletingMessageWithBadIdFails() {
+        XCTAssertFalse(deleteMessage(messageId: Config.InvalidId))
+    }
+    
+    private func deleteMessage(messageId: String) -> Bool {
+        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
+            self.messages.delete(messageId: messageId, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request) != nil
+    }
+    
+    private func postMessage(roomId: String, text: String, files: String?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(roomId: roomId, text: text, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func postMessage(roomId: String, files: String) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(roomId: roomId, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func postMessage(personId: String, text: String, files: String?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(personId: personId, text: text, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func postMessage(personId: String, files: String) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(personId: personId, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func postMessage(personEmail: EmailAddress, text: String, files: String?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(personEmail: personEmail, text: text, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func postMessage(personEmail: EmailAddress, files: String) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.post(personEmail: personEmail, files: files, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func listMessages(roomId: String, before: String?, beforeMessage: String?, max: Int?) -> [Message]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
+            self.messages.list(roomId: roomId, before: before, beforeMessage: beforeMessage, max: max, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func getMessage(messageId: String) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+            self.messages.get(messageId: messageId, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request)
+    }
+    
+    private func deleteRoom(roomId: String) -> Bool {
+        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
+            self.fixture.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
+        }
+        return Utils.getResponse(testCase: self, request: request) != nil
+    }
 }
+
+
