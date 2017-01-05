@@ -195,10 +195,8 @@ open class Call {
     
     func dial(address: String, option: MediaOption, locusServiceUrl: URL, completionHandler: CompletionHandler?) {
         to = address
-        createCallConnection(mediaOption: option, completionHandler: completionHandler) { [weak self] localMediaInfo, callCreationCompletion in
-            if let strongSelf = self {
-                strongSelf.callClient.createCall(toAddress: address, deviceUrl: strongSelf.deviceUrl, localMediaInfo: localMediaInfo, locusServiceUrl: locusServiceUrl, completionHandler: callCreationCompletion)
-            }
+        createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
+            self.callClient.createCall(toAddress: address, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, locusServiceUrl: locusServiceUrl, completionHandler: callCreationCompletion)
         }
     }
     
