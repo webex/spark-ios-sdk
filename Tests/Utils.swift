@@ -35,7 +35,7 @@ class Utils {
             }
             expect.fulfill()
         }
-        testCase.waitForExpectations(timeout: 1) { error in XCTAssertNil(error, "Timeout") }
+        testCase.waitForExpectations(timeout: 5) { error in XCTAssertNil(error, "Timeout") }
         return output
     }
 }

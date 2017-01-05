@@ -27,15 +27,7 @@ class MembershipTests: XCTestCase {
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private let MembershipCountValid = 10
     private var memberships: MembershipClient!
-    private var room: TestRoom?
-    private var roomId: String! {
-        if let room = room, let roomId = room.id {
-            return roomId
-        } else {
-            XCTFail("Missing required information about room")
-            return nil
-        }
-    }
+    private var roomId: String!
     private var other: TestUser!
     private var membership: Membership?
     
@@ -56,7 +48,9 @@ class MembershipTests: XCTestCase {
             other = fixture.createUser()
         }
         memberships = fixture.spark.memberships
-        room = TestRoom()
+        let room = fixture.createRoom(testCase: self, title: "test room")
+        XCTAssertNotNil(room?.id)
+        roomId = room?.id
     }
     
     override func tearDown() {
@@ -64,6 +58,9 @@ class MembershipTests: XCTestCase {
             if(!deleteMembership(membershipId: membershipId)) {
                 XCTFail("Failed to delete membership")
             }
+        }
+        if let roomId = roomId {
+            fixture.deleteRoom(testCase: self, roomId: roomId)
         }
         super.tearDown()
     }

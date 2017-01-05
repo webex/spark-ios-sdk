@@ -29,16 +29,8 @@ class MessageTests: XCTestCase {
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var other: TestUser!
     private var messages: MessageClient!
-    private var room: TestRoom?
-    private var roomId: String! {
-        if let room = room, let roomId = room.id {
-            return roomId
-        } else {
-            XCTFail("Missing required information about room")
-            return nil
-        }
-    }
-
+    private var roomId: String!
+    
     private func getISO8601Date() -> String {
         let formatter = DateFormatter()
         let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
@@ -62,15 +54,15 @@ class MessageTests: XCTestCase {
         if other == nil {
             other = fixture.createUser()
         }
-        room = TestRoom()
         messages = fixture.spark.messages
+        let room = fixture.createRoom(testCase: self, title: "test room")
+        XCTAssertNotNil(room?.id)
+        roomId = room?.id
     }
     
     override func tearDown() {
-        if let room = room, let roomId = room.id {
-            if(!deleteRoom(roomId: roomId)) {
-                XCTFail("Failed to delete room")
-            }
+        if let roomId = roomId {
+            fixture.deleteRoom(testCase: self, roomId: roomId)
         }
     }
     
@@ -297,13 +289,6 @@ class MessageTests: XCTestCase {
             self.messages.get(messageId: messageId, completionHandler: completionHandler)
         }
         return Utils.getResponse(testCase: self, request: request)
-    }
-    
-    private func deleteRoom(roomId: String) -> Bool {
-        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.fixture.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request) != nil
     }
 }
 
