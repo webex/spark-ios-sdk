@@ -162,7 +162,7 @@ class SparkTestFixture {
         let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
             self.spark.rooms.create(title: title, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: testCase, request: request)
+        return getResponse(testCase: testCase, request: request)
     }
     
     @discardableResult
@@ -170,6 +170,22 @@ class SparkTestFixture {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: testCase, request: request) != nil
+        return getResponse(testCase: testCase, request: request) != nil
+    }
+    
+    func getResponse<T>(testCase: XCTestCase, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
+        let expect = testCase.expectation(description: "Service call")
+        var output: T?
+        request() { response in
+            switch(response.result) {
+            case .success(let result):
+                output = result
+            case .failure(_):
+                output = nil
+            }
+            expect.fulfill()
+        }
+        testCase.waitForExpectations(timeout: 5) { error in XCTAssertNil(error, "Timeout") }
+        return output
     }
 }
