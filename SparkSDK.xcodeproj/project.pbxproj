@@ -19,7 +19,6 @@
 		3D2D51071D3E2173005FC665 /* Wme.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */; };
 		3D3131431D3EF932007717B2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F11D3EF82500205DF6 /* Config.swift */; };
-		3D31314F1D3EF932007717B2 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FD1D3EF82500205DF6 /* Utils.swift */; };
 		3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F31D3EF82500205DF6 /* MembershipTests.swift */; };
 		3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F41D3EF82500205DF6 /* MessageTests.swift */; };
 		3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F51D3EF82500205DF6 /* PeopleTests.swift */; };
@@ -214,7 +213,6 @@
 		3DA099FA1D3EF82500205DF6 /* TeamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamTests.swift; path = Tests/TeamTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FB1D3EF82500205DF6 /* TestRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestRoom.swift; path = Tests/TestRoom.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FC1D3EF82500205DF6 /* TestTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestTeam.swift; path = Tests/TestTeam.swift; sourceTree = SOURCE_ROOT; };
-		3DA099FD1D3EF82500205DF6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Tests/Utils.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebhookTests.swift; path = Tests/WebhookTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
 		3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestParameter.swift; sourceTree = "<group>"; };
@@ -404,7 +402,6 @@
 				3DA099FB1D3EF82500205DF6 /* TestRoom.swift */,
 				3DA099FC1D3EF82500205DF6 /* TestTeam.swift */,
 				3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */,
-				3DA099FD1D3EF82500205DF6 /* Utils.swift */,
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
 			);
 			name = Tests;
@@ -932,7 +929,6 @@
 				5AFB6E9B1DF5C6E90027E989 /* MockKeychain.swift in Sources */,
 				3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */,
 				3D31B7891D41B7F500D8DB55 /* PhoneTests.swift in Sources */,
-				3D31314F1D3EF932007717B2 /* Utils.swift in Sources */,
 				5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */,
 				5AFB6E9C1DF5C7720027E989 /* JWTAuthKeychainStorageTests.swift in Sources */,
 			);
