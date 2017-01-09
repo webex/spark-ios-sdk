@@ -42,25 +42,25 @@ class XCTeamSpec: XCTestCase {
     
     func testBasicCreateTeam() {
         let teamName = "test team"
-        let team = createTeam(teamName: teamName)
+        let team = fixture.createTeam(testCase: self, teamName: teamName)
         validate(team: team)
         XCTAssertEqual(team?.name, teamName)
     }
     
     func testCreateTeamWithNoNameFails() {
-        let team = createTeam(teamName: "")
+        let team = fixture.createTeam(testCase: self, teamName: "")
         XCTAssertNil(team, "Unexpected successful request")
     }
     
     func testCreateTeamWithSpecialCharacters() {
         let teamName = "@@@ &&&"
-        let team = createTeam(teamName: teamName)
+        let team = fixture.createTeam(testCase: self, teamName: teamName)
         validate(team: team)
         XCTAssertEqual(team?.name, teamName)
     }
     
     func testBasicListTeams() {
-        let team = createTeam(teamName: "test team")
+        let team = fixture.createTeam(testCase: self, teamName: "test team")
         let teams = listTeams()
         if let teams = teams {
             XCTAssertGreaterThan(teams.count, 0)
@@ -84,7 +84,7 @@ class XCTeamSpec: XCTestCase {
     }
     
     func testBasicGetTeam() {
-        if let teamCreated = createTeam(teamName: "test team"), let teamId = teamCreated.id, let teamFromGet = getTeam(teamId: teamId) {
+        if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id, let teamFromGet = getTeam(teamId: teamId) {
             self.validate(team: teamFromGet)
             XCTAssertEqual(teamFromGet, teamCreated)
         } else {
@@ -99,7 +99,7 @@ class XCTeamSpec: XCTestCase {
     
     func testBasicUpdateTeam() {
         let updatedName = "new test team"
-        if let teamCreated = createTeam(teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
+        if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
             self.validate(team: teamFromUpdate)
             XCTAssertEqual(teamFromUpdate.id, teamCreated.id)
             XCTAssertEqual(teamFromUpdate.created, teamCreated.created)
@@ -111,7 +111,7 @@ class XCTeamSpec: XCTestCase {
     
     func testUpdateTeamWithEmptyName() {
         let updatedName = ""
-        if let teamCreated = createTeam(teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
+        if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
             self.validate(team: teamFromUpdate)
             XCTAssertEqual(teamFromUpdate.id, teamCreated.id)
             XCTAssertEqual(teamFromUpdate.created, teamCreated.created)
@@ -123,7 +123,7 @@ class XCTeamSpec: XCTestCase {
     
     func testUpdateTeamWithSpecialName() {
         let updatedName = "@@@ &&&"
-        if let teamCreated = createTeam(teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
+        if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id, let teamFromUpdate = updateTeam(teamId: teamId, name: updatedName) {
             self.validate(team: teamFromUpdate)
             XCTAssertEqual(teamFromUpdate.id, teamCreated.id)
             XCTAssertEqual(teamFromUpdate.created, teamCreated.created)
@@ -139,23 +139,15 @@ class XCTeamSpec: XCTestCase {
     }
     
     func testBasicDeleteTeam() {
-        if let teamCreated = createTeam(teamName: "test team"), let teamId = teamCreated.id {
-            XCTAssertTrue(deleteTeam(teamId: teamId))
+        if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id {
+            XCTAssertTrue(fixture.deleteTeam(testCase: self, teamId: teamId))
         } else {
             XCTFail("Failed to create team")
         }
     }
     
     func testDeleteTeamWithInvalidIdFails() {
-        XCTAssertFalse(deleteTeam(teamId: Config.InvalidId), "Unexpected successful request")
-    }
-
-    @discardableResult
-    private func createTeam(teamName: String) -> Team? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
-            self.teams.create(name: teamName, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
+        XCTAssertFalse(fixture.deleteTeam(testCase: self, teamId: Config.InvalidId), "Unexpected successful request")
     }
 
     private func listTeams(max: Int? = nil) -> [Team]? {
@@ -177,12 +169,5 @@ class XCTeamSpec: XCTestCase {
             self.teams.update(teamId: teamId, name: name, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func deleteTeam(teamId: String) -> Bool {
-        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.teams.delete(teamId: teamId, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request) == nil ? false : true
     }
 }

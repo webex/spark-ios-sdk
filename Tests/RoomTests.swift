@@ -76,7 +76,7 @@ class RoomTests: XCTestCase {
     }
     
     func testCreatingRoomWithTeamIdReturnsRoom() {
-        let team = TestTeam()
+        let team = TestTeam(testCase: self)
         XCTAssertNotNil(team?.id)
         room = createRoom(title: roomTitle, teamId: team?.id)
         validate(room: room)
@@ -191,7 +191,7 @@ class RoomTests: XCTestCase {
     }
     
     func testListingRoomWithTeamIdReturnsRoom() {
-        let team = TestTeam()
+        let team = TestTeam(testCase: self)
         XCTAssertNotNil(team?.id)
         room = createRoom(title: roomTitle, teamId: team?.id)
         validate(room: room)
