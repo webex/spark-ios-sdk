@@ -24,7 +24,10 @@ class ApplicationLifecycleObserver: NotificationObserver {
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
-                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground))]
+                (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground)),
+                (SparkBackgroundCallNotifications.SparkCallIncomingInBackground.name, #selector(onIncomingCallInBackground)),
+                (SparkBackgroundCallNotifications.SparkCallDeclinedInBackground.name, #selector(onDeclinedCallInBackground)),
+        ]
     }
     
     private let webSocketService: WebSocketService
@@ -41,14 +44,34 @@ class ApplicationLifecycleObserver: NotificationObserver {
         Logger.info("Application did become active")
         
         callManager.fetchActiveCalls()
-        if let device = deviceService.device {
-            webSocketService.connect(device.webSocketUrl)
-        }
+        openWebSocket()
     }
     
     func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
-        
+        closeWebSocket()
+    }
+
+    func onIncomingCallInBackground() {
+        Logger.info("Incoming call when app in background")
+        openWebSocket()
+    }
+
+    func onDeclinedCallInBackground() {
+        guard UIApplication.shared.applicationState == .background else {
+            return
+        }
+        Logger.info("Incoming call declined when app in background")
+        closeWebSocket()
+    }
+
+    private func openWebSocket() {
+        if let device = deviceService.device {
+            webSocketService.connect(device.webSocketUrl)
+        }
+    }
+
+    private func closeWebSocket() {
         webSocketService.disconnect()
     }
 }
