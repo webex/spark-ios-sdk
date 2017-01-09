@@ -66,6 +66,7 @@
 		5D93AEBF1D2B590000196F6F /* MediaSessionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEBE1D2B590000196F6F /* MediaSessionObserver.swift */; };
 		5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */; };
 		8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */; };
+		AF50A3B01DED832100B05502 /* BackgroundCallNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF50A3AF1DED832100B05502 /* BackgroundCallNotifications.swift */; };
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75951CE2D7B70080EAE0 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75321CE2D7B70080EAE0 /* AccessToken.swift */; };
 		B91E75961CE2D7B70080EAE0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75331CE2D7B70080EAE0 /* AuthManager.swift */; };
@@ -217,6 +218,7 @@
 		5D93AEBE1D2B590000196F6F /* MediaSessionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaSessionObserver.swift; sourceTree = "<group>"; };
 		5DBC17A91CE30D7000DFF1C8 /* CallStateDisconnected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallStateDisconnected.swift; sourceTree = "<group>"; };
 		6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF50A3AF1DED832100B05502 /* BackgroundCallNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundCallNotifications.swift; sourceTree = "<group>"; };
 		B900B6A41CE2DB3100DC83CB /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = MediaEngine/Wme.framework; sourceTree = "<group>"; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75321CE2D7B70080EAE0 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				3D0AA8C51D0521570094A658 /* CallObserver.swift */,
 				3D0AA8C61D0521570094A658 /* PhoneNotificationCenter.swift */,
 				3D0AA8C71D0521570094A658 /* PhoneObserver.swift */,
+				AF50A3AF1DED832100B05502 /* BackgroundCallNotifications.swift */,
 			);
 			name = Notification;
 			sourceTree = "<group>";
@@ -888,6 +891,7 @@
 				B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */,
 				B91E75D61CE2D7B70080EAE0 /* Phone.swift in Sources */,
 				3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */,
+				AF50A3B01DED832100B05502 /* BackgroundCallNotifications.swift in Sources */,
 				5DBC17AA1CE30D7000DFF1C8 /* CallStateDisconnected.swift in Sources */,
 				B91E75AE1CE2D7B70080EAE0 /* MetricsEngine.swift in Sources */,
 				3D0AA8C81D0521570094A658 /* CallNotificationCenter.swift in Sources */,
