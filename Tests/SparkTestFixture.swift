@@ -188,4 +188,20 @@ class SparkTestFixture {
         testCase.waitForExpectations(timeout: 5) { error in XCTAssertNil(error, "Timeout") }
         return output
     }
+    
+    @discardableResult
+    func createTeam(testCase: XCTestCase, teamName: String) -> Team? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
+            self.spark.teams.create(name: teamName, completionHandler: completionHandler)
+        }
+        return getResponse(testCase: testCase, request: request)
+    }
+    
+    @discardableResult
+    func deleteTeam(testCase: XCTestCase, teamId: String) -> Bool {
+        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
+            self.spark.teams.delete(teamId: teamId, completionHandler: completionHandler)
+        }
+        return getResponse(testCase: testCase, request: request) == nil ? false : true
+    }
 }

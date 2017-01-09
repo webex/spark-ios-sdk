@@ -25,7 +25,7 @@ import XCTest
 class WebhookTests: XCTestCase {
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var webhooks: WebhookClient!
-    private var room: TestRoom?
+    private var room: Room!
     private var roomId: String!
     private var webhook: Webhook!
     private var webhookId: String!
