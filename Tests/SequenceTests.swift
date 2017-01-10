@@ -19,7 +19,8 @@
 // THE SOFTWARE.
 
 import Foundation
-import XCTest
+import Quick
+import Nimble
 @testable import SparkSDK
 
 class SequenceTests: XCTestCase {

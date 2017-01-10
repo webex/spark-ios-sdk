@@ -28,6 +28,7 @@
 		3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */; };
 		3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FA1D3EF82500205DF6 /* TeamTests.swift */; };
 		3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */; };
+		3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FB1D3EF82500205DF6 /* TestRoom.swift */; };
 		3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FC1D3EF82500205DF6 /* TestTeam.swift */; };
 		3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */; };
 		3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1A91D24AD4A0016A072 /* Team.swift */; };
@@ -210,6 +211,7 @@
 		3DA099F81D3EF82500205DF6 /* SequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SequenceTests.swift; path = Tests/SequenceTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipTests.swift; path = Tests/TeamMembershipTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FA1D3EF82500205DF6 /* TeamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamTests.swift; path = Tests/TeamTests.swift; sourceTree = SOURCE_ROOT; };
+		3DA099FB1D3EF82500205DF6 /* TestRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestRoom.swift; path = Tests/TestRoom.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FC1D3EF82500205DF6 /* TestTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestTeam.swift; path = Tests/TestTeam.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebhookTests.swift; path = Tests/WebhookTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
@@ -397,6 +399,7 @@
 				3DA099F81D3EF82500205DF6 /* SequenceTests.swift */,
 				3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */,
 				3DA099FA1D3EF82500205DF6 /* TeamTests.swift */,
+				3DA099FB1D3EF82500205DF6 /* TestRoom.swift */,
 				3DA099FC1D3EF82500205DF6 /* TestTeam.swift */,
 				3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */,
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
@@ -916,6 +919,7 @@
 				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,
 				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
 				5AFB6E9D1DF5C7770027E989 /* JWTAuthStrategyTests.swift in Sources */,
+				3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */,
 				5A9350DB1E00742D00374B99 /* MockClock.swift in Sources */,
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,

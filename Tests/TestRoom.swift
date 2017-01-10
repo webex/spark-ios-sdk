@@ -23,19 +23,21 @@ import Quick
 import Nimble
 import SparkSDK
 
-class TestTeam {
+class TestRoom {
+    var room: Room?
     var id: String? {
-        return team?.id
+        return room?.id
     }
-    
-    private let TeamName = "team_for_test"
-    private var team: Team?
+    var title: String? {
+        return room?.title
+    }
     
     init?() {
         do {
-            team = try Spark.teams.create(name: TeamName)
+            room = try SparkTestFixture.sharedInstance!.spark.rooms.create(title: "room_for_test")
+            
         } catch let error as NSError {
-            fail("Failed to create team, \(error.localizedFailureReason)")
+            fail("Failed to create room, \(error.localizedFailureReason)")
             
             return nil
         }
@@ -45,11 +47,44 @@ class TestTeam {
         guard id != nil else {
             return
         }
-        
         do {
-            try Spark.teams.delete(teamId: id!)
+            try SparkTestFixture.sharedInstance!.spark.rooms.delete(roomId: id!)
         } catch let error as NSError {
-            fail("Failed to create team, \(error.localizedFailureReason)")
+            fail("Failed to delete room, \(error.localizedFailureReason)")
         }
     }
+}
+
+class TestRoom: XCTestCase {
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
+    var room: Room?
+    var id: String? {
+        return room?.id
+    }
+    var title: String? {
+        return room?.title
+    }
+    
+    init?() {
+        room = createRoom(title: "room_for_test")
+    }
+    
+    deinit {
+        deleteRoom(roomId: id)
+        
+    }
+    
+    private func createRoom(title: String) -> Room? {
+        let request = { (completionHandler: (ServiceResponse<Room>) -> Void) in
+            fixture.createRoom(testCase: self, title: title)
+        }
+        return 
+    }
+    
+    private func deleteRoom(roomId: String) {
+        let authStrategy: JWTAuthStrategy
+        let roomClient = RoomClient(AuthenticationStrategy: authStrategy)
+        roomClient.delete(testCase: self, roomId: roomId)
+    }
+    
 }

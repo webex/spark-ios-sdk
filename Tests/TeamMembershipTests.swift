@@ -44,7 +44,7 @@ class TeamMembershipTests: XCTestCase {
         continueAfterFailure = false
         XCTAssertNotNil(fixture)
         teamMemberships = fixture.spark.teamMemberships
-        team = TestTeam(testCase: self)
+        team = TestTeam()
     }
     
     func testWhenMembershipIsCreatedWithPersonIdAndNoModeratorStatusThenItCanBeRetrieved() {
@@ -131,7 +131,7 @@ class TeamMembershipTests: XCTestCase {
     }
     
     func testWhenMembershipIsListedThenItContainsCorrectMembers() {
-        guard let testTeam = TestTeam(testCase: self) else {
+        guard let testTeam = TestTeam() else {
             XCTFail("Failed to create test team")
             return
         }
@@ -217,6 +217,21 @@ class TeamMembershipTests: XCTestCase {
             let id = membership.id,
             let membershipFromUpdate = updateMembership(membershipId: id, isModerator: true),
             let isModerator = membershipFromUpdate.isModerator {
+            validate(membership: membership)
+            self.validate(membership: membershipFromUpdate)
+            XCTAssertTrue(isModerator)
+        } else {
+            XCTFail("Failed to create membership")
+        }
+    }
+    
+        
+    func testWhenUpdatedMembershipCanBecomeModerator() {
+        if let user = fixture.createUser(),
+            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: false),
+            let id = membership.id,
+            let membershipFromUpdate = updateMembership(membershipId: id, isModerator: true),
+            let isModerator = membershipFromUpdate.isModerator{
             validate(membership: membership)
             validate(membership: membershipFromUpdate)
             XCTAssertTrue(isModerator)
