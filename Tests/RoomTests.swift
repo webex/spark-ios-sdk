@@ -42,6 +42,7 @@ class RoomTests: XCTestCase {
     }
     
     override func setUp() {
+        super.setUp()
         continueAfterFailure = false
         XCTAssertNotNil(fixture)
         me = fixture.selfUser
@@ -83,6 +84,10 @@ class RoomTests: XCTestCase {
         validate(room: room)
         XCTAssertEqual(room?.title, roomTitle)
         XCTAssertEqual(room?.teamId, team?.id)
+        if(!deleteRoom(roomId: room!.id!)) {
+            XCTFail("Failed to delete room")
+        }
+        room = nil
     }
     
     func testUpdatingRoomWithRoomIdAndTitleReturnsUpdatedRoom() {
@@ -196,10 +201,14 @@ class RoomTests: XCTestCase {
         XCTAssertNotNil(team?.id)
         room = createRoom(title: roomTitle, teamId: team?.id)
         validate(room: room)
+        XCTAssertNotNil(room?.teamId)
         if let roomArray = listRooms(teamId: team?.id, max: nil, type: nil) {
-            XCTAssertEqual(roomArray.count, 1)
             XCTAssertEqual(roomArray.first?.id, room?.id)
-            XCTAssertEqual(roomArray.first?.teamId, team?.id)
+            XCTAssertEqual(roomArray.first?.teamId, room?.teamId)
+            if(!deleteRoom(roomId: room!.id!)) {
+                XCTFail("Failed to delete room")
+            }
+            room = nil
         } else {
             XCTFail("Could not retrieve rooms")
         }
@@ -207,7 +216,7 @@ class RoomTests: XCTestCase {
     
     private func createRoom(title: String, teamId: String?) -> Room? {
         let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
-            self.rooms.create(title: title, completionHandler: completionHandler)
+            self.rooms.create(title: title, teamId: teamId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }

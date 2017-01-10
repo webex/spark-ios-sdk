@@ -54,6 +54,7 @@ class PhoneTests: XCTestCase {
     func testWhenDialThenReturnsSuccessAndHangsUp() {
         if let user = fixture.createUser() {
             let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+            phone.disableVideoCodecActivation()
             let call = dialCall(address: user.email.toString(), mediaOption: mediaOption)
             XCTAssertNotNil(call)
             XCTAssertTrue(hangupCall(call: call!))
@@ -74,6 +75,7 @@ class PhoneTests: XCTestCase {
     
     func testWhenDialWithSipAddressThenReturnsSuccessAndHangsUp() {
         let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+        phone.disableVideoCodecActivation()
         let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: mediaOption)
         XCTAssertNotNil(call)
         XCTAssertTrue(hangupCall(call: call!))
