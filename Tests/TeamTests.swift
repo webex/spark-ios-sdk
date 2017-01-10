@@ -24,8 +24,7 @@ import XCTest
 
 class XCTeamSpec: XCTestCase {
     
-    private let fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
-    private var teams: TeamClient!
+    var spark: Spark!
     
     private func validate(team: Team?) {
         XCTAssertNotNil(team, "Failed request")
@@ -35,9 +34,7 @@ class XCTeamSpec: XCTestCase {
     }
     
     override func setUp() {
-        continueAfterFailure = false
-        XCTAssertNotNil(fixture)
-        teams = fixture.spark.teams
+        self.spark = Spark(authenticationStrategy: SimpleAuthStrategy(accessToken: Config.selfUser.token!))
     }
     
     func testBasicCreateTeam() {
@@ -153,36 +150,52 @@ class XCTeamSpec: XCTestCase {
     @discardableResult
     private func createTeam(teamName: String) -> Team? {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
-            self.teams.create(name: teamName, completionHandler: completionHandler)
+            self.spark.teams.create(name: teamName, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: self, request: request)
+        return getResponse(request: request)
     }
 
     private func listTeams(max: Int? = nil) -> [Team]? {
         let request = { (completionHandler: @escaping (ServiceResponse<Array<Team>>) -> Void) in
-            self.teams.list(max: max, completionHandler: completionHandler)
+            self.spark.teams.list(max: max, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: self, request: request)
+        return getResponse(request: request)
     }
     
     private func getTeam(teamId: String) -> Team? {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
-            self.teams.get(teamId: teamId, completionHandler: completionHandler)
+            self.spark.teams.get(teamId: teamId, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: self, request: request)
+        return getResponse(request: request)
     }
     
     private func updateTeam(teamId: String, name: String) -> Team? {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
-            self.teams.update(teamId: teamId, name: name, completionHandler: completionHandler)
+            self.spark.teams.update(teamId: teamId, name: name, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: self, request: request)
+        return getResponse(request: request)
     }
     
     private func deleteTeam(teamId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.teams.delete(teamId: teamId, completionHandler: completionHandler)
+            self.spark.teams.delete(teamId: teamId, completionHandler: completionHandler)
         }
-        return Utils.getResponse(testCase: self, request: request) == nil ? false : true
+        return getResponse(request: request) == nil ? false : true
+    }
+    
+    private func getResponse<T>(request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
+        let expect = expectation(description: "Service call")
+        var output: T?
+        request() { response in
+            switch(response.result) {
+            case .success(let result):
+                output = result
+            case .failure(_):
+                output = nil
+            }
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 1) { error in XCTAssertNil(error, "Timeout") }
+        return output
     }
 }

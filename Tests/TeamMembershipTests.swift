@@ -25,8 +25,6 @@ import Nimble
 
 class TeamMembershipSpec: QuickSpec {
     
-    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
-    private var teamMemberships: TeamMembershipClient!
     private var team: TestTeam?
     private var teamId: String {
         return team!.id!
@@ -44,9 +42,7 @@ class TeamMembershipSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
-            self.continueAfterFailure = false
-            XCTAssertNotNil(self.fixture)
-            self.teamMemberships = self.fixture.spark.teamMemberships
+            Spark.initWith(accessToken: Config.selfUser.token!)
             self.team = TestTeam()
         }
         
@@ -55,12 +51,12 @@ class TeamMembershipSpec: QuickSpec {
         describe("create a membership") {
             it("by person Id") {
                 do {
-                    let user = self.fixture.createUser()
+                    let user = TestUserFactory.sharedInstance.createUser()
                     
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     
                     self.validate(membership: membership)
-                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beFalse())
                     
                 } catch let error as NSError {
@@ -70,11 +66,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("by person Id with isModerator true") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: true)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: true)
                     
                     self.validate(membership: membership)
-                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beTrue())
                     
                 } catch let error as NSError {
@@ -84,11 +80,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("by person Id with isModerator false") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: false)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: false)
                     
                     self.validate(membership: membership)
-                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.personId).to(equal(user.personId))
                     expect(membership.isModerator).to(beFalse())
                     
                 } catch let error as NSError {
@@ -98,11 +94,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("by person email") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!)
                     
                     self.validate(membership: membership)
-                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beFalse())
                     
                 } catch let error as NSError {
@@ -112,11 +108,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("by person email with isModerator true") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email, isModerator: true)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!, isModerator: true)
                     
                     self.validate(membership: membership)
-                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beTrue())
                 } catch let error as NSError {
                     fail("Failed to create membership, \(error.localizedFailureReason)")
@@ -125,11 +121,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("by person email with isModerator false") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personEmail: user.email!)
                     
                     self.validate(membership: membership)
-                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.personEmail).to(equal(user.email))
                     expect(membership.isModerator).to(beFalse())
                     
                 } catch let error as NSError {
@@ -138,7 +134,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try self.teamMemberships.create(teamId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.create(teamId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -152,14 +148,14 @@ class TeamMembershipSpec: QuickSpec {
                         return
                     }
                     
-                    let user = self.fixture.createUser()
-                    let membership1 = try self.teamMemberships.create(teamId: testTeam.id!, personId: user!.personId)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership1 = try Spark.teamMemberships.create(teamId: testTeam.id!, personId: user.personId!)
                     self.validate(membership: membership1)
                     
-                    let membership2 = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let membership2 = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     self.validate(membership: membership2)
                     
-                    let memberships = try self.teamMemberships.list(teamId: testTeam.id!)
+                    let memberships = try Spark.teamMemberships.list(teamId: testTeam.id!)
                     expect(memberships.contains{$0.teamId == testTeam.id}).to(beTrue())
                     expect(memberships.contains{$0 == membership1}).to(beTrue())
                     expect(memberships.contains{$0 == membership2}).to(beFalse())
@@ -171,11 +167,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("with max value") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     self.validate(membership: membership)
                     
-                    let memberships = try self.teamMemberships.list(teamId: self.teamId, max: 1)
+                    let memberships = try Spark.teamMemberships.list(teamId: self.teamId, max: 1)
                     expect(memberships.contains{$0.teamId == self.teamId}).to(beTrue())
                     expect(memberships.count).to(equal(1))
                     
@@ -186,11 +182,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("with invalid max value") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     self.validate(membership: membership)
                     
-                    let memberships = try self.teamMemberships.list(teamId: self.teamId, max: -1)
+                    let memberships = try Spark.teamMemberships.list(teamId: self.teamId, max: -1)
                     expect(memberships.isEmpty).to(beFalse())
                     
                 } catch let error as NSError {
@@ -199,7 +195,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try self.teamMemberships.list(teamId: Config.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.list(teamId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -208,11 +204,11 @@ class TeamMembershipSpec: QuickSpec {
         describe("get a membership") {
             it("normal") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     self.validate(membership: membership)
                     
-                    let membershipFromGet = try self.teamMemberships.get(membershipId: membership.id!)
+                    let membershipFromGet = try Spark.teamMemberships.get(membershipId: membership.id!)
                     self.validate(membership: membershipFromGet)
                     expect(membershipFromGet).to(equal(membership))
                     
@@ -222,7 +218,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-               expect{try self.teamMemberships.get(membershipId: Config.InvalidId)}.to(throwError())
+               expect{try Spark.teamMemberships.get(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
         
@@ -231,11 +227,11 @@ class TeamMembershipSpec: QuickSpec {
         describe("update a membership") {
             it("make isModerator true") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: false)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: false)
                     self.validate(membership: membership)
                     
-                    let membershipFromUpdate = try self.teamMemberships.update(membershipId: membership.id!, isModerator: true)
+                    let membershipFromUpdate = try Spark.teamMemberships.update(membershipId: membership.id!, isModerator: true)
                     self.validate(membership: membershipFromUpdate)
                     expect(membershipFromUpdate.isModerator).to(beTrue())
                     
@@ -246,11 +242,11 @@ class TeamMembershipSpec: QuickSpec {
             
             it("make isModerator false") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: true)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!, isModerator: true)
                     self.validate(membership: membership)
                     
-                    let membershipFromUpdate = try self.teamMemberships.update(membershipId: membership.id!, isModerator: false)
+                    let membershipFromUpdate = try Spark.teamMemberships.update(membershipId: membership.id!, isModerator: false)
                     self.validate(membership: membershipFromUpdate)
                     expect(membershipFromUpdate.isModerator).to(beFalse())
                     
@@ -260,7 +256,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try self.teamMemberships.update(membershipId: Config.InvalidId, isModerator: false)}.to(throwError())
+                expect{try Spark.teamMemberships.update(membershipId: Config.InvalidId, isModerator: false)}.to(throwError())
             }
         }
         
@@ -269,13 +265,13 @@ class TeamMembershipSpec: QuickSpec {
         describe("delete a membership") {
             it("normal") {
                 do {
-                    let user = self.fixture.createUser()
-                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    let user = TestUserFactory.sharedInstance.createUser()
+                    let membership = try Spark.teamMemberships.create(teamId: self.teamId, personId: user.personId!)
                     self.validate(membership: membership)
                     
-                    expect{try self.teamMemberships.delete(membershipId: membership.id!)}.notTo(throwError())
+                    expect{try Spark.teamMemberships.delete(membershipId: membership.id!)}.notTo(throwError())
                     
-                    let memberships = try self.teamMemberships.list(teamId: self.teamId)
+                    let memberships = try Spark.teamMemberships.list(teamId: self.teamId)
                     expect(memberships).notTo(beNil())
                     expect(memberships.contains{$0 == membership}).to(beFalse())
                     
@@ -285,7 +281,7 @@ class TeamMembershipSpec: QuickSpec {
             }
             
             it("with invalid id") {
-                expect{try self.teamMemberships.delete(membershipId: Config.InvalidId)}.to(throwError())
+                expect{try Spark.teamMemberships.delete(membershipId: Config.InvalidId)}.to(throwError())
             }
         }
     }

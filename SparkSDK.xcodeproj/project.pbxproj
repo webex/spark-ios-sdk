@@ -38,7 +38,7 @@
 		3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AF1D24AD570016A072 /* TeamMembership.swift */; };
 		3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */; };
 		3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */; };
-		3D81E30E1D41BBAD0085970A /* SparkTestFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */; };
+		3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */; };
 		3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */; };
 		3D9E1A261D3EF4AC007E570C /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */; };
@@ -201,7 +201,7 @@
 		3D66B1AF1D24AD570016A072 /* TeamMembership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembership.swift; path = Source/TeamMembership/TeamMembership.swift; sourceTree = "<group>"; };
 		3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipClient.swift; path = Source/TeamMembership/TeamMembershipClient.swift; sourceTree = "<group>"; };
 		3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TeamMembershipClient+Sync.swift"; path = "Source/TeamMembership/TeamMembershipClient+Sync.swift"; sourceTree = "<group>"; };
-		3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SparkTestFixture.swift; path = Tests/SparkTestFixture.swift; sourceTree = SOURCE_ROOT; };
+		3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestUserFactory.swift; path = Tests/TestUserFactory.swift; sourceTree = SOURCE_ROOT; };
 		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
 		3DA099F11D3EF82500205DF6 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Tests/Config.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F31D3EF82500205DF6 /* MembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MembershipTests.swift; path = Tests/MembershipTests.swift; sourceTree = SOURCE_ROOT; };
@@ -403,7 +403,7 @@
 				3DA099FA1D3EF82500205DF6 /* TeamTests.swift */,
 				3DA099FB1D3EF82500205DF6 /* TestRoom.swift */,
 				3DA099FC1D3EF82500205DF6 /* TestTeam.swift */,
-				3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */,
+				3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */,
 				3DA099FD1D3EF82500205DF6 /* Utils.swift */,
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
 			);
@@ -927,7 +927,7 @@
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
 				5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */,
-				3D81E30E1D41BBAD0085970A /* SparkTestFixture.swift in Sources */,
+				3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */,
 				3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */,
 				5AFB6E9B1DF5C6E90027E989 /* MockKeychain.swift in Sources */,
 				3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */,

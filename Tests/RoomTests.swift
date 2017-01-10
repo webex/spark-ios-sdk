@@ -25,7 +25,6 @@ import Alamofire
 
 class RoomSpec: QuickSpec {
     
-    private let fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private let RoomTitle  = "room_for_testing"
     private let SpecialTitle = "@@@ &&&_%%%"
     private let UpdatedRoomTitle  = "room_for_testing_updated"
@@ -33,8 +32,7 @@ class RoomSpec: QuickSpec {
     private let RoomCountMax = 100    //TO BE DETERMINED
     private let RoomCountValid = 10
     private let RoomCountInvalid = -1
-    private var me: TestUser!
-    private var rooms: RoomClient!
+    private var me = Config.selfUser
     
     private func validate(room: Room) {
         expect(room.id).notTo(beNil())
@@ -48,10 +46,7 @@ class RoomSpec: QuickSpec {
     override func spec() {
         
         beforeSuite {
-            self.continueAfterFailure = false
-            XCTAssertNotNil(self.fixture)
-            self.me = self.fixture.selfUser
-            self.rooms = self.fixture.spark.rooms
+            Spark.initWith(accessToken: self.me.token!)
         }
         
         // MARK: - Create a Room
@@ -64,7 +59,7 @@ class RoomSpec: QuickSpec {
             
             it("sync with title") {
                 do {
-                    let room = try self.rooms.create(title: self.RoomTitle)
+                    let room = try Spark.rooms.create(title: self.RoomTitle)
                     self.validate(room: room)
                     
                     expect(room.title).to(equal(self.RoomTitle))
@@ -76,7 +71,7 @@ class RoomSpec: QuickSpec {
             
             it("sync with emptyTitle") {
                 do {
-                    let room = try self.rooms.create(title: "")
+                    let room = try Spark.rooms.create(title: "")
 
                     expect(room.id).notTo(beNil())
                     expect(room.title).to(beNil())
@@ -88,7 +83,7 @@ class RoomSpec: QuickSpec {
             
             it("sync with specialTitle") {
                 do {
-                    let room = try self.rooms.create(title: self.SpecialTitle)
+                    let room = try Spark.rooms.create(title: self.SpecialTitle)
                     self.validate(room: room)
                     
                     expect(room.title).to(equal(self.SpecialTitle))
@@ -101,7 +96,7 @@ class RoomSpec: QuickSpec {
             it("sync with teamId") {
                 do {
                     let team = TestTeam()
-                    let room = try self.rooms.create(title: self.RoomTitle, teamId: team?.id)
+                    let room = try Spark.rooms.create(title: self.RoomTitle, teamId: team?.id)
                     expect(room.title).to(equal(self.RoomTitle))
                     expect(room.teamId).to(equal(team?.id))
                     
@@ -134,7 +129,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let updatedRoom = try self.rooms.update(roomId: room!.id!, title: self.UpdatedRoomTitle)
+                    let updatedRoom = try Spark.rooms.update(roomId: room!.id!, title: self.UpdatedRoomTitle)
                     self.validate(room: updatedRoom)
                     expect(updatedRoom.id).notTo(beNil())
                     expect(updatedRoom.title).to(equal(self.UpdatedRoomTitle))
@@ -145,7 +140,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid roomId") {
-                expect{try self.rooms.update(roomId: Config.InvalidId, title: self.UpdatedRoomTitle)}.to(throwError())
+                expect{try Spark.rooms.update(roomId: Config.InvalidId, title: self.UpdatedRoomTitle)}.to(throwError())
             }
             
             it("sync with roomId and specialTitle") {
@@ -154,7 +149,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let updatedRoom = try self.rooms.update(roomId: room!.id!, title: self.SpecialTitle)
+                    let updatedRoom = try Spark.rooms.update(roomId: room!.id!, title: self.SpecialTitle)
                     expect(updatedRoom.title).to(equal(self.SpecialTitle))
                     
                 }  catch let error as NSError {
@@ -171,7 +166,7 @@ class RoomSpec: QuickSpec {
             
             beforeEach {
                 do {
-                    room = try self.rooms.create(title: self.RoomTitle)
+                    room = try Spark.rooms.create(title: self.RoomTitle)
                     self.validate(room: room!)
                     
                 } catch let error as NSError {
@@ -187,20 +182,20 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    try self.rooms.delete(roomId: room!.id!)
+                    try Spark.rooms.delete(roomId: room!.id!)
                 } catch let error as NSError {
                     fail("Failed to delete room, \(error.localizedFailureReason)")
                 }
                 
-                expect{try self.rooms.get(roomId: room!.id!)}.to(throwError())
+                expect{try Spark.rooms.get(roomId: room!.id!)}.to(throwError())
             }
             
             it("sync with invalid RoomId") {
-                expect{try self.rooms.delete(roomId: Config.InvalidId)}.to(throwError())
+                expect{try Spark.rooms.delete(roomId: Config.InvalidId)}.to(throwError())
             }
             
             it("sync with empty RoomId") {
-                expect{try self.rooms.delete(roomId: "")}.to(throwError())
+                expect{try Spark.rooms.delete(roomId: "")}.to(throwError())
             }
         }
         
@@ -227,7 +222,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let roomDetails = try self.rooms.get(roomId: room!.id!)
+                    let roomDetails = try Spark.rooms.get(roomId: room!.id!)
                     self.validate(room: roomDetails)
                     expect(roomDetails.id!).to(equal(room?.id!))
                     expect(roomDetails.title!).to(equal(room?.title!))
@@ -238,7 +233,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid roomId") {
-                expect{try self.rooms.get(roomId: Config.InvalidId)}.to(throwError())
+                expect{try Spark.rooms.get(roomId: Config.InvalidId)}.to(throwError())
             }
             
             it("sync with emptyRoomId") {
@@ -247,7 +242,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let roomDetails = try self.rooms.get(roomId: "")
+                    let roomDetails = try Spark.rooms.get(roomId: "")
                     
                     expect(roomDetails).notTo(beNil())
                     expect(roomDetails.id).to(beNil())
@@ -282,7 +277,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list()
+                    let rooms = try Spark.rooms.list()
                     expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
                     expect(rooms[0].id).notTo(beNil())
                     expect(rooms[0].title).notTo(beNil())
@@ -298,7 +293,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountValid)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountValid)
                     expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountValid))
                     expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
                     self.validate(room: rooms[0])
@@ -314,7 +309,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountValid, type: .direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountValid, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -328,7 +323,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountMin)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMin)
                     expect(rooms.count).to(equal(self.RoomCountMin))
                     self.validate(room: rooms[0])
                     
@@ -343,7 +338,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountMin, type: .direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMin, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -357,7 +352,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountMax)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMax)
                     expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountMax))
                     expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
                     self.validate(room: rooms[0])
@@ -373,7 +368,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try self.rooms.list(max: self.RoomCountMax, type: .direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMax, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -382,20 +377,20 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid max") {
-                expect{try self.rooms.list(max: self.RoomCountInvalid)}.to(throwError())
+                expect{try Spark.rooms.list(max: self.RoomCountInvalid)}.to(throwError())
             }
             
             it("sync with invalid max and direct type") {
-                expect{try self.rooms.list(max: self.RoomCountInvalid, type: .direct)}.to(throwError())
+                expect{try Spark.rooms.list(max: self.RoomCountInvalid, type: .direct)}.to(throwError())
             }
             
             it("sync with teamId") {
                 do {
                     let team = TestTeam()
-                    let room = try self.rooms.create(title: self.RoomTitle, teamId: team?.id)
+                    let room = try Spark.rooms.create(title: self.RoomTitle, teamId: team?.id)
                     expect(room).notTo(beNil())
                     
-                    let rooms = try self.rooms.list(teamId: team?.id)
+                    let rooms = try Spark.rooms.list(teamId: team?.id)
                     expect(rooms.contains{$0.id == room.id}).to(beTrue())
                     expect(rooms.contains{$0.teamId == room.teamId}).to(beTrue())
                     

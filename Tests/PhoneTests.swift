@@ -24,13 +24,10 @@ import Nimble
 @testable import SparkSDK
 
 class PhoneSpec: QuickSpec {
-    
-    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
-    private var phone: Phone!
 
     private func registerPhone() {
         var registerSuccess: Bool = false
-        self.phone.register() {
+        Spark.phone.register() {
             registerSuccess = $0
         }
         expect(registerSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
@@ -38,7 +35,7 @@ class PhoneSpec: QuickSpec {
     
     private func deregisterPhone() {
         var deregisterSuccess: Bool = false
-        self.phone.deregister() {
+        Spark.phone.deregister() {
             deregisterSuccess = $0
         }
         expect(deregisterSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
@@ -54,9 +51,7 @@ class PhoneSpec: QuickSpec {
     
     override func spec() {
         beforeSuite {
-            self.continueAfterFailure = false
-            XCTAssertNotNil(self.fixture)
-            self.phone = self.fixture.spark.phone
+            Spark.initWith(accessToken: Config.selfUser.token!)
         }
         
         describe("phone register") {
@@ -93,10 +88,10 @@ class PhoneSpec: QuickSpec {
             it("normal") {
                 let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
                 var dailSuccess: Bool = false
-                let user = self.fixture.createUser()
+                let user = TestUserFactory.sharedInstance.createUser()
                 
-                self.phone.disableVideoCodecActivation()
-                let call = self.phone.dial((user?.email.toString())!, option: mediaOption) {
+                Spark.phone.disableVideoCodecActivation()
+                let call = Spark.phone.dial((user.email?.toString())!, option: mediaOption) {
                     dailSuccess = $0
                 }
                 expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
@@ -107,9 +102,9 @@ class PhoneSpec: QuickSpec {
             it("audio only") {
                 let mediaOption = MediaOption.audioOnly
                 var dailSuccess: Bool = false
-                let user = self.fixture.createUser()
+                let user = TestUserFactory.sharedInstance.createUser()
                 
-                let call = self.phone.dial((user?.email.toString())!, option: mediaOption) {
+                let call = Spark.phone.dial((user.email?.toString())!, option: mediaOption) {
                     dailSuccess = $0
                 }
                 expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
@@ -121,8 +116,8 @@ class PhoneSpec: QuickSpec {
                 let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
                 var dailSuccess: Bool = false
                 
-                self.phone.disableVideoCodecActivation()
-                let call = self.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
+                Spark.phone.disableVideoCodecActivation()
+                let call = Spark.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
                     dailSuccess = $0
                 }
                 expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
@@ -133,7 +128,7 @@ class PhoneSpec: QuickSpec {
             it("audio only with sip address") {
                 let mediaOption = MediaOption.audioOnly
                 var dailSuccess: Bool = false
-                let call = self.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
+                let call = Spark.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
                     dailSuccess = $0
                 }
                 expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
