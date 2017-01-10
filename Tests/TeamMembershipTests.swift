@@ -233,12 +233,12 @@ class TeamMembershipTests: XCTestCase {
     func testWhenMembershipIsDeletedThenItIsNotPartOfMembershipList() {
         if let user = fixture.createUser(),
             let membership = createMembership(teamId: teamId, personId: user.personId),
-            let membershipId = membership.id,
-            let memberships = listMemberships(teamId: teamId) {
+            let membershipId = membership.id {
             validate(membership: membership)
             XCTAssertTrue(deleteMembership(membershipId: membershipId))
+            let memberships = listMemberships(teamId: teamId)
             XCTAssertNotNil(memberships)
-            XCTAssertFalse(memberships.contains{$0 == membership})
+            XCTAssertEqual(memberships?.contains{$0.id == membershipId}, false)
         } else {
             XCTFail("Failed to delete membership")
         }

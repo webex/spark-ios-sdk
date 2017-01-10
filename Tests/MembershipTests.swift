@@ -132,7 +132,7 @@ class MembershipTests: XCTestCase {
     
     func testCreateMembershipWithValidRoomIdButInvalidEmail() {
         membership = createMembership(roomId: roomId, personEmail: Config.InvalidEmail, isModerator: false)
-        XCTAssertNil(membership, "Unexpected successful request")
+        XCTAssertNotNil(membership, "Failed to creature membership")
     }
     
     func testCreateModeratorMembershipWithRoomIdAndPersonEmail() {
@@ -149,24 +149,17 @@ class MembershipTests: XCTestCase {
     }
     
     func testListingMembershipWithNoFiltersFindsMembership() {
-        membership = createMembership(roomId: roomId, personId: other.personId, isModerator: false)
-        if let list = listMemberships(roomId: nil, personId: nil, max: nil) {
-            var foundMembership: Membership? = nil
-            for currentMembership in list {
-                if currentMembership.personId == other.personId && currentMembership.roomId == roomId {
-                    validate(membership: currentMembership)
-                    foundMembership = currentMembership
-                }
-            }
-            XCTAssertNotNil(foundMembership)
+        if let list = listMemberships(max: nil) {
+            XCTAssertGreaterThanOrEqual(list.count, 1)
+            validate(membership: list[0])
         } else {
             XCTFail("No memberships returned")
         }
     }
     
-    func testListingMembershipWithRoomIdAndPersonIdAndMaxCountFindsMembership() {
+    func testListingMembershipWithRoomIdAndPersonIdFindsMembership() {
         membership = createMembership(roomId: roomId, personId: other.personId, isModerator: false)
-        if let list = listMemberships(roomId: roomId, personId: other.personId, max: 10) {
+        if let list = listMemberships(roomId: roomId, personId: other.personId) {
             XCTAssertEqual(list.count, 1)
             let foundMembership = list[0]
             XCTAssertEqual(foundMembership.personId, other.personId)
@@ -182,7 +175,7 @@ class MembershipTests: XCTestCase {
     
     func testListingMembershipWithOnlyRoomIdFindsMembership() {
         membership = createMembership(roomId: roomId, personId: other.personId, isModerator: false)
-        if let list = listMemberships(roomId: roomId, personId: nil, max: nil) {
+        if let list = listMemberships(roomId: roomId, max: nil) {
             var foundMembership: Membership? = nil
             for currentMembership in list {
                 if currentMembership.personId == other.personId {
@@ -196,15 +189,17 @@ class MembershipTests: XCTestCase {
         }
     }
     
-    func testListingMembershipWithOnlyPersonIdFindsMembership() {
+    func testListingMembershipWithOnlyRoomIdAndPersonEmailFindsMembership() {
         membership = createMembership(roomId: roomId, personId: other.personId, isModerator: false)
-        if let list = listMemberships(roomId: nil, personId: other.personId, max: nil) {
-            XCTAssertEqual(list.count, 1)
-            let foundMembership = list[0]
-            XCTAssertEqual(foundMembership.personId, other.personId)
-            XCTAssertEqual(foundMembership.personEmail, other.email)
-            XCTAssertEqual(foundMembership.roomId, roomId)
-            validate(membership: foundMembership)
+        if let list = listMemberships(roomId: roomId, personEmail: other.email) {
+            var foundMembership: Membership? = nil
+            for currentMembership in list {
+                if currentMembership.personId == other.personId {
+                    validate(membership: currentMembership)
+                    foundMembership = currentMembership
+                }
+            }
+            XCTAssertNotNil(foundMembership)
         } else {
             XCTFail("No memberships returned")
         }
@@ -274,9 +269,30 @@ class MembershipTests: XCTestCase {
         return fixture.getResponse(testCase: self, request: request) != nil
     }
     
-    private func listMemberships(roomId: String?, personId: String?, max: Int?) -> [Membership]? {
+    private func listMemberships(max: Int?) -> [Membership]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
-            self.memberships.list(roomId: roomId, personId: personId, max: max, completionHandler: completionHandler)
+            self.memberships.list(max: max, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func listMemberships(roomId: String, max: Int?) -> [Membership]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
+            self.memberships.list(roomId: roomId, max: max, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+        
+    private func listMemberships(roomId: String, personId: String) -> [Membership]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
+            self.memberships.list(roomId: roomId, personId: personId, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func listMemberships(roomId: String, personEmail: EmailAddress) -> [Membership]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
+            self.memberships.list(roomId: roomId, personEmail: personEmail, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }

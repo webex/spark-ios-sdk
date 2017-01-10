@@ -115,6 +115,7 @@ class RoomTests: XCTestCase {
         let roomId = (room?.id)!
         XCTAssertTrue(deleteRoom(roomId: roomId))
         XCTAssertNil(getRoom(roomId: roomId))
+        room = nil
     }
     
     func testDeletingRoomWithBadIdFails() {
@@ -139,7 +140,6 @@ class RoomTests: XCTestCase {
         // XXX: There may be a reason for why we want this behavior, but if so it is not known
         room = createRoom(title: roomTitle, teamId: nil)
         let roomDetails = getRoom(roomId: "")
-        validate(room: roomDetails)
         XCTAssertNotNil(roomDetails)
         XCTAssertNil(roomDetails?.id)
         XCTAssertNil(roomDetails?.title)
@@ -196,8 +196,7 @@ class RoomTests: XCTestCase {
         XCTAssertNotNil(team?.id)
         room = createRoom(title: roomTitle, teamId: team?.id)
         validate(room: room)
-        let roomArray = listRooms(teamId: team?.id, max: nil, type: nil)
-        if let roomArray = roomArray {
+        if let roomArray = listRooms(teamId: team?.id, max: nil, type: nil) {
             XCTAssertEqual(roomArray.count, 1)
             XCTAssertEqual(roomArray.first?.id, room?.id)
             XCTAssertEqual(roomArray.first?.teamId, team?.id)

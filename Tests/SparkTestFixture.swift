@@ -185,7 +185,7 @@ class SparkTestFixture {
             }
             expect.fulfill()
         }
-        testCase.waitForExpectations(timeout: 5) { error in XCTAssertNil(error, "Timeout") }
+        testCase.waitForExpectations(timeout: 30) { error in XCTAssertNil(error, "Timeout") }
         return output
     }
     

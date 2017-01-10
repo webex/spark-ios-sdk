@@ -93,7 +93,7 @@ class PhoneTests: XCTestCase {
             success = result
             expect.fulfill()
         }
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 30) { error in
             XCTAssertNil(error, "Phone registration timed out")
         }
         return success
@@ -111,7 +111,7 @@ class PhoneTests: XCTestCase {
             success = result
             expect.fulfill()
         }
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 30) { error in
             XCTAssertNil(error, "Phone deregistration timed out")
         }
         
@@ -127,7 +127,7 @@ class PhoneTests: XCTestCase {
             expect.fulfill()
         }
         
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 30) { error in
             XCTAssertNil(error, "Phone dial timed out")
         }
         return success ? call : nil
@@ -141,7 +141,7 @@ class PhoneTests: XCTestCase {
             success = result
             expect.fulfill()
         }
-        waitForExpectations(timeout: 3) { error in
+        waitForExpectations(timeout: 30) { error in
             XCTAssertNil(error, "Phone hangup timed out")
         }
         return success

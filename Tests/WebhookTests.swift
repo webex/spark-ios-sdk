@@ -36,11 +36,11 @@ class WebhookTests: XCTestCase {
         let room = fixture.createRoom(testCase: self, title: "room_for_test")
         roomId = room?.id
         XCTAssertNotNil(roomId)
+        webhooks = fixture.spark.webhooks
         webhook = createWebhook()
         XCTAssertNotNil(webhook)
         webhookId = webhook.id
         XCTAssertNotNil(webhookId)
-        webhooks = fixture.spark.webhooks
     }
 
     override func tearDown() {
@@ -59,7 +59,7 @@ class WebhookTests: XCTestCase {
     }
     
     func testWhenCreateWebhookThenItExistsAndHasAnId() {
-        
+        // Tests that basic setup and teardown work without issue.
     }
     
     func testWhenThereIsOneWebhookThenTheListFunctionReturnsOneWebhook() {
@@ -87,7 +87,7 @@ class WebhookTests: XCTestCase {
     
     private func createWebhook() -> Webhook? {
         let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
-            self.webhooks.create(name: "test_webhook", targetUrl: "https://example.com/test_webhook", resource: "messages", event: "created", filter: "roomId=" + self.roomId!, completionHandler: completionHandler)
+            self.webhooks.create(name: "test_webhook", targetUrl: "https://example.com/test_webhook", resource: "messages", event: "created", filter: "roomId=" + self.roomId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }

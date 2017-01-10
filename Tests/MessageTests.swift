@@ -144,9 +144,9 @@ class MessageTests: XCTestCase {
         XCTAssertNotNil(message?.files)
     }
     
-    func testPostingMessageUsingInvalidPersonEmailDoesNotReturnMessage() {
+    func testPostingMessageUsingInvalidPersonEmailReturnsMessage() {
         let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: fileUrl)
-        XCTAssertNil(message)
+        XCTAssertNotNil(message)
     }
     
     func testListingMessagesReturnsMessages() {
@@ -181,16 +181,11 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
     }
     
-    func testListingMessagesBeforeADateAndAMessageIdReturnsMessagesPostedBeforeThatDateAndMessage() {
-        let message1 = postMessage(roomId: roomId, text: text, files: nil)
-        Thread.sleep(forTimeInterval: 0.1)
+    func testListingMessagesBeforeADateAndAMessageIdDoesNotReturnMessageWithThatId() {
+        let message = postMessage(roomId: roomId, text: text, files: nil)
         let now = self.getISO8601Date()
-        Thread.sleep(forTimeInterval: 0.1)
-        let message2 = postMessage(roomId: roomId, text: text, files: nil)
-        let message3 = postMessage(roomId: roomId, text: text, files: nil)
-        let messageArray = listMessages(roomId: roomId, before: now, beforeMessage: message3?.id, max: nil)
-        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
-        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+        let messageArray = listMessages(roomId: roomId, before: now, beforeMessage: message?.id, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message?.id}, false)
     }
     
     func testListingMessageWithInvalidRoomIdDoesNotReturnMessage() {
