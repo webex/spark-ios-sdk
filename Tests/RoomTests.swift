@@ -45,6 +45,7 @@ class RoomTests: XCTestCase {
         continueAfterFailure = false
         XCTAssertNotNil(fixture)
         me = fixture.selfUser
+        rooms = fixture.spark.rooms
     }
     
     override func tearDown() {
@@ -235,7 +236,7 @@ class RoomTests: XCTestCase {
     
     private func deleteRoom(roomId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.fixture.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
+            self.rooms.delete(roomId: roomId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request) != nil
     }
