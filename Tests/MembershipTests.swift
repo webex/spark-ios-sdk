@@ -257,41 +257,41 @@ class MembershipTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Membership>) -> Void) in
             self.memberships.create(roomId: roomId, personEmail: personEmail, isModerator: isModerator, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func createMembership(roomId: String, personId: String, isModerator: Bool) -> Membership? {
         let request = { (completionHandler: @escaping (ServiceResponse<Membership>) -> Void) in
             self.memberships.create(roomId: roomId, personId: personId, isModerator: isModerator, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func deleteMembership(membershipId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.memberships.delete(membershipId: membershipId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request) != nil
+        return Utils.getResponse(testCase: self, request: request) != nil
     }
     
     private func listMemberships(roomId: String?, personId: String?, max: Int?) -> [Membership]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
             self.memberships.list(roomId: roomId, personId: personId, max: max, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func getMembership(membershipId: String) -> Membership? {
         let request = { (completionHandler: @escaping (ServiceResponse<Membership>) -> Void) in
             self.memberships.get(membershipId: membershipId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func updateMembership(membershipId: String, isModerator: Bool) -> Membership? {
         let request = { (completionHandler: @escaping (ServiceResponse<Membership>) -> Void) in
             self.memberships.update(membershipId: membershipId, isModerator: isModerator, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
 }

@@ -179,20 +179,20 @@ class XCPeopleSpec: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<[Person]>) -> Void) in
             self.people.list(email: email, displayName: displayName, max: max, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func getMe() -> Person? {
         let request = { (completionHandler: @escaping (ServiceResponse<Person>) -> Void) in
             self.people.getMe(completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func get(personId: String) -> Person? {
         let request = { (completionHandler: @escaping (ServiceResponse<Person>) -> Void) in
             self.people.get(personId: personId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
 }

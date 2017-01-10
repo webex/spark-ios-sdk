@@ -155,34 +155,34 @@ class XCTeamSpec: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
             self.teams.create(name: teamName, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
 
     private func listTeams(max: Int? = nil) -> [Team]? {
         let request = { (completionHandler: @escaping (ServiceResponse<Array<Team>>) -> Void) in
             self.teams.list(max: max, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func getTeam(teamId: String) -> Team? {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
             self.teams.get(teamId: teamId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func updateTeam(teamId: String, name: String) -> Team? {
         let request = { (completionHandler: @escaping (ServiceResponse<Team>) -> Void) in
             self.teams.update(teamId: teamId, name: name, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func deleteTeam(teamId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.teams.delete(teamId: teamId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request) == nil ? false : true
+        return Utils.getResponse(testCase: self, request: request) == nil ? false : true
     }
 }

@@ -209,34 +209,34 @@ class RoomTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
             self.rooms.create(title: title, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func updateRoom(roomId: String, title: String) -> Room? {
         let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
             self.rooms.update(roomId: roomId, title: title, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func getRoom(roomId: String) -> Room? {
         let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
             self.rooms.get(roomId: roomId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func listRooms(teamId: String?, max: Int?, type: RoomType?) -> [Room]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) in
             self.rooms.list(teamId: teamId, max: max, type: type, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func deleteRoom(roomId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.fixture.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request) != nil
+        return Utils.getResponse(testCase: self, request: request) != nil
     }
 }

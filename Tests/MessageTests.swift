@@ -232,63 +232,63 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.messages.delete(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request) != nil
+        return Utils.getResponse(testCase: self, request: request) != nil
     }
     
     private func postMessage(roomId: String, text: String, files: String?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: roomId, text: text, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(roomId: String, files: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: roomId, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(personId: String, text: String, files: String?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personId: personId, text: text, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(personId: String, files: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personId: personId, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(personEmail: EmailAddress, text: String, files: String?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personEmail: personEmail, text: text, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(personEmail: EmailAddress, files: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personEmail: personEmail, files: files, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func listMessages(roomId: String, before: String?, beforeMessage: String?, max: Int?) -> [Message]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
             self.messages.list(roomId: roomId, before: before, beforeMessage: beforeMessage, max: max, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
     
     private func getMessage(messageId: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.get(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return Utils.getResponse(testCase: self, request: request)
     }
 }
 
