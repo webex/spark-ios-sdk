@@ -18,225 +18,391 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import XCTest
+import Quick
+import Nimble
+import Alamofire
 @testable import SparkSDK
 
-class RoomTests: XCTestCase {
+class RoomSpec: QuickSpec {
     
     private let fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
-    private let roomTitle  = "room_for_testing"
-    private let specialTitle = "@@@ &&&_%%%"
-    private let updatedRoomTitle  = "room_for_testing_updated"
+    private let RoomTitle  = "room_for_testing"
+    private let SpecialTitle = "@@@ &&&_%%%"
+    private let UpdatedRoomTitle  = "room_for_testing_updated"
+    private let RoomCountMin = 1
+    private let RoomCountMax = 100    //TO BE DETERMINED
+    private let RoomCountValid = 10
+    private let RoomCountInvalid = -1
     private var me: TestUser!
     private var rooms: RoomClient!
-    private var room: Room?
+    
+    private func validate(room: Room) {
+        expect(room.id).notTo(beNil())
+        expect(room.title).notTo(beNil())
+        expect(room.type).notTo(beNil())
+        expect(room.isLocked).notTo(beNil())
+        expect(room.lastActivity).notTo(beNil())
+        expect(room.created).notTo(beNil())
+    }
+    
+    override func spec() {
+        
+        beforeSuite {
+            self.continueAfterFailure = false
+            XCTAssertNotNil(self.fixture)
+            self.me = self.fixture.selfUser
+            self.rooms = self.fixture.spark.rooms
+        }
+        
+        // MARK: - Create a Room
+        
+        describe("create a room") {
+            
+            afterEach {
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+            
+            it("sync with title") {
+                do {
+                    let room = try self.rooms.create(title: self.RoomTitle)
+                    self.validate(room: room)
+                    
+                    expect(room.title).to(equal(self.RoomTitle))
+                    
+                } catch let error as NSError {
+                    fail("Failed to create room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with emptyTitle") {
+                do {
+                    let room = try self.rooms.create(title: "")
 
-    private func validate(room: Room?) {
-        XCTAssertNotNil(room)
-        XCTAssertNotNil(room?.id)
-        XCTAssertNotNil(room?.title)
-        XCTAssertNotNil(room?.type)
-        XCTAssertNotNil(room?.isLocked)
-        XCTAssertNotNil(room?.lastActivity)
-        XCTAssertNotNil(room?.created)
-    }
-    
-    override func setUp() {
-        continueAfterFailure = false
-        XCTAssertNotNil(fixture)
-        me = fixture.selfUser
-    }
-    
-    override func tearDown() {
-        if let room = room, let roomId = room.id {
-            if(!deleteRoom(roomId: roomId)) {
-                XCTFail("Failed to delete room")
+                    expect(room.id).notTo(beNil())
+                    expect(room.title).to(beNil())
+
+                } catch let error as NSError {
+                    fail("Failed to create room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with specialTitle") {
+                do {
+                    let room = try self.rooms.create(title: self.SpecialTitle)
+                    self.validate(room: room)
+                    
+                    expect(room.title).to(equal(self.SpecialTitle))
+                    
+                } catch let error as NSError {
+                    fail("Failed to create room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with teamId") {
+                do {
+                    let team = TestTeam()
+                    let room = try self.rooms.create(title: self.RoomTitle, teamId: team?.id)
+                    expect(room.title).to(equal(self.RoomTitle))
+                    expect(room.teamId).to(equal(team?.id))
+                    
+                } catch let error as NSError {
+                    fail("Failed to create team, \(error.localizedFailureReason)")
+                }
             }
         }
-        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
-        super.tearDown()
-    }
-    
-    func testCreatingRoomWithTitleReturnsRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        validate(room: room)
-        XCTAssertEqual(room?.title, roomTitle)
-    }
-    
-    func testCreatingRoomWithEmptyTitleReturnsRoom() {
-        room = createRoom(title: "", teamId: nil)
-        XCTAssertNotNil(room?.id)
-        XCTAssertNil(room?.title)
-    }
-    
-    func testCreatingRoomWithSpecialTitleReturnsRoom() {
-        room = createRoom(title: specialTitle, teamId: nil)
-        validate(room: room)
-        XCTAssertEqual(room?.title, specialTitle)
-    }
-    
-    func testCreatingRoomWithTeamIdReturnsRoom() {
-        let team = TestTeam()
-        XCTAssertNotNil(team?.id)
-        room = createRoom(title: roomTitle, teamId: team?.id)
-        validate(room: room)
-        XCTAssertEqual(room?.title, roomTitle)
-        XCTAssertEqual(room?.teamId, team?.id)
-    }
-    
-    func testUpdatingRoomWithRoomIdAndTitleReturnsUpdatedRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        validate(room: room)
-        let roomId = (room?.id)!
-        let updatedRoom = updateRoom(roomId: roomId, title: updatedRoomTitle)
-        validate(room: updatedRoom)
-        XCTAssertEqual(updatedRoom?.title, updatedRoomTitle)
-    }
-    
-    func testUpdatingRoomWithInvalidRoomIdFails() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        let updatedRoom = updateRoom(roomId: Config.InvalidId, title: updatedRoomTitle)
-        XCTAssertNil(updatedRoom)
-    }
-    
-    func testUpdatingRoomWithRoomIdAndSpecialTitleReturnsUpdatedRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        validate(room: room)
-        let roomId = (room?.id)!
-        let updatedRoom = updateRoom(roomId: roomId, title: specialTitle)
-        validate(room: updatedRoom)
-        XCTAssertEqual(updatedRoom?.title, specialTitle)
-    }
-    
-    func testDeletingRoomWithRoomIdRemovesRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        validate(room: room)
-        let roomId = (room?.id)!
-        XCTAssertTrue(deleteRoom(roomId: roomId))
-        XCTAssertNil(getRoom(roomId: roomId))
-    }
-    
-    func testDeletingRoomWithBadIdFails() {
-        XCTAssertFalse(deleteRoom(roomId: Config.InvalidId))
-    }
-    
-    func testGettingRoomWithRoomIdReturnsRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        validate(room: room)
-        let roomId = (room?.id)!
-        let roomDetails = getRoom(roomId: roomId)
-        validate(room: roomDetails)
-        XCTAssertEqual(roomDetails?.id, room?.id)
-        XCTAssertEqual(roomDetails?.title, room?.title)
-    }
-    
-    func testGettingRoomWithInvalidRoomIdFails() {
-        XCTAssertNil(getRoom(roomId: Config.InvalidId))
-    }
-    
-    func testGettingRoomWithEmptyRoomIdReturnsRoom() {
-        // XXX: There may be a reason for why we want this behavior, but if so it is not known
-        room = createRoom(title: roomTitle, teamId: nil)
-        let roomDetails = getRoom(roomId: "")
-        validate(room: roomDetails)
-        XCTAssertNotNil(roomDetails)
-        XCTAssertNil(roomDetails?.id)
-        XCTAssertNil(roomDetails?.title)
-    }
-    
-    func testListingRoomWithNoDetailsReturnsRoom() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        let roomArray = listRooms(teamId: nil, max: nil, type: nil)
-        if let roomArray = roomArray {
-            XCTAssertGreaterThanOrEqual(roomArray.count, 1)
-            validate(room: roomArray.first)
-        } else {
-            XCTFail("Could not retrieve rooms")
+        
+        // MARK: - Update a Room
+        
+        describe("update a room") {
+            
+            var room: TestRoom? = nil
+            
+            beforeEach {
+                room = TestRoom()
+                if room != nil {
+                    self.validate(room: room!.room!)
+                }
+            }
+            
+            afterEach {
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+            
+            it("sync with roomId and title") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let updatedRoom = try self.rooms.update(roomId: room!.id!, title: self.UpdatedRoomTitle)
+                    self.validate(room: updatedRoom)
+                    expect(updatedRoom.id).notTo(beNil())
+                    expect(updatedRoom.title).to(equal(self.UpdatedRoomTitle))
+                    
+                }  catch let error as NSError {
+                    fail("Failed to update team, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with invalid roomId") {
+                expect{try self.rooms.update(roomId: Config.InvalidId, title: self.UpdatedRoomTitle)}.to(throwError())
+            }
+            
+            it("sync with roomId and specialTitle") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let updatedRoom = try self.rooms.update(roomId: room!.id!, title: self.SpecialTitle)
+                    expect(updatedRoom.title).to(equal(self.SpecialTitle))
+                    
+                }  catch let error as NSError {
+                    fail("Failed to update team, \(error.localizedFailureReason)")
+                }
+            }
         }
-    }
-    
-    func testListingRoomsWithValidMaxReturnsRooms() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        let roomArray = listRooms(teamId: nil, max: 10, type: nil)
-        if let roomArray = roomArray {
-            XCTAssertLessThanOrEqual(roomArray.count, 10)
-            XCTAssertGreaterThanOrEqual(roomArray.count, 1)
-            validate(room: roomArray.first)
-        } else {
-            XCTFail("Could not retrieve rooms")
+        
+        // MARK: - Delete a Room
+        
+        describe("delete a room") {
+            
+            var room: Room? = nil
+            
+            beforeEach {
+                do {
+                    room = try self.rooms.create(title: self.RoomTitle)
+                    self.validate(room: room!)
+                    
+                } catch let error as NSError {
+                    fail("Failed to create team, \(error.localizedFailureReason)")
+                }
+                
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+            
+            it("sync with roomId") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    try self.rooms.delete(roomId: room!.id!)
+                } catch let error as NSError {
+                    fail("Failed to delete room, \(error.localizedFailureReason)")
+                }
+                
+                expect{try self.rooms.get(roomId: room!.id!)}.to(throwError())
+            }
+            
+            it("sync with invalid RoomId") {
+                expect{try self.rooms.delete(roomId: Config.InvalidId)}.to(throwError())
+            }
+            
+            it("sync with empty RoomId") {
+                expect{try self.rooms.delete(roomId: "")}.to(throwError())
+            }
         }
-    }
-    
-    func testListingRoomsWithValidMaxAndDirectTypeDoesNotFail() {
-        // We do not have a way that we're currently creating "direct" 1-to-1 rooms in this test
-        let roomArray = listRooms(teamId: nil, max: 10, type: .direct)
-        XCTAssertNotNil(roomArray)
-    }
-    
-    func testListingRoomsWithMaxOf1ReturnsOnly1Room() {
-        room = createRoom(title: roomTitle, teamId: nil)
-        let otherRoom = createRoom(title: roomTitle, teamId: nil)
-        let roomArray = listRooms(teamId: nil, max: 1, type: nil)
-        if let roomArray = roomArray {
-            XCTAssertEqual(roomArray.count, 1)
-            validate(room: roomArray.first)
-        } else {
-            XCTFail("Could not retrieve rooms")
+        
+        // MARK: - Get a room
+        
+        describe("get a room") {
+            
+            var room: TestRoom? = nil
+            
+            beforeEach {
+                room = TestRoom()
+                if room != nil {
+                    self.validate(room: room!.room!)
+                }
+            }
+            
+            afterEach {
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+            
+            it("sync with roomId") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let roomDetails = try self.rooms.get(roomId: room!.id!)
+                    self.validate(room: roomDetails)
+                    expect(roomDetails.id!).to(equal(room?.id!))
+                    expect(roomDetails.title!).to(equal(room?.title!))
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with invalid roomId") {
+                expect{try self.rooms.get(roomId: Config.InvalidId)}.to(throwError())
+            }
+            
+            it("sync with emptyRoomId") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let roomDetails = try self.rooms.get(roomId: "")
+                    
+                    expect(roomDetails).notTo(beNil())
+                    expect(roomDetails.id).to(beNil())
+                    expect(roomDetails.title).to(beNil())
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
         }
-        _ = deleteRoom(roomId: (otherRoom?.id)!)
-    }
-    
-    func testListingRoomsWithInvalidMaxFails() {
-        XCTAssertNil(listRooms(teamId: nil, max: -1, type: nil))
-    }
-    
-    func testListingRoomWithTeamIdReturnsRoom() {
-        let team = TestTeam()
-        XCTAssertNotNil(team?.id)
-        room = createRoom(title: roomTitle, teamId: team?.id)
-        validate(room: room)
-        let roomArray = listRooms(teamId: team?.id, max: nil, type: nil)
-        if let roomArray = roomArray {
-            XCTAssertEqual(roomArray.count, 1)
-            XCTAssertEqual(roomArray.first?.id, room?.id)
-            XCTAssertEqual(roomArray.first?.teamId, team?.id)
-        } else {
-            XCTFail("Could not retrieve rooms")
+        
+        // MARK: - List rooms
+        
+        describe("list rooms") {
+            
+            var room: TestRoom? = nil
+            
+            beforeEach {
+                room = TestRoom()
+                if room != nil {
+                    self.validate(room: room!.room!)
+                }
+            }
+            
+            afterEach {
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+            
+            it("sync with nothing") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list()
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
+                    expect(rooms[0].id).notTo(beNil())
+                    expect(rooms[0].title).notTo(beNil())
+                    
+                } catch let error as NSError {
+                    fail("Failed to list room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with valid max") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountValid)
+                    expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountValid))
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
+                    self.validate(room: rooms[0])
+                    
+                } catch let error as NSError {
+                    fail("Failed to list room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with valid max and direct type") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountValid, type: .direct)
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(0))
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with min max") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountMin)
+                    expect(rooms.count).to(equal(self.RoomCountMin))
+                    self.validate(room: rooms[0])
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with min max and direct group") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountMin, type: .direct)
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(0))
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with max max") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountMax)
+                    expect(rooms.count).to(beLessThanOrEqualTo(self.RoomCountMax))
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(self.RoomCountMin))
+                    self.validate(room: rooms[0])
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with max max and direct type") {
+                guard room?.id != nil else {
+                    return
+                }
+                
+                do {
+                    let rooms = try self.rooms.list(max: self.RoomCountMax, type: .direct)
+                    expect(rooms.count).to(beGreaterThanOrEqualTo(0))
+                    
+                } catch let error as NSError {
+                    fail("Failed to get room, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("sync with invalid max") {
+                expect{try self.rooms.list(max: self.RoomCountInvalid)}.to(throwError())
+            }
+            
+            it("sync with invalid max and direct type") {
+                expect{try self.rooms.list(max: self.RoomCountInvalid, type: .direct)}.to(throwError())
+            }
+            
+            it("sync with teamId") {
+                do {
+                    let team = TestTeam()
+                    let room = try self.rooms.create(title: self.RoomTitle, teamId: team?.id)
+                    expect(room).notTo(beNil())
+                    
+                    let rooms = try self.rooms.list(teamId: team?.id)
+                    expect(rooms.contains{$0.id == room.id}).to(beTrue())
+                    expect(rooms.contains{$0.teamId == room.teamId}).to(beTrue())
+                    
+                } catch let error as NSError {
+                    fail("Failed to list team, \(error.localizedFailureReason)")
+                }
+            }
         }
-    }
-    
-    private func createRoom(title: String, teamId: String?) -> Room? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
-            self.rooms.create(title: title, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request)
-    }
-    
-    private func updateRoom(roomId: String, title: String) -> Room? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
-            self.rooms.update(roomId: roomId, title: title, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request)
-    }
-    
-    private func getRoom(roomId: String) -> Room? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Room>) -> Void) in
-            self.rooms.get(roomId: roomId, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request)
-    }
-    
-    private func listRooms(teamId: String?, max: Int?, type: RoomType?) -> [Room]? {
-        let request = { (completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) in
-            self.rooms.list(teamId: teamId, max: max, type: type, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request)
-    }
-    
-    private func deleteRoom(roomId: String) -> Bool {
-        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.fixture.spark.rooms.delete(roomId: roomId, completionHandler: completionHandler)
-        }
-        return Utils.getResponse(testCase: self, request: request) != nil
     }
 }
