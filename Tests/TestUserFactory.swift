@@ -46,8 +46,8 @@ class TestUserFactory {
                                    "scopes": scopes]
         var user = TestUser()
         let semaphore = DispatchSemaphore(value: 0)
-        let queue = DispatchQueue(label: "create-user-queue")
-        Alamofire.request(testUserUrl, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON(queue: queue) { response in
+		let queue = DispatchQueue(label: "create-user-queue")
+		Alamofire.request(testUserUrl, method: .post, parameters: body, encoding: JSONEncoding.default, headers: headers).responseJSON(queue: queue) { response in
                 switch response.result {
                 case .success:
                     if let value = response.result.value {
@@ -57,16 +57,16 @@ class TestUserFactory {
                         user.email = EmailAddress.fromString(json["user"]["email"].stringValue)
                         user.name = json["user"]["name"].stringValue
                         user.orgId = json["user"]["orgId"].stringValue
-                        user.personId = self.getPersonIdFromUserId(id: user.id!)
+						user.personId = self.getPersonIdFromUserId(id: user.id!)
                         
                         semaphore.signal()
                     }
                 case .failure(let error):
                     print(error)
-                    semaphore.signal()
+					semaphore.signal()
                 }
         }
-        _ = semaphore.wait(timeout: DispatchTime.distantFuture)
+		_ = semaphore.wait(timeout: DispatchTime.distantFuture)
         
         return user
     }
@@ -100,7 +100,7 @@ private struct Client {
     
     init() {
         secret = Client.getSecret()
-        base64Credentials = "\(id):\(secret)".data(using: String.Encoding.utf8)!.base64EncodedString(options: [])
+		base64Credentials = "\(id):\(secret)".data(using: String.Encoding.utf8)!.base64EncodedString(options: [])
     }
        
     private static func getSecret() -> String {
@@ -119,32 +119,32 @@ private struct AccessToken {
     
     init() {
         value = AccessToken.getBearerAccessToken()
-    }
+	}
     
     private static func getBearerAccessToken() -> String {
-        let accessTokenUrl = "https://idbroker.webex.com/idb/oauth2/v1/access_token"        
+		let accessTokenUrl = "https://idbroker.webex.com/idb/oauth2/v1/access_token"		
 
-        let headers = ["Authorization": "Basic \(Client().base64Credentials)"]
+		let headers = ["Authorization": "Basic \(Client().base64Credentials)"]
         let body = ["grant_type": "client_credentials",
                     "scope": "webexsquare:admin Identity:SCIM"]
         var adminToken = ""
         let semaphore = DispatchSemaphore(value: 0)
-        let queue = DispatchQueue(label: "create-token-queue")
+		let queue = DispatchQueue(label: "create-token-queue")
 
-        Alamofire.request(accessTokenUrl, method: .post, parameters: body, headers: headers).responseJSON(queue: queue) { response in
-            switch response.result {
-            case .success:
-                if let value = response.result.value {
-                    let json = JSON(value)
-                    adminToken = json["access_token"].stringValue
-                    semaphore.signal()
-                }
-            case .failure(let error):
-                print(error)
-                semaphore.signal()
-            }
-        }
-        _ = semaphore.wait(timeout: DispatchTime.distantFuture)
+		Alamofire.request(accessTokenUrl, method: .post, parameters: body, headers: headers).responseJSON(queue: queue) { response in
+			switch response.result {
+			case .success:
+				if let value = response.result.value {
+					let json = JSON(value)
+					adminToken = json["access_token"].stringValue
+					semaphore.signal()
+				}
+			case .failure(let error):
+				print(error)
+				semaphore.signal()
+			}
+		}
+		_ = semaphore.wait(timeout: DispatchTime.distantFuture)
         return adminToken
     }
 }
