@@ -69,7 +69,7 @@ class MembershipTests: XCTestCase {
     }
     
     override static func tearDown() {
-        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+        Utils.wait(interval: Config.TestcaseInterval)
         super.tearDown()
     }
     
@@ -279,7 +279,7 @@ class MembershipTests: XCTestCase {
     
     private func listMemberships(roomId: String?, personId: String?, max: Int?) -> [Membership]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Membership]>) -> Void) in
-            self.memberships.list(roomId: roomId, personId: personId, max: max, completionHandler: completionHandler)
+            self.memberships.list(roomId: roomId, personId: personId, max: max,completionHandler: completionHandler)
         }
         return Utils.getResponse(testCase: self, request: request)
     }
