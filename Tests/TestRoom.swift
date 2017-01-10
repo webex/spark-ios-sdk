@@ -54,37 +54,3 @@ class TestRoom {
         }
     }
 }
-
-class TestRoom: XCTestCase {
-    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
-    var room: Room?
-    var id: String? {
-        return room?.id
-    }
-    var title: String? {
-        return room?.title
-    }
-    
-    init?() {
-        room = createRoom(title: "room_for_test")
-    }
-    
-    deinit {
-        deleteRoom(roomId: id)
-        
-    }
-    
-    private func createRoom(title: String) -> Room? {
-        let request = { (completionHandler: (ServiceResponse<Room>) -> Void) in
-            fixture.createRoom(testCase: self, title: title)
-        }
-        return 
-    }
-    
-    private func deleteRoom(roomId: String) {
-        let authStrategy: JWTAuthStrategy
-        let roomClient = RoomClient(AuthenticationStrategy: authStrategy)
-        roomClient.delete(testCase: self, roomId: roomId)
-    }
-    
-}

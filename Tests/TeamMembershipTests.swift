@@ -19,10 +19,12 @@
 // THE SOFTWARE.
 
 import Foundation
-import XCTest
+import Quick
+import Nimble
 @testable import SparkSDK
 
-class TeamMembershipTests: XCTestCase {
+class TeamMembershipSpec: QuickSpec {
+    
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var teamMemberships: TeamMembershipClient!
     private var team: TestTeam?
@@ -31,277 +33,260 @@ class TeamMembershipTests: XCTestCase {
     }
     
     private func validate(membership: TeamMembership) {
-        XCTAssertNotNil(membership.id)
-        XCTAssertNotNil(membership.teamId)
-        XCTAssertNotNil(membership.personId)
-        XCTAssertNotNil(membership.personEmail)
-        XCTAssertNotNil(membership.personDisplayName)
-        XCTAssertNotNil(membership.created)
-        XCTAssertNotNil(membership.isModerator)
+        expect(membership.id).notTo(beNil())
+        expect(membership.teamId).notTo(beNil())
+        expect(membership.personId).notTo(beNil())
+        expect(membership.personEmail).notTo(beNil())
+        expect(membership.personDisplayName).notTo(beNil())
+        expect(membership.created).notTo(beNil())
+        expect(membership.isModerator).notTo(beNil())
     }
     
-    override func setUp() {
-        continueAfterFailure = false
-        XCTAssertNotNil(fixture)
-        teamMemberships = fixture.spark.teamMemberships
-        team = TestTeam()
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonIdAndNoModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId),
-            let personId = membership.personId,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personId, user.personId)
-            XCTAssertFalse(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonIdAndTrueModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: true),
-            let personId = membership.personId,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personId, user.personId)
-            XCTAssertTrue(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonIdAndFalseModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: false),
-            let personId = membership.personId,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personId, user.personId)
-            XCTAssertFalse(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonEmailAndNoModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personEmail: user.email),
-            let personEmail = membership.personEmail,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personEmail, user.email)
-            XCTAssertFalse(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonEmailAndTrueModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personEmail: user.email, isModerator: true),
-            let personEmail = membership.personEmail,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personEmail, user.email)
-            XCTAssertTrue(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithPersonEmailAndFalseModeratorStatusThenItCanBeRetrieved() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personEmail: user.email, isModerator: false),
-            let personEmail = membership.personEmail,
-            let isModerator = membership.isModerator {
-            validate(membership: membership)
-            XCTAssertEqual(personEmail, user.email)
-            XCTAssertFalse(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenMembershipIsCreatedWithInvalidTeamIdAndPersonIdThenItCannotBeRetrieved() {
-        let membership = createMembership(teamId: Config.InvalidId, personId: Config.InvalidId)
-        XCTAssertNil(membership, "Unexpected successful request")
-    }
-    
-    func testWhenMembershipIsListedThenItContainsCorrectMembers() {
-        guard let testTeam = TestTeam() else {
-            XCTFail("Failed to create test team")
-            return
+    override func spec() {
+        beforeSuite {
+            self.continueAfterFailure = false
+            XCTAssertNotNil(self.fixture)
+            self.teamMemberships = self.fixture.spark.teamMemberships
+            self.team = TestTeam()
         }
         
-        if let user = fixture.createUser(),
-            let testTeamId = testTeam.id,
-            let membership1 = createMembership(teamId: testTeamId, personId: user.personId),
-            let membership2 = createMembership(teamId: teamId, personId: user.personId),
-            let memberships = listMemberships(teamId: testTeamId) {
-            validate(membership: membership1)
-            validate(membership: membership2)
-            XCTAssertTrue(memberships.contains{$0.teamId == testTeamId})
-            XCTAssertTrue(memberships.contains{$0 == membership1})
-            XCTAssertFalse(memberships.contains{$0 == membership2})
-        } else {
-            XCTFail("Membership list was incorrect")
-        }
-    }
-    
-    func testWhenMembershipIsListedWithMaxValueAndWhenOnlyOneMemberExistsThenListContainsTheCorrectMember() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId),
-            let memberships = listMemberships(teamId: teamId, max: 1) {
-            validate(membership: membership)
-            XCTAssertTrue(memberships.contains{$0.teamId == teamId})
-            XCTAssertEqual(memberships.count, 1)
-        } else {
-            XCTFail("Membership list was incorrect")
-        }
-    }
-    
-    func testWhenMembershipIsListedWithInvalidMaxValueAndOneMemberExistsThenListIsNotEmpty() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId),
-            let memberships = listMemberships(teamId: teamId, max: -1) {
-            validate(membership: membership)
-            XCTAssertFalse(memberships.isEmpty)
-        } else {
-            XCTFail("Membership list was incorrect")
-        }
-    }
-    
-    func testWhenTeamIdIsInvalidThenItCannotBeRetrieved() {
-        let memberships = listMemberships(teamId: Config.InvalidId)
-        XCTAssertNil(memberships, "Unexpected successful request")
-    }
-    
-    func testWhenMembershipIsCreatedItCanBeRetrievedByMembershipId() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId),
-            let membershipId = membership.id,
-            let membershipFromGet = getMembership(membershipId: membershipId) {
-            validate(membership: membership)
-            validate(membership: membershipFromGet)
-            XCTAssertEqual(membershipFromGet, membership)
-        } else {
-            XCTFail("Membership was incorrect")
-        }
-    }
-    
-    func testThatMembershipCannotBeRetrievedWithInvalidMembershipId() {
-        let membership = getMembership(membershipId: Config.InvalidId)
-        XCTAssertNil(membership, "Unexpected successful request")
-    }
-    
-    func testWhenUpdatedMembershipCanRemoveModeratorStatus() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: true),
-            let id = membership.id,
-            let membershipFromUpdate = updateMembership(membershipId: id, isModerator: false),
-            let isModerator = membershipFromUpdate.isModerator {
-            validate(membership: membership)
-            validate(membership: membershipFromUpdate)
-            XCTAssertFalse(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
-    func testWhenUpdatedMembershipCanBecomeModerator() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: false),
-            let id = membership.id,
-            let membershipFromUpdate = updateMembership(membershipId: id, isModerator: true),
-            let isModerator = membershipFromUpdate.isModerator {
-            validate(membership: membership)
-            self.validate(membership: membershipFromUpdate)
-            XCTAssertTrue(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
-        }
-    }
-    
+        // MARK: - Create a membership
         
-    func testWhenUpdatedMembershipCanBecomeModerator() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId, isModerator: false),
-            let id = membership.id,
-            let membershipFromUpdate = updateMembership(membershipId: id, isModerator: true),
-            let isModerator = membershipFromUpdate.isModerator{
-            validate(membership: membership)
-            validate(membership: membershipFromUpdate)
-            XCTAssertTrue(isModerator)
-        } else {
-            XCTFail("Failed to create membership")
+        describe("create a membership") {
+            it("by person Id") {
+                do {
+                    let user = self.fixture.createUser()
+                    
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.isModerator).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("by person Id with isModerator true") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: true)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.isModerator).to(beTrue())
+                    
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("by person Id with isModerator false") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: false)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personId).to(equal(user!.personId))
+                    expect(membership.isModerator).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("by person email") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.isModerator).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("by person email with isModerator true") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email, isModerator: true)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.isModerator).to(beTrue())
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("by person email with isModerator false") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personEmail: user!.email)
+                    
+                    self.validate(membership: membership)
+                    expect(membership.personEmail).to(equal(user!.email))
+                    expect(membership.isModerator).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to create membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid id") {
+                expect{try self.teamMemberships.create(teamId: Config.InvalidId, personId: Config.InvalidId)}.to(throwError())
+            }
         }
-    }
-    
-    func testThatMembershipCannotBeUpdatedWithInvalidMembershipId() {
-        let membership = updateMembership(membershipId: Config.InvalidId, isModerator: false)
-        XCTAssertNil(membership, "Unexpected successful request")
-    }
-    
-    func testWhenMembershipIsDeletedThenItIsNotPartOfMembershipList() {
-        if let user = fixture.createUser(),
-            let membership = createMembership(teamId: teamId, personId: user.personId),
-            let membershipId = membership.id,
-            let memberships = listMemberships(teamId: teamId) {
-            validate(membership: membership)
-            XCTAssertTrue(deleteMembership(membershipId: membershipId))
-            XCTAssertNotNil(memberships)
-            XCTAssertFalse(memberships.contains{$0 == membership})
-        } else {
-            XCTFail("Failed to delete membership")
+        
+        // MARK: - List a membership
+        
+        describe("list a membership") {
+            it("normal") {
+                do {
+                    guard let testTeam = TestTeam() else {
+                        fail("Failed to create test team")
+                        return
+                    }
+                    
+                    let user = self.fixture.createUser()
+                    let membership1 = try self.teamMemberships.create(teamId: testTeam.id!, personId: user!.personId)
+                    self.validate(membership: membership1)
+                    
+                    let membership2 = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    self.validate(membership: membership2)
+                    
+                    let memberships = try self.teamMemberships.list(teamId: testTeam.id!)
+                    expect(memberships.contains{$0.teamId == testTeam.id}).to(beTrue())
+                    expect(memberships.contains{$0 == membership1}).to(beTrue())
+                    expect(memberships.contains{$0 == membership2}).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to list membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with max value") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    self.validate(membership: membership)
+                    
+                    let memberships = try self.teamMemberships.list(teamId: self.teamId, max: 1)
+                    expect(memberships.contains{$0.teamId == self.teamId}).to(beTrue())
+                    expect(memberships.count).to(equal(1))
+                    
+                } catch let error as NSError {
+                    fail("Failed to list membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid max value") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    self.validate(membership: membership)
+                    
+                    let memberships = try self.teamMemberships.list(teamId: self.teamId, max: -1)
+                    expect(memberships.isEmpty).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to list membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid id") {
+                expect{try self.teamMemberships.list(teamId: Config.InvalidId)}.to(throwError())
+            }
         }
-    }
-    
-    func testThatMembershipCannotBeDeletedWithInvalidMembershipId() {
-        XCTAssertFalse(deleteMembership(membershipId: Config.InvalidId), "Unexpected successful request")
-    }
-    
-    private func createMembership(teamId: String, personId: String, isModerator: Bool = false) -> TeamMembership? {
-        let request = { (completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) in
-            self.teamMemberships.create(teamId: teamId, personId: personId, isModerator: isModerator, completionHandler: completionHandler)
+        
+        // MARK: - Get a membership
+        
+        describe("get a membership") {
+            it("normal") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    self.validate(membership: membership)
+                    
+                    let membershipFromGet = try self.teamMemberships.get(membershipId: membership.id!)
+                    self.validate(membership: membershipFromGet)
+                    expect(membershipFromGet).to(equal(membership))
+                    
+                } catch let error as NSError {
+                    fail("Failed to get membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid id") {
+               expect{try self.teamMemberships.get(membershipId: Config.InvalidId)}.to(throwError())
+            }
         }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func createMembership(teamId: String, personEmail: EmailAddress, isModerator: Bool = false) -> TeamMembership? {
-        let request = { (completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) in
-            self.teamMemberships.create(teamId: teamId, personEmail: personEmail, isModerator: isModerator, completionHandler: completionHandler)
+        
+        // MARK: - Update a membership
+        
+        describe("update a membership") {
+            it("make isModerator true") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: false)
+                    self.validate(membership: membership)
+                    
+                    let membershipFromUpdate = try self.teamMemberships.update(membershipId: membership.id!, isModerator: true)
+                    self.validate(membership: membershipFromUpdate)
+                    expect(membershipFromUpdate.isModerator).to(beTrue())
+                    
+                } catch let error as NSError {
+                    fail("Failed to update membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("make isModerator false") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId, isModerator: true)
+                    self.validate(membership: membership)
+                    
+                    let membershipFromUpdate = try self.teamMemberships.update(membershipId: membership.id!, isModerator: false)
+                    self.validate(membership: membershipFromUpdate)
+                    expect(membershipFromUpdate.isModerator).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to update membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid id") {
+                expect{try self.teamMemberships.update(membershipId: Config.InvalidId, isModerator: false)}.to(throwError())
+            }
         }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func listMemberships(teamId: String, max: Int? = nil) -> [TeamMembership]? {
-        let request = { (completionHandler: @escaping (ServiceResponse<[TeamMembership]>) -> Void) in
-            self.teamMemberships.list(teamId: teamId, max: max, completionHandler: completionHandler)
+        
+         // MARK: - Delete a membership
+        
+        describe("delete a membership") {
+            it("normal") {
+                do {
+                    let user = self.fixture.createUser()
+                    let membership = try self.teamMemberships.create(teamId: self.teamId, personId: user!.personId)
+                    self.validate(membership: membership)
+                    
+                    expect{try self.teamMemberships.delete(membershipId: membership.id!)}.notTo(throwError())
+                    
+                    let memberships = try self.teamMemberships.list(teamId: self.teamId)
+                    expect(memberships).notTo(beNil())
+                    expect(memberships.contains{$0 == membership}).to(beFalse())
+                    
+                } catch let error as NSError {
+                    fail("Failed to delete membership, \(error.localizedFailureReason)")
+                }
+            }
+            
+            it("with invalid id") {
+                expect{try self.teamMemberships.delete(membershipId: Config.InvalidId)}.to(throwError())
+            }
         }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func getMembership(membershipId: String) -> TeamMembership? {
-        let request = { (completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) in
-            self.teamMemberships.get(membershipId: membershipId, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func updateMembership(membershipId: String, isModerator: Bool) -> TeamMembership? {
-        let request = { (completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) in
-            self.teamMemberships.update(membershipId: membershipId, isModerator: isModerator, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func deleteMembership(membershipId: String) -> Bool {
-        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
-            self.teamMemberships.delete(membershipId: membershipId, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request) != nil
     }
 }
