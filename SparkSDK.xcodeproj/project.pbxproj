@@ -784,7 +784,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Cisco;
 				TargetAttributes = {
 					3D15B70A1D3E176C003BB682 = {
@@ -1081,6 +1081,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
@@ -1096,6 +1097,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
@@ -1183,6 +1185,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
