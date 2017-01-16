@@ -20,6 +20,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Network calls should be made using the equivalent asynchronous calls on the client")
 extension WebhookClient {
     
     /// Lists all webhooks
@@ -27,7 +28,7 @@ extension WebhookClient {
     /// - parameter max: Limit the maximum number of webhooks in the response.
     /// - returns: Webhooks array
     public func list(max: Int? = nil) throws -> [Webhook] {
-		return try SyncUtil.getArray(max, async: list)
+		return try SyncUtil.getArray(authenticationStrategy, max, async: list)
     }
     
     /// Posts a webhook.
@@ -39,7 +40,7 @@ extension WebhookClient {
     /// - parameter filter: The filter that defines the webhook scope.
     /// - returns: Webhook
     public func create(name: String, targetUrl: String, resource: String, event: String, filter: String) throws -> Webhook {
-		return try SyncUtil.getObject(name, targetUrl, resource, event, filter, async: create)
+		return try SyncUtil.getObject(authenticationStrategy, name, targetUrl, resource, event, filter, async: create)
     }
     
     /// Shows details for a webhook by id.
@@ -47,7 +48,7 @@ extension WebhookClient {
     /// - parameter webhookId: A webhook id.
     /// - returns: Webhook
     public func get(webhookId: String) throws -> Webhook {
-        return try SyncUtil.getObject(webhookId, async: get)
+        return try SyncUtil.getObject(authenticationStrategy, webhookId, async: get)
     }
     
     /// Updates a webhook by id.
@@ -57,7 +58,7 @@ extension WebhookClient {
     /// - parameter targetUrl: The URL that receives POST requests for each event.
     /// - returns: Webhook
     public func update(webhookId: String, name: String, targetUrl: String) throws -> Webhook {
-        return try SyncUtil.getObject(webhookId, name, targetUrl, async: update)
+        return try SyncUtil.getObject(authenticationStrategy, webhookId, name, targetUrl, async: update)
     }
     
     /// Deletes a webhook by id.
@@ -65,7 +66,7 @@ extension WebhookClient {
     /// - parameter webhookId: A webhook id.
     /// - returns: Void
     public func delete(webhookId: String) throws {
-        try SyncUtil.deleteObject(webhookId, async: delete)
+        try SyncUtil.deleteObject(authenticationStrategy, webhookId, async: delete)
     }
 
 }

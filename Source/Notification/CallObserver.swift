@@ -75,6 +75,12 @@ public enum LocalMediaChangeType {
 /// The CallObserver protocol defines callback methods that observer object implement to respond to call notification.
 public protocol CallObserver: class {
     
+    /// Callback when call is incoming.
+    ///
+    /// - parameter call: The incoming Call object
+    /// - returns: Void
+    func callIncoming(_ call: Call)
+    
     /// Callback when remote participant(s) is ringing.
     ///
     /// - parameter call: Call object for the notification
@@ -147,6 +153,10 @@ public protocol CallObserver: class {
 
 /// The default empty callback methods for CallObserver protocol.
 public extension CallObserver {
+    
+    /// Empty default implementation
+    func callIncoming(_ call: Call) {
+    }
     
     /// Empty default implementation
     func callDidBeginRinging(_ call: Call) {

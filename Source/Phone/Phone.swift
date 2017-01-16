@@ -21,7 +21,7 @@
 import AVFoundation
 
 /// Represents a Spark phone device.
-open class Phone {
+public class Phone {
     
     /// Privacy control of media access type.
     public enum MediaAccessType {
@@ -32,45 +32,68 @@ open class Phone {
         /// Access to both microphone and camera.
         case audioVideo
     }
-    
-    static let sharedInstance = Phone()
 
+    /// Default camera facing mode, used as the default when dialing or answering a call.
+    ///
+    /// - note: The setting is not persistent
+    @available(*, deprecated, message: "Use PhoneSettings.defaultFacingMode instead")
+    public var defaultFacingMode: Call.FacingMode {
+        get {
+            return PhoneSettings.defaultFacingMode
+        }
+        set {
+            PhoneSettings.defaultFacingMode = newValue
+        }
+    }
+    
     /// Default loud speaker mode, used as the default when dialing or answering a call.
     /// True as using loud speaker, False as not.
     ///
     /// - note: The setting is not persistent.
-    open var defaultFacingMode = Call.FacingMode.User
-    
-    /// Default camera facing mode, used as the default when dialing or answering a call.
-    ///
-    /// - note: The setting is not persistent
-    open var defaultLoudSpeaker = true
+    @available(*, deprecated, message: "Use PhoneSettings.defaultLoudSpeaker instead")
+    public var defaultLoudSpeaker: Bool {
+        get {
+            return PhoneSettings.defaultLoudSpeaker
+        }
+        set {
+            PhoneSettings.defaultLoudSpeaker = newValue
+        }
+    }
 
-    private let deviceService    = DeviceService.sharedInstance
-    private let webSocketService = WebSocketService.sharedInstance
-    private let reachabilityService = ReachabilityService.sharedInstance
-    private let applicationLifecycleObserver = ApplicationLifecycleObserver.sharedInstance
+    private let authenticationStrategy: AuthenticationStrategy
+    private let applicationLifecycleObserver: ApplicationLifecycleObserver
+    private let webSocketService: WebSocketService
+    private let callManager: CallManager
+    private let deviceService: DeviceService
+    
+    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.applicationLifecycleObserver = applicationLifecycleObserver
+        self.webSocketService = webSocketService
+        self.callManager = callManager
+        self.deviceService = deviceService
+        webSocketService.deviceReregistrationStrategy = self
+    }
     
     /// Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.
     ///
     /// - parameter completionHandler: A closure to be executed once the registration is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func register(_ completionHandler: ((Bool) -> Void)?) {
-        guard AuthManager.sharedInstance.authorized() else {
+    public func register(_ completionHandler: ((Bool) -> Void)?) {
+        // XXX This guard means that the completion handler may never be fired
+        guard authenticationStrategy.authorized else {
             Logger.error("Skip registering device due to no authorization")
             return
         }
         
-        deviceService.registerDevice() { success in
-            if success {
+        deviceService.registerDevice() { deviceRegistrationInformation in
+            if let deviceRegistrationInformation = deviceRegistrationInformation {
                 self.applicationLifecycleObserver.startObserving()
-                CallManager.sharedInstance.fetchActiveCalls()
-                self.webSocketService.connect(URL(string: self.deviceService.webSocketUrl!)!)
-                completionHandler?(true)
-            } else {
-                completionHandler?(false)
+                self.callManager.fetchActiveCalls()
+                self.webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
             }
+            completionHandler?(deviceRegistrationInformation != nil)
         }
     }
     
@@ -80,16 +103,12 @@ open class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func deregister(_ completionHandler: ((Bool) -> Void)?) {
-        reachabilityService.clear()
+    public func deregister(_ completionHandler: ((Bool) -> Void)?) {
+        callManager.clearReachabilityState()
         applicationLifecycleObserver.stopObserving()
         webSocketService.disconnect()
         deviceService.deregisterDevice() { success in
-            if success {
-                completionHandler?(true)
-            } else {
-                completionHandler?(false)
-            }
+            completionHandler?(success)
         }
     }
     
@@ -100,14 +119,10 @@ open class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Call object
     /// - note: This function is expected to run on main thread.
-    open func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = Call()
+    public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
+        let call = callManager.createOutgoingCall()
         call.dial(address: address, option: option) { success in
-            if success {
-                completionHandler(true)
-            } else {
-                completionHandler(false)
-            }
+            completionHandler(success)
         }
         return call
     }
@@ -116,22 +131,16 @@ open class Phone {
     ///
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
-    open func requestVideoCodecActivation() {
-        VideoLicense.sharedInstance.checkActivation() { isActivated in
-            if isActivated {
-                Logger.info("Video license has been activated")
-            } else {
-                Logger.warn("Video license has not been activated")
-            }
-        }
+    public func requestVideoCodecActivation() {
+        callManager.requestVideoCodecActivation()
     }
     
     /// Prevents the SDK from checking H.264 video codec license activation.
     ///
     /// - returns: Void
     /// - note: The function is expected to be called only by Cisco application. 3rd-party application should NOT call this API.
-    open func disableVideoCodecActivation() {
-        VideoLicense.sharedInstance.disableActivation()
+    public func disableVideoCodecActivation() {
+        callManager.disableVideoCodecActivation()
     }
     
     /// Requests access for media (audio and video), user can change the settings in iOS device settings.
@@ -140,7 +149,7 @@ open class Phone {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means access granted, and False means not.
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
-    open func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
+    public func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
         switch (type) {
         case .audio:
             requestMediaAccess(AVMediaTypeAudio) {
@@ -170,5 +179,11 @@ open class Phone {
                 completionHandler?(granted)
             }
         }
+    }
+}
+
+extension Phone: DeviceReregistrationStrategy {
+    func reregisterDevice() {
+        register(nil)
     }
 }

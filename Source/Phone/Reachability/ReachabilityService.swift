@@ -24,16 +24,22 @@ import ObjectMapper
 class ReachabilityService {
     
     typealias ReachabilityHandler = (String?) -> Void
-    static let sharedInstance = ReachabilityService()
     var feedback: MediaEngineReachabilityFeedback?
     
     private var hostAddresses: [InterfaceAddress.Item]?
-    private var lastFetchData: Date?
+    private var lastFetchDate: Date?
     private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
-
+    private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
+    
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
+    }
+    
     func fetch() {
         let isAddressChanged = isHostAddressChanged()
-        let isMaxAgeReached = isLastFetchLongEnough()
+        let isMaxAgeReached = isDataOutOfDate()
         
         if isAddressChanged || isMaxAgeReached {
             Logger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
@@ -57,33 +63,25 @@ class ReachabilityService {
     
     func clear() {
         hostAddresses = nil
-        lastFetchData = nil
+        lastFetchDate = nil
         clearReachabilityData()
     }
     
     private func isHostAddressChanged() -> Bool {
-        if hostAddresses == nil {
+        if let hostAddresses = hostAddresses {
+            let newHostAddresses = InterfaceAddress.getSortedAddresses()
+            return !InterfaceAddress.isSameSortedAddresses(oldAddrs: hostAddresses, newAddrs: newHostAddresses)
+        } else {
             return true
         }
-        
-        let newHostAddresses = InterfaceAddress.getSortedAddresses()
-        if InterfaceAddress.isSameSortedAddresses(oldAddrs: hostAddresses!, newAddrs: newHostAddresses) {
-            return false
-        }
-        
-        return true
     }
     
-    private func isLastFetchLongEnough() -> Bool {
-        if lastFetchData == nil {
+    private func isDataOutOfDate() -> Bool {
+        if let lastFetchDate = lastFetchDate {
+            return lastFetchDate.timeIntervalSinceNow > MaxAge
+        } else {
             return true
         }
-        
-        if lastFetchData!.timeIntervalSinceNow > MaxAge {
-            return true
-        }
-        
-        return false
     }
     
     private func updateHostAddresses() {
@@ -91,12 +89,12 @@ class ReachabilityService {
     }
     
     private func updateFetchDate() {
-        lastFetchData = Date()
+        lastFetchDate = Date()
     }
     
     private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
-        MediaClusterClient().get() {
+        MediaClusterClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
             case .success(let value):

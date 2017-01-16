@@ -21,21 +21,25 @@
 import Foundation
 
 /// The PhoneObserver protocol defines callback methods that observer object implement to respond to phone notification.
+@available(*, deprecated, message: "Use CallObserver to listen for incoming calls, use OAuthStrategyDelegate to listen for refresh access token failures")
 public protocol PhoneObserver: class {
     
     /// Callback when call is incoming.
     ///
     /// - parameter call: The incoming Call object
     /// - returns: Void
+    @available(*, deprecated, message: "Use CallObserver.callIncoming(_) instead")
     func callIncoming(_ call: Call)
     
     /// Callback when refreshes access token failed. App must login again if recieves this notification.
     ///
     /// - returns: Void
+    @available(*, deprecated, message: "Use OAuthStrategyDelegate instead")
     func refreshAccessTokenFailed()
 }
 
 /// The default empty callback methods for PhoneObserver protocol.
+@available(*, deprecated, message: "Use CallObserver to listen for incoming calls, use OAuthStrategyDelegate to listen for refresh access token failures")
 public extension PhoneObserver {
     
     /// Empty default implementation

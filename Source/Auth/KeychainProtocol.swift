@@ -18,27 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
 
-class ClientAccount: NSObject, NSCoding {
-    var clientId: String
-    var clientSecret: String
-    
-    private let clientIdKey = "clientIdKey"
-    private let clientSecretKey = "clientSecretKey"
-    
-    init(clientId: String, clientSecret: String) {
-        self.clientId = clientId
-        self.clientSecret = clientSecret
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        clientId = aDecoder.decodeObject(forKey: clientIdKey) as! String
-        clientSecret = aDecoder.decodeObject(forKey: clientSecretKey) as! String
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(clientId, forKey: clientIdKey)
-        aCoder.encode(clientSecret, forKey: clientSecretKey)
-    }
+import Foundation
+import KeychainAccess
+
+
+protocol KeychainProtocol {
+    func get(_ key: String) throws -> String?
+    func remove(_ key: String) throws
+    func set(_ value: String, key: String) throws
 }
+
+extension Keychain: KeychainProtocol {}

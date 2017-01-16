@@ -18,93 +18,121 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
+import ObjectMapper
+
 
 // TODO: need to discuss if use term - "locus"
-class CallClient: CompletionHandlerType<CallInfo>{
+class CallClient {
+    
+    typealias ObjectHandler = (ServiceResponse<CallInfo>) -> Void
+    typealias ArrayHandler = (ServiceResponse<[CallInfo]>) -> Void
+    
+    private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
+    
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
+    }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().keyPath("locus")
+        return ServiceRequest.Builder(authenticationStrategy).keyPath("locus")
     }
     
-    func join(_ localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    private func body(deviceUrl: URL, json: [String:Any?] = [:]) -> RequestParameter {
+        var result = json
+        result["deviceUrl"] = deviceUrl.absoluteString
+        return RequestParameter(result)
+    }
+    
+    private func convertToJson(mediaInfo: MediaInfo) -> [String:Any?] {
+        let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)!
+        return ["localMedias": [["type": "SDP", "localSdp": mediaInfoJSON]]]
+    }
+    
+    func createCall(toAddress: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        var json = convertToJson(mediaInfo: localMediaInfo)
+        json["invitee"] = ["address" : toAddress]
+
         let request = requestBuilder()
             .method(.post)
-            .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
-            .body(localInfo)
+            .baseUrl(deviceService.device!.locusServiceUrl)
             .path("loci/call")
+            .body(body(deviceUrl: deviceUrl, json: json))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func join(_ callUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func joinExistingCall(callUrl: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        let json = convertToJson(mediaInfo: localMediaInfo)
         let request = requestBuilder()
             .method(.post)
-            .body(localInfo)
-            .path("participant")
             .baseUrl(callUrl)
+            .path("participant")
+            .body(body(deviceUrl: deviceUrl, json: json))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func leave(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func leave(participantUrl: String, deviceUrl: URL, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(participantUrl)
             .path("leave")
-            .body(RequestParameter(["deviceUrl": deviceUrl]))
+            .body(body(deviceUrl: deviceUrl))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func decline(_ callUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func decline(callUrl: String, deviceUrl: URL, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(callUrl)
-            .body(RequestParameter(["deviceUrl": deviceUrl]))
+            .body(body(deviceUrl: deviceUrl))
             .path("participant/decline")
             .queue(queue)
             .build()
         
         request.responseJSON(completionHandler)
     }
+
+// Unused functionality
+//    func alert(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+//        let request = requestBuilder()
+//            .method(.put)
+//            .baseUrl(participantUrl)
+//            .body(RequestParameter(["deviceUrl": deviceUrl]))
+//            .path("alert")
+//            .queue(queue)
+//            .build()
+//        
+//        request.responseJSON(completionHandler)
+//    }
     
-    func alert(_ participantUrl: String, deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
-        let request = requestBuilder()
-            .method(.put)
-            .baseUrl(participantUrl)
-            .body(RequestParameter(["deviceUrl": deviceUrl]))
-            .path("alert")
-            .queue(queue)
-            .build()
-        
-        request.responseJSON(completionHandler)
-    }
-    
-    func sendDtmf(_ participantUrl: String, deviceUrl: String, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func sendDtmf(_ participantUrl: String, deviceUrl: URL, correlationId: Int, events: String, volume: Int? = nil, durationMillis: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         var dtmfInfo: [String:Any] = [
             "tones": events,
-            "correlationId": correlationId]
-        if volume != nil {
+            "correlationId" : correlationId]
+        if let volume = volume {
             dtmfInfo["volume"] = volume
         }
-        if durationMillis != nil {
+        if let durationMillis = durationMillis {
             dtmfInfo["durationMillis"] = durationMillis
         }
-        let body:[String: Any] = [
-            "deviceUrl": deviceUrl,
-            "dtmf": dtmfInfo]
+        let json: [String: Any] = ["dtmf" : dtmfInfo]
         
         let request = requestBuilder()
             .method(.post)
             .baseUrl(participantUrl)
-            .body(RequestParameter(body))
+            .body(body(deviceUrl: deviceUrl, json: json))
             .path("sendDtmf")
             .queue(queue)
             .build()
@@ -112,11 +140,12 @@ class CallClient: CompletionHandlerType<CallInfo>{
         request.responseJSON(completionHandler)
     }
     
-    func updateMedia(_ mediaUrl: String, localInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func updateMedia(_ mediaUrl: String, deviceUrl: URL, localMediaInfo: MediaInfo, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+        let json = convertToJson(mediaInfo: localMediaInfo)
         let request = requestBuilder()
             .method(.put)
             .baseUrl(mediaUrl)
-            .body(localInfo)
+            .body(body(deviceUrl: deviceUrl, json: json))
             .queue(queue)
             .build()
         
@@ -136,7 +165,7 @@ class CallClient: CompletionHandlerType<CallInfo>{
     func fetchCallInfos(_ queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
-            .baseUrl(DeviceService.sharedInstance.getServiceUrl("locus")!)
+            .baseUrl(deviceService.device!.locusServiceUrl)
             .path("loci")
             .keyPath("loci")
             .queue(queue)

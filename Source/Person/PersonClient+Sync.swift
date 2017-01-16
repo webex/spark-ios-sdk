@@ -20,6 +20,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Network calls should be made using the equivalent asynchronous calls on the client")
 extension PersonClient {
     
     /// List people in your organization.
@@ -29,7 +30,7 @@ extension PersonClient {
     /// - parameter max: Limit the maximum number of people in the response.
     /// - returns: People array
     public func list(email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil) throws -> [Person] {
-        return try SyncUtil.getArray(email, displayName, max, async: list)
+        return try SyncUtil.getArray(authenticationStrategy, email, displayName, max, async: list)
     }
     
     /// Shows details for a person by id.
@@ -37,13 +38,13 @@ extension PersonClient {
     /// - parameter personId: A person id
     /// - returns: Person
     public func get(personId: String) throws -> Person {
-        return try SyncUtil.getObject(personId, async: get)
+        return try SyncUtil.getObject(authenticationStrategy, personId, async: get)
     }
     
     /// Show the profile for the authenticated user.
     ///
     /// - returns: Person
     public func getMe() throws -> Person {
-        return try SyncUtil.getObject(getMe)
+        return try SyncUtil.getObject(authenticationStrategy, getMe)
     }
 }

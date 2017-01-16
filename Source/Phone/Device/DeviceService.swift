@@ -20,11 +20,23 @@
 
 import Foundation
 
-class DeviceService: CompletionHandlerType<Device> {
-    static let sharedInstance = DeviceService()
+struct DeviceRegistrationInformation {
+    let deviceUrl: URL
+    let webSocketUrl: URL
+    let locusServiceUrl: URL
+    let calliopeDiscoveryServiceUrl: URL
+    let metricsServiceUrl: URL
+}
+
+class DeviceService {
     
-    private var device: Device?
-    private let client: DeviceClient = DeviceClient()
+    private let client: DeviceClient
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        client = DeviceClient(authenticationStrategy: authenticationStrategy)
+    }
+
+    var device: DeviceRegistrationInformation?
     
     var deviceUrl: String? {
         get {
@@ -36,57 +48,54 @@ class DeviceService: CompletionHandlerType<Device> {
         }
     }
     
-    var webSocketUrl: String? {
-        return device?.webSocketUrl
-    }
-    
-    func getServiceUrl(_ service: String) -> String? {
-        if let services = device?.services {
-            return services[service + "ServiceUrl"]
-        }
-        
-        return nil
-    }
-    
-    func registerDevice(_ completionHandler: @escaping (Bool) -> Void) {
-        let deviceInfo = createDeviceInfo()
-        if deviceUrl == nil {
-            client.create(deviceInfo) {
-                (response: ServiceResponse<Device>) in
-                self.onRegisterDeviceCompleted(response, completionHandler: completionHandler)
-            }
-            
+    func registerDevice(_ completionHandler: @escaping (DeviceRegistrationInformation?) -> Void) {
+        let registrationHandler = createRegistrationHandler(completionHandler)
+        if let deviceUrl = deviceUrl {
+            client.update(registeredDeviceUrl: deviceUrl, deviceInfo: UIDevice.current, completionHandler: registrationHandler)
         } else {
-            client.update(deviceUrl!, deviceInfo: deviceInfo) {
-                (response: ServiceResponse<Device>) in
-                self.onRegisterDeviceCompleted(response, completionHandler: completionHandler)
-            }
+            client.create(deviceInfo: UIDevice.current, completionHandler: registrationHandler)
         }
     }
     
     func deregisterDevice(_ completionHandler: @escaping (Bool) -> Void) {
-        if deviceUrl == nil {
+        if let deviceUrl = deviceUrl {
+            client.delete(registeredDeviceUrl: deviceUrl) {
+                (response: ServiceResponse<Any>) in
+                self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
+            }
+            self.deviceUrl = nil
+        } else {
             completionHandler(true)
-            return
         }
-        
-        client.delete(deviceUrl!) {
-            (response: ServiceResponse<Any>) in
-            self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
-        }
-        
-        deviceUrl = nil
     }
     
-    private func onRegisterDeviceCompleted(_ response: ServiceResponse<Device>, completionHandler: (Bool) -> Void) {
-        switch response.result {
-        case .success(let value):
-            self.device = value
-            self.deviceUrl = self.device?.deviceUrl
-            completionHandler(true)
-        case .failure(let error):
-            Logger.error("Failed to register device", error: error)
-            completionHandler(false)
+    private func createRegistrationHandler(_ completionHandler: @escaping (DeviceRegistrationInformation?) -> Void) -> ((ServiceResponse<Device>) -> Void) {
+        return { serviceResponse in
+            var deviceRegistrationInformation: DeviceRegistrationInformation?
+            switch serviceResponse.result {
+            case .success(let device):
+                if let deviceUrlString = device.deviceUrl,
+                    let deviceUrl = URL(string: deviceUrlString),
+                    let webSocketUrlString = device.webSocketUrl,
+                    let webSocketUrl = URL(string: webSocketUrlString),
+                    let servicesDictionary = device.services,
+                    let locusServiceUrlString = servicesDictionary["locusServiceUrl"],
+                    let locusServiceUrl = URL(string: locusServiceUrlString),
+                    let calliopeDiscoveryServiceUrlString = servicesDictionary["calliopeDiscoveryServiceUrl"],
+                    let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
+                    let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
+                    let metricsServiceUrl = URL(string: metricsServiceUrlString) {
+                    
+                    deviceRegistrationInformation = DeviceRegistrationInformation(deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
+                    self.device = deviceRegistrationInformation
+                    self.deviceUrl = deviceUrlString
+                } else {
+                    Logger.error("Missing required URLs when registering device")
+                }
+            case .failure(let error):
+                Logger.error("Failed to register device", error: error)
+            }
+            completionHandler(deviceRegistrationInformation)
         }
     }
     
@@ -96,43 +105,8 @@ class DeviceService: CompletionHandlerType<Device> {
             completionHandler(true)
         case .failure(let error):
             Logger.error("Failed to deregister device", error: error)
-			completionHandler(false)
+            completionHandler(false)
         }
-    }
-    
-    private func createDeviceInfo() -> RequestParameter {
-        
-        let currentDevice = UIDevice.current
-		let deviceName = currentDevice.name.isEmpty ? "notset" : currentDevice.name
-        
-		let deviceType: String
-        if isPad() {
-            deviceType = "IPAD"
-        } else if isPhone() {
-            deviceType = "IPHONE"
-		} else {
-			deviceType = "UNKNOWN"
-		}
-        
-        let deviceParameters:[String: Any] = [
-            "deviceName": deviceName,
-            "name": currentDevice.name,
-            "model": currentDevice.model,
-            "localizedModel": currentDevice.localizedModel,
-            "systemName": currentDevice.systemName,
-            "systemVersion": currentDevice.systemVersion,
-            "deviceType": deviceType,
-            "capabilities": ["sdpSupported":true, "groupCallSupported":true]]
-        
-        return RequestParameter(deviceParameters)
-    }
-    
-    private func isPad() -> Bool {
-        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad
-    }
-    
-    private func isPhone() -> Bool {
-        return UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone
     }
 }
 

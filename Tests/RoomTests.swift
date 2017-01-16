@@ -309,7 +309,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try Spark.rooms.list(max: self.RoomCountValid, type: .Direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountValid, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -338,7 +338,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try Spark.rooms.list(max: self.RoomCountMin, type: .Direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMin, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -368,7 +368,7 @@ class RoomSpec: QuickSpec {
                 }
                 
                 do {
-                    let rooms = try Spark.rooms.list(max: self.RoomCountMax, type: .Direct)
+                    let rooms = try Spark.rooms.list(max: self.RoomCountMax, type: .direct)
                     expect(rooms.count).to(beGreaterThanOrEqualTo(0))
                     
                 } catch let error as NSError {
@@ -381,7 +381,7 @@ class RoomSpec: QuickSpec {
             }
             
             it("sync with invalid max and direct type") {
-                expect{try Spark.rooms.list(max: self.RoomCountInvalid, type: .Direct)}.to(throwError())
+                expect{try Spark.rooms.list(max: self.RoomCountInvalid, type: .direct)}.to(throwError())
             }
             
             it("sync with teamId") {

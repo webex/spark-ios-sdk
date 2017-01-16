@@ -40,8 +40,4 @@ struct RequestParameter {
     func value() -> [String: Any] {
         return storage
     }
-    
-    mutating func updateValue(_ value: Any, forKey key: String) {
-        storage.updateValue(value, forKey: key)
-    }
 }

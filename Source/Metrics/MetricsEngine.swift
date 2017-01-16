@@ -21,21 +21,21 @@
 import Foundation
 
 class MetricsEngine {
-    typealias CompletionHandlerType = (Bool) -> Void
-    
-    static let sharedInstance = MetricsEngine()
-    
-    private let MetricsBufferLimit = 50
-    private let MetricsFlushIntervalSeconds: Double = 30
+
+    private let metricsBufferLimit = 50
+    private let metricsFlushIntervalSeconds: Double = 30
     private var metricsBuffer = MetricsBuffer()
-    private var periodicFlushTimer: Timer!
+    private lazy var periodicFlushTimer: Timer = Timer(timeInterval: self.metricsFlushIntervalSeconds,
+                                                                target: self,
+                                                                selector: #selector(flush),
+                                                                userInfo: nil,
+                                                                repeats: true)
+    private let authenticationStrategy: AuthenticationStrategy
+    private let deviceService: DeviceService
     
-    init() {
-        periodicFlushTimer = Timer(timeInterval: MetricsFlushIntervalSeconds,
-                                        target: self,
-                                        selector: #selector(flush),
-                                        userInfo: nil,
-                                        repeats: true)
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.deviceService = deviceService
         
         RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
     }
@@ -51,7 +51,7 @@ class MetricsEngine {
     func trackMetric(_ metric: Metric) {
         metricsBuffer.addMetric(metric)
         
-        if metricsBuffer.count > MetricsBufferLimit {
+        if metricsBuffer.count > metricsBufferLimit {
             flush()
         }
     }
@@ -63,7 +63,7 @@ class MetricsEngine {
     func trackMetrics(_ metrics: [Metric]) {
         metricsBuffer.addMetrics(metrics)
         
-        if metricsBuffer.count > MetricsBufferLimit {
+        if metricsBuffer.count > metricsBufferLimit {
             flush()
         }
     }
@@ -72,7 +72,7 @@ class MetricsEngine {
     // Track a set of Metrics. This will send the Metrics over the network to the Metrics Endpoint immediately
     // without buffering metrics parameter is array of Metrics objects
     //
-    func trackMetrics(_ metrics: [Metric], completionHandler: CompletionHandlerType? = nil) {
+    func trackMetrics(_ metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
         if isDebuggerAttached() {
             Logger.warn("Skipping metric while debugging")
             return
@@ -94,8 +94,8 @@ class MetricsEngine {
         }
     }
     
-    private func postMetrics(_ payload: RequestParameter, completionHandler: CompletionHandlerType?) {
-        MetricsClient().post(payload) {
+    private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
+        MetricsClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {
             case .success:

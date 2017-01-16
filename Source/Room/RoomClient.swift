@@ -21,12 +21,24 @@
 import Foundation
 
 /// Room HTTP client
-open class RoomClient: CompletionHandlerType<Room> {
+public class RoomClient {
+    
+    /// Alias for closure to handle a service response along with a Room object.
+    public typealias ObjectHandler = (ServiceResponse<Room>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Room array.
+    public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
+    
+    let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("rooms")
+        return ServiceRequest.Builder(authenticationStrategy).path("rooms")
     }
-
+    
     /// List rooms. By default, lists rooms to which the authenticated user belongs.
     ///
     /// - parameter teamId: Limit the rooms to those associated with a team, by ID.
@@ -35,7 +47,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue]))
@@ -53,7 +65,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
             .body(RequestParameter(["title": title, "teamId": teamId]))
@@ -69,7 +81,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(roomId)
@@ -86,7 +98,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["title": title]))
@@ -103,7 +115,7 @@ open class RoomClient: CompletionHandlerType<Room> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(roomId)

@@ -20,6 +20,7 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Network calls should be made using the equivalent asynchronous calls on the client")
 extension TeamClient {
     
     /// Lists teams to which the authenticated user belongs.
@@ -27,7 +28,7 @@ extension TeamClient {
     /// - parameter max: Limit the maximum number of teams in the response.
     /// - returns: [Team]
     public func list(max: Int? = nil) throws -> [Team] {
-        return try SyncUtil.getArray(max, async: list)
+        return try SyncUtil.getArray(authenticationStrategy, max, async: list)
     }
     
     /// Creates a team. The authenticated user is automatically added as a member of the team. 
@@ -36,7 +37,7 @@ extension TeamClient {
     /// - parameter title: A user-friendly name for the team.
     /// - returns: Team
     public func create(name: String) throws -> Team {
-        return try SyncUtil.getObject(name, async: create)
+        return try SyncUtil.getObject(authenticationStrategy, name, async: create)
     }
     
     
@@ -45,7 +46,7 @@ extension TeamClient {
     /// - parameter teamId: A team id
     /// - returns: Team
     public func get(teamId: String) throws -> Team {
-        return try SyncUtil.getObject(teamId, async: get)
+        return try SyncUtil.getObject(authenticationStrategy, teamId, async: get)
     }
     
     /// Updates details for a team, by ID.
@@ -54,7 +55,7 @@ extension TeamClient {
     /// - parameter name: A user-friendly name for the team.
     /// - returns: Team
     public func update(teamId: String, name: String) throws -> Team {
-        return try SyncUtil.getObject(teamId, name, async: update)
+        return try SyncUtil.getObject(authenticationStrategy, teamId, name, async: update)
     }
     
     /// Deletes a team, by ID.
@@ -62,6 +63,6 @@ extension TeamClient {
     /// - parameter teamId: The team id.
     /// - returns: Void
     public func delete(teamId: String) throws {
-        try SyncUtil.deleteObject(teamId, async: delete)
+        try SyncUtil.deleteObject(authenticationStrategy, teamId, async: delete)
     }
 }

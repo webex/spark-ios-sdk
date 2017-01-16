@@ -78,8 +78,9 @@ class MemoryLogger : DDAbstractLogger {
         if let logFormatter = internalLogFormatter {
             message = logFormatter.format(message: logMessage)
         }
-        
-        storage.write(message!)
+        if let message = message {
+            storage.write(message)
+        }
     }
     
     func getLogs() -> String {
