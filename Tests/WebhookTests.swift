@@ -19,74 +19,104 @@
 // THE SOFTWARE.
 
 import Foundation
-import Quick
-import Nimble
+import XCTest
 @testable import SparkSDK
 
-class WebhookSpec: QuickSpec {
-    
-    private var room: TestRoom?
-    private var roomId: String {
-        return room!.id!
+class WebhookTests: XCTestCase {
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
+    private var webhooks: WebhookClient!
+    private var roomId: String!
+    private var webhook: Webhook!
+    private var webhookId: String!
+
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+        XCTAssertNotNil(fixture)
+        let room = fixture.createRoom(testCase: self, title: "room_for_test")
+        roomId = room?.id
+        XCTAssertNotNil(roomId)
+        webhooks = fixture.spark.webhooks
+        webhook = createWebhook()
+        XCTAssertNotNil(webhook)
+        webhookId = webhook.id
+        XCTAssertNotNil(webhookId)
+    }
+
+    override func tearDown() {
+        if let roomId = roomId {
+            fixture.deleteRoom(testCase: self, roomId: roomId)
+        }
+        if let webhook = webhook, let id = webhook.id {
+            deleteWebhook(id: id)
+        }
+        super.tearDown()
     }
     
-    override func spec() {
-        beforeSuite {
-            Spark.initWith(accessToken: Config.selfUser.token!)
-            self.room = TestRoom()
+    override static func tearDown() {
+        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+        super.tearDown()
+    }
+    
+    func testWhenCreateWebhookThenItExistsAndHasAnId() {
+        // Tests that basic setup and teardown work without issue.
+    }
+    
+    func testWhenThereIsOneWebhookThenTheListFunctionReturnsOneWebhook() {
+        let webhooks = listWebhooks()
+        XCTAssertEqual(webhooks?.count, 1)
+    }
+    
+    func testWhenGetWebhookByIDThenReturnedWebhookHasSameID() {
+        let gottenWebhook = getWebhook(id: webhookId)
+        XCTAssertEqual(gottenWebhook?.id, webhookId)
+    }
+    
+    func testWhenWebhookNameIsUpdatedThenReturnedInfoMatches() {
+        let updatedName = "updated_test_webhook"
+        let updatedTargetUrl = "https://example.com/updated_test_webhook"
+        let updated = updateWebhook(id: webhookId, name: updatedName, targetUrl: updatedTargetUrl)
+        XCTAssertEqual(updated?.name, updatedName)
+        XCTAssertEqual(updated?.targetUrl, updatedTargetUrl)
+    }
+    
+    func testWhenWebhookIsDeletedThenItCannotBeGotten() {
+        deleteWebhook(id: webhookId)
+        XCTAssertNil(getWebhook(id: webhookId))
+    }
+    
+    private func createWebhook() -> Webhook? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
+            self.webhooks.create(name: "test_webhook", targetUrl: "https://example.com/test_webhook", resource: "messages", event: "created", filter: "roomId=" + self.roomId, completionHandler: completionHandler)
         }
-        
-        afterSuite {
-            Utils.wait(interval: Config.TestcaseInterval)
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func deleteWebhook(id: String) {
+        let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
+            self.webhooks.delete(webhookId: id, completionHandler: completionHandler)
         }
-        
-        describe("Webhook API") {
-            var webhookId: String = ""
-            
-            it("Create webhook") {
-                do {
-                    let filter = "roomId=" + self.roomId
-                    let webhook = try Spark.webhooks.create(name: "myWebhook", targetUrl: "https://example.com/myWebhook", resource: "messages", event: "created", filter: filter)
-                    expect(webhook.id).notTo(beNil())
-                    
-                    webhookId = webhook.id!
-                    
-                } catch let error as NSError {
-                    fail("Failed to create webhook, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("List webhook") {
-                do {
-                    let webhooks = try Spark.webhooks.list()
-                    expect(webhooks.count).to(equal(1))
-                    
-                } catch let error as NSError {
-                    fail("Failed to list webhook, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("Get webhook") {
-                do {
-                    let webhookFromGet = try Spark.webhooks.get(webhookId: webhookId)
-                    expect(webhookFromGet.id).to(equal(webhookId))
-                    
-                } catch let error as NSError {
-                    fail("Failed to get webhook, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("Update webhook") {
-                do {
-                    _ = try Spark.webhooks.update(webhookId: webhookId, name: "myWebhook1", targetUrl: "https://example.com/myWebhook1")
-                } catch let error as NSError {
-                    fail("Failed to update webhook, \(error.localizedFailureReason)")
-                }
-            }
-            
-            it("Delete webhook") {
-                expect{try Spark.webhooks.delete(webhookId: webhookId)}.notTo(throwError())
-            }
+        _ = fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func listWebhooks() -> [Webhook]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Webhook]>) -> Void) in
+            self.webhooks.list(completionHandler: completionHandler)
         }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func getWebhook(id: String) -> Webhook? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
+            self.webhooks.get(webhookId: id, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func updateWebhook(id: String, name: String, targetUrl: String) -> Webhook? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
+            self.webhooks.update(webhookId: id, name: name, targetUrl: targetUrl, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
     }
 }

@@ -38,29 +38,48 @@ public class MembershipClient {
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(authenticationStrategy).path("memberships")
     }
+
+    /// Lists all room memberships for the authenticated user.
+    ///
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: nil, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    }
     
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    /// Lists all room memberships for all users in the given room.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(roomId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Lists any room memberships for the given room and person, specified by person id.
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
-    /// - parameter max: Limit the maximum number of items in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(roomId: String? = nil, personId: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
-        list(roomId: roomId, personId: personId, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    public func list(roomId: String, personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: personId, personEmail: nil, max: nil, queue: queue, completionHandler: completionHandler)
     }
     
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    /// Lists any room memberships for the given room and person, specified by person email.
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
-    /// - parameter max: Limit the maximum number of items in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func list(roomId: String? = nil, personEmail: EmailAddress?, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
-        list(roomId: roomId, personId: nil, personEmail: personEmail, max: max, queue: queue, completionHandler: completionHandler)
+    public func list(roomId: String, personEmail: EmailAddress, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: nil, personEmail: personEmail, max: nil, queue: queue, completionHandler: completionHandler)
     }
     
     private func list(roomId: String?, personId: String?, personEmail: EmailAddress?, max: Int?, queue: DispatchQueue?, completionHandler: @escaping ArrayHandler) {

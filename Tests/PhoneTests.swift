@@ -19,123 +19,133 @@
 // THE SOFTWARE.
 
 import Foundation
-import Quick
-import Nimble
+import XCTest
 @testable import SparkSDK
 
-class PhoneSpec: QuickSpec {
-
-    private func registerPhone() {
-        var registerSuccess: Bool = false
-        Spark.phone.register() {
-            registerSuccess = $0
-        }
-        expect(registerSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
+class PhoneTests: XCTestCase {
+    
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
+    private var phone: Phone!
+    
+    override func setUp() {
+        continueAfterFailure = false
+        XCTAssertNotNil(fixture)
+        phone = fixture.spark.phone
+        XCTAssertNotNil(phone)
+        XCTAssertTrue(registerPhone())
     }
     
-    private func deregisterPhone() {
-        var deregisterSuccess: Bool = false
-        Spark.phone.deregister() {
-            deregisterSuccess = $0
-        }
-        expect(deregisterSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
+    override func tearDown() {
+        XCTAssertTrue(deregisterPhone())
     }
     
-    private func hangupCall(call: Call) {
-        var hangupSuccess: Bool = false
-        call.hangup {
-            hangupSuccess = $0
-        }
-        expect(hangupSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
+    func testWhenRegisterAndDeregisterPhoneThenBothSucceed() {
+        // Tests that basic setup and teardown work without issue.
     }
     
-    override func spec() {
-        beforeSuite {
-            Spark.initWith(accessToken: Config.selfUser.token!)
+    func testWhenRegisterPhoneTwiceThenBothSucceed() {
+        XCTAssertTrue(registerPhone())
+    }
+    
+    func testWhenDeregisterPhoneTwiceThenBothSuceed() {
+        XCTAssertTrue(deregisterPhone())
+    }
+    
+    func testWhenDialThenReturnsSuccessAndHangsUp() {
+        if let user = fixture.createUser() {
+            let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+            phone.disableVideoCodecActivation()
+            let call = dialCall(address: user.email.toString(), mediaOption: mediaOption)
+            XCTAssertNotNil(call)
+            XCTAssertTrue(hangupCall(call: call!))
+        } else {
+            XCTFail("Unable to create user")
+        }
+    }
+    
+    func testWhenDialWithAudioOnlyThenReturnsSuccessAndHangsUp() {
+        if let user = fixture.createUser() {
+            let call = dialCall(address: user.email.toString(), mediaOption: MediaOption.audioOnly)
+            XCTAssertNotNil(call)
+            XCTAssertTrue(hangupCall(call: call!))
+        } else {
+            XCTFail("Unable to create user")
+        }
+    }
+    
+    func testWhenDialWithSipAddressThenReturnsSuccessAndHangsUp() {
+        let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+        phone.disableVideoCodecActivation()
+        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: mediaOption)
+        XCTAssertNotNil(call)
+        XCTAssertTrue(hangupCall(call: call!))
+    }
+    
+    func testWhenDialWithAudioOnlyAndSipAddressThenReturnsSuccessAndHangsUp() {
+        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: MediaOption.audioOnly)
+        XCTAssertNotNil(call)
+        XCTAssertTrue(hangupCall(call: call!))
+    }
+    
+    private func registerPhone() -> Bool {
+        var success = false
+        
+        let expect = expectation(description: "Phone registration")
+        phone.register() { result in
+            success = result
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 30) { error in
+            XCTAssertNil(error, "Phone registration timed out")
+        }
+        return success
+    }
+    
+    private func deregisterPhone() -> Bool {
+        guard let phone = phone else {
+            return false
         }
         
-        describe("phone register") {
+        var success = false
         
-            beforeEach {
-                self.registerPhone()
-            }
-            
-            afterEach {
-                self.deregisterPhone()
-            }
-            
-            it("normal") {
-            }
-            
-            it("double register") {
-                self.registerPhone()
-            }
-            
-            it("double deregister") {
-                self.deregisterPhone()
-            }
+        let expect = expectation(description: "Phone deregistration")
+        phone.deregister() { result in
+            success = result
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 30) { error in
+            XCTAssertNil(error, "Phone deregistration timed out")
         }
         
-        describe("phone dail") {
-            beforeEach {
-                self.registerPhone()
-            }
-            
-            afterEach {
-                self.deregisterPhone()
-            }
-            
-            it("normal") {
-                let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
-                var dailSuccess: Bool = false
-                let user = TestUserFactory.sharedInstance.createUser()
-                
-                Spark.phone.disableVideoCodecActivation()
-                let call = Spark.phone.dial((user.email?.toString())!, option: mediaOption) {
-                    dailSuccess = $0
-                }
-                expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
-                
-                self.hangupCall(call: call)
-            }
-            
-            it("audio only") {
-                let mediaOption = MediaOption.audioOnly
-                var dailSuccess: Bool = false
-                let user = TestUserFactory.sharedInstance.createUser()
-                
-                let call = Spark.phone.dial((user.email?.toString())!, option: mediaOption) {
-                    dailSuccess = $0
-                }
-                expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
-                
-                self.hangupCall(call: call)
-            }
-            
-            it("normal with sip address") {
-                let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
-                var dailSuccess: Bool = false
-                
-                Spark.phone.disableVideoCodecActivation()
-                let call = Spark.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
-                    dailSuccess = $0
-                }
-                expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
-                
-                self.hangupCall(call: call)
-            }
-            
-            it("audio only with sip address") {
-                let mediaOption = MediaOption.audioOnly
-                var dailSuccess: Bool = false
-                let call = Spark.phone.dial("sip:9995839764@sip.tropo.com", option: mediaOption) {
-                    dailSuccess = $0
-                }
-                expect(dailSuccess).toEventually(beTrue(), timeout: Config.TestcasePendingCheckTimeout, pollInterval: Config.TestcasePendingCheckPollInterval)
-                
-                self.hangupCall(call: call)
-            }
+        return success
+    }
+    
+    private func dialCall(address: String, mediaOption: MediaOption) -> Call? {
+        var success = false
+        
+        let expect = expectation(description: "Call dial")
+        let call = phone.dial(address, option: mediaOption) { result in
+            success = result
+            expect.fulfill()
         }
         
+        waitForExpectations(timeout: 30) { error in
+            XCTAssertNil(error, "Phone dial timed out")
+        }
+        return success ? call : nil
+    }
+    
+    private func hangupCall(call: Call) -> Bool {
+        var success = false
+        
+        let expect = expectation(description: "Call hangup")
+        call.hangup() { result in
+            success = result
+            expect.fulfill()
+        }
+        waitForExpectations(timeout: 30) { error in
+            XCTAssertNil(error, "Phone hangup timed out")
+        }
+        return success
     }
 }
