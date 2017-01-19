@@ -187,6 +187,8 @@ public class Phone {
         NotificationCenter.default.removeObserver(self)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidEnterBackground), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onIncomingCallInBackground), name: SparkBackgroundCallNotifications.SparkCallIncomingInBackground.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeclinedCallInBackground), name: SparkBackgroundCallNotifications.SparkCallDeclinedInBackground.name, object: nil)
     }
 
     private func stopObserving() {
@@ -198,14 +200,33 @@ public class Phone {
 
         if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
             callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
-            webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
         }
+        openWebSocket()
     }
 
     @objc private func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
 
         webSocketService.disconnect()
+    }
+
+    @objc private func onDeclinedCallInBackground() {
+        guard UIApplication.shared.applicationState == .background else {
+            return
+        }
+        Logger.info("Incoming call declined when app in background")
+        webSocketService.disconnect()
+    }
+
+    @objc private func onIncomingCallInBackground() {
+        Logger.info("Incoming call when app in background")
+        openWebSocket()
+    }
+
+    private func openWebSocket() {
+        if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
+            webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
+        }
     }
 }
 
