@@ -19,7 +19,6 @@
 		3D2D51071D3E2173005FC665 /* Wme.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */; };
 		3D3131431D3EF932007717B2 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F11D3EF82500205DF6 /* Config.swift */; };
-		3D31314F1D3EF932007717B2 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FD1D3EF82500205DF6 /* Utils.swift */; };
 		3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F31D3EF82500205DF6 /* MembershipTests.swift */; };
 		3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F41D3EF82500205DF6 /* MessageTests.swift */; };
 		3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F51D3EF82500205DF6 /* PeopleTests.swift */; };
@@ -29,7 +28,6 @@
 		3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */; };
 		3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FA1D3EF82500205DF6 /* TeamTests.swift */; };
 		3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */; };
-		3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FB1D3EF82500205DF6 /* TestRoom.swift */; };
 		3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA099FC1D3EF82500205DF6 /* TestTeam.swift */; };
 		3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3499571CF3ED30004022C3 /* ExponentialBackOffCounter.swift */; };
 		3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1A91D24AD4A0016A072 /* Team.swift */; };
@@ -38,7 +36,7 @@
 		3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1AF1D24AD570016A072 /* TeamMembership.swift */; };
 		3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */; };
 		3D66B1B41D24AD570016A072 /* TeamMembershipClient+Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */; };
-		3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */; };
+		3D81E30E1D41BBAD0085970A /* SparkTestFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */; };
 		3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */; };
 		3D9E1A261D3EF4AC007E570C /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		3DA2377D1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */; };
@@ -201,7 +199,7 @@
 		3D66B1AF1D24AD570016A072 /* TeamMembership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembership.swift; path = Source/TeamMembership/TeamMembership.swift; sourceTree = "<group>"; };
 		3D66B1B01D24AD570016A072 /* TeamMembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipClient.swift; path = Source/TeamMembership/TeamMembershipClient.swift; sourceTree = "<group>"; };
 		3D66B1B11D24AD570016A072 /* TeamMembershipClient+Sync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TeamMembershipClient+Sync.swift"; path = "Source/TeamMembership/TeamMembershipClient+Sync.swift"; sourceTree = "<group>"; };
-		3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestUserFactory.swift; path = Tests/TestUserFactory.swift; sourceTree = SOURCE_ROOT; };
+		3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SparkTestFixture.swift; path = Tests/SparkTestFixture.swift; sourceTree = SOURCE_ROOT; };
 		3D8F9BFA1D1D048400A0277D /* EmailAddress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailAddress.swift; sourceTree = "<group>"; };
 		3DA099F11D3EF82500205DF6 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Config.swift; path = Tests/Config.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F31D3EF82500205DF6 /* MembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MembershipTests.swift; path = Tests/MembershipTests.swift; sourceTree = SOURCE_ROOT; };
@@ -212,9 +210,7 @@
 		3DA099F81D3EF82500205DF6 /* SequenceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SequenceTests.swift; path = Tests/SequenceTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamMembershipTests.swift; path = Tests/TeamMembershipTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FA1D3EF82500205DF6 /* TeamTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TeamTests.swift; path = Tests/TeamTests.swift; sourceTree = SOURCE_ROOT; };
-		3DA099FB1D3EF82500205DF6 /* TestRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestRoom.swift; path = Tests/TestRoom.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FC1D3EF82500205DF6 /* TestTeam.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestTeam.swift; path = Tests/TestTeam.swift; sourceTree = SOURCE_ROOT; };
-		3DA099FD1D3EF82500205DF6 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = Tests/Utils.swift; sourceTree = SOURCE_ROOT; };
 		3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WebhookTests.swift; path = Tests/WebhookTests.swift; sourceTree = SOURCE_ROOT; };
 		3DA2377C1D0E7F1C004D75D6 /* ApplicationLifecycleObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationLifecycleObserver.swift; sourceTree = "<group>"; };
 		3DA3D58A1CF4347A008E8372 /* RequestParameter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestParameter.swift; sourceTree = "<group>"; };
@@ -401,10 +397,8 @@
 				3DA099F81D3EF82500205DF6 /* SequenceTests.swift */,
 				3DA099F91D3EF82500205DF6 /* TeamMembershipTests.swift */,
 				3DA099FA1D3EF82500205DF6 /* TeamTests.swift */,
-				3DA099FB1D3EF82500205DF6 /* TestRoom.swift */,
 				3DA099FC1D3EF82500205DF6 /* TestTeam.swift */,
-				3D81E30D1D41BBAD0085970A /* TestUserFactory.swift */,
-				3DA099FD1D3EF82500205DF6 /* Utils.swift */,
+				3D81E30D1D41BBAD0085970A /* SparkTestFixture.swift */,
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
 			);
 			name = Tests;
@@ -922,17 +916,15 @@
 				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,
 				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
 				5AFB6E9D1DF5C7770027E989 /* JWTAuthStrategyTests.swift in Sources */,
-				3D31B7901D41B7F500D8DB55 /* TestRoom.swift in Sources */,
 				5A9350DB1E00742D00374B99 /* MockClock.swift in Sources */,
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
 				5AFA0BD11DEE0AE400B6F6C9 /* OAuthStrategyTests.swift in Sources */,
-				3D81E30E1D41BBAD0085970A /* TestUserFactory.swift in Sources */,
+				3D81E30E1D41BBAD0085970A /* SparkTestFixture.swift in Sources */,
 				3D31B7861D41B7F500D8DB55 /* MembershipTests.swift in Sources */,
 				5AFB6E9B1DF5C6E90027E989 /* MockKeychain.swift in Sources */,
 				3D31B78C1D41B7F500D8DB55 /* TeamMembershipTests.swift in Sources */,
 				3D31B7891D41B7F500D8DB55 /* PhoneTests.swift in Sources */,
-				3D31314F1D3EF932007717B2 /* Utils.swift in Sources */,
 				5AFA0BD31DEE0B2F00B6F6C9 /* OAuthKeychainStorageTests.swift in Sources */,
 				5AFB6E9C1DF5C7720027E989 /* JWTAuthKeychainStorageTests.swift in Sources */,
 			);

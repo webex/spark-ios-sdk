@@ -23,24 +23,39 @@ import Foundation
 @available(*, deprecated, message: "Network calls should be made using the equivalent asynchronous calls on the client")
 extension MembershipClient {
     
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    /// Lists all room memberships for the authenticated user.
+    ///
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - returns: Memberships array
+    public func list(max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, max, async: list)
+    }
+    
+    /// Lists all room memberships for all users in the given room.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - returns: Memberships array
+    public func list(roomId: String, max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, max, async: list)
+    }
+    
+    /// Lists any room memberships for the given room and person, specified by person id.
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
-    /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId: String? = nil, personId: String? = nil, max: Int? = nil) throws -> [Membership] {
-        return try SyncUtil.getArray(authenticationStrategy, roomId, personId, max, async: list)
+    public func list(roomId: String, personId: String) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personId, async: list)
     }
 
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    /// Lists any room memberships for the given room and person, specified by person email.
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personEmail: Limit results to a specific person by email address.
-    /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId: String? = nil, personEmail: EmailAddress?, max: Int? = nil) throws -> [Membership] {
-        return try SyncUtil.getArray(authenticationStrategy, roomId, personEmail, max, async: list)
+    public func list(roomId: String, personEmail: EmailAddress) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personEmail, async: list)
     }
     
     /// Add someone to a room by person id; optionally making them a moderator.

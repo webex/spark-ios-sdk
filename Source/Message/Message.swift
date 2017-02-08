@@ -42,10 +42,10 @@ public struct Message: Mappable {
     /// A public URL that Spark can use to fetch attachments.
     public var files: [String]?
     
-    /// The id of the recipient when sending a private1:1 message.
+    /// The id of the recipient when sending a private 1:1 message.
     public var toPersonId: String?
     
-    /// The email address of the recipient when sendinga private 1:1 message.
+    /// The email address of the recipient when sending a private 1:1 message.
     public var toPersonEmail: EmailAddress?
     
     /// The timestamp that the message being created.
