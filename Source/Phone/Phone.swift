@@ -22,7 +22,7 @@ import AVFoundation
 
 /// Represents a Spark phone device.
 public class Phone {
-    
+
     /// Privacy control of media access type.
     public enum MediaAccessType {
         /// Access to microphone.
@@ -61,14 +61,12 @@ public class Phone {
     }
 
     private let authenticationStrategy: AuthenticationStrategy
-    private let applicationLifecycleObserver: ApplicationLifecycleObserver
     private let webSocketService: WebSocketService
     private let callManager: CallManager
     private let deviceService: DeviceService
-    
-    init(authenticationStrategy: AuthenticationStrategy, applicationLifecycleObserver: ApplicationLifecycleObserver, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
+
+    init(authenticationStrategy: AuthenticationStrategy, webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
         self.authenticationStrategy = authenticationStrategy
-        self.applicationLifecycleObserver = applicationLifecycleObserver
         self.webSocketService = webSocketService
         self.callManager = callManager
         self.deviceService = deviceService
@@ -81,16 +79,16 @@ public class Phone {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     public func register(_ completionHandler: ((Bool) -> Void)?) {
-        // XXX This guard means that the completion handler may never be fired
         guard authenticationStrategy.authorized else {
             Logger.error("Skip registering device due to no authorization")
+            completionHandler?(false)
             return
         }
         
         deviceService.registerDevice() { deviceRegistrationInformation in
             if let deviceRegistrationInformation = deviceRegistrationInformation {
-                self.applicationLifecycleObserver.startObserving()
-                self.callManager.fetchActiveCalls()
+                self.startObserving()
+                self.callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
                 self.webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
             }
             completionHandler?(deviceRegistrationInformation != nil)
@@ -105,7 +103,7 @@ public class Phone {
     /// - note: This function is expected to run on main thread.
     public func deregister(_ completionHandler: ((Bool) -> Void)?) {
         callManager.clearReachabilityState()
-        applicationLifecycleObserver.stopObserving()
+        stopObserving()
         webSocketService.disconnect()
         deviceService.deregisterDevice() { success in
             completionHandler?(success)
@@ -118,10 +116,13 @@ public class Phone {
     /// - parameter option: Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: Call object
-    /// - note: This function is expected to run on main thread.
+    /// - note: This function is expected to run on main thread, and should only be run after the phone is registered
     public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
-        let call = callManager.createOutgoingCall()
-        call.dial(address: address, option: option) { success in
+        guard let deviceRegistrationInformation = deviceService.deviceRegistrationInformation else {
+            fatalError("Attempted to dial an address before having first successfully registered the phone")
+        }
+
+        let call = callManager.createOutgoingCall(address: address, option: option, deviceRegistrationInformation: deviceRegistrationInformation) { success in
             completionHandler(success)
         }
         return call
@@ -131,6 +132,7 @@ public class Phone {
     ///
     /// - returns: Void
     /// - note: Invoking the function is optional since the license activation alert will appear automatically during the first video call.
+    /// - note: This function is expected to run on main thread, and should only be run after the phone is registered
     public func requestVideoCodecActivation() {
         callManager.requestVideoCodecActivation()
     }
@@ -178,6 +180,52 @@ public class Phone {
             DispatchQueue.main.async {
                 completionHandler?(granted)
             }
+        }
+    }
+
+    private func startObserving() {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationDidEnterBackground), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onIncomingCallInBackground), name: SparkBackgroundCallNotifications.SparkCallIncomingInBackground.name, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onDeclinedCallInBackground), name: SparkBackgroundCallNotifications.SparkCallDeclinedInBackground.name, object: nil)
+    }
+
+    private func stopObserving() {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func onApplicationDidBecomeActive() {
+        Logger.info("Application did become active")
+
+        if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
+            callManager.fetchActiveCalls(deviceRegistrationInformation: deviceRegistrationInformation)
+        }
+        openWebSocket()
+    }
+
+    @objc private func onApplicationDidEnterBackground() {
+        Logger.info("Application did enter background")
+
+        webSocketService.disconnect()
+    }
+
+    @objc private func onDeclinedCallInBackground() {
+        guard UIApplication.shared.applicationState == .background else {
+            return
+        }
+        Logger.info("Incoming call declined when app in background")
+        webSocketService.disconnect()
+    }
+
+    @objc private func onIncomingCallInBackground() {
+        Logger.info("Incoming call when app in background")
+        openWebSocket()
+    }
+
+    private func openWebSocket() {
+        if let deviceRegistrationInformation = deviceService.deviceRegistrationInformation {
+            webSocketService.connect(deviceRegistrationInformation.webSocketUrl)
         }
     }
 }

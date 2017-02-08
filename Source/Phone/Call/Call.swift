@@ -193,10 +193,10 @@ open class Call {
         }
     }
     
-    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
+    func dial(address: String, option: MediaOption, locusServiceUrl: URL, completionHandler: CompletionHandler?) {
         to = address
         createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
-            self.callClient.createCall(toAddress: address, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
+            self.callClient.createCall(toAddress: address, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, locusServiceUrl: locusServiceUrl, completionHandler: callCreationCompletion)
         }
     }
     
@@ -223,6 +223,8 @@ open class Call {
     }
     
     private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
+        let success: Bool
+        
         switch response.result {
         case .success(let value):
             update(callInfo: value)
@@ -237,15 +239,15 @@ open class Call {
             from = info?.hostEmail
             
             Logger.info("Success: join call")
-            completionHandler?(true)
-            
+            success = true
         case .failure(let error):
             self.mediaSession.stopMedia()
             Logger.error("Failure", error: error)
-            completionHandler?(false)
+            success = false
         }
+        completionHandler?(success)
     }
-    
+
     /// Disconnects the active call. Applies to both incoming and outgoing calls.
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
@@ -473,5 +475,3 @@ open class Call {
         }
     }
 }
-
-

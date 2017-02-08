@@ -51,8 +51,7 @@ public class Spark {
         let deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
         let callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
         let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
-        let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
-        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
+        phone = Phone(authenticationStrategy: authenticationStrategy, webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
         callNotificationCenter = callManager.callNotificationCenter
     }
     

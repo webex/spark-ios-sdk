@@ -62,9 +62,10 @@ class CallManager {
         return nil
     }
     
-    func fetchActiveCalls() {
+    func fetchActiveCalls(deviceRegistrationInformation: DeviceRegistrationInformation) {
         Logger.info("Fetch call infos")
-        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() { response in
+
+        CallClient(authenticationStrategy: authenticationStrategy).fetchCallInfos(locusServiceUrl: deviceRegistrationInformation.locusServiceUrl) { response in
             switch response.result {
             case .success(let callInfos):
                 for callInfo in callInfos {
@@ -106,11 +107,11 @@ class CallManager {
             (callInfo.isIncomingCall || callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl)) {
             // XXX: Is this conditional intended to add this call even when there is no real device registration information?
             // At the time of writing the deviceService.deviceUrl will return a saved value from the UserDefaults. When the application
-            // has been restarted and the reregistration process has not completed, other critical information such as locusServiceUrl
-            // will not be available, but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
+            // has been restarted and the reregistration process has not completed, other critical information may not be available, 
+            // but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
             // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed. 
             // If so it needs improvement, if not it may be able to be dropped.
-            let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+            let callClient = CallClient(authenticationStrategy: authenticationStrategy)
             let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics)
             addCallWith(url: callUrl, call: call)
 
@@ -121,13 +122,14 @@ class CallManager {
                 // Intentional use of deprecated API for backwards compatibility
                 PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
             }
-            // TODO: need to support other device joined case
         }
     }
     
-    func createOutgoingCall() -> Call {
-        let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.device!.deviceUrl, callMetrics: callMetrics)
+    func createOutgoingCall(address: String, option: MediaOption, deviceRegistrationInformation: DeviceRegistrationInformation, completionHandler: ((Bool) -> Void)?) -> Call {
+        let callClient = CallClient(authenticationStrategy: authenticationStrategy)
+        let call = Call(callManager: self, callClient: callClient, deviceUrl: deviceRegistrationInformation.deviceUrl, callMetrics: callMetrics)
+        call.dial(address: address, option: option, locusServiceUrl: deviceRegistrationInformation.locusServiceUrl, completionHandler: completionHandler)
+        return call
     }
     
     func requestVideoCodecActivation(completionHandler: ((_ isActivated: Bool) -> Void)? = nil) {
