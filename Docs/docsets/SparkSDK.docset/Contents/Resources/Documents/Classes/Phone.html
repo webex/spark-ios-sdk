@@ -14,7 +14,7 @@
     <a title="Phone Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (99% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -43,16 +43,25 @@
                 <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+                <a href="../Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuthStrategy.html">OAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PersonClient.html">PersonClient</a>
@@ -67,10 +76,16 @@
                 <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/PhoneSettings.html">PhoneSettings</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TeamClient.html">TeamClient</a>
@@ -110,16 +125,16 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -127,7 +142,19 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/CallObserver.html">CallObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthStorage.html">OAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/PhoneObserver.html">PhoneObserver</a>
@@ -138,10 +165,16 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
@@ -175,7 +208,25 @@
 
                 </div>
               </div>
-            <p>Represents a Spark phone device.</p>
+            <p>Phone represents a Cisco Spark calling device.
+The application can obtain the <em>phone</em> object from <em>Spark</em> object 
+and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
+The <em>phone</em> must be registered before it can make or receive calls.</p>
+
+<pre class="highlight plaintext"><code>    spark.phone.register() { success in
+      if success {
+        ... // Successfully registered device
+      } else {
+        ...    // Device was not registered, and no calls can be sent or received
+      }
+    }
+</code></pre>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
           </section>
           <section class="section task-group-section">
@@ -194,7 +245,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Privacy control of media access type.</p>
+                        <p>The enumeration of media access type for privacy control.</p>
 
                         <a href="../Classes/Phone/MediaAccessType.html" class="slightly-smaller">See more</a>
                       </div>
@@ -203,73 +254,6 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MediaAccessType</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC8SparkSDK5Phone17defaultFacingModeOCS_4Call10FacingMode"></a>
-                    <a name="//apple_ref/swift/Property/defaultFacingMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone17defaultFacingModeOCS_4Call10FacingMode">defaultFacingMode</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Default loud speaker mode, used as the default when dialing or answering a call.
-True as using loud speaker, False as not.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    The setting is not persistent.
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="o">.</span><span class="kt">FacingMode</span><span class="o">.</span><span class="kt">User</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vC8SparkSDK5Phone18defaultLoudSpeakerSb"></a>
-                    <a name="//apple_ref/swift/Property/defaultLoudSpeaker" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone18defaultLoudSpeakerSb">defaultLoudSpeaker</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Default camera facing mode, used as the default when dialing or answering a call.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    The setting is not persistent
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultLoudSpeaker</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
 
                         </div>
                       </div>
@@ -289,11 +273,13 @@ True as using loud speaker, False as not.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Registers the user’s device to Spark. Subsequent invocations of this method should perform a device refresh.</p>
+                        <p>This function registers this <em>phone</em> to Cisco Spark cloud on behave of the authenticated user.
+It also creates the websocket and connects to Cisco Spark cloud.
+Subsequent invocations of this method refresh the registration.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -302,7 +288,7 @@ True as using loud speaker, False as not.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -347,12 +333,13 @@ True as using loud speaker, False as not.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Removes the user’s device from Spark and disconnects the websocket. 
-Subsequent invocations of this method should behave as a no-op.</p>
+                        <p>This function removes this <em>phone</em> from Cisco Spark cloud on behave of the authenticated user.
+It also disconnects the websocket from Cisco Spark cloud.
+Subsequent invocations of this method behave as a no-op.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -361,7 +348,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deregister</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deregister</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -406,11 +393,23 @@ Subsequent invocations of this method should behave as a no-op.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Makes a call to intended recipient.</p>
+                        <p>This function makes a call to an intended recipient on behalf of the authenticated user.
+It supports the following address formats for the receipient:</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
+<blockquote>
+
+<ul>
+<li>Spark URI: e.g. spark:<a href="mailto:shenning@cisco.com">shenning@cisco.com</a></li>
+<li>SIP / SIPS URI: e.g. sip:<a href="mailto:1234@care.acme.com">1234@care.acme.com</a></li>
+<li>Tropo URI: e.g. tropo:999123456</li>
+<li>Email address: e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a></li>
+<li>App username: e.g. jp</li>
+</ul>
+</blockquote>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -419,7 +418,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Call.html">Call</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="n">_</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Call.html">Call</a></span></code></pre>
 
                         </div>
                       </div>
@@ -435,7 +434,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Intended recipient address. Supported URIs: Spark URI (e.g. spark:<a href="mailto:shenning@cisco.com">shenning@cisco.com</a>), SIP / SIPS URI (e.g. sip:<a href="mailto:1234@care.acme.com">1234@care.acme.com</a>), Tropo URI (e.g. tropo:999123456). Supported shorthand: Email address (e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a>), App username (e.g. jp)</p>
+                                  <p>Intended recipient address in one of the supported formats.</p>
 
                                 </div>
                               </td>
@@ -448,7 +447,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.</p>
+                                  <p>Intended media options - audio only or audio and video - for the call.</p>
 
                                 </div>
                               </td>
@@ -471,7 +470,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>Call object</p>
+                        <p>a Call object</p>
 
                       </div>
                     </section>
@@ -490,11 +489,17 @@ Subsequent invocations of this method should behave as a no-op.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Requests the end user approve the H.264 codec license from Cisco Systems.</p>
+                        <p>This function requests the end user approve the H.264 codec license from Cisco Systems, Inc.</p>
 
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    Invoking the function is optional since the license activation alert will appear automatically during the first video call.
+    Invoking this function is optional since the license activation alert will appear automatically during the first video call.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -528,11 +533,17 @@ Subsequent invocations of this method should behave as a no-op.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Prevents the SDK from checking H.264 video codec license activation.</p>
+                        <p>This function prevents Cisco Spark iOS SDK from checking H.264 video codec license activation.</p>
 
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
-    The function is expected to be called only by Cisco application. 3rd-party application should NOT call this API.
+    The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -566,11 +577,12 @@ Subsequent invocations of this method should behave as a no-op.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Requests access for media (audio and video), user can change the settings in iOS device settings.</p>
+                        <p>This function requests access for media (audio and video) on the user&rsquo;s iOS device. 
+The user can change the settings in iOS device settings.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
 
 </div>
 
@@ -579,7 +591,7 @@ Subsequent invocations of this method should behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestMediaAccess</span><span class="p">(</span><span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone/MediaAccessType.html">MediaAccessType</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">(</span><span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestMediaAccess</span><span class="p">(</span><span class="n">_</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone/MediaAccessType.html">MediaAccessType</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
                       </div>
@@ -629,8 +641,8 @@ Subsequent invocations of this method should behave as a no-op.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-08-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-24)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

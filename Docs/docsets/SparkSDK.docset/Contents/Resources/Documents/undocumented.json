@@ -1,1 +1,12 @@
-{"warnings":[],"source_directory":"/Users/bxu3/workspace/spark-ios-sdk-public"}
+{
+  "warnings": [
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 84,
+      "symbol": "Spark.init(authenticationStrategy:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/wechen3/Development/sources/spark-ios-sdk"
+}

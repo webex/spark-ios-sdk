@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,13 +19,16 @@
 // THE SOFTWARE.
 
 
-/// Represents a Spark call.
+/// A Call represents an active media call on Cisco Spark.
+/// The application can creates a *call* object by calling *phone.dial* function.
+/// - see: Phone API about how to create calls.
+/// - since: 1.2.0
 open class Call {
     
     /// Completion handler for a call operation.
     public typealias CompletionHandler = (Bool) -> Void
     
-    /// Camera facing mode.
+    /// The enumeration of Camera facing modes.
     public enum FacingMode: String {
         /// Front camera.
         case User
@@ -33,7 +36,7 @@ open class Call {
         case Environment
     }
     
-    /// Call status.
+    /// The enumeration of Call status.
     public enum Status: String {
         /// Intended recipient hasn't accepted the call.
         case Initiated
@@ -47,42 +50,42 @@ open class Call {
         case Disconnected
     }
     
-    /// Call status.
+    /// The current status of this *call*.
     open var status: Status {
         return state.status
     }
 
-    /// The intended recipient of the call. 
-    /// For an outgoing call this is the same as the address specified in dial. 
-    /// For an incoming call this is the identity of the authenticated user.
+    /// The intended recipient of this *call*.
+    /// - For an outgoing call, this is the same as the address specified in *phone.dial*.
+    /// - For an incoming call, this is the identity of the authenticated user.
     open var to: String?
     
-    /// The receiver of the call. 
-    /// For an outgoing call this is the identity of the authenticated user.
-    /// For an incoming call this is the email address / phone number / SIP address of the caller.
+    /// The receiver of this *call*.
+    /// - For an outgoing call, this is the identity of the authenticated user.
+    /// - For an incoming call, this is the address of the caller such as email address, phone number, or SIP address.
     open var from: String?
     
-    /// True if client is sending audio.
+    /// True if this *call* is sending audio. Otherwise, false.
     open var sendingAudio: Bool {
         return !mediaSession.audioMuted
     }
     
-    /// True if client is receiving audio.
+    /// True if the local party of this *call* is receiving audio. Otherwise, false.
     open var receivingAudio: Bool {
         return !mediaSession.audioOutputMuted
     }
     
-    /// True if client is sending video.
+    /// True if the local party of this *call* is sending video. Otherwise, false.
     open var sendingVideo: Bool {
         return mediaSession.hasVideo && !mediaSession.videoMuted
     }
     
-    /// True if client is receiving video.
+    /// True if the local party of this *call* is receiving video. Otherwise, false.
     open var receivingVideo: Bool {
         return mediaSession.hasVideo && !mediaSession.videoOutputMuted
     }
     
-    /// True if remote is sending audio.
+    /// True if the remote party of this *call* is sending audio. Otherwise, false.
     open var remoteSendingAudio: Bool {
         if let info = self.info {
             return !info.remoteAudioMuted
@@ -90,7 +93,7 @@ open class Call {
         return false
     }
     
-    /// True if remote is sending video.
+    /// True if the remote party of this *call* is sending video. Otherwise, false.
     open var remoteSendingVideo: Bool {
         if let info = self.info {
             return !info.remoteVideoMuted
@@ -98,37 +101,37 @@ open class Call {
         return false
     }
     
-    /// True if loud speaker is selected as the output device for this call.
+    /// True if loud speaker is selected as the audio output device for this *call*. Otherwise, false.
     open var loudSpeaker: Bool {
         return mediaSession.isSpeakerSelected()
     }
     
-    /// Camera facing mode selected for this call.
+    /// The camera facing mode selected for this *call*.
     open var facingMode: FacingMode {
         return mediaSession.isFrontCameraSelected() ? .User : .Environment
     }
     
-    /// Local video render view height.
+    /// The local video render view height of this *call*. (in what unit?)
     open var localVideoViewHeight: UInt32 {
         return mediaSession.localVideoViewHeight
     }
     
-    /// Local video render view width.
+    /// The Local video render view width of this *call*.
     open var localVideoViewWidth: UInt32 {
         return mediaSession.localVideoViewWidth
     }
     
-    /// Remote video render view height.
+    /// The remote video render view height of this *call*.
     open var remoteVideoViewHeight: UInt32 {
         return mediaSession.remoteVideoViewHeight
     }
     
-    /// Remote video render view width.
+    /// The remote video render view width of this *call*.
     open var remoteVideoViewWidth: UInt32 {
         return mediaSession.remoteVideoViewWidth
     }
     
-    /// True if the DTMF keypad can be enabled for Client.
+    /// True if the DTMF keypad can be enabled for this *call*. Otherwise, false.
     open var sendingDTMFEnabled: Bool {
         if let enableDTMF = info?.enableDTMF {
             return enableDTMF
@@ -181,12 +184,12 @@ open class Call {
         dtmfQueue = DtmfQueue(callClient: callClient)
     }
     
-    /// Answers an incoming call. Only applies to incoming calls.
+    /// This function answers an incoming call. It only applies to incoming calls. 
+    /// Calling this function on outgoing calls behaves ?
     ///
-    /// - parameter option: Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.
+    /// - parameter option: Intended media options - audio only or audio and video - for the call.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
     open func answer(option: MediaOption, completionHandler: CompletionHandler?) {
         createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
             self.callClient.joinExistingCall(callUrl: self.url, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
@@ -246,11 +249,10 @@ open class Call {
         }
     }
     
-    /// Disconnects the active call. Applies to both incoming and outgoing calls.
+    /// This function disconnects this *call*. This applies to both incoming and outgoing calls.
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
     open func hangup(_ completionHandler: CompletionHandler?) {
         guard let selfParticipantUrl = selfParticipantUrl else {
             Logger.error("Failure: Missing self participant URL")
