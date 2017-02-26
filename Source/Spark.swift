@@ -27,7 +27,7 @@ import UIKit
 ///
 /// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered Cisco Spark user.
 ///
-/// ````
+/// ```` swift
 ///    let clientId = "Def123456..."
 ///    let clientSecret = "fed456..."
 ///    let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
@@ -46,7 +46,7 @@ import UIKit
 ///
 /// - *JWTAuthStrategy* - this should be used when *Spark* is to be authenticated as a CIsco App ID.
 ///
-/// ````
+/// ```` swift
 ///    let jwtAuthStrategy = JWTAuthStrategy()
 ///    let spark = Spark(authenticationStrategy: jwtAuthStrategy)
 ///    ...

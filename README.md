@@ -1,45 +1,51 @@
 [![Travis CI](https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/ciscospark/spark-ios-sdk)
 
-# SparkSDK
+# Cisco Spark iOS SDK
 
-Spark iOS SDK written in swift.
+Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with **Cisco Spark iOS SDK** in your iOS application.
+ 
+Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift).
 
 ## Setup
-Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
+Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
 
 1. Install CocoaPods:
-    ```bash
+ 
+    ```
     gem install cocoapods
     ```
 
 1. Setup Cocoapods:
-    ```bash
+ 
+    ```
     pod setup
     ```
 
-1. Create a new file "Podfile" with following content in your project directory::
+1. Create a new file "Podfile" with following content in your MySparkApp project directory:
 
-    ```ruby
+    ```bash
     source 'https://github.com/CocoaPods/Specs.git'
     
     platform :ios, '9.0'
     use_frameworks!
     
-    target 'SparkSDKDemo' do
+    target 'MySparkApp' do
         pod 'SparkSDK'
     end
     ```
 
-1. Install SparkSDK from your project directory:
+1. Install SparkSDK from your MySparkApp project directory:
 
     ```bash
     pod install
     ```
 
-## Example
-Below is code of a demo of the SDK usage
 
-1. Create the Spark SDK with OAuth authentication
+## Example
+Below is code of a demo of the SDK usage:
+
+1. Create the Spark SDK with OAuth authentication.
+ 
    ```swift
    let clientId = "Def123456..."
    let clientSecret = "fed456..."
@@ -57,7 +63,8 @@ Below is code of a demo of the SDK usage
    }
    ```
  
-1. Create the Spark SDK with JWT-based authentication
+1. Create the Spark SDK with JWT-based authentication.
+ 
    ```swift
    let jwtAuthStrategy = JWTAuthStrategy()
    let spark = Spark(authenticationStrategy: jwtAuthStrategy)
@@ -68,7 +75,8 @@ Below is code of a demo of the SDK usage
    }
    ```
  
-1. Register the device to send and receive calls
+1. Register the device to send and receive calls.
+ 
    ```swift
    spark.phone.register() { success in
        if success {
@@ -104,7 +112,8 @@ Below is code of a demo of the SDK usage
    }
    ```
     
-1. Make an outgoing call
+1. Make an outgoing call.
+ 
    ```swift
    let address = "coworker@example.com"
    spark.phone.requestMediaAccess(Phone.MediaAccessType.audioVideo) { granted in
@@ -128,7 +137,8 @@ Below is code of a demo of the SDK usage
    }
    ```
  
-1. Receive a call
+1. Receive a call.
+ 
    ```swift
    class MyCallObserver: CallObserver {
        func callIncoming(_ call: Call) {

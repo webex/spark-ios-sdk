@@ -25,7 +25,8 @@ public enum MediaOption {
     /// Call with audio only.
     case audioOnly
     /// Call with both audio and video.
-    
+    /// - parameter local: the viewport of the local party's video.
+    /// - parameter remote: the viewport of the remote party's video.
     case audioVideo(local: MediaRenderView, remote: MediaRenderView)
     
     var hasVideo: Bool {

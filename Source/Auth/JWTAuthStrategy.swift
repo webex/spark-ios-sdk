@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,9 @@
 import Foundation
 
 
-/// A JWT-based authentication strategy
+/// A [JSON Web Token](https://jwt.io/introduction) (JWT) based authentication strategy
+///
+/// - since: 1.2.0
 public class JWTAuthStrategy: AuthenticationStrategy {
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
@@ -52,7 +54,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         return jwt
     }
     
-    /// See AuthenticationStrategy.authorized
+    /// - see: AuthenticationStrategy.authorized
     public var authorized: Bool {
         return unexpiredJwt != nil
     }

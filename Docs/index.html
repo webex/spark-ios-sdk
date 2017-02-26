@@ -202,79 +202,85 @@
           <section class="section">
             
             <p><a href="https://travis-ci.org/ciscospark/spark-ios-sdk"><img src="https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master" alt="Travis CI"></a></p>
-<a href='#sparksdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='sparksdk'>SparkSDK</h1>
+<a href='#cisco-spark-ios-sdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='cisco-spark-ios-sdk'>Cisco Spark iOS SDK</h1>
 
-<p>Spark iOS SDK written in swift.</p>
+<p>Want to have secure and convenient audio and video interactions integrated into your iOS application? <strong>Cisco Spark iOS SDK</strong> is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with <strong>Cisco Spark iOS SDK</strong> in your iOS application.</p>
+
+<p>Cisco Spark iOS SDK is written in <a href="https://developer.apple.com/swift">Swift</a>.</p>
 <a href='#setup' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='setup'>Setup</h2>
 
-<p>Here are the steps to integrate SparkSDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
+<p>Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
 
 <ol>
-<li><p>Install CocoaPods:
-<code>bash
-gem install cocoapods
-</code></p></li>
-<li><p>Setup Cocoapods:
-<code>bash
-pod setup
-</code></p></li>
-<li><p>Create a new file <q>Podfile</q> with following content in your project directory::</p>
-<pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
-
-<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'9.0'</span>
-<span class="n">use_frameworks!</span>
-
-<span class="n">target</span> <span class="s1">'SparkSDKDemo'</span> <span class="k">do</span>
-    <span class="n">pod</span> <span class="s1">'SparkSDK'</span>
-<span class="k">end</span>
+<li><p>Install CocoaPods:</p>
+<pre class="highlight plaintext"><code>gem install cocoapods
 </code></pre></li>
-<li><p>Install SparkSDK from your project directory:</p>
+<li><p>Setup Cocoapods:</p>
+<pre class="highlight plaintext"><code>pod setup
+</code></pre></li>
+<li><p>Create a new file <q>Podfile</q> with following content in your MySparkApp project directory:</p>
+<pre class="highlight shell"><code><span class="nb">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
+
+platform :ios, <span class="s1">'9.0'</span>
+use_frameworks!
+
+target <span class="s1">'MySparkApp'</span> <span class="k">do
+    </span>pod <span class="s1">'SparkSDK'</span>
+end
+</code></pre></li>
+<li><p>Install SparkSDK from your MySparkApp project directory:</p>
 <pre class="highlight shell"><code>pod install
 </code></pre></li>
 </ol>
 <a href='#example' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='example'>Example</h2>
 
-<p>Below is code of a demo of the SDK usage</p>
+<p>Below is code of a demo of the SDK usage:</p>
 
 <ol>
-<li><p>Create the Spark SDK with OAuth authentication
-<code>swift
-let clientId = &quot;Def123456...&quot;
-let clientSecret = &quot;fed456...&quot;
-let scope = &quot;spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write&quot;
-let redirectUri = &quot;MyCustomApplication://response&quot;
-let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-let spark = Spark(authenticationStrategy: oauthStrategy)
-// ...
-if !oauthStrategy.authorized {
-   oauthStrategy.authorize(parentViewController: self) { success in
-       if !success {
-           print(&quot;User not authorized&quot;)
-       }
-   }
-}
-</code></p></li>
-<li><p>Create the Spark SDK with JWT-based authentication
-<code>swift
-let jwtAuthStrategy = JWTAuthStrategy()
-let spark = Spark(authenticationStrategy: jwtAuthStrategy)
-// ...
-if !jwtAuthStrategy.authorized {
-   // obtain JWT through some application-specific mechanism  
-   jwtAuthStrategy.authorizedWith(jwt: myJwt)
-}
-</code></p></li>
-<li><p>Register the device to send and receive calls
-<code>swift
-spark.phone.register() { success in
-   if success {
-       // Successfully registered device
-   } else {
-       // Device was not registered, and no calls can be sent or received
-   }
-}
-</code></p></li>
-<li><p>Use Spark service</p></li>
+<li>Create the Spark SDK with OAuth authentication.</li>
+</ol>
+<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
+   <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
+   <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"</span>
+   <span class="k">let</span> <span class="nv">redirectUri</span> <span class="o">=</span> <span class="s">"MyCustomApplication://response"</span>
+   <span class="k">let</span> <span class="nv">oauthStrategy</span> <span class="o">=</span> <span class="kt">OAuthStrategy</span><span class="p">(</span><span class="nv">clientId</span><span class="p">:</span> <span class="n">clientId</span><span class="p">,</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="n">clientSecret</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span> <span class="nv">redirectUri</span><span class="p">:</span> <span class="n">redirectUri</span><span class="p">)</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">oauthStrategy</span><span class="p">)</span>
+   <span class="c1">// ...</span>
+   <span class="k">if</span> <span class="o">!</span><span class="n">oauthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+       <span class="n">oauthStrategy</span><span class="o">.</span><span class="nf">authorize</span><span class="p">(</span><span class="nv">parentViewController</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+           <span class="k">if</span> <span class="o">!</span><span class="n">success</span> <span class="p">{</span>
+               <span class="nf">print</span><span class="p">(</span><span class="s">"User not authorized"</span><span class="p">)</span>
+           <span class="p">}</span>
+       <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre>
+
+<ol>
+<li>Create the Spark SDK with JWT-based authentication.</li>
+</ol>
+<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">jwtAuthStrategy</span> <span class="o">=</span> <span class="kt">JWTAuthStrategy</span><span class="p">()</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
+   <span class="c1">// ...</span>
+   <span class="k">if</span> <span class="o">!</span><span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+       <span class="c1">// obtain JWT through some application-specific mechanism  </span>
+       <span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
+   <span class="p">}</span>
+</code></pre>
+
+<ol>
+<li>Register the device to send and receive calls.</li>
+</ol>
+<pre class="highlight swift"><code>   <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+       <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+           <span class="c1">// Successfully registered device</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+           <span class="c1">// Device was not registered, and no calls can be sent or received</span>
+       <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre>
+
+<ol>
+<li>Use Spark service</li>
 </ol>
 <pre class="highlight swift"><code>   <span class="n">spark</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"My Room"</span><span class="p">)</span> <span class="p">{</span> <span class="n">serviceResponse</span> <span class="k">in</span>
        <span class="k">switch</span> <span class="n">serviceResponse</span><span class="o">.</span><span class="n">result</span> <span class="p">{</span>
@@ -299,53 +305,54 @@ spark.phone.register() { success in
 </code></pre>
 
 <ol>
-<li><p>Make an outgoing call
-<code>swift
-let address = &quot;coworker@example.com&quot;
-spark.phone.requestMediaAccess(Phone.MediaAccessType.audioVideo) { granted in
-   if granted {
-       // Prepare view for an outgoing call, including ensuring MediaRenderViews
-       // are created if making a video call
-       let localVideoView = MediaRenderView()
-       let remoteVideoView = MediaRenderView()
-       let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-       let call = spark.phone.dial(address, option: mediaOption) { success in
-           if success {
-               // Call will be soon be ringing on the remote user&#39;s phone
-           } else {
-               // A service call may have failed, the user may have rejected the
-               // codec license, or the address could have been incorrect
-           }
-       }
-   } else {
-       // User denied access to use the camera or microphone
-   }
-}
-</code></p></li>
-<li><p>Receive a call
-<code>swift
-class MyCallObserver: CallObserver {
-   func callIncoming(_ call: Call) {
-       // Show incoming call view
-       let userAcceptedCall: Bool = // ... from user action
-       if userAcceptedCall {
-           let mediaOption = // ... set up a media option similarly to dialing
-           call.answer(option: mediaOption) { success in
-           }
-       } else {
-           // If the user chose to reject the call then reject it
-           call.reject() { success in
-           }
-       }
-   }
-}
-</code></p></li>
+<li>Make an outgoing call.</li>
 </ol>
+<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
+   <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">requestMediaAccess</span><span class="p">(</span><span class="kt">Phone</span><span class="o">.</span><span class="kt">MediaAccessType</span><span class="o">.</span><span class="n">audioVideo</span><span class="p">)</span> <span class="p">{</span> <span class="n">granted</span> <span class="k">in</span>
+       <span class="k">if</span> <span class="n">granted</span> <span class="p">{</span>
+           <span class="c1">// Prepare view for an outgoing call, including ensuring MediaRenderViews</span>
+           <span class="c1">// are created if making a video call</span>
+           <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+           <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+           <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
+           <span class="k">let</span> <span class="nv">call</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+               <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+                   <span class="c1">// Call will be soon be ringing on the remote user's phone</span>
+               <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                   <span class="c1">// A service call may have failed, the user may have rejected the</span>
+                   <span class="c1">// codec license, or the address could have been incorrect</span>
+               <span class="p">}</span>
+           <span class="p">}</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+           <span class="c1">// User denied access to use the camera or microphone</span>
+       <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre>
+
+<ol>
+<li>Receive a call.</li>
+</ol>
+<pre class="highlight swift"><code>   <span class="kd">class</span> <span class="kt">MyCallObserver</span><span class="p">:</span> <span class="kt">CallObserver</span> <span class="p">{</span>
+       <span class="kd">func</span> <span class="nf">callIncoming</span><span class="p">(</span><span class="n">_</span> <span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">)</span> <span class="p">{</span>
+           <span class="c1">// Show incoming call view</span>
+           <span class="k">let</span> <span class="nv">userAcceptedCall</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="c1">// ... from user action</span>
+           <span class="k">if</span> <span class="n">userAcceptedCall</span> <span class="p">{</span>
+               <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="c1">// ... set up a media option similarly to dialing</span>
+               <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+               <span class="p">}</span>
+           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+               <span class="c1">// If the user chose to reject the call then reject it</span>
+               <span class="n">call</span><span class="o">.</span><span class="nf">reject</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+               <span class="p">}</span>
+           <span class="p">}</span>
+       <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-24)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

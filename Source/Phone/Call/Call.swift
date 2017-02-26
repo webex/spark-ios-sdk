@@ -19,8 +19,28 @@
 // THE SOFTWARE.
 
 
-/// A Call represents an active media call on Cisco Spark.
-/// The application can creates a *call* object by calling *phone.dial* function.
+/// A Call represents a media call on Cisco Spark.
+/// The application can create an outgoing *call* object by calling *phone.dial* function:
+///
+/// ``` swift
+///     let address = "coworker@example.com"
+///     let localVideoView = MediaRenderView()
+///     let remoteVideoView = MediaRenderView()
+///     let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
+///     let call = spark.phone.dial(address, option: mediaOption) { success in
+///       if success {
+///         // success
+///       } else {
+///         // failure
+///       }
+///     }
+/// ```
+/// The application can receive an incoming *call* object via ...
+///
+/// ``` swift
+///    code
+/// ```
+///
 /// - see: Phone API about how to create calls.
 /// - since: 1.2.0
 open class Call {
@@ -111,27 +131,27 @@ open class Call {
         return mediaSession.isFrontCameraSelected() ? .User : .Environment
     }
     
-    /// The local video render view height of this *call*. (in what unit?)
+    /// The local video render view height (points) of this *call*.
     open var localVideoViewHeight: UInt32 {
         return mediaSession.localVideoViewHeight
     }
     
-    /// The Local video render view width of this *call*.
+    /// The Local video render view width (points) of this *call*.
     open var localVideoViewWidth: UInt32 {
         return mediaSession.localVideoViewWidth
     }
     
-    /// The remote video render view height of this *call*.
+    /// The remote video render view height (points) inof this *call*.
     open var remoteVideoViewHeight: UInt32 {
         return mediaSession.remoteVideoViewHeight
     }
     
-    /// The remote video render view width of this *call*.
+    /// The remote video render view width (points) of this *call*.
     open var remoteVideoViewWidth: UInt32 {
         return mediaSession.remoteVideoViewWidth
     }
     
-    /// True if the DTMF keypad can be enabled for this *call*. Otherwise, false.
+    /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
     open var sendingDTMFEnabled: Bool {
         if let enableDTMF = info?.enableDTMF {
             return enableDTMF
@@ -274,7 +294,7 @@ open class Call {
         }
     }
     
-    /// Rejects an incoming call. Only applies to incoming calls.
+    /// Rejects an incoming call. This only applies to incoming calls.
     ///
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
@@ -299,12 +319,11 @@ open class Call {
         }
     }
     
-    /// Sends DTMF events to remote destination.
+    /// This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
     ///
-    /// - parameter dtmf: Valid DTMF events. 0-9, *, #, and A-D.
+    /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
     open func send(dtmf: String, completionHandler: CompletionHandler?) {
         guard let selfParticipantUrl = selfParticipantUrl else {
             completionHandler?(false)
@@ -320,43 +339,40 @@ open class Call {
     }
     
     /// If sending video then stop sending video. If not sending video then start sending video.
-    ///
-    /// - note: This function is expected to run on main thread.
     open func toggleSendingVideo() {
         mediaSession.toggleSendingVideo()
     }
     
-    /// If receiving video then stop receiving video. If not receiving video then start receiving video.
+    /// Toggle whether the local party should receive video from the remote party or not.
     ///
-    /// - note: This function is expected to run on main thread.
+    /// * If receiving video then stop receiving video.
+    /// * If not receiving video then start receiving video.
     open func toggleReceivingVideo() {
         mediaSession.toggleReceivingVideo()
     }
     
-    /// If sending audio then stop sending audio. If not sending audio then start sending audio.
+    /// Toggle whether the local party should send audio from the remote party or not.
     ///
-    /// - note: This function is expected to run on main thread.
+    /// * If sending audio then stop sending audio.
+    /// * If not sending audio then start sending audio.
     open func toggleSendingAudio() {
         mediaSession.toggleSendingAudio()
     }
     
-    /// If receiving audio then stop receiving audio. If not receiving audio then start receiving audio.
+    /// Toggle whether the local party should receive audio from the remote party or not.
     ///
-    /// - note: This function is expected to run on main thread.
+    /// * If receiving audio then stop receiving audio.
+    /// * If not receiving audio then start receiving audio.
     open func toggleReceivingAudio() {
         mediaSession.toggleReceivingAudio()
     }
     
-    /// Toggle camera facing mode between front camera and back camera.
-    ///
-    /// - note: This function is expected to run on main thread.
+    /// Toggle camera facing mode between front camera and back camera of the iOS device.
     open func toggleFacingMode() {
         mediaSession.toggleFacingMode()
     }
     
-    /// Toggle loud speaker.
-    ///
-    /// - note: This function is expected to run on main thread.
+    /// Toggle the use of loud speaker on the iOS device.
     open func toggleLoudSpeaker() {
         mediaSession.toggleLoudSpeaker()
     }

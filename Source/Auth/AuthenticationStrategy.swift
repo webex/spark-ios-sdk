@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,23 @@
 import Foundation
 
 
-/// A protocol for generic authentication strategies in Spark. Each authentication strategy
-/// is responsible for providing an accessToken used throughout Spark.
+/// A protocol for generic authentication strategies in Cisco Spark. Each authentication strategy
+/// is responsible for providing an accessToken used throughout this SDK.
+///
+/// - since: 1.2.0
 public protocol AuthenticationStrategy : class {
     
-    /// Returns true if the user is logically authorized. This may not mean the user has a valid
+    /// True if the user is logically authorized. This may not mean the user has a valid
     /// access token yet, but the authentication strategy should be able to obtain one without
     /// further user interaction.
     var authorized: Bool { get }
     
-    /// Deauthorize the current user, clearing any persistent state. If the phone is registered it
-    /// should be deregistered before calling this method.
+    /// This function deauthorizes the current user and clears any persistent state with regards to the current user.
+    /// If the *phone* is registered, it should be deregistered before calling this method.
     func deauthorize()
     
-    /// Returns an access token. This may involve long-running operations such as service calls,
-    /// but may also return immediately. Users should not make assumptions about how quickly this
+    /// This function returns an access token. This may involve long-running operations such as service calls,
+    /// but may also return immediately. The application should not make assumptions about how quickly this
     /// completes.
     /// If the access token could not be retrieved then the completion handler will be called with nil.
     ///

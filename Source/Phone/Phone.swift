@@ -25,7 +25,7 @@ import AVFoundation
 /// and use *phone* to call other Cisco Spark users or PSTN when enabled.
 /// The *phone* must be registered before it can make or receive calls.
 ///
-/// ````
+/// ```` swift
 ///     spark.phone.register() { success in
 ///       if success {
 ///         ... // Successfully registered device
@@ -117,7 +117,9 @@ public class Phone {
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
     /// - returns: a Call object
+    /// - throw:
     /// - since: 1.2.0
+    /// - attention: Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.
    public func dial(_ address: String, option: MediaOption, completionHandler: @escaping (Bool) -> Void) -> Call {
         let call = callManager.createOutgoingCall()
         call.dial(address: address, option: option) { success in
@@ -126,19 +128,20 @@ public class Phone {
         return call
     }
     
-    /// This function requests the end user approve the H.264 codec license from Cisco Systems, Inc.
+    /// This function pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.
     ///
     /// - returns: Void
-    /// - note: Invoking this function is optional since the license activation alert will appear automatically during the first video call.
+    /// - note: Invoking this function is optional since the alert will appear automatically during the first video call.
     /// - since: 1.2.0
     public func requestVideoCodecActivation() {
         callManager.requestVideoCodecActivation()
     }
     
-    /// This function prevents Cisco Spark iOS SDK from checking H.264 video codec license activation.
+    /// This function prevents Cisco Spark iOS SDK from poping up an Alert for the end user
+    /// to approve the use of H.264 video codec license from Cisco Systems, Inc.
     ///
     /// - returns: Void
-    /// - note: The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
+    /// - attention: The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
     /// - since: 1.2.0
     public func disableVideoCodecActivation() {
         callManager.disableVideoCodecActivation()
