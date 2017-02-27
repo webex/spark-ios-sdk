@@ -208,39 +208,18 @@
 
                 </div>
               </div>
-            <p>Message HTTP client.</p>
+            <p>The Messages API.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
           </section>
           <section class="section task-group-section">
             <div class="task-group">
               <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C8SparkSDK13MessageClient13ObjectHandler"></a>
-                    <a name="//apple_ref/swift/Alias/ObjectHandler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK13MessageClient13ObjectHandler">ObjectHandler</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Alias for closure to handle a service response along with a Message object.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">ObjectHandler</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
                 <li class="item">
                   <div>
                     <code>
@@ -271,6 +250,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:C8SparkSDK13MessageClient13ObjectHandler"></a>
+                    <a name="//apple_ref/swift/Alias/ObjectHandler" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C8SparkSDK13MessageClient13ObjectHandler">ObjectHandler</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Alias for closure to handle a service response along with a Message object.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">ObjectHandler</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/Message.html">Message</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:FC8SparkSDK13MessageClient4listFT6roomIdSS6beforeGSqSS_13beforeMessageGSqSS_3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_7Message__T__T_"></a>
                     <a name="//apple_ref/swift/Method/list(roomId:before:beforeMessage:max:queue:completionHandler:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC8SparkSDK13MessageClient4listFT6roomIdSS6beforeGSqSS_13beforeMessageGSqSS_3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_7Message__T__T_">list(roomId:before:beforeMessage:max:queue:completionHandler:)</a>
@@ -281,7 +287,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Lists all messages in a room. If present, includes the associated media content attachment for each message.
+                        <p>This function lists all messages in a room based on <em>roomId</em>. 
+If present, it includes the associated media content attachment for each message.
 The list sorts the messages in descending order by creation date.</p>
 
                       </div>
@@ -305,7 +312,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>List messages for a room by id.</p>
+                                  <p>The identifier of the room where all the messages are to be listed.</p>
 
                                 </div>
                               </td>
@@ -318,7 +325,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>List messages sent before a date and time, in ISO8601 format.</p>
+                                  <p>List messages sent only before this date and time, in ISO8601 format.</p>
 
                                 </div>
                               </td>
@@ -331,7 +338,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>List messages sent before a message by id.</p>
+                                  <p>List messages sent only before this message by id.</p>
 
                                 </div>
                               </td>
@@ -399,7 +406,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a plain text message, and optionally, a media content attachment, to a room.</p>
+                        <p>This function posts a plain text message, and optionally, a media content attachment, to a room by room Id.</p>
 
                       </div>
                       <div class="declaration">
@@ -422,7 +429,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The room id.</p>
+                                  <p>The identifier of the room where the message is to be posted.</p>
 
                                 </div>
                               </td>
@@ -435,7 +442,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The plain text message to post to the room.</p>
+                                  <p>The plain text message to be posted to the room.</p>
 
                                 </div>
                               </td>
@@ -448,7 +455,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
+                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
 
                                 </div>
                               </td>
@@ -503,7 +510,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a media content attachment to a room without text.</p>
+                        <p>This function posts a media content attachment to a room based on <em>roomId</em> without text.</p>
 
                       </div>
                       <div class="declaration">
@@ -526,7 +533,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The room id.</p>
+                                  <p>The identifier of the room where the message is to be posted.</p>
 
                                 </div>
                               </td>
@@ -539,7 +546,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
+                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
 
                                 </div>
                               </td>
@@ -594,7 +601,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a plain text message, and optionally, a media content attachment, to a person.</p>
+                        <p>This function posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
 
                       </div>
                       <div class="declaration">
@@ -617,7 +624,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The id of the recipient when sending a private1:1 message.</p>
+                                  <p>The identifier of the recipient of this private 1:1 message.</p>
 
                                 </div>
                               </td>
@@ -630,7 +637,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The plain text message to post to the room.</p>
+                                  <p>The plain text message to post to the recipient.</p>
 
                                 </div>
                               </td>
@@ -643,7 +650,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
+                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
 
                                 </div>
                               </td>
@@ -698,7 +705,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a media content attachment to a person without text.</p>
+                        <p>This function posts a media content attachment to a person by person Id without text.</p>
 
                       </div>
                       <div class="declaration">
@@ -721,7 +728,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The id of the recipient when sending a private1:1 message.</p>
+                                  <p>The identifier of the recipient of this media content.</p>
 
                                 </div>
                               </td>
@@ -734,7 +741,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
+                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
 
                                 </div>
                               </td>
@@ -789,7 +796,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a plain text message, and optionally, a media content attachment, to a person.</p>
+                        <p>This function posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
 
                       </div>
                       <div class="declaration">
@@ -893,7 +900,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Posts a media content attachment to a person without text.</p>
+                        <p>This function posts a media content attachment to a person by email address without text.</p>
 
                       </div>
                       <div class="declaration">
@@ -916,7 +923,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The email address of the recipient when sending a private 1:1 message.</p>
+                                  <p>The email address of the recipient of this media content.</p>
 
                                 </div>
                               </td>
@@ -984,7 +991,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Shows details for a message by message id.</p>
+                        <p>This function retrieves the details of a message by message Id.</p>
 
                       </div>
                       <div class="declaration">
@@ -1007,7 +1014,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The message id.</p>
+                                  <p>The identifier of the message.</p>
 
                                 </div>
                               </td>
@@ -1062,7 +1069,7 @@ The list sorts the messages in descending order by creation date.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Deletes a message by message id.</p>
+                        <p>This function deletes a message by message id.</p>
 
                       </div>
                       <div class="declaration">
@@ -1085,7 +1092,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>The message id.</p>
+                                  <p>The identifier of the message.</p>
 
                                 </div>
                               </td>
@@ -1761,7 +1768,7 @@ The list sorts the messages in descending order by creation date.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-24)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-27)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

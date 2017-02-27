@@ -2,7 +2,7 @@
   "warnings": [
     {
       "file": "/Users/zhiyuliu/Work/Sandbox/sdk-docs/Source/Spark.swift",
-      "line": 49,
+      "line": 84,
       "symbol": "Spark.init(authenticationStrategy:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

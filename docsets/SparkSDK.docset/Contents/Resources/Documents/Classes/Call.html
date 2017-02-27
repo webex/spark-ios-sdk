@@ -208,7 +208,38 @@
 
                 </div>
               </div>
-            <p>Represents a Spark call.</p>
+            <p>A Call represents a media call on Cisco Spark.
+The application can create an outgoing <em>call</em> object by calling <em>phone.dial</em> function:</p>
+
+<pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
+    <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">call</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+        <span class="c1">// success</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// failure</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>The application can receive an incoming <em>call</em> object via &hellip;</p>
+
+<pre class="highlight swift"><code>   <span class="n">code</span>
+</code></pre>
+
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    Phone API about how to create calls.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
           </section>
           <section class="section task-group-section">
@@ -227,7 +258,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Camera facing mode.</p>
+                        <p>The enumeration of Camera facing modes.</p>
 
                         <a href="../Classes/Call/FacingMode.html" class="slightly-smaller">See more</a>
                       </div>
@@ -282,7 +313,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Call status.</p>
+                        <p>The enumeration of Call status.</p>
 
                         <a href="../Classes/Call/Status.html" class="slightly-smaller">See more</a>
                       </div>
@@ -310,7 +341,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Call status.</p>
+                        <p>The current status of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -337,9 +368,9 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The intended recipient of the call. 
-For an outgoing call this is the same as the address specified in dial. 
-For an incoming call this is the identity of the authenticated user.</p>
+                        <p>The intended recipient of this <em>call</em>.
+- For an outgoing call, this is the same as the address specified in <em>phone.dial</em>.
+- For an incoming call, this is the identity of the authenticated user.</p>
 
                       </div>
                       <div class="declaration">
@@ -366,9 +397,9 @@ For an incoming call this is the identity of the authenticated user.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The receiver of the call. 
-For an outgoing call this is the identity of the authenticated user.
-For an incoming call this is the email address / phone number / SIP address of the caller.</p>
+                        <p>The receiver of this <em>call</em>.
+- For an outgoing call, this is the identity of the authenticated user.
+- For an incoming call, this is the address of the caller such as email address, phone number, or SIP address.</p>
 
                       </div>
                       <div class="declaration">
@@ -395,7 +426,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is sending audio.</p>
+                        <p>True if this <em>call</em> is sending audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -422,7 +453,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is receiving audio.</p>
+                        <p>True if the local party of this <em>call</em> is receiving audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -449,7 +480,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is sending video.</p>
+                        <p>True if the local party of this <em>call</em> is sending video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -476,7 +507,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is receiving video.</p>
+                        <p>True if the local party of this <em>call</em> is receiving video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -503,7 +534,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if remote is sending audio.</p>
+                        <p>True if the remote party of this <em>call</em> is sending audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -530,7 +561,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if remote is sending video.</p>
+                        <p>True if the remote party of this <em>call</em> is sending video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -557,7 +588,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if loud speaker is selected as the output device for this call.</p>
+                        <p>True if loud speaker is selected as the audio output device for this <em>call</em>. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -584,7 +615,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Camera facing mode selected for this call.</p>
+                        <p>The camera facing mode selected for this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -611,7 +642,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Local video render view height.</p>
+                        <p>The local video render view height (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -638,7 +669,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Local video render view width.</p>
+                        <p>The Local video render view width (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -665,7 +696,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Remote video render view height.</p>
+                        <p>The remote video render view height (points) inof this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -692,7 +723,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Remote video render view width.</p>
+                        <p>The remote video render view width (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
@@ -719,7 +750,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if the DTMF keypad can be enabled for Client.</p>
+                        <p>True if the DTMF keypad is enabled for this <em>call</em>. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
@@ -746,13 +777,8 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Answers an incoming call. Only applies to incoming calls.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function answers an incoming call. It only applies to incoming calls. 
+Calling this function on outgoing calls behaves ?</p>
 
                       </div>
                       <div class="declaration">
@@ -775,7 +801,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                               </td>
                               <td>
                                 <div>
-                                  <p>Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.</p>
+                                  <p>Intended media options - audio only or audio and video - for the call.</p>
 
                                 </div>
                               </td>
@@ -817,13 +843,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Disconnects the active call. Applies to both incoming and outgoing calls.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function disconnects this <em>call</em>. This applies to both incoming and outgoing calls.</p>
 
                       </div>
                       <div class="declaration">
@@ -875,7 +895,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Rejects an incoming call. Only applies to incoming calls.</p>
+                        <p>Rejects an incoming call. This only applies to incoming calls.</p>
 
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
@@ -933,13 +953,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Sends DTMF events to remote destination.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.</p>
 
                       </div>
                       <div class="declaration">
@@ -962,7 +976,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                               </td>
                               <td>
                                 <div>
-                                  <p>Valid DTMF events. 0-9, *, #, and A-D.</p>
+                                  <p>any combination of valid DTMF events matching regex mattern “^[0-9#*abcdABCD]+$”</p>
 
                                 </div>
                               </td>
@@ -1006,12 +1020,6 @@ For an incoming call this is the email address / phone number / SIP address of t
                       <div class="abstract">
                         <p>If sending video then stop sending video. If not sending video then start sending video.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -1037,13 +1045,12 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If receiving video then stop receiving video. If not receiving video then start receiving video.</p>
+                        <p>Toggle whether the local party should receive video from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If receiving video then stop receiving video.</li>
+<li>If not receiving video then start receiving video.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
@@ -1070,13 +1077,12 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If sending audio then stop sending audio. If not sending audio then start sending audio.</p>
+                        <p>Toggle whether the local party should send audio from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If sending audio then stop sending audio.</li>
+<li>If not sending audio then start sending audio.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
@@ -1103,13 +1109,12 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If receiving audio then stop receiving audio. If not receiving audio then start receiving audio.</p>
+                        <p>Toggle whether the local party should receive audio from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If receiving audio then stop receiving audio.</li>
+<li>If not receiving audio then start receiving audio.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
@@ -1136,13 +1141,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Toggle camera facing mode between front camera and back camera.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>Toggle camera facing mode between front camera and back camera of the iOS device.</p>
 
                       </div>
                       <div class="declaration">
@@ -1169,13 +1168,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Toggle loud speaker.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>Toggle the use of loud speaker on the iOS device.</p>
 
                       </div>
                       <div class="declaration">
@@ -1278,7 +1271,7 @@ For an incoming call this is the email address / phone number / SIP address of t
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-24)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-27)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

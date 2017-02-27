@@ -284,7 +284,38 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Represents a Spark call.</p>
+                        <p>A Call represents a media call on Cisco Spark.
+The application can create an outgoing <em>call</em> object by calling <em>phone.dial</em> function:</p>
+
+<pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
+    <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">call</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+        <span class="c1">// success</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// failure</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>The application can receive an incoming <em>call</em> object via &hellip;</p>
+
+<pre class="highlight swift"><code>   <span class="n">code</span>
+</code></pre>
+
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    Phone API about how to create calls.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
                         <a href="Classes/Call.html" class="slightly-smaller">See more</a>
                       </div>
@@ -380,7 +411,25 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Represents a Spark phone device.</p>
+                        <p>Phone represents a Cisco Spark calling device.
+The application can obtain the <em>phone</em> object from <em>Spark</em> object 
+and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
+The <em>phone</em> must be registered before it can make or receive calls.</p>
+
+<pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+        <span class="o">...</span> <span class="c1">// Successfully registered device</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="o">...</span>    <span class="c1">// Device was not registered, and no calls can be sent or received</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
                         <a href="Classes/Phone.html" class="slightly-smaller">See more</a>
                       </div>
@@ -444,7 +493,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Message HTTP client.</p>
+                        <p>The Messages API.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
                         <a href="Classes/MessageClient.html" class="slightly-smaller">See more</a>
                       </div>
@@ -604,7 +659,13 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A JWT-based authentication strategy</p>
+                        <p>A <a href="https://jwt.io/introduction">JSON Web Token</a> (JWT) based authentication strategy</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
                         <a href="Classes/JWTAuthStrategy.html" class="slightly-smaller">See more</a>
                       </div>
@@ -767,7 +828,51 @@ are not persisted.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The main entry point into the SDK. Contains methods for initializing the SDK and verifying developer and end user credentials.</p>
+                        <p><em>Spark</em> object is the entry point to use this Cisco Spark iOS SDK. A <em>Spark</em> object must be created with one of the following <em>AuthenticationStrategy</em>.</p>
+
+<ul>
+<li><em>OAuthStrategy</em> - this should be used when <em>Spark</em> is to be authenticated as a registered Cisco Spark user.</li>
+</ul>
+
+<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
+   <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
+   <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"</span>
+   <span class="k">let</span> <span class="nv">redirectUri</span> <span class="o">=</span> <span class="s">"MyCustomApplication://response"</span>
+   <span class="k">let</span> <span class="nv">oauthStrategy</span> <span class="o">=</span> <span class="kt">OAuthStrategy</span><span class="p">(</span><span class="nv">clientId</span><span class="p">:</span> <span class="n">clientId</span><span class="p">,</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="n">clientSecret</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span> <span class="nv">redirectUri</span><span class="p">:</span> <span class="n">redirectUri</span><span class="p">)</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">oauthStrategy</span><span class="p">)</span>
+   <span class="o">...</span>
+   <span class="k">if</span> <span class="o">!</span><span class="n">oauthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+     <span class="n">oauthStrategy</span><span class="o">.</span><span class="nf">authorize</span><span class="p">(</span><span class="nv">parentViewController</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+       <span class="k">if</span> <span class="o">!</span><span class="n">success</span> <span class="p">{</span>
+           <span class="nf">print</span><span class="p">(</span><span class="s">"User not authorized"</span><span class="p">)</span>
+       <span class="p">}</span>
+     <span class="p">}</span>
+   <span class="p">}</span>
+</code></pre>
+
+<ul>
+<li><em>JWTAuthStrategy</em> - this should be used when <em>Spark</em> is to be authenticated as a CIsco App ID.</li>
+</ul>
+
+<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">jwtAuthStrategy</span> <span class="o">=</span> <span class="kt">JWTAuthStrategy</span><span class="p">()</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
+   <span class="o">...</span>
+   <span class="k">if</span> <span class="o">!</span><span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+     <span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
+   <span class="p">}</span>
+</code></pre>
+
+<div class="aside aside-attention">
+    <p class="aside-title">Attention</p>
+    All APIs on Cisco Spark iOS SDK are expected to run on the application&rsquo;s main thread.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
                         <a href="Classes/Spark.html" class="slightly-smaller">See more</a>
                       </div>
@@ -819,7 +924,7 @@ are not persisted.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-24)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-27)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
