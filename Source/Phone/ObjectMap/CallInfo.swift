@@ -22,12 +22,13 @@ import Foundation
 import ObjectMapper
 
 struct CallInfo {
-    var callUrl: String? // Mandatory
+    var locusUrl: String? // Mandatory
     var participants: [Participant]?
     var myself: Participant?
     var host: ParticipantInfo?
     var fullState: FullState?
     var sequence: Sequence? // Mandatory
+    var replaces: [Replace]?
     
     var selfEmail: String? {
         return myself?.person?.email
@@ -42,6 +43,13 @@ struct CallInfo {
             return []
         }
         return devices
+    }
+    
+    var callUrl : String? {
+        if let replace = self.replaces?.first {
+            return replace.locusUrl
+        }
+        return locusUrl
     }
     
     private var allParticipantants: [Participant] {
@@ -160,11 +168,22 @@ extension CallInfo: Mappable {
 	init?(map: Map) { }
 	
 	mutating func mapping(map: Map) {
-		callUrl <- map["url"]
+		locusUrl <- map["url"]
 		participants <- map["participants"]
 		myself <- map["self"]
 		host <- map["host"]
 		fullState <- map["fullState"]
 		sequence <- map["sequence"]
+        replaces <- map["replaces"]
 	}
+}
+
+struct Replace: Mappable {
+    var locusUrl: String?
+    
+    init?(map: Map){}
+    
+    mutating func mapping(map: Map) {
+        locusUrl <- map["locusUrl"]
+    }
 }
