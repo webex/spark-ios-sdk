@@ -6,6 +6,8 @@ Want to have secure and convenient audio and video interactions integrated into 
  
 Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift).
 
+**Access to the SDK's calling features is currently restricted**
+
 ## Setup
 Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
 
