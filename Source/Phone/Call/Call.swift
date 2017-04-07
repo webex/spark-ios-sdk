@@ -85,6 +85,12 @@ open class Call {
     /// - For an incoming call, this is the address of the caller such as email address, phone number, or SIP address.
     open var from: String?
     
+    public var fromId: String? {
+        get {
+            return info?.host?.id
+        }
+    }
+    
     /// True if this *call* is sending audio. Otherwise, false.
     open var sendingAudio: Bool {
         return !mediaSession.audioMuted
@@ -160,7 +166,7 @@ open class Call {
         }
     }
     
-    private var info: CallInfo?
+    var info: CallInfo?
     
     private var selfParticipantUrl: String? {
         return info?.myself?.url
