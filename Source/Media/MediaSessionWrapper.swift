@@ -23,8 +23,11 @@ import Wme
 
 class MediaSessionWrapper {
     private let mediaSession = MediaSession()
-    private let mediaSessionObserver = MediaSessionObserver()
+    private let mediaSessionObserver: MediaSessionObserver
     
+    init(callManager: CallManager) {
+        mediaSessionObserver = MediaSessionObserver(callManager: callManager)
+    }
     
     func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
         return session == mediaSession
@@ -138,37 +141,22 @@ class MediaSessionWrapper {
     
     // MARK: - Default settings
     private func applyDefaultMediaSettings() {
-        setDefaultFacingMode()
-        setDefaultAudioOutput()
-    }
-    
-    private func setDefaultFacingMode() {
-        let isFront = Phone.sharedInstance.defaultFacingMode == Call.FacingMode.User
+        let isFront = PhoneSettings.defaultFacingMode == Call.FacingMode.User
         mediaSession.setDefaultCamera(isFront)
-    }
-    
-    private func setDefaultAudioOutput() {
-        mediaSession.setDefaultAudioOutput(Phone.sharedInstance.defaultLoudSpeaker)
+        mediaSession.setDefaultAudioOutput(PhoneSettings.defaultLoudSpeaker)
     }
     
     // MARK: - lifecycle
     func prepare(_ mediaOption: MediaOption) {
-        var constraint: MediaConstraint!
-        var localView: MediaRenderView? = nil
-        var remoteView: MediaRenderView? = nil
 
         switch (mediaOption) {
         case .audioOnly:
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
+            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
         case .audioVideo(let local, let remote):
-            constraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
-            localView = local
-            remoteView = remote
+            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
+            mediaSession.localVideoView = local
+            mediaSession.remoteVideoView = remote
         }
-
-        mediaSession.mediaConstraint = constraint
-        mediaSession.localVideoView = localView
-        mediaSession.remoteVideoView = remoteView
         
         mediaSessionObserver.startObserving(mediaSession)
         mediaSession.createMediaConnection()

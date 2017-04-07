@@ -20,19 +20,5 @@
 
 import Foundation
 
-class Utils {
-    
-    static func waitBefore(interval: TimeInterval, closure: () -> Void) {
-        Thread.sleep(forTimeInterval: interval)
-        closure()
-    }
-    
-    static func waitAfter(interval: TimeInterval, closure: () -> Void) {
-        closure()
-		Thread.sleep(forTimeInterval: interval)
-	}
-    
-    static func wait(interval: TimeInterval) {
-		Thread.sleep(forTimeInterval: interval)
-	}
-}
+/// Alias for closure to handle a service response along with an object in type of Any.
+public typealias AnyHandler = (ServiceResponse<Any>) -> Void

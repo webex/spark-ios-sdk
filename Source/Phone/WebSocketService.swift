@@ -21,20 +21,30 @@
 import Foundation
 import Starscream
 import SwiftyJSON
+import ObjectMapper
+
+protocol DeviceReregistrationStrategy: class {
+    func reregisterDevice()
+}
 
 class WebSocketService: WebSocketDelegate {
     
-    static let sharedInstance = WebSocketService()
-    
-    private var socket: WebSocket?
     private let MessageBatchingIntervalInSec = 0.5
     private let ConnectionTimeoutIntervalInSec = 60.0
+
     private var connectionTimeoutTimer: Timer?
     private var messageBatchingTimer: Timer?
     private var connectionRetryCounter: ExponentialBackOffCounter
     private var pendingMessages: [JSON]
+    private var socket: WebSocket?
+
+    private let authenticationStrategy: AuthenticationStrategy
+    private let callManager: CallManager
+    weak var deviceReregistrationStrategy: DeviceReregistrationStrategy?
     
-    init() {
+    init(authenticationStrategy: AuthenticationStrategy, callManager: CallManager) {
+        self.authenticationStrategy = authenticationStrategy
+        self.callManager = callManager
         connectionRetryCounter = ExponentialBackOffCounter(minimum: 0.5, maximum: 32, multiplier: 2)
         pendingMessages = [JSON]()
     }
@@ -45,79 +55,72 @@ class WebSocketService: WebSocketDelegate {
     }
     
     func connect(_ webSocketUrl: URL) {
-        if socket == nil {
-            socket = createWebSocket(webSocketUrl)
-            guard socket != nil else {
-                Logger.error("Skip connection due to failure of creating socket")
-                return
+        if let socket = socket {
+            connect(webSocket: socket)
+        } else {
+            authenticationStrategy.accessToken { accessToken in
+                // Need to check authorization, avoid crash when logout as soon as login
+                guard let accessToken = accessToken else {
+                    Logger.error("Failed to create web socket due to no authorization")
+                    return
+                }
+                
+                let socket = WebSocket(url: webSocketUrl)        
+                socket.headers["Authorization"] = "Bearer " + accessToken
+                socket.voipEnabled = true
+                socket.delegate = self
+                self.socket = socket
+                self.connect(webSocket: socket)   
             }
         }
-        
-        if socket!.isConnected {
+    }
+    
+    private func connect(webSocket socket: WebSocket) {
+        if socket.isConnected {
             Logger.warn("Web socket is already connected")
             return
         }
         
         Logger.info("Web socket is being connected")
         
-        socket?.connect()
+        socket.connect()
         
         scheduleConnectionTimeoutTimer()
     }
     
     func disconnect() {
-        guard socket != nil else {
+        guard let socket = socket else {
             Logger.warn("Web socket has not been connected")
             return
         }
         
-        guard socket!.isConnected else {
+        guard socket.isConnected else {
             Logger.warn("Web socket is already disconnected")
             return
         }
         
         Logger.info("Web socket is being disconnected")
         
-        socket?.disconnect()
-        socket = nil
+        socket.disconnect()
+        self.socket = nil
     }
     
     private func reconnect() {
-        guard socket != nil else {
+        guard let socket = socket else {
             Logger.warn("Web socket has not been connected")
             return
         }
         
-        guard !socket!.isConnected else {
+        guard !socket.isConnected else {
             Logger.warn("Web socket has already connected")
             return
         }
         
         Logger.info("Web socket is being reconnected")
         
-        socket?.connect()
+        socket.connect()
     }
-    
-    private func createWebSocket(_ webSocketUrl: URL) -> WebSocket? {
-        // Need to check authorization, avoid crash when logout as soon as login
-        guard let authorization = AuthManager.sharedInstance.getAuthorization() else {
-            Logger.error("Failed to create web socket due to no authorization")
-            return nil
-        }
-        
-        socket = WebSocket(url: webSocketUrl)
-        if socket == nil {
-            Logger.error("Failed to create web socket")
-            return nil
-        }
-        
-        socket?.headers.unionInPlace(authorization)
-        socket?.voipEnabled = true
-        socket?.delegate = self
-        
-        return socket
-    }
-    
+
     private func despatch_main_after(_ delay: Double, closure: @escaping () -> Void) {
         DispatchQueue.main.asyncAfter(
             deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
@@ -134,7 +137,7 @@ class WebSocketService: WebSocketDelegate {
         scheduleMessageBatchingTimer()
         cancelConnectionTimeOutTimer()
         
-        ReachabilityService.sharedInstance.fetch()
+        callManager.prepareToHandleCalls()
     }
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
@@ -157,7 +160,7 @@ class WebSocketService: WebSocketDelegate {
             self.socket = nil
             Logger.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
             despatch_main_after(backoffTime) {
-                Spark.phone.register(nil)
+                self.deviceReregistrationStrategy?.reregisterDevice()
             }
         } else {
             // Unexpected disconnection, reconnect socket.
@@ -174,7 +177,7 @@ class WebSocketService: WebSocketDelegate {
     
     func websocketDidReceiveData(socket: WebSocket, data: Data) {
         let json = JSON(data: data)
-        ackMessage(socket, messageId: json["id"].string!)
+        ackMessage(socket, messageId: json["id"].string ?? "")
         pendingMessages.append(json)
     }
     
@@ -184,7 +187,7 @@ class WebSocketService: WebSocketDelegate {
         let ack = JSON(["type": "ack", "messageId": messageId])
         do {
             let ackData: Data = try ack.rawData(options: .prettyPrinted)
-			socket.write(data: ackData)
+            socket.write(data: ackData)
         } catch {
             Logger.error("Failed to acknowledge message")
         }
@@ -196,12 +199,26 @@ class WebSocketService: WebSocketDelegate {
             if let eventType = eventData["eventType"].string {
                 if eventType.hasPrefix("locus") {
                     Logger.info("locus event: \(eventData.object)")
-					CallManager.sharedInstance.handle(callEventJson: eventData.object)
+                    handle(callEventJson: eventData.object)
                 }
             }
         }
         
         pendingMessages.removeAll()
+    }
+    
+    private func handle(callEventJson event: Any) {
+        guard let eventJson = event as? [String: Any],
+            let callEvent = Mapper<CallEvent>().map(JSON: eventJson),
+            let callInfo = callEvent.callInfo,
+            let callEventType = callEvent.type else {
+                Logger.error("Malformed call event could not be processed as a call event \(event)")
+                return
+        }
+        
+        Logger.info(callEventType)
+        
+        callManager.handle(callInfo: callInfo)
     }
     
     // MARK: - Web Socket Timers

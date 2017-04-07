@@ -43,35 +43,37 @@ struct Feedback {
 }
 
 class CallMetrics {
-    static let sharedInstance = CallMetrics()
-    
+        
     private let TestUserEmailDomain = "example.com"
+    private let metricsEngine: MetricsEngine
     
-    func submit(feedback: Feedback, callInfo: CallInfo) {
-        var data: Metric.DataType = createBasicCallData(callInfo)
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+    }
+    
+    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: URL) {
+        var data: Metric.DataType = [
+            "locusId": callInfo.callUrl!,
+            "locusTimestamp": callInfo.lastActive!,
+            "deviceUrl": deviceUrl.absoluteString,
+            "participantId": callInfo.myself!.id!,
+            "isGroup": !callInfo.isOneOnOne,
+            "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
+        ]
+
         data.unionInPlace(feedback.metricData)
         
         var environment = MetricsEnvironment.Production
-		if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
+        if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
             environment = MetricsEnvironment.Test
         }
         
         let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: environment)
-        MetricsEngine.sharedInstance.trackMetric(metric)
+        metricsEngine.trackMetric(metric)
     }
     
     func reportVideoLicenseActivation() {
         let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
-        MetricsEngine.sharedInstance.trackMetric(metric)
-    }
-    
-    private func createBasicCallData(_ callInfo: CallInfo) -> Metric.DataType {
-        return ["locusId": callInfo.callUrl!,
-                "locusTimestamp": callInfo.lastActive!,
-                "deviceUrl": DeviceService.sharedInstance.deviceUrl!,
-                "participantId": callInfo.selfId!,
-                "isGroup": !callInfo.isOneOnOne,
-                "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
-        ]
+        metricsEngine.trackMetric(metric)
     }
 }

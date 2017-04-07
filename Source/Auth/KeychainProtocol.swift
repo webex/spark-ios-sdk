@@ -18,39 +18,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
-import Quick
-import Nimble
-import SparkSDK
 
-class TestRoom {
-    var room: Room?
-    var id: String? {
-        return room?.id
-    }
-    var title: String? {
-        return room?.title
-    }
-    
-    init?() {
-        do {
-            room = try Spark.rooms.create(title: "room_for_test")
-            
-        } catch let error as NSError {
-            fail("Failed to create room, \(error.localizedFailureReason)")
-            
-            return nil
-        }
-    }
-    
-    deinit {
-        guard id != nil else {
-            return
-        }
-        do {
-            try Spark.rooms.delete(roomId: id!)
-        } catch let error as NSError {
-            fail("Failed to delete room, \(error.localizedFailureReason)")
-        }
-    }
+import Foundation
+import KeychainAccess
+
+
+protocol KeychainProtocol {
+    func get(_ key: String) throws -> String?
+    func remove(_ key: String) throws
+    func set(_ value: String, key: String) throws
 }
+
+extension Keychain: KeychainProtocol {}

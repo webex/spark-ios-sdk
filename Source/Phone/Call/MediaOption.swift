@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +20,13 @@
 
 import Foundation
 
-/// Media option specifies a media call type.
+/// The enumeration of media options on a call.
 public enum MediaOption {
     /// Call with audio only.
     case audioOnly
     /// Call with both audio and video.
+    /// - parameter local: the viewport of the local party's video.
+    /// - parameter remote: the viewport of the remote party's video.
     case audioVideo(local: MediaRenderView, remote: MediaRenderView)
     
     var hasVideo: Bool {

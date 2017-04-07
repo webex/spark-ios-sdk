@@ -21,22 +21,68 @@
 import Foundation
 
 /// Membership HTTP client.
-open class MembershipClient: CompletionHandlerType<Membership> {
+public class MembershipClient {
     
-    private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("memberships")
+    /// Alias for closure to handle a service response along with a Membership object.
+    public typealias ObjectHandler = (ServiceResponse<Membership>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Membership array.
+    public typealias ArrayHandler = (ServiceResponse<[Membership]>) -> Void
+    
+    let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
     }
     
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    private func requestBuilder() -> ServiceRequest.Builder {
+        return ServiceRequest.Builder(authenticationStrategy).path("memberships")
+    }
+
+    /// Lists all room memberships for the authenticated user.
     ///
-    /// - parameter roomId: Limit results to a specific room by id.
-    /// - parameter personId: Limit results to a specific person by id.
-    /// - parameter personEmail: Limit results to a specific person by email address.
     /// - parameter max: Limit the maximum number of items in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: nil, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Lists all room memberships for all users in the given room.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(roomId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Lists any room memberships for the given room and person, specified by person id.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter personId: Limit results to a specific person by id.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(roomId: String, personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: personId, personEmail: nil, max: nil, queue: queue, completionHandler: completionHandler)
+    }
+    
+    /// Lists any room memberships for the given room and person, specified by person email.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter personEmail: Limit results to a specific person by email address.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    public func list(roomId: String, personEmail: EmailAddress, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+        list(roomId: roomId, personId: nil, personEmail: personEmail, max: nil, queue: queue, completionHandler: completionHandler)
+    }
+    
+    private func list(roomId: String?, personId: String?, personEmail: EmailAddress?, max: Int?, queue: DispatchQueue?, completionHandler: @escaping ArrayHandler) {
         
         let query = RequestParameter([
             "roomId": roomId,
@@ -62,7 +108,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personId": personId,
@@ -85,7 +131,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
             "personEmail": personEmail.toString(),
@@ -106,7 +152,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(membershipId)
@@ -123,7 +169,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["isModerator": isModerator]))
@@ -140,7 +186,7 @@ open class MembershipClient: CompletionHandlerType<Membership> {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
             .path(membershipId)

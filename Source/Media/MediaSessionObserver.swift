@@ -23,11 +23,19 @@ import AVFoundation
 import Wme
 
 class MediaSessionObserver: NotificationObserver {
-    private let callNotificationCenter = CallNotificationCenter.sharedInstance
+
+    private let callManager: CallManager
+    private var callNotificationCenter: CallNotificationCenter {
+        return callManager.callNotificationCenter
+    }
+    
+    init(callManager: CallManager) {
+        self.callManager = callManager
+    }
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [
-			(.MediaEngineDidSwitchCameras,         #selector(onMediaEngineDidSwitchCameras(_:))),
+            (.MediaEngineDidSwitchCameras,         #selector(onMediaEngineDidSwitchCameras(_:))),
             (.MediaEngineDidChangeLocalViewSize,   #selector(onMediaEngineDidChangeLocalViewSize(_:))),
             (.MediaEngineDidChangeRemoteViewSize,  #selector(onMediaEngineDidChangeRemoteViewSize(_:))),
             (.MediaEngineDidMuteVideo,             #selector(onMediaEngineDidMuteVideo(_:))),
@@ -119,7 +127,7 @@ class MediaSessionObserver: NotificationObserver {
     
     private func getCallFromNotification(_ notification: Notification) -> Call? {
         if let session = notification.object as? MediaSession {
-			return CallManager.sharedInstance.findCallBy(mediaSession: session)
+            return callManager.findCallBy(mediaSession: session)
         }
         return nil
     }

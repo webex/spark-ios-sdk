@@ -13,7 +13,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (99% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -42,16 +42,25 @@
                 <a href="Classes/CallNotificationCenter.html">CallNotificationCenter</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+                <a href="Classes/EmailAddress.html">EmailAddress</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/EmailAddress.html">EmailAddress</a>
+                <a href="Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/MembershipClient.html">MembershipClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/OAuthStrategy.html">OAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/PersonClient.html">PersonClient</a>
@@ -66,10 +75,16 @@
                 <a href="Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/PhoneSettings.html">PhoneSettings</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/TeamClient.html">TeamClient</a>
@@ -109,16 +124,16 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:ZF8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:ZF8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:ZF8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="Functions.html#/s:ZF8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -126,7 +141,19 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/CallObserver.html">CallObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuthStorage.html">OAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/PhoneObserver.html">PhoneObserver</a>
@@ -137,10 +164,16 @@
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/Membership.html">Membership</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Person.html">Person</a>
@@ -177,6 +210,38 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:P8SparkSDK21OAuthStrategyDelegate"></a>
+                    <a name="//apple_ref/swift/Protocol/OAuthStrategyDelegate" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P8SparkSDK21OAuthStrategyDelegate">OAuthStrategyDelegate</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A delegate to handle some events</p>
+
+                        <a href="Protocols/OAuthStrategyDelegate.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuthStrategyDelegate</span><span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:P8SparkSDK13PhoneObserver"></a>
                     <a name="//apple_ref/swift/Protocol/PhoneObserver" class="dashAnchor"></a>
                     <a class="token" href="#/s:P8SparkSDK13PhoneObserver">PhoneObserver</a>
@@ -195,7 +260,78 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">PhoneObserver</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">PhoneObserver</span><span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P8SparkSDK12OAuthStorage"></a>
+                    <a name="//apple_ref/swift/Protocol/OAuthStorage" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P8SparkSDK12OAuthStorage">OAuthStorage</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A mechanism to store OAuth authentication information</p>
+
+                        <a href="Protocols/OAuthStorage.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">OAuthStorage</span> <span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P8SparkSDK22AuthenticationStrategy"></a>
+                    <a name="//apple_ref/swift/Protocol/AuthenticationStrategy" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P8SparkSDK22AuthenticationStrategy">AuthenticationStrategy</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A protocol for generic authentication strategies in Cisco Spark. Each authentication strategy
+is responsible for providing an accessToken used throughout this SDK.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Protocols/AuthenticationStrategy.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">AuthenticationStrategy</span> <span class="p">:</span> <span class="kd">class</span></code></pre>
 
                         </div>
                       </div>
@@ -227,7 +363,39 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CallObserver</span><span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">CallObserver</span><span class="p">:</span> <span class="kd">class</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:P8SparkSDK14JWTAuthStorage"></a>
+                    <a name="//apple_ref/swift/Protocol/JWTAuthStorage" class="dashAnchor"></a>
+                    <a class="token" href="#/s:P8SparkSDK14JWTAuthStorage">JWTAuthStorage</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Represents a storage mechanism for JWT authorization information</p>
+
+                        <a href="Protocols/JWTAuthStorage.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">JWTAuthStorage</span><span class="p">:</span> <span class="kd">class</span></code></pre>
 
                         </div>
                       </div>
@@ -239,8 +407,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-08-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

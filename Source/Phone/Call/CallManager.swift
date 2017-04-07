@@ -18,15 +18,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import ObjectMapper
-
 class CallManager {
     
-    static let sharedInstance = CallManager()
     private var callInstances = [String: Call]()
+    private let authenticationStrategy: AuthenticationStrategy
+    private let reachabilityService: ReachabilityService
+    private let deviceService: DeviceService
+    private let callMetrics: CallMetrics
+    private let videoLicense: VideoLicense
+    let callNotificationCenter: CallNotificationCenter
+    
+    var localReachabilityInfo: [String /* media cluster tag */ : Reachability]? {
+        return reachabilityService.feedback?.reachabilities
+    }
+    
+    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
+        self.authenticationStrategy = authenticationStrategy
+        self.reachabilityService = ReachabilityService(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        self.deviceService = deviceService
+        self.callMetrics = CallMetrics(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        self.videoLicense = VideoLicense(callMetrics: callMetrics)
+        callNotificationCenter = CallNotificationCenter()
+    }
     
     func addCallWith(url: String, call: Call) {
-		guard url.characters.count > 0 else { return }
+        guard url.characters.count > 0 else { return }
 		
         callInstances.updateValue(call, forKey: url)
         Logger.info("Add call for call url:\(url)")
@@ -46,30 +62,14 @@ class CallManager {
         return nil
     }
     
-    func handle(callEventJson event: Any) {
-        guard let eventJson = event as? [String: Any] else {
-            return
-        }
-        
-        guard let callEvent = Mapper<CallEvent>().map(JSON: eventJson) else {
-            return
-        }
-        
-        guard let callInfo = callEvent.callInfo else {
-            return
-        }
-        
-        Logger.info(callEvent.type!)
-        
-		handle(callInfo: callInfo)
-    }
-    
     func fetchActiveCalls() {
         Logger.info("Fetch call infos")
-        CallClient().fetchCallInfos() {
-            switch $0.result {
-            case .success(let value):
-                self.handleActiveCalls(value)
+        CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).fetchCallInfos() { response in
+            switch response.result {
+            case .success(let callInfos):
+                for callInfo in callInfos {
+                    self.handle(callInfo: callInfo)
+                }
                 Logger.info("Success: fetch call infos")
             case .failure(let error):
                 Logger.error("Failure", error: error)
@@ -77,8 +77,19 @@ class CallManager {
         }
     }
     
-    private func handle(callInfo: CallInfo) {
+    func prepareToHandleCalls() {
+        // TODO until this class has prepared to handle calls, it should probably not be asked to handle calls!
+        reachabilityService.fetch() // TODO should have a callback to know when we're done fetching
+    }
+    
+    func clearReachabilityState() {
+        // XXX This is only a partial clearing of data, consider not clearing this at all, as it may be worthless to do so
+        reachabilityService.clear()
+    }
+    
+    func handle(callInfo: CallInfo) {
         guard let callUrl = callInfo.callUrl else {
+            Logger.error("CallInfo is missing call url")
             return
         }
         
@@ -89,35 +100,41 @@ class CallManager {
         
         // If it belongs to existing active call, update it.
         if let call = callInstances[callUrl] {
-			call.update(callInfo: callInfo)
-            return
-        }
-        
-        if callInfo.isIncomingCall {
-            doActionWhenIncoming(callInfo)
-        } else if callInfo.hasJoinedOnOtherDevice {
-            doActionWhenJoinedOnOtherDevice(callInfo)
+            call.update(callInfo: callInfo)
+        } else if let deviceUrlString = deviceService.deviceUrl,
+            let deviceUrl = URL(string: deviceUrlString),
+            (callInfo.isIncomingCall || callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl)) {
+            // XXX: Is this conditional intended to add this call even when there is no real device registration information?
+            // At the time of writing the deviceService.deviceUrl will return a saved value from the UserDefaults. When the application
+            // has been restarted and the reregistration process has not completed, other critical information such as locusServiceUrl
+            // will not be available, but the deviceUrl WILL be. This may put the application in a bad state. This code MAY be dealing with
+            // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed. 
+            // If so it needs improvement, if not it may be able to be dropped.
+            let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+            let call = Call(callInfo, callManager: self, callClient: callClient, deviceUrl: deviceUrl, callMetrics: callMetrics)
+            addCallWith(url: callUrl, call: call)
+
+            if callInfo.isIncomingCall {
+                callNotificationCenter.notifyIncomingCall(call)
+                Logger.info("Receive incoming call")
+
+                // Intentional use of deprecated API for backwards compatibility
+                PhoneNotificationCenter.sharedInstance.notifyIncomingCall(call)
+            }
+            // TODO: need to support other device joined case
         }
     }
     
-    private func handleActiveCalls(_ callInfos: [CallInfo]) {
-        for callInfo in callInfos {
-			handle(callInfo: callInfo)
-        }
-    }
-
-    private func doActionWhenIncoming(_ callInfo: CallInfo) {
-        let incomingCall = Call(callInfo)
-		addCallWith(url: incomingCall.url, call: incomingCall)
-
-        PhoneNotificationCenter.sharedInstance.notifyIncomingCall(incomingCall)
-        
-        Logger.info("Receive incoming call")
+    func createOutgoingCall() -> Call {
+        let callClient = CallClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+        return Call(callManager: self, callClient: callClient, deviceUrl: deviceService.device!.deviceUrl, callMetrics: callMetrics)
     }
     
-    private func doActionWhenJoinedOnOtherDevice(_ callInfo: CallInfo) {
-        // TODO: need to support other device joined case
-        let call = Call(callInfo)
-		addCallWith(url: call.url, call: call)
+    func requestVideoCodecActivation(completionHandler: ((_ isActivated: Bool) -> Void)? = nil) {
+        videoLicense.checkActivation(completionHandler: completionHandler)
+    }
+    
+    func disableVideoCodecActivation() {
+        videoLicense.disableActivation()
     }
 }

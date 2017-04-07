@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,31 +21,33 @@
 import Foundation
 import ObjectMapper
 
-/// Message contents.
+/// The struct of a Message on Cisco Spark.
+///
+/// - since: 1.2.0
 public struct Message: Mappable {
     
-    /// The id of this message.
+    /// The identifier of this message.
     public var id: String?
     
-    /// The person id.
+    /// The identifier of the person who sent this message.
     public var personId: String?
     
-    /// The person email.
+    /// The email address of the person who sent this message.
     public var personEmail: EmailAddress?
     
-    /// The room id.
+    /// The identifier of the room where this message was posted.
     public var roomId: String?
     
-    /// The plain text message.
+    /// The content of the message in plain text. This can be the alternate text if markdown is specified.
     public var text: String?
     
-    /// A public URL that Spark can use to fetch attachments.
+    /// A array of public URLs of the attachments in the message.
     public var files: [String]?
     
-    /// The id of the recipient when sending a private1:1 message.
+    /// The identifier of the recipient when sending a private 1:1 message.
     public var toPersonId: String?
     
-    /// The email address of the recipient when sendinga private 1:1 message.
+    /// The email address of the recipient when sending a private 1:1 message.
     public var toPersonEmail: EmailAddress?
     
     /// The timestamp that the message being created.
@@ -78,7 +80,11 @@ class EmailTransform: TransformType {
     typealias JSON = String
     
     func transformFromJSON(_ value: Any?) -> Object? {
-        return EmailAddress.fromString(value as! String)
+        if let value = value as? String {
+            return EmailAddress.fromString(value)
+        } else {
+            return nil
+        }
     }
     
     func transformToJSON(_ value: Object?) -> JSON? {

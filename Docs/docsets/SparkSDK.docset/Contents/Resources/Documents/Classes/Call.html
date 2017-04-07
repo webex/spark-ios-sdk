@@ -14,7 +14,7 @@
     <a title="Call Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (99% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -43,16 +43,25 @@
                 <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes.html#/s:C8SparkSDK21CompletionHandlerType">CompletionHandlerType</a>
+                <a href="../Classes/EmailAddress.html">EmailAddress</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/EmailAddress.html">EmailAddress</a>
+                <a href="../Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MessageClient.html">MessageClient</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/OAuthStrategy.html">OAuthStrategy</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PersonClient.html">PersonClient</a>
@@ -67,10 +76,16 @@
                 <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/PhoneSettings.html">PhoneSettings</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TeamClient.html">TeamClient</a>
@@ -110,16 +125,16 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:ZF8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -127,7 +142,19 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/CallObserver.html">CallObserver</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthStorage.html">OAuthStorage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/PhoneObserver.html">PhoneObserver</a>
@@ -138,10 +165,16 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Message.html">Message</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
@@ -171,11 +204,42 @@
             <h1>Call</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Call</span></code></pre>
+                  <pre class="highlight"><code><span class="n">open</span> <span class="kd">class</span> <span class="kt">Call</span></code></pre>
 
                 </div>
               </div>
-            <p>Represents a Spark call.</p>
+            <p>A Call represents a media call on Cisco Spark.
+The application can create an outgoing <em>call</em> object by calling <em>phone.dial</em> function:</p>
+
+<pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
+    <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">call</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+        <span class="c1">// success</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// failure</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>The application can receive an incoming <em>call</em> object via &hellip;</p>
+
+<pre class="highlight swift"><code>   <span class="n">code</span>
+</code></pre>
+
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    Phone API about how to create calls.
+
+</div>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
           </section>
           <section class="section task-group-section">
@@ -194,7 +258,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Camera facing mode.</p>
+                        <p>The enumeration of Camera facing modes.</p>
 
                         <a href="../Classes/Call/FacingMode.html" class="slightly-smaller">See more</a>
                       </div>
@@ -229,7 +293,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">CompletionHandler</span> <span class="o">=</span> <span class="kt">Bool</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">CompletionHandler</span> <span class="o">=</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
 
                         </div>
                       </div>
@@ -249,7 +313,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Call status.</p>
+                        <p>The enumeration of Call status.</p>
 
                         <a href="../Classes/Call/Status.html" class="slightly-smaller">See more</a>
                       </div>
@@ -277,14 +341,14 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Call status.</p>
+                        <p>The current status of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/Status.html">Status</a></span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/Status.html">Status</a></span></code></pre>
 
                         </div>
                       </div>
@@ -304,16 +368,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The intended recipient of the call. 
-For an outgoing call this is the same as the address specified in dial. 
-For an incoming call this is the identity of the authenticated user.</p>
+                        <p>The intended recipient of this <em>call</em>.
+- For an outgoing call, this is the same as the address specified in <em>phone.dial</em>.
+- For an incoming call, this is the identity of the authenticated user.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">to</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -333,16 +397,16 @@ For an incoming call this is the identity of the authenticated user.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The receiver of the call. 
-For an outgoing call this is the identity of the authenticated user.
-For an incoming call this is the email address / phone number / SIP address of the caller.</p>
+                        <p>The receiver of this <em>call</em>.
+- For an outgoing call, this is the identity of the authenticated user.
+- For an incoming call, this is the address of the caller such as email address, phone number, or SIP address.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">from</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">from</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -362,14 +426,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is sending audio.</p>
+                        <p>True if this <em>call</em> is sending audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -389,14 +453,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is receiving audio.</p>
+                        <p>True if the local party of this <em>call</em> is receiving audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">receivingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -416,14 +480,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is sending video.</p>
+                        <p>True if the local party of this <em>call</em> is sending video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -443,14 +507,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if client is receiving video.</p>
+                        <p>True if the local party of this <em>call</em> is receiving video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">receivingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -470,14 +534,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if remote is sending audio.</p>
+                        <p>True if the remote party of this <em>call</em> is sending audio. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">remoteSendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -497,14 +561,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if remote is sending video.</p>
+                        <p>True if the remote party of this <em>call</em> is sending video. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">remoteSendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -524,14 +588,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if loud speaker is selected as the output device for this call.</p>
+                        <p>True if loud speaker is selected as the audio output device for this <em>call</em>. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">loudSpeaker</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">loudSpeaker</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -551,14 +615,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Camera facing mode selected for this call.</p>
+                        <p>The camera facing mode selected for this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">facingMode</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/FacingMode.html">FacingMode</a></span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">facingMode</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/FacingMode.html">FacingMode</a></span></code></pre>
 
                         </div>
                       </div>
@@ -578,14 +642,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Local video render view height.</p>
+                        <p>The local video render view height (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">localVideoViewHeight</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">localVideoViewHeight</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
 
                         </div>
                       </div>
@@ -605,14 +669,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Local video render view width.</p>
+                        <p>The Local video render view width (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">localVideoViewWidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">localVideoViewWidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
 
                         </div>
                       </div>
@@ -632,14 +696,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Remote video render view height.</p>
+                        <p>The remote video render view height (points) inof this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteVideoViewHeight</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">remoteVideoViewHeight</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
 
                         </div>
                       </div>
@@ -659,14 +723,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Remote video render view width.</p>
+                        <p>The remote video render view width (points) of this <em>call</em>.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteVideoViewWidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">remoteVideoViewWidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
 
                         </div>
                       </div>
@@ -686,14 +750,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>True if the DTMF keypad can be enabled for Client.</p>
+                        <p>True if the DTMF keypad is enabled for this <em>call</em>. Otherwise, false.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="k">var</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -713,20 +777,15 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Answers an incoming call. Only applies to incoming calls.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function answers an incoming call. It only applies to incoming calls. 
+Calling this function on outgoing calls behaves ?</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">answer</span><span class="p">(</span><span class="n">option</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Enums/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -742,7 +801,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                               </td>
                               <td>
                                 <div>
-                                  <p>Media option for call: audio-only, audio+video etc. If it contains video, need to specify render view for video.</p>
+                                  <p>Intended media options - audio only or audio and video - for the call.</p>
 
                                 </div>
                               </td>
@@ -784,20 +843,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Disconnects the active call. Applies to both incoming and outgoing calls.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function disconnects this <em>call</em>. This applies to both incoming and outgoing calls.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hangup</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">hangup</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -842,7 +895,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Rejects an incoming call. Only applies to incoming calls.</p>
+                        <p>Rejects an incoming call. This only applies to incoming calls.</p>
 
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
@@ -855,7 +908,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reject</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">reject</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -890,9 +943,9 @@ For an incoming call this is the email address / phone number / SIP address of t
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call8sendDTMFFTSS17completionHandlerGSqFSbT___T_"></a>
-                    <a name="//apple_ref/swift/Method/sendDTMF(_:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call8sendDTMFFTSS17completionHandlerGSqFSbT___T_">sendDTMF(_:completionHandler:)</a>
+                    <a name="/s:FC8SparkSDK4Call4sendFT4dtmfSS17completionHandlerGSqFSbT___T_"></a>
+                    <a name="//apple_ref/swift/Method/send(dtmf:completionHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK4Call4sendFT4dtmfSS17completionHandlerGSqFSbT___T_">send(dtmf:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -900,20 +953,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Sends DTMF events to remote destination.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendDTMF</span><span class="p">(</span><span class="nv">dtmf</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="nv">dtmf</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call.html#/s:C8SparkSDK4Call17CompletionHandler">CompletionHandler</a></span><span class="p">?)</span></code></pre>
 
                         </div>
                       </div>
@@ -929,7 +976,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                               </td>
                               <td>
                                 <div>
-                                  <p>Valid DTMF events. 0-9, *, #, and A-D.</p>
+                                  <p>any combination of valid DTMF events matching regex mattern “^[0-9#*abcdABCD]+$”</p>
 
                                 </div>
                               </td>
@@ -973,18 +1020,12 @@ For an incoming call this is the email address / phone number / SIP address of t
                       <div class="abstract">
                         <p>If sending video then stop sending video. If not sending video then start sending video.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
-
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleSendingVideo</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleSendingVideo</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1004,20 +1045,19 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If receiving video then stop receiving video. If not receiving video then start receiving video.</p>
+                        <p>Toggle whether the local party should receive video from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If receiving video then stop receiving video.</li>
+<li>If not receiving video then start receiving video.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleReceivingVideo</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleReceivingVideo</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1037,20 +1077,19 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If sending audio then stop sending audio. If not sending audio then start sending audio.</p>
+                        <p>Toggle whether the local party should send audio from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If sending audio then stop sending audio.</li>
+<li>If not sending audio then start sending audio.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleSendingAudio</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleSendingAudio</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1070,20 +1109,19 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>If receiving audio then stop receiving audio. If not receiving audio then start receiving audio.</p>
+                        <p>Toggle whether the local party should receive audio from the remote party or not.</p>
 
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+<ul>
+<li>If receiving audio then stop receiving audio.</li>
+<li>If not receiving audio then start receiving audio.</li>
+</ul>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleReceivingAudio</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleReceivingAudio</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1103,20 +1141,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Toggle camera facing mode between front camera and back camera.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>Toggle camera facing mode between front camera and back camera of the iOS device.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleFacingMode</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleFacingMode</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1136,20 +1168,14 @@ For an incoming call this is the email address / phone number / SIP address of t
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Toggle loud speaker.</p>
-
-<div class="aside aside-note">
-    <p class="aside-title">Note</p>
-    This function is expected to run on main thread.
-
-</div>
+                        <p>Toggle the use of loud speaker on the iOS device.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">toggleLoudSpeaker</span><span class="p">()</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">toggleLoudSpeaker</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1159,9 +1185,9 @@ For an incoming call this is the email address / phone number / SIP address of t
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call12sendFeedbackFTSi8commentsGSqSS_11includeLogsSb_T_"></a>
-                    <a name="//apple_ref/swift/Method/sendFeedback(_:comments:includeLogs:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call12sendFeedbackFTSi8commentsGSqSS_11includeLogsSb_T_">sendFeedback(_:comments:includeLogs:)</a>
+                    <a name="/s:FC8SparkSDK4Call16sendFeedbackWithFT6ratingSi8commentsGSqSS_11includeLogsSb_T_"></a>
+                    <a name="//apple_ref/swift/Method/sendFeedbackWith(rating:comments:includeLogs:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK4Call16sendFeedbackWithFT6ratingSi8commentsGSqSS_11includeLogsSb_T_">sendFeedbackWith(rating:comments:includeLogs:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1182,7 +1208,7 @@ For an incoming call this is the email address / phone number / SIP address of t
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendFeedback</span><span class="p">(</span><span class="nv">rating</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">comments</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">includeLogs</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="n">open</span> <span class="kd">func</span> <span class="nf">sendFeedbackWith</span><span class="p">(</span><span class="nv">rating</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">comments</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">includeLogs</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -1245,8 +1271,8 @@ For an incoming call this is the email address / phone number / SIP address of t
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2016 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2016-08-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

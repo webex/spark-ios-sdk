@@ -21,10 +21,22 @@
 import Foundation
 
 /// Webhook HTTP client.
-open class WebhookClient: CompletionHandlerType<Webhook> {
+public class WebhookClient {
+    
+    /// Alias for closure to handle a service response along with a Webhook object.
+    public typealias ObjectHandler = (ServiceResponse<Webhook>) -> Void
+    
+    /// Alias for closure to handle a service response along with a Webhook array.
+    public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
+    
+    let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
+    }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().path("webhooks")
+        return ServiceRequest.Builder(authenticationStrategy).path("webhooks")
     }
     
     /// Lists all webhooks.

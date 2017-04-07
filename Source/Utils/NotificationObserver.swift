@@ -27,7 +27,7 @@ class NotificationObserver: NSObject {
     
     final func startObserving() {
         startObserving(nil)
-	}
+    }
     
     final func startObserving(_ sender: Any?) {
         guard !isObserving else {

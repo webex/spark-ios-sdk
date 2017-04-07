@@ -22,12 +22,13 @@ import Foundation
 import ObjectMapper
 
 struct CallInfo {
-    var callUrl: String?
+    var locusUrl: String? // Mandatory
     var participants: [Participant]?
     var myself: Participant?
     var host: ParticipantInfo?
     var fullState: FullState?
-    var sequence: Sequence?
+    var sequence: Sequence? // Mandatory
+    var replaces: [Replace]?
     
     var selfEmail: String? {
         return myself?.person?.email
@@ -36,11 +37,7 @@ struct CallInfo {
     var hostEmail: String? {
         return host?.email
     }
-
-    var allDevices: [ParticipantDevice] {
-        return allParticipantants.flatMap({$0.devices}).reduce([], +)
-    }
-    
+   
     var selfDevices: [ParticipantDevice] {
         guard let devices = myself?.devices else {
             return []
@@ -48,19 +45,14 @@ struct CallInfo {
         return devices
     }
     
-    var thisDevice: ParticipantDevice? {
-        return selfDevices.filter({$0.url == DeviceService.sharedInstance.deviceUrl}).first // should be only one
+    var callUrl : String? {
+        if let replace = self.replaces?.first {
+            return replace.locusUrl
+        }
+        return locusUrl
     }
     
-    var otherDevices: [ParticipantDevice] {
-        return selfDevices.filter({$0.url != DeviceService.sharedInstance.deviceUrl})
-    }
-    
-    var remoteDevices: [ParticipantDevice] {
-        return remoteParticipantants.flatMap({$0.devices}).reduce([], +)
-    }
-
-    var allParticipantants: [Participant] {
+    private var allParticipantants: [Participant] {
         guard let allParticipants = participants else {
             return []
         }
@@ -68,7 +60,7 @@ struct CallInfo {
         return allParticipants
     }
 
-    var selfParticipantant: Participant? {
+    private var selfParticipantant: Participant? {
         return myself
     }
     
@@ -76,36 +68,8 @@ struct CallInfo {
         return allParticipantants.filter({$0.id != myself?.id})
     }
     
-    var selfMediaInfo: MediaInfo? {
-        return thisDevice?.mediaConnections?.first?.localSdp
-    }
-    
     var selfMediaUrl: String? {
         return myself?.mediaBaseUrl
-    }
-    
-    var selfParticipantUrl: String? {
-        return myself?.url
-    }
-    
-    var selfId: String? {
-        return myself?.id
-    }
-    
-    var selfState: ParticipantState? {
-        return myself?.state
-    }
-    
-    var selfAudioMuted: Bool? {
-        return selfMediaInfo?.audioMuted
-    }
-    
-    var selfVideoMuted: Bool? {
-        return selfMediaInfo?.videoMuted
-    }
-    
-    var remoteSdp: String? {
-        return thisDevice?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
     var enableDTMF: Bool? {
@@ -117,49 +81,41 @@ struct CallInfo {
     }
     
     var isOneOnOne: Bool {
-		return allParticipantantsWith(type: "USER").count == 2
-    }
-    
-    var isBridge: Bool {
-        return !isOneOnOne
+        return allParticipantants.filter({$0.type == "USER"}).count == 2
     }
     
     var hasJoined: Bool {
         return myself?.state == ParticipantState.Joined
     }
 
-    var hasJoinedOnThisDevice: Bool {
-        if !hasJoined {
-            return false
-        }
-		return !(selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+    func hasJoinedOnThisDevice(deviceUrl: URL) -> Bool {
+        return hasJoined && !selfDevicesWith(state: "JOINED").filter({$0.url == deviceUrl.absoluteString}).isEmpty
     }
 
-    var hasJoinedOnOtherDevice: Bool {
-        if !hasJoined {
-            return false
-        }
-        
-		return  (selfDevicesWith(state: "JOINED").count > 1 )
-			|| (selfDevicesWith(state: "JOINED").filter({$0.url == DeviceService.sharedInstance.deviceUrl}).isEmpty)
+    func hasJoinedOnOtherDevice(deviceUrl: URL) -> Bool {
+        return hasJoined && !selfDevicesWith(state: "JOINED").filter({$0.url != deviceUrl.absoluteString}).isEmpty
+    }
+    
+    private func selfDevicesWith(state: String) -> [ParticipantDevice] {
+        return selfDevices.filter({$0.state == state})
     }
 
     var hasLeft: Bool {
         return selfParticipantant?.state == ParticipantState.Left
     }
 
-    var hasDeclined: Bool {
+    func hasDeclined(deviceUrl: URL) -> Bool {
         if selfParticipantant?.state != ParticipantState.Declined {
             return false
         }
-        return selfParticipantant?.deviceUrl == DeviceService.sharedInstance.deviceUrl
+        return selfParticipantant?.deviceUrl == deviceUrl.absoluteString
     }
 
-    var hasDeclinedOnOtherDevice: Bool {
+    func hasDeclinedOnOtherDevice(deviceUrl: URL) -> Bool {
         if selfParticipantant?.state != ParticipantState.Declined {
             return false
         }
-        return selfParticipantant?.deviceUrl != DeviceService.sharedInstance.deviceUrl
+        return selfParticipantant?.deviceUrl != deviceUrl.absoluteString
     }
 
     var hasAtLeastOneRemoteParticipantantLeft: Bool {
@@ -206,25 +162,28 @@ struct CallInfo {
             return email.lowercased().hasSuffix(emailDomain.lowercased())
         }).count > 0
     }
-    
-    func allParticipantantsWith(type: String) -> [Participant] {
-        return allParticipantants.filter({$0.type == type})
-    }
-    
-    func selfDevicesWith(state: String) -> [ParticipantDevice] {
-        return selfDevices.filter({$0.state == state})
-    }
 }
 
 extension CallInfo: Mappable {
 	init?(map: Map) { }
 	
 	mutating func mapping(map: Map) {
-		callUrl <- map["url"]
+		locusUrl <- map["url"]
 		participants <- map["participants"]
 		myself <- map["self"]
 		host <- map["host"]
 		fullState <- map["fullState"]
 		sequence <- map["sequence"]
+        replaces <- map["replaces"]
 	}
+}
+
+struct Replace: Mappable {
+    var locusUrl: String?
+    
+    init?(map: Map){}
+    
+    mutating func mapping(map: Map) {
+        locusUrl <- map["locusUrl"]
+    }
 }

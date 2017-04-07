@@ -60,7 +60,8 @@ class UserDefaults {
         }
     }
     
-    func removeVideoLicenseSetting() {
+    // Used for development only, to reset video license settings.
+    func resetVideoLicenseActivation() {
         storage.removeObject(forKey: IsVideoLicenseActivationDisabled)
         storage.removeObject(forKey: IsVideoLicenseActivated)
     }

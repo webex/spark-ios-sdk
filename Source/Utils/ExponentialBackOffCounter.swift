@@ -33,8 +33,11 @@ struct ExponentialBackOffCounter {
     }
     
     mutating func next() -> Double {
-        current = current != nil ? min(current! * multiplier, maximum) : minimum
-        return current!
+        if let current = current {
+            return min(current * multiplier, maximum)
+        } else {
+            return minimum
+        }
     }
     
     mutating func reset() {

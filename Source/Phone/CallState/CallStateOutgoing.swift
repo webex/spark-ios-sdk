@@ -22,35 +22,23 @@ import Foundation
 
 class CallStateOutgoing: CallState {
 
-    override var status: Call.Status {
+    var status: Call.Status {
         return .Ringing
     }
     
-    override func update() {
-        if info.hasLeft {
-            doActionWhenLocalCancelled()
-        } else if info.hasAtLeastOneRemoteParticipantantJoined {
-            doActionWhenConnected()
-        } else if info.hasAtLeastOneRemoteParticipantantDeclined {
-            doActionWhenRemoteDeclined()
+    func update(callInfo: CallInfo, for call: Call) {
+        if callInfo.hasLeft {
+            call.removeFromCallManager()
+            call.state = CallStateLocalCancelled()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
+        } else if callInfo.hasAtLeastOneRemoteParticipantantJoined {
+            call.state = CallStateConnected()
+            call.callNotificationCenter.notifyCallConnected(call)
+        } else if callInfo.hasAtLeastOneRemoteParticipantantDeclined {
+            call.removeFromCallManager()
+            call.hangup(nil)
+            call.state = CallStateRemoteDeclined()
+            call.callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
         }
-    }
-    
-    private func doActionWhenConnected() {
-        call.state = CallStateConnected(call)
-        callNotificationCenter.notifyCallConnected(call)
-    }
-    
-    private func doActionWhenLocalCancelled() {
-		callManager.removeCallWith(url: call.url)
-        call.state = CallStateLocalCancelled(call)
-        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.LocalCancelled)
-    }
-    
-    private func doActionWhenRemoteDeclined() {
-        callManager.removeCallWith(url: call.url)
-        call.hangup(nil)
-        call.state = CallStateRemoteDeclined(call)
-        callNotificationCenter.notifyCallDisconnected(call, disconnectionType: DisconnectionType.RemoteDeclined)
     }
 }

@@ -26,16 +26,14 @@ class DtmfQueue {
     
     var queue: [(event: String, completionHandler: CompletionHandler?)]
     let dispatchQueue: DispatchQueue
-    weak var call: Call!
     var correlationId: Int
     var waitingForResponse: Bool
-    
-    private let deviceUrl = DeviceService.sharedInstance.deviceUrl
-    
-    init(_ call: Call) {
+    private let callClient: CallClient
+
+    init(callClient: CallClient) {
+        self.callClient = callClient
         queue = []
         correlationId = 1
-        self.call = call
         dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue")
         waitingForResponse = false
     }
@@ -49,11 +47,11 @@ class DtmfQueue {
         }
     }
     
-    func push(_ event: String, completionHandler: CompletionHandler?) {
+    func push(participantUrl: String, deviceUrl: URL, event: String, completionHandler: CompletionHandler?) {
         if isValidEvents(event) {
             dispatchQueue.async {
                 self.queue.append((event, completionHandler))
-                self.sendDtmfEvents(completionHandler)
+                self.sendDtmfEvents(participantUrl: participantUrl, deviceUrl: deviceUrl, completionHandler: completionHandler)
             }
         } else {
             if let handler = completionHandler {
@@ -62,7 +60,7 @@ class DtmfQueue {
         }
     }
     
-    func sendDtmfEvents(_ completionHandler: CompletionHandler?) {
+    private func sendDtmfEvents(participantUrl: String, deviceUrl: URL, completionHandler: CompletionHandler?) {
         dispatchQueue.async {
             if self.queue.count > 0 && !self.waitingForResponse {
                 var events = [String]()
@@ -75,9 +73,8 @@ class DtmfQueue {
                 let dtmfEvents = events.joined(separator: "")
                 Logger.info("send Dtmf events \(dtmfEvents)")
                 
-                let participantUrl = self.call.info?.selfParticipantUrl
                 self.waitingForResponse = true
-                CallClient().sendDtmf(participantUrl!, deviceUrl: self.deviceUrl!, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
+                self.callClient.sendDtmf(participantUrl, deviceUrl: deviceUrl, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
                     switch $0.result {
                     case .success:
                         Logger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
@@ -95,7 +92,7 @@ class DtmfQueue {
                         }
                     }
                     self.waitingForResponse = false
-                    self.sendDtmfEvents(completionHandler)
+                    self.sendDtmfEvents(participantUrl: participantUrl, deviceUrl: deviceUrl, completionHandler: completionHandler)
                 }
                 self.correlationId += 1
                 self.queue.removeAll()

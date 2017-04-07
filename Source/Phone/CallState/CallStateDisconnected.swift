@@ -20,18 +20,27 @@
 
 import Foundation
 
-class CallStateLocalCancelled: CallState {}
+class CallStateDisconnected: CallState {
+    var status: Call.Status {
+        return .Disconnected
+    }
+    
+    func update(callInfo: CallInfo, for call: Call) {
+    }
+}
 
-class CallStateLocalDeclined: CallState {}
+class CallStateLocalCancelled: CallStateDisconnected {}
 
-class CallStateLocalLeft: CallState {}
+class CallStateLocalDeclined: CallStateDisconnected {}
 
-class CallStateOtherDeviceConnected: CallState {}
+class CallStateLocalLeft: CallStateDisconnected {}
 
-class CallStateOtherDeviceDeclined: CallState {}
+class CallStateOtherDeviceConnected: CallStateDisconnected {}
 
-class CallStateRemoteCancelled: CallState {}
+class CallStateOtherDeviceDeclined: CallStateDisconnected {}
 
-class CallStateRemoteDeclined: CallState {}
+class CallStateRemoteCancelled: CallStateDisconnected {}
 
-class CallStateRemoteLeft: CallState {}
+class CallStateRemoteDeclined: CallStateDisconnected {}
+
+class CallStateRemoteLeft: CallStateDisconnected {}

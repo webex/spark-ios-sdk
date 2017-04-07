@@ -21,18 +21,21 @@
 import Foundation
 
 /// The CallNotificationCenter class is used to add & remove call observer.
-open class CallNotificationCenter {
+public class CallNotificationCenter {
     
     /// Returns the singleton CallNotificationCenter.
-    open static let sharedInstance = CallNotificationCenter()
+    @available(*, deprecated, message: "Use Spark.callNotificationCenter instead")
+    public static var sharedInstance: CallNotificationCenter {
+        return SparkInstance.sharedInstance.callManager.callNotificationCenter
+    }
     
-	private var observers = NSHashTable<AnyObject>.weakObjects()
+    private var observers = NSHashTable<AnyObject>.weakObjects()
     
     /// Add call observer
     ///
     /// - parameter observer: CallObserver object to add.
     /// - returns: Void
-    open func add(observer: CallObserver) {
+    public func add(observer: CallObserver) {
         observers.add(observer)
     }
     
@@ -40,8 +43,12 @@ open class CallNotificationCenter {
     ///
     /// - parameter observer: CallObserver object to remove.
     /// - returns: Void
-    open func remove(observer: CallObserver) {
+    public func remove(observer: CallObserver) {
         observers.remove(observer)
+    }
+    
+    func notifyIncomingCall(_ call: Call) {
+        fire { $0.callIncoming(call) }
     }
     
     func notifyCallRinging(_ call: Call) {
@@ -81,12 +88,17 @@ open class CallNotificationCenter {
     }
     
     func notifyEnableDTMFChanged(_ call: Call) {
-		fire { $0.enableDTMFDidChange(call, sendingDTMFEnabled: call.sendingDTMFEnabled) }
+        fire { $0.enableDTMFDidChange(call, sendingDTMFEnabled: call.sendingDTMFEnabled) }
     }
 	
-	private func fire(_ closure:(_ observer: CallObserver) -> Void) {
-		for observer in observers.allObjects as! [CallObserver] {
-			closure(observer)
-		}
-	}
+    private func fire(_ closure:(_ observer: CallObserver) -> Void) {
+
+        for observer in observers.allObjects {
+            if let observer = observer as? CallObserver {
+                closure(observer)
+            } else {
+                Logger.warn("\(observer) is not a CallObserver")
+            }
+        }
+    }
 }

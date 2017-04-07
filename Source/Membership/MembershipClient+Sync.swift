@@ -20,17 +20,42 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Network calls should be made using the equivalent asynchronous calls on the client")
 extension MembershipClient {
     
-    /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
+    /// Lists all room memberships for the authenticated user.
+    ///
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - returns: Memberships array
+    public func list(max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, max, async: list)
+    }
+    
+    /// Lists all room memberships for all users in the given room.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter max: Limit the maximum number of items in the response.
+    /// - returns: Memberships array
+    public func list(roomId: String, max: Int? = nil) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, max, async: list)
+    }
+    
+    /// Lists any room memberships for the given room and person, specified by person id.
     ///
     /// - parameter roomId: Limit results to a specific room by id.
     /// - parameter personId: Limit results to a specific person by id.
-    /// - parameter personEmail: Limit results to a specific person by email address.
-    /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: Memberships array
-    public func list(roomId: String? = nil, personId: String? = nil, personEmail: EmailAddress? = nil, max: Int? = nil) throws -> [Membership] {
-        return try SyncUtil.getArray(roomId, personId, personEmail, max, async: list)
+    public func list(roomId: String, personId: String) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personId, async: list)
+    }
+
+    /// Lists any room memberships for the given room and person, specified by person email.
+    ///
+    /// - parameter roomId: Limit results to a specific room by id.
+    /// - parameter personEmail: Limit results to a specific person by email address.
+    /// - returns: Memberships array
+    public func list(roomId: String, personEmail: EmailAddress) throws -> [Membership] {
+        return try SyncUtil.getArray(authenticationStrategy, roomId, personEmail, async: list)
     }
     
     /// Add someone to a room by person id; optionally making them a moderator.
@@ -40,7 +65,7 @@ extension MembershipClient {
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
     public func create(roomId: String, personId: String, isModerator: Bool = false) throws -> Membership {
-        return try SyncUtil.getObject(roomId, personId, isModerator, async: create)
+        return try SyncUtil.getObject(authenticationStrategy, roomId, personId, isModerator, async: create)
     }
     
     /// Add someone to a room by email address; optionally making them a moderator.
@@ -50,7 +75,7 @@ extension MembershipClient {
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
     public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false) throws -> Membership {
-        return try SyncUtil.getObject(roomId, personEmail, isModerator, async: create)
+        return try SyncUtil.getObject(authenticationStrategy, roomId, personEmail, isModerator, async: create)
     }
     
     /// Get details for a membership by id.
@@ -58,7 +83,7 @@ extension MembershipClient {
     /// - parameter membershipId: The membership id.
     /// - returns: Membership
     public func get(membershipId: String) throws -> Membership {
-        return try SyncUtil.getObject(membershipId, async: get)
+        return try SyncUtil.getObject(authenticationStrategy, membershipId, async: get)
     }
     
     /// Updates properties for a membership by id.
@@ -67,7 +92,7 @@ extension MembershipClient {
     /// - parameter isModerator: Set to true to make the person a room moderator.
     /// - returns: Membership
     public func update(membershipId: String, isModerator: Bool) throws -> Membership {
-        return try SyncUtil.getObject(membershipId, isModerator, async: update)
+        return try SyncUtil.getObject(authenticationStrategy, membershipId, isModerator, async: update)
     }
     
     /// Deletes a membership by id.
@@ -75,6 +100,6 @@ extension MembershipClient {
     /// - parameter membershipId: The membership id.
     /// - returns: Void
     public func delete(membershipId: String) throws {
-        try SyncUtil.deleteObject(membershipId, async: delete)
+        try SyncUtil.deleteObject(authenticationStrategy, membershipId, async: delete)
     }
 }

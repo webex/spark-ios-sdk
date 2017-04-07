@@ -20,39 +20,76 @@
 
 import Foundation
 
-class DeviceClient: CompletionHandlerType<Device> {
-    private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder().baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
+class DeviceClient {
+    
+    typealias ObjectHandler = (ServiceResponse<Device>) -> Void
+    
+    private let authenticationStrategy: AuthenticationStrategy
+    
+    init(authenticationStrategy: AuthenticationStrategy) {
+        self.authenticationStrategy = authenticationStrategy
     }
     
-    func create(_ deviceInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    private func requestBuilder() -> ServiceRequest.Builder {
+        return ServiceRequest.Builder(authenticationStrategy)
+    }
+    
+    func create(deviceInfo: UIDevice, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
-            .body(deviceInfo)
+            .baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
+            .body(createBody(deviceInfo))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func update(_ deviceUrl: String, deviceInfo: RequestParameter, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func update(registeredDeviceUrl: String, deviceInfo: UIDevice, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
-            .baseUrl(deviceUrl)
-            .body(deviceInfo)
+            .baseUrl(registeredDeviceUrl)
+            .body(createBody(deviceInfo))
             .queue(queue)
             .build()
         
         request.responseObject(completionHandler)
     }
     
-    func delete(_ deviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func delete(registeredDeviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)
-            .baseUrl(deviceUrl)
+            .baseUrl(registeredDeviceUrl)
             .queue(queue)
             .build()
         
         request.responseJSON(completionHandler)
     }
+    
+    
+    private func createBody(_ device: UIDevice) -> RequestParameter {
+        let deviceName = device.name.isEmpty ? "notset" : device.name
+        
+        let deviceType: String
+        if device.userInterfaceIdiom == .pad {
+            deviceType = "IPAD"
+        } else if device.userInterfaceIdiom == .phone {
+            deviceType = "IPHONE"
+        } else {
+            deviceType = "UNKNOWN"
+        }
+        
+        let deviceParameters:[String: Any] = [
+            "deviceName": deviceName,
+            "name": device.name,
+            "model": device.model,
+            "localizedModel": device.localizedModel,
+            "systemName": device.systemName,
+            "systemVersion": device.systemVersion,
+            "deviceType": deviceType,
+            "capabilities": ["sdpSupported":true, "groupCallSupported":true]]
+        
+        return RequestParameter(deviceParameters)
+    }
+   
 }

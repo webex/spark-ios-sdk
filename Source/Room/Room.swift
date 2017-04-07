@@ -24,9 +24,9 @@ import ObjectMapper
 /// Room type.
 public enum RoomType: String {
     /// 1-to-1 room
-    case Direct  = "direct"
+    case direct  = "direct"
     /// Group room
-    case Group = "group"
+    case group = "group"
 }
 
 /// Room contents.

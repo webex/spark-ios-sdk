@@ -22,8 +22,6 @@ import Foundation
 
 class ApplicationLifecycleObserver: NotificationObserver {
     
-    static let sharedInstance = ApplicationLifecycleObserver()
-    
     override func notificationMapping() -> [(Notification.Name, Selector)] {
         return [(.UIApplicationDidBecomeActive, #selector(onApplicationDidBecomeActive)),
                 (.UIApplicationDidEnterBackground, #selector(onApplicationDidEnterBackground)),
@@ -32,21 +30,31 @@ class ApplicationLifecycleObserver: NotificationObserver {
         ]
     }
     
+    private let webSocketService: WebSocketService
+    private let callManager: CallManager
+    private let deviceService: DeviceService
+    
+    init(webSocketService: WebSocketService, callManager: CallManager, deviceService: DeviceService) {
+        self.webSocketService = webSocketService
+        self.callManager = callManager
+        self.deviceService = deviceService
+    }
+    
     func onApplicationDidBecomeActive() {
         Logger.info("Application did become active")
         
-        CallManager.sharedInstance.fetchActiveCalls()
-        self.openWebSocket()
+        callManager.fetchActiveCalls()
+        openWebSocket()
     }
-
+    
     func onApplicationDidEnterBackground() {
         Logger.info("Application did enter background")
-        self.closeWebSocket()
+        closeWebSocket()
     }
 
     func onIncomingCallInBackground() {
         Logger.info("Incoming call when app in background")
-        self.openWebSocket()
+        openWebSocket()
     }
 
     func onDeclinedCallInBackground() {
@@ -54,16 +62,16 @@ class ApplicationLifecycleObserver: NotificationObserver {
             return
         }
         Logger.info("Incoming call declined when app in background")
-        self.closeWebSocket()
+        closeWebSocket()
     }
 
     private func openWebSocket() {
-        if let webSocketUrl = DeviceService.sharedInstance.webSocketUrl {
-            WebSocketService.sharedInstance.connect(URL(string: webSocketUrl)!)
+        if let device = deviceService.device {
+            webSocketService.connect(device.webSocketUrl)
         }
     }
 
     private func closeWebSocket() {
-        WebSocketService.sharedInstance.disconnect()
+        webSocketService.disconnect()
     }
 }

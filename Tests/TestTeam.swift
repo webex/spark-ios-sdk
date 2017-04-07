@@ -19,37 +19,32 @@
 // THE SOFTWARE.
 
 import Foundation
-import Quick
-import Nimble
+import XCTest
 import SparkSDK
 
 class TestTeam {
+    
+    private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     var id: String? {
-        return team?.id
+        return team.id
     }
+    var testCase: XCTestCase
     
-    private let TeamName = "team_for_test"
-    private var team: Team?
+    private var team: Team
     
-    init?() {
-        do {
-            team = try Spark.teams.create(name: TeamName)
-        } catch let error as NSError {
-            fail("Failed to create team, \(error.localizedFailureReason)")
-            
+    init?(testCase: XCTestCase) {
+        self.testCase = testCase
+        if let result = fixture.createTeam(testCase: testCase, teamName: "team_for_test") {
+            team = result
+        } else {
             return nil
         }
     }
     
     deinit {
-        guard id != nil else {
+        guard let id = id else {
             return
         }
-        
-        do {
-            try Spark.teams.delete(teamId: id!)
-        } catch let error as NSError {
-            fail("Failed to create team, \(error.localizedFailureReason)")
-        }
+        fixture.deleteTeam(testCase: testCase, teamId: id)
     }
 }

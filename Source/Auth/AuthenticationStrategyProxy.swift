@@ -20,15 +20,31 @@
 
 import Foundation
 
-/// Completion handler when getting service reponse for a request.
-open class CompletionHandlerType<T> {
+class AuthenticationStrategyProxy: AuthenticationStrategy {
+    private var delegate: AuthenticationStrategy?
+    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
+        self.delegate = delegate
+    }
     
-    /// Alias for closure to handle a service response along with an object.
-    public typealias ObjectHandler = (ServiceResponse<T>) -> Void
+    var authorized: Bool {
+        if let delegate = delegate {
+            return delegate.authorized
+        } else {
+            return false
+        }
+    }
     
-    /// Alias for closure to handle a service response along with an object array.
-    public typealias ArrayHandler = (ServiceResponse<[T]>) -> Void
+    func deauthorize() {
+        if let delegate = delegate {
+            return delegate.deauthorize()
+        }
+    }
     
-    /// Alias for closure to handle a service response along with an object in type of Any.
-    public typealias AnyHandler = (ServiceResponse<Any>) -> Void
+    func accessToken(completionHandler: @escaping (String?) -> Void) {
+        if let delegate = delegate {
+            return delegate.accessToken(completionHandler: completionHandler)
+        } else {
+            completionHandler(nil)
+        }
+    }
 }

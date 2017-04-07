@@ -20,25 +20,30 @@
 
 import Foundation
 
-class ClientAccount: NSObject, NSCoding {
-    var clientId: String
-    var clientSecret: String
-    
-    private let clientIdKey = "clientIdKey"
-    private let clientSecretKey = "clientSecretKey"
-    
-    init(clientId: String, clientSecret: String) {
-        self.clientId = clientId
-        self.clientSecret = clientSecret
+class SimpleAuthStrategy: AuthenticationStrategy {
+    static func neverAuthorized() -> AuthenticationStrategy {
+        return SimpleAuthStrategy(possibleAccessToken: nil)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        clientId = aDecoder.decodeObject(forKey: clientIdKey) as! String
-        clientSecret = aDecoder.decodeObject(forKey: clientSecretKey) as! String
+    private var accessToken: String?
+    
+    var authorized: Bool {
+        return accessToken != nil
     }
     
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(clientId, forKey: clientIdKey)
-        aCoder.encode(clientSecret, forKey: clientSecretKey)
+    private init(possibleAccessToken: String?) {
+        self.accessToken = possibleAccessToken
+    }
+    
+    convenience init(accessToken: String) {
+        self.init(possibleAccessToken: accessToken)
+    }
+    
+    func deauthorize() {
+        accessToken = nil
+    }
+    
+    func accessToken(completionHandler: @escaping (String?) -> Void) {
+        completionHandler(accessToken)
     }
 }

@@ -27,12 +27,15 @@ class InterfaceAddress {
 
     static func getSortedAddresses() -> [Item] {
         var addresses = [Item]()
-        let hostAddr = NetUtils.getHostAddresses()
-        for element in hostAddr! {
-            addresses.append((ifaName: element.ifaName, ifaAddr: element.ifaAddr))
+        if let hostAddr = NetUtils.getHostAddresses() {
+            for element in hostAddr {
+                addresses.append((ifaName: element.ifaName, ifaAddr: element.ifaAddr))
+            }
+
+            return addresses.sorted{$0.ifaName+$0.ifaAddr < $1.ifaName+$1.ifaAddr}
+        } else {
+            return []
         }
-        
-        return addresses.sorted{$0.ifaName+$0.ifaAddr < $1.ifaName+$1.ifaAddr}
     }
     
     static func isSameSortedAddresses(oldAddrs: [Item], newAddrs: [Item]) -> Bool {

@@ -1,124 +1,160 @@
 [![Travis CI](https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/ciscospark/spark-ios-sdk)
 
-# SparkSDK
+# Cisco Spark iOS SDK
 
-Spark iOS SDK written in swift.
+Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with **Cisco Spark iOS SDK** in your iOS application.
+ 
+Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift).
+
+**Access to the SDK's calling features is currently restricted**
 
 ## Setup
-Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
+Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
 
 1. Install CocoaPods:
-    ```bash
+ 
+    ```
     gem install cocoapods
     ```
 
 1. Setup Cocoapods:
-    ```bash
+ 
+    ```
     pod setup
     ```
 
-1. Create a new file "Podfile" with following content in your project directory::
+1. Create a new file "Podfile" with following content in your MySparkApp project directory:
 
-    ```ruby
+    ```bash
     source 'https://github.com/CocoaPods/Specs.git'
     
-    platform :ios, '8.0'
+    platform :ios, '9.0'
     use_frameworks!
     
-    target 'SparkSDKDemo' do
+    target 'MySparkApp' do
         pod 'SparkSDK'
     end
     ```
 
-1. Install SparkSDK from your project directory:
+1. Install SparkSDK from your MySparkApp project directory:
 
     ```bash
     pod install
     ```
 
+
 ## Example
-Below is code of a demo of the SDK usage
+Below is code of a demo of the SDK usage:
 
-1. Setup SDK with Spark access token
+1. Create the Spark SDK with OAuth authentication.
+ 
    ```swift
-   func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        let sparkAccessToken = "Yjc5ZTYyMDEt..."
-        Spark.initWith(accessToken: sparkAccessToken)
-        return true
-    }
+   let clientId = "Def123456..."
+   let clientSecret = "fed456..."
+   let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
+   let redirectUri = "MyCustomApplication://response"
+   let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
+   let spark = Spark(authenticationStrategy: oauthStrategy)
+   // ...
+   if !oauthStrategy.authorized {
+       oauthStrategy.authorize(parentViewController: self) { success in
+           if !success {
+               print("User not authorized")
+           }
+       }
+   }
    ```
-1. Setup SDK with app infomation, and authorize access to Spark service
+ 
+1. Create the Spark SDK with JWT-based authentication.
+ 
    ```swift
-   class LoginViewController: UIViewController {
-        @IBAction func loginWithSpark(sender: AnyObject) {
-            let clientId = "C90f769..."
-            let clientSecret = "64e252..."
-            let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
-            let redirectUri = "SparkSDKDemo://response"
-            
-            Spark.initWith(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, controller: self)
-        }
-    }
-    ```
-
-1. Register device
-    ```swift
-    Spark.phone.register() { success in
-        if !success {
-            print("Failed to register device.")
-        }
-    }
-    ```
+   let jwtAuthStrategy = JWTAuthStrategy()
+   let spark = Spark(authenticationStrategy: jwtAuthStrategy)
+   // ...
+   if !jwtAuthStrategy.authorized {
+       // obtain JWT through some application-specific mechanism  
+       jwtAuthStrategy.authorizedWith(jwt: myJwt)
+   }
+   ```
+ 
+1. Register the device to send and receive calls.
+ 
+   ```swift
+   spark.phone.register() { success in
+       if success {
+           // Successfully registered device
+       } else {
+           // Device was not registered, and no calls can be sent or received
+       }
+   }
+   ```
             
 1. Use Spark service
     
    ```swift
-   // IM example
-    do {
-        // Create a new room
-        let room = try Spark.rooms.create(title: "Hello World")
-        print("\(room.title!), created \(room.created!): \(room.id!)")
-        
-        // Add a coworker to the room
-        try Spark.memberships.create(roomId: room.id!, personEmail: "coworker@acm.com")
-
-        // List the members of the room
-        let memberships = try Spark.memberships.list(roomId: room.id!)
-        for membership in memberships {
-            print("\(membership.personEmail!)")
-        }
-
-        // Post a text message to the room
-        try Spark.messages.postToRoom(roomId: room.id!, text: "Hello World")
-
-        // Share a file with the room
-        try Spark.messages.postToRoom(roomId: room.id!, files: "http://example.com/hello_world.jpg")
-        
-    } catch let error as NSError {
-        print("Error: \(error.localizedFailureReason)")
-    }
+   spark.rooms.create(title: "My Room") { serviceResponse in
+       switch serviceResponse.result {
+       case .success(let room):
+           // Room was created
+       case .failure(let error):
+           // Room creation failed
+       }
+   }
+ 
+   // ... 
+ 
+   if let roomId = room.id {
+       spark.memberships.create(roomId: roomId, personId: coworkerId) { serviceResponse in
+           // ...
+       }
+ 
+       spark.messages.post(roomId: roomId, text: "Hello friend!") { serviceResponse in
+           // ...
+       }
+   }
+   ```
     
-    // Calling example
-    // Make a call
-    var outgoingCall =  Spark.phone.dial("coworker@acm.com", option: MediaOption.AudioVideo(local: ..., remote: ...)) { success in
-        if !success {
-            print("Failed to dail")
-        }
-    }
-    
-    // Recieve a call
-    class IncomingCallViewController: UIViewController, PhoneObserver {
-        override func viewWillAppear(...) {
-            ...
-            PhoneNotificationCenter.sharedInstance.addObserver(self)
-        }
-        override func viewWillDisappear(...) {
-            ...
-            PhoneNotificationCenter.sharedInstance.removeObserver(self)
-        }
-        func callIncoming(call: Call) {
-            // Show incoming call toast view
-        }
-        ...
-    }
-    ```
+1. Make an outgoing call.
+ 
+   ```swift
+   let address = "coworker@example.com"
+   spark.phone.requestMediaAccess(Phone.MediaAccessType.audioVideo) { granted in
+       if granted {
+           // Prepare view for an outgoing call, including ensuring MediaRenderViews
+           // are created if making a video call
+           let localVideoView = MediaRenderView()
+           let remoteVideoView = MediaRenderView()
+           let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
+           let call = spark.phone.dial(address, option: mediaOption) { success in
+               if success {
+                   // Call will be soon be ringing on the remote user's phone
+               } else {
+                   // A service call may have failed, the user may have rejected the
+                   // codec license, or the address could have been incorrect
+               }
+           }
+       } else {
+           // User denied access to use the camera or microphone
+       }
+   }
+   ```
+ 
+1. Receive a call.
+ 
+   ```swift
+   class MyCallObserver: CallObserver {
+       func callIncoming(_ call: Call) {
+           // Show incoming call view
+           let userAcceptedCall: Bool = // ... from user action
+           if userAcceptedCall {
+               let mediaOption = // ... set up a media option similarly to dialing
+               call.answer(option: mediaOption) { success in
+               }
+           } else {
+               // If the user chose to reject the call then reject it
+               call.reject() { success in
+               }
+           }
+       }
+   }
+   ```
