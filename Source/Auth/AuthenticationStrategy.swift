@@ -26,7 +26,7 @@ import Foundation
 /// is responsible for providing an accessToken used throughout this SDK.
 ///
 /// - since: 1.2.0
-public protocol AuthenticationStrategy : class {
+public protocol Authenticator : class {
     
     /// True if the user is logically authorized. This may not mean the user has a valid
     /// access token yet, but the authentication strategy should be able to obtain one without

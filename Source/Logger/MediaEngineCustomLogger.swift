@@ -28,22 +28,22 @@ class MediaEngineCustomLogger : CustomLogger {
     let wmedefaultLevel = DDLogLevel.info
     
     @objc func logVerbose(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.verbose(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.verbose(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
     @objc func logDebug(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.debug(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.debug(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
     @objc func logInfo(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.info(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.info(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
     @objc func logWarn(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.warn(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.warn(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
     
     @objc func logError(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.error(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.error(message, level: wmedefaultLevel, file: file, function: function, line: line)
     }
 }

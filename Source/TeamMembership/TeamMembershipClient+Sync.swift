@@ -29,7 +29,7 @@ extension TeamMembershipClient {
     /// - parameter max: Limit the maximum number of items in the response.
     /// - returns: TeamMembership array
     public func list(teamId: String, max: Int? = nil) throws -> [TeamMembership] {
-        return try SyncUtil.getArray(authenticationStrategy, teamId, max, async: list)
+        return try SyncUtil.getArray(authenticator, teamId, max, async: list)
     }
     
     /// Add someone to a team by Person ID; optionally making them a moderator.
@@ -39,7 +39,7 @@ extension TeamMembershipClient {
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
 	public func create(teamId: String, personId: String, isModerator: Bool = false) throws -> TeamMembership {
-        return try SyncUtil.getObject(authenticationStrategy, teamId, personId, isModerator, async: create)
+        return try SyncUtil.getObject(authenticator, teamId, personId, isModerator, async: create)
     }
     
     /// Add someone to a teams by email address; optionally making them a moderator.
@@ -49,7 +49,7 @@ extension TeamMembershipClient {
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
     public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false) throws -> TeamMembership {
-        return try SyncUtil.getObject(authenticationStrategy, teamId, personEmail, isModerator, async: create)
+        return try SyncUtil.getObject(authenticator, teamId, personEmail, isModerator, async: create)
     }
     
     /// Get details for a membership by ID.
@@ -57,7 +57,7 @@ extension TeamMembershipClient {
     /// - parameter membershipId: The membership ID.
     /// - returns: TeamMembership
     public func get(membershipId: String) throws -> TeamMembership {
-        return try SyncUtil.getObject(authenticationStrategy, membershipId, async: get)
+        return try SyncUtil.getObject(authenticator, membershipId, async: get)
     }
     
     /// Updates properties for a membership by ID.
@@ -66,7 +66,7 @@ extension TeamMembershipClient {
     /// - parameter isModerator: Set to true to make the person a team moderator.
     /// - returns: TeamMembership
     public func update(membershipId: String, isModerator: Bool) throws -> TeamMembership {
-        return try SyncUtil.getObject(authenticationStrategy, membershipId, isModerator, async: update)
+        return try SyncUtil.getObject(authenticator, membershipId, isModerator, async: update)
     }
     
     /// Deletes a membership by ID.
@@ -74,6 +74,6 @@ extension TeamMembershipClient {
     /// - parameter membershipId: The membership ID.
     /// - returns: Void
     public func delete(membershipId: String) throws {
-        try SyncUtil.deleteObject(authenticationStrategy, membershipId, async: delete)
+        try SyncUtil.deleteObject(authenticator, membershipId, async: delete)
     }
 }

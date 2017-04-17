@@ -20,8 +20,8 @@
 
 import Foundation
 
-class SimpleAuthStrategy: AuthenticationStrategy {
-    static func neverAuthorized() -> AuthenticationStrategy {
+class SimpleAuthStrategy: Authenticator {
+    static func neverAuthorized() -> Authenticator {
         return SimpleAuthStrategy(possibleAccessToken: nil)
     }
     

@@ -22,7 +22,7 @@ import Foundation
 import ObjectMapper
 
 struct MediaEngineReachabilityFeedback: Mappable {
-    var reachabilities: [String /* media cluster tag */ : Reachability]?
+    var reachabilities: [String /* media cluster tag */ : ReachabilityModel]?
     
     init?(map: Map){
     }

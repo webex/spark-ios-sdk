@@ -29,14 +29,14 @@ public class MembershipClient {
     /// Alias for closure to handle a service response along with a Membership array.
     public typealias ArrayHandler = (ServiceResponse<[Membership]>) -> Void
     
-    let authenticationStrategy: AuthenticationStrategy
+    let authenticator: Authenticator
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).path("memberships")
+        return ServiceRequest.Builder(authenticator).path("memberships")
     }
 
     /// Lists all room memberships for the authenticated user.

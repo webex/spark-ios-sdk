@@ -23,7 +23,18 @@ import Foundation
 import UIKit
 
 
-/// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *AuthenticationStrategy*.
+public enum SparkErrors: Error {
+    case unauthorized
+    case unregistered
+    case missingAttributes
+    case invalidDTMF(String)
+    case h264Required
+    case notFound(String)
+    case unsupported
+    case disconnected(String?)
+}
+
+/// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
 /// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered Cisco Spark user.
 ///
@@ -33,7 +44,7 @@ import UIKit
 ///    let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
 ///    let redirectUri = "MyCustomApplication://response"
 ///    let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-///    let spark = Spark(authenticationStrategy: oauthStrategy)
+///    let spark = Spark(authenticator: oauthStrategy)
 ///    ...
 ///    if !oauthStrategy.authorized {
 ///      oauthStrategy.authorize(parentViewController: self) { success in
@@ -48,7 +59,7 @@ import UIKit
 ///
 /// ```` swift
 ///    let jwtAuthStrategy = JWTAuthStrategy()
-///    let spark = Spark(authenticationStrategy: jwtAuthStrategy)
+///    let spark = Spark(authenticator: jwtAuthStrategy)
 ///    ...
 ///    if !jwtAuthStrategy.authorized {
 ///      jwtAuthStrategy.authorizedWith(jwt: myJwt)
@@ -62,6 +73,8 @@ public class Spark {
     /// The version number of this Cisco Spark iOS SDK.
     public static let version = "1.2.0"
     
+    public var logger: Logger?
+    
     /// Toggle to enable or disable console log output.
     ///
     /// - parameter enable: Set True to enable console log, False as not.
@@ -70,25 +83,16 @@ public class Spark {
         LoggerManager.sharedInstance.toggleConsoleLogger(enable)
     }
     
-    /// The *AuthenticationStrategy* object from the application when constructing *Spark*.
+    /// The *Authenticator* object from the application when constructing *Spark*.
     /// It can be used to check and modify authentication state.
-    public let authenticationStrategy: AuthenticationStrategy
+    public let authenticator: Authenticator
     
     /// *Phone* represents a calling device in Cisco Spark iOS SDK. 
     /// It can be used to make media calls on Cisco Spark.
-    public let phone: Phone
+    public lazy var phone: Phone = Phone(authenticator: self.authenticator)
     
-    /// CallNotificationCenter allows your application to be notified of call events
-    public let callNotificationCenter: CallNotificationCenter
-    
-    public init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
-        let deviceService = DeviceService(authenticationStrategy: authenticationStrategy)
-        let callManager = CallManager(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
-        let webSocketService = WebSocketService(authenticationStrategy: authenticationStrategy, callManager: callManager)
-        let applicationLifecycleObserver = ApplicationLifecycleObserver(webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
-        phone = Phone(authenticationStrategy: authenticationStrategy, applicationLifecycleObserver: applicationLifecycleObserver, webSocketService: webSocketService, callManager: callManager, deviceService: deviceService)
-        callNotificationCenter = callManager.callNotificationCenter
+    public init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     /// Rooms are virtual meeting places in Cisco Spark where people post messages and collaborate to get work done.
@@ -98,7 +102,7 @@ public class Spark {
     /// - see: Memberships API about how to manage people in a room.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var rooms: RoomClient {
-        return RoomClient(authenticationStrategy: authenticationStrategy)
+        return RoomClient(authenticator: authenticator)
     }
     
     /// People are registered users of Cisco Spark.
@@ -108,7 +112,7 @@ public class Spark {
     /// - see: Memberships API about how to manage people in a room.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var people: PersonClient {
-        return PersonClient(authenticationStrategy: authenticationStrategy)
+        return PersonClient(authenticator: authenticator)
     }
     
     /// Memberships represents a person's relationships to rooms.
@@ -118,7 +122,7 @@ public class Spark {
     /// - see: Rooms API about how to manage rooms.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var memberships: MembershipClient {
-        return MembershipClient(authenticationStrategy: authenticationStrategy)
+        return MembershipClient(authenticator: authenticator)
     }
     
     /// Messages are how we communicate in a room.
@@ -128,7 +132,7 @@ public class Spark {
     /// - see: Rooms API about how to manage rooms.
     /// - see: Memberships API about how to manage people in a room.
     public var messages: MessageClient {
-        return MessageClient(authenticationStrategy: authenticationStrategy)
+        return MessageClient(authenticator: authenticator)
     }
     
     /// Webhooks allow the application to be notified via HTTP (or HTTPS?) when a specific event occurs in Cisco Spark,
@@ -136,7 +140,7 @@ public class Spark {
     /// Use *Webhooks* to create and manage the webhooks for specific events.
     /// - since: 1.2.0
     public var webhooks: WebhookClient {
-        return WebhookClient(authenticationStrategy: authenticationStrategy)
+        return WebhookClient(authenticator: authenticator)
     }
     
     /// *Teams* are groups of people with a set of rooms that are visible to all members of that team.
@@ -146,7 +150,7 @@ public class Spark {
     /// - see: Team Memberships API about how to manage people in a team.
     /// - see: Memberships API about how to manage people in a room.
     public var teams: TeamClient {
-        return TeamClient(authenticationStrategy: authenticationStrategy)
+        return TeamClient(authenticator: authenticator)
     }
     
     /// Team Memberships represent a person's relationships to teams.
@@ -156,6 +160,6 @@ public class Spark {
     /// - see: Teams API about how to manage teams.
     /// - see: Rooms API about how to manage rooms.
     public var teamMemberships: TeamMembershipClient {
-        return TeamMembershipClient(authenticationStrategy: authenticationStrategy)
+        return TeamMembershipClient(authenticator: authenticator)
     }
 }

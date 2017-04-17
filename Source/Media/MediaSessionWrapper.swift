@@ -22,16 +22,9 @@ import Foundation
 import Wme
 
 class MediaSessionWrapper {
+    
     private let mediaSession = MediaSession()
-    private let mediaSessionObserver: MediaSessionObserver
-    
-    init(callManager: CallManager) {
-        mediaSessionObserver = MediaSessionObserver(callManager: callManager)
-    }
-    
-    func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
-        return session == mediaSession
-    }
+    private var mediaSessionObserver: MediaSessionObserver?
     
     // MARK: - SDP
     func getLocalSdp() -> String {
@@ -46,7 +39,7 @@ class MediaSessionWrapper {
     var hasAudio: Bool {
         return mediaSession.mediaConstraint.hasAudio
     }
-
+    
     var hasVideo: Bool {
         return mediaSession.mediaConstraint.hasVideo
     }
@@ -56,68 +49,56 @@ class MediaSessionWrapper {
     }
     
     // MARK: - Local View & Remote View
-    var localVideoViewHeight: UInt32 {
-        return mediaSession.localVideoViewHeight
+    var localVideoViewHeight: Int32 {
+        return Int32(mediaSession.localVideoViewHeight)
     }
     
-    var localVideoViewWidth: UInt32 {
-        return mediaSession.localVideoViewWidth
+    var localVideoViewWidth: Int32 {
+        return Int32(mediaSession.localVideoViewWidth)
     }
     
-    var remoteVideoViewHeight: UInt32 {
-        return mediaSession.remoteVideoViewHeight
+    var remoteVideoViewHeight: Int32 {
+        return Int32(mediaSession.remoteVideoViewHeight)
     }
     
-    var remoteVideoViewWidth: UInt32 {
-        return mediaSession.remoteVideoViewWidth
+    var remoteVideoViewWidth: Int32 {
+        return Int32(mediaSession.remoteVideoViewWidth)
     }
-
+    
     // MARK: - Audio & Video
     var audioMuted: Bool {
-        return mediaSession.audioMuted
+        get {
+            return mediaSession.audioMuted
+        }
+        set {
+            newValue ? mediaSession.muteAudio() : mediaSession.unmuteAudio()
+        }
     }
     
     var audioOutputMuted: Bool {
-        return mediaSession.audioOutputMuted
+        get {
+            return mediaSession.audioOutputMuted
+        }
+        set {
+            newValue ? mediaSession.muteAudioOutput() : mediaSession.unmuteAudioOutput()
+        }
     }
     
     var videoMuted: Bool {
-        return mediaSession.videoMuted
+        get {
+            return mediaSession.videoMuted
+        }
+        set {
+            newValue ? mediaSession.muteVideo() : mediaSession.unmuteVideo()
+        }
     }
     
     var videoOutputMuted: Bool {
-        return mediaSession.videoOutputMuted
-    }
-
-    func toggleSendingVideo() {
-        if videoMuted {
-            mediaSession.unmuteVideo()
-        } else {
-            mediaSession.muteVideo()
+        get {
+            return mediaSession.videoOutputMuted
         }
-    }
-    
-    func toggleReceivingVideo() {
-        if videoOutputMuted {
-            mediaSession.unmuteVideoOutput()
-        } else {
-            mediaSession.muteVideoOutput()
-        }
-    }
-    
-    func toggleSendingAudio() {
-        if audioMuted {
-            mediaSession.unmuteAudio()
-        } else {
-            mediaSession.muteAudio()
-        }
-    }
-    
-    func toggleReceivingAudio() {
-        if audioOutputMuted {
-            mediaSession.unmuteAudioOutput()
-        } else {
-            mediaSession.muteAudioOutput()
+        set {
+            newValue ? mediaSession.muteVideoOutput() : mediaSession.unmuteVideoOutput()
         }
     }
     
@@ -139,17 +120,9 @@ class MediaSessionWrapper {
         return mediaSession.isSpeakerSelected()
     }
     
-    // MARK: - Default settings
-    private func applyDefaultMediaSettings() {
-        let isFront = PhoneSettings.defaultFacingMode == Call.FacingMode.User
-        mediaSession.setDefaultCamera(isFront)
-        mediaSession.setDefaultAudioOutput(PhoneSettings.defaultLoudSpeaker)
-    }
-    
     // MARK: - lifecycle
-    func prepare(_ mediaOption: MediaOption) {
-
-        switch (mediaOption) {
+    func prepare(option: MediaOption, phone: Phone) {
+        switch (option) {
         case .audioOnly:
             mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
         case .audioVideo(let local, let remote):
@@ -157,19 +130,19 @@ class MediaSessionWrapper {
             mediaSession.localVideoView = local
             mediaSession.remoteVideoView = remote
         }
-        
-        mediaSessionObserver.startObserving(mediaSession)
         mediaSession.createMediaConnection()
-
-        applyDefaultMediaSettings()
+        mediaSession.setDefaultCamera(phone.defaultFacingMode == MediaOption.FacingMode.user)
+        mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
     }
     
-    func startMedia() {
+    func startMedia(call: Call) {
+        mediaSessionObserver = MediaSessionObserver(call: call)
+        mediaSessionObserver?.startObserving(mediaSession)
         mediaSession.connectToCloud()
     }
     
     func stopMedia() {
-        mediaSessionObserver.stopObserving()
+        mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
     }
 }

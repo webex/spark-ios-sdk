@@ -30,7 +30,7 @@ public protocol OAuthStrategyDelegate: class {
 }
 
 /// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
-public class OAuthStrategy: AuthenticationStrategy {
+public class OAuthStrategy: Authenticator {
     
     private let clientId: String
     private let clientSecret: String
@@ -102,18 +102,18 @@ public class OAuthStrategy: AuthenticationStrategy {
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
                     self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                        Logger.error("Failure retrieving the access token from the oauth code", error: error)
+                        SDKLogger.error("Failure retrieving the access token from the oauth code", error: error)
                     }))
                 }
                 completionHandler?(oauthCode != nil)
             }
         } else {
-            Logger.error("Bad URL")
+            SDKLogger.error("Bad URL")
             completionHandler?(false)
         }
     }
     
-    /// See AuthenticationStrategy.accessToken(completionHandler:)
+    /// See Authenticator.accessToken(completionHandler:)
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         guard authorized else {
             completionHandler(nil)
@@ -128,12 +128,9 @@ public class OAuthStrategy: AuthenticationStrategy {
             if !fetchingAccessTokenInProcess, let refreshToken = storage.authenticationInfo?.refreshToken {
                 fetchingAccessTokenInProcess = true
                 oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                    Logger.error("Failed to refresh token", error: error)
+                    SDKLogger.error("Failed to refresh token", error: error)
                     self.deauthorize()
                     self.delegate?.refreshAccessTokenFailed()
-                    
-                    // Intentional use of deprecated API for backwards compatibility
-                    PhoneNotificationCenter.sharedInstance.notifyRefreshAccessTokenFailed()
                 }))
             }
         }
@@ -159,7 +156,7 @@ public class OAuthStrategy: AuthenticationStrategy {
         }
     }
     
-    private static func authenticationInfoFrom(accessTokenObject: AccessToken) -> OAuthAuthenticationInfo? {
+    private static func authenticationInfoFrom(accessTokenObject: AccessTokenModel) -> OAuthAuthenticationInfo? {
         if let accessToken = accessTokenObject.accessTokenString,
             let accessTokenExpiration = accessTokenObject.accessTokenExpiration,
             let refreshToken = accessTokenObject.refreshTokenString,
@@ -174,7 +171,7 @@ public class OAuthStrategy: AuthenticationStrategy {
         return nil
     }
     
-    /// See AuthenticationStrategy.deauthorize()
+    /// See Authenticator.deauthorize()
     public func deauthorize() {
         storage.authenticationInfo = nil
     }

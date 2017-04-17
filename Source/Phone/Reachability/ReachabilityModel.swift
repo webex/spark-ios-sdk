@@ -19,25 +19,24 @@
 // THE SOFTWARE.
 
 import Foundation
+import ObjectMapper
 
-class CallStateIdle: CallState {
-    
-    var status: Call.Status {
-        return .Initiated
-    }
+struct ReachabilityModel {
+    var https: ReachabilityTransportStatusModel?
+    var tcp: ReachabilityTransportStatusModel?
+    var udp: ReachabilityTransportStatusModel?
+    var xtls: ReachabilityTransportStatusModel?
+}
 
-    func update(callInfo: CallInfo, for call: Call) {
-        if CallStateIdle.isMakingOutgoingCall(callInfo, call: call) {
-            call.state = CallStateOutgoing()
-            call.callNotificationCenter.notifyCallRinging(call)
-        }
+extension ReachabilityModel: Mappable {
+    
+    init?(map: Map){
     }
     
-    private static func isMakingOutgoingCall(_ callInfo: CallInfo, call: Call) -> Bool {
-        return callInfo.hasJoinedOnThisDevice(deviceUrl: call.deviceUrl) && isRemoteParticipantantsIdleOrNotified(callInfo)
-    }
-    
-    private static func isRemoteParticipantantsIdleOrNotified(_ callInfo: CallInfo) -> Bool {
-        return callInfo.remoteParticipantants.filter({$0.state != ParticipantState.Idle && $0.state != ParticipantState.Notified}).isEmpty
+    mutating func mapping(map: Map) {
+        https <- map["https"]
+        tcp <- map["tcp"]
+        udp <- map["udp"]
+        xtls <- map["xtls"]
     }
 }

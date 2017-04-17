@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,31 +20,36 @@
 
 import Foundation
 
-class AuthenticationStrategyProxy: AuthenticationStrategy {
-    private var delegate: AuthenticationStrategy?
-    func setDelegateStrategy(_ delegate: AuthenticationStrategy?) {
-        self.delegate = delegate
+class SerialQueue {
+    
+    private let ops: OperationQueue
+    
+    private let queue: DispatchQueue
+    
+    var underlying: DispatchQueue {
+        return self.queue
     }
     
-    var authorized: Bool {
-        if let delegate = delegate {
-            return delegate.authorized
-        } else {
-            return false
+    init(_ queue: DispatchQueue? = nil) {
+        self.queue = queue ?? DispatchQueue(label: "com.cisoc.spark-ios-sdk.BaseSerialQueue-\(UUID().uuidString)")
+        self.ops = OperationQueue()
+        self.ops.underlyingQueue = self.queue
+        self.ops.maxConcurrentOperationCount = 1
+    }
+    
+    func sync(_ block: @escaping () -> Void) {
+        self.ops.addOperation {
+            self.ops.isSuspended = true
+            self.queue.async {
+                block()
+            }
         }
     }
     
-    func deauthorize() {
-        if let delegate = delegate {
-            return delegate.deauthorize()
+    func yield() {
+        self.queue.async {
+            self.ops.isSuspended = false
         }
     }
     
-    func accessToken(completionHandler: @escaping (String?) -> Void) {
-        if let delegate = delegate {
-            return delegate.accessToken(completionHandler: completionHandler)
-        } else {
-            completionHandler(nil)
-        }
-    }
 }

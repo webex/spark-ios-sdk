@@ -21,20 +21,65 @@
 import Foundation
 import ObjectMapper
 
-struct MediaInfo: Mappable {
+struct MediaConnectionModel {
+    var mediaId: String?
+    var type: String?
+    var localSdp: MediaModel?
+    var remoteSdp: MediaModel?
+    var actionsUrl: String?
+    var keepAliveUrl: String?
+    var keepAliveSecs: Int?
+}
+
+struct MediaModel {
     var sdp: String?
     var audioMuted: Bool?
     var videoMuted: Bool?
     var csis: [UInt]?
-    var reachabilities: [String /* media cluster tag */ : Reachability]?
+    var reachabilities: [String /* media cluster tag */ : ReachabilityModel]?
     var type: String? = "SDP"
-
-    init(sdp: String, audioMuted: Bool, videoMuted: Bool, reachabilities: [String: Reachability]?) {
+    
+    init(sdp: String, audioMuted: Bool, videoMuted: Bool, reachabilities: [String: ReachabilityModel]?) {
         self.sdp = sdp
         self.audioMuted = audioMuted
         self.videoMuted = videoMuted
         self.reachabilities = reachabilities
     }
+}
+
+extension MediaConnectionModel: Mappable {
+    init?(map: Map){
+    }
+    
+    mutating func mapping(map: Map) {
+        mediaId <- map["mediaId"]
+        type <- map["type"]
+        localSdp <- (map["localSdp"], MediaTransform())
+        remoteSdp <- (map["remoteSdp"], MediaTransform())
+        actionsUrl <- map["actionsUrl"]
+        keepAliveUrl <- map["keepAliveUrl"]
+        keepAliveSecs <- map["keepAliveSecs"]
+    }
+    
+    class MediaTransform: TransformType {
+        typealias Object = MediaModel
+        typealias JSON = String
+        
+        func transformFromJSON(_ value: Any?) -> Object? {
+            guard let stringValue = value as? String else {
+                return nil
+            }
+            let mediaInfo = Mapper<MediaModel>().map(JSONString: stringValue)
+            return mediaInfo
+            
+        }
+        func transformToJSON(_ value: Object?) -> JSON? {
+            return nil
+        }
+    }
+}
+
+extension MediaModel: Mappable {
     
     init?(map: Map){
     }

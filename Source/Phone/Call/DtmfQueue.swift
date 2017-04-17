@@ -22,81 +22,78 @@ import Foundation
 
 class DtmfQueue {
     
-    typealias CompletionHandler = (Bool) -> Void
+    private var queue = [(event: String, completionHandler: ((Error?) -> Void)?)]()
     
-    var queue: [(event: String, completionHandler: CompletionHandler?)]
-    let dispatchQueue: DispatchQueue
-    var correlationId: Int
-    var waitingForResponse: Bool
-    private let callClient: CallClient
+    private let dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue")
+    
+    private var correlationId: Int = 1
+    
+    private var waitingForResponse = false;
+    
+    private let client: CallClient
 
-    init(callClient: CallClient) {
-        self.callClient = callClient
-        queue = []
-        correlationId = 1
-        dispatchQueue = DispatchQueue(label: "CallDtmfQueueDispatchQueue")
-        waitingForResponse = false
+    init(client: CallClient) {
+        self.client = client
     }
     
-    func isValidEvents(_ events: String) -> Bool {
+    func push(participantUrl: String, device: Device, event: String, completionHandler: ((Error?) -> Void)?) {
+        if isValidEvents(event) {
+            dispatchQueue.async {
+                self.queue.append((event, completionHandler))
+                self.sendDtmfEvents(participantUrl: participantUrl, device: device, completionHandler: completionHandler)
+            }
+        } else {
+            DispatchQueue.main.async {
+                completionHandler?(SparkErrors.invalidDTMF(event))
+            }
+        }
+    }
+    
+    private func sendDtmfEvents(participantUrl: String, device: Device, completionHandler: ((Error?) -> Void)?) {
+        dispatchQueue.async {
+            if self.queue.count > 0 && !self.waitingForResponse {
+                var events = [String]()
+                var completionHandlers = [((Error?) -> Void)?]()
+                for item in self.queue {
+                    events.append(item.event)
+                    completionHandlers.append(item.completionHandler)
+                }
+                let dtmfEvents = events.joined(separator: "")
+                SDKLogger.info("send Dtmf events \(dtmfEvents)")
+                
+                self.waitingForResponse = true
+                self.client.sendDtmf(participantUrl, by: device, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
+                    switch $0.result {
+                    case .success:
+                        SDKLogger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
+                        for completion in completionHandlers {
+                            DispatchQueue.main.async {
+                                completion?(nil)
+                            }
+                        }
+                    case .failure(let error):
+                        SDKLogger.error("Failure", error: error)
+                        for completion in completionHandlers {
+                            DispatchQueue.main.async {
+                                completion?(error)
+                            }
+                        }
+                    }
+                    self.waitingForResponse = false
+                    self.sendDtmfEvents(participantUrl: participantUrl, device: device, completionHandler: completionHandler)
+                }
+                self.correlationId += 1
+                self.queue.removeAll()
+            }
+        }
+    }
+    
+    private func isValidEvents(_ events: String) -> Bool {
         let characterset = CharacterSet(charactersIn: "1234567890*#ABCDabcd")
         if events.rangeOfCharacter(from: characterset.inverted) != nil {
             return false
         } else {
             return true
-        }
-    }
-    
-    func push(participantUrl: String, deviceUrl: URL, event: String, completionHandler: CompletionHandler?) {
-        if isValidEvents(event) {
-            dispatchQueue.async {
-                self.queue.append((event, completionHandler))
-                self.sendDtmfEvents(participantUrl: participantUrl, deviceUrl: deviceUrl, completionHandler: completionHandler)
-            }
-        } else {
-            if let handler = completionHandler {
-                handler(false)
-            }
-        }
-    }
-    
-    private func sendDtmfEvents(participantUrl: String, deviceUrl: URL, completionHandler: CompletionHandler?) {
-        dispatchQueue.async {
-            if self.queue.count > 0 && !self.waitingForResponse {
-                var events = [String]()
-                var completionHandlers = [CompletionHandler?]()
-                for item in self.queue {
-                    events.append(item.event)
-                    completionHandlers.append(item.completionHandler)
-                }
-                
-                let dtmfEvents = events.joined(separator: "")
-                Logger.info("send Dtmf events \(dtmfEvents)")
-                
-                self.waitingForResponse = true
-                self.callClient.sendDtmf(participantUrl, deviceUrl: deviceUrl, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
-                    switch $0.result {
-                    case .success:
-                        Logger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
-                        for completion in completionHandlers {
-                            DispatchQueue.main.async {
-                                completion?(true)
-                            }
-                        }
-                    case .failure(let error):
-                        Logger.error("Failure", error: error)
-                        for completion in completionHandlers {
-                            DispatchQueue.main.async {
-                                completion?(false)
-                            }
-                        }
-                    }
-                    self.waitingForResponse = false
-                    self.sendDtmfEvents(participantUrl: participantUrl, deviceUrl: deviceUrl, completionHandler: completionHandler)
-                }
-                self.correlationId += 1
-                self.queue.removeAll()
-            }
         }
     }
 }

@@ -30,7 +30,7 @@ extension RoomClient {
     /// - parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
     /// - returns: Room array
     public func list(teamId: String? = nil, max: Int? = nil, type: RoomType? = nil) throws -> [Room] {
-        return try SyncUtil.getArray(authenticationStrategy, teamId, max, type, async: list)
+        return try SyncUtil.getArray(authenticator, teamId, max, type, async: list)
     }
     
     /// Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
@@ -39,7 +39,7 @@ extension RoomClient {
     /// - parameter teamId: The ID for the team with which this room is associated.
     /// - returns: Room
     public func create(title: String, teamId: String? = nil) throws -> Room {
-        return try SyncUtil.getObject(authenticationStrategy, title, teamId, async: create)
+        return try SyncUtil.getObject(authenticator, title, teamId, async: create)
     }
     
     /// Shows details for a room by id.
@@ -47,7 +47,7 @@ extension RoomClient {
     /// - parameter roomId: The room id.
     /// - returns: Room
     public func get(roomId: String) throws -> Room  {
-        return try SyncUtil.getObject(authenticationStrategy, roomId, async: get)
+        return try SyncUtil.getObject(authenticator, roomId, async: get)
     }
     
     /// Updates details for a room by id.
@@ -56,7 +56,7 @@ extension RoomClient {
     /// - parameter title: A user-friendly name for the room.
     /// - returns: Room
     public func update(roomId: String, title: String) throws -> Room {
-        return try SyncUtil.getObject(authenticationStrategy, roomId, title, async: update)
+        return try SyncUtil.getObject(authenticator, roomId, title, async: update)
     }
     
     /// Deletes a room by id.
@@ -64,6 +64,6 @@ extension RoomClient {
     /// - parameter roomId: The room id.
     /// - returns: Void
     public func delete(roomId: String) throws {
-        try SyncUtil.deleteObject(authenticationStrategy, roomId, async: delete)
+        try SyncUtil.deleteObject(authenticator, roomId, async: delete)
     }
 }

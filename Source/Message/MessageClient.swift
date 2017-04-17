@@ -31,14 +31,14 @@ public class MessageClient {
     /// Alias for closure to handle a service response along with a Message array.
     public typealias ArrayHandler = (ServiceResponse<[Message]>) -> Void
     
-    let authenticationStrategy: AuthenticationStrategy
+    let authenticator: Authenticator
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).path("messages")
+        return ServiceRequest.Builder(authenticator).path("messages")
     }
     
     /// This function lists all messages in a room based on *roomId*. 

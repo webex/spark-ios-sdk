@@ -28,7 +28,7 @@ extension TeamClient {
     /// - parameter max: Limit the maximum number of teams in the response.
     /// - returns: [Team]
     public func list(max: Int? = nil) throws -> [Team] {
-        return try SyncUtil.getArray(authenticationStrategy, max, async: list)
+        return try SyncUtil.getArray(authenticator, max, async: list)
     }
     
     /// Creates a team. The authenticated user is automatically added as a member of the team. 
@@ -37,7 +37,7 @@ extension TeamClient {
     /// - parameter title: A user-friendly name for the team.
     /// - returns: Team
     public func create(name: String) throws -> Team {
-        return try SyncUtil.getObject(authenticationStrategy, name, async: create)
+        return try SyncUtil.getObject(authenticator, name, async: create)
     }
     
     
@@ -46,7 +46,7 @@ extension TeamClient {
     /// - parameter teamId: A team id
     /// - returns: Team
     public func get(teamId: String) throws -> Team {
-        return try SyncUtil.getObject(authenticationStrategy, teamId, async: get)
+        return try SyncUtil.getObject(authenticator, teamId, async: get)
     }
     
     /// Updates details for a team, by ID.
@@ -55,7 +55,7 @@ extension TeamClient {
     /// - parameter name: A user-friendly name for the team.
     /// - returns: Team
     public func update(teamId: String, name: String) throws -> Team {
-        return try SyncUtil.getObject(authenticationStrategy, teamId, name, async: update)
+        return try SyncUtil.getObject(authenticator, teamId, name, async: update)
     }
     
     /// Deletes a team, by ID.
@@ -63,6 +63,6 @@ extension TeamClient {
     /// - parameter teamId: The team id.
     /// - returns: Void
     public func delete(teamId: String) throws {
-        try SyncUtil.deleteObject(authenticationStrategy, teamId, async: delete)
+        try SyncUtil.deleteObject(authenticator, teamId, async: delete)
     }
 }

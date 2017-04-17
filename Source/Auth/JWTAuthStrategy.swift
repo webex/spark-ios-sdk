@@ -25,7 +25,7 @@ import Foundation
 /// A [JSON Web Token](https://jwt.io/introduction) (JWT) based authentication strategy
 ///
 /// - since: 1.2.0
-public class JWTAuthStrategy: AuthenticationStrategy {
+public class JWTAuthStrategy: Authenticator {
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
     private var tokenCompletionHandlers: [(String?) -> Void] = []
@@ -54,7 +54,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         return jwt
     }
     
-    /// - see: AuthenticationStrategy.authorized
+    /// - see: Authenticator.authorized
     public var authorized: Bool {
         return unexpiredJwt != nil
     }
@@ -81,7 +81,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         case 3:
             base64String += "="
         default:
-            Logger.error("Base64Url encoded string could not be correctly decoded")
+            SDKLogger.error("Base64Url encoded string could not be correctly decoded")
             return nil
         }
         return Data(base64Encoded: base64String)
@@ -105,13 +105,13 @@ public class JWTAuthStrategy: AuthenticationStrategy {
         storage.authenticationInfo = nil
     }
     
-    /// See AuthenticationStrategy.deauthorize()
+    /// See Authenticator.deauthorize()
     public func deauthorize() {
         storage.jwt = nil
         storage.authenticationInfo = nil
     }
     
-    /// See AuthenticationStrategy.accessToken(completionHandler:)
+    /// See Authenticator.accessToken(completionHandler:)
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         tokenCompletionHandlers.append(completionHandler)
         if let jwt = unexpiredJwt, unexpiredAccessToken == nil {
@@ -124,7 +124,7 @@ public class JWTAuthStrategy: AuthenticationStrategy {
                         }
                     case .failure(let error):
                         self.deauthorize()
-                        Logger.error("Failed to refresh token", error: error)
+                        SDKLogger.error("Failed to refresh token", error: error)
                     }
                     self.fireCompletionHandlers()
                 }

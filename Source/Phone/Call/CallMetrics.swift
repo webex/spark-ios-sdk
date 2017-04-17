@@ -47,28 +47,22 @@ class CallMetrics {
     private let TestUserEmailDomain = "example.com"
     private let metricsEngine: MetricsEngine
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+    init(authenticator: Authenticator, deviceService: DeviceService) {
+        metricsEngine = MetricsEngine(authenticator: authenticator, deviceService: deviceService)
     }
     
-    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: URL) {
+    func submit(feedback: Feedback, call: CallModel, deviceUrl: URL) {
         var data: Metric.DataType = [
-            "locusId": callInfo.callUrl!,
-            "locusTimestamp": callInfo.lastActive!,
+            "locusId": call.callUrl!,
+            "locusTimestamp": call.fullState!.lastActive!,
             "deviceUrl": deviceUrl.absoluteString,
-            "participantId": callInfo.myself!.id!,
-            "isGroup": !callInfo.isOneOnOne,
+            "participantId": call.myself!.id!,
+            "isGroup": !call.isOneOnOne,
             "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
         ]
 
         data.unionInPlace(feedback.metricData)
-        
-        var environment = MetricsEnvironment.Production
-        if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
-            environment = MetricsEnvironment.Test
-        }
-        
-        let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: environment)
+        let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: MetricsEnvironment.Production)
         metricsEngine.trackMetric(metric)
     }
     

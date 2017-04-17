@@ -29,11 +29,11 @@ class ReachabilityService {
     private var hostAddresses: [InterfaceAddress.Item]?
     private var lastFetchDate: Date?
     private let MaxAge = TimeInterval(7200) // 7200 sec = 2 hours
-    private let authenticationStrategy: AuthenticationStrategy
+    private let authenticator: Authenticator
     private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator, deviceService: DeviceService) {
+        self.authenticator = authenticator
         self.deviceService = deviceService
     }
     
@@ -42,7 +42,7 @@ class ReachabilityService {
         let isMaxAgeReached = isDataOutOfDate()
         
         if isAddressChanged || isMaxAgeReached {
-            Logger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
+            SDKLogger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
             performReachabilityCheck() {
                 if let value = $0 {
                     self.feedback = Mapper<MediaEngineReachabilityFeedback>().map(JSONString: value)
@@ -51,13 +51,13 @@ class ReachabilityService {
                     self.updateHostAddresses()
                     self.updateFetchDate()
                     
-                    Logger.info("Fetch done, result = \(value)")
+                    SDKLogger.info("Fetch done, result = \(value)")
                 } else {
-                    Logger.error("Fetch failed, get nil from Media Engine")
+                    SDKLogger.error("Fetch failed, get nil from Media Engine")
                 }
             }
         } else {
-            Logger.info("Fetch skipped, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
+            SDKLogger.info("Fetch skipped, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
         }
     }
     
@@ -94,7 +94,7 @@ class ReachabilityService {
     
     private func performReachabilityCheck(_ completionHandler: @escaping ReachabilityCheckHandler) {
         var clusterInfo: MediaCluster? = nil
-        MediaClusterClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).get() {
+        MediaClusterClient(authenticator: authenticator, deviceService: deviceService).get() {
             (response: ServiceResponse<MediaCluster>) in
             switch response.result {
             case .success(let value):
@@ -105,7 +105,7 @@ class ReachabilityService {
                     }
                 }
             case .failure(let error):
-                Logger.error("Failure", error: error)
+                SDKLogger.error("Failure", error: error)
             }
         }
     }

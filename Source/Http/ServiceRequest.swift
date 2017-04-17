@@ -32,10 +32,10 @@ class ServiceRequest {
     private let query: RequestParameter?
     private let keyPath: String?
     private let queue: DispatchQueue?
-    private let authenticationStrategy: AuthenticationStrategy
+    private let authenticator: Authenticator
     
-    private init(authenticationStrategy: AuthenticationStrategy, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
-        self.authenticationStrategy = authenticationStrategy
+    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
+        self.authenticator = authenticator
         self.url = url
         self.headers = headers
         self.method = method
@@ -48,7 +48,7 @@ class ServiceRequest {
     class Builder {
         
         private static let apiBaseUrl: URL = URL(string: "https://api.ciscospark.com/v1")!
-        private let authenticationStrategy: AuthenticationStrategy
+        private let authenticator: Authenticator
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod
         private var baseUrl: URL
@@ -59,8 +59,8 @@ class ServiceRequest {
         private var queue: DispatchQueue?
         
         
-        init(_ authenticationStrategy: AuthenticationStrategy) {
-            self.authenticationStrategy = authenticationStrategy
+        init(_ authenticator: Authenticator) {
+            self.authenticator = authenticator
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string]
             self.baseUrl = Builder.apiBaseUrl
@@ -69,7 +69,7 @@ class ServiceRequest {
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -229,7 +229,7 @@ class ServiceRequest {
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
-        authenticationStrategy.accessToken { accessToken in
+        authenticator.accessToken { accessToken in
             accessTokenCallback(accessToken)
         }
     }

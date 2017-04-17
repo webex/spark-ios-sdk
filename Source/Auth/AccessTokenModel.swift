@@ -19,11 +19,24 @@
 // THE SOFTWARE.
 
 import Foundation
+import ObjectMapper
 
-protocol CallState {
+class AccessTokenModel: Mappable {
     
-    var status: Call.Status { get }
+    var accessTokenString: String?
+    var accessTokenExpiration: TimeInterval?
+    var refreshTokenString: String?
+    var refreshTokenExpiration: TimeInterval?
+    var accessTokenCreationDate: Date
     
-    func update(callInfo: CallInfo, for call: Call)
+    required init?(map: Map) {
+        accessTokenCreationDate = Date()
+    }
+    
+    func mapping(map: Map) {
+        accessTokenString <- map["access_token"]
+        accessTokenExpiration <- map["expires_in"]
+        refreshTokenString <- map["refresh_token"]
+        refreshTokenExpiration <- map["refresh_token_expires_in"]
+    }
 }
-

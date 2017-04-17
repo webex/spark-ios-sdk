@@ -22,19 +22,17 @@ import Foundation
 
 class DeviceClient {
     
-    typealias ObjectHandler = (ServiceResponse<Device>) -> Void
+    private let authenticator: Authenticator
     
-    private let authenticationStrategy: AuthenticationStrategy
-    
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy)
+        return ServiceRequest.Builder(authenticator)
     }
     
-    func create(deviceInfo: UIDevice, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func create(deviceInfo: UIDevice, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<DeviceModel>) -> Void) {
         let request = requestBuilder()
             .method(.post)
             .baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
@@ -45,7 +43,7 @@ class DeviceClient {
         request.responseObject(completionHandler)
     }
     
-    func update(registeredDeviceUrl: String, deviceInfo: UIDevice, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func update(registeredDeviceUrl: String, deviceInfo: UIDevice, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<DeviceModel>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(registeredDeviceUrl)
@@ -56,7 +54,7 @@ class DeviceClient {
         request.responseObject(completionHandler)
     }
     
-    func delete(registeredDeviceUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    func delete(registeredDeviceUrl: String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .baseUrl(registeredDeviceUrl)

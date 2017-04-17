@@ -29,14 +29,14 @@ public class TeamMembershipClient {
     /// Alias for closure to handle a service response along with a TeamMembership array.
     public typealias ArrayHandler = (ServiceResponse<[TeamMembership]>) -> Void
     
-    let authenticationStrategy: AuthenticationStrategy
+    let authenticator: Authenticator
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).path("team/memberships")
+        return ServiceRequest.Builder(authenticator).path("team/memberships")
     }
     
     /// Lists all team memberships. By default, lists memberships for teams to which the authenticated user belongs.

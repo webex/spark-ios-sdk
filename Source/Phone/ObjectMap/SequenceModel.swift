@@ -21,14 +21,36 @@
 import Foundation
 import ObjectMapper
 
-struct Sequence: Mappable {
+struct SequenceModel {
     
     var entries: [UInt64] = []
     var rangeStart: UInt64 = 0
     var rangeEnd: UInt64 = 0
     
+    var empty: Bool {
+        return entries.isEmpty && rangeStart == 0 && rangeEnd == 0
+    }
+    
+    var start: UInt64 {
+        let v = self.rangeStart
+        return v > 0 ? v : (self.entries.first ?? 0)
+    }
+    
+    var end: UInt64 {
+        let v = self.entries.last ?? 0
+        return v > 0 ? v : self.rangeEnd
+    }
+    
     init() { // test purpose only
     }
+    
+    func inRange(_ value: UInt64) -> Bool {
+        return value >= self.rangeStart && value <= self.rangeEnd
+    }
+
+}
+
+extension SequenceModel: Mappable {
     
     init?(map: Map) {
     }
@@ -37,54 +59,6 @@ struct Sequence: Mappable {
         entries <- (map["entries"], UInt64Transform())
         rangeStart <- (map["rangeStart"], UInt64Transform())
         rangeEnd <- (map["rangeEnd"], UInt64Transform())
-    }
-    
-    func getEntries() -> [UInt64] {
-        return entries
-    }
-    
-    func getRangeStart() -> UInt64 {
-        return rangeStart
-    }
-    
-    func getRangeEnd() -> UInt64 {
-        return rangeEnd
-    }
-    
-    func isEmpty() -> Bool {
-        return entries.isEmpty && rangeStart == 0 && rangeEnd == 0
-    }
-    
-    func getEntriesFirstValue() -> UInt64 {
-        return entries.first ?? 0
-    }
-    
-    func getEntriesLastValue() -> UInt64 {
-        return entries.last ?? 0
-    }
-    
-    func getCompareFirstValue() -> UInt64 {
-        var retVal = getRangeStart()
-        
-        if (retVal == 0) {
-            retVal = getEntriesFirstValue()
-        }
-        
-        return retVal
-    }
-    
-    func getCompareLastValue() -> UInt64 {
-        var retVal = getEntriesLastValue()
-        
-        if (retVal == 0) {
-            retVal = getRangeEnd()
-        }
-        
-        return retVal
-    }
-    
-    func inRange(_ value: UInt64) -> Bool {
-        return value >= getRangeStart() && value <= getRangeEnd() 
     }
     
     class UInt64Transform: TransformType {
@@ -105,3 +79,5 @@ struct Sequence: Mappable {
         }
     }
 }
+
+

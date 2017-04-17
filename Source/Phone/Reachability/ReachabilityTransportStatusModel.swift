@@ -21,9 +21,12 @@
 import Foundation
 import ObjectMapper
 
-struct ReachabilityTransportStatus: Mappable {
+struct ReachabilityTransportStatusModel {
     var latencyInMilliseconds: Int?
     var reachable: Bool?
+}
+
+extension ReachabilityTransportStatusModel: Mappable {
     
     init?(map: Map){
     }

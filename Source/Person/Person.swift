@@ -71,7 +71,7 @@ public struct Person: Mappable {
                 if let emailAddress = EmailAddress.fromString(emailString) {
                     emails.append(emailAddress)
                 } else {
-                    Logger.warn("\(emailString) is not a properly formatted email address")
+                    SDKLogger.warn("\(emailString) is not a properly formatted email address")
                 }
             }
             return emails

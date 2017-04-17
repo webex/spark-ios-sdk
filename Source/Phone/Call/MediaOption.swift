@@ -22,6 +22,15 @@ import Foundation
 
 /// The enumeration of media options on a call.
 public enum MediaOption {
+    
+    /// The enumeration of Camera facing modes.
+    public enum FacingMode {
+        /// Front camera.
+        case user
+        /// Back camera.
+        case environment
+    }
+    
     /// Call with audio only.
     case audioOnly
     /// Call with both audio and video.

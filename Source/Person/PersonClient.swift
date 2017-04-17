@@ -29,14 +29,14 @@ public class PersonClient {
     /// Alias for closure to handle a service response along with a Person array.
     public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
     
-    let authenticationStrategy: AuthenticationStrategy
+    let authenticator: Authenticator
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).path("people")
+        return ServiceRequest.Builder(authenticator).path("people")
     }
     
     /// List people in your organization.

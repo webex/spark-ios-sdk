@@ -23,14 +23,11 @@ import AVFoundation
 import Wme
 
 class MediaSessionObserver: NotificationObserver {
-
-    private let callManager: CallManager
-    private var callNotificationCenter: CallNotificationCenter {
-        return callManager.callNotificationCenter
-    }
     
-    init(callManager: CallManager) {
-        self.callManager = callManager
+    private let call: Call
+    
+    init(call: Call) {
+        self.call = call
     }
     
     override func notificationMapping() -> [(Notification.Name, Selector)] {
@@ -50,85 +47,54 @@ class MediaSessionObserver: NotificationObserver {
     }
     
     @objc private func onMediaEngineDidSwitchCameras(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyFacingModeChanged(call, facingMode: call.facingMode)
-        }
-    }
-    
-    @objc private func onMediaEngineDidChangeLocalViewSize(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyLocalViewSizeChanged(call, height: call.localVideoViewHeight, width: call.localVideoViewWidth)
-        }
-    }
-    
-    @objc private func onMediaEngineDidChangeRemoteViewSize(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyRemoteViewSizeChanged(call, height: call.remoteVideoViewHeight, width: call.remoteVideoViewWidth)
-        }
-    }
-    
-    @objc private func onMediaEngineDidMuteVideo(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: false)
-            callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localVideoMuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteVideo(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-			call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: true)
-            callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localVideoUnmuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidMuteVideoOutput(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteVideoOutputMuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteVideoOutput(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteVideoOutputUnmuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidMuteAudio(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            call.updateMedia(sendingAudio: false, sendingVideo: call.sendingVideo)
-            callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localAudioMuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteAudio(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            call.updateMedia(sendingAudio: true, sendingVideo: call.sendingVideo)
-            callNotificationCenter.notifyLocalMediaChanged(call, mediaUpdatedType: LocalMediaChangeType.localAudioUnmuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidMuteAudioOutput(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteAudioOutputMuted)
-        }
-    }
-    
-    @objc private func onMediaEngineDidUnMuteAudioOutput(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyRemoteMediaChanged(call, mediaUpdatedType: RemoteMediaChangeType.remoteAudioOutputUnmuted)
-        }
+        call.onMediaChanged?(Call.MediaChangeType.cameraSwitched)
     }
     
     @objc private func onMediaEngineDidChangeAudioRoute(_ notification: Notification) {
-        if let call = getCallFromNotification(notification) {
-            callNotificationCenter.notifyLoudSpeakerChanged(call, isLoudSpeakerSelected: call.loudSpeaker)
-        }
+        call.onMediaChanged?(Call.MediaChangeType.spearkerSwitched)
     }
     
-    private func getCallFromNotification(_ notification: Notification) -> Call? {
-        if let session = notification.object as? MediaSession {
-            return callManager.findCallBy(mediaSession: session)
-        }
-        return nil
+    @objc private func onMediaEngineDidChangeLocalViewSize(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.localVideoViewSize)
+    }
+    
+    @objc private func onMediaEngineDidChangeRemoteViewSize(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.remoteVideoViewSize)
+    }
+    
+    @objc private func onMediaEngineDidMuteVideo(_ notification: Notification) {
+        call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: false)
+        call.onMediaChanged?(Call.MediaChangeType.sendingVideo(false))
+    }
+    
+    @objc private func onMediaEngineDidUnMuteVideo(_ notification: Notification) {
+        call.updateMedia(sendingAudio: call.sendingAudio, sendingVideo: true)
+        call.onMediaChanged?(Call.MediaChangeType.sendingVideo(true))
+    }
+    
+    @objc private func onMediaEngineDidMuteVideoOutput(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.receivingVideo(false))
+    }
+    
+    @objc private func onMediaEngineDidUnMuteVideoOutput(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.receivingVideo(true))
+    }
+    
+    @objc private func onMediaEngineDidMuteAudio(_ notification: Notification) {
+        call.updateMedia(sendingAudio: false, sendingVideo: call.sendingVideo)
+        call.onMediaChanged?(Call.MediaChangeType.sendingAudio(false))
+    }
+    
+    @objc private func onMediaEngineDidUnMuteAudio(_ notification: Notification) {
+        call.updateMedia(sendingAudio: true, sendingVideo: call.sendingVideo)
+        call.onMediaChanged?(Call.MediaChangeType.sendingAudio(true))
+    }
+    
+    @objc private func onMediaEngineDidMuteAudioOutput(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.receivingAudio(false))
+    }
+    
+    @objc private func onMediaEngineDidUnMuteAudioOutput(_ notification: Notification) {
+        call.onMediaChanged?(Call.MediaChangeType.receivingAudio(true))
     }
 }

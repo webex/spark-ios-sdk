@@ -45,7 +45,7 @@ class InterfaceAddress {
         
         for i in 0..<oldAddrs.count {
             if !isSameAddress(oldAddr: oldAddrs[i], newAddr: newAddrs[i]) {
-                Logger.info("Address changed: \(oldAddrs[i]) -> \(newAddrs[i])")
+                SDKLogger.info("Address changed: \(oldAddrs[i]) -> \(newAddrs[i])")
                 return false
             }
         }

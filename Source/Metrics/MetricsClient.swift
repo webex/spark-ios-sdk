@@ -22,16 +22,16 @@ import Foundation
 
 class MetricsClient {
    
-    private let authenticationStrategy: AuthenticationStrategy
+    private let authenticator: Authenticator
     private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator, deviceService: DeviceService) {
+        self.authenticator = authenticator
         self.deviceService = deviceService
     }
     
     func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
-        let request = ServiceRequest.Builder(authenticationStrategy)
+        let request = ServiceRequest.Builder(authenticator)
             .baseUrl(deviceService.device!.metricsServiceUrl)
             .path("metrics")
             .method(.post)

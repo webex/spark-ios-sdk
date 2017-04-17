@@ -21,18 +21,17 @@
 import Foundation
 import ObjectMapper
 
-
-struct ParticipantStatus: Mappable {
-    var audioStatus: String?
-    var videoStatus: String?
-    var csis: [UInt]?
+struct DeviceModel: Mappable {
+    var deviceUrl: String?
+    var webSocketUrl: String?
+    var services: [String: String]?
     
     init?(map: Map){
     }
     
     mutating func mapping(map: Map) {
-        audioStatus <- map["audioStatus"]
-        videoStatus <- map["videoStatus"]
-        csis <- map["csis"]
+        deviceUrl <- map["url"]
+        webSocketUrl <- map["webSocketUrl"]
+        services <- map["services"]
     }
 }

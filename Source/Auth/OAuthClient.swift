@@ -22,7 +22,7 @@ import Foundation
 
 class OAuthClient {
     
-    typealias ObjectHandler = (ServiceResponse<AccessToken>) -> Void
+    typealias ObjectHandler = (ServiceResponse<AccessTokenModel>) -> Void
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())

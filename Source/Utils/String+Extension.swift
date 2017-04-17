@@ -30,4 +30,6 @@ extension String {
     var encodeQueryParamString: String? {
         return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)?.replacingOccurrences(of: " ", with: "+")
     }
+    
+    
 }

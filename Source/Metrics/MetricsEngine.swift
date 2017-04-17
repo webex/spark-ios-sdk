@@ -30,11 +30,11 @@ class MetricsEngine {
                                                                 selector: #selector(flush),
                                                                 userInfo: nil,
                                                                 repeats: true)
-    private let authenticationStrategy: AuthenticationStrategy
+    private let authenticator: Authenticator
     private let deviceService: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator, deviceService: DeviceService) {
+        self.authenticator = authenticator
         self.deviceService = deviceService
         
         RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
@@ -74,14 +74,14 @@ class MetricsEngine {
     //
     func trackMetrics(_ metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
         if isDebuggerAttached() {
-            Logger.warn("Skipping metric while debugging")
+            SDKLogger.warn("Skipping metric while debugging")
             return
         }
         
         var payloads: [Metric.DataType] = []
         for metric in metrics {
             if !metric.isValid {
-                Logger.warn("Skipping invalid metric \(metric.name)")
+                SDKLogger.warn("Skipping invalid metric \(metric.name)")
                 continue
             }
             
@@ -95,15 +95,15 @@ class MetricsEngine {
     }
     
     private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
-        MetricsClient(authenticationStrategy: authenticationStrategy, deviceService: deviceService).post(payload) {
+        MetricsClient(authenticator: authenticator, deviceService: deviceService).post(payload) {
             (response: ServiceResponse<Any>) in
             switch response.result {
             case .success:
-                Logger.info("Success: post metrics")
+                SDKLogger.info("Success: post metrics")
                 completionHandler?(true)
                 
             case .failure(let error):
-                Logger.error("Failure", error: error)
+                SDKLogger.error("Failure", error: error)
                 completionHandler?(false)
                 break
             }
