@@ -80,10 +80,30 @@ public class Call {
     }
     
     /// Callback when remote participant(s) is ringing.
-    public var onRinging: (() -> Void)?
+    public var onRinging: (() -> Void)? {
+        didSet {
+            self.device.phone.queue.sync {
+                if let block = self.onRinging, self.status == CallStatus.ringing {
+                    DispatchQueue.main.async {
+                        block()
+                    }
+                }
+            }
+        }
+    }
     
     /// Callback when remote participant(s) answered and call gets connected.
-    public var onConnected: (() -> Void)?
+    public var onConnected: (() -> Void)? {
+        didSet {
+            self.device.phone.queue.sync {
+                if let block = self.onConnected, self.status == CallStatus.connected {
+                    DispatchQueue.main.async {
+                        block()
+                    }
+                }
+            }
+        }
+    }
     
     /// Callback when call gets disconnected (hangup, cancelled, get declined or other self device pickup the call).
     public var onDisconnected: ((DisconnectType) -> Void)?

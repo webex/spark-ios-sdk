@@ -66,11 +66,11 @@ public class Phone {
     let metrics: CallMetrics
     let client: CallClient
     let prompter: H264LicensePrompter
+    let queue = SerialQueue()
     
     private let devices: DeviceService    
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
-    private let queue = SerialQueue();
     private var mediaContext: MediaSessionWrapper?
     
     enum LocusResult {
