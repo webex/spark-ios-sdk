@@ -46,6 +46,13 @@ import CoreMedia
 /// - since: 1.2.0
 public class Call {
     
+    public enum Error {
+        case answer(Swift.Error)
+        case reject(Swift.Error)
+        case hangup(Swift.Error)
+        case dtmf(Swift.Error)
+    }
+
     public enum Direction {
         case incoming
         case outgoing
@@ -60,6 +67,7 @@ public class Call {
         case remoteCancel
         case otherConnected
         case otherDeclined
+        case error(Swift.Error)
     }
     
     public enum MediaChangeType {
@@ -88,6 +96,7 @@ public class Call {
                         block()
                     }
                 }
+                self.device.phone.queue.yield()
             }
         }
     }
@@ -101,6 +110,7 @@ public class Call {
                         block()
                     }
                 }
+                self.device.phone.queue.yield()
             }
         }
     }
@@ -112,19 +122,11 @@ public class Call {
     
     public var onCapabilitiesChanged: ((Capabilities) -> Void)?
     
-    public var onError: ((Error) -> Void)?
+    public var onError: ((Call.Error) -> Void)?
     
     public internal(set) var status: CallStatus = CallStatus.initiated
     
     public private(set) var direction: Direction
-    
-    public var id: String {
-        return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
-    }
-    
-    public var sessionId: String {
-        return URL(string: self.url)!.lastPathComponent
-    }
     
     /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
     public var sendingDTMFEnabled: Bool {
@@ -192,7 +194,7 @@ public class Call {
     }
     
     /// The camera facing mode selected for this *call*.
-    public var facingMode: MediaOption.FacingMode {
+    public var facingMode: Phone.FacingMode {
         get {
             return self.mediaSession.isFrontCameraSelected() ? .user : .environment
         }
@@ -229,24 +231,35 @@ public class Call {
         return self.model.callUrl!
     }
     
+    
     let device: Device
     let mediaSession: MediaSessionWrapper
+    var _uuid: UUID
     
     private let dtmfQueue: DtmfQueue
     private var _dail: String?
     private var _model: CallModel
     private var mutex = pthread_mutex_t()
     
-
+    
+    private var id: String {
+        return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
+    }
+    
+    private var sessionId: String {
+        return URL(string: self.url)!.lastPathComponent
+    }
+    
     private var remoteSDP: String? {
         return self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
-    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction) {
+    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, uuid: UUID?) {
         self.direction = direction
         self.device = device
         self.mediaSession = media
         self._model = model
+        self._uuid = uuid ?? UUID()
         self.dtmfQueue = DtmfQueue(client: device.phone.client)
     }
     
@@ -261,11 +274,17 @@ public class Call {
         pthread_mutex_unlock(&mutex)
     }
     
-    /// This function disconnects this *call*. This applies to both incoming and outgoing calls.
+    /// This function answers an incoming call. It only applies to incoming calls.
+    /// Calling this function on outgoing calls behaves ?
     ///
+    /// - parameter option: Intended media options - audio only or audio and video - for the call.
+    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
-    public func hangup() {
-        self.device.phone.hangup(call: self)
+    public func answer(option: MediaOption) {
+        if let uuid = option.uuid {
+            self._uuid = uuid
+        }
+        self.device.phone.answer(call: self, option: option)
     }
     
     /// Rejects an incoming call. This only applies to incoming calls.
@@ -276,6 +295,13 @@ public class Call {
         self.device.phone.reject(call: self)
     }
     
+    /// This function disconnects this *call*. This applies to both incoming and outgoing calls.
+    ///
+    /// - returns: Void
+    public func hangup() {
+        self.device.phone.hangup(call: self)
+    }
+
     /// Send feed back to Spark.
     ///
     /// - parameter rating: Rating between 1 and 5.
@@ -284,14 +310,12 @@ public class Call {
     /// - returns: Void
     /// - note: This function is expected to run on main thread.
     public func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
-        // TODO
-        //        guard let info = info else {
-        //            SDKLogger.error("Failure: Missing call info for feedback")
-        //            return
-        //        }
-        //
-        //        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        //        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
+        guard let info = info else {
+            SDKLogger.error("Failure: Missing call info for feedback")
+            return
+        }
+        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
+        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
     }
     
     /// This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
@@ -299,11 +323,11 @@ public class Call {
     /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
-    public func send(dtmf: String, completionHandler: ((Error?) -> Void)?) {
+    public func send(dtmf: String, completionHandler: ((Swift.Error?) -> Void)?) {
         guard let url = self.model.myself?.url else {
             SDKLogger.error("Failure: Missing self participant URL")
             DispatchQueue.main.async {
-                self.onError?(SparkErrors.missingAttributes)
+                completionHandler?(SparkErrors.missingAttributes)
             }
             return
         }
@@ -314,16 +338,6 @@ public class Call {
                 completionHandler?(SparkErrors.unsupported)
             }
         }
-    }
-    
-    /// This function answers an incoming call. It only applies to incoming calls.
-    /// Calling this function on outgoing calls behaves ?
-    ///
-    /// - parameter option: Intended media options - audio only or audio and video - for the call.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
-    /// - returns: Void
-    public func answer(option: MediaOption) {
-        self.device.phone.answer(call: self, option: option)
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
@@ -345,6 +359,9 @@ public class Call {
     }
     
     func doCallModel(_ model: CallModel) {
+        if let string = model.toJSONString(prettyPrint: true) {
+            print("###: \(string)")
+        }
         if model.isValid {
             let old = self.model
             if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {

@@ -23,7 +23,7 @@ import XCTest
 @testable import SparkSDK
 
 fileprivate class MockStorage: OAuthStorage {
-    var authenticationInfo: OAuthAuthenticationInfo?
+    var tokens: OAuthTokens?
 }
 
 fileprivate class MockOAuthClient: OAuthClient {
@@ -75,7 +75,7 @@ fileprivate class MockOAuthLauncher: OAuthLauncher {
     }
 }
 
-fileprivate class MockDelegate: OAuthStrategyDelegate {
+fileprivate class MockDelegate: OAuthAuthenticatorDelegate {
     var callCount = 0
     
     func refreshAccessTokenFailed() {
@@ -111,12 +111,12 @@ class OAuthStrategyTests: XCTestCase {
         
         XCTAssertFalse(testObject.authorized)
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: yesterday)
         
         XCTAssertFalse(testObject.authorized)
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         
         XCTAssertTrue(testObject.authorized)
@@ -125,19 +125,19 @@ class OAuthStrategyTests: XCTestCase {
     func testWhenDeauthorizedThenAuthenticationInformationIsCleared() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         
         testObject.deauthorize()
         
         XCTAssertFalse(testObject.authorized)
-        XCTAssertNil(storage.authenticationInfo)
+        XCTAssertNil(storage.tokens)
     }
     
     func testWhenAccessTokenIsValidThenItIsImmediatelyReturned() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: tomorrow,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: tomorrow,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         var retrievedAccessToken: String? = nil
         testObject.accessToken() { accessToken in
@@ -151,7 +151,7 @@ class OAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenAndRefreshTokenAreExpiredThenNilIsImmediatelyReturnedForAccessToken() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: yesterday)
         var count = 0
         var retrievedAccessToken: String? = nil
@@ -168,7 +168,7 @@ class OAuthStrategyTests: XCTestCase {
     func testWhenAccessTokenIsExpiredButRefreshTokenIsNotThenNewAccessTokenIsReturnedFromService() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         var count = 0
         var retrievedAccessToken: String? = nil
@@ -189,7 +189,7 @@ class OAuthStrategyTests: XCTestCase {
         XCTAssertEqual(retrievedAccessToken, "accessToken2")
         XCTAssertEqual(count, 1)
         
-        let authInfo = storage.authenticationInfo
+        let authInfo = storage.tokens
         XCTAssertEqual(authInfo?.accessToken, "accessToken2")
         XCTAssertEqualWithAccuracy(authInfo?.accessTokenExpirationDate.timeIntervalSinceReferenceDate ?? 0, tomorrow.timeIntervalSinceReferenceDate, accuracy: 1.0)
         XCTAssertEqual(authInfo?.refreshToken, "refreshToken1")
@@ -202,7 +202,7 @@ class OAuthStrategyTests: XCTestCase {
         let testObject = createTestObject()
         
         let almostExpired = clock.currentTime.addingTimeInterval(14*60)
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: almostExpired,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: almostExpired,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         testObject.accessToken() { _ in
         }
@@ -211,7 +211,7 @@ class OAuthStrategyTests: XCTestCase {
     }
     
     func testWhenAccessTokenRefreshFailsThenDeauthorized() {
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
+        storage.tokens = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday,
                                                              refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         let testObject = createTestObject()
         
@@ -223,11 +223,11 @@ class OAuthStrategyTests: XCTestCase {
         }
         XCTAssertEqual(delegate.callCount, 0)
         
-        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(ServiceResponse<AccessToken>(nil, Result.failure(NSError())))
+        oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(ServiceResponse<OAuthTokenModel>(nil, Result.failure(NSError())))
         
         XCTAssertEqual(count, 1)
         XCTAssertEqual(retrievedAccessToken, nil)
-        XCTAssertNil(storage.authenticationInfo)
+        XCTAssertNil(storage.tokens)
         XCTAssertEqual(delegate.callCount, 1)
         XCTAssertFalse(testObject.authorized)
     }
@@ -384,7 +384,7 @@ class OAuthStrategyTests: XCTestCase {
     func testWhenMultipleAccessTokensAreRequestedThenRefreshIsCalledOnceAndBothReturnAndTheDelegateIsOnlyNotifiedOnce() {
         let testObject = createTestObject()
         
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        storage.authenticationInfo = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         
         var firstCount = 0
         testObject.accessToken() { accessToken in
@@ -409,7 +409,7 @@ class OAuthStrategyTests: XCTestCase {
     }
     
     func testWhenAccessTokenExpiresASecondTimeThenItCanStillBeRetrieved() {
-        storage.authenticationInfo = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
+        storage.authenticationInfo = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: yesterday, refreshToken: "refreshToken1", refreshTokenExpirationDate: tomorrow)
         let testObject = createTestObject()
         testObject.accessToken() { _ in }
         oauthClient.refreshOAuthAccessTokenFromRefreshToken_completionHandler?(accessTokenResponse(accessToken: "accessToken2", refreshExpiration: 14 * oneDay))

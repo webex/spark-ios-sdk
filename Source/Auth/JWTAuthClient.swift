@@ -19,10 +19,38 @@
 // THE SOFTWARE.
 
 import Foundation
+import ObjectMapper
+
+class JWTTokenModel: NSObject, Mappable {
+    
+    var token: String?
+    var tokenExpiration: TimeInterval?
+    var tokenCreationDate: Date
+    
+    var tokenExpirationDate: Date {
+        return Date(timeInterval: tokenExpiration!, since: tokenCreationDate)
+    }
+    
+    init(token: String) {
+        self.token = token
+        tokenCreationDate = Date()
+    }
+    
+    // MARK:- Mappable
+    
+    required init?(map: Map) {
+        tokenCreationDate = Date()
+    }
+    func mapping(map: Map) {
+        token <- map["token"]
+        tokenExpiration <- map["expiresIn"]
+    }
+}
+
 
 class JWTAuthClient {
     
-    typealias ObjectHandler = (ServiceResponse<JWTAccessTokenCreationResult>) -> Void
+    typealias ObjectHandler = (ServiceResponse<JWTTokenModel>) -> Void
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())

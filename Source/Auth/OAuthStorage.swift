@@ -24,5 +24,5 @@ import Foundation
 public protocol OAuthStorage : class {
     
     /// The authentication information representing a successful login using OAuth
-    var authenticationInfo: OAuthAuthenticationInfo? { get set }
+    var tokens: OAuthTokens? { get set }
 }

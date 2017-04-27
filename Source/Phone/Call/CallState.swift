@@ -36,61 +36,81 @@ public enum CallStatus {
                 if model.isRemoteJoined {
                     if local.isJoined(by: call.device.deviceUrl) {
                         call.status = .connected
-                        call.onConnected?()
+                        DispatchQueue.main.async {
+                            call.onConnected?()
+                        }
                     }
                     else if local.isDeclined(by: call.device.deviceUrl) {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
-                        call.onDisconnected?(Call.DisconnectType.localDecline)
+                        DispatchQueue.main.async {
+                            call.onDisconnected?(Call.DisconnectType.localDecline)
+                        }
                     }
                     else if local.isJoined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
-                        call.onDisconnected?(Call.DisconnectType.otherConnected)
+                        DispatchQueue.main.async {
+                            call.onDisconnected?(Call.DisconnectType.otherConnected)
+                        }
                     }
                     else if local.isDeclined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
-                        call.onDisconnected?(Call.DisconnectType.otherDeclined)
+                        DispatchQueue.main.async {
+                            call.onDisconnected?(Call.DisconnectType.otherDeclined)
+                        }
                     }
                 }
                 else if model.isRemoteDeclined {
                     call.device.phone.remove(call: call)
                     call.status = .disconnected
-                    call.onDisconnected?(Call.DisconnectType.remoteCancel)
+                    DispatchQueue.main.async {
+                        call.onDisconnected?(Call.DisconnectType.remoteCancel)
+                    }
                 }
             }
             else if local.isJoined(by: call.device.deviceUrl) && model.isRemoteNotified {
                 call.status = .ringing
-                call.onRinging?()
+                DispatchQueue.main.async {
+                    call.onRinging?()
+                }
             }
         case .ringing:
             if local.isLeft {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
-                call.onDisconnected?(Call.DisconnectType.localCancel)
+                DispatchQueue.main.async {
+                    call.onDisconnected?(Call.DisconnectType.localCancel)
+                }
             }
             else if model.isRemoteJoined {
                 call.status = .connected
-                call.onConnected?()
+                DispatchQueue.main.async {
+                    call.onConnected?()
+                }
             }
             else if model.isRemoteDeclined {
                 call.device.phone.remove(call: call)
-                //call.release()
                 call.status = .disconnected
-                call.onDisconnected?(Call.DisconnectType.remoteDecline)
+                DispatchQueue.main.async {
+                    call.onDisconnected?(Call.DisconnectType.remoteDecline)
+                }
             }
         case .connected:
             if local.isLeft {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
-                call.onDisconnected?(Call.DisconnectType.localLeft)
+                DispatchQueue.main.async {
+                    call.onDisconnected?(Call.DisconnectType.localLeft)
+                }
             }
             else if model.isRemoteLeft {
                 call.device.phone.remove(call: call)
-                //call.release()
                 call.status = .disconnected
-                call.onDisconnected?(Call.DisconnectType.remoteLeft)
+                DispatchQueue.main.async {
+                    call.onDisconnected?(Call.DisconnectType.remoteLeft)
+                }
             }
         case .disconnected:
             break;

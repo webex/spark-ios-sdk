@@ -37,20 +37,18 @@ import AVFoundation
 /// - since: 1.2.0
 public class Phone {
     
-    /// The enumeration of media access type for privacy control.
-    public enum MediaAccessType {
-        /// Access to microphone (audio).
-        case audio
-        /// Access to camera (video).
-        case video
-        /// Access to both microphone and camera.
-        case audioVideo
+    /// The enumeration of Camera facing modes.
+    public enum FacingMode {
+        /// Front camera.
+        case user
+        /// Back camera.
+        case environment
     }
     
     /// Default camera facing mode, used as the default when dialing or answering a call.
     ///
     /// - note: The setting is not persistent
-    public var defaultFacingMode = MediaOption.FacingMode.user
+    public var defaultFacingMode = FacingMode.user
     
     /// Default loud speaker mode, used as the default when dialing or answering a call.
     /// True as using loud speaker, False as not.
@@ -74,7 +72,7 @@ public class Phone {
     private var mediaContext: MediaSessionWrapper?
     
     enum LocusResult {
-        case call(Device, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
+        case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
         case join(Call, ServiceResponse<CallModel>)
         case leave(Call, ServiceResponse<CallModel>)
         case reject(Call, ServiceResponse<Any>)
@@ -82,6 +80,7 @@ public class Phone {
     }
     
     init(authenticator: Authenticator) {
+        let _ = MediaEngineWrapper.sharedInstance.WMEVersion
         self.authenticator = authenticator
         self.devices = DeviceService(authenticator: authenticator)
         self.reachability = ReachabilityService(authenticator: authenticator, deviceService: self.devices)
@@ -200,12 +199,12 @@ public class Phone {
                                             Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
                                                 if let id = persons.result.data?.first?.id {
                                                     self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                                        self.doLocusResponse(LocusResult.call(device, mediaContext, resNew, completionHandler))
+                                                        self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
                                                         self.queue.yield()
                                                     }
                                                 }
                                                 else {
-                                                    self.doLocusResponse(LocusResult.call(device, mediaContext, res, completionHandler))
+                                                    self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
                                                     self.queue.yield()
                                                 }
                                             }
@@ -215,7 +214,7 @@ public class Phone {
                                     }
                                 }
                             }
-                            self.doLocusResponse(LocusResult.call(device, mediaContext, res, completionHandler))
+                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
                             self.queue.yield()
                         }
                     }
@@ -249,67 +248,29 @@ public class Phone {
         self.prompter.disable = true
     }
     
-    /// This function requests access for media (audio and video) on the user's iOS device.
-    /// The user can change the settings in iOS device settings.
-    ///
-    /// - parameter type: Request access to different media types.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means access granted, and False means not.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func requestMediaAccess(_ type: MediaAccessType, completionHandler: ((Bool) -> Void)?) {
-        func requestMediaAccess(_ mediaType: String, completionHandler: ((Bool) -> Void)?) {
-            AVCaptureDevice.requestAccess(forMediaType: mediaType) {
-                let granted = $0
-                DispatchQueue.main.async {
-                    completionHandler?(granted)
-                }
-            }
+    public func startPreview(option: MediaOption) {
+        DispatchQueue.main.async {
+            self.mediaContext = MediaSessionWrapper()
+            self.mediaContext.startPreview(option: option)
         }
-        switch (type) {
-        case .audio:
-            requestMediaAccess(AVMediaTypeAudio) {
-                completionHandler?($0)
-            }
-        case .video:
-            requestMediaAccess(AVMediaTypeVideo) {
-                completionHandler?($0)
-            }
-        case .audioVideo:
-            requestMediaAccess(AVMediaTypeAudio) {
-                if !$0 {
-                    completionHandler?(false)
-                } else {
-                    requestMediaAccess(AVMediaTypeVideo) {
-                        completionHandler?($0)
-                    }
-                }
-            }
-        }
-    }
-    
-    public func startPreview(view: MediaRenderView) {
-//        DispatchQueue.main.async {
-//            self.mediaContext = MediaSessionWrapper()
-//            self.mediaContext.startPreview(view: view)
-//        }
     }
     
     public func stopPreview() {
-//        DispatchQueue.main.async {
-//            if let media = self.mediaContext {
-//                media.stopPreview()
-//            }
-//        }
+        DispatchQueue.main.async {
+            if let media = self.mediaContext {
+                media.stopPreview()
+            }
+        }
     }
     
     private func add(call: Call) {
-        calls[call.id] = call;
-        SDKLogger.info("Add call for call url:\(call.id)")
+        calls[call.url] = call;
+        SDKLogger.info("Add call for call url:\(call.url)")
     }
     
     func remove(call: Call) {
-        calls[call.id] = nil
-        SDKLogger.info("Remove call for call url:\(call.id)")
+        calls[call.url] = nil
+        SDKLogger.info("Remove call for call url:\(call.url)")
     }
     
     func answer(call: Call, option: MediaOption) {
@@ -331,7 +292,7 @@ public class Phone {
             guard let url = call.model.callUrl else {
                 SDKLogger.error("Failure: Missing call URL")
                 DispatchQueue.main.async {
-                    call.onError?(SparkErrors.missingAttributes)
+                    call.onError?(Call.Error.reject(SparkErrors.missingAttributes))
                 }
                 self.queue.yield()
                 return
@@ -351,7 +312,7 @@ public class Phone {
             guard let url = call.model.myself?.url else {
                 SDKLogger.error("Failure: Missing self participant URL")
                 DispatchQueue.main.async {
-                    call.onError?(SparkErrors.missingAttributes)
+                    call.onError?(Call.Error.hangup(SparkErrors.missingAttributes))
                 }
                 self.queue.yield()
                 return
@@ -394,11 +355,11 @@ public class Phone {
     
     private func doLocusResponse(_ ret: LocusResult) {
         switch ret {
-        case .call(let device, let media, let res, let completionHandler):
+        case .call(let device, let uuid, let media, let res, let completionHandler):
             switch res.result {
             case .success(let model):
                 if model.isValid {
-                    let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing)
+                    let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, uuid: uuid)
                     self.add(call: call)
                     DispatchQueue.main.async {
                         call.startMedia()
@@ -424,7 +385,7 @@ public class Phone {
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(error)
+                    call.onError?(Call.Error.answer(error))
                 }
             }
         case .leave(let call, let res):
@@ -435,24 +396,29 @@ public class Phone {
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(error)
+                    call.onError?(Call.Error.answer(error))
                 }
             }
         case .reject(let call, let res):
             switch res.result {
             case .success(_):
                 SDKLogger.info("Success: reject call")
+                call.device.phone.remove(call: call)
+                call.status = .disconnected
+                DispatchQueue.main.async {
+                    call.onDisconnected?(Call.DisconnectType.localDecline)
+                }
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(error)
+                    call.onError?(Call.Error.answer(error))
                 }
             }
         case .update(let call, let res):
             switch res.result {
             case .success(let model):
-                call.doCallModel(model)
                 SDKLogger.info("Success: update media")
+                call.doCallModel(model)
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
             }
@@ -476,7 +442,7 @@ public class Phone {
             // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed.
             // If so it needs improvement, if not it may be able to be dropped.
             if model.isValid {
-                let call = Call(model: model, device: device, media: self.mediaContext ?? MediaSessionWrapper(), direction: Call.Direction.incoming)
+                let call = Call(model: model, device: device, media: self.mediaContext ?? MediaSessionWrapper(), direction: Call.Direction.incoming, uuid: nil)
                 SDKLogger.info("Receive incoming call: \(call)")
                 DispatchQueue.main.async {
                     self.onIncoming?(call)

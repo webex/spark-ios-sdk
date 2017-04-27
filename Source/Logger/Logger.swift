@@ -21,10 +21,12 @@ public struct LogMessage {
     public let description: String
 }
 
-public enum LogLevel: Int {
+public enum LogLevel: UInt {
+    case off
     case error
     case warning
     case info
     case debug
     case verbose
+    case all
 }

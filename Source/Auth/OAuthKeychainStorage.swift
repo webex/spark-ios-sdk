@@ -30,7 +30,7 @@ public class OAuthKeychainStorage: OAuthStorage {
     private let refreshTokenKey = "refreshToken"
     private let refreshTokenExpirationDateKey = "refreshTokenExpirationDate"
     
-    private var cachedAuthenticationInfo: OAuthAuthenticationInfo?
+    private var cachedTokens: OAuthTokens?
     private let keychain: KeychainProtocol
     
     /// Creates a new OAuth keychain store
@@ -43,28 +43,28 @@ public class OAuthKeychainStorage: OAuthStorage {
     }
     
     /// See OAuthStorage.authenticationInfo
-    public var authenticationInfo: OAuthAuthenticationInfo? { 
+    public var tokens: OAuthTokens? {
         get {
             do {
-                if cachedAuthenticationInfo == nil,
+                if cachedTokens == nil,
                     let accessToken = try keychain.get(accessTokenKey),
                     let accessTokenExpirationDateString = try keychain.get(accessTokenExpirationDateKey),
                     let accessTokenExpirationDateDouble = Double(accessTokenExpirationDateString),
                     let refreshToken = try keychain.get(refreshTokenKey),
                     let refreshTokenExpirationDateString = try keychain.get(refreshTokenExpirationDateKey),
                     let refreshTokenExpirationDateDouble = Double(refreshTokenExpirationDateString) {
-                    cachedAuthenticationInfo = OAuthAuthenticationInfo(accessToken: accessToken,
-                                                                       accessTokenExpirationDate: Date(timeIntervalSinceReferenceDate: accessTokenExpirationDateDouble),
-                                                                       refreshToken: refreshToken,
-                                                                       refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
+                    cachedTokens = OAuthTokens(accessToken: accessToken,
+                                               accessTokenExpirationDate: Date(timeIntervalSinceReferenceDate: accessTokenExpirationDateDouble),
+                                               refreshToken: refreshToken,
+                                               refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
                 }
             } catch let error {
                 SDKLogger.error("Failed to get authentication information with error", error: error)
             }
-            return cachedAuthenticationInfo            
+            return cachedTokens
         }
         set {
-            cachedAuthenticationInfo = newValue
+            cachedTokens = newValue
             do {
                 if let newValue = newValue {
                     try keychain.set(newValue.accessToken, key: accessTokenKey)

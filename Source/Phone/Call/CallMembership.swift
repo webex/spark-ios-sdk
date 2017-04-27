@@ -10,7 +10,7 @@ import Foundation
 
 public struct CallMembership {
 
-    enum State : String {
+    public enum State : String {
         case unknown
         case idle
         case notified
@@ -24,9 +24,9 @@ public struct CallMembership {
     public let isInitiator: Bool
     
     public let presonId: String?
-    
-    public var callId: String {
-        return self.call.id
+
+    public var state: State {
+        return self.call.model[participant: self.id]?.state ?? .unknown
     }
     
     public var email: String? {
@@ -40,7 +40,7 @@ public struct CallMembership {
     public var phoneNumber: String? {
         return self.call.model[participant: self.id]?.person?.phoneNumber
     }
-    
+        
     private let call: Call
     
     init(participant: ParticipantModel, call: Call) {
@@ -49,6 +49,4 @@ public struct CallMembership {
         self.isInitiator = participant.isCreator ?? false
         self.presonId = participant.person?.id
     }
-    
-    
 }

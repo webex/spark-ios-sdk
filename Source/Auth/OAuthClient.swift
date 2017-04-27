@@ -19,10 +19,33 @@
 // THE SOFTWARE.
 
 import Foundation
+import ObjectMapper
+
+struct OAuthTokenModel {
+    var accessTokenString: String?
+    var accessTokenExpiration: TimeInterval?
+    var refreshTokenString: String?
+    var refreshTokenExpiration: TimeInterval?
+    var accessTokenCreationDate: Date
+}
+
+extension OAuthTokenModel: Mappable {
+    
+    init?(map: Map) {
+        accessTokenCreationDate = Date()
+    }
+    
+    mutating func mapping(map: Map) {
+        accessTokenString <- map["access_token"]
+        accessTokenExpiration <- map["expires_in"]
+        refreshTokenString <- map["refresh_token"]
+        refreshTokenExpiration <- map["refresh_token_expires_in"]
+    }
+}
 
 class OAuthClient {
     
-    typealias ObjectHandler = (ServiceResponse<AccessTokenModel>) -> Void
+    typealias ObjectHandler = (ServiceResponse<OAuthTokenModel>) -> Void
     
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())

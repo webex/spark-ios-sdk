@@ -38,6 +38,7 @@ class SerialQueue {
     }
     
     func sync(_ block: @escaping () -> Void) {
+        print("### \(self.ops.isSuspended)")
         self.ops.addOperation {
             self.ops.isSuspended = true
             self.queue.async {

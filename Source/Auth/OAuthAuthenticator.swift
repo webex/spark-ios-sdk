@@ -21,16 +21,32 @@
 
 import Foundation
 
+/// Authentication information for an OAuth authentication
+public struct OAuthTokens {
+    
+    /// The access token, used throughout the Spark SDK for authentication
+    public let accessToken: String
+    
+    /// The date and time at which the access token will no longer be valid
+    public let accessTokenExpirationDate: Date
+    
+    /// The access token, used to obtain a new access token
+    public let refreshToken: String
+    
+    /// The date and time at which the refresh token will no longer be valid.
+    /// This will itself refresh every time the refresh token is used.
+    public let refreshTokenExpirationDate: Date
+}
 
 /// A delegate to handle some events
-public protocol OAuthStrategyDelegate: class {
+public protocol OAuthAuthenticatorDelegate: class {
     
     /// Called when an OAuth access token could not be created from the existing refresh token
     func refreshAccessTokenFailed()
 }
 
 /// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
-public class OAuthStrategy: Authenticator {
+public class OAuthAuthenticator: Authenticator {
     
     private let clientId: String
     private let clientSecret: String
@@ -45,11 +61,11 @@ public class OAuthStrategy: Authenticator {
     
     
     /// The delegate, which gets callbacks for refresh access token failure
-    public weak var delegate: OAuthStrategyDelegate?
+    public weak var delegate: OAuthAuthenticatorDelegate?
     
     /// Returns true if the user has already been authorized
     public var authorized: Bool {
-        if let refreshTokenExpirationDate = storage.authenticationInfo?.refreshTokenExpirationDate {
+        if let refreshTokenExpirationDate = storage.tokens?.refreshTokenExpirationDate {
             return refreshTokenExpirationDate > clock.currentTime
         } else {
             return fetchingAccessTokenInProcess
@@ -120,12 +136,12 @@ public class OAuthStrategy: Authenticator {
             return
         }
         let buffer: TimeInterval = 15 * 60
-        if let authenticationInfo = storage.authenticationInfo, authenticationInfo.accessTokenExpirationDate > Date(timeInterval: buffer, since: clock.currentTime) {
-            completionHandler(authenticationInfo.accessToken)
+        if let tokens = storage.tokens, tokens.accessTokenExpirationDate > Date(timeInterval: buffer, since: clock.currentTime) {
+            completionHandler(tokens.accessToken)
         } else {
             accessTokenCompletionHandlers.append(completionHandler)
             
-            if !fetchingAccessTokenInProcess, let refreshToken = storage.authenticationInfo?.refreshToken {
+            if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
                 fetchingAccessTokenInProcess = true
                 oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
                     SDKLogger.error("Failed to refresh token", error: error)
@@ -142,7 +158,7 @@ public class OAuthStrategy: Authenticator {
             
             switch response.result {
             case .success(let accessTokenObject):
-                self.storage.authenticationInfo = OAuthStrategy.authenticationInfoFrom(accessTokenObject: accessTokenObject)
+                self.storage.tokens = OAuthAuthenticator.authenticationInfoFrom(accessTokenObject: accessTokenObject)
             case .failure(let error):
                 errorHandler(error)
             }
@@ -150,20 +166,20 @@ public class OAuthStrategy: Authenticator {
             let handlers = self.accessTokenCompletionHandlers
             self.accessTokenCompletionHandlers = []
             for handler in handlers {
-                handler(self.storage.authenticationInfo?.accessToken)
+                handler(self.storage.tokens?.accessToken)
             }
 
         }
     }
     
-    private static func authenticationInfoFrom(accessTokenObject: AccessTokenModel) -> OAuthAuthenticationInfo? {
+    private static func authenticationInfoFrom(accessTokenObject: OAuthTokenModel) -> OAuthTokens? {
         if let accessToken = accessTokenObject.accessTokenString,
             let accessTokenExpiration = accessTokenObject.accessTokenExpiration,
             let refreshToken = accessTokenObject.refreshTokenString,
             let refreshTokenExpiration = accessTokenObject.refreshTokenExpiration {
             let accessTokenExpirationDate = Date(timeInterval: accessTokenExpiration, since: accessTokenObject.accessTokenCreationDate)
             let refreshTokenExpirationDate = Date(timeInterval: refreshTokenExpiration, since: accessTokenObject.accessTokenCreationDate)
-            return OAuthAuthenticationInfo(accessToken: accessToken,
+            return OAuthTokens(accessToken: accessToken,
                                            accessTokenExpirationDate: accessTokenExpirationDate,
                                            refreshToken: refreshToken,
                                            refreshTokenExpirationDate: refreshTokenExpirationDate)
@@ -173,6 +189,6 @@ public class OAuthStrategy: Authenticator {
     
     /// See Authenticator.deauthorize()
     public func deauthorize() {
-        storage.authenticationInfo = nil
+        storage.tokens = nil
     }
 }

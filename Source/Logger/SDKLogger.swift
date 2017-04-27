@@ -23,7 +23,7 @@ import CocoaLumberjack
 
 class SDKLogger {
     
-    static let defaultLevel = DDLogLevel.info
+    static let defaultLevel = DDLogLevel.all
     
     static func verbose(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
         log(message(), level: level, flag: DDLogFlag.verbose, file: file, function: function, line: line)
@@ -48,6 +48,10 @@ class SDKLogger {
     static private func log(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
         guard LoggerManager.sharedInstance.hasSetup() else {
             return
+        }
+        
+        if let logger = LoggerManager.sharedInstance.customLogger {
+            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue), file: file, function: function, line: line, description: message())
         }
 
         if level.rawValue & flag.rawValue != 0 {

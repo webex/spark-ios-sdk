@@ -45,6 +45,9 @@ class LogFormatter : DDDispatchQueueLogFormatter {
 class LoggerManager {
     
     static let sharedInstance = LoggerManager()
+    
+    var customLogger: Logger?
+    
     var isConsoleLoggerAdded: Bool
     let consoleLogger: DDTTYLogger
     let memoryLogger: MemoryLogger

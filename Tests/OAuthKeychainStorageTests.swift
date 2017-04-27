@@ -37,7 +37,7 @@ class OAuthKeychainStorageTests: XCTestCase {
     }
     
     func testWhenLoginInformationIsSavedItCanBeRetrieved() {
-        let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
+        let info = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
@@ -48,7 +48,7 @@ class OAuthKeychainStorageTests: XCTestCase {
     }
     
     func testWhenLoginInformationIsClearedThenItIsNil() {
-        let info = OAuthAuthenticationInfo(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
+        let info = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
         let testObject1 = createTestObject()
         testObject1.authenticationInfo = info
@@ -59,7 +59,7 @@ class OAuthKeychainStorageTests: XCTestCase {
         XCTAssertNil(testObject2.authenticationInfo)
     }
     
-    private func auth(_ first: OAuthAuthenticationInfo?, isEqualTo second: OAuthAuthenticationInfo?) -> Bool {
+    private func auth(_ first: OAuthTokens?, isEqualTo second: OAuthTokens?) -> Bool {
         guard let first = first, let second = second else {
             return false
         }

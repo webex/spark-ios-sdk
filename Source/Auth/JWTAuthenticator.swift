@@ -21,11 +21,19 @@
 
 import Foundation
 
+public struct JWTAuthenticationInfo {
+    
+    /// Access token used throughout Spark
+    public let accessToken: String
+    
+    /// The date and time the access token will expire
+    public let accessTokenExpirationDate: Date
+}
 
 /// A [JSON Web Token](https://jwt.io/introduction) (JWT) based authentication strategy
 ///
 /// - since: 1.2.0
-public class JWTAuthStrategy: Authenticator {
+public class JWTAuthenticator: Authenticator {
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
     private var tokenCompletionHandlers: [(String?) -> Void] = []
@@ -44,7 +52,7 @@ public class JWTAuthStrategy: Authenticator {
     }
     
     private var unexpiredJwt: String? {
-        guard let jwt = storage.jwt, let payload = JWTAuthStrategy.payloadFor(jwt: jwt) else {
+        guard let jwt = storage.jwt, let payload = JWTAuthenticator.payloadFor(jwt: jwt) else {
             return nil
         }
         
@@ -62,7 +70,7 @@ public class JWTAuthStrategy: Authenticator {
     private static func payloadFor(jwt: String?) -> [String: Any]? {
         if let segments = jwt?.components(separatedBy: "."), 
             segments.count == 3,
-            let payloadData = JWTAuthStrategy.base64UrlDecode(segments[1]) {
+            let payloadData = JWTAuthenticator.base64UrlDecode(segments[1]) {
             return (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any]
         }
         return nil
@@ -119,7 +127,7 @@ public class JWTAuthStrategy: Authenticator {
                 client.fetchTokenFromJWT(jwt) { response in
                     switch response.result {
                     case .success(let jwtAccessTokenCreationResult):
-                        if let authInfo = JWTAuthStrategy.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
+                        if let authInfo = JWTAuthenticator.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
                             self.storage.authenticationInfo = authInfo
                         }
                     case .failure(let error):
@@ -143,7 +151,7 @@ public class JWTAuthStrategy: Authenticator {
         }
     }
     
-    private static func authenticationInfoFrom(jwtAccessTokenCreationResult: JWTAccessTokenCreationResult) -> JWTAuthenticationInfo? {
+    private static func authenticationInfoFrom(jwtAccessTokenCreationResult: JWTTokenModel) -> JWTAuthenticationInfo? {
         if let token = jwtAccessTokenCreationResult.token,
             let tokenExpiration = jwtAccessTokenCreationResult.tokenExpiration {
             let tokenExpirationDate = Date(timeInterval: tokenExpiration, since: jwtAccessTokenCreationResult.tokenCreationDate)

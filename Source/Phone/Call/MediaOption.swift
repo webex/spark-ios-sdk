@@ -21,29 +21,34 @@
 import Foundation
 
 /// The enumeration of media options on a call.
-public enum MediaOption {
+public struct MediaOption {
     
-    /// The enumeration of Camera facing modes.
-    public enum FacingMode {
-        /// Front camera.
-        case user
-        /// Back camera.
-        case environment
-    }
+    public var localVideoView: MediaRenderView?
     
-    /// Call with audio only.
-    case audioOnly
-    /// Call with both audio and video.
-    /// - parameter local: the viewport of the local party's video.
-    /// - parameter remote: the viewport of the remote party's video.
-    case audioVideo(local: MediaRenderView, remote: MediaRenderView)
+    public var remoteVideoView: MediaRenderView?
+    
+    fileprivate var _uuid: UUID?
     
     var hasVideo: Bool {
-        switch self {
-        case .audioOnly:
-            return false
-        case .audioVideo:
-            return true
+        return self.localVideoView != nil || self.remoteVideoView != nil
+    }
+    
+    public init(local: MediaRenderView, remote: MediaRenderView) {
+        self.localVideoView = local
+        self.remoteVideoView = remote
+    }
+}
+
+// CallKit
+public extension MediaOption {
+    
+    public var uuid: UUID? {
+        get {
+            return self._uuid
+        }
+        set {
+            self._uuid = newValue
         }
     }
+    
 }

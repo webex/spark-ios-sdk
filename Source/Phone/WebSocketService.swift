@@ -134,7 +134,7 @@ class WebSocketService: WebSocketDelegate {
         let eventData = json["data"]
         if let eventType = eventData["eventType"].string {
             if eventType.hasPrefix("locus") {
-                SDKLogger.info("locus event: \(eventData.object)")
+                //SDKLogger.info("locus event: \(eventData.object)")
                 let eventObj = eventData.object;
                 guard let eventJson = eventObj as? [String: Any],
                     let event = Mapper<CallEventModel>().map(JSON: eventJson),
