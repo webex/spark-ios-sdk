@@ -101,6 +101,10 @@ public class Phone {
         }
     }
     
+    deinit {
+        self.metrics.deinitMetrics()
+    }
+    
     /// This function registers this *phone* to Cisco Spark cloud on behave of the authenticated user.
     /// It also creates the websocket and connects to Cisco Spark cloud.
     /// Subsequent invocations of this method refresh the registration.

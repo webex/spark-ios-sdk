@@ -90,6 +90,7 @@ class DeviceService {
         } else {
             completionHandler(nil)
         }
+        self.device = nil
     }
 }
 

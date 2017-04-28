@@ -40,7 +40,8 @@ class MetricsEngine {
         RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
     }
     
-    deinit {
+    func finishAllMetrics() {
+        flush()
         periodicFlushTimer.invalidate()
     }
     

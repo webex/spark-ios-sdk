@@ -70,4 +70,8 @@ class CallMetrics {
         let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
         metricsEngine.trackMetric(metric)
     }
+    
+    func deinitMetrics() {
+        metricsEngine.finishAllMetrics()
+    }
 }

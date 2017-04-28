@@ -76,6 +76,7 @@ class WebSocketService: WebSocketDelegate {
             if let socket = self.socket, socket.isConnected {
                 SDKLogger.info("Web socket is being disconnected")
                 socket.disconnect()
+                self.socket = nil
                 return
             }
             self.socket = nil
