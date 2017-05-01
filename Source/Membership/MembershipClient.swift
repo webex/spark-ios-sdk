@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,19 @@
 
 import Foundation
 
-/// Membership HTTP client.
+/// An iOS client wrapper of the Cisco Spark [Room Memberships REST API](https://developer.ciscospark.com/resource-memberships.html) .
+///
+/// - since: 1.2.0
 public class MembershipClient {
     
     /// Alias for closure to handle a service response along with a Membership object.
+    ///
+    /// - since: 1.2.0
     public typealias ObjectHandler = (ServiceResponse<Membership>) -> Void
     
     /// Alias for closure to handle a service response along with a Membership array.
+    ///
+    /// - since: 1.2.0
     public typealias ArrayHandler = (ServiceResponse<[Membership]>) -> Void
     
     let authenticator: Authenticator
@@ -39,45 +45,49 @@ public class MembershipClient {
         return ServiceRequest.Builder(authenticator).path("memberships")
     }
 
-    /// Lists all room memberships for the authenticated user.
+    /// Lists all room memberships where the authenticated user belongs.
     ///
-    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter max: The maximum number of items in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         list(roomId: nil, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
     }
     
-    /// Lists all room memberships for all users in the given room.
+    /// Lists all memberships in the given room by room Id.
     ///
-    /// - parameter roomId: Limit results to a specific room by id.
-    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter roomId: The identifier of the room where the membership belongs.
+    /// - parameter max: The maximum number of memberships in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(roomId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         list(roomId: roomId, personId: nil, personEmail: nil, max: max, queue: queue, completionHandler: completionHandler)
     }
     
-    /// Lists any room memberships for the given room and person, specified by person id.
+    /// Lists any room memberships for the given room (by room id) and person (by person id).
     ///
-    /// - parameter roomId: Limit results to a specific room by id.
-    /// - parameter personId: Limit results to a specific person by id.
+    /// - parameter roomId: The identifier of the room where the memberships belong.
+    /// - parameter personId: The identifier of the person who has the memberships.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(roomId: String, personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         list(roomId: roomId, personId: personId, personEmail: nil, max: nil, queue: queue, completionHandler: completionHandler)
     }
     
-    /// Lists any room memberships for the given room and person, specified by person email.
+    /// Lists any room memberships for the given room (by room id) and person (by email address).
     ///
-    /// - parameter roomId: Limit results to a specific room by id.
-    /// - parameter personEmail: Limit results to a specific person by email address.
+    /// - parameter roomId: The identifier of the room where the memberships belong.
+    /// - parameter personEmail: The email address of the person who has the memberships.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(roomId: String, personEmail: EmailAddress, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         list(roomId: roomId, personId: nil, personEmail: personEmail, max: nil, queue: queue, completionHandler: completionHandler)
     }
@@ -100,14 +110,15 @@ public class MembershipClient {
         request.responseArray(completionHandler)
     }
     
-    /// Add someone to a room by person id; optionally making them a moderator.
+    /// Adds a person to a room by person id; optionally making the person a moderator.
     ///
-    /// - parameter roomId: The rooom id.
-    /// - parameter personId: The person id.
-    /// - parameter isModerator: Set to true to make the person a room moderator.
+    /// - parameter roomId: The identifier of the room where the person is to be added.
+    /// - parameter personId: The identifier of the person to be added.
+    /// - parameter isModerator: If true, make the person a moderator of the room. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func create(roomId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
@@ -123,14 +134,15 @@ public class MembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Add someone to a room by email address; optionally making them a moderator.
+    /// Adds a person to a room by email address; optionally making the person a moderator.
     ///
-    /// - parameter roomId: The rooom id.
-    /// - parameter personEmail: The email address.
-    /// - parameter isModerator: Set to true to make the person a room moderator.
+    /// - parameter roomId: The identifier of the room where the person is to be added.
+    /// - parameter personEmail: The email address of the person to be added.
+    /// - parameter isModerator: If true, make the person a moderator of the room. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func create(roomId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "roomId": roomId,
@@ -146,12 +158,13 @@ public class MembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Get details for a membership by id.
+    /// Retrieves the details for a membership by membership id.
     ///
-    /// - parameter membershipId: The membership id.
+    /// - parameter membershipId: The identifier of the membership.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -162,13 +175,14 @@ public class MembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Updates properties for a membership by id.
+    /// Updates the properties of a membership by membership id.
     ///
-    /// - parameter membershipId: The membership id.
-    /// - parameter isModerator: Set to true to make the person a room moderator.
+    /// - parameter membershipId: The identifier of the membership.
+    /// - parameter isModerator: If true, make the person a moderator of the room in this membership. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
@@ -180,12 +194,13 @@ public class MembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Deletes a membership by id.
+    /// Deletes a membership by membership id. It removes the person from the room where the membership belongs.
     ///
-    /// - parameter membershipId: The membership id.
+    /// - parameter membershipId: The identifier of the membership.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)

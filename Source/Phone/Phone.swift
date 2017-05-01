@@ -21,7 +21,7 @@
 import AVFoundation
 
 /// Phone represents a Cisco Spark calling device.
-/// The application can obtain the *phone* object from *Spark* object
+/// The application can obtain a *phone* object from *Spark* object
 /// and use *phone* to call other Cisco Spark users or PSTN when enabled.
 /// The *phone* must be registered before it can make or receive calls.
 ///
@@ -38,6 +38,7 @@ import AVFoundation
 public class Phone {
     
     /// The enumeration of Camera facing modes.
+    /// - since: 1.2.0
     public enum FacingMode {
         /// Front camera.
         case user
@@ -45,18 +46,23 @@ public class Phone {
         case environment
     }
     
-    /// Default camera facing mode, used as the default when dialing or answering a call.
+    /// Default camera facing mode of this phone, used as the default when dialing or answering a call.
+    /// The default mode is the front camera.
     ///
     /// - note: The setting is not persistent
+    /// - since: 1.2.0
     public var defaultFacingMode = FacingMode.user
     
-    /// Default loud speaker mode, used as the default when dialing or answering a call.
-    /// True as using loud speaker, False as not.
+    /// Default loud speaker mode of this phone, used as the default when dialing or answering a call.
+    /// True as using loud speaker, False as not. The default is using loud speaker.
     ///
     /// - note: The setting is not persistent.
+    /// - since: 1.2.0
     public var defaultLoudSpeaker: Bool = true
     
     /// Callback when call is incoming.
+    ///
+    /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
     let authenticator: Authenticator
@@ -105,7 +111,7 @@ public class Phone {
         self.metrics.deinitMetrics()
     }
     
-    /// This function registers this *phone* to Cisco Spark cloud on behave of the authenticated user.
+    /// Registers this phone to Cisco Spark cloud on behalf of the authenticated user.
     /// It also creates the websocket and connects to Cisco Spark cloud.
     /// Subsequent invocations of this method refresh the registration.
     ///
@@ -142,7 +148,7 @@ public class Phone {
         }
     }
     
-    /// This function removes this *phone* from Cisco Spark cloud on behave of the authenticated user.
+    /// Removes this *phone* from Cisco Spark cloud on behalf of the authenticated user.
     /// It also disconnects the websocket from Cisco Spark cloud.
     /// Subsequent invocations of this method behave as a no-op.
     ///
@@ -163,7 +169,7 @@ public class Phone {
         }
     }
     
-    /// This function makes a call to an intended recipient on behalf of the authenticated user.
+    /// Makes a call to an intended recipient on behalf of the authenticated user.
     /// It supports the following address formats for the receipient:
     ///
     /// >
@@ -233,7 +239,7 @@ public class Phone {
         }
     }
     
-    /// This function pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.
+    /// Pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.
     ///
     /// - returns: Void
     /// - note: Invoking this function is optional since the alert will appear automatically during the first video call.
@@ -242,7 +248,7 @@ public class Phone {
         self.prompter.check() { _ in }
     }
     
-    /// This function prevents Cisco Spark iOS SDK from poping up an Alert for the end user
+    /// Prevents Cisco Spark iOS SDK from poping up an Alert for the end user
     /// to approve the use of H.264 video codec license from Cisco Systems, Inc.
     ///
     /// - returns: Void

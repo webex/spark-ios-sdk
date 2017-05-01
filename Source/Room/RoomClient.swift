@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,9 @@
 
 import Foundation
 
-/// Room HTTP client
+/// An iOS client wrapper of the Cisco Spark [Rooms REST API](https://developer.ciscospark.com/resource-rooms.html) .
+///
+/// - since: 1.2.0
 public class RoomClient {
     
     /// Alias for closure to handle a service response along with a Room object.
@@ -39,14 +41,15 @@ public class RoomClient {
         return ServiceRequest.Builder(authenticator).path("rooms")
     }
     
-    /// List rooms. By default, lists rooms to which the authenticated user belongs.
+    /// Lists all rooms where the authenticated user belongs.
     ///
-    /// - parameter teamId: Limit the rooms to those associated with a team, by ID.
-    /// - parameter max: Limit the maximum number of rooms in the response.
-    /// - parameter type: Available values: direct and group. direct returns all 1-to-1 rooms. group returns all group rooms. If not specified or values not matched, will return all room types.
+    /// - parameter teamId: If not nil, only list the rooms that are associated with the team by team id.
+    /// - parameter max: The maximum number of rooms in the response.
+    /// - parameter type: If not nil, only list the rooms of this type. Otherwise all rooms are listed.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -61,10 +64,12 @@ public class RoomClient {
     /// Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
     ///
     /// - parameter title: A user-friendly name for the room.
-    /// - parameter teamId: The ID for the team with which this room is associated.
+    /// - parameter teamId: If not nil, this room will be associated with the team by team id. Otherwise, this room is not associated with any team.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
+    /// - see: see MemebershipClient API
     public func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
@@ -75,12 +80,13 @@ public class RoomClient {
         request.responseObject(completionHandler)
     }
     
-    /// Shows details for a room by id. Specify the room id in the roomId parameter in the URI.
+    /// Retrieves the details for a room by id.
     ///
-    /// - parameter roomId: The room id.
+    /// - parameter roomId: The identifier of the room.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -91,13 +97,14 @@ public class RoomClient {
         request.responseObject(completionHandler)
     }
     
-    /// Updates details for a room by id. Specify the room id in the roomId parameter in the URI.
+    /// Updates the details for a room by id.
     ///
-    /// - parameter roomId: The room id.
+    /// - parameter roomId: The identifier of the room.
     /// - parameter title: A user-friendly name for the room.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
@@ -109,12 +116,13 @@ public class RoomClient {
         request.responseObject(completionHandler)
     }
     
-    /// Deletes a room by id. Specify the room id in the roomId parameter in the URI.
+    /// Deletes a room by id.
     ///
-    /// - parameter roomId: The room id.
+    /// - parameter roomId: The identifier of the room.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)

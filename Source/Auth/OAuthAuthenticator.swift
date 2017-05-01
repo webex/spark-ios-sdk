@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,11 @@ public protocol OAuthAuthenticatorDelegate: class {
     func refreshAccessTokenFailed()
 }
 
-/// An authentication strategy that uses Spark's OAuth2 mechanism to provide access tokens
+/// An [OAuth](https://oauth.net/2/) based authentication strategy
+/// is to be used to authenticate a user on Cisco Spark.
+///
+/// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
+/// - since: 1.2.0
 public class OAuthAuthenticator: Authenticator {
     
     private let clientId: String
@@ -63,7 +67,8 @@ public class OAuthAuthenticator: Authenticator {
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthAuthenticatorDelegate?
     
-    /// Returns true if the user has already been authorized
+    /// - see: See Authenticator.authorized
+    /// - since: 1.2.0
     public var authorized: Bool {
         if let refreshTokenExpirationDate = storage.tokens?.refreshTokenExpirationDate {
             return refreshTokenExpirationDate > clock.currentTime
@@ -80,7 +85,8 @@ public class OAuthAuthenticator: Authenticator {
     /// - parameter redirectUri: the redirect URI that will be called when completing the authentication. This must match the redirect URI registered to your clientId.
     /// - parameter storage: the storage mechanism for persisting authentication information
     ///
-    /// See https://developer.ciscospark.com/authentication.html
+    /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
+    /// - since: 1.2.0
     public convenience init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
                             storage: OAuthStorage = OAuthKeychainStorage()) {
         self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher(), clock: Clock())
@@ -98,12 +104,11 @@ public class OAuthAuthenticator: Authenticator {
         self.clock = clock
     }
     
-    /// Bring up a web-based authorization view controller and direct the user through the OAuth process.
+    /// Brings up a web-based authorization view controller and directs the user through the OAuth process.
     ///
     /// - parameter parentViewController: the parent view controller for the OAuth view controller
-    /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to
-    ///                                indicate if the authentication process was successful. It will be called directly after
-    ///                                the OAuth view controller has begun to dismiss itself in an animated way
+    /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to indicate if the authentication process was successful. It will be called directly after the OAuth view controller has begun to dismiss itself in an animated way.
+    /// - since: 1.2.0
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
         if let encodedClientId = clientId.encodeQueryParamString,
             let encodedRedirectUri = redirectUri.encodeQueryParamString,
@@ -129,7 +134,8 @@ public class OAuthAuthenticator: Authenticator {
         }
     }
     
-    /// See Authenticator.accessToken(completionHandler:)
+    /// - see: See Authenticator.accessToken(completionHandler:)
+    /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         guard authorized else {
             completionHandler(nil)
@@ -187,7 +193,8 @@ public class OAuthAuthenticator: Authenticator {
         return nil
     }
     
-    /// See Authenticator.deauthorize()
+    /// - see: See Authenticator.deauthorize()
+    /// - since: 1.2.0
     public func deauthorize() {
         storage.tokens = nil
     }

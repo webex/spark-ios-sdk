@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,9 @@
 
 import Foundation
 
-/// Team HTTP client
+/// An iOS client wrapper of the Cisco Spark [Teams REST API](https://developer.ciscospark.com/resource-teams.html) .
+///
+/// - since: 1.2.0
 public class TeamClient {
     
     /// Alias for closure to handle a service response along with a Team object.
@@ -41,10 +43,11 @@ public class TeamClient {
     
     /// Lists teams to which the authenticated user belongs.
     ///
-    /// - parameter max: Limit the maximum number of teams in the response.
+    /// - parameter max: The maximum number of teams in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -63,6 +66,8 @@ public class TeamClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
+    /// - see: see TeamMemebershipClient API
     public func create(name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.post)
@@ -74,12 +79,13 @@ public class TeamClient {
     }
     
     
-    /// Shows details for a team by id.
+    /// Retrieves the details for a team by id.
     ///
-    /// - parameter teamId: A team id
+    /// - parameter teamId: The identifier of the team.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func get(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
         let request = requestBuilder()
             .method(.get)
@@ -90,13 +96,14 @@ public class TeamClient {
         request.responseObject(completionHandler)
     }
     
-    /// Updates details for a team, by ID.
+    /// Updates the details for a team by id.
     ///
     /// - parameter teamId: The team id.
     /// - parameter name: A user-friendly name for the team.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func update(teamId: String, name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
@@ -108,12 +115,13 @@ public class TeamClient {
         request.responseObject(completionHandler)
     }
     
-    /// Deletes a team, by ID.
+    /// Deletes a team by id.
     ///
     /// - parameter teamId: The team id.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func delete(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)

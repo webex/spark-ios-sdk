@@ -21,7 +21,7 @@
 import CoreMedia
 
 /// A Call represents a media call on Cisco Spark.
-/// The application can create an outgoing *call* object by calling *phone.dial* function:
+/// The application can create an outgoing *call* by calling *phone.dial* function:
 ///
 /// ``` swift
 ///     let address = "coworker@example.com"
@@ -36,13 +36,13 @@ import CoreMedia
 ///       }
 ///     }
 /// ```
-/// The application can receive an incoming *call* object via ...
+/// The application can receive an incoming *call* via ...
 ///
 /// ``` swift
 ///    code
 /// ```
 ///
-/// - see: Phone API about how to create calls.
+/// - see: see Phone API about how to create calls.
 /// - since: 1.2.0
 public class Call {
     
@@ -53,23 +53,42 @@ public class Call {
         case dtmf(Swift.Error)
     }
 
+    /// The enumeration of directions of a call
+    /// - since: 1.2.0
     public enum Direction {
+        /// The local party is a recipient of the call.
         case incoming
+        /// The local party is an initiator of the call.
         case outgoing
     }
     
+    /// The enumuaration of reasons for a call being disconnected.
+    /// - since: 1.2.0
     public enum DisconnectType {
+        /// The local party has left the call.
         case localLeft
+        /// The local party has declined the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
         case localDecline
+        /// The local party has cancelled the call.
+        /// This is only applicable when the *direction* of the call is *outgoing*.
         case localCancel
+        /// The remote party has left the call.
         case remoteLeft
+        /// The remote party has declined the call.
+        /// This is only applicable when the *direction* of the call is *outgoing*.
         case remoteDecline
+        /// The remote party has cancelled the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
         case remoteCancel
         case otherConnected
         case otherDeclined
+        /// Unknown error
         case error(Swift.Error)
     }
     
+    /// The enumeration of reasons for the media of a call being changed
+    /// - since: 1.2.0
     public enum MediaChangeType {
         case remoteSendingVideo(Bool)
         case remoteSendingAudio(Bool)
@@ -83,11 +102,15 @@ public class Call {
         case remoteVideoViewSize
     }
     
+    /// The enumeration of capabilities of a call.
+    /// - since: 1.2.0
     public enum Capabilities {
+        /// This *call* can send and receive DTMF.
         case dtmf
     }
     
     /// Callback when remote participant(s) is ringing.
+    /// - since: 1.2.0
     public var onRinging: (() -> Void)? {
         didSet {
             self.device.phone.queue.sync {
@@ -101,7 +124,8 @@ public class Call {
         }
     }
     
-    /// Callback when remote participant(s) answered and call gets connected.
+    /// Callback when remote participant(s) answered and this *call* is connected.
+    /// - since: 1.2.0
     public var onConnected: (() -> Void)? {
         didSet {
             self.device.phone.queue.sync {
@@ -115,35 +139,50 @@ public class Call {
         }
     }
     
-    /// Callback when call gets disconnected (hangup, cancelled, get declined or other self device pickup the call).
+    /// Callback when this *call* is disconnected (hangup, cancelled, get declined or other self device pickup the call).
+    /// - since: 1.2.0
     public var onDisconnected: ((DisconnectType) -> Void)?
     
+    /// Callback when the media types of this *call* have changed.
+    /// - since: 1.2.0
     public var onMediaChanged: ((MediaChangeType) -> Void)?
     
+    /// Callback when the capabilities of this *call* have changed.
+    /// - since: 1.2.0
     public var onCapabilitiesChanged: ((Capabilities) -> Void)?
     
+    /// Callback when an error has occured on this *call*.
+    /// - since: 1.2.0
     public var onError: ((Call.Error) -> Void)?
     
+    /// The status of this *call*.
+    /// - since: 1.2.0
     public internal(set) var status: CallStatus = CallStatus.initiated
     
+    /// The direction of this *call*.
+    /// - since: 1.2.0
     public private(set) var direction: Direction
     
     /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
+    /// - since: 1.2.0
     public var sendingDTMFEnabled: Bool {
         return self.model.isLocalSupportDTMF
     }
     
     /// True if the remote party of this *call* is sending video. Otherwise, false.
+    /// - since: 1.2.0
     public var remoteSendingVideo: Bool {
         return !model.isRemoteVideoMuted
     }
     
     /// True if the remote party of this *call* is sending audio. Otherwise, false.
+    /// - since: 1.2.0
     public var remoteSendingAudio: Bool {
         return !model.isRemoteAudioMuted
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.
+    /// - since: 1.2.0
     public var sendingVideo: Bool {
         get {
             return self.mediaSession.hasVideo && !self.mediaSession.videoMuted
@@ -154,6 +193,7 @@ public class Call {
     }
     
     /// True if this *call* is sending audio. Otherwise, false.
+    /// - since: 1.2.0
     public var sendingAudio: Bool {
         get {
             return self.mediaSession.hasAudio && !self.mediaSession.audioMuted
@@ -164,6 +204,7 @@ public class Call {
     }
     
     /// True if the local party of this *call* is receiving video. Otherwise, false.
+    /// - since: 1.2.0
     public var receivingVideo: Bool {
         get {
             return self.mediaSession.hasVideo && !self.mediaSession.videoOutputMuted
@@ -174,6 +215,7 @@ public class Call {
     }
     
     /// True if the local party of this *call* is receiving audio. Otherwise, false.
+    /// - since: 1.2.0
     public var receivingAudio: Bool {
         get {
             return self.mediaSession.hasAudio && !self.mediaSession.audioOutputMuted
@@ -183,7 +225,8 @@ public class Call {
         }
     }
     
-    /// True if loud speaker is selected as the audio output device for this *call*. Otherwise, false.
+    /// True if the loud speaker is selected as the audio output device for this *call*. Otherwise, false.
+    /// - since: 1.2.0
     public var isSpeaker: Bool {
         get {
             return self.mediaSession.isSpeakerSelected()
@@ -194,6 +237,7 @@ public class Call {
     }
     
     /// The camera facing mode selected for this *call*.
+    /// - since: 1.2.0
     public var facingMode: Phone.FacingMode {
         get {
             return self.mediaSession.isFrontCameraSelected() ? .user : .environment
@@ -204,15 +248,19 @@ public class Call {
     }
     
     /// The local video render view dimensions (points) of this *call*.
+    /// - since: 1.2.0
     public var localVideoViewSize: CMVideoDimensions {
         return CMVideoDimensions(width: self.mediaSession.localVideoViewWidth, height: self.mediaSession.localVideoViewHeight)
     }
     
     /// The remote video render view dimensions (points) of this *call*.
+    /// - since: 1.2.0
     public var remoteVideoViewSize: CMVideoDimensions {
         return CMVideoDimensions(width: self.mediaSession.remoteVideoViewWidth, height: self.mediaSession.remoteVideoViewHeight)
     }
     
+    /// Call Memberships represent participants in this *call*.
+    /// - since: 1.2.0
     public var memberships: [CallMembership] {
         if let participants = self.model.participants {
             return participants.map { participant in
@@ -274,12 +322,13 @@ public class Call {
         pthread_mutex_unlock(&mutex)
     }
     
-    /// This function answers an incoming call. It only applies to incoming calls.
+    /// Answers this call, only applicable when the direction of this call is incoming.
     /// Calling this function on outgoing calls behaves ?
     ///
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - since: 1.2.0
     public func answer(option: MediaOption) {
         if let uuid = option.uuid {
             self._uuid = uuid
@@ -287,28 +336,29 @@ public class Call {
         self.device.phone.answer(call: self, option: option)
     }
     
-    /// Rejects an incoming call. This only applies to incoming calls.
+    /// Rejects this call, only applicable when the direction of this call is incoming.
     ///
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
+    /// - since: 1.2.0
     public func reject() {
         self.device.phone.reject(call: self)
     }
     
-    /// This function disconnects this *call*. This applies to both incoming and outgoing calls.
+    /// Disconnects this call.
     ///
     /// - returns: Void
+    /// - since: 1.2.0
     public func hangup() {
         self.device.phone.hangup(call: self)
     }
 
-    /// Send feed back to Spark.
+    /// Sends feedback for this call to Cisco Spark team.
     ///
-    /// - parameter rating: Rating between 1 and 5.
-    /// - parameter comments: User comments.
+    /// - parameter rating: The rating of the quality of this call between 1 and 5 where 5 means excellent quality.
+    /// - parameter comments: The comments for this call.
     /// - parameter includeLogs: True if to include logs, False as not.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
+    /// - since: 1.2.0
     public func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
         guard let info = info else {
             SDKLogger.error("Failure: Missing call info for feedback")
@@ -318,11 +368,12 @@ public class Call {
         callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
     }
     
-    /// This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
+    /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
     ///
     /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - since: 1.2.0
     public func send(dtmf: String, completionHandler: ((Swift.Error?) -> Void)?) {
         guard let url = self.model.myself?.url else {
             SDKLogger.error("Failure: Missing self participant URL")

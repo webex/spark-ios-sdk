@@ -20,7 +20,9 @@
 
 import Foundation
 
-/// TeamMembership HTTP client.
+/// An iOS client wrapper of the Cisco Spark [TeamMemberships REST API](https://developer.ciscospark.com/resource-team-memberships.html) .
+///
+/// - since: 1.2.0
 public class TeamMembershipClient {
     
     /// Alias for closure to handle a service response along with a TeamMembership object.
@@ -39,13 +41,14 @@ public class TeamMembershipClient {
         return ServiceRequest.Builder(authenticator).path("team/memberships")
     }
     
-    /// Lists all team memberships. By default, lists memberships for teams to which the authenticated user belongs.
+    /// Lists all team memberships where the authenticated user belongs.
     ///
     /// - parameter teamId: Limit results to a specific team, by ID.
-    /// - parameter max: Limit the maximum number of items in the response.
+    /// - parameter max: The maximum number of team memberships in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(teamId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let query = RequestParameter([
             "teamId": teamId,
@@ -61,14 +64,15 @@ public class TeamMembershipClient {
         request.responseArray(completionHandler)
     }
     
-    /// Add someone to a team by Person ID; optionally making them a moderator.
+    /// Adds a person to a team by person id; optionally making the person a moderator of the team.
     ///
-    /// - parameter teamId: The team ID.
-    /// - parameter personId: The person ID.
-    /// - parameter isModerator: Set to true to make the person a team moderator.
+    /// - parameter teamId: The identifier of the team.
+    /// - parameter personId: The identifier of the person.
+    /// - parameter isModerator: If true, make the person a moderator of the team. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "teamId": teamId,
@@ -84,14 +88,15 @@ public class TeamMembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Add someone to a teams by email address; optionally making them a moderator.
+    /// Add a person to a teams by email address; optionally making the person a moderator of the team.
     ///
-    /// - parameter teamId: The team ID.
-    /// - parameter personEmail: The email address.
-    /// - parameter isModerator: Set to true to make the person a team moderator.
+    /// - parameter teamId: The identifier of the team.
+    /// - parameter personEmail: The email address of the person.
+    /// - parameter isModerator: If true, make the person a moderator of the team. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let body = RequestParameter([
             "teamId": teamId,
@@ -107,13 +112,14 @@ public class TeamMembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Get details for a membership by ID.
+    /// Retrieves the details for a membership by id.
     ///
-    /// - parameter membershipId: The membership ID.
+    /// - parameter membershipId: The identifier of the membership.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    /// - since: 1.2.0
+   public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
             .path(membershipId)
@@ -123,13 +129,14 @@ public class TeamMembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Updates properties for a membership by ID.
+    /// Updates the details for a membership by id.
     ///
-    /// - parameter membershipId: The membership ID.
-    /// - parameter isModerator: Set to true to make the person a team moderator.
+    /// - parameter membershipId: The identifier of the membership.
+    /// - parameter isModerator: If true, make the person a moderator of the team. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.put)
@@ -141,12 +148,13 @@ public class TeamMembershipClient {
         request.responseObject(completionHandler)
     }
     
-    /// Deletes a membership by ID.
+    /// Deletes a membership by id.
     ///
-    /// - parameter membershipId: The membership ID.
+    /// - parameter membershipId: The identifier of the membership.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
         let request = requestBuilder()
             .method(.delete)

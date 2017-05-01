@@ -36,7 +36,7 @@ public enum SparkErrors: Error {
 
 /// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
-/// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered Cisco Spark user.
+/// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered user to Cisco Spark.
 ///
 /// ```` swift
 ///    let clientId = "Def123456..."
@@ -55,7 +55,7 @@ public enum SparkErrors: Error {
 ///    }
 /// ````
 ///
-/// - *JWTAuthStrategy* - this should be used when *Spark* is to be authenticated as a CIsco App ID.
+/// - *JWTAuthStrategy* - this should be used when *Spark* is to be authenticated as a guest user to Cisco Spark.
 ///
 /// ```` swift
 ///    let jwtAuthStrategy = JWTAuthStrategy()
@@ -75,20 +75,20 @@ public class Spark {
     
     public var logger: Logger?
     
-    /// Toggle to enable or disable console log output.
+    /// Toggle to enable or disable console log output of this SDK.
     ///
-    /// - parameter enable: Set True to enable console log, False as not.
+    /// - parameter enable: Set True to enable console log, False to disable.
     /// - returns: Void
     public static func toggleConsoleLogger(_ enable: Bool) {
         LoggerManager.sharedInstance.toggleConsoleLogger(enable)
     }
     
-    /// The *Authenticator* object from the application when constructing *Spark*.
+    /// This is the *Authenticator* object from the application when constructing this Spark object.
     /// It can be used to check and modify authentication state.
     public let authenticator: Authenticator
     
     /// *Phone* represents a calling device in Cisco Spark iOS SDK. 
-    /// It can be used to make media calls on Cisco Spark.
+    /// It can be used to make audio and video calls on Cisco Spark.
     public lazy var phone: Phone = Phone(authenticator: self.authenticator)
     
     public init(authenticator: Authenticator) {
@@ -115,8 +115,8 @@ public class Spark {
         return PersonClient(authenticator: authenticator)
     }
     
-    /// Memberships represents a person's relationships to rooms.
-    /// Use *membership*  to manage the authenticated user's relationship to rooms.
+    /// Memberships represent a person's relationships to rooms.
+    /// Use *membership* to manage the authenticated user's relationship to rooms.
     ///
     /// - since: 1.2.0
     /// - see: Rooms API about how to manage rooms.
@@ -143,7 +143,7 @@ public class Spark {
         return WebhookClient(authenticator: authenticator)
     }
     
-    /// *Teams* are groups of people with a set of rooms that are visible to all members of that team.
+    /// Teams are groups of people with a set of rooms that are visible to all members of that team.
     /// Use *teams* to create and manage the teams on behalf of the authenticated user.
     ///
     /// - since: 1.2.0

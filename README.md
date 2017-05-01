@@ -2,9 +2,9 @@
 
 # Cisco Spark iOS SDK
 
-Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with **Cisco Spark iOS SDK** in your iOS application.
+Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will help you to get up running quickly with **Cisco Spark iOS SDK** in your iOS application.
  
-Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift).
+Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift) and requires iOS 9.0 or above.
 
 ## Setup
 Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
@@ -44,7 +44,7 @@ Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS app
 ## Example
 Below is code of a demo of the SDK usage:
 
-1. Create the Spark SDK with OAuth authentication.
+1. Create the Spark SDK with Spark ID authentication ([OAuth](https://oauth.net/) based).
  
    ```swift
    let clientId = "Def123456..."
@@ -63,7 +63,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
  
-1. Create the Spark SDK with JWT-based authentication.
+1. Create the Spark SDK with Guess ID authentication ([JWT](https://jwt.io/) based).
  
    ```swift
    let jwtAuthStrategy = JWTAuthStrategy()

@@ -13,7 +13,7 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (99% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (80% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -33,13 +33,19 @@
                 <a href="Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Call/FacingMode.html">– FacingMode</a>
+                <a href="Classes/Call/Error.html">– Error</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Call/Status.html">– Status</a>
+                <a href="Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+                <a href="Classes/Call/DisconnectType.html">– DisconnectType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/MediaChangeType.html">– MediaChangeType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/Capabilities.html">– Capabilities</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/EmailAddress.html">EmailAddress</a>
@@ -48,7 +54,7 @@
                 <a href="Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
+                <a href="Classes/JWTAuthenticator.html">JWTAuthenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/MembershipClient.html">MembershipClient</a>
@@ -57,10 +63,10 @@
                 <a href="Classes/MessageClient.html">MessageClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+                <a href="Classes/OAuthAuthenticator.html">OAuthAuthenticator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuthStrategy.html">OAuthStrategy</a>
+                <a href="Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/PersonClient.html">PersonClient</a>
@@ -69,22 +75,13 @@
                 <a href="Classes/Phone.html">Phone</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/PhoneSettings.html">PhoneSettings</a>
+                <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Spark.html">Spark</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/TeamClient.html">TeamClient</a>
@@ -101,22 +98,19 @@
             <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/DisconnectionType.html">DisconnectionType</a>
+                <a href="Enums/CallStatus.html">CallStatus</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/LocalMediaChangeType.html">LocalMediaChangeType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/MediaOption.html">MediaOption</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/RemoteMediaChangeType.html">RemoteMediaChangeType</a>
+                <a href="Enums/LogLevel.html">LogLevel</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/Result.html">Result</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/RoomType.html">RoomType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/SparkErrors.html">SparkErrors</a>
               </li>
             </ul>
           </li>
@@ -141,22 +135,19 @@
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/CallObserver.html">CallObserver</a>
+                <a href="Protocols/Authenticator.html">Authenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuthAuthenticatorDelegate.html">OAuthAuthenticatorDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/OAuthStorage.html">OAuthStorage</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/PhoneObserver.html">PhoneObserver</a>
               </li>
             </ul>
           </li>
@@ -164,7 +155,19 @@
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/CallMembership.html">CallMembership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CallMembership/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LogMessage.html">LogMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/MediaOption.html">MediaOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Membership.html">Membership</a>
@@ -173,7 +176,7 @@
                 <a href="Structs/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
+                <a href="Structs/OAuthTokens.html">OAuthTokens</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Person.html">Person</a>
@@ -195,6 +198,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Typealiases.html#/s:8SparkSDK10AnyHandler">AnyHandler</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -204,9 +215,9 @@
             <p><a href="https://travis-ci.org/ciscospark/spark-ios-sdk"><img src="https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master" alt="Travis CI"></a></p>
 <a href='#cisco-spark-ios-sdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='cisco-spark-ios-sdk'>Cisco Spark iOS SDK</h1>
 
-<p>Want to have secure and convenient audio and video interactions integrated into your iOS application? <strong>Cisco Spark iOS SDK</strong> is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with <strong>Cisco Spark iOS SDK</strong> in your iOS application.</p>
+<p>Want to have secure and convenient audio and video interactions integrated into your iOS application? <strong>Cisco Spark iOS SDK</strong> is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will help you to get up running quickly with <strong>Cisco Spark iOS SDK</strong> in your iOS application.</p>
 
-<p>Cisco Spark iOS SDK is written in <a href="https://developer.apple.com/swift">Swift</a>.</p>
+<p>Cisco Spark iOS SDK is written in <a href="https://developer.apple.com/swift">Swift</a> and requires iOS 9.0 or above.</p>
 <a href='#setup' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='setup'>Setup</h2>
 
 <p>Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
@@ -237,7 +248,7 @@ end
 <p>Below is code of a demo of the SDK usage:</p>
 
 <ol>
-<li>Create the Spark SDK with OAuth authentication.</li>
+<li>Create the Spark SDK with Spark ID authentication (<a href="https://oauth.net/">OAuth</a> based).</li>
 </ol>
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
    <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
@@ -256,7 +267,7 @@ end
 </code></pre>
 
 <ol>
-<li>Create the Spark SDK with JWT-based authentication.</li>
+<li>Create the Spark SDK with Guess ID authentication (<a href="https://jwt.io/">JWT</a> based).</li>
 </ol>
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">jwtAuthStrategy</span> <span class="o">=</span> <span class="kt">JWTAuthStrategy</span><span class="p">()</span>
    <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
@@ -352,7 +363,7 @@ end
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-04-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

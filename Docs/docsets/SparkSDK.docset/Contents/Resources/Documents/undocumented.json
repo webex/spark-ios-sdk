@@ -1,9 +1,527 @@
 {
   "warnings": [
     {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Auth/JWTAuthenticator.swift",
+      "line": 24,
+      "symbol": "JWTAuthenticationInfo",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Http/Result.swift",
+      "line": 32,
+      "symbol": "Result.data",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Http/Result.swift",
+      "line": 41,
+      "symbol": "Result.error",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 11,
+      "symbol": "Logger",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 12,
+      "symbol": "Logger.log(message:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 15,
+      "symbol": "LogMessage",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 16,
+      "symbol": "LogMessage.message",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 17,
+      "symbol": "LogMessage.level",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 18,
+      "symbol": "LogMessage.file",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 19,
+      "symbol": "LogMessage.function",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 20,
+      "symbol": "LogMessage.line",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 21,
+      "symbol": "LogMessage.description",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 24,
+      "symbol": "LogLevel",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 25,
+      "symbol": "LogLevel.off",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 26,
+      "symbol": "LogLevel.error",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 27,
+      "symbol": "LogLevel.warning",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 28,
+      "symbol": "LogLevel.info",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 29,
+      "symbol": "LogLevel.debug",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 30,
+      "symbol": "LogLevel.verbose",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 31,
+      "symbol": "LogLevel.all",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call+CallKit.swift",
+      "line": 13,
+      "symbol": "Call.uuid",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 49,
+      "symbol": "Call.Error",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 50,
+      "symbol": "Call.Error.answer",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 51,
+      "symbol": "Call.Error.reject",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 52,
+      "symbol": "Call.Error.hangup",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 53,
+      "symbol": "Call.Error.dtmf",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
       "line": 84,
-      "symbol": "Spark.init(authenticationStrategy:)",
+      "symbol": "Call.DisconnectType.otherConnected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 85,
+      "symbol": "Call.DisconnectType.otherDeclined",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 93,
+      "symbol": "Call.MediaChangeType.remoteSendingVideo",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 94,
+      "symbol": "Call.MediaChangeType.remoteSendingAudio",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 95,
+      "symbol": "Call.MediaChangeType.sendingVideo",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 96,
+      "symbol": "Call.MediaChangeType.sendingAudio",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 97,
+      "symbol": "Call.MediaChangeType.receivingVideo",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 98,
+      "symbol": "Call.MediaChangeType.receivingAudio",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 99,
+      "symbol": "Call.MediaChangeType.cameraSwitched",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 100,
+      "symbol": "Call.MediaChangeType.spearkerSwitched",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 101,
+      "symbol": "Call.MediaChangeType.localVideoViewSize",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
+      "line": 102,
+      "symbol": "Call.MediaChangeType.remoteVideoViewSize",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 11,
+      "symbol": "CallMembership",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 13,
+      "symbol": "CallMembership.State",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 14,
+      "symbol": "CallMembership.State.unknown",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 15,
+      "symbol": "CallMembership.State.idle",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 16,
+      "symbol": "CallMembership.State.notified",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 17,
+      "symbol": "CallMembership.State.joined",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 18,
+      "symbol": "CallMembership.State.left",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 19,
+      "symbol": "CallMembership.State.declined",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 22,
+      "symbol": "CallMembership.id",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 24,
+      "symbol": "CallMembership.isInitiator",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 26,
+      "symbol": "CallMembership.presonId",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 28,
+      "symbol": "CallMembership.state",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 32,
+      "symbol": "CallMembership.email",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 36,
+      "symbol": "CallMembership.sipUrl",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "line": 40,
+      "symbol": "CallMembership.phoneNumber",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallState.swift",
+      "line": 23,
+      "symbol": "CallStatus",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallState.swift",
+      "line": 24,
+      "symbol": "CallStatus.initiated",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallState.swift",
+      "line": 25,
+      "symbol": "CallStatus.ringing",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallState.swift",
+      "line": 26,
+      "symbol": "CallStatus.connected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallState.swift",
+      "line": 27,
+      "symbol": "CallStatus.disconnected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/MediaOption.swift",
+      "line": 26,
+      "symbol": "MediaOption.localVideoView",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/MediaOption.swift",
+      "line": 28,
+      "symbol": "MediaOption.remoteVideoView",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/MediaOption.swift",
+      "line": 36,
+      "symbol": "MediaOption.init(local:remote:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/MediaOption.swift",
+      "line": 45,
+      "symbol": "MediaOption.uuid",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Phone.swift",
+      "line": 261,
+      "symbol": "Phone.startPreview(option:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Phone.swift",
+      "line": 268,
+      "symbol": "Phone.stopPreview()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 26,
+      "symbol": "SparkErrors",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 27,
+      "symbol": "SparkErrors.unauthorized",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 28,
+      "symbol": "SparkErrors.unregistered",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 29,
+      "symbol": "SparkErrors.missingAttributes",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 30,
+      "symbol": "SparkErrors.invalidDTMF",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 31,
+      "symbol": "SparkErrors.h264Required",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 32,
+      "symbol": "SparkErrors.notFound",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 33,
+      "symbol": "SparkErrors.unsupported",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 34,
+      "symbol": "SparkErrors.disconnected",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 76,
+      "symbol": "Spark.logger",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
+      "line": 94,
+      "symbol": "Spark.init(authenticator:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     }

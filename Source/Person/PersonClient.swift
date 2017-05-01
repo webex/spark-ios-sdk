@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,9 @@
 
 import Foundation
 
-/// Person HTTP client
+/// An iOS client wrapper of the Cisco Spark [People REST API](https://developer.ciscospark.com/resource-people.html) .
+///
+/// - since: 1.2.0
 public class PersonClient {
     
     /// Alias for closure to handle a service response along with a Person object.
@@ -39,11 +41,11 @@ public class PersonClient {
         return ServiceRequest.Builder(authenticator).path("people")
     }
     
-    /// List people in your organization.
+    /// Lists people in the authenticated user's organization.
     ///
-    /// - parameter email: List people with this email address.
-    /// - parameter displayName: List people whose name starts with this string.
-    /// - parameter max: Limit the maximum number of people in the response.
+    /// - parameter email: if not nil, only list people with this email address.
+    /// - parameter displayName: if not nil, only list people whose name starts with this string.
+    /// - parameter max: The maximum number of people in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -58,9 +60,9 @@ public class PersonClient {
         request.responseArray(completionHandler)
     }
     
-    /// Shows details for a person by id.
+    /// Retrieves the details for a person by person id.
     ///
-    /// - parameter personId: A person id
+    /// - parameter personId: The identifier of the person.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -74,7 +76,7 @@ public class PersonClient {
         request.responseObject(completionHandler)
     }
     
-    /// Show the profile for the authenticated user.
+    /// Retrieves the details for the authenticated user.
     ///
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.

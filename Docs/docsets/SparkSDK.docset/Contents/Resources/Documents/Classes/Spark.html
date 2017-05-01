@@ -14,7 +14,7 @@
     <a title="Spark Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (99% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (80% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,13 +34,19 @@
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/FacingMode.html">– FacingMode</a>
+                <a href="../Classes/Call/Error.html">– Error</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/Status.html">– Status</a>
+                <a href="../Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+                <a href="../Classes/Call/DisconnectType.html">– DisconnectType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/MediaChangeType.html">– MediaChangeType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/EmailAddress.html">EmailAddress</a>
@@ -49,7 +55,7 @@
                 <a href="../Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
+                <a href="../Classes/JWTAuthenticator.html">JWTAuthenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
@@ -58,10 +64,10 @@
                 <a href="../Classes/MessageClient.html">MessageClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+                <a href="../Classes/OAuthAuthenticator.html">OAuthAuthenticator</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuthStrategy.html">OAuthStrategy</a>
+                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PersonClient.html">PersonClient</a>
@@ -70,22 +76,13 @@
                 <a href="../Classes/Phone.html">Phone</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/PhoneSettings.html">PhoneSettings</a>
+                <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TeamClient.html">TeamClient</a>
@@ -102,22 +99,19 @@
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Enums/DisconnectionType.html">DisconnectionType</a>
+                <a href="../Enums/CallStatus.html">CallStatus</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/LocalMediaChangeType.html">LocalMediaChangeType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/MediaOption.html">MediaOption</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/RemoteMediaChangeType.html">RemoteMediaChangeType</a>
+                <a href="../Enums/LogLevel.html">LogLevel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/Result.html">Result</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/RoomType.html">RoomType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SparkErrors.html">SparkErrors</a>
               </li>
             </ul>
           </li>
@@ -142,22 +136,19 @@
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/CallObserver.html">CallObserver</a>
+                <a href="../Protocols/Authenticator.html">Authenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthAuthenticatorDelegate.html">OAuthAuthenticatorDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/OAuthStorage.html">OAuthStorage</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/PhoneObserver.html">PhoneObserver</a>
               </li>
             </ul>
           </li>
@@ -165,7 +156,19 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/CallMembership.html">CallMembership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallMembership/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogMessage.html">LogMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaOption.html">MediaOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
@@ -174,7 +177,7 @@
                 <a href="../Structs/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
+                <a href="../Structs/OAuthTokens.html">OAuthTokens</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
@@ -196,6 +199,14 @@
               </li>
             </ul>
           </li>
+          <li class="nav-group-name">
+            <a href="../Typealiases.html">Typealiases</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Typealiases.html#/s:8SparkSDK10AnyHandler">AnyHandler</a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -208,7 +219,7 @@
 
                 </div>
               </div>
-            <p><em>Spark</em> object is the entry point to use this Cisco Spark iOS SDK. A <em>Spark</em> object must be created with one of the following <em>AuthenticationStrategy</em>.</p>
+            <p><em>Spark</em> object is the entry point to use this Cisco Spark iOS SDK. A <em>Spark</em> object must be created with one of the following <em>Authenticator</em>.</p>
 
 <ul>
 <li><em>OAuthStrategy</em> - this should be used when <em>Spark</em> is to be authenticated as a registered Cisco Spark user.</li>
@@ -219,7 +230,7 @@
    <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"</span>
    <span class="k">let</span> <span class="nv">redirectUri</span> <span class="o">=</span> <span class="s">"MyCustomApplication://response"</span>
    <span class="k">let</span> <span class="nv">oauthStrategy</span> <span class="o">=</span> <span class="kt">OAuthStrategy</span><span class="p">(</span><span class="nv">clientId</span><span class="p">:</span> <span class="n">clientId</span><span class="p">,</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="n">clientSecret</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span> <span class="nv">redirectUri</span><span class="p">:</span> <span class="n">redirectUri</span><span class="p">)</span>
-   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">oauthStrategy</span><span class="p">)</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">oauthStrategy</span><span class="p">)</span>
    <span class="o">...</span>
    <span class="k">if</span> <span class="o">!</span><span class="n">oauthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
      <span class="n">oauthStrategy</span><span class="o">.</span><span class="nf">authorize</span><span class="p">(</span><span class="nv">parentViewController</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
@@ -235,7 +246,7 @@
 </ul>
 
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">jwtAuthStrategy</span> <span class="o">=</span> <span class="kt">JWTAuthStrategy</span><span class="p">()</span>
-   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
+   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
    <span class="o">...</span>
    <span class="k">if</span> <span class="o">!</span><span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
      <span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
@@ -288,6 +299,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:vC8SparkSDK5Spark6loggerGSqPS_6Logger__"></a>
+                    <a name="//apple_ref/swift/Property/logger" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC8SparkSDK5Spark6loggerGSqPS_6Logger__">logger</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Spark</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:ZFC8SparkSDK5Spark19toggleConsoleLoggerFSbT_"></a>
                     <a name="//apple_ref/swift/Method/toggleConsoleLogger(_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:ZFC8SparkSDK5Spark19toggleConsoleLoggerFSbT_">toggleConsoleLogger(_:)</a>
@@ -298,7 +336,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Toggle to enable or disable console log output.</p>
+                        <p>Toggle to enable or disable console log output of this SDK.</p>
 
                       </div>
                       <div class="declaration">
@@ -321,7 +359,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>Set True to enable console log, False as not.</p>
+                                  <p>Set True to enable console log, False to disable.</p>
 
                                 </div>
                               </td>
@@ -340,9 +378,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark22authenticationStrategyPS_22AuthenticationStrategy_"></a>
-                    <a name="//apple_ref/swift/Property/authenticationStrategy" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark22authenticationStrategyPS_22AuthenticationStrategy_">authenticationStrategy</a>
+                    <a name="/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_"></a>
+                    <a name="//apple_ref/swift/Property/authenticator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_">authenticator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -350,7 +388,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The <em>AuthenticationStrategy</em> object from the application when constructing <em>Spark</em>.
+                        <p>This is the <em>Authenticator</em> object from the application when constructing this Spark object.
 It can be used to check and modify authentication state.</p>
 
                       </div>
@@ -358,7 +396,7 @@ It can be used to check and modify authentication state.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="kt"><a href="../Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">authenticator</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Authenticator.html">Authenticator</a></span></code></pre>
 
                         </div>
                       </div>
@@ -379,14 +417,14 @@ It can be used to check and modify authentication state.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p><em>Phone</em> represents a calling device in Cisco Spark iOS SDK. 
-It can be used to make media calls on Cisco Spark.</p>
+It can be used to make audio and video calls on Cisco Spark.</p>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n"><a href="../Classes/Spark.html#/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_">authenticator</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -396,36 +434,9 @@ It can be used to make media calls on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark22callNotificationCenterCS_22CallNotificationCenter"></a>
-                    <a name="//apple_ref/swift/Property/callNotificationCenter" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark22callNotificationCenterCS_22CallNotificationCenter">callNotificationCenter</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>CallNotificationCenter allows your application to be notified of call events</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">callNotificationCenter</span><span class="p">:</span> <span class="kt"><a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:FC8SparkSDK5SparkcFT22authenticationStrategyPS_22AuthenticationStrategy__S0_"></a>
-                    <a name="//apple_ref/swift/Method/init(authenticationStrategy:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5SparkcFT22authenticationStrategyPS_22AuthenticationStrategy__S0_">init(authenticationStrategy:)</a>
+                    <a name="/s:FC8SparkSDK5SparkcFT13authenticatorPS_13Authenticator__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(authenticator:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK5SparkcFT13authenticatorPS_13Authenticator__S0_">init(authenticator:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -552,8 +563,8 @@ Use <em>people</em>  to find a person on behalf of the authenticated user.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Memberships represents a person&rsquo;s relationships to rooms.
-Use <em>membership</em>  to manage the authenticated user&rsquo;s relationship to rooms.</p>
+                        <p>Memberships represent a person&rsquo;s relationships to rooms.
+Use <em>membership</em> to manage the authenticated user&rsquo;s relationship to rooms.</p>
 
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
@@ -674,7 +685,7 @@ Use <em>Webhooks</em> to create and manage the webhooks for specific events.
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p><em>Teams</em> are groups of people with a set of rooms that are visible to all members of that team.
+                        <p>Teams are groups of people with a set of rooms that are visible to all members of that team.
 Use <em>teams</em> to create and manage the teams on behalf of the authenticated user.</p>
 
 <div class="aside aside-since">
@@ -758,7 +769,7 @@ Use <em>teamMemberships</em> to create and manage the team membership on behalf 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-04-30)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

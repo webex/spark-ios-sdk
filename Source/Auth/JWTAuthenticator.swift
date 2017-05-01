@@ -31,6 +31,7 @@ public struct JWTAuthenticationInfo {
 }
 
 /// A [JSON Web Token](https://jwt.io/introduction) (JWT) based authentication strategy
+/// is to be used to authenticate a guest user on Cisco Spark.
 ///
 /// - since: 1.2.0
 public class JWTAuthenticator: Authenticator {
@@ -62,7 +63,8 @@ public class JWTAuthenticator: Authenticator {
         return jwt
     }
     
-    /// - see: Authenticator.authorized
+    /// - see: See Authenticator.authorized
+    /// - since: 1.2.0
     public var authorized: Bool {
         return unexpiredJwt != nil
     }
@@ -95,7 +97,9 @@ public class JWTAuthenticator: Authenticator {
         return Data(base64Encoded: base64String)
     }
 
-    /// Create a new JWT authentication strategy
+    /// Creates a new JWT authentication strategy
+    ///
+    /// - since: 1.2.0
     public convenience init(storage: JWTAuthStorage = JWTAuthKeychainStorage()) {
         self.init(storage: storage, client: JWTAuthClient())
     }
@@ -105,21 +109,24 @@ public class JWTAuthenticator: Authenticator {
         self.storage = storage
     }
     
-    /// Sets the JWT authorization on the authorization strategy, clearing any existing access token information
+    /// Sets the JWT access token on the authorization strategy, overriting any existing access token.
     ///
     /// - parameter jwt: the new JSON Web Token to use
+    /// - since: 1.2.0
     public func authorizedWith(jwt: String) {
         storage.jwt = jwt
         storage.authenticationInfo = nil
     }
     
-    /// See Authenticator.deauthorize()
+    /// - see: See Authenticator.deauthorize()
+    /// - since: 1.2.0
     public func deauthorize() {
         storage.jwt = nil
         storage.authenticationInfo = nil
     }
     
-    /// See Authenticator.accessToken(completionHandler:)
+    /// - see: See Authenticator.accessToken(completionHandler:)
+    /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         tokenCompletionHandlers.append(completionHandler)
         if let jwt = unexpiredJwt, unexpiredAccessToken == nil {

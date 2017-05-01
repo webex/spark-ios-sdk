@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,9 @@
 import Foundation
 
 
-/// The data type include email validation and equatable implementation.
+/// An email address data type with email validation and equatable implementation.
+///
+/// - since: 1.2.0
 open class EmailAddress: Equatable {
     fileprivate var address: String
     
@@ -29,10 +31,11 @@ open class EmailAddress: Equatable {
         self.address = address
     }
     
-    /// Initialize EmailAddress from string
+    /// Create an *EmailAddress* object from a string
     ///
     /// - parameter address: The email address string.
     /// - returns: EmailAddress
+    /// - since: 1.2.0
     open static func fromString(_ address: String) -> EmailAddress? {
         guard isValid(address) else {
             return nil
@@ -41,9 +44,10 @@ open class EmailAddress: Equatable {
         return EmailAddress(address)
     }
     
-    /// Get email address string from EmailAddress
+    /// Get the email address string from this *EmailAddress* object.
     ///
     /// - returns: String
+    /// - since: 1.2.0
     open func toString() -> String {
         return address
     }
@@ -56,9 +60,11 @@ open class EmailAddress: Equatable {
     }
 }
 
-/// EmailAddress Equatable implementation. Check if two email addresses are equal.
+/// This function checks if two email addresses are equal
+/// This is the Equatable implementation for *EmailAddress*. .
 ///
-/// - returns: Bool
+/// - returns: Bool if the two email addresses are the equal. (? true?)
+/// - since: 1.2.0
 public func ==(lhs: EmailAddress, rhs: EmailAddress) -> Bool {
     return lhs.address == rhs.address
 }

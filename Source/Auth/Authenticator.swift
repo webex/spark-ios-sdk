@@ -28,20 +28,29 @@ import Foundation
 /// - since: 1.2.0
 public protocol Authenticator : class {
     
-    /// True if the user is logically authorized. This may not mean the user has a valid
+    /// Returns True if the user is logically authorized.
+    ///
+    /// This may not mean the user has a valid
     /// access token yet, but the authentication strategy should be able to obtain one without
     /// further user interaction.
+    ///
+    /// - since: 1.2.0
     var authorized: Bool { get }
     
-    /// This function deauthorizes the current user and clears any persistent state with regards to the current user.
+    /// Deauthorizes the current user and clears any persistent state with regards to the current user.
     /// If the *phone* is registered, it should be deregistered before calling this method.
+    ///
+    /// - since: 1.2.0
     func deauthorize()
     
-    /// This function returns an access token. This may involve long-running operations such as service calls,
+    /// Returns an access token of this *authenticator*. 
+    /// 
+    /// This may involve long-running operations such as service calls,
     /// but may also return immediately. The application should not make assumptions about how quickly this
     /// completes.
     /// If the access token could not be retrieved then the completion handler will be called with nil.
     ///
     /// - parameter completionHandler: called when retrieval of the access token is complete
+    /// - since: 1.2.0
     func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
 }
