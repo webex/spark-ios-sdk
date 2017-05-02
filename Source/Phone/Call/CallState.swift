@@ -44,21 +44,21 @@ public enum CallStatus {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.localDecline)
+                            call.onDisconnected?(Call.DisconnectReason.localDecline)
                         }
                     }
                     else if local.isJoined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.otherConnected)
+                            call.onDisconnected?(Call.DisconnectReason.otherConnected)
                         }
                     }
                     else if local.isDeclined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.otherDeclined)
+                            call.onDisconnected?(Call.DisconnectReason.otherDeclined)
                         }
                     }
                 }
@@ -66,7 +66,7 @@ public enum CallStatus {
                     call.device.phone.remove(call: call)
                     call.status = .disconnected
                     DispatchQueue.main.async {
-                        call.onDisconnected?(Call.DisconnectType.remoteCancel)
+                        call.onDisconnected?(Call.DisconnectReason.remoteCancel)
                     }
                 }
             }
@@ -81,7 +81,7 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.localCancel)
+                    call.onDisconnected?(Call.DisconnectReason.localCancel)
                 }
             }
             else if model.isRemoteJoined {
@@ -94,7 +94,7 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.remoteDecline)
+                    call.onDisconnected?(Call.DisconnectReason.remoteDecline)
                 }
             }
         case .connected:
@@ -102,14 +102,14 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.localLeft)
+                    call.onDisconnected?(Call.DisconnectReason.localLeft)
                 }
             }
             else if model.isRemoteLeft {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.remoteLeft)
+                    call.onDisconnected?(Call.DisconnectReason.remoteLeft)
                 }
             }
         case .disconnected:

@@ -48,7 +48,7 @@ public class MembershipClient {
     /// Lists all room memberships where the authenticated user belongs.
     ///
     /// - parameter max: The maximum number of items in the response.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -60,7 +60,7 @@ public class MembershipClient {
     ///
     /// - parameter roomId: The identifier of the room where the membership belongs.
     /// - parameter max: The maximum number of memberships in the response.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -72,7 +72,7 @@ public class MembershipClient {
     ///
     /// - parameter roomId: The identifier of the room where the memberships belong.
     /// - parameter personId: The identifier of the person who has the memberships.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -84,7 +84,7 @@ public class MembershipClient {
     ///
     /// - parameter roomId: The identifier of the room where the memberships belong.
     /// - parameter personEmail: The email address of the person who has the memberships.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -115,7 +115,7 @@ public class MembershipClient {
     /// - parameter roomId: The identifier of the room where the person is to be added.
     /// - parameter personId: The identifier of the person to be added.
     /// - parameter isModerator: If true, make the person a moderator of the room. The default is false.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -139,7 +139,7 @@ public class MembershipClient {
     /// - parameter roomId: The identifier of the room where the person is to be added.
     /// - parameter personEmail: The email address of the person to be added.
     /// - parameter isModerator: If true, make the person a moderator of the room. The default is false.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -161,7 +161,7 @@ public class MembershipClient {
     /// Retrieves the details for a membership by membership id.
     ///
     /// - parameter membershipId: The identifier of the membership.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -179,7 +179,7 @@ public class MembershipClient {
     ///
     /// - parameter membershipId: The identifier of the membership.
     /// - parameter isModerator: If true, make the person a moderator of the room in this membership. The default is false.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -197,7 +197,7 @@ public class MembershipClient {
     /// Deletes a membership by membership id. It removes the person from the room where the membership belongs.
     ///
     /// - parameter membershipId: The identifier of the membership.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0

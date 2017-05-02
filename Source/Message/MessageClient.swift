@@ -53,7 +53,7 @@ public class MessageClient {
     /// - parameter before: If not nil, only list messages sent only before this date and time, in ISO8601 format.
     /// - parameter beforeMessage: if not nil, only list messages sent only before this message by id.
     /// - parameter max: The maximum number of messages in the response.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -79,7 +79,7 @@ public class MessageClient {
     /// - parameter roomId: The identifier of the room where the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -91,7 +91,7 @@ public class MessageClient {
     ///
     /// - parameter roomId: The identifier of the room.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -104,7 +104,7 @@ public class MessageClient {
     /// - parameter personId: The identifier of the recipient of this private 1:1 message.
     /// - parameter text: The plain text message to post to the recipient.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -116,7 +116,7 @@ public class MessageClient {
     ///
     /// - parameter personId: The identifier of the recipient of this media content.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -129,7 +129,7 @@ public class MessageClient {
     /// - parameter personEmail: The email address of the recipient when sending a private 1:1 message.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -141,7 +141,7 @@ public class MessageClient {
     ///
     /// - parameter personEmail: The email address of the recipient of this media content.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -170,7 +170,7 @@ public class MessageClient {
     /// Retrieves the details for a message by message Id.
     ///
     /// - parameter messageId: The identifier of the message.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -187,7 +187,7 @@ public class MessageClient {
     /// Deletes a message by message id.
     ///
     /// - parameter messageId: The identifier of the message.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0

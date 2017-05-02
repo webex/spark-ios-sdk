@@ -36,7 +36,7 @@ public enum SparkErrors: Error {
 
 /// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
-/// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered user to Cisco Spark.
+/// - *OAuthStrategy* - this should be used when the SDK is to be authenticated as a registered user to Cisco Spark cloud.
 ///
 /// ```` swift
 ///    let clientId = "Def123456..."
@@ -55,7 +55,7 @@ public enum SparkErrors: Error {
 ///    }
 /// ````
 ///
-/// - *JWTAuthStrategy* - this should be used when *Spark* is to be authenticated as a guest user to Cisco Spark.
+/// - *JWTAuthStrategy* - this should be used when the SDK is to be authenticated as a guest user to Cisco Spark cloud.
 ///
 /// ```` swift
 ///    let jwtAuthStrategy = JWTAuthStrategy()
@@ -66,13 +66,14 @@ public enum SparkErrors: Error {
 ///    }
 /// ````
 ///
-/// - attention: All APIs on Cisco Spark iOS SDK are expected to run on the application's main thread.
+/// - attention: All APIs on Cisco Spark iOS SDK are expected to run on the application's main thread, unless specified otherwise.
 /// - since: 1.2.0
 public class Spark {
     
     /// The version number of this Cisco Spark iOS SDK.
     public static let version = "1.2.0"
     
+    /// The logger for this SDK.
     public var logger: Logger?
     
     /// Toggle to enable or disable console log output of this SDK.
@@ -91,6 +92,10 @@ public class Spark {
     /// It can be used to make audio and video calls on Cisco Spark.
     public lazy var phone: Phone = Phone(authenticator: self.authenticator)
     
+    /// Constructs a new *Spark* object with an *Authenticator*.
+    ///
+    /// - parameter authenticator: The authentication strategy for this SDK.
+    /// - since: 1.2.0
     public init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }
@@ -138,6 +143,7 @@ public class Spark {
     /// Webhooks allow the application to be notified via HTTP (or HTTPS?) when a specific event occurs in Cisco Spark,
     /// e.g. a new message is posted into a specific room.
     /// Use *Webhooks* to create and manage the webhooks for specific events.
+    ///
     /// - since: 1.2.0
     public var webhooks: WebhookClient {
         return WebhookClient(authenticator: authenticator)

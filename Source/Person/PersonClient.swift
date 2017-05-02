@@ -26,9 +26,13 @@ import Foundation
 public class PersonClient {
     
     /// Alias for closure to handle a service response along with a Person object.
+    ///
+    /// - since: 1.2.0
     public typealias ObjectHandler = (ServiceResponse<Person>) -> Void
     
     /// Alias for closure to handle a service response along with a Person array.
+    ///
+    /// - since: 1.2.0
     public typealias ArrayHandler = (ServiceResponse<[Person]>) -> Void
     
     let authenticator: Authenticator
@@ -46,9 +50,10 @@ public class PersonClient {
     /// - parameter email: if not nil, only list people with this email address.
     /// - parameter displayName: if not nil, only list people whose name starts with this string.
     /// - parameter max: The maximum number of people in the response.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func list(email: EmailAddress? = nil, displayName: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -63,9 +68,10 @@ public class PersonClient {
     /// Retrieves the details for a person by person id.
     ///
     /// - parameter personId: The identifier of the person.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func get(personId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)
@@ -78,9 +84,10 @@ public class PersonClient {
     
     /// Retrieves the details for the authenticated user.
     ///
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
+    /// - since: 1.2.0
     public func getMe(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
         let request = requestBuilder()
             .method(.get)

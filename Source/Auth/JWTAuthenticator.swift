@@ -21,12 +21,19 @@
 
 import Foundation
 
+/// Information about the JWT authentication.
+///
+/// - since: 1.2.0
 public struct JWTAuthenticationInfo {
     
-    /// Access token used throughout Spark
+    /// The JWT access token, used throughout SDK for authentication.
+    ///
+    /// - since: 1.2.0
     public let accessToken: String
     
     /// The date and time the access token will expire
+    ///
+    /// - since: 1.2.0
     public let accessTokenExpirationDate: Date
 }
 

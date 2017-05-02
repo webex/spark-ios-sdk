@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,9 @@ import Foundation
 import KeychainAccess
 
 
-/// Storage class that uses the device keychain
+/// A JWTAuthStorage implementation based on the iOS device keychain.
+///
+/// - since: 1.2.0
 public class JWTAuthKeychainStorage: JWTAuthStorage {
     
     private let jwtKey = "jwtKey"
@@ -33,7 +35,9 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
     private var cachedJwt: String?
     private var cachedAuthenticationInfo: JWTAuthenticationInfo?
     
-    /// Creates a new JWTAuthKeychainStorage
+    /// Contructs a new JWTAuthKeychainStorage
+    ///
+    /// - since: 1.2.0
     public convenience init() {
         self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.jwtauth"))
     }
@@ -42,7 +46,8 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         self.keychain = keychain
     }
     
-    /// The JSON Web Token
+    /// - see: see JWTAuthKeychainStorage.jwt
+    /// - since: 1.2.0
     public var jwt: String? {
         get {
             do {
@@ -69,7 +74,8 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
         }
     }
     
-    /// The authentication information
+    /// - see: see JWTAuthKeychainStorage.authenticationInfo
+    /// - since: 1.2.0
     public var authenticationInfo: JWTAuthenticationInfo? {
         get {
             do {
