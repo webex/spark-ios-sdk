@@ -23,13 +23,23 @@ import Foundation
 import UIKit
 
 
+/// The errors when invoking Cisco Spark cloud service.
+///
+/// - since: 1.2.0
 public enum SparkErrors: Error {
+    /// This request is unauthorized.
     case unauthorized
+    /// This device is unregistered.
     case unregistered
+    /// This request is missing attributes.
     case missingAttributes
+    /// This request has invalid DTMF string.
     case invalidDTMF(String)
+    /// This call requires H.264 codec.
     case h264Required
+    
     case notFound(String)
+    /// This request is not supported.
     case unsupported
     case disconnected(String?)
 }

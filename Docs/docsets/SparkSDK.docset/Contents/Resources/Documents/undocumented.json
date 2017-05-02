@@ -71,134 +71,106 @@
       "warning": "undocumented"
     },
     {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 53,
-      "symbol": "Call.Error.answer",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 54,
-      "symbol": "Call.Error.reject",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 55,
-      "symbol": "Call.Error.hangup",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 56,
-      "symbol": "Call.Error.dtmf",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 11,
+      "line": 23,
       "symbol": "CallMembership",
       "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 13,
+      "line": 25,
       "symbol": "CallMembership.State",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 14,
+      "line": 26,
       "symbol": "CallMembership.State.unknown",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 15,
+      "line": 27,
       "symbol": "CallMembership.State.idle",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 16,
+      "line": 28,
       "symbol": "CallMembership.State.notified",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 17,
+      "line": 29,
       "symbol": "CallMembership.State.joined",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 18,
+      "line": 30,
       "symbol": "CallMembership.State.left",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 19,
+      "line": 31,
       "symbol": "CallMembership.State.declined",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 22,
+      "line": 34,
       "symbol": "CallMembership.id",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 24,
+      "line": 36,
       "symbol": "CallMembership.isInitiator",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 26,
+      "line": 38,
       "symbol": "CallMembership.presonId",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 28,
+      "line": 40,
       "symbol": "CallMembership.state",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 32,
+      "line": 44,
       "symbol": "CallMembership.email",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 36,
+      "line": 48,
       "symbol": "CallMembership.sipUrl",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
-      "line": 40,
+      "line": 52,
       "symbol": "CallMembership.phoneNumber",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -282,63 +254,14 @@
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 26,
-      "symbol": "SparkErrors",
-      "symbol_kind": "source.lang.swift.decl.enum",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 27,
-      "symbol": "SparkErrors.unauthorized",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 28,
-      "symbol": "SparkErrors.unregistered",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 29,
-      "symbol": "SparkErrors.missingAttributes",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 30,
-      "symbol": "SparkErrors.invalidDTMF",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 31,
-      "symbol": "SparkErrors.h264Required",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 32,
+      "line": 41,
       "symbol": "SparkErrors.notFound",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 33,
-      "symbol": "SparkErrors.unsupported",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Spark.swift",
-      "line": 34,
+      "line": 44,
       "symbol": "SparkErrors.disconnected",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"

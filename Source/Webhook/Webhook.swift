@@ -21,37 +21,54 @@
 import Foundation
 import ObjectMapper
 
-/// Webhook contents.
+/// A data type presents a Webhook at Cisco Spark for Developer.
+///
+/// - see: see [Webhook Explained](https://developer.ciscospark.com/webhooks-explained.html)
+/// - since: 1.2.0
 public struct Webhook : Mappable {
     
-    /// The id of this webhook.
+    /// The identifier of this webhook.
+    ///
+    /// - since: 1.2.0
     public var id: String?
     
     /// A user-friendly name for this webhook.
+    ///
+    /// - since: 1.2.0
     public var name: String?
     
     /// The URL that receives POST requests for each event.
+    ///
+    /// - since: 1.2.0
     public var targetUrl: String?
     
     /// The resource type for the webhook.
+    ///
+    /// - since: 1.2.0
     public var resource: String?
     
     /// The event type for the webhook.
+    ///
+    /// - since: 1.2.0
     public var event: String?
     
     /// The filter that defines the webhook scope.
+    ///
+    /// - since: 1.2.0
     public var filter: String?
     
     /// The timestamp that the webhook being created.
+    ///
+    /// - since: 1.2.0
     public var created: Date?
     
-    /// Webhook constructor.
+    /// Constructs a new *Webhook* object.
     ///
     /// - note: for internal use only.
     public init?(map: Map) {
     }
     
-    /// Webhook mapping from JSON.
+    /// Maps a *Webhook from JSON.
     ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
