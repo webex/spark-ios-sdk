@@ -43,6 +43,7 @@ import CoreMedia
 /// ```
 ///
 /// - see: see Phone API about how to create calls.
+/// - see: CallStatus for the states of a Call.
 /// - since: 1.2.0
 public class Call {
     

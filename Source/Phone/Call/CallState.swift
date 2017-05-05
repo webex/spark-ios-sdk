@@ -20,10 +20,19 @@
 
 import Foundation
 
+/// The status of a *Call*.
+///
+/// - since: 1.2.0
 public enum CallStatus {
+    /// For the outgoing call, the call has dialed.
+    /// For the incoming call, the call has received.
     case initiated
+    /// For the outgoing call, the call is ringing the remote party.
+    /// For the incoming call, the call is ringing the local party.
     case ringing
+    /// The call is answered.
     case connected
+    /// The call has been terminated.
     case disconnected
     
     func handle(model: CallModel, for call: Call) {
