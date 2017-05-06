@@ -79,9 +79,9 @@ public class Phone {
     
     enum LocusResult {
         case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
-        case join(Call, ServiceResponse<CallModel>)
-        case leave(Call, ServiceResponse<CallModel>)
-        case reject(Call, ServiceResponse<Any>)
+        case join(Call, ServiceResponse<CallModel>, (Error?) -> Void)
+        case leave(Call, ServiceResponse<CallModel>, (Error?) -> Void)
+        case reject(Call, ServiceResponse<Any>, (Error?) -> Void)
         case update(Call, ServiceResponse<CallModel>)
     }
     
@@ -201,27 +201,21 @@ public class Phone {
                     if let device = self.devices.device {
                         let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
                         self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
-                            if let error = res.result.error {
-                                if error is SparkErrors {
-                                    switch error as! SparkErrors {
-                                    case .notFound(let target):
-                                        if let email = EmailAddress.fromString(target) {
-                                            Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
-                                                if let id = persons.result.data?.first?.id {
-                                                    self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                                        self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
-                                                        self.queue.yield()
-                                                    }
-                                                }
-                                                else {
-                                                    self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
-                                                    self.queue.yield()
-                                                }
+                            if let _ = res.result.error {
+                                if let email = EmailAddress.fromString(address) {
+                                    Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
+                                        if let id = persons.result.data?.first?.id {
+                                            self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
+                                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
+                                                self.queue.yield()
                                             }
-                                            return;
                                         }
-                                    default: break
+                                        else {
+                                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
+                                            self.queue.yield()
+                                        }
                                     }
+                                    return;
                                 }
                             }
                             self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
@@ -230,7 +224,7 @@ public class Phone {
                     }
                     else {
                         DispatchQueue.main.async {
-                            completionHandler(Result.failure(SparkErrors.unregistered))
+                            completionHandler(Result.failure(SparkError.unregistered))
                         }
                         self.queue.yield()
                     }
@@ -258,10 +252,10 @@ public class Phone {
         self.prompter.disable = true
     }
     
-    public func startPreview(option: MediaOption) {
+    public func startPreview(view: MediaRenderView) {
         DispatchQueue.main.async {
             self.mediaContext = MediaSessionWrapper()
-            self.mediaContext.startPreview(option: option)
+            _ = self.mediaContext?.startPreview(view: view, phone: self)
         }
     }
     
@@ -283,46 +277,95 @@ public class Phone {
         SDKLogger.info("Remove call for call url:\(call.url)")
     }
     
-    func answer(call: Call, option: MediaOption) {
+    func answer(call: Call, option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
+            if call.direction == Call.Direction.outgoing {
+                SDKLogger.error("Failure: Unsupport function for outgoing call")
+                completionHandler(SparkError.illegalOperation(reason: "Unsupport function for outgoing call"))
+                return
+            }
+            if call.direction == Call.Direction.incoming {
+                if call.status == CallStatus.connected {
+                    SDKLogger.error("Failure: Already connected")
+                    completionHandler(SparkError.illegalStatus(reason: "Already connected"))
+                    return
+                }
+                else if call.status == CallStatus.disconnected {
+                    SDKLogger.error("Failure: Already disconnected")
+                    completionHandler(SparkError.illegalStatus(reason: "Already disconnected"))
+                    return
+                }
+            }
+            
+            if let uuid = option.uuid {
+                call._uuid = uuid
+            }
             let mediaContext = call.mediaSession
             mediaContext.prepare(option: option, phone: self)
             let media = MediaModel(sdp: mediaContext.getLocalSdp(), audioMuted: false, videoMuted: false, reachabilities: self.reachability.feedback?.reachabilities)
             self.queue.sync {
                 self.client.join(call.url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
-                    self.doLocusResponse(LocusResult.join(call, res))
+                    self.doLocusResponse(LocusResult.join(call, res, completionHandler))
                     self.queue.yield()
                 }
             }
         }
     }
     
-    func reject(call: Call) {
+    func reject(call: Call, completionHandler: @escaping (Error?) -> Void) {
         self.queue.sync {
-            guard let url = call.model.callUrl else {
-                SDKLogger.error("Failure: Missing call URL")
+            if call.direction == Call.Direction.outgoing {
+                SDKLogger.error("Failure: Unsupport function for outgoing call")
                 DispatchQueue.main.async {
-                    call.onError?(Call.Error.reject(SparkErrors.missingAttributes))
+                    completionHandler(SparkError.illegalOperation(reason: "Unsupport function for outgoing call"))
                 }
                 self.queue.yield()
                 return
             }
+            if call.direction == Call.Direction.incoming {
+                if call.status == CallStatus.connected {
+                    SDKLogger.error("Failure: Already connected")
+                    DispatchQueue.main.async {
+                        completionHandler(SparkError.illegalStatus(reason: "Already connected"))
+                    }
+                    self.queue.yield()
+                    return
+                }
+                else if call.status == CallStatus.disconnected {
+                    SDKLogger.error("Failure: Already disconnected")
+                    DispatchQueue.main.async {
+                        completionHandler(SparkError.illegalStatus(reason: "Already disconnected"))
+                    }
+                    self.queue.yield()
+                    return
+                }
+            }
+            
             DispatchQueue.main.async {
                 call.stopMedia()
             }
-            self.client.decline(url, by: call.device, queue: self.queue.underlying) { res in
-                self.doLocusResponse(LocusResult.reject(call, res))
+            if let url = call.model.callUrl {
+                self.client.decline(url, by: call.device, queue: self.queue.underlying) { res in
+                    self.doLocusResponse(LocusResult.reject(call, res, completionHandler))
+                    self.queue.yield()
+                }
+            }
+            else {
+                SDKLogger.error("Failure: Missing call URL")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.serviceFailed(code: -7000, reason: "Missing call URL"))
+                }
                 self.queue.yield()
             }
         }
     }
     
-    func hangup(call: Call) {
+    func hangup(call: Call, completionHandler: @escaping (Error?) -> Void) {
         self.queue.sync {
-            guard let url = call.model.myself?.url else {
-                SDKLogger.error("Failure: Missing self participant URL")
+            if call.status == CallStatus.disconnected {
+                SDKLogger.error("Failure: Already disconnected")
                 DispatchQueue.main.async {
-                    call.onError?(Call.Error.hangup(SparkErrors.missingAttributes))
+                    completionHandler(SparkError.illegalStatus(reason: "Already disconnected"))
                 }
                 self.queue.yield()
                 return
@@ -330,8 +373,17 @@ public class Phone {
             DispatchQueue.main.async {
                 call.stopMedia()
             }
-            self.client.leave(url, by: call.device, queue: self.queue.underlying) { res in
-                self.doLocusResponse(LocusResult.leave(call, res))
+            if let url = call.model.myself?.url {
+                self.client.leave(url, by: call.device, queue: self.queue.underlying) { res in
+                    self.doLocusResponse(LocusResult.leave(call, res, completionHandler))
+                    self.queue.yield()
+                }
+            }
+            else {
+                SDKLogger.error("Failure: Missing self participant URL")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.serviceFailed(code: -7000, reason: "Missing self participant URL"))
+                }
                 self.queue.yield()
             }
         }
@@ -377,39 +429,43 @@ public class Phone {
                     }
                 }
                 else {
-                    completionHandler(Result.failure(SparkErrors.missingAttributes))
+                    completionHandler(Result.failure(SparkError.serviceFailed(code: -7000, reason: "Failure: Missing required information when dial")))
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
                     completionHandler(Result.failure(error))
                 }
             }
-        case .join(let call, let res):
+        case .join(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
                 SDKLogger.info("Success: join call")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     call.startMedia()
+                    completionHandler(nil)
                 }
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(Call.Error.answer(error))
+                    completionHandler(error)
                 }
             }
-        case .leave(let call, let res):
+        case .leave(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
                 SDKLogger.info("Success: leave call")
                 call.doCallModel(model)
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(Call.Error.answer(error))
+                    completionHandler(error)
                 }
             }
-        case .reject(let call, let res):
+        case .reject(let call, let res, let completionHandler):
             switch res.result {
             case .success(_):
                 SDKLogger.info("Success: reject call")
@@ -417,11 +473,12 @@ public class Phone {
                 call.status = .disconnected
                 DispatchQueue.main.async {
                     call.onDisconnected?(Call.DisconnectType.localDecline)
+                    completionHandler(nil)
                 }
             case .failure(let error):
                 SDKLogger.error("Failure", error: error)
                 DispatchQueue.main.async {
-                    call.onError?(Call.Error.answer(error))
+                    completionHandler(error)
                 }
             }
         case .update(let call, let res):
@@ -472,7 +529,7 @@ public class Phone {
                     completionHandler(nil)
                 }
                 else {
-                    completionHandler(SparkErrors.h264Required)
+                    completionHandler(SparkError.requireH264)
                 }
             }
         }

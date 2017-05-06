@@ -50,21 +50,17 @@ class WebSocketService: WebSocketDelegate {
             self.socket = nil
             self.authenticator.accessToken { token in
                 self.queue.async {
+                    SDKLogger.info("Web socket is being connected")
+                    let socket = WebSocket(url: webSocketUrl)
                     if let token = token {
-                        SDKLogger.info("Web socket is being connected")
-                        let socket = WebSocket(url: webSocketUrl)
                         socket.headers["Authorization"] = "Bearer " + token
-                        socket.voipEnabled = true
-                        socket.callbackQueue = self.queue
-                        socket.delegate = self
-                        self.onConnected = block
-                        self.socket = socket
-                        socket.connect()
                     }
-                    else {
-                        SDKLogger.error("Failed to create web socket due to no authorization")
-                        block(SparkErrors.unauthorized)
-                    }
+                    socket.voipEnabled = true
+                    socket.callbackQueue = self.queue
+                    socket.delegate = self
+                    self.onConnected = block
+                    self.socket = socket
+                    socket.connect()
                 }
             }
         }
@@ -96,7 +92,9 @@ class WebSocketService: WebSocketDelegate {
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         if let block = self.onConnected {
             SDKLogger.info("Websocket cannot connect: \(String(describing: error))")
-            block(SparkErrors.disconnected(error?.localizedDescription))
+            let code = error?.code ?? -7000
+            let reason = error?.localizedDescription ?? "Websocket cannot connect"
+            block(SparkError.serviceFailed(code: code, reason: reason))
             self.onConnected = nil
         }
         else if let code = error?.code, let desc = error?.localizedDescription {

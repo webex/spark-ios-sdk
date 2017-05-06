@@ -22,6 +22,7 @@ import Foundation
 import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
+import SwiftyJSON
 
 class ServiceRequest {
     
@@ -233,5 +234,18 @@ class ServiceRequest {
             accessTokenCallback(accessToken)
         }
     }
+}
+
+extension SparkError {
+    
+    /// Converts the error data to NSError
+    static func requestErrorWith(data: Data) -> Error {
+        var failureReason = "Service request failed without error message"
+        if let errorMessage = JSON(data: data)["message"].string {
+            failureReason = errorMessage
+        }
+        return SparkError.serviceFailed(code: -7000, reason: failureReason)
+    }
+    
 }
 

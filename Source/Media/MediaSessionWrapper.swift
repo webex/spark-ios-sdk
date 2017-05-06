@@ -23,6 +23,9 @@ import Wme
 
 class MediaSessionWrapper {
     
+    private var preview: Bool = false
+    private var running: Bool = false
+    
     private let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
     
@@ -103,8 +106,8 @@ class MediaSessionWrapper {
     }
     
     // MARK: - Camera
-    func toggleFacingMode() {
-        mediaSession.toggleCamera()
+    func setFacingMode(mode: Phone.FacingMode) {
+        mediaSession.setCamrea(mode == .user)
     }
     
     func isFrontCameraSelected() -> Bool {
@@ -112,16 +115,44 @@ class MediaSessionWrapper {
     }
     
     // MARK: - Loud Speaker
-    func toggleLoudSpeaker() {
-        mediaSession.toggleSpeaker()
+    func setLoudSpeaker(speaker: Bool) {
+        mediaSession.setSpeaker(speaker)
     }
-    
+        
     func isSpeakerSelected() -> Bool {
         return mediaSession.isSpeakerSelected()
     }
     
+    func startPreview(view: MediaRenderView, phone: Phone) -> Bool {
+        if !self.preview && !self.running {
+            self.preview = true
+            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
+            mediaSession.sendVideo = true
+            mediaSession.localVideoView = view
+            mediaSession.createMediaConnection()
+            mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
+            mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
+            mediaSession.startLocalVideoRenderView()
+            return true
+        }
+        return false;
+    }
+    
+    func stopPreview() {
+        if self.preview {
+            mediaSession.stopLocalVideoRenderView(true)
+            mediaSession.localVideoView = nil
+            mediaSession.sendVideo = false
+            self.preview = false
+        }
+    }
+    
     // MARK: - lifecycle
     func prepare(option: MediaOption, phone: Phone) {
+        self.running = true;        
+        if self.preview {
+            self.stopPreview()
+        }
         if option.hasVideo {
             mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
             mediaSession.localVideoView = option.localVideoView
@@ -144,5 +175,6 @@ class MediaSessionWrapper {
     func stopMedia() {
         mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
+        self.running = false
     }
 }

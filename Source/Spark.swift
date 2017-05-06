@@ -22,18 +22,6 @@
 import Foundation
 import UIKit
 
-
-public enum SparkErrors: Error {
-    case unauthorized
-    case unregistered
-    case missingAttributes
-    case invalidDTMF(String)
-    case h264Required
-    case notFound(String)
-    case unsupported
-    case disconnected(String?)
-}
-
 /// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
 /// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered user to Cisco Spark.

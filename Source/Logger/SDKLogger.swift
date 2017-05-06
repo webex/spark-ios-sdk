@@ -50,9 +50,9 @@ class SDKLogger {
             return
         }
         
-        if let logger = LoggerManager.sharedInstance.customLogger {
-            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue), file: file, function: function, line: line, description: message())
-        }
+//        if let logger = LoggerManager.sharedInstance.customLogger {
+//            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue)!, file: file, function: function, line: line, description: message())
+//        }
 
         if level.rawValue & flag.rawValue != 0 {
 			let actualMessage: String

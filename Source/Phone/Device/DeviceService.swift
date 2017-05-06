@@ -60,7 +60,7 @@ class DeviceService {
                     completionHandler(Result.success(device));
                 } else {
                     SDKLogger.error("Missing required URLs when registering device")
-                    completionHandler(Result.failure(SparkErrors.missingAttributes))
+                    completionHandler(Result.failure(SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")))
                 }
             case .failure(let error):
                 SDKLogger.error("Failed to register device", error: error)

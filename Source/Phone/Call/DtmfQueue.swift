@@ -44,7 +44,7 @@ class DtmfQueue {
             }
         } else {
             DispatchQueue.main.async {
-                completionHandler?(SparkErrors.invalidDTMF(event))
+                completionHandler?(SparkError.invalidDTMF)
             }
         }
     }

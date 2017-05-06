@@ -46,13 +46,6 @@ import CoreMedia
 /// - since: 1.2.0
 public class Call {
     
-    public enum Error {
-        case answer(Swift.Error)
-        case reject(Swift.Error)
-        case hangup(Swift.Error)
-        case dtmf(Swift.Error)
-    }
-
     /// The enumeration of directions of a call
     /// - since: 1.2.0
     public enum Direction {
@@ -151,10 +144,6 @@ public class Call {
     /// - since: 1.2.0
     public var onCapabilitiesChanged: ((Capabilities) -> Void)?
     
-    /// Callback when an error has occured on this *call*.
-    /// - since: 1.2.0
-    public var onError: ((Call.Error) -> Void)?
-    
     /// The status of this *call*.
     /// - since: 1.2.0
     public internal(set) var status: CallStatus = CallStatus.initiated
@@ -232,7 +221,7 @@ public class Call {
             return self.mediaSession.isSpeakerSelected()
         }
         set {
-            // TODO
+            self.mediaSession.setLoudSpeaker(speaker: newValue)
         }
     }
     
@@ -243,7 +232,7 @@ public class Call {
             return self.mediaSession.isFrontCameraSelected() ? .user : .environment
         }
         set {
-            // TODO
+            self.mediaSession.setFacingMode(mode: newValue)
         }
     }
     
@@ -329,27 +318,24 @@ public class Call {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
     /// - since: 1.2.0
-    public func answer(option: MediaOption) {
-        if let uuid = option.uuid {
-            self._uuid = uuid
-        }
-        self.device.phone.answer(call: self, option: option)
+    public func answer(option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.answer(call: self, option: option, completionHandler: completionHandler)
     }
     
     /// Rejects this call, only applicable when the direction of this call is incoming.
     ///
     /// - returns: Void
     /// - since: 1.2.0
-    public func reject() {
-        self.device.phone.reject(call: self)
+    public func reject(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.reject(call: self, completionHandler: completionHandler)
     }
     
     /// Disconnects this call.
     ///
     /// - returns: Void
     /// - since: 1.2.0
-    public func hangup() {
-        self.device.phone.hangup(call: self)
+    public func hangup(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.hangup(call: self, completionHandler: completionHandler)
     }
 
     /// Sends feedback for this call to Cisco Spark team.
@@ -360,12 +346,12 @@ public class Call {
     /// - returns: Void
     /// - since: 1.2.0
     public func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
-        guard let info = info else {
-            SDKLogger.error("Failure: Missing call info for feedback")
-            return
-        }
-        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
+//        guard let info = info else {
+//            SDKLogger.error("Failure: Missing call info for feedback")
+//            return
+//        }
+//        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
+//        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
     }
     
     /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
@@ -374,20 +360,19 @@ public class Call {
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
     /// - since: 1.2.0
-    public func send(dtmf: String, completionHandler: ((Swift.Error?) -> Void)?) {
-        guard let url = self.model.myself?.url else {
-            SDKLogger.error("Failure: Missing self participant URL")
-            DispatchQueue.main.async {
-                completionHandler?(SparkErrors.missingAttributes)
+    public func send(dtmf: String, completionHandler: ((Error?) -> Void)?) {
+        if let url = self.model.myself?.url {
+            if self.sendingDTMFEnabled {
+                self.dtmfQueue.push(participantUrl: url, device: self.device, event: dtmf, completionHandler: completionHandler)
+            } else {
+                DispatchQueue.main.async {
+                    completionHandler?(SparkError.unsupportedDTMF)
+                }
             }
-            return
         }
-        if sendingDTMFEnabled {
-            self.dtmfQueue.push(participantUrl: url, device: self.device, event: dtmf, completionHandler: completionHandler)
-        } else {
-            DispatchQueue.main.async {
-                completionHandler?(SparkErrors.unsupported)
-            }
+        else {
+            completionHandler?(SparkError.serviceFailed(code: -700, reason: "Failure: Missing self participant URL"))
+            SDKLogger.error("Failure: Missing self participant URL")
         }
     }
     
