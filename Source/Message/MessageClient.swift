@@ -25,16 +25,6 @@ import Foundation
 /// - since: 1.2.0
 public class MessageClient {
     
-    /// Alias for closure to handle a service response along with a Message object.
-    ///
-    /// - since: 1.2.0
-    public typealias ObjectHandler = (ServiceResponse<Message>) -> Void
-    
-    /// Alias for closure to handle a service response along with a Message array.
-    ///
-    /// - since: 1.2.0
-    public typealias ArrayHandler = (ServiceResponse<[Message]>) -> Void
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -53,11 +43,11 @@ public class MessageClient {
     /// - parameter before: If not nil, only list messages sent only before this date and time, in ISO8601 format.
     /// - parameter beforeMessage: if not nil, only list messages sent only before this message by id.
     /// - parameter max: The maximum number of messages in the response.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(roomId: String, before: String? = nil, beforeMessage: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) {
         let query = RequestParameter([
             "roomId": roomId,
             "before": before,
@@ -79,11 +69,11 @@ public class MessageClient {
     /// - parameter roomId: The identifier of the room where the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(roomId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(roomId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: roomId, personId: nil, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
     }
     
@@ -91,11 +81,11 @@ public class MessageClient {
     ///
     /// - parameter roomId: The identifier of the room.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(roomId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(roomId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: roomId, personId: nil, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
     }
     
@@ -104,11 +94,11 @@ public class MessageClient {
     /// - parameter personId: The identifier of the recipient of this private 1:1 message.
     /// - parameter text: The plain text message to post to the recipient.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(personId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: nil, personId: personId, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
     }
     
@@ -116,11 +106,11 @@ public class MessageClient {
     ///
     /// - parameter personId: The identifier of the recipient of this media content.
     /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(personId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: nil, personId: personId, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
     }
     
@@ -129,11 +119,11 @@ public class MessageClient {
     /// - parameter personEmail: The email address of the recipient when sending a private 1:1 message.
     /// - parameter text: The plain text message to post to the room.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(personEmail: EmailAddress, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personEmail: EmailAddress, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: nil, personId: nil, personEmail: personEmail, text: text, files: files, queue: queue, completionHandler: completionHandler)
     }
     
@@ -141,15 +131,15 @@ public class MessageClient {
     ///
     /// - parameter personEmail: The email address of the recipient of this media content.
     /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func post(personEmail: EmailAddress, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func post(personEmail: EmailAddress, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         post(roomId: nil, personId: nil, personEmail: personEmail, text: nil, files: files, queue: queue, completionHandler: completionHandler)
     }
     
-    private func post(roomId: String?, personId: String?, personEmail: EmailAddress?, text: String?, files: String?, queue: DispatchQueue?, completionHandler: @escaping ObjectHandler) {
+    private func post(roomId: String?, personId: String?, personEmail: EmailAddress?, text: String?, files: String?, queue: DispatchQueue?, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         let email: String? = personEmail == nil ? nil : personEmail!.toString()
         let body = RequestParameter([
             "roomId": roomId,
@@ -170,11 +160,11 @@ public class MessageClient {
     /// Retrieves the details for a message by message Id.
     ///
     /// - parameter messageId: The identifier of the message.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    public func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void){
         let request = requestBuilder()
             .method(.get)
             .path(messageId)
@@ -187,11 +177,11 @@ public class MessageClient {
     /// Deletes a message by message id.
     ///
     /// - parameter messageId: The identifier of the message.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(messageId)

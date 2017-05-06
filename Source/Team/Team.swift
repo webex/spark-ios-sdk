@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,36 @@
 import Foundation
 import ObjectMapper
 
-/// Team contents.
-public struct Team: Mappable, Equatable {
+/// A data type represents a Team at Cisco Spark cloud. 
+///
+/// - since: 1.2.0
+public struct Team: Equatable {
     
-    /// The id of this team.
+    /// The identifier of this team.
+    ///
+    /// - since: 1.2.0
     public var id: String?
     
     /// The name of this team
+    ///
+    /// - since: 1.2.0
     public var name: String?
     
     /// The timestamp that this team being created.
+    ///
+    /// - since: 1.2.0
     public var created: Date?
+}
+
+extension Team: Mappable {
     
-    /// Team constructor.
+    /// Constructs a *Team* object.
     ///
     /// - note: for internal use only.
     public init?(map: Map){
     }
     
-    /// Team mapping from JSON.
+    /// Map a *Team* from JSON.
     ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
@@ -49,7 +60,11 @@ public struct Team: Mappable, Equatable {
     }
 }
 
-/// Team Equatable implementation. Check if two teams are equal.
+/// Checks whether the two *Team* have the same id and name, and were created at the same time.
+/// This is the Equatable implementation for *Team*.
+///
+/// - returns: True if the two teams are equal. Otherwise, false.
+/// - since: 1.2.0
 public func ==(lhs: Team, rhs: Team) -> Bool {
     if lhs.id == rhs.id &&
         lhs.name == rhs.name &&

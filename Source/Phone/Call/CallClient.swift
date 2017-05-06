@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -97,7 +97,7 @@ class CallClient {
         request.responseJSON(completionHandler)
     }
 
-    func alert(_ participantUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping AnyHandler) {
+    func alert(_ participantUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(participantUrl)

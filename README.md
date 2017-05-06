@@ -4,7 +4,7 @@
 
 Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will help you to get up running quickly with **Cisco Spark iOS SDK** in your iOS application.
  
-Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift) and requires iOS 9.0 or above.
+Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift) and requires **iOS 9.0** or above.
 
 ## Setup
 Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
@@ -15,13 +15,13 @@ Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS app
     gem install cocoapods
     ```
 
-1. Setup Cocoapods:
+2. Setup Cocoapods:
  
     ```
     pod setup
     ```
 
-1. Create a new file "Podfile" with following content in your MySparkApp project directory:
+3. Create a new file "Podfile" with following content in your MySparkApp project directory:
 
     ```bash
     source 'https://github.com/CocoaPods/Specs.git'
@@ -34,7 +34,7 @@ Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS app
     end
     ```
 
-1. Install SparkSDK from your MySparkApp project directory:
+4. Install SparkSDK from your MySparkApp project directory:
 
     ```bash
     pod install
@@ -63,7 +63,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
  
-1. Create the Spark SDK with Guess ID authentication ([JWT](https://jwt.io/) based).
+2. Create the Spark SDK with Guess ID authentication ([JWT](https://jwt.io/) based).
  
    ```swift
    let jwtAuthStrategy = JWTAuthStrategy()
@@ -75,7 +75,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
  
-1. Register the device to send and receive calls.
+3. Register the device to send and receive calls.
  
    ```swift
    spark.phone.register() { success in
@@ -87,7 +87,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
             
-1. Use Spark service
+4. Use Spark service
     
    ```swift
    spark.rooms.create(title: "My Room") { serviceResponse in
@@ -112,7 +112,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
     
-1. Make an outgoing call.
+5. Make an outgoing call.
  
    ```swift
    let address = "coworker@example.com"
@@ -137,7 +137,7 @@ Below is code of a demo of the SDK usage:
    }
    ```
  
-1. Receive a call.
+6. Receive a call.
  
    ```swift
    class MyCallObserver: CallObserver {

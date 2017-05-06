@@ -25,12 +25,6 @@ import Foundation
 /// - since: 1.2.0
 public class RoomClient {
     
-    /// Alias for closure to handle a service response along with a Room object.
-    public typealias ObjectHandler = (ServiceResponse<Room>) -> Void
-    
-    /// Alias for closure to handle a service response along with a Room array.
-    public typealias ArrayHandler = (ServiceResponse<[Room]>) -> Void
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -50,7 +44,7 @@ public class RoomClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue]))
@@ -70,7 +64,7 @@ public class RoomClient {
     /// - returns: Void
     /// - since: 1.2.0
     /// - see: see MemebershipClient API
-    public func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(title: String, teamId: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Room>) -> Void) {
         let request = requestBuilder()
             .method(.post)
             .body(RequestParameter(["title": title, "teamId": teamId]))
@@ -87,7 +81,7 @@ public class RoomClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func get(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Room>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path(roomId)
@@ -105,7 +99,7 @@ public class RoomClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func update(roomId: String, title: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Room>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["title": title]))
@@ -123,7 +117,7 @@ public class RoomClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(roomId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(roomId)

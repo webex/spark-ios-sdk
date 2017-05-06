@@ -23,9 +23,17 @@ import Foundation
 /// The enumeration of media options on a call.
 public struct MediaOption {
     
-    public var localVideoView: MediaRenderView?
+    public static func audioOnly() -> MediaOption {
+        return MediaOption()
+    }
     
-    public var remoteVideoView: MediaRenderView?
+    public static func audioVideo(local: MediaRenderView, remote: MediaRenderView) -> MediaOption {
+        return MediaOption(local: local, remote: remote)
+    }
+    
+    var localVideoView: MediaRenderView?
+    
+    var remoteVideoView: MediaRenderView?
     
     fileprivate var _uuid: UUID?
     
@@ -33,7 +41,11 @@ public struct MediaOption {
         return self.localVideoView != nil || self.remoteVideoView != nil
     }
     
-    public init(local: MediaRenderView, remote: MediaRenderView) {
+    init() {
+        
+    }
+    
+    init(local: MediaRenderView, remote: MediaRenderView) {
         self.localVideoView = local
         self.remoteVideoView = remote
     }

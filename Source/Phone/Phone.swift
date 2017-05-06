@@ -30,7 +30,7 @@ import AVFoundation
 ///       if success {
 ///         ... // Successfully registered device
 ///       } else {
-///         ...    // Device was not registered, and no calls can be sent or received
+///         ... // Device was not registered, and no calls can be sent or received
 ///       }
 ///     }
 /// ````
@@ -38,6 +38,7 @@ import AVFoundation
 public class Phone {
     
     /// The enumeration of Camera facing modes.
+    ///
     /// - since: 1.2.0
     public enum FacingMode {
         /// Front camera.
@@ -472,7 +473,7 @@ public class Phone {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.localDecline)
+                    call.onDisconnected?(Call.DisconnectReason.localDecline)
                     completionHandler(nil)
                 }
             case .failure(let error):

@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ import Foundation
 import ObjectMapper
 
 /// Membership contents.
-public struct Membership: Mappable, Equatable {
+public struct Membership: Equatable {
     
     /// The id of this membership.
     public var id: String?
@@ -45,6 +45,10 @@ public struct Membership: Mappable, Equatable {
     /// The timestamp that the membership being created.
     public var created: Date?
     
+}
+
+extension Membership: Mappable {
+    
     /// Membership constructor.
     ///
     /// - note: for internal use only.
@@ -64,6 +68,7 @@ public struct Membership: Mappable, Equatable {
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
+
 
 /// Membership Equatable implementation. Check if two memberships are equal.
 public func ==(lhs: Membership, rhs: Membership) -> Bool {

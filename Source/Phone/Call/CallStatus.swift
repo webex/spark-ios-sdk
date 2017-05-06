@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,10 +20,19 @@
 
 import Foundation
 
+/// The status of a *Call*.
+///
+/// - since: 1.2.0
 public enum CallStatus {
+    /// For the outgoing call, the call has dialed.
+    /// For the incoming call, the call has received.
     case initiated
+    /// For the outgoing call, the call is ringing the remote party.
+    /// For the incoming call, the call is ringing the local party.
     case ringing
+    /// The call is answered.
     case connected
+    /// The call has been terminated.
     case disconnected
     
     func handle(model: CallModel, for call: Call) {
@@ -44,21 +53,21 @@ public enum CallStatus {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.localDecline)
+                            call.onDisconnected?(Call.DisconnectReason.localDecline)
                         }
                     }
                     else if local.isJoined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.otherConnected)
+                            call.onDisconnected?(Call.DisconnectReason.otherConnected)
                         }
                     }
                     else if local.isDeclined {
                         call.device.phone.remove(call: call)
                         call.status = .disconnected
                         DispatchQueue.main.async {
-                            call.onDisconnected?(Call.DisconnectType.otherDeclined)
+                            call.onDisconnected?(Call.DisconnectReason.otherDeclined)
                         }
                     }
                 }
@@ -66,7 +75,7 @@ public enum CallStatus {
                     call.device.phone.remove(call: call)
                     call.status = .disconnected
                     DispatchQueue.main.async {
-                        call.onDisconnected?(Call.DisconnectType.remoteCancel)
+                        call.onDisconnected?(Call.DisconnectReason.remoteCancel)
                     }
                 }
             }
@@ -81,7 +90,7 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.localCancel)
+                    call.onDisconnected?(Call.DisconnectReason.localCancel)
                 }
             }
             else if model.isRemoteJoined {
@@ -94,7 +103,7 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.remoteDecline)
+                    call.onDisconnected?(Call.DisconnectReason.remoteDecline)
                 }
             }
         case .connected:
@@ -102,14 +111,14 @@ public enum CallStatus {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.localLeft)
+                    call.onDisconnected?(Call.DisconnectReason.localLeft)
                 }
             }
             else if model.isRemoteLeft {
                 call.device.phone.remove(call: call)
                 call.status = .disconnected
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectType.remoteLeft)
+                    call.onDisconnected?(Call.DisconnectReason.remoteLeft)
                 }
             }
         case .disconnected:

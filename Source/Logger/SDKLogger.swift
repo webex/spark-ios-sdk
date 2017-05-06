@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -51,8 +51,8 @@ class SDKLogger {
         }
         
 //        if let logger = LoggerManager.sharedInstance.customLogger {
-//            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue)!, file: file, function: function, line: line, description: message())
-//        }
+//            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue), file: file, function: function, line: line, description: message())
+//        )}
 
         if level.rawValue & flag.rawValue != 0 {
 			let actualMessage: String

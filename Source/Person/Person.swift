@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ import Foundation
 import ObjectMapper
 
 /// Person contents.
-public struct Person: Mappable {
+public struct Person {
     
     /// The id of this person.
     public var id: String?
@@ -38,23 +38,6 @@ public struct Person: Mappable {
     
     /// The timestamp that this person being created.
     public var created: Date?
-    
-    /// Person constructor.
-    ///
-    /// - note: for internal use only.
-    public init?(map: Map){
-    }
-    
-    /// Person mapping from JSON.
-    ///
-    /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
-        id <- map["id"]
-        emails <- (map["emails"], EmailsTransform())
-        displayName <- map["displayName"]
-        avatar <- map["avatar"]
-        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-    }
     
     class EmailsTransform: TransformType {
         typealias Object = [EmailAddress]
@@ -80,5 +63,25 @@ public struct Person: Mappable {
         func transformToJSON(_ value: Object?) -> JSON? {
             return nil
         }
+    }
+}
+
+extension Person: Mappable {
+    
+    /// Person constructor.
+    ///
+    /// - note: for internal use only.
+    public init?(map: Map){
+    }
+    
+    /// Person mapping from JSON.
+    ///
+    /// - note: for internal use only.
+    public mutating func mapping(map: Map) {
+        id <- map["id"]
+        emails <- (map["emails"], EmailsTransform())
+        displayName <- map["displayName"]
+        avatar <- map["avatar"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }

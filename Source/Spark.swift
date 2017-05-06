@@ -24,18 +24,18 @@ import UIKit
 
 /// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
-/// - *OAuthStrategy* - this should be used when *Spark* is to be authenticated as a registered user to Cisco Spark.
+/// - *OAuthAuthenticator* - this should be used when the SDK is to be authenticated as a registered user to Cisco Spark cloud.
 ///
 /// ```` swift
 ///    let clientId = "Def123456..."
 ///    let clientSecret = "fed456..."
 ///    let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
 ///    let redirectUri = "MyCustomApplication://response"
-///    let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-///    let spark = Spark(authenticator: oauthStrategy)
+///    let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
+///    let spark = Spark(authenticator: authenticator)
 ///    ...
-///    if !oauthStrategy.authorized {
-///      oauthStrategy.authorize(parentViewController: self) { success in
+///    if !authenticator.authorized {
+///      authenticator.authorize(parentViewController: self) { success in
 ///        if !success {
 ///            print("User not authorized")
 ///        }
@@ -43,24 +43,25 @@ import UIKit
 ///    }
 /// ````
 ///
-/// - *JWTAuthStrategy* - this should be used when *Spark* is to be authenticated as a guest user to Cisco Spark.
+/// - *JWTAuthenticator* - this should be used when the SDK is to be authenticated as a guest user to Cisco Spark cloud.
 ///
 /// ```` swift
-///    let jwtAuthStrategy = JWTAuthStrategy()
-///    let spark = Spark(authenticator: jwtAuthStrategy)
+///    let authenticator = JWTAuthenticator()
+///    let spark = Spark(authenticator: authenticator)
 ///    ...
-///    if !jwtAuthStrategy.authorized {
-///      jwtAuthStrategy.authorizedWith(jwt: myJwt)
+///    if !authenticator.authorized {
+///      authenticator.authorizedWith(jwt: myJwt)
 ///    }
 /// ````
 ///
-/// - attention: All APIs on Cisco Spark iOS SDK are expected to run on the application's main thread.
+/// - attention: All APIs on Cisco Spark iOS SDK are expected to run on the application's main thread, unless specified otherwise.
 /// - since: 1.2.0
 public class Spark {
     
     /// The version number of this Cisco Spark iOS SDK.
     public static let version = "1.2.0"
     
+    /// The logger for this SDK.
     public var logger: Logger?
     
     /// Toggle to enable or disable console log output of this SDK.
@@ -79,6 +80,10 @@ public class Spark {
     /// It can be used to make audio and video calls on Cisco Spark.
     public lazy var phone: Phone = Phone(authenticator: self.authenticator)
     
+    /// Constructs a new *Spark* object with an *Authenticator*.
+    ///
+    /// - parameter authenticator: The authentication strategy for this SDK.
+    /// - since: 1.2.0
     public init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }
@@ -126,6 +131,7 @@ public class Spark {
     /// Webhooks allow the application to be notified via HTTP (or HTTPS?) when a specific event occurs in Cisco Spark,
     /// e.g. a new message is posted into a specific room.
     /// Use *Webhooks* to create and manage the webhooks for specific events.
+    ///
     /// - since: 1.2.0
     public var webhooks: WebhookClient {
         return WebhookClient(authenticator: authenticator)

@@ -25,12 +25,6 @@ import Foundation
 /// - since: 1.2.0
 public class WebhookClient {
     
-    /// Alias for closure to handle a service response along with a Webhook object.
-    public typealias ObjectHandler = (ServiceResponse<Webhook>) -> Void
-    
-    /// Alias for closure to handle a service response along with a Webhook array.
-    public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -48,7 +42,7 @@ public class WebhookClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Webhook]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["max": max]))
@@ -70,7 +64,7 @@ public class WebhookClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,
@@ -94,7 +88,7 @@ public class WebhookClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    open func get(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func get(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path(webhookId)
@@ -113,7 +107,7 @@ public class WebhookClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    open func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    open func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["name": name, "targetUrl": targetUrl]))
@@ -132,7 +126,7 @@ public class WebhookClient {
     /// - returns: Void
     /// - parameter webhookId: The identifier of  the webhook.
     /// - since: 1.2.0
-    open func delete(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    open func delete(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(webhookId)

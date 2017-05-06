@@ -39,14 +39,25 @@ import CoreMedia
 /// The application can receive an incoming *call* via ...
 ///
 /// ``` swift
-///    code
+///     spark.phone.onIncoming = { call in
+///       call.answer(option: mediaOption) { error in
+///         if let error = error {
+///           // success
+///         }
+///         else {
+///           // failure
+///         }
+///       }
+///     }
 /// ```
 ///
 /// - see: see Phone API about how to create calls.
+/// - see: CallStatus for the states of a Call.
 /// - since: 1.2.0
 public class Call {
     
     /// The enumeration of directions of a call
+    ///
     /// - since: 1.2.0
     public enum Direction {
         /// The local party is a recipient of the call.
@@ -56,8 +67,9 @@ public class Call {
     }
     
     /// The enumuaration of reasons for a call being disconnected.
+    ///
     /// - since: 1.2.0
-    public enum DisconnectType {
+    public enum DisconnectReason {
         /// The local party has left the call.
         case localLeft
         /// The local party has declined the call.
@@ -74,28 +86,50 @@ public class Call {
         /// The remote party has cancelled the call.
         /// This is only applicable when the *direction* of the call is *incoming*.
         case remoteCancel
+        /// One of the other phones of the authenticated user has answered the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
         case otherConnected
+        /// One of the other phones of the authenticated user has declined the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
         case otherDeclined
         /// Unknown error
-        case error(Swift.Error)
+        case error(Error)
     }
     
-    /// The enumeration of reasons for the media of a call being changed
+    /// The enumeration of media change event
+    ///
     /// - since: 1.2.0
-    public enum MediaChangeType {
+    public enum MediaChangedEvent {
+        /// True if the remote party now is sending video. Otherwise false.
+        /// This might be triggered when the remote party muted or unmuted the video.
         case remoteSendingVideo(Bool)
+        /// True if the remote party now is sending audio. Otherwise false.
+        /// This might be triggered when the remote party muted or unmuted the audio.
         case remoteSendingAudio(Bool)
+        /// True if the local party now is sending video. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the video.
         case sendingVideo(Bool)
+        /// True if the local party now is sending aduio. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the audio.
         case sendingAudio(Bool)
+        /// True if the local party now is receiving video. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the video.
         case receivingVideo(Bool)
+        /// True if the local party now is receiving audio. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the audio.
         case receivingAudio(Bool)
+        /// Camera FacingMode on local device has switched.
         case cameraSwitched
+        /// Whether loud speaker on local device is on or not has switched.
         case spearkerSwitched
+        /// Local video rendering view size has changed.
         case localVideoViewSize
+        /// Remote video rendering view size has changed.
         case remoteVideoViewSize
     }
     
     /// The enumeration of capabilities of a call.
+    ///
     /// - since: 1.2.0
     public enum Capabilities {
         /// This *call* can send and receive DTMF.
@@ -103,6 +137,7 @@ public class Call {
     }
     
     /// Callback when remote participant(s) is ringing.
+    ///
     /// - since: 1.2.0
     public var onRinging: (() -> Void)? {
         didSet {
@@ -118,6 +153,7 @@ public class Call {
     }
     
     /// Callback when remote participant(s) answered and this *call* is connected.
+    ///
     /// - since: 1.2.0
     public var onConnected: (() -> Void)? {
         didSet {
@@ -133,44 +169,53 @@ public class Call {
     }
     
     /// Callback when this *call* is disconnected (hangup, cancelled, get declined or other self device pickup the call).
+    ///
     /// - since: 1.2.0
-    public var onDisconnected: ((DisconnectType) -> Void)?
+    public var onDisconnected: ((DisconnectReason) -> Void)?
     
     /// Callback when the media types of this *call* have changed.
+    ///
     /// - since: 1.2.0
-    public var onMediaChanged: ((MediaChangeType) -> Void)?
+    public var onMediaChanged: ((MediaChangedEvent) -> Void)?
     
     /// Callback when the capabilities of this *call* have changed.
+    ///
     /// - since: 1.2.0
     public var onCapabilitiesChanged: ((Capabilities) -> Void)?
     
     /// The status of this *call*.
+    ///
     /// - since: 1.2.0
     public internal(set) var status: CallStatus = CallStatus.initiated
     
     /// The direction of this *call*.
+    ///
     /// - since: 1.2.0
     public private(set) var direction: Direction
     
     /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var sendingDTMFEnabled: Bool {
         return self.model.isLocalSupportDTMF
     }
     
     /// True if the remote party of this *call* is sending video. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var remoteSendingVideo: Bool {
         return !model.isRemoteVideoMuted
     }
     
     /// True if the remote party of this *call* is sending audio. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var remoteSendingAudio: Bool {
         return !model.isRemoteAudioMuted
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var sendingVideo: Bool {
         get {
@@ -182,6 +227,7 @@ public class Call {
     }
     
     /// True if this *call* is sending audio. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var sendingAudio: Bool {
         get {
@@ -193,6 +239,7 @@ public class Call {
     }
     
     /// True if the local party of this *call* is receiving video. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var receivingVideo: Bool {
         get {
@@ -204,6 +251,7 @@ public class Call {
     }
     
     /// True if the local party of this *call* is receiving audio. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var receivingAudio: Bool {
         get {
@@ -215,6 +263,7 @@ public class Call {
     }
     
     /// True if the loud speaker is selected as the audio output device for this *call*. Otherwise, false.
+    ///
     /// - since: 1.2.0
     public var isSpeaker: Bool {
         get {
@@ -226,6 +275,7 @@ public class Call {
     }
     
     /// The camera facing mode selected for this *call*.
+    ///
     /// - since: 1.2.0
     public var facingMode: Phone.FacingMode {
         get {
@@ -237,18 +287,21 @@ public class Call {
     }
     
     /// The local video render view dimensions (points) of this *call*.
+    ///
     /// - since: 1.2.0
     public var localVideoViewSize: CMVideoDimensions {
         return CMVideoDimensions(width: self.mediaSession.localVideoViewWidth, height: self.mediaSession.localVideoViewHeight)
     }
     
     /// The remote video render view dimensions (points) of this *call*.
+    ///
     /// - since: 1.2.0
     public var remoteVideoViewSize: CMVideoDimensions {
         return CMVideoDimensions(width: self.mediaSession.remoteVideoViewWidth, height: self.mediaSession.remoteVideoViewHeight)
     }
     
     /// Call Memberships represent participants in this *call*.
+    ///
     /// - since: 1.2.0
     public var memberships: [CallMembership] {
         if let participants = self.model.participants {
@@ -311,29 +364,35 @@ public class Call {
         pthread_mutex_unlock(&mutex)
     }
     
-    /// Answers this call, only applicable when the direction of this call is incoming.
-    /// Calling this function on outgoing calls behaves ?
+    /// Answers this call.
+    /// This can only be invoked when this call is incoming and in rining status.
+    /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void
+    /// - see: see CallStatus
     /// - since: 1.2.0
     public func answer(option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
         self.device.phone.answer(call: self, option: option, completionHandler: completionHandler)
     }
     
-    /// Rejects this call, only applicable when the direction of this call is incoming.
+    /// Rejects this call. 
+    /// This can only be invoked when this call is incoming and in rining status.
+    /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - returns: Void
     /// - since: 1.2.0
+    /// - see: see CallStatus
     public func reject(completionHandler: @escaping (Error?) -> Void) {
         self.device.phone.reject(call: self, completionHandler: completionHandler)
     }
     
     /// Disconnects this call.
+    /// This can only be invoked when this call is in answered status.
     ///
     /// - returns: Void
     /// - since: 1.2.0
+    /// - see: see CallStatus
     public func hangup(completionHandler: @escaping (Error?) -> Void) {
         self.device.phone.hangup(call: self, completionHandler: completionHandler)
     }
@@ -405,10 +464,10 @@ public class Call {
                 self.status.handle(model: new, for: self)
                 DispatchQueue.main.async {
                     if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
-                        self.onMediaChanged?(MediaChangeType.remoteSendingVideo(new.isRemoteVideoMuted))
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(new.isRemoteVideoMuted))
                     }
                     if new.isRemoteAudioMuted != old.isRemoteAudioMuted {
-                        self.onMediaChanged?(MediaChangeType.remoteSendingAudio(new.isRemoteAudioMuted))
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingAudio(new.isRemoteAudioMuted))
                     }
                     if new.isLocalSupportDTMF != old.isLocalSupportDTMF {
                         self.onCapabilitiesChanged?(Capabilities.dtmf)

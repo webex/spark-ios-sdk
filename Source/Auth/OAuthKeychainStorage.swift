@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,9 @@
 import Foundation
 import KeychainAccess
 
-/// An OAuthStorage mechanism that uses the keychain for underlying storage
+/// An OAuthStorage implementation based on the iOS device keychain.
+///
+/// - since: 1.2.0
 public class OAuthKeychainStorage: OAuthStorage {
 
     private let accessTokenKey = "accessToken"
@@ -33,7 +35,9 @@ public class OAuthKeychainStorage: OAuthStorage {
     private var cachedTokens: OAuthTokens?
     private let keychain: KeychainProtocol
     
-    /// Creates a new OAuth keychain store
+    /// Constructs a new OAuthKeychainStorage
+    ///
+    /// - since: 1.2.0
     public convenience init() {
         self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.oauth"))
     }
@@ -42,7 +46,8 @@ public class OAuthKeychainStorage: OAuthStorage {
         self.keychain = keychain
     }
     
-    /// See OAuthStorage.authenticationInfo
+    /// - see: See OAuthStorage.authenticationInfo
+    /// - since: 1.2.0
     public var tokens: OAuthTokens? {
         get {
             do {

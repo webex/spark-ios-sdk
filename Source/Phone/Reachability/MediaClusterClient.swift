@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,7 @@
 import Foundation
 
 class MediaClusterClient {
-    
-    typealias ObjectHandler = (ServiceResponse<MediaCluster>) -> Void
-    
+        
     private let authenticator: Authenticator
     private let deviceService: DeviceService
     
@@ -36,7 +34,7 @@ class MediaClusterClient {
         return ServiceRequest.Builder(authenticator).baseUrl(deviceService.device!.calliopeDiscoveryServiceUrl)
     }
     
-    func get(queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func get(queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<MediaCluster>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path("clusters")

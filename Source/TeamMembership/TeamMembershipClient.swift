@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,6 @@ import Foundation
 /// - since: 1.2.0
 public class TeamMembershipClient {
     
-    /// Alias for closure to handle a service response along with a TeamMembership object.
-    public typealias ObjectHandler = (ServiceResponse<TeamMembership>) -> Void
-    
-    /// Alias for closure to handle a service response along with a TeamMembership array.
-    public typealias ArrayHandler = (ServiceResponse<[TeamMembership]>) -> Void
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -49,7 +43,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(teamId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(teamId: String, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[TeamMembership]>) -> Void) {
         let query = RequestParameter([
             "teamId": teamId,
             "max": max])
@@ -73,7 +67,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) {
         let body = RequestParameter([
             "teamId": teamId,
             "personId": personId,
@@ -97,7 +91,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(teamId: String, personEmail: EmailAddress, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) {
         let body = RequestParameter([
             "teamId": teamId,
             "personEmail": personEmail.toString(),
@@ -119,7 +113,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-   public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+   public func get(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path(membershipId)
@@ -137,7 +131,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func update(membershipId: String, isModerator: Bool, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["isModerator": isModerator]))
@@ -155,7 +149,7 @@ public class TeamMembershipClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(membershipId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(membershipId)

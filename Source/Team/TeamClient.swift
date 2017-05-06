@@ -25,12 +25,6 @@ import Foundation
 /// - since: 1.2.0
 public class TeamClient {
     
-    /// Alias for closure to handle a service response along with a Team object.
-    public typealias ObjectHandler = (ServiceResponse<Team>) -> Void
-    
-    /// Alias for closure to handle a service response along with a Team array.
-    public typealias ArrayHandler = (ServiceResponse<[Team]>) -> Void
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -48,7 +42,7 @@ public class TeamClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    public func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Team]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["max": max]))
@@ -68,7 +62,7 @@ public class TeamClient {
     /// - returns: Void
     /// - since: 1.2.0
     /// - see: see TeamMemebershipClient API
-    public func create(name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func create(name: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Team>) -> Void) {
         let request = requestBuilder()
             .method(.post)
             .body(RequestParameter(["name": name]))
@@ -86,7 +80,7 @@ public class TeamClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func get(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler){
+    public func get(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Team>) -> Void){
         let request = requestBuilder()
             .method(.get)
             .path(teamId)
@@ -104,7 +98,7 @@ public class TeamClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func update(teamId: String, name: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    public func update(teamId: String, name: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Team>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["name": name]))
@@ -122,7 +116,7 @@ public class TeamClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func delete(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    public func delete(teamId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(teamId)

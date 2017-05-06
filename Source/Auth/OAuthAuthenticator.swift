@@ -18,30 +18,43 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import Foundation
 
 /// Authentication information for an OAuth authentication
+///
+/// - since: 1.2.0
 public struct OAuthTokens {
     
-    /// The access token, used throughout the Spark SDK for authentication
+    /// The OAuth access token, used throughout the SDK for authentication
+    ///
+    /// - since: 1.2.0
     public let accessToken: String
     
-    /// The date and time at which the access token will no longer be valid
+    /// The date and time at which the access token will expire
+    ///
+    /// - since: 1.2.0
     public let accessTokenExpirationDate: Date
     
-    /// The access token, used to obtain a new access token
+    /// The OAuth refresh token, used to obtain a new access token
+    ///
+    /// - since: 1.2.0
     public let refreshToken: String
     
-    /// The date and time at which the refresh token will no longer be valid.
+    /// The date and time at which the refresh token will expire.
     /// This will itself refresh every time the refresh token is used.
+    ///
+    /// - since: 1.2.0
     public let refreshTokenExpirationDate: Date
 }
 
-/// A delegate to handle some events
+/// A delegate to handle OAuth events.
+///
+/// - since: 1.2.0
 public protocol OAuthAuthenticatorDelegate: class {
     
     /// Called when an OAuth access token could not be created from the existing refresh token
+    ///
+    /// - since: 1.2.0
     func refreshAccessTokenFailed()
 }
 

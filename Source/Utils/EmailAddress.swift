@@ -21,7 +21,7 @@
 import Foundation
 
 
-/// An email address data type with email validation and equatable implementation.
+/// A data type represents an email address with validation and equatable implementation.
 ///
 /// - since: 1.2.0
 open class EmailAddress: Equatable {
@@ -31,7 +31,7 @@ open class EmailAddress: Equatable {
         self.address = address
     }
     
-    /// Create an *EmailAddress* object from a string
+    /// Creates an *EmailAddress* object from a string
     ///
     /// - parameter address: The email address string.
     /// - returns: EmailAddress
@@ -44,9 +44,9 @@ open class EmailAddress: Equatable {
         return EmailAddress(address)
     }
     
-    /// Get the email address string from this *EmailAddress* object.
+    /// Returns the email address string from this *EmailAddress* object.
     ///
-    /// - returns: String
+    /// - returns: The email address string
     /// - since: 1.2.0
     open func toString() -> String {
         return address
@@ -60,10 +60,10 @@ open class EmailAddress: Equatable {
     }
 }
 
-/// This function checks if two email addresses are equal
+/// Checks if two *EmailAddress* have same the sequence of characters.
 /// This is the Equatable implementation for *EmailAddress*. .
 ///
-/// - returns: Bool if the two email addresses are the equal. (? true?)
+/// - returns: True if the two email addresses are equal. Otherwise, false.
 /// - since: 1.2.0
 public func ==(lhs: EmailAddress, rhs: EmailAddress) -> Bool {
     return lhs.address == rhs.address

@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,5 +20,13 @@
 
 import Foundation
 
-/// Alias for closure to handle a service response along with an object in type of Any.
-public typealias AnyHandler = (ServiceResponse<Any>) -> Void
+class MediaEngineObserver: NotificationObserver {
+    override func notificationMapping() -> [(Notification.Name, Selector)] {
+		return [(Notification.Name.MediaEngineDidEncounterError, #selector(MediaEngineObserver.onMediaEngineDidEncounterError(_:)))]
+    }
+    
+    @objc private func onMediaEngineDidEncounterError(_ notification: Notification) {
+        // TODO: handle engine errors
+        SDKLogger.info(notification.description)
+    }
+}

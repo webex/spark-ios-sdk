@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,77 +48,77 @@ class MediaSessionObserver: NotificationObserver {
     
     @objc private func onMediaEngineDidSwitchCameras(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.cameraSwitched)
+            self.call.onMediaChanged?(Call.MediaChangedEvent.cameraSwitched)
         }
     }
     
     @objc private func onMediaEngineDidChangeAudioRoute(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.spearkerSwitched)
+            self.call.onMediaChanged?(Call.MediaChangedEvent.spearkerSwitched)
         }
     }
     
     @objc private func onMediaEngineDidChangeLocalViewSize(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.localVideoViewSize)
+            self.call.onMediaChanged?(Call.MediaChangedEvent.localVideoViewSize)
         }
     }
     
     @objc private func onMediaEngineDidChangeRemoteViewSize(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.remoteVideoViewSize)
+            self.call.onMediaChanged?(Call.MediaChangedEvent.remoteVideoViewSize)
         }
     }
     
     @objc private func onMediaEngineDidMuteVideo(_ notification: Notification) {
         DispatchQueue.main.async {
             self.call.updateMedia(sendingAudio: self.call.sendingAudio, sendingVideo: false)
-            self.call.onMediaChanged?(Call.MediaChangeType.sendingVideo(false))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.sendingVideo(false))
         }
     }
     
     @objc private func onMediaEngineDidUnMuteVideo(_ notification: Notification) {
         DispatchQueue.main.async {
             self.call.updateMedia(sendingAudio: self.call.sendingAudio, sendingVideo: true)
-            self.call.onMediaChanged?(Call.MediaChangeType.sendingVideo(true))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.sendingVideo(true))
         }
     }
     
     @objc private func onMediaEngineDidMuteVideoOutput(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.receivingVideo(false))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.receivingVideo(false))
         }
     }
     
     @objc private func onMediaEngineDidUnMuteVideoOutput(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.receivingVideo(true))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.receivingVideo(true))
         }
     }
     
     @objc private func onMediaEngineDidMuteAudio(_ notification: Notification) {
         DispatchQueue.main.async {
             self.call.updateMedia(sendingAudio: false, sendingVideo: self.call.sendingVideo)
-            self.call.onMediaChanged?(Call.MediaChangeType.sendingAudio(false))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.sendingAudio(false))
         }
     }
     
     @objc private func onMediaEngineDidUnMuteAudio(_ notification: Notification) {
         DispatchQueue.main.async {
             self.call.updateMedia(sendingAudio: true, sendingVideo: self.call.sendingVideo)
-            self.call.onMediaChanged?(Call.MediaChangeType.sendingAudio(true))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.sendingAudio(true))
         }
     }
     
     @objc private func onMediaEngineDidMuteAudioOutput(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.receivingAudio(false))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.receivingAudio(false))
         }
     }
     
     @objc private func onMediaEngineDidUnMuteAudioOutput(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.call.onMediaChanged?(Call.MediaChangeType.receivingAudio(true))
+            self.call.onMediaChanged?(Call.MediaChangedEvent.receivingAudio(true))
         }
     }
 }

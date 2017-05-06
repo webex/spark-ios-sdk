@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,12 @@
 import Foundation
 import ObjectMapper
 
-struct MediaCluster: Mappable {
+struct MediaCluster {
     var statusCode: Int?
     var group: [String /* media cluster tag */ : [String /* transport */ : [String] /* transport address */ ]]?
-    
+}
+
+extension MediaCluster: Mappable {
     init?(map: Map){
     }
     

@@ -24,7 +24,7 @@ import ObjectMapper
 /// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.2.0
-public struct Message: Mappable {
+public struct Message {
     
     /// The identifier of this message.
     public var id: String?
@@ -52,6 +52,10 @@ public struct Message: Mappable {
     
     /// The timestamp that the message being created.
     public var created: Date?
+
+}
+
+extension Message: Mappable {
     
     /// Message constructor.
     ///
