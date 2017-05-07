@@ -26,11 +26,11 @@ import AVFoundation
 /// The *phone* must be registered before it can make or receive calls.
 ///
 /// ```` swift
-///     spark.phone.register() { success in
-///       if success {
-///         ... // Successfully registered device
-///       } else {
+///     spark.phone.register() { error in
+///       if let error = error {
 ///         ... // Device was not registered, and no calls can be sent or received
+///       } else {
+///         ... // Successfully registered device
 ///       }
 ///     }
 /// ````
@@ -83,6 +83,7 @@ public class Phone {
         case join(Call, ServiceResponse<CallModel>, (Error?) -> Void)
         case leave(Call, ServiceResponse<CallModel>, (Error?) -> Void)
         case reject(Call, ServiceResponse<Any>, (Error?) -> Void)
+        case alert(Call, ServiceResponse<Any>, (Error?) -> Void)
         case update(Call, ServiceResponse<CallModel>)
     }
     
@@ -278,6 +279,40 @@ public class Phone {
         SDKLogger.info("Remove call for call url:\(call.url)")
     }
     
+    func acknowledge(call: Call, completionHandler: @escaping (Error?) -> Void) {
+        self.queue.sync {
+            if call.direction == Call.Direction.outgoing {
+                SDKLogger.error("Failure: Unsupport function for outgoing call")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.illegalOperation(reason: "Unsupport function for outgoing call"))
+                }
+                self.queue.yield()
+                return
+            }
+            if call.direction == Call.Direction.incoming && call.status != CallStatus.initiated {
+                SDKLogger.error("Failure: Not initialted call")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.illegalStatus(reason: "Not initialted call"))
+                }
+                self.queue.yield()
+                return
+            }
+            if let url = call.model.callUrl {
+                self.client.alert(url, by: call.device, queue: self.queue.underlying) { res in
+                    self.doLocusResponse(LocusResult.alert(call, res, completionHandler))
+                    self.queue.yield()
+                }
+            }
+            else {
+                SDKLogger.error("Failure: Missing call URL")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.serviceFailed(code: -7000, reason: "Missing call URL"))
+                }
+                self.queue.yield()
+            }
+        }
+    }
+    
     func answer(call: Call, option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
             if call.direction == Call.Direction.outgoing {
@@ -421,6 +456,7 @@ public class Phone {
         case .call(let device, let uuid, let media, let res, let completionHandler):
             switch res.result {
             case .success(let model):
+                SDKLogger.debug("Receive call locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
                 if model.isValid {
                     let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, uuid: uuid)
                     self.add(call: call)
@@ -433,6 +469,7 @@ public class Phone {
                     completionHandler(Result.failure(SparkError.serviceFailed(code: -7000, reason: "Failure: Missing required information when dial")))
                 }
             case .failure(let error):
+                SDKLogger.error("Failure call ", error: error)
                 DispatchQueue.main.async {
                     completionHandler(Result.failure(error))
                 }
@@ -440,14 +477,14 @@ public class Phone {
         case .join(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.info("Success: join call")
+                SDKLogger.debug("Receive join locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     call.startMedia()
                     completionHandler(nil)
                 }
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.error("Failure join ", error: error)
                 DispatchQueue.main.async {
                     completionHandler(error)
                 }
@@ -455,13 +492,13 @@ public class Phone {
         case .leave(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.info("Success: leave call")
+                SDKLogger.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     completionHandler(nil)
                 }
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.error("Failure leave ", error: error)
                 DispatchQueue.main.async {
                     completionHandler(error)
                 }
@@ -477,7 +514,22 @@ public class Phone {
                     completionHandler(nil)
                 }
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.error("Failure reject ", error: error)
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
+            }
+        case .alert(let call, let res, let completionHandler):
+            switch res.result {
+            case .success(_):
+                SDKLogger.info("Success: alert call")
+                call.status = .ringing
+                DispatchQueue.main.async {
+                    call.onRinging?()
+                    completionHandler(nil)
+                }
+            case .failure(let error):
+                SDKLogger.error("Failure alert ", error: error)
                 DispatchQueue.main.async {
                     completionHandler(error)
                 }
@@ -485,16 +537,17 @@ public class Phone {
         case .update(let call, let res):
             switch res.result {
             case .success(let model):
-                SDKLogger.info("Success: update media")
+                SDKLogger.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
                 call.doCallModel(model)
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.error("Failure update media ", error: error)
             }
         }
         
     }
     
     private func doLocusEvent(_ model: CallModel) {
+        SDKLogger.debug("Receive locus event: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
         guard let url = model.callUrl else {
             SDKLogger.error("CallInfo is missing call url")
             return
@@ -511,7 +564,8 @@ public class Phone {
             // If so it needs improvement, if not it may be able to be dropped.
             if model.isValid {
                 let call = Call(model: model, device: device, media: self.mediaContext ?? MediaSessionWrapper(), direction: Call.Direction.incoming, uuid: nil)
-                SDKLogger.info("Receive incoming call: \(call)")
+                self.add(call: call)
+                SDKLogger.info("Receive incoming call: \(call.model.callUrl ?? call._uuid.uuidString)")
                 DispatchQueue.main.async {
                     self.onIncoming?(call)
                 }

@@ -28,14 +28,22 @@ import CoreMedia
 ///     let localVideoView = MediaRenderView()
 ///     let remoteVideoView = MediaRenderView()
 ///     let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-///     let call = spark.phone.dial(address, option: mediaOption) { success in
-///       if success {
+///     spark.phone.dial(address, option: mediaOption) { ret in
+///       switch ret {
+///       case .success(let call):
 ///         // success
-///       } else {
+///         call.onConnected = {
+///
+///         }
+///         call.onDisconnected = { reason in
+///
+///         }
+///       case .failure(let error):
 ///         // failure
 ///       }
-///     }
+//      }
 /// ```
+///
 /// The application can receive an incoming *call* via ...
 ///
 /// ``` swift
@@ -362,6 +370,17 @@ public class Call {
     }
     @inline(__always) private func unlock(){
         pthread_mutex_unlock(&mutex)
+    }
+    
+    /// Acknowledge (without answering) an incoming call.
+    /// Will cause the initiator's Call instance to emit the ringing event.
+    /// Otherwise error will occur and onError callback will be dispatched.
+    ///
+    /// - returns: Void
+    /// - see: see CallStatus
+    /// - since: 1.2.0
+    public func acknowledge(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.acknowledge(call: self, completionHandler: completionHandler)
     }
     
     /// Answers this call.

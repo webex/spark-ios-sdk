@@ -97,12 +97,12 @@ class CallClient {
         request.responseJSON(completionHandler)
     }
 
-    func alert(_ participantUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
+    func alert(_ callUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.put)
-            .baseUrl(participantUrl)
-            .body(RequestParameter(["deviceUrl": device.deviceUrl]))
-            .path("alert")
+            .baseUrl(callUrl)
+            .body(body(deviceUrl: device.deviceUrl))
+            .path("participant/alert")
             .queue(queue)
             .build()
     
