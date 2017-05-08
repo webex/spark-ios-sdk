@@ -31,7 +31,7 @@ class DtmfQueue {
     private var waitingForResponse = false;
     
     private let client: CallClient
-
+    
     init(client: CallClient) {
         self.client = client
     }
@@ -59,20 +59,20 @@ class DtmfQueue {
                     completionHandlers.append(item.completionHandler)
                 }
                 let dtmfEvents = events.joined(separator: "")
-                SDKLogger.info("send Dtmf events \(dtmfEvents)")
+                SDKLogger.shared.debug("Send Dtmf events \(dtmfEvents)")
                 
                 self.waitingForResponse = true
                 self.client.sendDtmf(participantUrl, by: device, correlationId: self.correlationId, events: dtmfEvents, queue: self.dispatchQueue) {
                     switch $0.result {
                     case .success:
-                        SDKLogger.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
+                        SDKLogger.shared.info("Success: send Dtmf with correlationId \(self.correlationId - 1)")
                         for completion in completionHandlers {
                             DispatchQueue.main.async {
                                 completion?(nil)
                             }
                         }
                     case .failure(let error):
-                        SDKLogger.error("Failure", error: error)
+                        SDKLogger.shared.error("Failure", error: error)
                         for completion in completionHandlers {
                             DispatchQueue.main.async {
                                 completion?(error)

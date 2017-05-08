@@ -42,7 +42,7 @@ class ReachabilityService {
         let isMaxAgeReached = isDataOutOfDate()
         
         if isAddressChanged || isMaxAgeReached {
-            SDKLogger.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
+            SDKLogger.shared.info("Fetch scheduled, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
             performReachabilityCheck() {
                 if let value = $0 {
                     self.feedback = Mapper<MediaEngineReachabilityFeedback>().map(JSONString: value)
@@ -51,13 +51,13 @@ class ReachabilityService {
                     self.updateHostAddresses()
                     self.updateFetchDate()
                     
-                    SDKLogger.info("Fetch done, result = \(value)")
+                    SDKLogger.shared.info("Fetch done, result = \(value)")
                 } else {
-                    SDKLogger.error("Fetch failed, get nil from Media Engine")
+                    SDKLogger.shared.error("Fetch failed, get nil from Media Engine")
                 }
             }
         } else {
-            SDKLogger.info("Fetch skipped, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
+            SDKLogger.shared.info("Fetch skipped, isAddressChanged = \(isAddressChanged), isMaxAgeReached = \(isMaxAgeReached)")
         }
     }
     
@@ -105,7 +105,7 @@ class ReachabilityService {
                     }
                 }
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.shared.error("Failure", error: error)
             }
         }
     }

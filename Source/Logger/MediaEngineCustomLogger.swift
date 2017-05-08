@@ -19,31 +19,27 @@
 // THE SOFTWARE.
 
 import Foundation
-import CocoaLumberjack
 import Wme
 
 class MediaEngineCustomLogger : CustomLogger {
     
-    // May have some different log level setting on media engine
-    let wmedefaultLevel = DDLogLevel.info
-    
     @objc func logVerbose(_ message: String!, file: String!, function: String!, line: UInt) {
-        SDKLogger.verbose(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.verbose(message, file: file, function: function, line: line)
     }
     
     @objc func logDebug(_ message: String!, file: String!, function: String!, line: UInt) {
-        SDKLogger.debug(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.debug(message, file: file, function: function, line: line)
     }
     
     @objc func logInfo(_ message: String!, file: String!, function: String!, line: UInt) {
-        SDKLogger.info(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.info(message, file: file, function: function, line: line)
     }
     
     @objc func logWarn(_ message: String!, file: String!, function: String!, line: UInt) {
-        SDKLogger.warn(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.warn(message, file: file, function: function, line: line)
     }
     
     @objc func logError(_ message: String!, file: String!, function: String!, line: UInt) {
-        SDKLogger.error(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.error(message, file: file, function: function, line: line)
     }
 }

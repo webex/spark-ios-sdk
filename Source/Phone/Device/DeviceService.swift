@@ -59,11 +59,12 @@ class DeviceService {
                     UserDefaults.sharedInstance.deviceUrl = deviceUrlString
                     completionHandler(Result.success(device));
                 } else {
-                    SDKLogger.error("Missing required URLs when registering device")
-                    completionHandler(Result.failure(SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")))
+                    let error = SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")
+                    SDKLogger.shared.error("Failed to register device", error: error)
+                    completionHandler(Result.failure(error))
                 }
             case .failure(let error):
-                SDKLogger.error("Failed to register device", error: error)
+                SDKLogger.shared.error("Failed to register device", error: error)
                 completionHandler(Result.failure(error))
             }
         }
@@ -82,7 +83,7 @@ class DeviceService {
                 case .success:
                     completionHandler(nil)
                 case .failure(let error):
-                    SDKLogger.error("Failed to deregister device", error: error)
+                    SDKLogger.shared.error("Failed to deregister device", error: error)
                     completionHandler(error)
                 }
             }

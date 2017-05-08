@@ -35,7 +35,7 @@ struct Feedback {
         }
         
         if includeLogs {
-            data["log"] = LoggerManager.sharedInstance.getMemoryLogs()
+            data["log"] = SDKLogger.shared.logs
         }
      
         return data

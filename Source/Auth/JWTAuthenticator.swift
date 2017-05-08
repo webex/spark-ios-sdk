@@ -42,6 +42,7 @@ public struct JWTAuthenticationInfo {
 ///
 /// - since: 1.2.0
 public class JWTAuthenticator: Authenticator {
+    
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
     private var tokenCompletionHandlers: [(String?) -> Void] = []
@@ -98,7 +99,7 @@ public class JWTAuthenticator: Authenticator {
         case 3:
             base64String += "="
         default:
-            SDKLogger.error("Base64Url encoded string could not be correctly decoded")
+            SDKLogger.shared.error("Base64Url encoded string could not be correctly decoded")
             return nil
         }
         return Data(base64Encoded: base64String)
@@ -146,7 +147,7 @@ public class JWTAuthenticator: Authenticator {
                         }
                     case .failure(let error):
                         self.deauthorize()
-                        SDKLogger.error("Failed to refresh token", error: error)
+                        SDKLogger.shared.error("Failed to refresh token", error: error)
                     }
                     self.fireCompletionHandlers()
                 }

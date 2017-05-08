@@ -136,13 +136,13 @@ public class OAuthAuthenticator: Authenticator {
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
                     self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                        SDKLogger.error("Failure retrieving the access token from the oauth code", error: error)
+                        SDKLogger.shared.error("Failure retrieving the access token from the oauth code", error: error)
                     }))
                 }
                 completionHandler?(oauthCode != nil)
             }
         } else {
-            SDKLogger.error("Bad URL")
+            SDKLogger.shared.error("Bad URL")
             completionHandler?(false)
         }
     }
@@ -163,7 +163,7 @@ public class OAuthAuthenticator: Authenticator {
             if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
                 fetchingAccessTokenInProcess = true
                 oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                    SDKLogger.error("Failed to refresh token", error: error)
+                    SDKLogger.shared.error("Failed to refresh token", error: error)
                     self.deauthorize()
                     self.delegate?.refreshAccessTokenFailed()
                 }))

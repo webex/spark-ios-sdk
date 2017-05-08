@@ -27,6 +27,6 @@ class MediaEngineObserver: NotificationObserver {
     
     @objc private func onMediaEngineDidEncounterError(_ notification: Notification) {
         // TODO: handle engine errors
-        SDKLogger.info(notification.description)
+        SDKLogger.shared.info(notification.description)
     }
 }

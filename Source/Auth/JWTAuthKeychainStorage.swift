@@ -55,7 +55,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
                     cachedJwt = jwt
                 }
             } catch let error {
-                SDKLogger.error("Failed to get JWT with error", error: error)
+                SDKLogger.shared.error("Failed to get JWT with error", error: error)
             }
             return cachedJwt
         }
@@ -68,7 +68,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
                     try keychain.remove(jwtKey)
                 }
             } catch let error {
-                SDKLogger.error("Failed to save JWT with error", error: error)
+                SDKLogger.shared.error("Failed to save JWT with error", error: error)
             }
         }
     }
@@ -86,7 +86,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
                     cachedAuthenticationInfo = JWTAuthenticationInfo(accessToken: accessToken, accessTokenExpirationDate: expirationDate)
                 }
             } catch let error {
-                SDKLogger.error("Failed to get authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to get authentication information with error", error: error)
             }
             return cachedAuthenticationInfo            
         }
@@ -101,7 +101,7 @@ public class JWTAuthKeychainStorage: JWTAuthStorage {
                     try keychain.remove(accessTokenExpirationDateKey)
                 }
             } catch let error {
-                SDKLogger.error("Failed to save authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to save authentication information with error", error: error)
             }
         }
     }  

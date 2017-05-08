@@ -64,7 +64,7 @@ public class OAuthKeychainStorage: OAuthStorage {
                                                refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
                 }
             } catch let error {
-                SDKLogger.error("Failed to get authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to get authentication information with error", error: error)
             }
             return cachedTokens
         }
@@ -83,7 +83,7 @@ public class OAuthKeychainStorage: OAuthStorage {
                     try keychain.remove(refreshTokenExpirationDateKey)
                 }
             } catch let error {
-                SDKLogger.error("Failed to save authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to save authentication information with error", error: error)
             }
         }
     }

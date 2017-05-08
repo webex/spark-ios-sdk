@@ -69,7 +69,7 @@ public class Spark {
     /// - parameter enable: Set True to enable console log, False to disable.
     /// - returns: Void
     public static func toggleConsoleLogger(_ enable: Bool) {
-        LoggerManager.sharedInstance.toggleConsoleLogger(enable)
+        SDKLogger.shared.console = enable
     }
     
     /// This is the *Authenticator* object from the application when constructing this Spark object.

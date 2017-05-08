@@ -43,14 +43,14 @@ class WebSocketService: WebSocketDelegate {
     func connect(_ webSocketUrl: URL, _ block: @escaping (Error?) -> Void) {
         self.queue.async {
             if let socket = self.socket, socket.isConnected {
-                SDKLogger.warn("Web socket has already connected")
+                SDKLogger.shared.warn("Web socket has already connected")
                 block(nil)
                 return
             }
             self.socket = nil
             self.authenticator.accessToken { token in
                 self.queue.async {
-                    SDKLogger.info("Web socket is being connected")
+                    SDKLogger.shared.info("Web socket is being connected")
                     let socket = WebSocket(url: webSocketUrl)
                     if let token = token {
                         socket.headers["Authorization"] = "Bearer " + token
@@ -70,7 +70,7 @@ class WebSocketService: WebSocketDelegate {
     func disconnect() {
         self.queue.async {
             if let socket = self.socket, socket.isConnected {
-                SDKLogger.info("Web socket is being disconnected")
+                SDKLogger.shared.info("Web socket is being disconnected")
                 socket.disconnect()
                 self.socket = nil
                 return
@@ -81,7 +81,7 @@ class WebSocketService: WebSocketDelegate {
     
     // MARK: - Websocket Delegate Methods.
     func websocketDidConnect(socket: WebSocket) {
-        SDKLogger.info("Websocket is connected")
+        SDKLogger.shared.info("Websocket is connected")
         if let block = self.onConnected {
             block(nil)
             self.onConnected = nil
@@ -91,30 +91,30 @@ class WebSocketService: WebSocketDelegate {
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         if let block = self.onConnected {
-            SDKLogger.info("Websocket cannot connect: \(String(describing: error))")
+            SDKLogger.shared.info("Websocket cannot connect: \(String(describing: error))")
             let code = error?.code ?? -7000
             let reason = error?.localizedDescription ?? "Websocket cannot connect"
             block(SparkError.serviceFailed(code: code, reason: reason))
             self.onConnected = nil
         }
         else if let code = error?.code, let desc = error?.localizedDescription {
-            SDKLogger.info("Websocket is disconnected: \(code), \(desc)")
+            SDKLogger.shared.info("Websocket is disconnected: \(code), \(desc)")
             if self.socket == nil {
-                SDKLogger.info("Websocket is disconnected on purpose")
+                SDKLogger.shared.info("Websocket is disconnected on purpose")
             }
             else {
                 let backoffTime = connectionRetryCounter.next()
                 despatch_after(backoffTime) {
                     if code > Int(WebSocket.CloseCode.normal.rawValue) {
                         // Abnormal disconnection, re-register device.
-                        SDKLogger.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
+                        SDKLogger.shared.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
                         self.socket = nil
                         self.onFailed?()
                     } else {
                         // Unexpected disconnection, reconnect socket.
-                        SDKLogger.warn("Unexpected disconnection, websocket will reconnect in \(backoffTime) seconds")
+                        SDKLogger.shared.warn("Unexpected disconnection, websocket will reconnect in \(backoffTime) seconds")
                         if let socket = self.socket, !socket.isConnected {
-                            SDKLogger.info("Web socket is being reconnected")
+                            SDKLogger.shared.info("Web socket is being reconnected")
                             socket.connect()
                         }
                     }
@@ -124,7 +124,7 @@ class WebSocketService: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        SDKLogger.info("Websocket got some text: \(text)")
+        SDKLogger.shared.info("Websocket got some text: \(text)")
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: Data) {
@@ -133,16 +133,15 @@ class WebSocketService: WebSocketDelegate {
         let eventData = json["data"]
         if let eventType = eventData["eventType"].string {
             if eventType.hasPrefix("locus") {
-                //SDKLogger.info("locus event: \(eventData.object)")
                 let eventObj = eventData.object;
                 guard let eventJson = eventObj as? [String: Any],
                     let event = Mapper<CallEventModel>().map(JSON: eventJson),
                     let call = event.callModel,
                     let type = event.type else {
-                        SDKLogger.error("Malformed call event could not be processed as a call event \(eventObj)")
+                        SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventObj)")
                         return
                 }
-                SDKLogger.info(type)
+                SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
             }
         }
@@ -155,7 +154,7 @@ class WebSocketService: WebSocketDelegate {
             let ackData: Data = try ack.rawData(options: .prettyPrinted)
             socket.write(data: ackData)
         } catch {
-            SDKLogger.error("Failed to acknowledge message")
+            SDKLogger.shared.error("Failed to acknowledge message")
         }
     }
     

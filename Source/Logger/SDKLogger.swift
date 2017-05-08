@@ -19,50 +19,126 @@
 // THE SOFTWARE.
 
 import Foundation
-import CocoaLumberjack
 
 class SDKLogger {
     
-    static let defaultLevel = DDLogLevel.all
+    static let shared = SDKLogger()
     
-    static func verbose(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.verbose, file: file, function: function, line: line)
+    var logger: Logger?;
+    
+    var console: Bool = false
+    
+    var memory: Bool = true {
+        didSet {
+            self.storage = memory ? MemoryLoggerStorage() : nil
+        }
     }
     
-    static func debug(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.debug, file: file, function: function, line: line)
+    var logs: String? {
+        return memory ? self.storage?.read() : nil
     }
     
-    static func info(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.info, file: file, function: function, line: line)
+    private var storage: MemoryLoggerStorage?
+    
+    func verbose(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), error:error, level: LogLevel.verbose, file: file, function: function, line: line)
     }
     
-    static func warn(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.warning, file: file, function: function, line: line)
+    func debug(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), error:error, level: LogLevel.debug, file: file, function: function, line: line)
     }
     
-	static func error(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.error, file: file, function: function, line: line, asynchronous: false)
+    func info(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), error:error, level: LogLevel.info, file: file, function: function, line: line)
     }
     
-    static private func log(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
-        guard LoggerManager.sharedInstance.hasSetup() else {
-            return
+    func warn(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), error:error, level: LogLevel.warning, file: file, function: function, line: line)
+    }
+    
+	func error(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
+        log(message(), error:error, level: LogLevel.error, file: file, function: function, line: line, asynchronous: false)
+    }
+    
+    private func log(_ message: @autoclosure () -> String, error: Error?, level: LogLevel, file: String, function: String, line: UInt, asynchronous: Bool = true) {
+        let actualMessage: String
+        if let error = error {
+            actualMessage = "\(message()): \(String(describing: error.localizedDescription))"
+        } else {
+            actualMessage = message()
+        }
+        let log = LogMessage(message: actualMessage, level: level, file: file, function: function, line: line, description: actualMessage, timestamp: Date(), threadName: Thread.current.name)
+        
+        func output() {
+            if let logger = self.logger {
+                logger.log(message: log)
+            }
+            if console {
+                print(format(message: log))
+            }
+            if memory {
+                self.storage?.write(format(message: log))
+            }
         }
         
-//        if let logger = LoggerManager.sharedInstance.customLogger {
-//            logger.log(message: LogMessage(message: message(), level: LogLevel(rawValue: level.rawValue), file: file, function: function, line: line, description: message())
-//        )}
-
-        if level.rawValue & flag.rawValue != 0 {
-			let actualMessage: String
-			if let error = error as NSError? {
-				actualMessage = "\(message()): \(String(describing: error.localizedFailureReason))"
-			} else {
-				actualMessage = message()
-			}
-            let logMessage = DDLogMessage(message: actualMessage, level: level, flag: flag, context: context, file: file, function: function, line: line, tag: tag, options: [.copyFile, .copyFunction], timestamp: nil)
-            ddlog.log(asynchronous: asynchronous, message: logMessage)
+        if asynchronous {
+            DispatchQueue.main.async {
+                output()
+            }
         }
+        else {
+            output()
+        }
+    }
+    
+    private func format(message: LogMessage) -> String {
+        let timestamp: String = message.timestamp.longString
+        let queueThread: String = message.threadName ?? ""
+        
+        var level: String
+        switch (message.level) {
+        case .error:   level = "E"
+        case .warning: level = "W"
+        case .info:    level = "I"
+        case .debug:   level = "D"
+        case .verbose: level = "V"
+        }
+        return level + " " + timestamp + " " + "[" + queueThread + "]" + " | " + message.function + ": " + message.message
+    }
+}
+
+
+class MemoryLoggerStorage {
+    
+    // configs
+    private let BlockSize = 10*1024
+    private let BlockCount = 10
+    
+    // storage
+    private var blocks: [String]
+    private var blockIndex = 0
+    
+    init() {
+        blocks = [String](repeating: "", count: BlockCount)
+    }
+    
+    func write(_ message: String) {
+        objc_sync_enter(self)
+        blocks[blockIndex] += message + "\n"
+        if blocks[blockIndex].characters.count > BlockSize {
+            blockIndex = (blockIndex + 1) % BlockCount
+            blocks[blockIndex] = ""
+        }
+        objc_sync_exit(self)
+    }
+    
+    func read() -> String {
+        var output = ""
+        objc_sync_enter(self)
+        for offset in 1...BlockCount {
+            output += blocks[(blockIndex + offset) % BlockCount]
+        }
+        objc_sync_exit(self)
+        return output
     }
 }

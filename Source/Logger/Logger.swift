@@ -37,6 +37,8 @@ public struct LogMessage {
     public let function: String
     public let line: UInt
     public let description: String
+    public let timestamp: Date
+    public let threadName: String?
 }
 
 /// The enumeration of log message level

@@ -449,8 +449,9 @@ public class Call {
             }
         }
         else {
-            completionHandler?(SparkError.serviceFailed(code: -700, reason: "Failure: Missing self participant URL"))
-            SDKLogger.error("Failure: Missing self participant URL")
+            let error = SparkError.serviceFailed(code: -700, reason: "Missing self participant URL")
+            completionHandler?(error)
+            SDKLogger.shared.error("Failure", error: error)
         }
     }
     
@@ -463,7 +464,7 @@ public class Call {
             self.mediaSession.setRemoteSdp(remoteSDP)
         }
         else {
-            SDKLogger.error("Failure: remoteSdp is nil")
+            SDKLogger.shared.error("Failure: remoteSdp is nil")
         }
         self.mediaSession.startMedia(call: self)
     }
@@ -473,9 +474,6 @@ public class Call {
     }
     
     func doCallModel(_ model: CallModel) {
-        if let string = model.toJSONString(prettyPrint: true) {
-            print("###: \(string)")
-        }
         if model.isValid {
             let old = self.model
             if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {

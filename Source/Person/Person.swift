@@ -54,7 +54,7 @@ public struct Person {
                 if let emailAddress = EmailAddress.fromString(emailString) {
                     emails.append(emailAddress)
                 } else {
-                    SDKLogger.warn("\(emailString) is not a properly formatted email address")
+                    SDKLogger.shared.warn("\(emailString) is not a properly formatted email address")
                 }
             }
             return emails

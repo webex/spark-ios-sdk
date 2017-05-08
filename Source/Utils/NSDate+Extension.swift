@@ -24,4 +24,16 @@ extension Date {
     func isAfterDate(_ date: Date) -> Bool {
         return self.compare(date) == .orderedDescending
     }
+    
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss:SSS"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
+    
+    var longString: String {
+        return Date.formatter.string(from: self)
+    }
+
 }

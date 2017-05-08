@@ -75,14 +75,14 @@ class MetricsEngine {
     //
     func trackMetrics(_ metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
         if isDebuggerAttached() {
-            SDKLogger.warn("Skipping metric while debugging")
+            SDKLogger.shared.warn("Skipping metric while debugging")
             return
         }
         
         var payloads: [Metric.DataType] = []
         for metric in metrics {
             if !metric.isValid {
-                SDKLogger.warn("Skipping invalid metric \(metric.name)")
+                SDKLogger.shared.warn("Skipping invalid metric \(metric.name)")
                 continue
             }
             
@@ -100,11 +100,11 @@ class MetricsEngine {
             (response: ServiceResponse<Any>) in
             switch response.result {
             case .success:
-                SDKLogger.info("Success: post metrics")
+                SDKLogger.shared.info("Success: post metrics")
                 completionHandler?(true)
                 
             case .failure(let error):
-                SDKLogger.error("Failure", error: error)
+                SDKLogger.shared.error("Failure", error: error)
                 completionHandler?(false)
                 break
             }
