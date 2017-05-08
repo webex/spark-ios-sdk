@@ -61,7 +61,14 @@ public struct Person {
         }
         
         func transformToJSON(_ value: Object?) -> JSON? {
-            return nil
+            var emails: [String] = []
+            guard value != nil else {
+                return nil
+            }
+            for email in value! {
+                emails.append(email.toString())
+            }
+            return emails
         }
     }
 }
