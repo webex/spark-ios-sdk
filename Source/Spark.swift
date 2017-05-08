@@ -62,7 +62,11 @@ public class Spark {
     public static let version = "1.2.0"
     
     /// The logger for this SDK.
-    public var logger: Logger?
+    public var logger: Logger? {
+        didSet {
+            SDKLogger.shared.logger = self.logger
+        }
+    }
     
     /// Toggle to enable or disable console log output of this SDK.
     ///

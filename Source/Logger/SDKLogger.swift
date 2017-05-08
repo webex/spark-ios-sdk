@@ -67,17 +67,20 @@ class SDKLogger {
         } else {
             actualMessage = message()
         }
-        let log = LogMessage(message: actualMessage, level: level, file: file, function: function, line: line, description: actualMessage, timestamp: Date(), threadName: Thread.current.name)
+        let timestamp = Date()
+        let thread = Thread.current.name ?? ""
+        let desc = format(logLevel: level, timestamp: timestamp, thread: thread, message: actualMessage, function: function)
+        let log = LogMessage(message: actualMessage, level: level, file: file, function: function, line: line, description: desc, timestamp: timestamp, threadName: thread)
         
         func output() {
             if let logger = self.logger {
                 logger.log(message: log)
             }
             if console {
-                print(format(message: log))
+                print(desc)
             }
             if memory {
-                self.storage?.write(format(message: log))
+                self.storage?.write(desc)
             }
         }
         
@@ -92,18 +95,20 @@ class SDKLogger {
     }
     
     private func format(message: LogMessage) -> String {
-        let timestamp: String = message.timestamp.longString
-        let queueThread: String = message.threadName ?? ""
-        
+        return self.format(logLevel: message.level, timestamp: message.timestamp, thread: message.threadName, message: message.message, function: message.function)
+    }
+    
+    private func format(logLevel: LogLevel, timestamp: Date, thread: String, message: String, function: String) -> String {
+        let timestamp: String = timestamp.longString
         var level: String
-        switch (message.level) {
+        switch (logLevel) {
         case .error:   level = "E"
         case .warning: level = "W"
         case .info:    level = "I"
         case .debug:   level = "D"
         case .verbose: level = "V"
         }
-        return level + " " + timestamp + " " + "[" + queueThread + "]" + " | " + message.function + ": " + message.message
+        return level + " " + timestamp + " " + "[" + thread + "]" + " | " + function + ": " + message
     }
 }
 
