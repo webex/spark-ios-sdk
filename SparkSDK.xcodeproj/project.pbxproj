@@ -78,9 +78,7 @@
 		5D1A5D091CF8130E00313515 /* ReachabilityTransportStatusModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5D081CF8130E00313515 /* ReachabilityTransportStatusModel.swift */; };
 		5D1A5D0B1CF821D000313515 /* MediaEngineReachabilityFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D1A5D0A1CF821D000313515 /* MediaEngineReachabilityFeedback.swift */; };
 		5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C64D1CF04E6400758F6B /* SDKLogger.swift */; };
-		5D67C6521CF04E6400758F6B /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C64E1CF04E6400758F6B /* LogManager.swift */; };
 		5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C64F1CF04E6400758F6B /* MediaEngineCustomLogger.swift */; };
-		5D67C6541CF04E6400758F6B /* MemoryLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6501CF04E6400758F6B /* MemoryLogger.swift */; };
 		5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6641CF4525C00758F6B /* MediaCluster.swift */; };
 		5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */; };
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
@@ -217,9 +215,7 @@
 		5D1A5D081CF8130E00313515 /* ReachabilityTransportStatusModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityTransportStatusModel.swift; sourceTree = "<group>"; };
 		5D1A5D0A1CF821D000313515 /* MediaEngineReachabilityFeedback.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaEngineReachabilityFeedback.swift; sourceTree = "<group>"; };
 		5D67C64D1CF04E6400758F6B /* SDKLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKLogger.swift; sourceTree = "<group>"; };
-		5D67C64E1CF04E6400758F6B /* LogManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
 		5D67C64F1CF04E6400758F6B /* MediaEngineCustomLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaEngineCustomLogger.swift; sourceTree = "<group>"; };
-		5D67C6501CF04E6400758F6B /* MemoryLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryLogger.swift; sourceTree = "<group>"; };
 		5D67C6641CF4525C00758F6B /* MediaCluster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaCluster.swift; sourceTree = "<group>"; };
 		5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaClusterClient.swift; sourceTree = "<group>"; };
 		5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
@@ -363,9 +359,7 @@
 			isa = PBXGroup;
 			children = (
 				5D67C64D1CF04E6400758F6B /* SDKLogger.swift */,
-				5D67C64E1CF04E6400758F6B /* LogManager.swift */,
 				5D67C64F1CF04E6400758F6B /* MediaEngineCustomLogger.swift */,
-				5D67C6501CF04E6400758F6B /* MemoryLogger.swift */,
 				209360371E89DA7300D6BC4A /* Logger.swift */,
 			);
 			path = Logger;
@@ -812,7 +806,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */,
-				5D67C6521CF04E6400758F6B /* LogManager.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */,
 				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
@@ -867,7 +860,6 @@
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
 				20EEA27C1EB0E77300D6BB75 /* Call+CallKit.swift in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
-				5D67C6541CF04E6400758F6B /* MemoryLogger.swift in Sources */,
 				5AFB6E951DF5C5110027E989 /* JWTAuthenticator.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
