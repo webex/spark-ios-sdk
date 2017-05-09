@@ -14,7 +14,7 @@
     <a title="TeamMembershipClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (88% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (86% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,16 +34,13 @@
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/Error.html">– Error</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/DisconnectReason.html">– DisconnectReason</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/MediaChangeType.html">– MediaChangeType</a>
+                <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -111,7 +108,7 @@
                 <a href="../Enums/RoomType.html">RoomType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/SparkErrors.html">SparkErrors</a>
+                <a href="../Enums/SparkError.html">SparkError</a>
               </li>
             </ul>
           </li>
@@ -199,14 +196,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-group-name">
-            <a href="../Typealiases.html">Typealiases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:8SparkSDK10AnyHandler">AnyHandler</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -234,60 +223,6 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK20TeamMembershipClient12ArrayHandler"></a>
-                    <a name="//apple_ref/swift/Alias/ArrayHandler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK20TeamMembershipClient12ArrayHandler">ArrayHandler</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Alias for closure to handle a service response along with a TeamMembership array.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">ArrayHandler</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:C8SparkSDK20TeamMembershipClient13ObjectHandler"></a>
-                    <a name="//apple_ref/swift/Alias/ObjectHandler" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK20TeamMembershipClient13ObjectHandler">ObjectHandler</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Alias for closure to handle a service response along with a TeamMembership object.</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">ObjectHandler</span> <span class="o">=</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
                     <a name="/s:FC8SparkSDK20TeamMembershipClient4listFT6teamIdSS3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_14TeamMembership__T__T_"></a>
                     <a name="//apple_ref/swift/Method/list(teamId:max:queue:completionHandler:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:FC8SparkSDK20TeamMembershipClient4listFT6teamIdSS3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_14TeamMembership__T__T_">list(teamId:max:queue:completionHandler:)</a>
@@ -311,7 +246,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html#/s:C8SparkSDK20TeamMembershipClient12ArrayHandler">ArrayHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">list</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">max</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -408,7 +343,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html#/s:C8SparkSDK20TeamMembershipClient13ObjectHandler">ObjectHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -518,7 +453,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt"><a href="../Classes/EmailAddress.html">EmailAddress</a></span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html#/s:C8SparkSDK20TeamMembershipClient13ObjectHandler">ObjectHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">create</span><span class="p">(</span><span class="nv">teamId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="kt"><a href="../Classes/EmailAddress.html">EmailAddress</a></span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -628,7 +563,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html#/s:C8SparkSDK20TeamMembershipClient13ObjectHandler">ObjectHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -712,7 +647,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Classes/TeamMembershipClient.html#/s:C8SparkSDK20TeamMembershipClient13ObjectHandler">ObjectHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">isModerator</span><span class="p">:</span> <span class="kt">Bool</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt"><a href="../Structs/TeamMembership.html">TeamMembership</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -809,7 +744,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="kt"><a href="../Typealiases.html#/s:8SparkSDK10AnyHandler">AnyHandler</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">delete</span><span class="p">(</span><span class="nv">membershipId</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Structs/ServiceResponse.html">ServiceResponse</a></span><span class="o">&lt;</span><span class="kt">Any</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -872,7 +807,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-02)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

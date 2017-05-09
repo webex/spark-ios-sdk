@@ -14,7 +14,7 @@
     <a title="Phone Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (88% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (86% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,16 +34,13 @@
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/Error.html">– Error</a>
-              </li>
-              <li class="nav-group-task">
                 <a href="../Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/DisconnectReason.html">– DisconnectReason</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/MediaChangeType.html">– MediaChangeType</a>
+                <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -111,7 +108,7 @@
                 <a href="../Enums/RoomType.html">RoomType</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/SparkErrors.html">SparkErrors</a>
+                <a href="../Enums/SparkError.html">SparkError</a>
               </li>
             </ul>
           </li>
@@ -199,14 +196,6 @@
               </li>
             </ul>
           </li>
-          <li class="nav-group-name">
-            <a href="../Typealiases.html">Typealiases</a>
-            <ul class="nav-group-tasks">
-              <li class="nav-group-task">
-                <a href="../Typealiases.html#/s:8SparkSDK10AnyHandler">AnyHandler</a>
-              </li>
-            </ul>
-          </li>
         </ul>
       </nav>
       <article class="main-content">
@@ -224,11 +213,11 @@ The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
 
-<pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
-        <span class="o">...</span> <span class="c1">// Successfully registered device</span>
+<pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="o">...</span>    <span class="c1">// Device was not registered, and no calls can be sent or received</span>
+        <span class="o">...</span> <span class="c1">// Successfully registered device</span>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
@@ -704,9 +693,9 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone12startPreviewFT6optionVS_11MediaOption_T_"></a>
-                    <a name="//apple_ref/swift/Method/startPreview(option:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone12startPreviewFT6optionVS_11MediaOption_T_">startPreview(option:)</a>
+                    <a name="/s:FC8SparkSDK5Phone12startPreviewFT4viewCSo15MediaRenderView_T_"></a>
+                    <a name="//apple_ref/swift/Method/startPreview(view:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC8SparkSDK5Phone12startPreviewFT4viewCSo15MediaRenderView_T_">startPreview(view:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -760,7 +749,7 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-02)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-09)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
