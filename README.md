@@ -46,113 +46,110 @@ Below is code of a demo of the SDK usage:
 
 1. Create the Spark SDK with Spark ID authentication ([OAuth](https://oauth.net/) based).
  
-   ```swift
-   let clientId = "Def123456..."
-   let clientSecret = "fed456..."
-   let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
-   let redirectUri = "MyCustomApplication://response"
-   let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-   let spark = Spark(authenticationStrategy: oauthStrategy)
-   // ...
-   if !oauthStrategy.authorized {
-       oauthStrategy.authorize(parentViewController: self) { success in
-           if !success {
-               print("User not authorized")
-           }
-       }
-   }
-   ```
+  ```swift
+  let clientId = "..."
+  let clientSecret = "..."
+  let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write spark:teams_read spark:teams_write spark:team_memberships_write spark:team_memberships_read"
+  let redirectUri = "Sparkdemoapp://response"
+
+  let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
+  let spark = Spark(authenticator: authenticator)
+
+  if !authenticator.authorized {
+    authenticator.authorize(parentViewController: self) { success in
+      if !success {
+        print("User not authorized")
+      }
+    }
+  }
+  ```
  
 2. Create the Spark SDK with Guess ID authentication ([JWT](https://jwt.io/) based).
  
-   ```swift
-   let jwtAuthStrategy = JWTAuthStrategy()
-   let spark = Spark(authenticationStrategy: jwtAuthStrategy)
-   // ...
-   if !jwtAuthStrategy.authorized {
-       // obtain JWT through some application-specific mechanism  
-       jwtAuthStrategy.authorizedWith(jwt: myJwt)
-   }
-   ```
+  ```swift
+  let authenticator = JWTAuthenticator()
+  let spark = Spark(authenticator: authenticator)
+
+  if !authenticator.authorized {
+    authenticator.authorizedWith(jwt: myJwt)
+  }
+  ```
  
 3. Register the device to send and receive calls.
  
-   ```swift
-   spark.phone.register() { success in
-       if success {
-           // Successfully registered device
-       } else {
-           // Device was not registered, and no calls can be sent or received
-       }
-   }
-   ```
+  ```swift
+  spark.phone.register() { error in
+    if let error = error {
+      ... // Device was not registered, and no calls can be sent or received
+    } else {
+      ... // Successfully registered device
+    }
+  }
+  ```
             
 4. Use Spark service
     
-   ```swift
-   spark.rooms.create(title: "My Room") { serviceResponse in
-       switch serviceResponse.result {
-       case .success(let room):
-           // Room was created
-       case .failure(let error):
-           // Room creation failed
-       }
-   }
+  ```swift
+  spark.rooms.create(title: "Hello World") { response in
+    switch response.result {
+    case .success(let room):
+        // ...
+    case .failure(let error):
+        // ...
+    }
+  }
  
-   // ... 
+  // ... 
  
-   if let roomId = room.id {
-       spark.memberships.create(roomId: roomId, personId: coworkerId) { serviceResponse in
-           // ...
-       }
- 
-       spark.messages.post(roomId: roomId, text: "Hello friend!") { serviceResponse in
-           // ...
-       }
-   }
-   ```
+  spark.memberships.create(roomId: roomId, personEmail: email) { response in
+    switch response.result {
+    case .success(let membership):
+        // ...
+    case .failure(let error):
+        // ...
+    }
+  }
+  
+  // ...
+  
+  spark.messages.post(personEmail: email, text: "Hello there") { response in
+    switch response.result {
+    case .success(let message):
+        // ...
+    case .failure(let error):
+        // ...
+    }
+  }
+  ```
     
 5. Make an outgoing call.
  
-   ```swift
-   let address = "coworker@example.com"
-   spark.phone.requestMediaAccess(Phone.MediaAccessType.audioVideo) { granted in
-       if granted {
-           // Prepare view for an outgoing call, including ensuring MediaRenderViews
-           // are created if making a video call
-           let localVideoView = MediaRenderView()
-           let remoteVideoView = MediaRenderView()
-           let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-           let call = spark.phone.dial(address, option: mediaOption) { success in
-               if success {
-                   // Call will be soon be ringing on the remote user's phone
-               } else {
-                   // A service call may have failed, the user may have rejected the
-                   // codec license, or the address could have been incorrect
-               }
-           }
-       } else {
-           // User denied access to use the camera or microphone
-       }
-   }
-   ```
+  ```swift
+  spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideo(local: ..., remote: ...)) { ret in
+    switch ret {
+    case .success(let call):
+      call.onConnected = { 
+
+      } 
+      call.onDisconnected = { reason in
+
+      }
+    case .failure(let error):
+      // failure
+    }
+  }
+  ```
  
 6. Receive a call.
  
-   ```swift
-   class MyCallObserver: CallObserver {
-       func callIncoming(_ call: Call) {
-           // Show incoming call view
-           let userAcceptedCall: Bool = // ... from user action
-           if userAcceptedCall {
-               let mediaOption = // ... set up a media option similarly to dialing
-               call.answer(option: mediaOption) { success in
-               }
-           } else {
-               // If the user chose to reject the call then reject it
-               call.reject() { success in
-               }
-           }
-       }
-   }
-   ```
+  ```swift
+  spark.phone.onIncoming = { call in
+    call.answer(option: MediaOption.audioVideo(local: ..., remote: ...)) { error in
+    if let error = error {
+      // success
+    }
+    else {
+      // failure
+    }
+  }
+  ```
