@@ -29,7 +29,7 @@ import UIKit
 /// ```` swift
 ///    let clientId = "Def123456..."
 ///    let clientSecret = "fed456..."
-///    let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
+///    let scope = "spark:all"
 ///    let redirectUri = "MyCustomApplication://response"
 ///    let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
 ///    let spark = Spark(authenticator: authenticator)

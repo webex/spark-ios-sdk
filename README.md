@@ -49,7 +49,7 @@ Below is code of a demo of the SDK usage:
   ```swift
   let clientId = "..."
   let clientSecret = "..."
-  let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write spark:teams_read spark:teams_write spark:team_memberships_write spark:team_memberships_read"
+  let scope = "spark:all"
   let redirectUri = "Sparkdemoapp://response"
 
   let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
