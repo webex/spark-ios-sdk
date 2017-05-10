@@ -65,11 +65,12 @@ public class Spark {
     public var logger: Logger? {
         didSet {
             SDKLogger.shared.logger = self.logger
+            verbose()
         }
     }
     
     /// Toggle to enable or disable console log output of this SDK.
-    public var consoleLogger: Bool {
+    public var consoleLogger: LogLevel {
         get {
             return SDKLogger.shared.console
         }
@@ -92,6 +93,7 @@ public class Spark {
     /// - since: 1.2.0
     public init(authenticator: Authenticator) {
         self.authenticator = authenticator
+        verbose()
     }
     
     /// Rooms are virtual meeting places in Cisco Spark where people post messages and collaborate to get work done.
@@ -162,4 +164,23 @@ public class Spark {
     public var teamMemberships: TeamMembershipClient {
         return TeamMembershipClient(authenticator: authenticator)
     }
+    
+    private func verbose() {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
+        let identifier = machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
+        
+        let output = "Cisco_Spark_iOS_SDK/\(Spark.version)/WME-\(MediaEngineWrapper.sharedInstance.WMEVersion)/\(identifier)-\(UIDevice.current.systemVersion)"
+        if let _ = SDKLogger.shared.logger {
+            SDKLogger.shared.info(output)
+        }
+        else {
+            print(output)
+        }
+    }
 }
+

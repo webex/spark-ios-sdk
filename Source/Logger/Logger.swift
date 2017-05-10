@@ -45,6 +45,7 @@ public struct LogMessage {
 ///
 /// - since: 1.2.0
 public enum LogLevel: UInt {
+    case no
     /// This is an error message.
     case error
     /// This is a warning message.
@@ -55,4 +56,5 @@ public enum LogLevel: UInt {
     case debug
     /// This is a verbose message.
     case verbose
+    case all
 }

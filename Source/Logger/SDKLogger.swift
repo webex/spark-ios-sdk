@@ -26,7 +26,7 @@ class SDKLogger {
     
     var logger: Logger?;
     
-    var console: Bool = false
+    var console: LogLevel = LogLevel.debug
     
     var memory: Bool = true {
         didSet {
@@ -76,7 +76,7 @@ class SDKLogger {
             if let logger = self.logger {
                 logger.log(message: log)
             }
-            if console {
+            if console.rawValue > LogLevel.no.rawValue {
                 print(desc)
             }
             if memory {
