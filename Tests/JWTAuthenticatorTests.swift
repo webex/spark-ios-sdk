@@ -39,10 +39,10 @@ fileprivate class MockJWTClient: JWTAuthClient {
     }
 }
 
-class JWTAuthStrategyTests: XCTestCase {
+class JWTAuthenticatorTests: XCTestCase {
     private static let oneDay: TimeInterval = 24*60*60
-    private let yesterday = Date(timeIntervalSinceNow: -JWTAuthStrategyTests.oneDay)
-    private let tomorrow = Date(timeIntervalSinceNow: JWTAuthStrategyTests.oneDay)
+    private let yesterday = Date(timeIntervalSinceNow: -JWTAuthenticatorTests.oneDay)
+    private let tomorrow = Date(timeIntervalSinceNow: JWTAuthenticatorTests.oneDay)
     private let now = Date()
     private var storage: MockJWTStorage!
     private var client: MockJWTClient!
@@ -143,7 +143,7 @@ class JWTAuthStrategyTests: XCTestCase {
             count = count + 1
         }
         
-        client.fetchTokenFromJWT_completionHandler?(ServiceResponse<JWTAccessTokenCreationResult>(nil, Result.failure(NSError())))
+        client.fetchTokenFromJWT_completionHandler?(ServiceResponse<JWTTokenModel>(nil, Result.failure(SparkError.illegalStatus(reason: "Fetch fails test"))))
         
         XCTAssertEqual(retrievedAccessToken, nil)
         XCTAssertNil(storage.authenticationInfo)
@@ -238,16 +238,16 @@ class JWTAuthStrategyTests: XCTestCase {
         XCTAssertEqual(tokenTwoCount, 1)
     }
     
-    private func createTestObject(jwt: String = testJWT) -> JWTAuthStrategy {
-        let strategy = JWTAuthStrategy(storage: storage, client: client)
-        strategy.authorizedWith(jwt: jwt)
-        return strategy
+    private func createTestObject(jwt: String = testJWT) -> JWTAuthenticator {
+        let authenticator = JWTAuthenticator(storage: storage, client: client)
+        authenticator.authorizedWith(jwt: jwt)
+        return authenticator
     }
     
-    private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTAccessTokenCreationResult> {
-        let accessTokenObject = JWTAccessTokenCreationResult(token: accessToken)
+    private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTTokenModel> {
+        let accessTokenObject = JWTTokenModel(token: accessToken)
         accessTokenObject.tokenCreationDate = now
-        accessTokenObject.tokenExpiration = JWTAuthStrategyTests.oneDay
-        return ServiceResponse<JWTAccessTokenCreationResult>(nil, Result.success(accessTokenObject))
+        accessTokenObject.tokenExpiration = JWTAuthenticatorTests.oneDay
+        return ServiceResponse<JWTTokenModel>(nil, Result.success(accessTokenObject))
     }
 }

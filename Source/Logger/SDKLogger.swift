@@ -107,6 +107,7 @@ class SDKLogger {
         case .info:    level = "I"
         case .debug:   level = "D"
         case .verbose: level = "V"
+        default :      level = "A"
         }
         return level + " " + timestamp + " " + "[" + thread + "]" + " | " + function + ": " + message
     }
