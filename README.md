@@ -45,111 +45,111 @@ Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS app
 Below is code of a demo of the SDK usage:
 
 1. Create the Spark SDK with Spark ID authentication ([OAuth](https://oauth.net/) based).
- 
-  ```swift
-  let clientId = "..."
-  let clientSecret = "..."
-  let scope = "spark:all"
-  let redirectUri = "Sparkdemoapp://response"
+   
+    ```swift
+    let clientId = "..."
+    let clientSecret = "..."
+    let scope = "spark:all"
+    let redirectUri = "Sparkdemoapp://response"
 
-  let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-  let spark = Spark(authenticator: authenticator)
+    let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
+    let spark = Spark(authenticator: authenticator)
 
-  if !authenticator.authorized {
-    authenticator.authorize(parentViewController: self) { success in
-      if !success {
-        print("User not authorized")
+    if !authenticator.authorized {
+      authenticator.authorize(parentViewController: self) { success in
+        if !success {
+          print("User not authorized")
+        }
       }
     }
-  }
-  ```
+    ```
  
 2. Create the Spark SDK with Guess ID authentication ([JWT](https://jwt.io/) based).
  
-  ```swift
-  let authenticator = JWTAuthenticator()
-  let spark = Spark(authenticator: authenticator)
+    ```swift
+    let authenticator = JWTAuthenticator()
+    let spark = Spark(authenticator: authenticator)
 
-  if !authenticator.authorized {
-    authenticator.authorizedWith(jwt: myJwt)
-  }
-  ```
+    if !authenticator.authorized {
+      authenticator.authorizedWith(jwt: myJwt)
+    }
+    ```
  
 3. Register the device to send and receive calls.
- 
-  ```swift
-  spark.phone.register() { error in
-    if let error = error {
-      ... // Device was not registered, and no calls can be sent or received
-    } else {
-      ... // Successfully registered device
+   
+    ```swift
+    spark.phone.register() { error in
+      if let error = error {
+        ... // Device was not registered, and no calls can be sent or received
+      } else {
+        ... // Successfully registered device
+      }
     }
-  }
-  ```
+    ```
             
 4. Use Spark service
     
-  ```swift
-  spark.rooms.create(title: "Hello World") { response in
-    switch response.result {
-    case .success(let room):
-        // ...
-    case .failure(let error):
-        // ...
+    ```swift
+    spark.rooms.create(title: "Hello World") { response in
+      switch response.result {
+      case .success(let room):
+          // ...
+      case .failure(let error):
+          // ...
+      }
     }
-  }
- 
-  // ... 
- 
-  spark.memberships.create(roomId: roomId, personEmail: email) { response in
-    switch response.result {
-    case .success(let membership):
-        // ...
-    case .failure(let error):
-        // ...
+   
+    // ... 
+   
+    spark.memberships.create(roomId: roomId, personEmail: email) { response in
+      switch response.result {
+      case .success(let membership):
+          // ...
+      case .failure(let error):
+          // ...
+      }
     }
-  }
-  
-  // ...
-  
-  spark.messages.post(personEmail: email, text: "Hello there") { response in
-    switch response.result {
-    case .success(let message):
-        // ...
-    case .failure(let error):
-        // ...
+    
+    // ...
+    
+    spark.messages.post(personEmail: email, text: "Hello there") { response in
+      switch response.result {
+      case .success(let message):
+          // ...
+      case .failure(let error):
+          // ...
+      }
     }
-  }
-  ```
+    ```
     
 5. Make an outgoing call.
  
-  ```swift
-  spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideo(local: ..., remote: ...)) { ret in
-    switch ret {
-    case .success(let call):
-      call.onConnected = { 
+    ```swift
+    spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideo(local: ..., remote: ...)) { ret in
+      switch ret {
+      case .success(let call):
+        call.onConnected = { 
 
-      } 
-      call.onDisconnected = { reason in
+        } 
+        call.onDisconnected = { reason in
 
+        }
+      case .failure(let error):
+        // failure
       }
-    case .failure(let error):
-      // failure
     }
-  }
-  ```
+    ```
  
 6. Receive a call.
- 
-  ```swift
-  spark.phone.onIncoming = { call in
-    call.answer(option: MediaOption.audioVideo(local: ..., remote: ...)) { error in
-    if let error = error {
-      // success
+   
+    ```swift
+    spark.phone.onIncoming = { call in
+      call.answer(option: MediaOption.audioVideo(local: ..., remote: ...)) { error in
+      if let error = error {
+        // success
+      }
+      else {
+        // failure
+      }
     }
-    else {
-      // failure
-    }
-  }
-  ```
+    ```
