@@ -271,7 +271,9 @@ public class Phone {
     
     public func startPreview(view: MediaRenderView) {
         DispatchQueue.main.async {
-            self.mediaContext = MediaSessionWrapper()
+            if self.mediaContext == nil {
+                self.mediaContext = MediaSessionWrapper()
+            }
             _ = self.mediaContext?.startPreview(view: view, phone: self)
         }
     }
