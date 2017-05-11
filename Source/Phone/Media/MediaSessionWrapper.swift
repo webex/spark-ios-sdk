@@ -131,6 +131,7 @@ class MediaSessionWrapper {
             mediaSession.localVideoView = view
             mediaSession.createMediaConnection()
             mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
+            mediaSession.setCamrea(phone.defaultFacingMode == Phone.FacingMode.user)
             mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
             mediaSession.startLocalVideoRenderView()
             return true
