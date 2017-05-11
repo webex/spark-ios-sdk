@@ -22,6 +22,8 @@ import Foundation
 
 /// The status of a *Call*.
 ///
+/// ![Status Diagram](https://raw.githubusercontent.com/ciscospark/spark-ios-sdk/Release/1.2.0/Misc/phone_status_diagram.png)
+///
 /// - since: 1.2.0
 public enum CallStatus {
     /// For the outgoing call, the call has dialed.
