@@ -20,16 +20,15 @@
 
 import Foundation
 
-class TimestampFormatter {
-    static func nowInUTC() -> String {
-        return dateFormatterUTC().string(from: Date())
+class Timestamp {
+    static var nowInUTC: String {
+        return Timestamp.dateFormatterUTC.string(from: Date())
     }
 
-    private static func dateFormatterUTC() -> DateFormatter {
+    private static var dateFormatterUTC: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
         formatter.timeZone = TimeZone(abbreviation: "UTC")
-        
         return formatter
     }
 }

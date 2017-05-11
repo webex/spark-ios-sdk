@@ -65,7 +65,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 /// - since: 1.2.0
 public class OAuthAuthenticator: Authenticator {
     
-    private let clientId: String
+    let clientId: String
     private let clientSecret: String
     private let scope: String
     private let redirectUri: String

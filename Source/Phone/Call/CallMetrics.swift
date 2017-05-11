@@ -20,58 +20,21 @@
 
 import Foundation
 
-struct Feedback {
-    var rating: Int
-    var comments: String? = nil
-    var includeLogs: Bool = false
-    
-    var metricData: Metric.DataType {
-        var data: Metric.DataType = [:]
-        
-        data["rating"] = String(rating)
-        
-        if rating == 0 {
-            data["declinedRating"] = String(true)
-        }
-        
-        if includeLogs {
-            data["log"] = SDKLogger.shared.logs
-        }
-     
-        return data
-    }
-}
-
 class CallMetrics {
         
-    private let TestUserEmailDomain = "example.com"
-    private let metricsEngine: MetricsEngine
+    var callStartedTime: Date?;
     
-    init(authenticator: Authenticator, deviceService: DeviceService) {
-        metricsEngine = MetricsEngine(authenticator: authenticator, deviceService: deviceService)
+    var callEndedTime: Date?
+    
+    var callEndedReason: Call.DisconnectReason?
+    
+    func trackCallStarted() {
+        self.callStartedTime = Date()
     }
     
-    func submit(feedback: Feedback, call: CallModel, deviceUrl: URL) {
-        var data: Metric.DataType = [
-            "locusId": call.callUrl!,
-            "locusTimestamp": call.fullState!.lastActive!,
-            "deviceUrl": deviceUrl.absoluteString,
-            "participantId": call.myself!.id!,
-            "isGroup": !call.isOneOnOne,
-            "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
-        ]
-
-        data.unionInPlace(feedback.metricData)
-        let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: MetricsEnvironment.Production)
-        metricsEngine.trackMetric(metric)
+    func trackCallEnded(reason: Call.DisconnectReason) {
+        self.callEndedTime = Date()
+        self.callEndedReason = reason
     }
     
-    func reportVideoLicenseActivation() {
-        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
-        metricsEngine.trackMetric(metric)
-    }
-    
-    func deinitMetrics() {
-        metricsEngine.finishAllMetrics()
-    }
 }

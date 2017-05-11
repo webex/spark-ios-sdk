@@ -68,15 +68,16 @@ public class Phone {
     
     let authenticator: Authenticator
     let reachability: ReachabilityService
-    let metrics: CallMetrics
     let client: CallClient
     let prompter: H264LicensePrompter
     let queue = SerialQueue()
+    let metrics: MetricsEngine
     
     private let devices: DeviceService    
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
+    
     
     enum LocusResult {
         case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
@@ -92,8 +93,8 @@ public class Phone {
         self.authenticator = authenticator
         self.devices = DeviceService(authenticator: authenticator)
         self.reachability = ReachabilityService(authenticator: authenticator, deviceService: self.devices)
-        self.metrics = CallMetrics(authenticator: authenticator, deviceService: self.devices)
         self.client = CallClient(authenticator: authenticator)
+        self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
         self.webSocket.onFailed = { [weak self] in
@@ -110,7 +111,7 @@ public class Phone {
     }
     
     deinit {
-        self.metrics.deinitMetrics()
+        self.metrics.release()
     }
     
     /// Registers this phone to Cisco Spark cloud on behalf of the authenticated user.
@@ -285,6 +286,7 @@ public class Phone {
     
     private func add(call: Call) {
         calls[call.url] = call;
+        self.metrics.trackCallReuqestMetric(call: call)
         SDKLogger.shared.info("Add call for call url:\(call.url)")
     }
     
@@ -311,7 +313,7 @@ public class Phone {
                 self.queue.yield()
                 return
             }
-            if let url = call.model.callUrl {
+            if let url = call.model.locusUrl {
                 self.client.alert(url, by: call.device, queue: self.queue.underlying) { res in
                     self.doLocusResponse(LocusResult.alert(call, res, completionHandler))
                     self.queue.yield()
@@ -394,7 +396,7 @@ public class Phone {
             DispatchQueue.main.async {
                 call.stopMedia()
             }
-            if let url = call.model.callUrl {
+            if let url = call.model.locusUrl {
                 self.client.decline(url, by: call.device, queue: self.queue.underlying) { res in
                     self.doLocusResponse(LocusResult.reject(call, res, completionHandler))
                     self.queue.yield()
@@ -521,10 +523,8 @@ public class Phone {
             switch res.result {
             case .success(_):
                 SDKLogger.shared.info("Success: reject call")
-                call.device.phone.remove(call: call)
-                call.status = .disconnected
+                call.end(reason: Call.DisconnectReason.localDecline)
                 DispatchQueue.main.async {
-                    call.onDisconnected?(Call.DisconnectReason.localDecline)
                     completionHandler(nil)
                 }
             case .failure(let error):

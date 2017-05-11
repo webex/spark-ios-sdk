@@ -329,16 +329,16 @@ public class Call {
         return self.model.callUrl!
     }
     
-    
     let device: Device
     let mediaSession: MediaSessionWrapper
     var _uuid: UUID
     
+    let metrics: CallMetrics
     private let dtmfQueue: DtmfQueue
+    
     private var _dail: String?
     private var _model: CallModel
     private var mutex = pthread_mutex_t()
-    
     
     private var id: String {
         return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
@@ -359,6 +359,8 @@ public class Call {
         self._model = model
         self._uuid = uuid ?? UUID()
         self.dtmfQueue = DtmfQueue(client: device.phone.client)
+        self.metrics = CallMetrics()
+        self.metrics.trackCallStarted()
     }
     
     deinit{
@@ -424,12 +426,7 @@ public class Call {
     /// - returns: Void
     /// - since: 1.2.0
     public func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
-//        guard let info = info else {
-//            SDKLogger.error("Failure: Missing call info for feedback")
-//            return
-//        }
-//        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-//        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
+        self.device.phone.metrics.trackFeedbackMetric(call: self, rating: rating, comments: comments, includeLogs: includeLogs)
     }
     
     /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
@@ -453,6 +450,16 @@ public class Call {
             completionHandler?(error)
             SDKLogger.shared.error("Failure", error: error)
         }
+    }
+    
+    func end(reason: DisconnectReason) {
+        self.device.phone.remove(call: self)
+        self.status = .disconnected
+        self.metrics.trackCallEnded(reason: reason)
+        DispatchQueue.main.async {
+            self.onDisconnected?(reason)
+        }
+        self.device.phone.metrics.trackCallEndMetric(call: self)
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {

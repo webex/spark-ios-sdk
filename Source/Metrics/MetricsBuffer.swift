@@ -20,25 +20,57 @@
 
 import Foundation
 
-class MetricsBuffer {
-    private var metrics: [Metric] = []
+class MetricsBuffer: NSObject {
+    private var metrics = [Metric]()
     
     var count: Int {
-        return metrics.count
+        var count: Int = 0
+        synchronized(lock: self) {
+            count = metrics.count
+        }
+        return count
     }
     
-    func addMetric(_ metric: Metric) {
-        metrics.append(metric)
+    func add(metric: Metric) {
+        synchronized(lock: self) {
+            metrics.append(metric)
+        }
     }
     
-    func addMetrics(_ metrics: [Metric]) {
-        self.metrics.append(contentsOf: metrics)
+    func add(metrics: [Metric]) {
+        synchronized(lock: self) {
+            self.metrics.append(contentsOf: metrics)
+        }
     }
     
-    func popAll() -> [Metric] {
-        let metricsCopy = metrics
-        metrics.removeAll()
-        
+    func popAllIfGreaterThan(_ amount: Int) -> [Metric]? {
+        var metricsCopy: [Metric]?
+        synchronized(lock: self) {
+            if metrics.count > amount {
+                metricsCopy = metrics
+                metrics.removeAll()
+            }
+        }
+        return metricsCopy
+    }
+    
+    func popAmount(_ amount: Int) -> [Metric]? {
+        var metricsCopy: [Metric]?
+        synchronized(lock: self) {
+            if metrics.count >= amount {
+                metricsCopy = Array(metrics.prefix(amount))
+                metrics.removeFirst(amount)
+            }
+        }
+        return metricsCopy
+    }
+    
+    func popAll() -> [Metric]? {
+        var metricsCopy: [Metric]?
+        synchronized(lock: self) {
+            metricsCopy = metrics
+            metrics.removeAll()
+        }
         return metricsCopy
     }
 }

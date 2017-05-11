@@ -76,7 +76,7 @@ class SDKLogger {
             if let logger = self.logger {
                 logger.log(message: log)
             }
-            if console.rawValue > LogLevel.no.rawValue {
+            if level.rawValue <= console.rawValue {
                 print(desc)
             }
             if memory {
@@ -107,6 +107,7 @@ class SDKLogger {
         case .info:    level = "I"
         case .debug:   level = "D"
         case .verbose: level = "V"
+        default: level = "U"
         }
         return level + " " + timestamp + " " + "[" + thread + "]" + " | " + function + ": " + message
     }

@@ -22,117 +22,91 @@ import Foundation
 
 class MetricsEngine {
 
-    private let metricsBufferLimit = 50
-    private let metricsFlushIntervalSeconds: Double = 30
-    private var metricsBuffer = MetricsBuffer()
-    private lazy var periodicFlushTimer: Timer = Timer(timeInterval: self.metricsFlushIntervalSeconds,
-                                                                target: self,
-                                                                selector: #selector(flush),
-                                                                userInfo: nil,
-                                                                repeats: true)
-    private let authenticator: Authenticator
-    private let deviceService: DeviceService
+    private let bufferLimit = 50
+    private let client: MetricsClient
+    private var buffer = MetricsBuffer()
+    private lazy var timer: Timer = Timer(timeInterval: 30, target: self, selector: #selector(flush), userInfo: nil, repeats: true)
+    let authenticator: Authenticator
     
-    init(authenticator: Authenticator, deviceService: DeviceService) {
+    init(authenticator: Authenticator, service: DeviceService) {
         self.authenticator = authenticator
-        self.deviceService = deviceService
-        
-        RunLoop.current.add(periodicFlushTimer, forMode: RunLoopMode.commonModes)
+        self.client = MetricsClient(authenticator: authenticator, service: service)
+        RunLoop.current.add(self.timer, forMode: RunLoopMode.commonModes)
     }
-    
-    func finishAllMetrics() {
+
+    func release() {
         flush()
-        periodicFlushTimer.invalidate()
+        self.timer.invalidate()
+    }
+
+    func track(name: String, type: MetricsType = MetricsType.Generic, _ data: [String: Any]) {
+        self.track(metric: Metric(name: name, data: data))
     }
     
-    //
-    // Track a particular Metric. This will buffer the Metric and eventually send a batch of Metrics over the 
-    // network to the Metrics Endpoint
-    //
-    func trackMetric(_ metric: Metric) {
-        metricsBuffer.addMetric(metric)
-        
-        if metricsBuffer.count > metricsBufferLimit {
+    private func track(metric: Metric) {
+        self.buffer.add(metric: metric)
+        if buffer.count > bufferLimit {
             flush()
         }
     }
     
-    //
-    // Track a set of Metrics. This will buffer the Metrics and eventually send a batch of Metrics over the 
-    // network to the Metrics Endpoint
-    //
-    func trackMetrics(_ metrics: [Metric]) {
-        metricsBuffer.addMetrics(metrics)
-        
-        if metricsBuffer.count > metricsBufferLimit {
+    private func track(metrics: [Metric]) {
+        self.buffer.add(metrics: metrics)
+        if buffer.count > bufferLimit {
             flush()
         }
     }
     
-    //
-    // Track a set of Metrics. This will send the Metrics over the network to the Metrics Endpoint immediately
-    // without buffering metrics parameter is array of Metrics objects
-    //
-    func trackMetrics(_ metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
+    private func track(metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
         if isDebuggerAttached() {
             SDKLogger.shared.warn("Skipping metric while debugging")
             return
         }
-        
-        var payloads: [Metric.DataType] = []
+        var payloads = [[String: Any]]()
         for metric in metrics {
-            if !metric.isValid {
-                SDKLogger.shared.warn("Skipping invalid metric \(metric.name)")
-                continue
+            if metric.isValid {
+                let payload = self.makePayloadWith(metric: metric)
+                payloads.append(payload)
             }
-            
-            let payload = constructPayloadFromMetric(metric)
-            payloads.append(payload)
+            else {
+                SDKLogger.shared.warn("Skipping invalid metric \(metric.name)")
+            }
         }
         
         if payloads.count > 0 {
-            postMetrics(RequestParameter(["metrics": payloads]), completionHandler: completionHandler)
-        }
-    }
-    
-    private func postMetrics(_ payload: RequestParameter, completionHandler: ((Bool) -> Void)?) {
-        MetricsClient(authenticator: authenticator, deviceService: deviceService).post(payload) {
-            (response: ServiceResponse<Any>) in
-            switch response.result {
-            case .success:
-                SDKLogger.shared.info("Success: post metrics")
-                completionHandler?(true)
-                
-            case .failure(let error):
-                SDKLogger.shared.error("Failure", error: error)
-                completionHandler?(false)
-                break
+            self.client.post(RequestParameter(["metrics": payloads])) { response in
+                switch response.result {
+                case .success:
+                    SDKLogger.shared.info("Success: post metrics")
+                    completionHandler?(true)
+                case .failure(let error):
+                    SDKLogger.shared.error("Failure", error: error)
+                    completionHandler?(false)
+                }
             }
         }
     }
     
-    private func constructPayloadFromMetric(_ metric: Metric) -> Metric.DataType {
-        let postTime = TimestampFormatter.nowInUTC()
-        var payload: Metric.DataType = ["key": metric.name,
-                                        "postTime": postTime,
-                                        "time": metric.time,
-                                        "background": String(metric.isBackground)]
-        payload.unionInPlace(metric.data)
-        
-        payload["evn"] = metric.environment.rawValue
+    private func makePayloadWith(metric: Metric) -> [String: Any] {
+        var payload: [String: Any] = metric.data
+        payload["key"] = metric.name
+        payload["time"] = metric.time
+        payload["postTime"] = Timestamp.nowInUTC
         payload["type"] = metric.type.rawValue
-        
+        if metric.background {
+            payload["background"] = String(metric.background)
+        }
         return payload
     }
     
-    //
-    // Manually flush any buffered metrics. Useful when we are going to background mode
-    //
     @objc private func flush() {
-        if metricsBuffer.count > 0 {
-            trackMetrics(metricsBuffer.popAll(), completionHandler: nil)
+        if buffer.count > 0 {
+            if let metrics = buffer.popAll() {
+                self.track(metrics: metrics, completionHandler: nil)
+            }
         }
     }
+    
 }
 
 

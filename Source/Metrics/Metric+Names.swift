@@ -22,7 +22,15 @@ import Foundation
 
 extension Metric {
     struct Call {
+        
         static let Rating = "meetup_call_user_rating"
         static let ActivatingVideo = "video_license_activation"
+        static let End = "callEnd";
+        static let Request = "callRequest";
+        static let Alert = "callAlert";
+        
+        static let Error = "errorCode";
+        static let NetworkError = "networkError";
+        static let HttpStatusCode = "httpStatusCode";
     }
 }

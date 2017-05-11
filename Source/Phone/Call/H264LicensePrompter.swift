@@ -22,7 +22,7 @@ import Foundation
 
 class H264LicensePrompter {
     
-    private let metrics: CallMetrics
+    private let metrics: MetricsEngine
     
     var disable: Bool {
         get {
@@ -33,7 +33,7 @@ class H264LicensePrompter {
         }
     }
     
-    init(metrics: CallMetrics) {
+    init(metrics: MetricsEngine) {
         self.metrics = metrics
     }
     
@@ -50,7 +50,7 @@ class H264LicensePrompter {
                 alertController.addAction(UIAlertAction(title: "Activate", style: UIAlertActionStyle.default) { _ in
                     SDKLogger.shared.info("Video license has been activated")
                     UserDefaults.sharedInstance.isVideoLicenseActivated = true
-                    self.metrics.reportVideoLicenseActivation()
+                    self.metrics.trackVideoLicenseActivation()
                     completionHandler(true)
                 })
                 alertController.addAction(UIAlertAction(title: "View License", style: UIAlertActionStyle.default) { _ in

@@ -85,6 +85,7 @@ struct PersonModel {
     var name: String?
     var sipUrl: String?
     var phoneNumber: String?
+    var orgId: String?
 }
 
 struct AlertHintModel {
@@ -178,6 +179,7 @@ extension PersonModel: Mappable {
         name <- map["name"]
         sipUrl <- map["sipUrl"]
         phoneNumber <- map["phoneNumber"]
+        orgId <- map["orgId"]
     }
 }
 

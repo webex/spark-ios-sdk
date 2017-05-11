@@ -23,21 +23,25 @@ import Foundation
 class MetricsClient {
    
     private let authenticator: Authenticator
-    private let deviceService: DeviceService
+    private let service: DeviceService
     
-    init(authenticator: Authenticator, deviceService: DeviceService) {
+    init(authenticator: Authenticator, service: DeviceService) {
         self.authenticator = authenticator
-        self.deviceService = deviceService
+        self.service = service
     }
     
     func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
-        let request = ServiceRequest.Builder(authenticator)
-            .baseUrl(deviceService.device!.metricsServiceUrl)
-            .path("metrics")
-            .method(.post)
-            .body(metrics)
-            .build()
-        
-        request.responseJSON(completionHandler)
+        if let device = self.service.device {
+            let request = ServiceRequest.Builder(authenticator)
+                .baseUrl(device.metricsServiceUrl)
+                .path("metrics")
+                .method(.post)
+                .body(metrics)
+                .build()
+            request.responseJSON(completionHandler)
+        }
+        else {
+            completionHandler(ServiceResponse(nil, Result.failure(SparkError.unregistered)))
+        }
     }
 }
