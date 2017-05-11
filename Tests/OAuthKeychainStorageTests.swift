@@ -40,23 +40,23 @@ class OAuthKeychainStorageTests: XCTestCase {
         let info = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
         let testObject1 = createTestObject()
-        testObject1.authenticationInfo = info
-        XCTAssertTrue(auth(testObject1.authenticationInfo, isEqualTo: info))
+        testObject1.tokens = info
+        XCTAssertTrue(auth(testObject1.tokens, isEqualTo: info))
         
         let testObject2 = createTestObject()
-        XCTAssertTrue(auth(testObject2.authenticationInfo, isEqualTo: info))
+        XCTAssertTrue(auth(testObject2.tokens, isEqualTo: info))
     }
     
     func testWhenLoginInformationIsClearedThenItIsNil() {
         let info = OAuthTokens(accessToken: "accessToken1", accessTokenExpirationDate: Date(timeIntervalSince1970: 1),
                                            refreshToken: "refreshToken1", refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: 2))
         let testObject1 = createTestObject()
-        testObject1.authenticationInfo = info
-        _ = testObject1.authenticationInfo
-        testObject1.authenticationInfo = nil
+        testObject1.tokens = info
+        _ = testObject1.tokens
+        testObject1.tokens = nil
         
         let testObject2 = createTestObject()
-        XCTAssertNil(testObject2.authenticationInfo)
+        XCTAssertNil(testObject2.tokens)
     }
     
     private func auth(_ first: OAuthTokens?, isEqualTo second: OAuthTokens?) -> Bool {
