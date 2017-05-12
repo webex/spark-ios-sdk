@@ -55,7 +55,7 @@ class SerialQueue {
     
 }
 
-public func synchronized<T: Any>(lock: T, block: () throws -> Void) rethrows {
+func synchronized<T: Any>(lock: T, block: () throws -> Void) rethrows {
     objc_sync_enter(lock)
     defer {
         objc_sync_exit(lock)
