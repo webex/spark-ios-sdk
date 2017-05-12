@@ -61,7 +61,7 @@ public enum CallStatus {
                         call.end(reason: Call.DisconnectReason.otherDeclined)
                     }
                 }
-                else if model.isRemoteDeclined {
+                else if model.isRemoteDeclined || model.isRemoteLeft {
                     call.end(reason: Call.DisconnectReason.remoteCancel)
                 }
             }
@@ -72,17 +72,41 @@ public enum CallStatus {
                 }
             }
         case .ringing:
-            if local.isLeft {
-                call.end(reason: Call.DisconnectReason.localCancel)
-            }
-            else if model.isRemoteJoined {
-                call.status = .connected
-                DispatchQueue.main.async {
-                    call.onConnected?()
+            if call.direction == Call.Direction.incoming {
+                if model.isRemoteJoined {
+                    if local.isJoined(by: call.device.deviceUrl) {
+                        call.status = .connected
+                        DispatchQueue.main.async {
+                            call.onConnected?()
+                        }
+                    }
+                    else if local.isDeclined(by: call.device.deviceUrl) {
+                        call.end(reason: Call.DisconnectReason.localDecline)
+                    }
+                    else if local.isJoined {
+                        call.end(reason: Call.DisconnectReason.otherConnected)
+                    }
+                    else if local.isDeclined {
+                        call.end(reason: Call.DisconnectReason.otherDeclined)
+                    }
+                }
+                else if model.isRemoteDeclined || model.isRemoteLeft {
+                    call.end(reason: Call.DisconnectReason.remoteCancel)
                 }
             }
-            else if model.isRemoteDeclined {
-                call.end(reason: Call.DisconnectReason.remoteDecline)
+            else {
+                if local.isLeft {
+                    call.end(reason: Call.DisconnectReason.localCancel)
+                }
+                else if model.isRemoteJoined {
+                    call.status = .connected
+                    DispatchQueue.main.async {
+                        call.onConnected?()
+                    }
+                }
+                else if model.isRemoteDeclined {
+                    call.end(reason: Call.DisconnectReason.remoteDecline)
+                }
             }
         case .connected:
             if local.isLeft {

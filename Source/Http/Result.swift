@@ -29,6 +29,7 @@ public enum Result<T> {
     /// Result for Failure, with the error message.
     case failure(Error)
     
+    /// Returns the associated data if the result is a success, `nil` otherwise.
     public var data: T? {
         switch self {
         case .success(let data):
@@ -38,6 +39,7 @@ public enum Result<T> {
         }
     }
     
+    /// Returns the associated error value if the result is a failure, `nil` otherwise.
     public var error: Error? {
         switch self {
         case .success(_):
