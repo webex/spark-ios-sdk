@@ -63,7 +63,8 @@ class ServiceRequest {
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
             self.headers = ["Content-Type": "application/json",
-                            "User-Agent": UserAgent.string]
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
             self.baseUrl = Builder.apiBaseUrl
             self.method = .get
             self.path = ""

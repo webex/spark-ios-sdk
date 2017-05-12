@@ -30,7 +30,7 @@ enum MetricsType: String {
 struct Metric {
         
     var name: String
-    var data: [String: Any]
+    var data: [String: String]
     var time: String
     var background: Bool
     var type: MetricsType
@@ -39,7 +39,7 @@ struct Metric {
         return (name.characters.count > 0) && (data.count > 0)
     }
     
-    init(name: String, type: MetricsType = MetricsType.Generic, data: [String: Any]) {
+    init(name: String, type: MetricsType = MetricsType.Generic, data: [String: String]) {
         self.name = name
         self.type = type        
         self.data = data

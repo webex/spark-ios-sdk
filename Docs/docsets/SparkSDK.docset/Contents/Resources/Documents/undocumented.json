@@ -78,6 +78,20 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 48,
+      "symbol": "LogLevel.no",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Logger/Logger.swift",
+      "line": 59,
+      "symbol": "LogLevel.all",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Phone/Call/Call+CallKit.swift",
       "line": 25,
       "symbol": "Call.uuid",
@@ -212,14 +226,14 @@
     },
     {
       "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Phone/Phone.swift",
-      "line": 271,
+      "line": 272,
       "symbol": "Phone.startPreview(view:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Phone/Phone.swift",
-      "line": 278,
+      "line": 281,
       "symbol": "Phone.stopPreview()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -285,6 +299,13 @@
       "line": 32,
       "symbol": "SparkError.illegalStatus",
       "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk/Source/Utils/SerialQueue.swift",
+      "line": 58,
+      "symbol": "synchronized(lock:block:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     }
   ],

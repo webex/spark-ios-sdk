@@ -459,7 +459,6 @@ public class Call {
         DispatchQueue.main.async {
             self.onDisconnected?(reason)
         }
-        self.device.phone.metrics.trackCallEndMetric(call: self)
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {

@@ -28,17 +28,13 @@ class SDKLogger {
     
     var console: LogLevel = LogLevel.debug
     
-    var memory: Bool = true {
-        didSet {
-            self.storage = memory ? MemoryLoggerStorage() : nil
-        }
-    }
+    var memory: Bool = true
     
     var logs: String? {
-        return memory ? self.storage?.read() : nil
+        return memory ? self.storage.read() : nil
     }
     
-    private var storage: MemoryLoggerStorage?
+    private var storage = MemoryLoggerStorage()
     
     func verbose(_ message: @autoclosure () -> String, error: Error? = nil, file: String = #file, function: String = #function, line: UInt = #line) {
         log(message(), error:error, level: LogLevel.verbose, file: file, function: function, line: line)
@@ -78,9 +74,9 @@ class SDKLogger {
             }
             if level.rawValue <= console.rawValue {
                 print(desc)
-            }
-            if memory {
-                self.storage?.write(desc)
+                if memory {
+                    self.storage.write(desc)
+                }
             }
         }
         
@@ -118,7 +114,7 @@ class MemoryLoggerStorage {
     
     // configs
     private let BlockSize = 10*1024
-    private let BlockCount = 10
+    private let BlockCount = 1
     
     // storage
     private var blocks: [String]
@@ -129,22 +125,22 @@ class MemoryLoggerStorage {
     }
     
     func write(_ message: String) {
-        objc_sync_enter(self)
-        blocks[blockIndex] += message + "\n"
-        if blocks[blockIndex].characters.count > BlockSize {
-            blockIndex = (blockIndex + 1) % BlockCount
-            blocks[blockIndex] = ""
+        synchronized(lock: self) {
+            blocks[blockIndex] += message + "\n"
+            if blocks[blockIndex].characters.count > BlockSize {
+                blockIndex = (blockIndex + 1) % BlockCount
+                blocks[blockIndex] = ""
+            }
         }
-        objc_sync_exit(self)
     }
     
     func read() -> String {
         var output = ""
-        objc_sync_enter(self)
-        for offset in 1...BlockCount {
-            output += blocks[(blockIndex + offset) % BlockCount]
+        synchronized(lock: self) {
+            for offset in 1...BlockCount {
+                output += blocks[(blockIndex + offset) % BlockCount]
+            }
         }
-        objc_sync_exit(self)
         return output
     }
 }

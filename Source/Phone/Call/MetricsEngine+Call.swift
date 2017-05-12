@@ -30,26 +30,29 @@ extension MetricsEngine {
         data["user.rating"] = String(rating)
         data["user.comments"] = comments ?? ""
         if includeLogs {
+            print("####: \(String(describing: SDKLogger.shared.logs?.characters.count))")
             data["user.logs"] = SDKLogger.shared.logs
         }
         self.track(name: Metric.Call.Rating, data)
+        self.flush()
     }
     
     func trackVideoLicenseActivation() {
         self.track(name: Metric.Call.ActivatingVideo, type: MetricsType.Increment, ["value":""])
+        self.flush()
     }
     
-    private func basicCallInfo(call: Call) -> [String: Any]? {
+    private func basicCallInfo(call: Call) -> [String: String]? {
         guard let locus = call.model.locusUrl, let locusUrl = URL(string: locus) else {
             return nil
         }
-        var data: [String: Any] = [
+        var data: [String: String] = [
             "locusId": locusUrl.lastPathComponent,
             "locusTimestamp": call.model.fullState?.lastActive ?? "",
-            "deviceUrl": call.device.deviceUrl,
+            "deviceUrl": call.device.deviceUrl.absoluteString,
             "participantId": call.model.myself?.id ?? "",
-            "correlationId": call._uuid,
-            "isGroup": !call.model.isOneOnOne,
+            "correlationId": call._uuid.uuidString,
+            "isGroup": String((!call.model.isOneOnOne)),
             "initialMediaType": call.mediaSession.hasVideo ? "VIDEO" : "AUDIO",
             "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion,
             "actor.id": call.model.host?.id ?? "",

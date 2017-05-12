@@ -39,7 +39,7 @@ class MetricsEngine {
         self.timer.invalidate()
     }
 
-    func track(name: String, type: MetricsType = MetricsType.Generic, _ data: [String: Any]) {
+    func track(name: String, type: MetricsType = MetricsType.Generic, _ data: [String: String]) {
         self.track(metric: Metric(name: name, data: data))
     }
     
@@ -58,10 +58,6 @@ class MetricsEngine {
     }
     
     private func track(metrics: [Metric], completionHandler: ((Bool) -> Void)? = nil) {
-        if isDebuggerAttached() {
-            SDKLogger.shared.warn("Skipping metric while debugging")
-            return
-        }
         var payloads = [[String: Any]]()
         for metric in metrics {
             if metric.isValid {
@@ -72,9 +68,9 @@ class MetricsEngine {
                 SDKLogger.shared.warn("Skipping invalid metric \(metric.name)")
             }
         }
-        
         if payloads.count > 0 {
             self.client.post(RequestParameter(["metrics": payloads])) { response in
+                SDKLogger.shared.debug("\(response)")
                 switch response.result {
                 case .success:
                     SDKLogger.shared.info("Success: post metrics")
@@ -87,8 +83,8 @@ class MetricsEngine {
         }
     }
     
-    private func makePayloadWith(metric: Metric) -> [String: Any] {
-        var payload: [String: Any] = metric.data
+    private func makePayloadWith(metric: Metric) -> [String: String] {
+        var payload: [String: String] = metric.data
         payload["key"] = metric.name
         payload["time"] = metric.time
         payload["postTime"] = Timestamp.nowInUTC
@@ -99,7 +95,7 @@ class MetricsEngine {
         return payload
     }
     
-    @objc private func flush() {
+    @objc func flush() {
         if buffer.count > 0 {
             if let metrics = buffer.popAll() {
                 self.track(metrics: metrics, completionHandler: nil)

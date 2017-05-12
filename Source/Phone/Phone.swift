@@ -288,7 +288,6 @@ public class Phone {
     
     private func add(call: Call) {
         calls[call.url] = call;
-        self.metrics.trackCallReuqestMetric(call: call)
         SDKLogger.shared.info("Add call for call url:\(call.url)")
     }
     
@@ -474,7 +473,7 @@ public class Phone {
         case .call(let device, let uuid, let media, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
                 if model.isValid {
                     let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, uuid: uuid)
                     self.add(call: call)
@@ -495,7 +494,7 @@ public class Phone {
         case .join(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive join locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive join locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     call.startMedia()
@@ -510,7 +509,7 @@ public class Phone {
         case .leave(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     completionHandler(nil)
@@ -553,7 +552,7 @@ public class Phone {
         case .update(let call, let res):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
                 call.doCallModel(model)
             case .failure(let error):
                 SDKLogger.shared.error("Failure update media ", error: error)
@@ -563,7 +562,7 @@ public class Phone {
     }
     
     private func doLocusEvent(_ model: CallModel) {
-        SDKLogger.shared.debug("Receive locus event: \(model.toJSONString(prettyPrint: true) ?? "Nil JSON")")
+        SDKLogger.shared.debug("Receive locus event: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
         guard let url = model.callUrl else {
             SDKLogger.shared.error("CallInfo is missing call url")
             return
