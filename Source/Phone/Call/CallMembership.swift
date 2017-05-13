@@ -20,41 +20,77 @@
 
 import Foundation
 
+/// A data type represents a relationship between *Call* and *Person* at Cisco Spark cloud.
+///
+/// - since: 1.2.0
 public struct CallMembership {
 
+    /// The enumeration of the status of the person in the membership.
+    ///
+    /// - since: 1.2.0
     public enum State : String {
+        /// The person status is unknown.
         case unknown
+        /// The person is idle w/o any call.
         case idle
+        /// The person has been notified about the call.
         case notified
+        /// The person has joined the call.
         case joined
+        /// The person has left the call.
         case left
+        /// The person has declined the call.
         case declined
     }
     
+    /// The identifier of the membership.
+    ///
+    /// - since: 1.2.0
     public let id: String
     
+    /// True if the person is the initiator of the call.
+    ///
+    /// - since: 1.2.0
     public let isInitiator: Bool
     
+    /// The identifier of the person.
+    ///
+    /// - since: 1.2.0
     public let presonId: String?
 
+    /// The status of the person in this *CallMembership*.
+    ///
+    /// - since: 1.2.0
     public var state: State {
         return self.call.model[participant: self.id]?.state ?? .unknown
     }
     
+    /// The email address of the person in this *CallMembership*.
+    ///
+    /// - since: 1.2.0
     public var email: String? {
         return self.call.model[participant: self.id]?.person?.email
     }
     
+    /// The SIP address of the person in this *CallMembership*.
+    ///
+    /// - since: 1.2.0
     public var sipUrl: String? {
         return self.call.model[participant: self.id]?.person?.sipUrl
     }
     
+    /// The phone number of the person in this *CallMembership*.
+    ///
+    /// - since: 1.2.0
     public var phoneNumber: String? {
         return self.call.model[participant: self.id]?.person?.phoneNumber
     }
         
     private let call: Call
     
+    /// Constructs a new *CallMembership*.
+    ///
+    /// - since: 1.2.0
     init(participant: ParticipantModel, call: Call) {
         self.id = participant.id ?? ""
         self.call = call

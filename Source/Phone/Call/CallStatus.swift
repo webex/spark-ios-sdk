@@ -20,7 +20,13 @@
 
 import Foundation
 
-/// The status of a *Call*.
+/// The status of a *Call*. 
+///
+/// The following diagram shows all statuses and transitions triggered 
+/// by either an API call or an event received by the Spark iOS SDK.
+/// The <span style="color:orange">orange</span> transtions are triggered by API calls.
+/// The <span style="color:blue">blue</span> transitions are triggered by events.
+/// Illegal API calls during certain statuses will result callbacks with *Error* without transitions.
 ///
 /// ![Status Diagram](https://raw.githubusercontent.com/ciscospark/spark-ios-sdk/Release/1.2.0/Misc/phone_status_diagram.png)
 ///
@@ -34,7 +40,7 @@ public enum CallStatus {
     case ringing
     /// The call is answered.
     case connected
-    /// The call has been terminated.
+    /// The call is terminated.
     case disconnected
     
     func handle(model: CallModel, for call: Call) {

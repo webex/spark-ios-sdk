@@ -20,13 +20,21 @@
 
 import Foundation
 
-/// The enumeration of media options on a call.
+/// A data type represents the media options of a *call*.
+///
+/// - since: 1.2.0
 public struct MediaOption {
     
+    /// Constructs an audio only media option.
+    ///
+    /// - since: 1.2.0
     public static func audioOnly() -> MediaOption {
         return MediaOption()
     }
     
+    /// Constructs an audio and video media option.
+    ///
+    /// - since: 1.2.0
     public static func audioVideo(local: MediaRenderView, remote: MediaRenderView) -> MediaOption {
         return MediaOption(local: local, remote: remote)
     }
@@ -54,6 +62,9 @@ public struct MediaOption {
 // CallKit
 public extension MediaOption {
     
+    /// A local unique identifier of a media options.
+    ///
+    /// - since: 1.2.0
     public var uuid: UUID? {
         get {
             return self._uuid
