@@ -494,10 +494,10 @@ public class Call {
                 self.status.handle(model: new, for: self)
                 DispatchQueue.main.async {
                     if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
-                        self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(new.isRemoteVideoMuted))
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(!new.isRemoteVideoMuted))
                     }
                     if new.isRemoteAudioMuted != old.isRemoteAudioMuted {
-                        self.onMediaChanged?(MediaChangedEvent.remoteSendingAudio(new.isRemoteAudioMuted))
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingAudio(!new.isRemoteAudioMuted))
                     }
                     if new.isLocalSupportDTMF != old.isLocalSupportDTMF {
                         self.onCapabilitiesChanged?(Capabilities.dtmf)
