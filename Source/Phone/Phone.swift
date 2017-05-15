@@ -66,6 +66,13 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// Is this phone registered to Cisco Spark cloud.
+    ///
+    /// - since: 1.2.0
+    public var isRegistered: Bool {
+        return self.devices.device != nil
+    }
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -78,6 +85,7 @@ public class Phone {
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
     
+    private var debug = true;
     
     enum LocusResult {
         case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
@@ -208,43 +216,31 @@ public class Phone {
                         self.queue.yield()
                         return
                     }
+                    
                     if let device = self.devices.device {
                         let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
-                        self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
-                            if let _ = res.result.error {
-                                if let email = EmailAddress.fromString(address) {
-                                    Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
-                                        if let id = persons.result.data?.first?.id {
-                                            self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
-                                                self.queue.yield()
-                                            }
-                                        }
-                                        else {
-                                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
+                        func call(address: String) {
+                            self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
+                                if let _ = res.result.error {
+                                    if let id = self.convertId(id: address) {
+                                        self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
+                                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
                                             self.queue.yield()
                                         }
-                                    }
-                                    return;
-                                }
-                                else if let decode = address.base64Decoded(), let uri = URL(string: decode), uri.scheme == "ciscospark" {
-                                    let path = uri.pathComponents
-                                    if path.count > 2 {
-                                        let id = path[path.count - 1]
-                                        let type = path[path.count - 2]
-                                        if type == "PEOPLE" {
-                                            self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
-                                                self.queue.yield()
-                                            }
-                                            return
-                                        }
+                                        return
                                     }
                                 }
+                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
+                                self.queue.yield()
                             }
-                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
-                            self.queue.yield()
                         }
+                        if let email = EmailAddress.fromString(address), address.contains("@") && !address.contains(".") {
+                            Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
+                                call(address: persons.result.data?.first?.id ?? address)
+                            }
+                            return
+                        }
+                        call(address: address)
                     }
                     else {
                         DispatchQueue.main.async {
@@ -499,7 +495,7 @@ public class Phone {
         case .call(let device, let uuid, let media, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 if model.isValid {
                     let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, uuid: uuid)
                     self.add(call: call)
@@ -520,7 +516,7 @@ public class Phone {
         case .join(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive join locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive join locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     call.startMedia()
@@ -535,7 +531,7 @@ public class Phone {
         case .leave(let call, let res, let completionHandler):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 call.doCallModel(model)
                 DispatchQueue.main.async {
                     completionHandler(nil)
@@ -578,7 +574,7 @@ public class Phone {
         case .update(let call, let res):
             switch res.result {
             case .success(let model):
-                SDKLogger.shared.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
+                SDKLogger.shared.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 call.doCallModel(model)
             case .failure(let error):
                 SDKLogger.shared.error("Failure update media ", error: error)
@@ -588,7 +584,7 @@ public class Phone {
     }
     
     private func doLocusEvent(_ model: CallModel) {
-        SDKLogger.shared.debug("Receive locus event: \(model.toJSONString(prettyPrint: false) ?? "Nil JSON")")
+        SDKLogger.shared.debug("Receive locus event: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         guard let url = model.callUrl else {
             SDKLogger.shared.error("CallInfo is missing call url")
             return
@@ -634,6 +630,19 @@ public class Phone {
                 completionHandler(nil)
             }
         }
+    }
+    
+    private func convertId(id: String) -> String? {
+        if let decode = id.base64Decoded(), let uri = URL(string: decode), uri.scheme == "ciscospark" {
+            let path = uri.pathComponents
+            if path.count > 2 {
+                let type = path[path.count - 2]
+                if type == "PEOPLE" {
+                    return path[path.count - 1]
+                }
+            }
+        }
+        return nil
     }
 
     private func fetchActiveCalls() {
