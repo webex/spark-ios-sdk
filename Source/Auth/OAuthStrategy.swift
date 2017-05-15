@@ -101,11 +101,16 @@ public class OAuthStrategy: AuthenticationStrategy {
             oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
-                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                        Logger.error("Failure retrieving the access token from the oauth code", error: error)
-                    }))
+                    
+                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: { response in
+                        self.createAccessTokenHandler(errorHandler: { error in
+                            Logger.error("Failure retrieving the access token from the oauth code", error: error)
+                        })(response)
+                        completionHandler?(true)
+                    })
+                } else {
+                    completionHandler?(false)
                 }
-                completionHandler?(oauthCode != nil)
             }
         } else {
             Logger.error("Bad URL")
