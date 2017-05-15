@@ -22,6 +22,9 @@ import Foundation
 
 public extension Call {
     
+    /// A local unique identifier of a *Call* for [Apple CallKit](https://developer.apple.com/reference/callkit).
+    ///
+    /// - since: 1.2.0
     public var uuid: UUID {
         return self._uuid
     }

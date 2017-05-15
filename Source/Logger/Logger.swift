@@ -24,6 +24,11 @@ import Foundation
 ///
 /// - since: 1.2.0
 public protocol Logger {
+    /// log a message.
+    ///
+    /// - parameter message: the mesage to be logged
+    /// - returns: Void
+    /// - since: 1.2.0
     func log(message: LogMessage)
 }
 
@@ -31,13 +36,21 @@ public protocol Logger {
 ///
 /// - since: 1.2.0
 public struct LogMessage {
+    /// The log message.
     public let message: String
+    /// The log level.
     public let level: LogLevel
+    /// The source file where the log message is generated.
     public let file: String
+    /// The function where the log message is generated.
     public let function: String
+    /// The line where the log message is generated.
     public let line: UInt
+    /// The description of the log message.
     public let description: String
+    /// The date and time when the log message is generated.
     public let timestamp: Date
+    /// The name of the thread where the log message is generated.
     public let threadName: String
 }
 
@@ -45,6 +58,7 @@ public struct LogMessage {
 ///
 /// - since: 1.2.0
 public enum LogLevel: UInt {
+    /// Turn off logging.
     case no
     /// This is an error message.
     case error
@@ -56,5 +70,6 @@ public enum LogLevel: UInt {
     case debug
     /// This is a verbose message.
     case verbose
+    /// Turn all all logging.
     case all
 }

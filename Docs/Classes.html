@@ -13,7 +13,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (86% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -125,9 +125,6 @@
               </li>
               <li class="nav-group-task">
                 <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDK12synchronizedurFzT4lockx5blockFzT_T__T_">synchronized(lock:block:)</a>
               </li>
             </ul>
           </li>
@@ -261,20 +258,42 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <pre class="highlight plaintext"><code>
-The application can receive an incoming *call* via ...
+                        <p>A Call represents a media call on Cisco Spark.</p>
 
-``` swift
-    spark.phone.onIncoming = { call in
-      call.answer(option: mediaOption) { error in
-        if let error = error {
-          // success
-        }
-        else {
-          // failure
-        }
-      }
-    }
+<p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
+
+<pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
+    <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
+    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span><span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">switch</span> <span class="n">ret</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">call</span><span class="p">):</span>
+        <span class="c1">// success</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onConnected</span> <span class="o">=</span> <span class="p">{</span>
+
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onDisconnected</span> <span class="o">=</span> <span class="p">{</span> <span class="n">reason</span> <span class="k">in</span>
+
+        <span class="p">}</span>
+      <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// failure</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre>
+
+<p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
+
+<pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
+      <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+          <span class="c1">// success</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+          <span class="c1">// failure</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
 </code></pre>
 
 <div class="aside aside-see">
@@ -285,7 +304,7 @@ The application can receive an incoming *call* via ...
 
 <div class="aside aside-see">
     <p class="aside-title">See</p>
-    CallStatus for the states of a Call.
+    CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
 
@@ -865,7 +884,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-12)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -21,14 +21,15 @@
 import CoreMedia
 
 /// A Call represents a media call on Cisco Spark.
+///
 /// The application can create an outgoing *call* by calling *phone.dial* function:
 ///
-/// ``` swift
+/// ```` swift
 ///     let address = "coworker@example.com"
 ///     let localVideoView = MediaRenderView()
 ///     let remoteVideoView = MediaRenderView()
 ///     let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-///     spark.phone.dial(address, option: mediaOption) { ret in
+///     spark.phone.dial(address, option:mediaOption) {
 ///       switch ret {
 ///       case .success(let call):
 ///         // success
@@ -41,12 +42,12 @@ import CoreMedia
 ///       case .failure(let error):
 ///         // failure
 ///       }
-//      }
-/// ```
+///     }
+/// ````
 ///
-/// The application can receive an incoming *call* via ...
+/// The application can receive an incoming *call* on *phone.onIncoming* function:
 ///
-/// ``` swift
+/// ```` swift
 ///     spark.phone.onIncoming = { call in
 ///       call.answer(option: mediaOption) { error in
 ///         if let error = error {
@@ -57,10 +58,10 @@ import CoreMedia
 ///         }
 ///       }
 ///     }
-/// ```
+/// ````
 ///
 /// - see: see Phone API about how to create calls.
-/// - see: CallStatus for the states of a Call.
+/// - see: CallStatus for the states and transitions of a *Call*.
 /// - since: 1.2.0
 public class Call {
     
@@ -194,6 +195,7 @@ public class Call {
     /// The status of this *call*.
     ///
     /// - since: 1.2.0
+    /// - see: CallStatus
     public internal(set) var status: CallStatus = CallStatus.initiated
     
     /// The direction of this *call*.
@@ -378,6 +380,7 @@ public class Call {
     /// Will cause the initiator's Call instance to emit the ringing event.
     /// Otherwise error will occur and onError callback will be dispatched.
     ///
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - see: see CallStatus
     /// - since: 1.2.0
@@ -386,10 +389,11 @@ public class Call {
     }
     
     /// Answers this call.
-    /// This can only be invoked when this call is incoming and in rining status.
+    /// This can only be invoked when this call is incoming and in ringing status.
     /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - see: see CallStatus
     /// - since: 1.2.0
@@ -398,9 +402,10 @@ public class Call {
     }
     
     /// Rejects this call. 
-    /// This can only be invoked when this call is incoming and in rining status.
+    /// This can only be invoked when this call is incoming and in ringing status.
     /// Otherwise error will occur and onError callback will be dispatched.
     ///
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.2.0
     /// - see: see CallStatus
@@ -411,6 +416,7 @@ public class Call {
     /// Disconnects this call.
     /// This can only be invoked when this call is in answered status.
     ///
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.2.0
     /// - see: see CallStatus
@@ -431,6 +437,7 @@ public class Call {
     
     /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
     ///
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
     /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
     /// - returns: Void

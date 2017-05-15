@@ -180,7 +180,6 @@ public class Phone {
     ///  * SIP / SIPS URI: e.g. sip:1234@care.acme.com
     ///  * Tropo URI: e.g. tropo:999123456
     ///  * Email address: e.g. shenning@cisco.com
-    ///  * App username: e.g. jp
     /// >
     ///
     /// - parameter address: Intended recipient address in one of the supported formats.
@@ -277,6 +276,10 @@ public class Phone {
         self.prompter.disable = true
     }
     
+    /// Render a preview of the local party before the call is answered.
+    ///
+    /// - parameter view: a UI view for rendering video.
+    /// - returns: Void
     public func startPreview(view: MediaRenderView) {
         DispatchQueue.main.async {
             if self.mediaContext == nil {
@@ -286,6 +289,9 @@ public class Phone {
         }
     }
     
+    /// Stop rendering the preview of the local party.
+    ///
+    /// - returns: Void
     public func stopPreview() {
         DispatchQueue.main.async {
             if let media = self.mediaContext {

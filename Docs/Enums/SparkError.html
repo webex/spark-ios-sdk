@@ -14,7 +14,7 @@
     <a title="SparkError Enum Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (86% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -127,9 +127,6 @@
               <li class="nav-group-task">
                 <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
               </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDK12synchronizedurFzT4lockx5blockFzT_T__T_">synchronized(lock:block:)</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
@@ -205,7 +202,19 @@
         <section>
           <section class="section">
             <h1>SparkError</h1>
-            <p>Undocumented</p>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">SparkError</span><span class="p">:</span> <span class="kt">Error</span></code></pre>
+
+                </div>
+              </div>
+            <p>The enumeration of error types in Cisco Spark iOS SDK.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
 
           </section>
           <section class="section task-group-section">
@@ -224,8 +233,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>A service request to Cisco Spark cloud has failed.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">serviceFailed</span><span class="p">(</span><span class="nv">code</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -247,8 +264,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The <em>Phone</em> has not been registered.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unregistered</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -270,8 +295,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The media requires H.264 codec.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">requireH264</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -293,8 +326,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The DTMF is invalid.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">invalidDTMF</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -316,8 +357,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The DTMF is unsupported.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">unsupportedDTMF</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -339,8 +388,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The service request is illegal.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">illegalOperation</span><span class="p">(</span><span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -362,8 +419,16 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>Undocumented</p>
+                        <p>The service is in an illegal status.</p>
 
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="nf">illegalStatus</span><span class="p">(</span><span class="nv">reason</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
                       </div>
                     </section>
                   </div>
@@ -375,9 +440,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vP10Foundation14LocalizedError16errorDescriptionGSqSS_"></a>
+                    <a name="/s:vO8SparkSDK10SparkError16errorDescriptionGSqSS_"></a>
                     <a name="//apple_ref/swift/Property/errorDescription" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vP10Foundation14LocalizedError16errorDescriptionGSqSS_">errorDescription</a>
+                    <a class="token" href="#/s:vO8SparkSDK10SparkError16errorDescriptionGSqSS_">errorDescription</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -385,7 +450,8 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        
+                        <p>Details of the error.</p>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
@@ -403,7 +469,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-12)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

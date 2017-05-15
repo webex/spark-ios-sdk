@@ -50,7 +50,7 @@ public protocol Authenticator : class {
     /// completes.
     /// If the access token could not be retrieved then the completion handler will be called with nil.
     ///
-    /// - parameter completionHandler: called when retrieval of the access token is complete
+    /// - parameter completionHandler: a closure to be executed when completed, with the access token if successfuly retrieved, otherwise nil.
     /// - since: 1.2.0
     func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
 }

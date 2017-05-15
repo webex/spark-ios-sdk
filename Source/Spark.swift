@@ -69,7 +69,7 @@ public class Spark {
         }
     }
     
-    /// Toggle to enable or disable console log output of this SDK.
+    /// Set the log level of the console logging.
     public var consoleLogger: LogLevel {
         get {
             return SDKLogger.shared.console

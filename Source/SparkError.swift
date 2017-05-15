@@ -21,19 +21,28 @@
 
 import Foundation
 
+/// The enumeration of error types in Cisco Spark iOS SDK.
+///
+/// - since: 1.2.0
 public enum SparkError: Error {
-    
+    /// A service request to Cisco Spark cloud has failed.
     case serviceFailed(code: Int, reason: String)
+    /// The *Phone* has not been registered.
     case unregistered
+    /// The media requires H.264 codec.
     case requireH264
+    /// The DTMF is invalid.
     case invalidDTMF
+    /// The DTMF is unsupported.
     case unsupportedDTMF
+    /// The service request is illegal.
     case illegalOperation(reason: String)
+    /// The service is in an illegal status.
     case illegalStatus(reason: String)
 }
 
 extension SparkError: LocalizedError {
-    
+    /// Details of the error.
     public var errorDescription: String? {
         switch self {
         case .serviceFailed(let code, let reason):
