@@ -48,36 +48,7 @@ public enum CallStatus {
             return;
         }
         switch self {
-        case .initiated:
-            if call.direction == Call.Direction.incoming {
-                if model.isRemoteJoined {
-                    if local.isJoined(by: call.device.deviceUrl) {
-                        call.status = .connected
-                        DispatchQueue.main.async {
-                            call.onConnected?()
-                        }
-                    }
-                    else if local.isDeclined(by: call.device.deviceUrl) {
-                        call.end(reason: Call.DisconnectReason.localDecline)
-                    }
-                    else if local.isJoined {
-                        call.end(reason: Call.DisconnectReason.otherConnected)
-                    }
-                    else if local.isDeclined {
-                        call.end(reason: Call.DisconnectReason.otherDeclined)
-                    }
-                }
-                else if model.isRemoteDeclined || model.isRemoteLeft {
-                    call.end(reason: Call.DisconnectReason.remoteCancel)
-                }
-            }
-            else if local.isJoined(by: call.device.deviceUrl) && model.isRemoteNotified {
-                call.status = .ringing
-                DispatchQueue.main.async {
-                    call.onRinging?()
-                }
-            }
-        case .ringing:
+        case .initiated, .ringing:
             if call.direction == Call.Direction.incoming {
                 if model.isRemoteJoined {
                     if local.isJoined(by: call.device.deviceUrl) {
@@ -104,14 +75,22 @@ public enum CallStatus {
                 if local.isLeft {
                     call.end(reason: Call.DisconnectReason.localCancel)
                 }
-                else if model.isRemoteJoined {
-                    call.status = .connected
-                    DispatchQueue.main.async {
-                        call.onConnected?()
+                else if local.isJoined(by: call.device.deviceUrl) {
+                    if model.isRemoteNotified {
+                        call.status = .ringing
+                        DispatchQueue.main.async {
+                            call.onRinging?()
+                        }
                     }
-                }
-                else if model.isRemoteDeclined {
-                    call.end(reason: Call.DisconnectReason.remoteDecline)
+                    else if model.isRemoteJoined {
+                        call.status = .connected
+                        DispatchQueue.main.async {
+                            call.onConnected?()
+                        }
+                    }
+                    else if model.isRemoteDeclined {
+                        call.end(reason: Call.DisconnectReason.remoteDecline)
+                    }
                 }
             }
         case .connected:
