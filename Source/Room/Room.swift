@@ -91,3 +91,4 @@ extension Room: Mappable {
         teamId <- map["teamId"]
     }
 }
+

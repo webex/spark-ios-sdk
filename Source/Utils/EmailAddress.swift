@@ -24,7 +24,7 @@ import Foundation
 /// A data type represents an email address with validation and equatable implementation.
 ///
 /// - since: 1.2.0
-open class EmailAddress: Equatable {
+open class EmailAddress {
     fileprivate var address: String
     
     private init(_ address: String) {
@@ -59,6 +59,8 @@ open class EmailAddress: Equatable {
         return emailTest.evaluate(with: address)
     }
 }
+
+extension EmailAddress: Equatable {}
 
 /// Checks if two *EmailAddress* have same the sequence of characters.
 /// This is the Equatable implementation for *EmailAddress*. .

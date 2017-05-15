@@ -22,7 +22,7 @@ import Foundation
 import ObjectMapper
 
 /// Membership contents.
-public struct Membership: Equatable {
+public struct Membership {
     
     /// The id of this membership.
     public var id: String?
@@ -67,20 +67,4 @@ extension Membership: Mappable {
         isMonitor <- map["isMonitor"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
-}
-
-
-/// Membership Equatable implementation. Check if two memberships are equal.
-public func ==(lhs: Membership, rhs: Membership) -> Bool {
-    if lhs.id == rhs.id  &&
-        lhs.personId == rhs.personId &&
-        lhs.personEmail == rhs.personEmail &&
-        lhs.roomId == rhs.roomId &&
-        lhs.isModerator == rhs.isModerator &&
-        lhs.isMonitor == rhs.isMonitor &&
-        lhs.created == rhs.created  {
-        return true
-    }
-    
-    return false
 }

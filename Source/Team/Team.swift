@@ -24,7 +24,7 @@ import ObjectMapper
 /// A data type represents a Team at Cisco Spark cloud. 
 ///
 /// - since: 1.2.0
-public struct Team: Equatable {
+public struct Team {
     
     /// The identifier of this team.
     ///
@@ -58,20 +58,5 @@ extension Team: Mappable {
         name <- map["name"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
-}
-
-/// Checks whether the two *Team* have the same id and name, and were created at the same time.
-/// This is the Equatable implementation for *Team*.
-///
-/// - returns: True if the two teams are equal. Otherwise, false.
-/// - since: 1.2.0
-public func ==(lhs: Team, rhs: Team) -> Bool {
-    if lhs.id == rhs.id &&
-        lhs.name == rhs.name &&
-        lhs.created == rhs.created {
-        return true
-    }
-    
-    return false
 }
 

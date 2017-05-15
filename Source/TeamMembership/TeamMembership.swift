@@ -24,7 +24,7 @@ import ObjectMapper
 /// A data type represents a relationship between *Team* and *Person* at Cisco Spark cloud.
 ///
 /// - since: 1.2.0
-public struct TeamMembership: Equatable {
+public struct TeamMembership {
     
     /// The identifier of this team membership.
     ///
@@ -82,23 +82,4 @@ extension TeamMembership: Mappable {
         isModerator <- map["isModerator"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
-}
-
-/// Checks whether the two *TeamMembership* have the same properties
-/// This is the Equatable implementation for *TeamMembership*.
-///
-/// - return: True if the two team memberships are equal. Otherwise, false.
-/// - since: 1.2.0
-public func ==(lhs: TeamMembership, rhs: TeamMembership) -> Bool {
-    if lhs.id == rhs.id  &&
-        lhs.personId == rhs.personId &&
-        lhs.personEmail == rhs.personEmail &&
-        lhs.personDisplayName == rhs.personDisplayName &&
-        lhs.teamId == rhs.teamId &&
-        lhs.isModerator == rhs.isModerator &&
-        lhs.created == rhs.created  {
-        return true
-    }
-    
-    return false
 }

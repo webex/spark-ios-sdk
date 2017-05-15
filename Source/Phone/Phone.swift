@@ -201,6 +201,14 @@ public class Phone {
                 let localSDP = mediaContext.getLocalSdp()
                 let reachabilities = self.reachability.feedback?.reachabilities
                 self.queue.sync {
+                    if self.calls.count > 0 {
+                        SDKLogger.shared.error("Failure: There are other active calls")
+                        DispatchQueue.main.async {
+                            completionHandler(Result.failure(SparkError.illegalOperation(reason: "There are other active calls")))
+                        }
+                        self.queue.yield()
+                        return
+                    }
                     if let device = self.devices.device {
                         let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
                         self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
@@ -298,6 +306,14 @@ public class Phone {
     
     func acknowledge(call: Call, completionHandler: @escaping (Error?) -> Void) {
         self.queue.sync {
+            if self.calls.filter({ $0.key != call.url }).count > 0 {
+                SDKLogger.shared.error("Failure: There are other active calls")
+                DispatchQueue.main.async {
+                    completionHandler(SparkError.illegalOperation(reason: "There are other active calls"))
+                }
+                self.queue.yield()
+                return
+            }
             if call.direction == Call.Direction.outgoing {
                 SDKLogger.shared.error("Failure: Unsupport function for outgoing call")
                 DispatchQueue.main.async {
@@ -332,6 +348,11 @@ public class Phone {
     
     func answer(call: Call, option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
+            if self.calls.filter({ $0.key != call.url }).count > 0 {
+                SDKLogger.shared.error("Failure: There are other active calls")
+                completionHandler(SparkError.illegalOperation(reason: "There are other active calls"))
+                return
+            }
             if call.direction == Call.Direction.outgoing {
                 SDKLogger.shared.error("Failure: Unsupport function for outgoing call")
                 completionHandler(SparkError.illegalOperation(reason: "Unsupport function for outgoing call"))
@@ -349,7 +370,6 @@ public class Phone {
                     return
                 }
             }
-            
             if let uuid = option.uuid {
                 call._uuid = uuid
             }
