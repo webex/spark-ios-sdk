@@ -66,13 +66,6 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
-    /// Is this phone registered to Cisco Spark cloud.
-    ///
-    /// - since: 1.2.0
-    public var isRegistered: Bool {
-        return self.devices.device != nil
-    }
-    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
