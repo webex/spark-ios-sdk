@@ -196,20 +196,18 @@ public class Phone {
                 completionHandler(Result.failure(error))
             }
             else {
+                if self.calls.count > 0 {
+                    SDKLogger.shared.error("Failure: There are other active calls")
+                    completionHandler(Result.failure(SparkError.illegalOperation(reason: "There are other active calls")))
+                    return
+                }
+                
                 let mediaContext = self.mediaContext ?? MediaSessionWrapper()
                 mediaContext.prepare(option: option, phone: self)
                 let localSDP = mediaContext.getLocalSdp()
                 let reachabilities = self.reachability.feedback?.reachabilities
+                
                 self.queue.sync {
-                    if self.calls.count > 0 {
-                        SDKLogger.shared.error("Failure: There are other active calls")
-                        DispatchQueue.main.async {
-                            completionHandler(Result.failure(SparkError.illegalOperation(reason: "There are other active calls")))
-                        }
-                        self.queue.yield()
-                        return
-                    }
-                    
                     if let device = self.devices.device {
                         let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
                         func call(address: String) {
