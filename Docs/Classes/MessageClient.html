@@ -15,6 +15,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -200,7 +201,6 @@
                 </div>
               </div>
             <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-messages.html">Messages REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -227,7 +227,6 @@
                         <p>Lists all messages in a room by room Id.
 If present, it includes the associated media content attachment for each message.
 The list sorts the messages in descending order by creation date.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -256,7 +255,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the room.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -269,7 +267,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>If not nil, only list messages sent only before this date and time, in ISO8601 format.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -282,7 +279,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>if not nil, only list messages sent only before this message by id.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -295,7 +291,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The maximum number of messages in the response.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -307,8 +302,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -321,7 +315,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -331,7 +324,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -350,7 +342,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a plain text message, and optionally, a media content attachment, to a room by room Id.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -379,7 +370,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the room where the message is to be posted.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -392,7 +382,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The plain text message to be posted to the room.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -405,7 +394,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -417,8 +405,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -431,7 +418,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -441,7 +427,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -460,7 +445,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a room by room Id without text.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -489,7 +473,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the room.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -502,7 +485,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -514,8 +496,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -528,7 +509,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -538,7 +518,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -557,7 +536,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -586,7 +564,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the recipient of this private 1:1 message.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -599,7 +576,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The plain text message to post to the recipient.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -612,7 +588,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -624,8 +599,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -638,7 +612,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -648,7 +621,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -667,7 +639,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a person by person Id without text.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -696,7 +667,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the recipient of this media content.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -709,7 +679,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -721,8 +690,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -735,7 +703,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -745,7 +712,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -764,7 +730,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -793,7 +758,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The email address of the recipient when sending a private 1:1 message.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -806,7 +770,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The plain text message to post to the room.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -819,7 +782,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -831,8 +793,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -845,7 +806,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -855,7 +815,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -874,7 +833,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a person by email address without text.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -903,7 +861,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The email address of the recipient of this media content.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -916,7 +873,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -928,8 +884,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -942,7 +897,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -952,7 +906,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -971,7 +924,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Retrieves the details for a message by message Id.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1000,7 +952,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the message.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1012,8 +963,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1026,7 +976,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1036,7 +985,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1055,7 +1003,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Deletes a message by message id.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1084,7 +1031,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>The identifier of the message.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1096,8 +1042,7 @@ The list sorts the messages in descending order by creation date.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application’s main thread.</p>
-
+                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1110,7 +1055,6 @@ The list sorts the messages in descending order by creation date.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the request has finished.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1120,7 +1064,6 @@ The list sorts the messages in descending order by creation date.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1130,8 +1073,8 @@ The list sorts the messages in descending order by creation date.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-15)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

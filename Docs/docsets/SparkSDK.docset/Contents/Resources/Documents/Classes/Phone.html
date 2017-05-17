@@ -15,6 +15,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -203,7 +204,6 @@
 The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
@@ -212,7 +212,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -237,7 +236,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of Camera facing modes.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -272,13 +270,11 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="abstract">
                         <p>Default camera facing mode of this phone, used as the default when dialing or answering a call.
 The default mode is the front camera.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -312,13 +308,11 @@ The default mode is the front camera.</p>
                       <div class="abstract">
                         <p>Default loud speaker mode of this phone, used as the default when dialing or answering a call.
 True as using loud speaker, False as not. The default is using loud speaker.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -351,7 +345,6 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when call is incoming.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -386,7 +379,6 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                         <p>Registers this phone to Cisco Spark cloud on behalf of the authenticated user.
 It also creates the websocket and connects to Cisco Spark cloud.
 Subsequent invocations of this method refresh the registration.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -415,7 +407,6 @@ Subsequent invocations of this method refresh the registration.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the registration is completed. True means success, and False means failure.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -425,7 +416,6 @@ Subsequent invocations of this method refresh the registration.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -446,7 +436,6 @@ Subsequent invocations of this method refresh the registration.</p>
                         <p>Removes this <em>phone</em> from Cisco Spark cloud on behalf of the authenticated user.
 It also disconnects the websocket from Cisco Spark cloud.
 Subsequent invocations of this method behave as a no-op.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -475,7 +464,6 @@ Subsequent invocations of this method behave as a no-op.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -485,7 +473,6 @@ Subsequent invocations of this method behave as a no-op.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -515,18 +502,17 @@ It supports the following address formats for the receipient:</p>
 <li>Email address: e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a></li>
 </ul>
 </blockquote>
-
-<p><li>throw:</li>
+<li>throw:</li>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
-    1.2.0</p>
+    1.2.0
 
-<p></div>
+</div>
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
-    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.</p>
+    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.
 
-<p></div></p>
+</div>
 
                       </div>
                       <div class="declaration">
@@ -550,7 +536,6 @@ It supports the following address formats for the receipient:</p>
                               <td>
                                 <div>
                                   <p>Intended recipient address in one of the supported formats.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -563,7 +548,6 @@ It supports the following address formats for the receipient:</p>
                               <td>
                                 <div>
                                   <p>Intended media options - audio only or audio and video - for the call.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -576,7 +560,6 @@ It supports the following address formats for the receipient:</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -586,7 +569,6 @@ It supports the following address formats for the receipient:</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>a Call object</p>
-
                       </div>
                     </section>
                   </div>
@@ -605,13 +587,11 @@ It supports the following address formats for the receipient:</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     Invoking this function is optional since the alert will appear automatically during the first video call.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -630,7 +610,6 @@ It supports the following address formats for the receipient:</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -650,13 +629,11 @@ It supports the following address formats for the receipient:</p>
                       <div class="abstract">
                         <p>Prevents Cisco Spark iOS SDK from poping up an Alert for the end user
 to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
-
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -675,7 +652,6 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -717,7 +693,6 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                               <td>
                                 <div>
                                   <p>a UI view for rendering video.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -727,7 +702,6 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -759,7 +733,6 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -769,8 +742,8 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-15)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

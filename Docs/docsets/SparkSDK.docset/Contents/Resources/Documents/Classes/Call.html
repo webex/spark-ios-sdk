@@ -15,6 +15,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -202,7 +203,6 @@
             <p>A Call represents a media call on Cisco Spark.</p>
 
 <p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
     <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
     <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
@@ -224,7 +224,6 @@
 </code></pre>
 
 <p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
       <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -236,19 +235,16 @@
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see Phone API about how to create calls.
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -273,7 +269,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of directions of a call</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -307,7 +302,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumuaration of reasons for a call being disconnected.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -341,7 +335,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of media change event</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -375,7 +368,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of capabilities of a call.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -409,7 +401,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) is ringing.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -442,7 +433,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) answered and this <em>call</em> is connected.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -475,7 +465,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when this <em>call</em> is disconnected (hangup, cancelled, get declined or other self device pickup the call).</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -508,7 +497,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the media types of this <em>call</em> have changed.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -541,7 +529,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the capabilities of this <em>call</em> have changed.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -574,13 +561,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The status of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus
@@ -613,7 +598,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The direction of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -646,7 +630,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the DTMF keypad is enabled for this <em>call</em>. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -679,7 +662,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -712,7 +694,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -745,7 +726,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is sending video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -778,7 +758,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if this <em>call</em> is sending audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -811,7 +790,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -844,7 +822,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -877,7 +854,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the loud speaker is selected as the audio output device for this <em>call</em>. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -910,7 +886,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The camera facing mode selected for this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -943,7 +918,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The local video render view dimensions (points) of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -976,7 +950,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The remote video render view dimensions (points) of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1009,7 +982,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Call Memberships represent participants in this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1044,13 +1016,11 @@
                         <p>Acknowledge (without answering) an incoming call.
 Will cause the initiator&rsquo;s Call instance to emit the ringing event.
 Otherwise error will occur and onError callback will be dispatched.</p>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1079,7 +1049,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1089,7 +1058,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1110,13 +1078,11 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                         <p>Answers this call.
 This can only be invoked when this call is incoming and in ringing status.
 Otherwise error will occur and onError callback will be dispatched.</p>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1145,7 +1111,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                               <td>
                                 <div>
                                   <p>Intended media options - audio only or audio and video - for the call.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1158,7 +1123,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1168,7 +1132,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1189,13 +1152,11 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                         <p>Rejects this call. 
 This can only be invoked when this call is incoming and in ringing status.
 Otherwise error will occur and onError callback will be dispatched.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1224,7 +1185,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1234,7 +1194,6 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1254,13 +1213,11 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div class="abstract">
                         <p>Disconnects this call.
 This can only be invoked when this call is in answered status.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1289,7 +1246,6 @@ This can only be invoked when this call is in answered status.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1299,7 +1255,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1318,7 +1273,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends feedback for this call to Cisco Spark team.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1347,7 +1301,6 @@ This can only be invoked when this call is in answered status.</p>
                               <td>
                                 <div>
                                   <p>The rating of the quality of this call between 1 and 5 where 5 means excellent quality.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1360,7 +1313,6 @@ This can only be invoked when this call is in answered status.</p>
                               <td>
                                 <div>
                                   <p>The comments for this call.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1373,7 +1325,6 @@ This can only be invoked when this call is in answered status.</p>
                               <td>
                                 <div>
                                   <p>True if to include logs, False as not.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1383,7 +1334,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1402,7 +1352,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1430,8 +1379,7 @@ This can only be invoked when this call is in answered status.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-
+                                  <p>A closure to be executed once the action is completed. True means success, False means failure.</p>
                                 </div>
                               </td>
                             </tr>
@@ -1443,8 +1391,7 @@ This can only be invoked when this call is in answered status.</p>
                               </td>
                               <td>
                                 <div>
-                                  <p>any combination of valid DTMF events matching regex mattern “^[0-9#*abcdABCD]+$”</p>
-
+                                  <p>any combination of valid DTMF events matching regex mattern <q>^[0-9#\*abcdABCD]+$</q></p>
                                 </div>
                               </td>
                             </tr>
@@ -1457,7 +1404,6 @@ This can only be invoked when this call is in answered status.</p>
                               <td>
                                 <div>
                                   <p>A closure to be executed once the action is completed. True means success, False means failure.</p>
-
                                 </div>
                               </td>
                             </tr>
@@ -1467,7 +1413,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div>
                         <h4>Return Value</h4>
                         <p>Void</p>
-
                       </div>
                     </section>
                   </div>
@@ -1490,7 +1435,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A local unique identifier of a <em>Call</em> for <a href="https://developer.apple.com/reference/callkit">Apple CallKit</a>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1514,8 +1458,8 @@ This can only be invoked when this call is in answered status.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-15)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

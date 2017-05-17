@@ -14,6 +14,7 @@
     <header>
       <div class="content-wrapper">
         <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -212,7 +213,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-teams.html">Teams REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -252,7 +252,6 @@
                         <p>A Call represents a media call on Cisco Spark.</p>
 
 <p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
     <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
     <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
@@ -274,7 +273,6 @@
 </code></pre>
 
 <p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
       <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -286,19 +284,16 @@
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see Phone API about how to create calls.
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -336,7 +331,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A JWTAuthStorage implementation based on the iOS device keychain.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -377,7 +371,6 @@
 The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
@@ -386,7 +379,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -425,13 +417,11 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="abstract">
                         <p>An <a href="https://oauth.net/2/">OAuth</a> based authentication strategy
 is to be used to authenticate a user on Cisco Spark.</p>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -469,7 +459,6 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-webhooks.html">Webhooks REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -507,7 +496,6 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-messages.html">Messages REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -545,7 +533,6 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-memberships.html">Room Memberships REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -583,7 +570,6 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A data type represents an email address with validation and equatable implementation.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -622,7 +608,6 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="abstract">
                         <p>A <a href="https://jwt.io/introduction">JSON Web Token</a> (JWT) based authentication strategy
 is to be used to authenticate a guest user on Cisco Spark.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -660,7 +645,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-people.html">People REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -698,7 +682,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An OAuthStorage implementation based on the iOS device keychain.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -740,7 +723,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
 <ul>
 <li><em>OAuthAuthenticator</em> - this should be used when the SDK is to be authenticated as a registered user to Cisco Spark cloud.</li>
 </ul>
-
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
    <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
    <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:all"</span>
@@ -760,7 +742,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
 <ul>
 <li><em>JWTAuthenticator</em> - this should be used when the SDK is to be authenticated as a guest user to Cisco Spark cloud.</li>
 </ul>
-
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">authenticator</span> <span class="o">=</span> <span class="kt">JWTAuthenticator</span><span class="p">()</span>
    <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">authenticator</span><span class="p">)</span>
    <span class="o">...</span>
@@ -768,13 +749,11 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
      <span class="n">authenticator</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
    <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     All APIs on Cisco Spark iOS SDK are expected to run on the application&rsquo;s main thread, unless specified otherwise.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -812,7 +791,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-rooms.html">Rooms REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -850,7 +828,6 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-team-memberships.html">TeamMemberships REST API</a> .</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -875,8 +852,8 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-05-15)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
