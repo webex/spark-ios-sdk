@@ -406,10 +406,6 @@ public class Phone {
                     return
                 }
             }
-            
-            DispatchQueue.main.async {
-                call.stopMedia()
-            }
             if let url = call.model.locusUrl {
                 self.client.decline(url, by: call.device, queue: self.queue.underlying) { res in
                     self.doLocusResponse(LocusResult.reject(call, res, completionHandler))
@@ -435,9 +431,6 @@ public class Phone {
                 }
                 self.queue.yield()
                 return
-            }
-            DispatchQueue.main.async {
-                call.stopMedia()
             }
             if let url = call.model.myself?.url {
                 self.client.leave(url, by: call.device, queue: self.queue.underlying) { res in

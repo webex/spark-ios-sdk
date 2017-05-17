@@ -144,6 +144,7 @@ class MediaSessionWrapper {
             mediaSession.stopLocalVideoRenderView(true)
             mediaSession.localVideoView = nil
             mediaSession.sendVideo = false
+            mediaSession.disconnectFromCloud()
             self.preview = false
         }
     }

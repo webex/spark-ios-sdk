@@ -462,6 +462,7 @@ public class Call {
     func end(reason: DisconnectReason) {
         self.device.phone.remove(call: self)
         self.status = .disconnected
+        self.stopMedia()
         self.metrics.trackCallEnded(reason: reason)
         DispatchQueue.main.async {
             self.onDisconnected?(reason)
