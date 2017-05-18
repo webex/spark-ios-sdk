@@ -341,7 +341,7 @@ public class Phone {
     
     func answer(call: Call, option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
-            if self.calls.filter({ $0.key != call.url }).count > 0 {
+            if self.calls.filter({ $0.key != call.url && $0.value.status == CallStatus.connected}).count > 0 {
                 SDKLogger.shared.error("Failure: There are other active calls")
                 completionHandler(SparkError.illegalOperation(reason: "There are other active calls"))
                 return
