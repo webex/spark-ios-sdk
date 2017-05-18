@@ -37,10 +37,8 @@ extension ReachabilityTransportStatusModel: Mappable {
     }
     
     class StringAndIntTransform: TransformType {
-        typealias Object = Int
-        typealias JSON = String
-        
-        func transformFromJSON(_ value: Any?) -> Object? {
+
+        func transformFromJSON(_ value: Any?) -> Int? {
             if let inputString = value as? String {
                 return Int(inputString)
             } else if let inputInt = value as? Int {
@@ -49,7 +47,7 @@ extension ReachabilityTransportStatusModel: Mappable {
             return nil
         }
         
-        func transformToJSON(_ value: Object?) -> JSON? {
+        func transformToJSON(_ value: Int?) -> String? {
             guard let input = value else {
                 return nil
             }

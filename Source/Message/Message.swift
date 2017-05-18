@@ -80,10 +80,8 @@ extension Message: Mappable {
 }
 
 class EmailTransform: TransformType {
-    typealias Object = EmailAddress
-    typealias JSON = String
     
-    func transformFromJSON(_ value: Any?) -> Object? {
+    func transformFromJSON(_ value: Any?) -> EmailAddress? {
         if let value = value as? String {
             return EmailAddress.fromString(value)
         } else {
@@ -91,7 +89,7 @@ class EmailTransform: TransformType {
         }
     }
     
-    func transformToJSON(_ value: Object?) -> JSON? {
-        return nil
+    func transformToJSON(_ value: EmailAddress?) -> String? {
+        return value?.toString()
     }
 }

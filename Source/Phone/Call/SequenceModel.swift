@@ -62,10 +62,8 @@ extension SequenceModel: Mappable {
     }
     
     class UInt64Transform: TransformType {
-        typealias Object = UInt64
-        typealias JSON = String
         
-        func transformFromJSON(_ value: Any?) -> Object?{
+        func transformFromJSON(_ value: Any?) -> UInt64?{
             if let number = value as? NSNumber {
                 let uint64Value = number.uint64Value
                 return uint64Value
@@ -74,8 +72,11 @@ extension SequenceModel: Mappable {
             return nil
         }
         
-        func transformToJSON(_ value: Object?) -> JSON? {
-            return nil
+        func transformToJSON(_ value: UInt64?) -> String? {
+            guard let input = value else {
+                return nil
+            }
+            return String(input)
         }
     }
 }

@@ -119,7 +119,7 @@ public class Phone {
     /// It also creates the websocket and connects to Cisco Spark cloud.
     /// Subsequent invocations of this method refresh the registration.
     ///
-    /// - parameter completionHandler: A closure to be executed once the registration is completed. True means success, and False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.2.0
     public func register(_ completionHandler: @escaping ((Error?) -> Void)) {
@@ -156,7 +156,7 @@ public class Phone {
     /// It also disconnects the websocket from Cisco Spark cloud.
     /// Subsequent invocations of this method behave as a no-op.
     ///
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.2.0
     public func deregister(_ completionHandler: @escaping ((Error?) -> Void)) {
@@ -185,7 +185,7 @@ public class Phone {
     ///
     /// - parameter address: Intended recipient address in one of the supported formats.
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, and False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed.
     /// - returns: a Call object
     /// - throw:
     /// - since: 1.2.0
@@ -425,7 +425,7 @@ public class Phone {
     func hangup(call: Call, completionHandler: @escaping (Error?) -> Void) {
         self.queue.sync {
             if call.status == CallStatus.disconnected {
-                SDKLogger.shared.error("Failure: Already disconnected")
+                SDKLogger.shared.warn("Warning: Already disconnected")
                 DispatchQueue.main.async {
                     completionHandler(SparkError.illegalStatus(reason: "Already disconnected"))
                 }

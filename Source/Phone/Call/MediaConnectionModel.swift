@@ -62,10 +62,8 @@ extension MediaConnectionModel: Mappable {
     }
     
     class MediaTransform: TransformType {
-        typealias Object = MediaModel
-        typealias JSON = String
         
-        func transformFromJSON(_ value: Any?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> MediaModel? {
             guard let stringValue = value as? String else {
                 return nil
             }
@@ -73,8 +71,8 @@ extension MediaConnectionModel: Mappable {
             return mediaInfo
             
         }
-        func transformToJSON(_ value: Object?) -> JSON? {
-            return nil
+        func transformToJSON(_ value: MediaModel?) -> String? {
+            return value?.toJSONString()
         }
     }
 }

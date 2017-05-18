@@ -121,17 +121,15 @@ extension ParticipantModel: Mappable {
     }
     
     class ParticipantStateTransform: TransformType {
-        typealias Object = CallMembership.State
-        typealias JSON = String
         
-        func transformFromJSON(_ value: Any?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> CallMembership.State? {
             guard let state = value as? String else {
                 return nil
             }
             return CallMembership.State(rawValue: state.lowercased())
         }
         
-        func transformToJSON(_ value: Object?) -> JSON? {
+        func transformToJSON(_ value: CallMembership.State?) -> String? {
             guard let state = value else {
                 return nil
             }

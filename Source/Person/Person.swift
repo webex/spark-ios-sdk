@@ -40,10 +40,8 @@ public struct Person {
     public var created: Date?
     
     class EmailsTransform: TransformType {
-        typealias Object = [EmailAddress]
-        typealias JSON = [String]
         
-        func transformFromJSON(_ value: Any?) -> Object? {
+        func transformFromJSON(_ value: Any?) -> [EmailAddress]? {
             var emails: [EmailAddress] = []
 
             guard let value = (value as? [String]) else {
@@ -60,7 +58,7 @@ public struct Person {
             return emails
         }
         
-        func transformToJSON(_ value: Object?) -> JSON? {
+        func transformToJSON(_ value: [EmailAddress]?) ->  [String]? {
             var emails: [String] = []
             guard value != nil else {
                 return nil

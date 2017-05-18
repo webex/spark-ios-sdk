@@ -378,7 +378,6 @@ public class Call {
     
     /// Acknowledge (without answering) an incoming call.
     /// Will cause the initiator's Call instance to emit the ringing event.
-    /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
@@ -390,7 +389,6 @@ public class Call {
     
     /// Answers this call.
     /// This can only be invoked when this call is incoming and in ringing status.
-    /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
     /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
@@ -403,7 +401,6 @@ public class Call {
     
     /// Rejects this call. 
     /// This can only be invoked when this call is incoming and in ringing status.
-    /// Otherwise error will occur and onError callback will be dispatched.
     ///
     /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
@@ -437,9 +434,8 @@ public class Call {
     
     /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
     ///
-    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.    
     /// - returns: Void
     /// - since: 1.2.0
     public func send(dtmf: String, completionHandler: ((Error?) -> Void)?) {
