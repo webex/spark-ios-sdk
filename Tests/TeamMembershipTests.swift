@@ -144,8 +144,8 @@ class TeamMembershipTests: XCTestCase {
             validate(membership: membership1)
             validate(membership: membership2)
             XCTAssertTrue(memberships.contains{$0.teamId == testTeamId})
-            XCTAssertTrue(memberships.contains{$0 == membership1})
-            XCTAssertFalse(memberships.contains{$0 == membership2})
+            XCTAssertTrue(memberships.contains{$0.id == membership1.id})
+            XCTAssertFalse(memberships.contains{$0.id == membership2.id})
         } else {
             XCTFail("Membership list was incorrect")
         }
@@ -186,7 +186,7 @@ class TeamMembershipTests: XCTestCase {
             let membershipFromGet = getMembership(membershipId: membershipId) {
             validate(membership: membership)
             validate(membership: membershipFromGet)
-            XCTAssertEqual(membershipFromGet, membership)
+            XCTAssertEqual(membershipFromGet.id, membership.id)
         } else {
             XCTFail("Membership was incorrect")
         }

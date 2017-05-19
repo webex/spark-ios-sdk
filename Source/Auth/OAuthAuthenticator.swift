@@ -133,13 +133,18 @@ public class OAuthAuthenticator: Authenticator {
             + "&state=iossdkstate") {
 
             oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
+                
+//                if let oauthCode = oauthCode {
+//                    self.fetchingAccessTokenInProcess = true
+//                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
+//                        SDKLogger.shared.error("Failure retrieving the access token from the oauth code", error: error)
+//                    }))
+//                }
+//                completionHandler?(oauthCode != nil)
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
-                    
                     self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: { response in
-                        self.createAccessTokenHandler(errorHandler: { error in
-                            SDKLogger.shared.error("Failure retrieving the access token from the oauth code", error: error)
-                        })(response)
+                        self.createAccessTokenHandler(errorHandler: { error in SDKLogger.shared.error("Failure retrieving the access token from the oauth code", error: error)})(response)
                         completionHandler?(true)
                     })
                 } else {
@@ -176,7 +181,7 @@ public class OAuthAuthenticator: Authenticator {
         }
     }
     
-    private func createAccessTokenHandler(errorHandler: @escaping (Error)->Void) -> OAuthClient.ObjectHandler {
+    private func createAccessTokenHandler(errorHandler: @escaping (Error)->Void) -> (ServiceResponse<OAuthTokenModel>) -> Void {
         return { response in
             self.fetchingAccessTokenInProcess = false
             

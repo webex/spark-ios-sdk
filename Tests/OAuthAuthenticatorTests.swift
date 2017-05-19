@@ -30,17 +30,17 @@ fileprivate class MockOAuthClient: OAuthClient {
     var refreshOAuthAccessTokenFromRefreshToken_refreshToken: String?
     var refreshOAuthAccessTokenFromRefreshToken_clientId: String?
     var refreshOAuthAccessTokenFromRefreshToken_clientSecret: String?
-    var refreshOAuthAccessTokenFromRefreshToken_completionHandler: ObjectHandler?
+    var refreshOAuthAccessTokenFromRefreshToken_completionHandler: ((ServiceResponse<OAuthTokenModel>) -> Void)?
     var refreshOAuthAccessTokenFromRefreshToken_callCount = 0
     
     var fetchAccessTokenFromOAuthCode_oauthCode: String?
     var fetchAccessTokenFromOAuthCode_clientId: String?
     var fetchAccessTokenFromOAuthCode_clientSecret: String?
     var fetchAccessTokenFromOAuthCode_redirectUri: String?
-    var fetchAccessTokenFromOAuthCode_completionHandler: ObjectHandler?
+    var fetchAccessTokenFromOAuthCode_completionHandler: ((ServiceResponse<OAuthTokenModel>) -> Void)?
     var fetchAccessTokenFromOAuthCode_callCount = 0
     
-    override func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    override func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<OAuthTokenModel>) -> Void) {
         refreshOAuthAccessTokenFromRefreshToken_refreshToken = refreshToken
         refreshOAuthAccessTokenFromRefreshToken_clientId = clientId
         refreshOAuthAccessTokenFromRefreshToken_clientSecret = clientSecret
@@ -48,7 +48,7 @@ fileprivate class MockOAuthClient: OAuthClient {
         refreshOAuthAccessTokenFromRefreshToken_callCount += 1
     }
     
-    override func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    override func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<OAuthTokenModel>) -> Void) {
         fetchAccessTokenFromOAuthCode_oauthCode = oauthCode
         fetchAccessTokenFromOAuthCode_clientId = clientId
         fetchAccessTokenFromOAuthCode_clientSecret = clientSecret
@@ -350,12 +350,13 @@ class OAuthAuthenticatorTests: XCTestCase {
         var successResult: Bool? = nil
         var count = 0
         testObject.authorize(parentViewController: parent) { success in
+            print(success)
             successResult = success
             count += 1
         }
         
         oauthLauncher.completionHandler?("oauthCode1")
-        
+        oauthClient.fetchAccessTokenFromOAuthCode_completionHandler?(accessTokenResponse(accessToken: "accessToken1"))
         XCTAssertTrue(testObject.authorized)
         XCTAssertEqual(successResult, true)
         XCTAssertEqual(count, 1)

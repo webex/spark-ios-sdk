@@ -31,9 +31,13 @@ fileprivate class MockJWTStorage: JWTAuthStorage {
 
 fileprivate class MockJWTClient: JWTAuthClient {
     var fetchTokenFromJWT_callCount = 0
-    var fetchTokenFromJWT_completionHandler: ObjectHandler?
+    var fetchTokenFromJWT_completionHandler: ((ServiceResponse<JWTTokenModel>) -> Void)?
     
-    override func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    override init() {
+        
+    }
+    
+    override func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<JWTTokenModel>) -> Void) {
         fetchTokenFromJWT_completionHandler = completionHandler
         fetchTokenFromJWT_callCount += 1
     }

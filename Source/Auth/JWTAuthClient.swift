@@ -49,15 +49,13 @@ class JWTTokenModel: NSObject, Mappable {
 
 
 class JWTAuthClient {
-    
-    typealias ObjectHandler = (ServiceResponse<JWTTokenModel>) -> Void
-    
+        
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
             .path("jwt/login")
     }
     
-    func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<JWTTokenModel>) -> Void) {
         let request = requestBuilder()
             .method(.post)
             .headers(["Authorization": jwt,

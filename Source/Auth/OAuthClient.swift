@@ -45,16 +45,14 @@ extension OAuthTokenModel: Mappable {
 }
 
 class OAuthClient {
-    
-    typealias ObjectHandler = (ServiceResponse<OAuthTokenModel>) -> Void
-    
+        
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
     }
     
-    func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<OAuthTokenModel>) -> Void) {
         let query = RequestParameter(["grant_type": "authorization_code",
             "redirect_uri": redirectUri,
             "code": oauthCode,
@@ -70,7 +68,7 @@ class OAuthClient {
         request.responseObject(completionHandler)
     }
     
-    func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping  (ServiceResponse<OAuthTokenModel>) -> Void) {
         let query = RequestParameter(["grant_type": "refresh_token",
             "refresh_token": refreshToken,
             "client_id": clientId,
