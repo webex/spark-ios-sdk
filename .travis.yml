@@ -27,9 +27,7 @@ before_install:
 
 script:
   - set -o pipefail
-  - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clientSecret="$CLIENTSECRET" test | xcpretty -c
-  - curl -XPOST --silent --show-error --user ${TiggerUser}:${TiggerToken} ${TiggerAddress}
-  - travis_wait bash LocalBuild.sh
+  - travis_wait bash IntegrationTesting.sh
 branches:
   only:
     - master
