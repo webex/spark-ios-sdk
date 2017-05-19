@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,46 +19,57 @@
 // THE SOFTWARE.
 
 import Foundation
-import CocoaLumberjack
 
-class Logger {
-    
-    static let defaultLevel = DDLogLevel.info
-    
-    static func verbose(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.verbose, file: file, function: function, line: line)
-    }
-    
-    static func debug(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.debug, file: file, function: function, line: line)
-    }
-    
-    static func info(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.info, file: file, function: function, line: line)
-    }
-    
-    static func warn(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.warning, file: file, function: function, line: line)
-    }
-    
-	static func error(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel = defaultLevel, file: String = #file, function: String = #function, line: UInt = #line) {
-        log(message(), level: level, flag: DDLogFlag.error, file: file, function: function, line: line, asynchronous: false)
-    }
-    
-    static private func log(_ message: @autoclosure () -> String, error: Error? = nil, level: DDLogLevel, flag: DDLogFlag, context: Int = 0, file: String, function: String, line: UInt, tag: Any? = nil, asynchronous: Bool = true, ddlog: DDLog = DDLog.sharedInstance()) {
-        guard LoggerManager.sharedInstance.hasSetup() else {
-            return
-        }
+/// A protocol for logging in the SDK.
+///
+/// - since: 1.2.0
+public protocol Logger {
+    /// log a message.
+    ///
+    /// - parameter message: the mesage to be logged
+    /// - returns: Void
+    /// - since: 1.2.0
+    func log(message: LogMessage)
+}
 
-        if level.rawValue & flag.rawValue != 0 {
-			let actualMessage: String
-			if let error = error as? NSError {
-				actualMessage = "\(message()): \(error.localizedFailureReason)"
-			} else {
-				actualMessage = message()
-			}
-            let logMessage = DDLogMessage(message: actualMessage, level: level, flag: flag, context: context, file: file, function: function, line: line, tag: tag, options: [.copyFile, .copyFunction], timestamp: nil)
-            ddlog.log(asynchronous: asynchronous, message: logMessage)
-        }
-    }
+/// Information about the log message.
+///
+/// - since: 1.2.0
+public struct LogMessage {
+    /// The log message.
+    public let message: String
+    /// The log level.
+    public let level: LogLevel
+    /// The source file where the log message is generated.
+    public let file: String
+    /// The function where the log message is generated.
+    public let function: String
+    /// The line where the log message is generated.
+    public let line: UInt
+    /// The description of the log message.
+    public let description: String
+    /// The date and time when the log message is generated.
+    public let timestamp: Date
+    /// The name of the thread where the log message is generated.
+    public let threadName: String
+}
+
+/// The enumeration of log message level
+///
+/// - since: 1.2.0
+public enum LogLevel: UInt {
+    /// Turn off logging.
+    case no
+    /// This is an error message.
+    case error
+    /// This is a warning message.
+    case warning
+    /// This is an info message.
+    case info
+    /// This is a debug message.
+    case debug
+    /// This is a verbose message.
+    case verbose
+    /// Turn all all logging.
+    case all
 }

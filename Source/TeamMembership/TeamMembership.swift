@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,56 @@
 import Foundation
 import ObjectMapper
 
-/// TeamMembership contents.
-public struct TeamMembership: Mappable, Equatable {
+/// A data type represents a relationship between *Team* and *Person* at Cisco Spark cloud.
+///
+/// - since: 1.2.0
+public struct TeamMembership {
     
-    /// The id of this team membership.
+    /// The identifier of this team membership.
+    ///
+    /// - since: 1.2.0
     public var id: String?
     
-    /// The id of the team.
+    /// The identifier of the team.
+    ///
+    /// - since: 1.2.0
     public var teamId: String?
     
-    /// The id of the person.
+    /// The identifier of the person.
+    ///
+    /// - since: 1.2.0
     public var personId: String?
     
     /// The email address of the person.
+    ///
+    /// - since: 1.2.0
     public var personEmail: EmailAddress?
     
     ///  The display name of the person.
+    ///
+    /// - since: 1.2.0
     public var personDisplayName: String?
     
-    /// Moderator of a team.
+    /// True if the person in this membership is a moderator of the team.
+    ///
+    /// - since: 1.2.0
     public var isModerator: Bool?
     
     /// The timestamp that the team membership being created.
+    ///
+    /// - since: 1.2.0
     public var created: Date?
+}
+
+extension TeamMembership: Mappable {
     
-    /// TeamMembership constructor.
+    /// Contructus a new *TeamMembership* object.
     ///
     /// - note: for internal use only.
     public init?(map: Map){
     }
     
-    /// TeamMembership mapping from JSON.
+    /// Maps a *TeamMembership* from JSON.
     ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
@@ -63,19 +82,4 @@ public struct TeamMembership: Mappable, Equatable {
         isModerator <- map["isModerator"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
-}
-
-/// TeamMembership Equatable implementation. Check if two team memberships are equal.
-public func ==(lhs: TeamMembership, rhs: TeamMembership) -> Bool {
-    if lhs.id == rhs.id  &&
-        lhs.personId == rhs.personId &&
-        lhs.personEmail == rhs.personEmail &&
-        lhs.personDisplayName == rhs.personDisplayName &&
-        lhs.teamId == rhs.teamId &&
-        lhs.isModerator == rhs.isModerator &&
-        lhs.created == rhs.created  {
-        return true
-    }
-    
-    return false
 }

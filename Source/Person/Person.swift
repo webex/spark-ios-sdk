@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ import Foundation
 import ObjectMapper
 
 /// Person contents.
-public struct Person: Mappable {
+public struct Person {
     
     /// The id of this person.
     public var id: String?
@@ -39,6 +39,40 @@ public struct Person: Mappable {
     /// The timestamp that this person being created.
     public var created: Date?
     
+    class EmailsTransform: TransformType {
+        
+        func transformFromJSON(_ value: Any?) -> [EmailAddress]? {
+            var emails: [EmailAddress] = []
+
+            guard let value = (value as? [String]) else {
+                return nil
+            }
+
+            for emailString in value {
+                if let emailAddress = EmailAddress.fromString(emailString) {
+                    emails.append(emailAddress)
+                } else {
+                    SDKLogger.shared.warn("\(emailString) is not a properly formatted email address")
+                }
+            }
+            return emails
+        }
+        
+        func transformToJSON(_ value: [EmailAddress]?) ->  [String]? {
+            var emails: [String] = []
+            guard value != nil else {
+                return nil
+            }
+            for email in value! {
+                emails.append(email.toString())
+            }
+            return emails
+        }
+    }
+}
+
+extension Person: Mappable {
+    
     /// Person constructor.
     ///
     /// - note: for internal use only.
@@ -54,31 +88,5 @@ public struct Person: Mappable {
         displayName <- map["displayName"]
         avatar <- map["avatar"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-    }
-    
-    class EmailsTransform: TransformType {
-        typealias Object = [EmailAddress]
-        typealias JSON = [String]
-        
-        func transformFromJSON(_ value: Any?) -> Object? {
-            var emails: [EmailAddress] = []
-
-            guard let value = (value as? [String]) else {
-                return nil
-            }
-
-            for emailString in value {
-                if let emailAddress = EmailAddress.fromString(emailString) {
-                    emails.append(emailAddress)
-                } else {
-                    Logger.warn("\(emailString) is not a properly formatted email address")
-                }
-            }
-            return emails
-        }
-        
-        func transformToJSON(_ value: Object?) -> JSON? {
-            return nil
-        }
     }
 }

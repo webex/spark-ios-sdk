@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,9 @@
 import Foundation
 import KeychainAccess
 
-/// An OAuthStorage mechanism that uses the keychain for underlying storage
+/// An OAuthStorage implementation based on the iOS device keychain.
+///
+/// - since: 1.2.0
 public class OAuthKeychainStorage: OAuthStorage {
 
     private let accessTokenKey = "accessToken"
@@ -30,10 +32,12 @@ public class OAuthKeychainStorage: OAuthStorage {
     private let refreshTokenKey = "refreshToken"
     private let refreshTokenExpirationDateKey = "refreshTokenExpirationDate"
     
-    private var cachedAuthenticationInfo: OAuthAuthenticationInfo?
+    private var cachedTokens: OAuthTokens?
     private let keychain: KeychainProtocol
     
-    /// Creates a new OAuth keychain store
+    /// Constructs a new OAuthKeychainStorage
+    ///
+    /// - since: 1.2.0
     public convenience init() {
         self.init(keychain: Keychain(service: "\(Bundle.main.bundleIdentifier ?? "").sparksdk.oauth"))
     }
@@ -42,29 +46,30 @@ public class OAuthKeychainStorage: OAuthStorage {
         self.keychain = keychain
     }
     
-    /// See OAuthStorage.authenticationInfo
-    public var authenticationInfo: OAuthAuthenticationInfo? { 
+    /// - see: See OAuthStorage.authenticationInfo
+    /// - since: 1.2.0
+    public var tokens: OAuthTokens? {
         get {
             do {
-                if cachedAuthenticationInfo == nil,
+                if cachedTokens == nil,
                     let accessToken = try keychain.get(accessTokenKey),
                     let accessTokenExpirationDateString = try keychain.get(accessTokenExpirationDateKey),
                     let accessTokenExpirationDateDouble = Double(accessTokenExpirationDateString),
                     let refreshToken = try keychain.get(refreshTokenKey),
                     let refreshTokenExpirationDateString = try keychain.get(refreshTokenExpirationDateKey),
                     let refreshTokenExpirationDateDouble = Double(refreshTokenExpirationDateString) {
-                    cachedAuthenticationInfo = OAuthAuthenticationInfo(accessToken: accessToken,
-                                                                       accessTokenExpirationDate: Date(timeIntervalSinceReferenceDate: accessTokenExpirationDateDouble),
-                                                                       refreshToken: refreshToken,
-                                                                       refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
+                    cachedTokens = OAuthTokens(accessToken: accessToken,
+                                               accessTokenExpirationDate: Date(timeIntervalSinceReferenceDate: accessTokenExpirationDateDouble),
+                                               refreshToken: refreshToken,
+                                               refreshTokenExpirationDate: Date(timeIntervalSinceReferenceDate: refreshTokenExpirationDateDouble))
                 }
             } catch let error {
-                Logger.error("Failed to get authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to get authentication information with error", error: error)
             }
-            return cachedAuthenticationInfo            
+            return cachedTokens
         }
         set {
-            cachedAuthenticationInfo = newValue
+            cachedTokens = newValue
             do {
                 if let newValue = newValue {
                     try keychain.set(newValue.accessToken, key: accessTokenKey)
@@ -78,7 +83,7 @@ public class OAuthKeychainStorage: OAuthStorage {
                     try keychain.remove(refreshTokenExpirationDateKey)
                 }
             } catch let error {
-                Logger.error("Failed to save authentication information with error", error: error)
+                SDKLogger.shared.error("Failed to save authentication information with error", error: error)
             }
         }
     }

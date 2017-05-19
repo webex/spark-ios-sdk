@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -60,7 +60,7 @@ class SparkTestFixture {
             return nil
         }
         selfUser = selfUserValue
-        class Auth: AuthenticationStrategy {
+        class Auth: Authenticator {
             private let accessToken: String
             let authorized = true
             
@@ -75,7 +75,7 @@ class SparkTestFixture {
                 completionHandler(accessToken)
             }
         }
-        spark = Spark(authenticationStrategy: SimpleAuthStrategy(accessToken: selfUser.accessToken))
+        spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))
     }
     
     private static func createAdminAccessToken(clientId: String, clientSecret: String) -> String? {

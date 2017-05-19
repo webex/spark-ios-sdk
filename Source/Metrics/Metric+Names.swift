@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,15 @@ import Foundation
 
 extension Metric {
     struct Call {
+        
         static let Rating = "meetup_call_user_rating"
         static let ActivatingVideo = "video_license_activation"
+        static let End = "callEnd";
+        static let Request = "callRequest";
+        static let Alert = "callAlert";
+        
+        static let Error = "errorCode";
+        static let NetworkError = "networkError";
+        static let HttpStatusCode = "httpStatusCode";
     }
 }

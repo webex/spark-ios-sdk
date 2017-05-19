@@ -18,476 +18,503 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import CoreMedia
 
 /// A Call represents a media call on Cisco Spark.
-/// The application can create an outgoing *call* object by calling *phone.dial* function:
 ///
-/// ``` swift
+/// The application can create an outgoing *call* by calling *phone.dial* function:
+///
+/// ```` swift
 ///     let address = "coworker@example.com"
 ///     let localVideoView = MediaRenderView()
 ///     let remoteVideoView = MediaRenderView()
 ///     let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-///     let call = spark.phone.dial(address, option: mediaOption) { success in
-///       if success {
+///     spark.phone.dial(address, option:mediaOption) {
+///       switch ret {
+///       case .success(let call):
 ///         // success
-///       } else {
+///         call.onConnected = {
+///
+///         }
+///         call.onDisconnected = { reason in
+///
+///         }
+///       case .failure(let error):
 ///         // failure
 ///       }
 ///     }
-/// ```
-/// The application can receive an incoming *call* object via ...
+/// ````
 ///
-/// ``` swift
-///    code
-/// ```
+/// The application can receive an incoming *call* on *phone.onIncoming* function:
 ///
-/// - see: Phone API about how to create calls.
+/// ```` swift
+///     spark.phone.onIncoming = { call in
+///       call.answer(option: mediaOption) { error in
+///         if let error = error {
+///           // success
+///         }
+///         else {
+///           // failure
+///         }
+///       }
+///     }
+/// ````
+///
+/// - see: see Phone API about how to create calls.
+/// - see: CallStatus for the states and transitions of a *Call*.
 /// - since: 1.2.0
-open class Call {
+public class Call {
     
-    /// Completion handler for a call operation.
-    public typealias CompletionHandler = (Bool) -> Void
-    
-    /// The enumeration of Camera facing modes.
-    public enum FacingMode: String {
-        /// Front camera.
-        case User
-        /// Back camera.
-        case Environment
+    /// The enumeration of directions of a call
+    ///
+    /// - since: 1.2.0
+    public enum Direction {
+        /// The local party is a recipient of the call.
+        case incoming
+        /// The local party is an initiator of the call.
+        case outgoing
     }
     
-    /// The enumeration of Call status.
-    public enum Status: String {
-        /// Intended recipient hasn't accepted the call.
-        case Initiated
-        /// Remote party has acknowledged the call.
-        case Ringing
-        /// An incoming call from remote party.
-        case Incoming
-        /// Call gets connected.
-        case Connected
-        /// Call gets disconnected.
-        case Disconnected
+    /// The enumuaration of reasons for a call being disconnected.
+    ///
+    /// - since: 1.2.0
+    public enum DisconnectReason {
+        /// The local party has left the call.
+        case localLeft
+        /// The local party has declined the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
+        case localDecline
+        /// The local party has cancelled the call.
+        /// This is only applicable when the *direction* of the call is *outgoing*.
+        case localCancel
+        /// The remote party has left the call.
+        case remoteLeft
+        /// The remote party has declined the call.
+        /// This is only applicable when the *direction* of the call is *outgoing*.
+        case remoteDecline
+        /// The remote party has cancelled the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
+        case remoteCancel
+        /// One of the other phones of the authenticated user has answered the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
+        case otherConnected
+        /// One of the other phones of the authenticated user has declined the call.
+        /// This is only applicable when the *direction* of the call is *incoming*.
+        case otherDeclined
+        /// Unknown error
+        case error(Error)
     }
     
-    /// The current status of this *call*.
-    open var status: Status {
-        return state.status
-    }
-
-    /// The intended recipient of this *call*.
-    /// - For an outgoing call, this is the same as the address specified in *phone.dial*.
-    /// - For an incoming call, this is the identity of the authenticated user.
-    open var to: String?
-    
-    /// The receiver of this *call*.
-    /// - For an outgoing call, this is the identity of the authenticated user.
-    /// - For an incoming call, this is the address of the caller such as email address, phone number, or SIP address.
-    open var from: String?
-    
-    /// True if this *call* is sending audio. Otherwise, false.
-    open var sendingAudio: Bool {
-        return !mediaSession.audioMuted
-    }
-    
-    /// True if the local party of this *call* is receiving audio. Otherwise, false.
-    open var receivingAudio: Bool {
-        return !mediaSession.audioOutputMuted
-    }
-    
-    /// True if the local party of this *call* is sending video. Otherwise, false.
-    open var sendingVideo: Bool {
-        return mediaSession.hasVideo && !mediaSession.videoMuted
-    }
-    
-    /// True if the local party of this *call* is receiving video. Otherwise, false.
-    open var receivingVideo: Bool {
-        return mediaSession.hasVideo && !mediaSession.videoOutputMuted
+    /// The enumeration of media change event
+    ///
+    /// - since: 1.2.0
+    public enum MediaChangedEvent {
+        /// True if the remote party now is sending video. Otherwise false.
+        /// This might be triggered when the remote party muted or unmuted the video.
+        case remoteSendingVideo(Bool)
+        /// True if the remote party now is sending audio. Otherwise false.
+        /// This might be triggered when the remote party muted or unmuted the audio.
+        case remoteSendingAudio(Bool)
+        /// True if the local party now is sending video. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the video.
+        case sendingVideo(Bool)
+        /// True if the local party now is sending aduio. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the audio.
+        case sendingAudio(Bool)
+        /// True if the local party now is receiving video. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the video.
+        case receivingVideo(Bool)
+        /// True if the local party now is receiving audio. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the audio.
+        case receivingAudio(Bool)
+        /// Camera FacingMode on local device has switched.
+        case cameraSwitched
+        /// Whether loud speaker on local device is on or not has switched.
+        case spearkerSwitched
+        /// Local video rendering view size has changed.
+        case localVideoViewSize
+        /// Remote video rendering view size has changed.
+        case remoteVideoViewSize
     }
     
-    /// True if the remote party of this *call* is sending audio. Otherwise, false.
-    open var remoteSendingAudio: Bool {
-        if let info = self.info {
-            return !info.remoteAudioMuted
+    /// The enumeration of capabilities of a call.
+    ///
+    /// - since: 1.2.0
+    public enum Capabilities {
+        /// This *call* can send and receive DTMF.
+        case dtmf
+    }
+    
+    /// Callback when remote participant(s) is ringing.
+    ///
+    /// - since: 1.2.0
+    public var onRinging: (() -> Void)? {
+        didSet {
+            self.device.phone.queue.sync {
+                if let block = self.onRinging, self.status == CallStatus.ringing {
+                    DispatchQueue.main.async {
+                        block()
+                    }
+                }
+                self.device.phone.queue.yield()
+            }
         }
-        return false
+    }
+    
+    /// Callback when remote participant(s) answered and this *call* is connected.
+    ///
+    /// - since: 1.2.0
+    public var onConnected: (() -> Void)? {
+        didSet {
+            self.device.phone.queue.sync {
+                if let block = self.onConnected, self.status == CallStatus.connected {
+                    DispatchQueue.main.async {
+                        block()
+                    }
+                }
+                self.device.phone.queue.yield()
+            }
+        }
+    }
+    
+    /// Callback when this *call* is disconnected (hangup, cancelled, get declined or other self device pickup the call).
+    ///
+    /// - since: 1.2.0
+    public var onDisconnected: ((DisconnectReason) -> Void)?
+    
+    /// Callback when the media types of this *call* have changed.
+    ///
+    /// - since: 1.2.0
+    public var onMediaChanged: ((MediaChangedEvent) -> Void)?
+    
+    /// Callback when the capabilities of this *call* have changed.
+    ///
+    /// - since: 1.2.0
+    public var onCapabilitiesChanged: ((Capabilities) -> Void)?
+    
+    /// The status of this *call*.
+    ///
+    /// - since: 1.2.0
+    /// - see: CallStatus
+    public internal(set) var status: CallStatus = CallStatus.initiated
+    
+    /// The direction of this *call*.
+    ///
+    /// - since: 1.2.0
+    public private(set) var direction: Direction
+    
+    /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var sendingDTMFEnabled: Bool {
+        return self.model.isLocalSupportDTMF
     }
     
     /// True if the remote party of this *call* is sending video. Otherwise, false.
-    open var remoteSendingVideo: Bool {
-        if let info = self.info {
-            return !info.remoteVideoMuted
-        }
-        return false
+    ///
+    /// - since: 1.2.0
+    public var remoteSendingVideo: Bool {
+        return !model.isRemoteVideoMuted
     }
     
-    /// True if loud speaker is selected as the audio output device for this *call*. Otherwise, false.
-    open var loudSpeaker: Bool {
-        return mediaSession.isSpeakerSelected()
+    /// True if the remote party of this *call* is sending audio. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var remoteSendingAudio: Bool {
+        return !model.isRemoteAudioMuted
+    }
+    
+    /// True if the local party of this *call* is sending video. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var sendingVideo: Bool {
+        get {
+            return self.mediaSession.hasVideo && !self.mediaSession.videoMuted
+        }
+        set {
+            self.mediaSession.videoMuted = !newValue
+        }
+    }
+    
+    /// True if this *call* is sending audio. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var sendingAudio: Bool {
+        get {
+            return self.mediaSession.hasAudio && !self.mediaSession.audioMuted
+        }
+        set {
+            self.mediaSession.audioMuted = !newValue
+        }
+    }
+    
+    /// True if the local party of this *call* is receiving video. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var receivingVideo: Bool {
+        get {
+            return self.mediaSession.hasVideo && !self.mediaSession.videoOutputMuted
+        }
+        set {
+            self.mediaSession.videoOutputMuted = !newValue
+        }
+    }
+    
+    /// True if the local party of this *call* is receiving audio. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var receivingAudio: Bool {
+        get {
+            return self.mediaSession.hasAudio && !self.mediaSession.audioOutputMuted
+        }
+        set {
+            self.mediaSession.audioOutputMuted = !newValue
+        }
+    }
+    
+    /// True if the loud speaker is selected as the audio output device for this *call*. Otherwise, false.
+    ///
+    /// - since: 1.2.0
+    public var isSpeaker: Bool {
+        get {
+            return self.mediaSession.isSpeakerSelected()
+        }
+        set {
+            self.mediaSession.setLoudSpeaker(speaker: newValue)
+        }
     }
     
     /// The camera facing mode selected for this *call*.
-    open var facingMode: FacingMode {
-        return mediaSession.isFrontCameraSelected() ? .User : .Environment
-    }
-    
-    /// The local video render view height (points) of this *call*.
-    open var localVideoViewHeight: UInt32 {
-        return mediaSession.localVideoViewHeight
-    }
-    
-    /// The Local video render view width (points) of this *call*.
-    open var localVideoViewWidth: UInt32 {
-        return mediaSession.localVideoViewWidth
-    }
-    
-    /// The remote video render view height (points) inof this *call*.
-    open var remoteVideoViewHeight: UInt32 {
-        return mediaSession.remoteVideoViewHeight
-    }
-    
-    /// The remote video render view width (points) of this *call*.
-    open var remoteVideoViewWidth: UInt32 {
-        return mediaSession.remoteVideoViewWidth
-    }
-    
-    /// True if the DTMF keypad is enabled for this *call*. Otherwise, false.
-    open var sendingDTMFEnabled: Bool {
-        if let enableDTMF = info?.enableDTMF {
-            return enableDTMF
-        } else {
-            return false
+    ///
+    /// - since: 1.2.0
+    public var facingMode: Phone.FacingMode {
+        get {
+            return self.mediaSession.isFrontCameraSelected() ? .user : .environment
+        }
+        set {
+            self.mediaSession.setFacingMode(mode: newValue)
         }
     }
     
-    private var info: CallInfo?
-    
-    private var selfParticipantUrl: String? {
-        return info?.myself?.url
+    /// The local video render view dimensions (points) of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var localVideoViewSize: CMVideoDimensions {
+        return CMVideoDimensions(width: self.mediaSession.localVideoViewWidth, height: self.mediaSession.localVideoViewHeight)
     }
     
-    var state: CallState
-    private var url: String { return info?.callUrl ?? "" }
-    
-    private let mediaEngine = MediaEngineWrapper.sharedInstance
-    private let mediaSession: MediaSessionWrapper
-    // XXX reduce scope to increase information hiding in this class
-    let deviceUrl: URL
-    private var dtmfQueue: DtmfQueue
-    private let callClient: CallClient
-    private let callManager: CallManager
-    private let callMetrics: CallMetrics
-    var callNotificationCenter: CallNotificationCenter {
-        return callManager.callNotificationCenter
+    /// The remote video render view dimensions (points) of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var remoteVideoViewSize: CMVideoDimensions {
+        return CMVideoDimensions(width: self.mediaSession.remoteVideoViewWidth, height: self.mediaSession.remoteVideoViewHeight)
     }
     
-    init(callManager: CallManager, callClient: CallClient, deviceUrl: URL, callMetrics: CallMetrics) {
-        self.callManager = callManager
-        self.callClient = callClient
-        self.deviceUrl = deviceUrl
-        self.callMetrics = callMetrics
-        mediaSession = MediaSessionWrapper(callManager: callManager)
-        state = CallStateIdle()
-        dtmfQueue = DtmfQueue(callClient: callClient)
+    /// Call Memberships represent participants in this *call*.
+    ///
+    /// - since: 1.2.0
+    public var memberships: [CallMembership] {
+        if let participants = self.model.participants {
+            return participants.filter({ $0.type == "USER" }).map { participant in
+                return CallMembership(participant: participant, call: self)
+            }
+        }
+        return []
     }
     
-    init(_ info: CallInfo, callManager: CallManager, callClient: CallClient, deviceUrl: URL, callMetrics: CallMetrics) {
-        self.info = info
-        self.callManager = callManager
-        self.callClient = callClient
-        self.deviceUrl = deviceUrl
-        self.callMetrics = callMetrics
-        mediaSession = MediaSessionWrapper(callManager: callManager)
-        to = info.selfEmail
-        from = info.hostEmail
-        state = CallStateIncoming()
-        dtmfQueue = DtmfQueue(callClient: callClient)
+    /// The initiator of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var from: CallMembership? {
+        return self.memberships.filter({ $0.isInitiator }).first
     }
     
-    /// This function answers an incoming call. It only applies to incoming calls. 
-    /// Calling this function on outgoing calls behaves ?
+    /// The intended recipient of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var to: CallMembership? {
+        return self.memberships.filter({ !$0.isInitiator }).first
+    }
+    
+    var model: CallModel {
+        get { lock(); defer { unlock() }; return _model }
+        set { lock(); defer { unlock() }; _model = newValue }
+    }
+    
+    var url: String {
+        return self.model.callUrl!
+    }
+    
+    let device: Device
+    let mediaSession: MediaSessionWrapper
+    var _uuid: UUID
+    
+    let metrics: CallMetrics
+    private let dtmfQueue: DtmfQueue
+    
+    private var _dail: String?
+    private var _model: CallModel
+    private var mutex = pthread_mutex_t()
+    
+    private var id: String {
+        return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
+    }
+    
+    private var sessionId: String {
+        return URL(string: self.url)!.lastPathComponent
+    }
+    
+    private var remoteSDP: String? {
+        return self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp
+    }
+    
+    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, uuid: UUID?) {
+        self.direction = direction
+        self.device = device
+        self.mediaSession = media
+        self._model = model
+        self._uuid = uuid ?? UUID()
+        self.dtmfQueue = DtmfQueue(client: device.phone.client)
+        self.metrics = CallMetrics()
+        self.metrics.trackCallStarted()
+    }
+    
+    deinit{
+        pthread_mutex_init(&mutex, nil)
+    }
+    
+    @inline(__always) private func lock(){
+        pthread_mutex_lock(&mutex)
+    }
+    @inline(__always) private func unlock(){
+        pthread_mutex_unlock(&mutex)
+    }
+    
+    /// Acknowledge (without answering) an incoming call.
+    /// Will cause the initiator's Call instance to emit the ringing event.
+    ///
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
+    /// - returns: Void
+    /// - see: see CallStatus
+    /// - since: 1.2.0
+    public func acknowledge(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.acknowledge(call: self, completionHandler: completionHandler)
+    }
+    
+    /// Answers this call.
+    /// This can only be invoked when this call is incoming and in ringing status.
     ///
     /// - parameter option: Intended media options - audio only or audio and video - for the call.
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
-    open func answer(option: MediaOption, completionHandler: CompletionHandler?) {
-        createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
-            self.callClient.joinExistingCall(callUrl: self.url, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
-        }
+    /// - see: see CallStatus
+    /// - since: 1.2.0
+    public func answer(option: MediaOption, completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.answer(call: self, option: option, completionHandler: completionHandler)
     }
     
-    func dial(address: String, option: MediaOption, completionHandler: CompletionHandler?) {
-        to = address
-        createCallConnection(mediaOption: option, completionHandler: completionHandler) { localMediaInfo, callCreationCompletion in
-            self.callClient.createCall(toAddress: address, deviceUrl: self.deviceUrl, localMediaInfo: localMediaInfo, completionHandler: callCreationCompletion)
-        }
-    }
-    
-    private func createCallConnection(mediaOption: MediaOption, completionHandler: CompletionHandler?, callCreationAction: @escaping (MediaInfo, @escaping (ServiceResponse<CallInfo>) -> Void) -> Void) {
-        verifyLicenseFor(mediaOption: mediaOption) { verified in
-            if verified {
-                self.mediaSession.prepare(mediaOption)
-                let localMediaInfo = self.localMediaInformation(localSdp: self.mediaSession.getLocalSdp())
-                callCreationAction(localMediaInfo) { response in
-                    self.onJoinCallCompleted(response, completionHandler: completionHandler)
-                }
-            } else {
-                completionHandler?(false)
-            }
-        }
-    }
-    
-    private func verifyLicenseFor(mediaOption: MediaOption, completionHandler: @escaping CompletionHandler) {
-        guard mediaOption.hasVideo else {
-            completionHandler(true)
-            return
-        }
-        callManager.requestVideoCodecActivation(completionHandler: completionHandler)
-    }
-    
-    private func onJoinCallCompleted(_ response: ServiceResponse<CallInfo>, completionHandler: CompletionHandler?) {
-        switch response.result {
-        case .success(let value):
-            update(callInfo: value)
-            
-            if let remoteSdp = selfMediaConnection?.remoteSdp?.sdp {
-                self.mediaSession.setRemoteSdp(remoteSdp)
-            } else {
-                Logger.error("Failure: remoteSdp is nil")
-            }
-            self.mediaSession.startMedia()
-            callManager.addCallWith(url: self.url, call: self)
-            from = info?.hostEmail
-            
-            Logger.info("Success: join call")
-            completionHandler?(true)
-            
-        case .failure(let error):
-            self.mediaSession.stopMedia()
-            Logger.error("Failure", error: error)
-            completionHandler?(false)
-        }
-    }
-    
-    /// This function disconnects this *call*. This applies to both incoming and outgoing calls.
+    /// Rejects this call. 
+    /// This can only be invoked when this call is incoming and in ringing status.
     ///
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
-    open func hangup(_ completionHandler: CompletionHandler?) {
-        guard let selfParticipantUrl = selfParticipantUrl else {
-            Logger.error("Failure: Missing self participant URL")
-            completionHandler?(false)
-            return
-        }
-        mediaSession.stopMedia()
-        
-        callClient.leave(participantUrl: selfParticipantUrl, deviceUrl: deviceUrl) { response in
-            switch response.result {
-            case .success(let callInfo):
-                self.update(callInfo: callInfo)
-                Logger.info("Success: leave call")
-                completionHandler?(true)
-            case .failure(let error):
-                Logger.error("Failure", error: error)
-                completionHandler?(false)
-            }
-        }
+    /// - since: 1.2.0
+    /// - see: see CallStatus
+    public func reject(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.reject(call: self, completionHandler: completionHandler)
     }
     
-    /// Rejects an incoming call. This only applies to incoming calls.
+    /// Disconnects this call.
+    /// This can only be invoked when this call is in answered status.
     ///
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
-    open func reject(_ completionHandler: CompletionHandler?) {
-        guard let callUrl = info?.callUrl else {
-            Logger.error("Failure: Missing call URL")
-            completionHandler?(false)
-            return
-        }
-        mediaSession.stopMedia()
-        
-        callClient.decline(callUrl: callUrl, deviceUrl: deviceUrl) { response in
-            switch response.result {
-            case .success:
-                Logger.info("Success: reject call")
-                completionHandler?(true)
-            case .failure(let error):
-                Logger.error("Failure", error: error)
-                completionHandler?(false)
-            }
-        }
+    /// - since: 1.2.0
+    /// - see: see CallStatus
+    public func hangup(completionHandler: @escaping (Error?) -> Void) {
+        self.device.phone.hangup(call: self, completionHandler: completionHandler)
     }
-    
-    /// This function sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
-    ///
-    /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
-    /// - parameter completionHandler: A closure to be executed once the action is completed. True means success, False means failure.
-    /// - returns: Void
-    open func send(dtmf: String, completionHandler: CompletionHandler?) {
-        guard let selfParticipantUrl = selfParticipantUrl else {
-            completionHandler?(false)
-            Logger.error("Failure: Missing self participant URL")
-            return
-        }
 
-        if sendingDTMFEnabled {
-            dtmfQueue.push(participantUrl: selfParticipantUrl, deviceUrl: deviceUrl, event: dtmf, completionHandler: completionHandler)
-        } else {
-            completionHandler?(false)
-        }
-    }
-    
-    /// If sending video then stop sending video. If not sending video then start sending video.
-    open func toggleSendingVideo() {
-        mediaSession.toggleSendingVideo()
-    }
-    
-    /// Toggle whether the local party should receive video from the remote party or not.
+    /// Sends feedback for this call to Cisco Spark team.
     ///
-    /// * If receiving video then stop receiving video.
-    /// * If not receiving video then start receiving video.
-    open func toggleReceivingVideo() {
-        mediaSession.toggleReceivingVideo()
-    }
-    
-    /// Toggle whether the local party should send audio from the remote party or not.
-    ///
-    /// * If sending audio then stop sending audio.
-    /// * If not sending audio then start sending audio.
-    open func toggleSendingAudio() {
-        mediaSession.toggleSendingAudio()
-    }
-    
-    /// Toggle whether the local party should receive audio from the remote party or not.
-    ///
-    /// * If receiving audio then stop receiving audio.
-    /// * If not receiving audio then start receiving audio.
-    open func toggleReceivingAudio() {
-        mediaSession.toggleReceivingAudio()
-    }
-    
-    /// Toggle camera facing mode between front camera and back camera of the iOS device.
-    open func toggleFacingMode() {
-        mediaSession.toggleFacingMode()
-    }
-    
-    /// Toggle the use of loud speaker on the iOS device.
-    open func toggleLoudSpeaker() {
-        mediaSession.toggleLoudSpeaker()
-    }
-    
-    /// Send feed back to Spark.
-    ///
-    /// - parameter rating: Rating between 1 and 5.
-    /// - parameter comments: User comments.
+    /// - parameter rating: The rating of the quality of this call between 1 and 5 where 5 means excellent quality.
+    /// - parameter comments: The comments for this call.
     /// - parameter includeLogs: True if to include logs, False as not.
     /// - returns: Void
-    /// - note: This function is expected to run on main thread.
-    open func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
-        guard let info = info else {
-            Logger.error("Failure: Missing call info for feedback")
-            return
-        }
-
-        let feedback = Feedback(rating: rating, comments: comments, includeLogs: includeLogs)
-        callMetrics.submit(feedback: feedback, callInfo: info, deviceUrl: deviceUrl)
+    /// - since: 1.2.0
+    public func sendFeedbackWith(rating: Int, comments: String? = nil, includeLogs: Bool = false) {
+        self.device.phone.metrics.trackFeedbackMetric(call: self, rating: rating, comments: comments, includeLogs: includeLogs)
     }
     
-    private var selfMediaConnection: MediaConnection? {
-        return info?.selfDevices.filter({$0.url == deviceUrl.absoluteString}).first?.mediaConnections?.first
+    /// Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.
+    ///
+    /// - parameter dtmf: any combination of valid DTMF events matching regex mattern "^[0-9#\*abcdABCD]+$"
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.    
+    /// - returns: Void
+    /// - since: 1.2.0
+    public func send(dtmf: String, completionHandler: ((Error?) -> Void)?) {
+        if let url = self.model.myself?.url {
+            if self.sendingDTMFEnabled {
+                self.dtmfQueue.push(participantUrl: url, device: self.device, event: dtmf, completionHandler: completionHandler)
+            } else {
+                DispatchQueue.main.async {
+                    completionHandler?(SparkError.unsupportedDTMF)
+                }
+            }
+        }
+        else {
+            let error = SparkError.serviceFailed(code: -700, reason: "Missing self participant URL")
+            completionHandler?(error)
+            SDKLogger.shared.error("Failure", error: error)
+        }
+    }
+    
+    func end(reason: DisconnectReason) {
+        self.device.phone.remove(call: self)
+        self.status = .disconnected
+        self.stopMedia()
+        self.metrics.trackCallEnded(reason: reason)
+        DispatchQueue.main.async {
+            self.onDisconnected?(reason)
+        }
     }
     
     func updateMedia(sendingAudio: Bool, sendingVideo: Bool) {
-        guard let mediaUrl = info?.selfMediaUrl, let localSdpString = selfMediaConnection?.localSdp?.sdp else {
-            return
-        }
-
-        let audioMuted = !sendingAudio
-        let videoMuted = !sendingVideo
-
-        let localMediaInfo = localMediaInformation(localSdp: localSdpString, audioMuted: audioMuted, videoMuted: videoMuted)
-        callClient.updateMedia(mediaUrl, deviceUrl: deviceUrl, localMediaInfo: localMediaInfo) { response in
-            switch response.result {
-            case .success(let value):
-                self.update(callInfo: value)
-                Logger.info("Success: update media")
-            case .failure(let error):
-                Logger.error("Failure", error: error)
-            }
-        }
-    }
-
-
-    func update(callInfo newInfo: CallInfo) {
-        guard let oldInfo = info, let oldSequence = oldInfo.sequence else {
-            self.info = newInfo
-            state.update(callInfo: newInfo, for: self)
-            notifyVideoChanged()
-            notifyAudioChanged()
-            callNotificationCenter.notifyEnableDTMFChanged(self)
-            return
-        }
-
-        let newSequence = newInfo.sequence!
-        let result = CallInfoSequence.overwrite(oldValue: oldSequence, newValue: newSequence)
-
-        switch (result) {
-        case .true:
-            self.info = newInfo
-            state.update(callInfo: newInfo, for: self)
-
-            if (newInfo.remoteVideoMuted != oldInfo.remoteVideoMuted) {
-                notifyVideoChanged()
-            }
-
-            if (newInfo.remoteAudioMuted != oldInfo.remoteAudioMuted) {
-                notifyAudioChanged()
-            }
-
-            if (newInfo.enableDTMF != oldInfo.enableDTMF) {
-                callNotificationCenter.notifyEnableDTMFChanged(self)
-            }
-        case .deSync:
-            fetchCallInfo()
-        default:
-            break
-        }
+        self.device.phone.update(call: self, sendingAudio: sendingAudio, sendingVideo: sendingVideo)
     }
     
-    func removeFromCallManager() {
-        callManager.removeCallWith(url: url)
+    func startMedia() {
+        if let remoteSDP = self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp {
+            self.mediaSession.setRemoteSdp(remoteSDP)
+        }
+        else {
+            SDKLogger.shared.error("Failure: remoteSdp is nil")
+        }
+        self.mediaSession.startMedia(call: self)
     }
     
-    func isMediaSessionAssociated(_ session: MediaSession) -> Bool {
-        return mediaSession.isMediaSessionAssociated(session)
-    }
-
-    private func notifyVideoChanged() {
-        let videoChangeType = (info?.remoteVideoMuted ?? false) ? RemoteMediaChangeType.remoteVideoMuted : RemoteMediaChangeType.remoteVideoUnmuted
-        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: videoChangeType)
-    }
-
-    private func notifyAudioChanged() {
-        let audioChangeType = (info?.remoteAudioMuted ?? false) ? RemoteMediaChangeType.remoteAudioMuted : RemoteMediaChangeType.remoteAudioUnmuted
-        callNotificationCenter.notifyRemoteMediaChanged(self, mediaUpdatedType: audioChangeType)
-    }
-
-    private func fetchCallInfo() {
-        callClient.fetchCallInfo(url, completionHandler: onFetchCallInfoCompleted)
+    func stopMedia() {
+        self.mediaSession.stopMedia()
     }
     
-    private func localMediaInformation(localSdp: String, audioMuted: Bool = false, videoMuted: Bool = false) -> MediaInfo {
-        return MediaInfo(sdp: localSdp, audioMuted: audioMuted, videoMuted: videoMuted, reachabilities: callManager.localReachabilityInfo)
-    }
-    
-    private func onFetchCallInfoCompleted(_ response: ServiceResponse<CallInfo>) {
-        switch response.result {
-        case .success(let value):
-            update(callInfo: value)
-            Logger.info("Success: fetch call info")
-        case .failure(let error):
-            Logger.error("Failure", error: error)
+    func doCallModel(_ model: CallModel) {
+        if model.isValid {
+            let old = self.model
+            if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {
+                self.model = new
+                self.status.handle(model: new, for: self)
+                DispatchQueue.main.async {
+                    if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(!new.isRemoteVideoMuted))
+                    }
+                    if new.isRemoteAudioMuted != old.isRemoteAudioMuted {
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingAudio(!new.isRemoteAudioMuted))
+                    }
+                    if new.isLocalSupportDTMF != old.isLocalSupportDTMF {
+                        self.onCapabilitiesChanged?(Capabilities.dtmf)
+                    }
+                }
+            }
         }
     }
 }

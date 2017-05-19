@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,60 +20,21 @@
 
 import Foundation
 
-struct Feedback {
-    var rating: Int
-    var comments: String? = nil
-    var includeLogs: Bool = false
-    
-    var metricData: Metric.DataType {
-        var data: Metric.DataType = [:]
-        
-        data["rating"] = String(rating)
-        
-        if rating == 0 {
-            data["declinedRating"] = String(true)
-        }
-        
-        if includeLogs {
-            data["log"] = LoggerManager.sharedInstance.getMemoryLogs()
-        }
-     
-        return data
-    }
-}
-
 class CallMetrics {
         
-    private let TestUserEmailDomain = "example.com"
-    private let metricsEngine: MetricsEngine
+    var callStartedTime: Date?;
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        metricsEngine = MetricsEngine(authenticationStrategy: authenticationStrategy, deviceService: deviceService)
+    var callEndedTime: Date?
+    
+    var callEndedReason: Call.DisconnectReason?
+    
+    func trackCallStarted() {
+        self.callStartedTime = Date()
     }
     
-    func submit(feedback: Feedback, callInfo: CallInfo, deviceUrl: URL) {
-        var data: Metric.DataType = [
-            "locusId": callInfo.callUrl!,
-            "locusTimestamp": callInfo.lastActive!,
-            "deviceUrl": deviceUrl.absoluteString,
-            "participantId": callInfo.myself!.id!,
-            "isGroup": !callInfo.isOneOnOne,
-            "wmeVersion": MediaEngineWrapper.sharedInstance.WMEVersion
-        ]
-
-        data.unionInPlace(feedback.metricData)
-        
-        var environment = MetricsEnvironment.Production
-        if callInfo.participantsContain(emailDomain: TestUserEmailDomain) {
-            environment = MetricsEnvironment.Test
-        }
-        
-        let metric = Metric.genericMetricWithName(Metric.Call.Rating, data: data, environment: environment)
-        metricsEngine.trackMetric(metric)
+    func trackCallEnded(reason: Call.DisconnectReason) {
+        self.callEndedTime = Date()
+        self.callEndedReason = reason
     }
     
-    func reportVideoLicenseActivation() {
-        let metric = Metric.incrementMetricWithName(Metric.Call.ActivatingVideo, category: MetricsCategory.generic)
-        metricsEngine.trackMetric(metric)
-    }
 }

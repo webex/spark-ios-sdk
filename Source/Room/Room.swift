@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +21,64 @@
 import Foundation
 import ObjectMapper
 
-/// Room type.
+/// The enumeration of the types of a room.
 public enum RoomType: String {
-    /// 1-to-1 room
+    /// 1-to-1 room between two people
     case direct  = "direct"
-    /// Group room
+    /// Group room among multiple people
     case group = "group"
 }
 
-/// Room contents.
-public struct Room: Mappable {
-    /// The id of this room.
+/// A data type represents a Room at Cisco Spark cloud.
+///
+/// - note: Room has been renamed to Space in Cisco Spark.
+/// - since: 1.2.0
+public struct Room {
+    /// The identifier of this room.
+    ///
+    /// - since: 1.2.0
     public var id: String?
     
     /// The title of this room.
+    ///
+    /// - since: 1.2.0
     public var title: String?
     
     /// The type of this room.
+    ///
+    /// - since: 1.2.0
     public var type: RoomType?
     
     /// Indicate if this room is locked.
+    ///
+    /// - since: 1.2.0
     public var isLocked: Bool?
     
     /// Last activity of this room.
+    ///
+    /// - since: 1.2.0
     public var lastActivity: String?
     
     /// The timestamp that this room being created.
+    ///
+    /// - since: 1.2.0
     public var created: Date?
     
     /// The team Id that this room associated with.
+    ///
+    /// - since: 1.2.0
     public var teamId: String?
+}
 
-    /// Room constructor.
+extension Room: Mappable {
+    
+    /// Constructs a *Room* object.
     ///
     /// - note: for internal use only.
     public init?(map: Map){
     }
     
-    /// Room mapping from JSON.
+    /// Maps a *Room* from JSON.
     ///
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
@@ -71,3 +91,4 @@ public struct Room: Mappable {
         teamId <- map["teamId"]
     }
 }
+

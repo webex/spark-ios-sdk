@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ class PhoneTests: XCTestCase {
     
     func testWhenDialWithAudioOnlyThenReturnsSuccessAndHangsUp() {
         if let user = fixture.createUser() {
-            let call = dialCall(address: user.email.toString(), mediaOption: MediaOption.audioOnly)
+            let call = dialCall(address: user.email.toString(), mediaOption: MediaOption.audioOnly())
             XCTAssertNotNil(call)
             XCTAssertTrue(hangupCall(call: call!))
         } else {
@@ -82,7 +82,7 @@ class PhoneTests: XCTestCase {
     }
     
     func testWhenDialWithAudioOnlyAndSipAddressThenReturnsSuccessAndHangsUp() {
-        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: MediaOption.audioOnly)
+        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: MediaOption.audioOnly())
         XCTAssertNotNil(call)
         XCTAssertTrue(hangupCall(call: call!))
     }
@@ -91,8 +91,8 @@ class PhoneTests: XCTestCase {
         var success = false
         
         let expect = expectation(description: "Phone registration")
-        phone.register() { result in
-            success = result
+        phone.register() { error in
+            success = (error == nil)
             expect.fulfill()
         }
         waitForExpectations(timeout: 30) { error in
@@ -109,8 +109,8 @@ class PhoneTests: XCTestCase {
         var success = false
         
         let expect = expectation(description: "Phone deregistration")
-        phone.deregister() { result in
-            success = result
+        phone.deregister() { error in
+            success = (error == nil)
             expect.fulfill()
         }
         waitForExpectations(timeout: 30) { error in
@@ -121,26 +121,25 @@ class PhoneTests: XCTestCase {
     }
     
     private func dialCall(address: String, mediaOption: MediaOption) -> Call? {
-        var success = false
-        
         let expect = expectation(description: "Call dial")
-        let call = phone.dial(address, option: mediaOption) { result in
-            success = result
+        var call:Call? = nil
+        phone.dial(address, option: mediaOption) { result in
+            call = result.data
             expect.fulfill()
         }
         
         waitForExpectations(timeout: 30) { error in
             XCTAssertNil(error, "Phone dial timed out")
         }
-        return success ? call : nil
+        return call
     }
     
     private func hangupCall(call: Call) -> Bool {
         var success = false
         
         let expect = expectation(description: "Call hangup")
-        call.hangup() { result in
-            success = result
+        call.hangup() { error in
+            success = (error == nil)
             expect.fulfill()
         }
         waitForExpectations(timeout: 30) { error in

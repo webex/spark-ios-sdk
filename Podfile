@@ -9,7 +9,6 @@ def shared_pods
 	pod 'SwiftyJSON', '~> 3.1.0'
 	pod 'Starscream', '~> 2.0.0'
 	pod 'KeychainAccess', '~> 3.0.0'
-	pod 'CocoaLumberjack/Swift', '~> 3.0.0'
 end
 
 target 'SparkSDK' do

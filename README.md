@@ -1,160 +1,176 @@
-[![Travis CI](https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/ciscospark/spark-ios-sdk)
-
 # Cisco Spark iOS SDK
 
-Want to have secure and convenient audio and video interactions integrated into your iOS application? **Cisco Spark iOS SDK** is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with **Cisco Spark iOS SDK** in your iOS application.
- 
-Cisco Spark iOS SDK is written in [Swift](https://developer.apple.com/swift).
+[![CocoaPods](https://img.shields.io/cocoapods/v/SparkSDK.svg)](https://cocoapods.org/pods/SparkSDK)
+[![Travis CI](https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/ciscospark/spark-ios-sdk)
+[![license](https://img.shields.io/github/license/ciscospark/spark-ios-sdk.svg)](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE)
 
-**Access to the SDK's calling features is currently restricted**
+The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.
 
-## Setup
-Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using [CocoaPods](http://cocoapods.org):
+This SDK is written in [Swift 3](https://developer.apple.com/swift) and requires **iOS 9** or later.
+
+## Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [License](#license)
+
+## Install
+
+Assuming you already have an Xcode project, e.g. _MySparkApp_, for your iOS app, here are the steps to integrate the Spark iOS SDK into your Xcode project using [CocoaPods](http://cocoapods.org):
 
 1. Install CocoaPods:
- 
-    ```
+
+    ```bash
     gem install cocoapods
     ```
 
-1. Setup Cocoapods:
- 
-    ```
+2. Setup CocoaPods:
+
+    ```bash
     pod setup
     ```
 
-1. Create a new file "Podfile" with following content in your MySparkApp project directory:
+3. Create a new file, `Podfile`, with following content in your _MySparkApp_ project directory:
 
-    ```bash
+    ```ruby
     source 'https://github.com/CocoaPods/Specs.git'
-    
+
     platform :ios, '9.0'
     use_frameworks!
-    
+
     target 'MySparkApp' do
-        pod 'SparkSDK'
+      pod 'SparkSDK'
     end
     ```
 
-1. Install SparkSDK from your MySparkApp project directory:
+4. Install the Spark iOS SDK from your _MySparkApp_ project directory:
 
     ```bash
     pod install
     ```
 
+## Usage
 
-## Example
-Below is code of a demo of the SDK usage:
+To use the SDK, you will need Cisco Spark integration credentials. If you do not already have a Cisco Spark account, visit [Spark for Developers](https://developer.ciscospark.com/) to create your account and [register your integration](https://developer.ciscospark.com/authentication.html#registering-your-integration). Your app will need to authenticate users via an [OAuth](https://oauth.net/) grant flow for existing Cisco Spark users or a [JSON Web Token](https://jwt.io/) for guest users without a Cisco Spark account.
 
-1. Create the Spark SDK with OAuth authentication.
- 
-   ```swift
-   let clientId = "Def123456..."
-   let clientSecret = "fed456..."
-   let scope = "spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"
-   let redirectUri = "MyCustomApplication://response"
-   let oauthStrategy = OAuthStrategy(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
-   let spark = Spark(authenticationStrategy: oauthStrategy)
-   // ...
-   if !oauthStrategy.authorized {
-       oauthStrategy.authorize(parentViewController: self) { success in
-           if !success {
-               print("User not authorized")
-           }
-       }
-   }
-   ```
- 
-1. Create the Spark SDK with JWT-based authentication.
- 
-   ```swift
-   let jwtAuthStrategy = JWTAuthStrategy()
-   let spark = Spark(authenticationStrategy: jwtAuthStrategy)
-   // ...
-   if !jwtAuthStrategy.authorized {
-       // obtain JWT through some application-specific mechanism  
-       jwtAuthStrategy.authorizedWith(jwt: myJwt)
-   }
-   ```
- 
-1. Register the device to send and receive calls.
- 
-   ```swift
-   spark.phone.register() { success in
-       if success {
-           // Successfully registered device
-       } else {
-           // Device was not registered, and no calls can be sent or received
-       }
-   }
-   ```
-            
-1. Use Spark service
-    
-   ```swift
-   spark.rooms.create(title: "My Room") { serviceResponse in
-       switch serviceResponse.result {
-       case .success(let room):
-           // Room was created
-       case .failure(let error):
-           // Room creation failed
-       }
-   }
- 
-   // ... 
- 
-   if let roomId = room.id {
-       spark.memberships.create(roomId: roomId, personId: coworkerId) { serviceResponse in
-           // ...
-       }
- 
-       spark.messages.post(roomId: roomId, text: "Hello friend!") { serviceResponse in
-           // ...
-       }
-   }
-   ```
-    
-1. Make an outgoing call.
- 
-   ```swift
-   let address = "coworker@example.com"
-   spark.phone.requestMediaAccess(Phone.MediaAccessType.audioVideo) { granted in
-       if granted {
-           // Prepare view for an outgoing call, including ensuring MediaRenderViews
-           // are created if making a video call
-           let localVideoView = MediaRenderView()
-           let remoteVideoView = MediaRenderView()
-           let mediaOption = MediaOption.audioVideo(local: localVideoView, remote: remoteVideoView)
-           let call = spark.phone.dial(address, option: mediaOption) { success in
-               if success {
-                   // Call will be soon be ringing on the remote user's phone
-               } else {
-                   // A service call may have failed, the user may have rejected the
-                   // codec license, or the address could have been incorrect
-               }
-           }
-       } else {
-           // User denied access to use the camera or microphone
-       }
-   }
-   ```
- 
-1. Receive a call.
- 
-   ```swift
-   class MyCallObserver: CallObserver {
-       func callIncoming(_ call: Call) {
-           // Show incoming call view
-           let userAcceptedCall: Bool = // ... from user action
-           if userAcceptedCall {
-               let mediaOption = // ... set up a media option similarly to dialing
-               call.answer(option: mediaOption) { success in
-               }
-           } else {
-               // If the user chose to reject the call then reject it
-               call.reject() { success in
-               }
-           }
-       }
-   }
-   ```
+See the [iOS SDK area](https://developer.ciscospark.com/sdk-for-ios.html) of the Spark for Developers site for more information about this SDK.
+
+### Example
+
+Here are some examples of how to use the iOS SDK in your app.
+
+1. Create the Spark instance using Spark ID authentication ([OAuth](https://oauth.net/)-based):
+
+    ```swift
+    let clientId = "$YOUR_CLIENT_ID"
+    let clientSecret = "$YOUR_CLIENT_SECRET"
+    let scope = "spark:all"
+    let redirectUri = "Sparkdemoapp://response"
+
+    let authenticator = OAuthAuthenticator(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri)
+    let spark = Spark(authenticator: authenticator)
+
+    if !authenticator.authorized {
+        authenticator.authorize(parentViewController: self) { success in
+            if !success {
+                print("User not authorized")
+            }
+        }
+    }
+    ```
+
+2. Create the Spark instance with Guest ID authentication ([JWT](https://jwt.io/)-based):
+
+    ```swift
+    let authenticator = JWTAuthenticator()
+    let spark = Spark(authenticator: authenticator)
+
+    if !authenticator.authorized {
+        authenticator.authorizedWith(jwt: myJwt)
+    }
+    ```
+
+3. Register the device to send and receive calls:
+
+    ```swift
+    spark.phone.register() { error in
+        if let error = error {
+            // Device not registered, and calls will not be sent or received
+        } else {
+            // Device registered
+        }
+    }
+    ```
+
+4. Use Spark service:
+
+    ```swift
+    spark.rooms.create(title: "Hello World") { response in
+        switch response.result {
+        case .success(let room):
+            // ...
+        case .failure(let error):
+            // ...
+        }
+    }
+
+    // ...
+
+    spark.memberships.create(roomId: roomId, personEmail: email) { response in
+        switch response.result {
+        case .success(let membership):
+            // ...
+        case .failure(let error):
+            // ...
+        }
+    }
+
+    // ...
+
+    spark.messages.post(personEmail: email, text: "Hello there") { response in
+        switch response.result {
+        case .success(let message):
+            // ...
+        case .failure(let error):
+            // ...
+        }
+    }
+    ```
+
+5. Make an outgoing call:
+
+    ```swift
+    spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideo(local: ..., remote: ...)) { ret in
+        switch ret {
+        case .success(let call):
+            call.onConnected = {
+                // ...
+            }
+            call.onDisconnected = { reason in
+                // ...
+            }
+        case .failure(let error):
+            // failure
+        }
+    }
+    ```
+
+6. Receive a call:
+
+    ```swift
+    spark.phone.onIncoming = { call in
+        call.answer(option: MediaOption.audioVideo(local: ..., remote: ...)) { error in
+        if let error = error {
+            // success
+        }
+        else {
+            // failure
+        }
+    }
+    ```
+
+## License
+
+&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
+
+See [LICENSE](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE) for details.
