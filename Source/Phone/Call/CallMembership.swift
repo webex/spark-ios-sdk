@@ -43,20 +43,15 @@ public struct CallMembership {
         case declined
     }
     
-    /// The identifier of the membership.
-    ///
-    /// - since: 1.2.0
-    public let id: String
-    
     /// True if the person is the initiator of the call.
     ///
     /// - since: 1.2.0
-    public let isInitiator: Bool
+    public private(set) var isInitiator: Bool
     
     /// The identifier of the person.
     ///
     /// - since: 1.2.0
-    public let presonId: String?
+    public private(set) var presonId: String?
 
     /// The status of the person in this *CallMembership*.
     ///
@@ -85,9 +80,14 @@ public struct CallMembership {
     public var phoneNumber: String? {
         return self.call.model[participant: self.id]?.person?.phoneNumber
     }
-        
-    private let call: Call
     
+    /// The identifier of the membership.
+    ///
+    /// - since: 1.2.0
+    private let id: String
+    
+    private let call: Call
+
     /// Constructs a new *CallMembership*.
     ///
     /// - since: 1.2.0
@@ -95,6 +95,8 @@ public struct CallMembership {
         self.id = participant.id ?? ""
         self.call = call
         self.isInitiator = participant.isCreator ?? false
-        self.presonId = participant.person?.id
+        if let personId = participant.person?.id {
+            self.presonId = "ciscospark://us/PEOPLE/\(personId)".base64Encoded()
+        }
     }
 }

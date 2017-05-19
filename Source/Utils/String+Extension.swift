@@ -31,7 +31,6 @@ extension String {
         return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)?.replacingOccurrences(of: " ", with: "+")
     }
     
-    //: ### Base64 encoding a string
     func base64Encoded() -> String? {
         if let data = self.data(using: .utf8) {
             return data.base64EncodedString()
@@ -39,7 +38,6 @@ extension String {
         return nil
     }
     
-    //: ### Base64 decoding a string
     func base64Decoded() -> String? {
         var encoded64 = self
         let remainder = encoded64.characters.count % 4

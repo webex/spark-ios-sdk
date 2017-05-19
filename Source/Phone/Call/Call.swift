@@ -315,11 +315,25 @@ public class Call {
     /// - since: 1.2.0
     public var memberships: [CallMembership] {
         if let participants = self.model.participants {
-            return participants.map { participant in
+            return participants.filter({ $0.type == "USER" }).map { participant in
                 return CallMembership(participant: participant, call: self)
             }
         }
         return []
+    }
+    
+    /// The initiator of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var from: CallMembership? {
+        return self.memberships.filter({ $0.isInitiator }).first
+    }
+    
+    /// The intended recipient of this *call*.
+    ///
+    /// - since: 1.2.0
+    public var to: CallMembership? {
+        return self.memberships.filter({ !$0.isInitiator }).first
     }
     
     var model: CallModel {
