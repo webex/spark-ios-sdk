@@ -13,7 +13,8 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (99% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -33,13 +34,16 @@
                 <a href="Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Call/FacingMode.html">– FacingMode</a>
+                <a href="Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Call/Status.html">– Status</a>
+                <a href="Classes/Call/DisconnectReason.html">– DisconnectReason</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+                <a href="Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/Capabilities.html">– Capabilities</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/EmailAddress.html">EmailAddress</a>
@@ -48,7 +52,7 @@
                 <a href="Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
+                <a href="Classes/JWTAuthenticator.html">JWTAuthenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/MembershipClient.html">MembershipClient</a>
@@ -57,10 +61,10 @@
                 <a href="Classes/MessageClient.html">MessageClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+                <a href="Classes/OAuthAuthenticator.html">OAuthAuthenticator</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/OAuthStrategy.html">OAuthStrategy</a>
+                <a href="Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/PersonClient.html">PersonClient</a>
@@ -69,22 +73,13 @@
                 <a href="Classes/Phone.html">Phone</a>
               </li>
               <li class="nav-group-task">
-                <a href="Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/PhoneSettings.html">PhoneSettings</a>
+                <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Spark.html">Spark</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/TeamClient.html">TeamClient</a>
@@ -101,22 +96,19 @@
             <a href="Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Enums/DisconnectionType.html">DisconnectionType</a>
+                <a href="Enums/CallStatus.html">CallStatus</a>
               </li>
               <li class="nav-group-task">
-                <a href="Enums/LocalMediaChangeType.html">LocalMediaChangeType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/MediaOption.html">MediaOption</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Enums/RemoteMediaChangeType.html">RemoteMediaChangeType</a>
+                <a href="Enums/LogLevel.html">LogLevel</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/Result.html">Result</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/RoomType.html">RoomType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/SparkError.html">SparkError</a>
               </li>
             </ul>
           </li>
@@ -126,37 +118,25 @@
               <li class="nav-group-task">
                 <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
               </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/CallObserver.html">CallObserver</a>
+                <a href="Protocols/Authenticator.html">Authenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
               </li>
               <li class="nav-group-task">
+                <a href="Protocols/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/OAuthAuthenticatorDelegate.html">OAuthAuthenticatorDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Protocols/OAuthStorage.html">OAuthStorage</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="Protocols/PhoneObserver.html">PhoneObserver</a>
               </li>
             </ul>
           </li>
@@ -164,7 +144,19 @@
             <a href="Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Structs/CallMembership.html">CallMembership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/CallMembership/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/LogMessage.html">LogMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/MediaOption.html">MediaOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Membership.html">Membership</a>
@@ -173,7 +165,7 @@
                 <a href="Structs/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
-                <a href="Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
+                <a href="Structs/OAuthTokens.html">OAuthTokens</a>
               </li>
               <li class="nav-group-task">
                 <a href="Structs/Person.html">Person</a>
@@ -201,158 +193,160 @@
         <section>
           <section class="section">
             
-            <p><a href="https://travis-ci.org/ciscospark/spark-ios-sdk"><img src="https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master" alt="Travis CI"></a></p>
-<a href='#cisco-spark-ios-sdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='cisco-spark-ios-sdk'>Cisco Spark iOS SDK</h1>
+            <a href='#cisco-spark-ios-sdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='cisco-spark-ios-sdk'>Cisco Spark iOS SDK</h1>
 
-<p>Want to have secure and convenient audio and video interactions integrated into your iOS application? <strong>Cisco Spark iOS SDK</strong> is designed to ease the developer experience and accelerate the integration of pervasive into mobile applications. This guide will get you up and running quickly with <strong>Cisco Spark iOS SDK</strong> in your iOS application.</p>
+<p><a href="https://cocoapods.org/pods/SparkSDK"><img src="https://img.shields.io/cocoapods/v/SparkSDK.svg" alt="CocoaPods"></a>
+<a href="https://travis-ci.org/ciscospark/spark-ios-sdk"><img src="https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master" alt="Travis CI"></a>
+<a href="https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE"><img src="https://img.shields.io/github/license/ciscospark/spark-ios-sdk.svg" alt="license"></a></p>
 
-<p>Cisco Spark iOS SDK is written in <a href="https://developer.apple.com/swift">Swift</a>.</p>
-<a href='#setup' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='setup'>Setup</h2>
+<p>The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.</p>
 
-<p>Assuming you already have your Xcode project, e.g., MySparkApp, for your iOS applicaiton. Here are the steps to integrate SparkSDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
+<p>This SDK is written in <a href="https://developer.apple.com/swift">Swift 3</a> and requires <strong>iOS 9</strong> or later.</p>
+<a href='#table-of-contents' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='table-of-contents'>Table of Contents</h2>
+
+<ul>
+<li><a href="#install">Install</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<a href='#install' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='install'>Install</h2>
+
+<p>Assuming you already have an Xcode project, e.g. <em>MySparkApp</em>, for your iOS app, here are the steps to integrate the Spark iOS SDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
 
 <ol>
 <li><p>Install CocoaPods:</p>
-<pre class="highlight plaintext"><code>gem install cocoapods
+<pre class="highlight shell"><code>gem install cocoapods
 </code></pre></li>
-<li><p>Setup Cocoapods:</p>
-<pre class="highlight plaintext"><code>pod setup
+<li><p>Setup CocoaPods:</p>
+<pre class="highlight shell"><code>pod setup
 </code></pre></li>
-<li><p>Create a new file <q>Podfile</q> with following content in your MySparkApp project directory:</p>
-<pre class="highlight shell"><code><span class="nb">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
+<li><p>Create a new file, <code>Podfile</code>, with following content in your <em>MySparkApp</em> project directory:</p>
+<pre class="highlight ruby"><code><span class="n">source</span> <span class="s1">'https://github.com/CocoaPods/Specs.git'</span>
 
-platform :ios, <span class="s1">'9.0'</span>
-use_frameworks!
+<span class="n">platform</span> <span class="ss">:ios</span><span class="p">,</span> <span class="s1">'9.0'</span>
+<span class="n">use_frameworks!</span>
 
-target <span class="s1">'MySparkApp'</span> <span class="k">do
-    </span>pod <span class="s1">'SparkSDK'</span>
-end
+<span class="n">target</span> <span class="s1">'MySparkApp'</span> <span class="k">do</span>
+  <span class="n">pod</span> <span class="s1">'SparkSDK'</span>
+<span class="k">end</span>
 </code></pre></li>
-<li><p>Install SparkSDK from your MySparkApp project directory:</p>
+<li><p>Install the Spark iOS SDK from your <em>MySparkApp</em> project directory:</p>
 <pre class="highlight shell"><code>pod install
 </code></pre></li>
 </ol>
-<a href='#example' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='example'>Example</h2>
+<a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage'>Usage</h2>
 
-<p>Below is code of a demo of the SDK usage:</p>
+<p>To use the SDK, you will need Cisco Spark integration credentials. If you do not already have a Cisco Spark account, visit <a href="https://developer.ciscospark.com/">Spark for Developers</a> to create your account and <a href="https://developer.ciscospark.com/authentication.html#registering-your-integration">register your integration</a>. Your app will need to authenticate users via an <a href="https://oauth.net/">OAuth</a> grant flow for existing Cisco Spark users or a <a href="https://jwt.io/">JSON Web Token</a> for guest users without a Cisco Spark account.</p>
 
-<ol>
-<li>Create the Spark SDK with OAuth authentication.</li>
-</ol>
-<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
-   <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
-   <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:people_read spark:rooms_read spark:rooms_write spark:memberships_read spark:memberships_write spark:messages_read spark:messages_write"</span>
-   <span class="k">let</span> <span class="nv">redirectUri</span> <span class="o">=</span> <span class="s">"MyCustomApplication://response"</span>
-   <span class="k">let</span> <span class="nv">oauthStrategy</span> <span class="o">=</span> <span class="kt">OAuthStrategy</span><span class="p">(</span><span class="nv">clientId</span><span class="p">:</span> <span class="n">clientId</span><span class="p">,</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="n">clientSecret</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span> <span class="nv">redirectUri</span><span class="p">:</span> <span class="n">redirectUri</span><span class="p">)</span>
-   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">oauthStrategy</span><span class="p">)</span>
-   <span class="c1">// ...</span>
-   <span class="k">if</span> <span class="o">!</span><span class="n">oauthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
-       <span class="n">oauthStrategy</span><span class="o">.</span><span class="nf">authorize</span><span class="p">(</span><span class="nv">parentViewController</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-           <span class="k">if</span> <span class="o">!</span><span class="n">success</span> <span class="p">{</span>
-               <span class="nf">print</span><span class="p">(</span><span class="s">"User not authorized"</span><span class="p">)</span>
-           <span class="p">}</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-</code></pre>
+<p>See the <a href="https://developer.ciscospark.com/sdk-for-ios.html">iOS SDK area</a> of the Spark for Developers site for more information about this SDK.</p>
+<a href='#example' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='example'>Example</h3>
+
+<p>Here are some examples of how to use the iOS SDK in your app.</p>
 
 <ol>
-<li>Create the Spark SDK with JWT-based authentication.</li>
+<li><p>Create the Spark instance using Spark ID authentication (<a href="https://oauth.net/">OAuth</a>-based):</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"$YOUR_CLIENT_ID"</span>
+<span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"$YOUR_CLIENT_SECRET"</span>
+<span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:all"</span>
+<span class="k">let</span> <span class="nv">redirectUri</span> <span class="o">=</span> <span class="s">"Sparkdemoapp://response"</span>
+
+<span class="k">let</span> <span class="nv">authenticator</span> <span class="o">=</span> <span class="kt">OAuthAuthenticator</span><span class="p">(</span><span class="nv">clientId</span><span class="p">:</span> <span class="n">clientId</span><span class="p">,</span> <span class="nv">clientSecret</span><span class="p">:</span> <span class="n">clientSecret</span><span class="p">,</span> <span class="nv">scope</span><span class="p">:</span> <span class="n">scope</span><span class="p">,</span> <span class="nv">redirectUri</span><span class="p">:</span> <span class="n">redirectUri</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">authenticator</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="o">!</span><span class="n">authenticator</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+    <span class="n">authenticator</span><span class="o">.</span><span class="nf">authorize</span><span class="p">(</span><span class="nv">parentViewController</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">success</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"User not authorized"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Create the Spark instance with Guest ID authentication (<a href="https://jwt.io/">JWT</a>-based):</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">authenticator</span> <span class="o">=</span> <span class="kt">JWTAuthenticator</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">authenticator</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="o">!</span><span class="n">authenticator</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
+    <span class="n">authenticator</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Register the device to send and receive calls:</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="c1">// Device not registered, and calls will not be sent or received</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// Device registered</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Use Spark service:</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"Hello World"</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">response</span><span class="o">.</span><span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">room</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ...</span>
+
+<span class="n">spark</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">roomId</span><span class="p">,</span> <span class="nv">personEmail</span><span class="p">:</span> <span class="n">email</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">response</span><span class="o">.</span><span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">membership</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// ...</span>
+
+<span class="n">spark</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="nf">post</span><span class="p">(</span><span class="nv">personEmail</span><span class="p">:</span> <span class="n">email</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="s">"Hello there"</span><span class="p">)</span> <span class="p">{</span> <span class="n">response</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">response</span><span class="o">.</span><span class="n">result</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">message</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// ...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Make an outgoing call:</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="s">"coworker@acm.com"</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">ret</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">ret</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">call</span><span class="p">):</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onConnected</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onDisconnected</span> <span class="o">=</span> <span class="p">{</span> <span class="n">reason</span> <span class="k">in</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// failure</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Receive a call:</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
+    <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
+        <span class="c1">// success</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">// failure</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
 </ol>
-<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">jwtAuthStrategy</span> <span class="o">=</span> <span class="kt">JWTAuthStrategy</span><span class="p">()</span>
-   <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticationStrategy</span><span class="p">:</span> <span class="n">jwtAuthStrategy</span><span class="p">)</span>
-   <span class="c1">// ...</span>
-   <span class="k">if</span> <span class="o">!</span><span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="n">authorized</span> <span class="p">{</span>
-       <span class="c1">// obtain JWT through some application-specific mechanism  </span>
-       <span class="n">jwtAuthStrategy</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
-   <span class="p">}</span>
-</code></pre>
+<a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
 
-<ol>
-<li>Register the device to send and receive calls.</li>
-</ol>
-<pre class="highlight swift"><code>   <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-       <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
-           <span class="c1">// Successfully registered device</span>
-       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-           <span class="c1">// Device was not registered, and no calls can be sent or received</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-</code></pre>
+<p>&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.</p>
 
-<ol>
-<li>Use Spark service</li>
-</ol>
-<pre class="highlight swift"><code>   <span class="n">spark</span><span class="o">.</span><span class="n">rooms</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">title</span><span class="p">:</span> <span class="s">"My Room"</span><span class="p">)</span> <span class="p">{</span> <span class="n">serviceResponse</span> <span class="k">in</span>
-       <span class="k">switch</span> <span class="n">serviceResponse</span><span class="o">.</span><span class="n">result</span> <span class="p">{</span>
-       <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">room</span><span class="p">):</span>
-           <span class="c1">// Room was created</span>
-       <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
-           <span class="c1">// Room creation failed</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-
-   <span class="c1">// ... </span>
-
-   <span class="k">if</span> <span class="k">let</span> <span class="nv">roomId</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="n">id</span> <span class="p">{</span>
-       <span class="n">spark</span><span class="o">.</span><span class="n">memberships</span><span class="o">.</span><span class="nf">create</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">roomId</span><span class="p">,</span> <span class="nv">personId</span><span class="p">:</span> <span class="n">coworkerId</span><span class="p">)</span> <span class="p">{</span> <span class="n">serviceResponse</span> <span class="k">in</span>
-           <span class="c1">// ...</span>
-       <span class="p">}</span>
-
-       <span class="n">spark</span><span class="o">.</span><span class="n">messages</span><span class="o">.</span><span class="nf">post</span><span class="p">(</span><span class="nv">roomId</span><span class="p">:</span> <span class="n">roomId</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="s">"Hello friend!"</span><span class="p">)</span> <span class="p">{</span> <span class="n">serviceResponse</span> <span class="k">in</span>
-           <span class="c1">// ...</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-</code></pre>
-
-<ol>
-<li>Make an outgoing call.</li>
-</ol>
-<pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
-   <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">requestMediaAccess</span><span class="p">(</span><span class="kt">Phone</span><span class="o">.</span><span class="kt">MediaAccessType</span><span class="o">.</span><span class="n">audioVideo</span><span class="p">)</span> <span class="p">{</span> <span class="n">granted</span> <span class="k">in</span>
-       <span class="k">if</span> <span class="n">granted</span> <span class="p">{</span>
-           <span class="c1">// Prepare view for an outgoing call, including ensuring MediaRenderViews</span>
-           <span class="c1">// are created if making a video call</span>
-           <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
-           <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
-           <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="n">localVideoView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="n">remoteVideoView</span><span class="p">)</span>
-           <span class="k">let</span> <span class="nv">call</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-               <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
-                   <span class="c1">// Call will be soon be ringing on the remote user's phone</span>
-               <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                   <span class="c1">// A service call may have failed, the user may have rejected the</span>
-                   <span class="c1">// codec license, or the address could have been incorrect</span>
-               <span class="p">}</span>
-           <span class="p">}</span>
-       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-           <span class="c1">// User denied access to use the camera or microphone</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-</code></pre>
-
-<ol>
-<li>Receive a call.</li>
-</ol>
-<pre class="highlight swift"><code>   <span class="kd">class</span> <span class="kt">MyCallObserver</span><span class="p">:</span> <span class="kt">CallObserver</span> <span class="p">{</span>
-       <span class="kd">func</span> <span class="nf">callIncoming</span><span class="p">(</span><span class="n">_</span> <span class="nv">call</span><span class="p">:</span> <span class="kt">Call</span><span class="p">)</span> <span class="p">{</span>
-           <span class="c1">// Show incoming call view</span>
-           <span class="k">let</span> <span class="nv">userAcceptedCall</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="c1">// ... from user action</span>
-           <span class="k">if</span> <span class="n">userAcceptedCall</span> <span class="p">{</span>
-               <span class="k">let</span> <span class="nv">mediaOption</span> <span class="o">=</span> <span class="c1">// ... set up a media option similarly to dialing</span>
-               <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-               <span class="p">}</span>
-           <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-               <span class="c1">// If the user chose to reject the call then reject it</span>
-               <span class="n">call</span><span class="o">.</span><span class="nf">reject</span><span class="p">()</span> <span class="p">{</span> <span class="n">success</span> <span class="k">in</span>
-               <span class="p">}</span>
-           <span class="p">}</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-</code></pre>
+<p>See <a href="https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE">LICENSE</a> for details.</p>
 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-27)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-19)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

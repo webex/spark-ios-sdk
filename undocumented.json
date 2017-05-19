@@ -1,12 +1,6 @@
 {
   "warnings": [
-    {
-      "file": "/Users/zhiyuliu/Work/Sandbox/sdk-docs/Source/Spark.swift",
-      "line": 84,
-      "symbol": "Spark.init(authenticationStrategy:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    }
+
   ],
-  "source_directory": "/Users/zhiyuliu/Work/Sandbox/sdk-docs"
+  "source_directory": "/Users/zhiyuliu/Work/SparkSDK/Sources/API_refactoring/spark-ios-sdk"
 }
