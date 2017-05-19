@@ -27,7 +27,6 @@ before_install:
 
 script:
   - set -o pipefail
-  - travis_wait bash IntegrationTesting.sh
 branches:
   only:
     - master
