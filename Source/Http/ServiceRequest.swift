@@ -207,6 +207,8 @@ class ServiceRequest {
             let urlRequestConvertible: URLRequestConvertible
             do {
                 var urlRequest = try URLRequest(url: self.url, method: self.method, headers: headers)
+                //disable http local cache data.
+                urlRequest.cachePolicy = .reloadIgnoringLocalCacheData
                 if let body = self.body {
                     urlRequest = try JSONEncoding.default.encode(urlRequest, with: body.value())
                 }
