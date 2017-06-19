@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,26 @@ import Foundation
 
 class MetricsClient {
    
-    private let authenticationStrategy: AuthenticationStrategy
-    private let deviceService: DeviceService
+    private let authenticator: Authenticator
+    private let service: DeviceService
     
-    init(authenticationStrategy: AuthenticationStrategy, deviceService: DeviceService) {
-        self.authenticationStrategy = authenticationStrategy
-        self.deviceService = deviceService
+    init(authenticator: Authenticator, service: DeviceService) {
+        self.authenticator = authenticator
+        self.service = service
     }
     
     func post(_ metrics: RequestParameter, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
-        let request = ServiceRequest.Builder(authenticationStrategy)
-            .baseUrl(deviceService.device!.metricsServiceUrl)
-            .path("metrics")
-            .method(.post)
-            .body(metrics)
-            .build()
-        
-        request.responseJSON(completionHandler)
+        if let device = self.service.device {
+            let request = ServiceRequest.Builder(authenticator)
+                .baseUrl(device.metricsServiceUrl)
+                .path("metrics")
+                .method(.post)
+                .body(metrics)
+                .build()
+            request.responseJSON(completionHandler)
+        }
+        else {
+            completionHandler(ServiceResponse(nil, Result.failure(SparkError.unregistered)))
+        }
     }
 }

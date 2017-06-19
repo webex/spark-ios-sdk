@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,4 +28,24 @@ public enum Result<T> {
     
     /// Result for Failure, with the error message.
     case failure(Error)
+    
+    /// Returns the associated data if the result is a success, `nil` otherwise.
+    public var data: T? {
+        switch self {
+        case .success(let data):
+            return data
+        case .failure(_):
+            return nil
+        }
+    }
+    
+    /// Returns the associated error value if the result is a failure, `nil` otherwise.
+    public var error: Error? {
+        switch self {
+        case .success(_):
+            return nil
+        case .failure(let error):
+            return error
+        }
+    }
 }

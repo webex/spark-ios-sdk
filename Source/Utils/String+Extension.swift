@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,4 +30,24 @@ extension String {
     var encodeQueryParamString: String? {
         return self.addingPercentEncoding(withAllowedCharacters: String.allowedQueryCharactersPlusSpace)?.replacingOccurrences(of: " ", with: "+")
     }
+    
+    func base64Encoded() -> String? {
+        if let data = self.data(using: .utf8) {
+            return data.base64EncodedString()
+        }
+        return nil
+    }
+    
+    func base64Decoded() -> String? {
+        var encoded64 = self
+        let remainder = encoded64.characters.count % 4
+        if remainder > 0 {
+            encoded64 = encoded64.padding(toLength: encoded64.characters.count + 4 - remainder, withPad: "=", startingAt: 0)
+        }
+        if let data = Data(base64Encoded: encoded64) {
+            return String(data: data, encoding: .utf8)
+        }
+        return nil
+    }
+    
 }

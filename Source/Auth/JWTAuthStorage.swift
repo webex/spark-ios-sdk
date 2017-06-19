@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,14 @@
 import Foundation
 
 
-/// Represents a storage mechanism for JWT authorization information
+/// A protocol represents a storage mechanism for JWT authorization information
+///
+/// - since: 1.2.0
 public protocol JWTAuthStorage: class {
 
     /// The JSON Web Token
     var jwt: String? { get set }
     
-    /// The authentication information
+    /// The JWT authentication information
     var authenticationInfo: JWTAuthenticationInfo? { get set }
 }

@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,9 +20,13 @@
 
 import Foundation
 
-/// A mechanism to store OAuth authentication information
+/// A protocol represents a storage mechanism for OAuth authorization information
+///
+/// - since: 1.2.0
 public protocol OAuthStorage : class {
     
-    /// The authentication information representing a successful login using OAuth
-    var authenticationInfo: OAuthAuthenticationInfo? { get set }
+    /// The OAuth authentication information
+    ///
+    /// - since: 1.2.0
+    var tokens: OAuthTokens? { get set }
 }

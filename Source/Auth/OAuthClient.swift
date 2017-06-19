@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,19 +18,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+
 import Foundation
+import ObjectMapper
+
+struct OAuthTokenModel {
+    var accessTokenString: String?
+    var accessTokenExpiration: TimeInterval?
+    var refreshTokenString: String?
+    var refreshTokenExpiration: TimeInterval?
+    var accessTokenCreationDate: Date
+}
+
+extension OAuthTokenModel: Mappable {
+    
+    init?(map: Map) {
+        accessTokenCreationDate = Date()
+    }
+    
+    mutating func mapping(map: Map) {
+        accessTokenString <- map["access_token"]
+        accessTokenExpiration <- map["expires_in"]
+        refreshTokenString <- map["refresh_token"]
+        refreshTokenExpiration <- map["refresh_token_expires_in"]
+    }
+}
 
 class OAuthClient {
-    
-    typealias ObjectHandler = (ServiceResponse<AccessToken>) -> Void
-    
+        
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
     }
     
-    func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func fetchAccessTokenFrom(oauthCode: String, clientId: String, clientSecret: String, redirectUri: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<OAuthTokenModel>) -> Void) {
         let query = RequestParameter(["grant_type": "authorization_code",
             "redirect_uri": redirectUri,
             "code": oauthCode,
@@ -46,7 +68,7 @@ class OAuthClient {
         request.responseObject(completionHandler)
     }
     
-    func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    func refreshAccessTokenFrom(refreshToken: String, clientId: String, clientSecret: String, queue: DispatchQueue? = nil, completionHandler: @escaping  (ServiceResponse<OAuthTokenModel>) -> Void) {
         let query = RequestParameter(["grant_type": "refresh_token",
             "refresh_token": refreshToken,
             "client_id": clientId,

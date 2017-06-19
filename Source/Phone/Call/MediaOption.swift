@@ -20,21 +20,58 @@
 
 import Foundation
 
-/// The enumeration of media options on a call.
-public enum MediaOption {
-    /// Call with audio only.
-    case audioOnly
-    /// Call with both audio and video.
-    /// - parameter local: the viewport of the local party's video.
-    /// - parameter remote: the viewport of the remote party's video.
-    case audioVideo(local: MediaRenderView, remote: MediaRenderView)
+/// A data type represents the media options of a *call*.
+///
+/// - since: 1.2.0
+public struct MediaOption {
+    
+    /// Constructs an audio only media option.
+    ///
+    /// - since: 1.2.0
+    public static func audioOnly() -> MediaOption {
+        return MediaOption()
+    }
+    
+    /// Constructs an audio and video media option.
+    ///
+    /// - since: 1.2.0
+    public static func audioVideo(local: MediaRenderView, remote: MediaRenderView) -> MediaOption {
+        return MediaOption(local: local, remote: remote)
+    }
+    
+    var localVideoView: MediaRenderView?
+    
+    var remoteVideoView: MediaRenderView?
+    
+    fileprivate var _uuid: UUID?
     
     var hasVideo: Bool {
-        switch self {
-        case .audioOnly:
-            return false
-        case .audioVideo:
-            return true
+        return self.localVideoView != nil || self.remoteVideoView != nil
+    }
+    
+    init() {
+        
+    }
+    
+    init(local: MediaRenderView, remote: MediaRenderView) {
+        self.localVideoView = local
+        self.remoteVideoView = remote
+    }
+}
+
+// CallKit
+public extension MediaOption {
+    
+    /// A local unique identifier of a media options.
+    ///
+    /// - since: 1.2.0
+    public var uuid: UUID? {
+        get {
+            return self._uuid
+        }
+        set {
+            self._uuid = newValue
         }
     }
+    
 }

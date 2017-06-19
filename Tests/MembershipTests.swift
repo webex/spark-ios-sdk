@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -208,7 +208,7 @@ class MembershipTests: XCTestCase {
     func testGettingMembershipReturnsMembership() {
         membership = createMembership(roomId: roomId, personId: other.personId, isModerator: false)
         if let membershipId = membership?.id, let foundMembership = getMembership(membershipId: membershipId) {
-            XCTAssertEqual(foundMembership, membership)
+            XCTAssertEqual(foundMembership.id, membership?.id)
         } else {
             XCTFail("Failed to get membership")
         }

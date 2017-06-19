@@ -14,7 +14,8 @@
     <a title="Membership Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (99% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
     <div class="content-wrapper">
@@ -34,13 +35,16 @@
                 <a href="../Classes/Call.html">Call</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/FacingMode.html">– FacingMode</a>
+                <a href="../Classes/Call/Direction.html">– Direction</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Call/Status.html">– Status</a>
+                <a href="../Classes/Call/DisconnectReason.html">– DisconnectReason</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/CallNotificationCenter.html">CallNotificationCenter</a>
+                <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/EmailAddress.html">EmailAddress</a>
@@ -49,7 +53,7 @@
                 <a href="../Classes/JWTAuthKeychainStorage.html">JWTAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/JWTAuthStrategy.html">JWTAuthStrategy</a>
+                <a href="../Classes/JWTAuthenticator.html">JWTAuthenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/MembershipClient.html">MembershipClient</a>
@@ -58,10 +62,10 @@
                 <a href="../Classes/MessageClient.html">MessageClient</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
+                <a href="../Classes/OAuthAuthenticator.html">OAuthAuthenticator</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/OAuthStrategy.html">OAuthStrategy</a>
+                <a href="../Classes/OAuthKeychainStorage.html">OAuthKeychainStorage</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/PersonClient.html">PersonClient</a>
@@ -70,22 +74,13 @@
                 <a href="../Classes/Phone.html">Phone</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Classes/Phone/MediaAccessType.html">– MediaAccessType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/PhoneNotificationCenter.html">PhoneNotificationCenter</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/PhoneSettings.html">PhoneSettings</a>
+                <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Classes/SparkBackgroundCallNotifications.html">SparkBackgroundCallNotifications</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/TeamClient.html">TeamClient</a>
@@ -102,22 +97,19 @@
             <a href="../Enums.html">Enums</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Enums/DisconnectionType.html">DisconnectionType</a>
+                <a href="../Enums/CallStatus.html">CallStatus</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Enums/LocalMediaChangeType.html">LocalMediaChangeType</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/MediaOption.html">MediaOption</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Enums/RemoteMediaChangeType.html">RemoteMediaChangeType</a>
+                <a href="../Enums/LogLevel.html">LogLevel</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/Result.html">Result</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Enums/RoomType.html">RoomType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/SparkError.html">SparkError</a>
               </li>
             </ul>
           </li>
@@ -127,37 +119,25 @@
               <li class="nav-group-task">
                 <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
               </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_10MembershipS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_14TeamMembershipS0__Sb">==(_:_:)</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTVS_4TeamS0__Sb">==(_:_:)</a>
-              </li>
             </ul>
           </li>
           <li class="nav-group-name">
             <a href="../Protocols.html">Protocols</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Protocols/AuthenticationStrategy.html">AuthenticationStrategy</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/CallObserver.html">CallObserver</a>
+                <a href="../Protocols/Authenticator.html">Authenticator</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Protocols/JWTAuthStorage.html">JWTAuthStorage</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Protocols/Logger.html">Logger</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/OAuthAuthenticatorDelegate.html">OAuthAuthenticatorDelegate</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Protocols/OAuthStorage.html">OAuthStorage</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/OAuthStrategyDelegate.html">OAuthStrategyDelegate</a>
-              </li>
-              <li class="nav-group-task">
-                <a href="../Protocols/PhoneObserver.html">PhoneObserver</a>
               </li>
             </ul>
           </li>
@@ -165,7 +145,19 @@
             <a href="../Structs.html">Structs</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="../Structs/CallMembership.html">CallMembership</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/CallMembership/State.html">– State</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Structs/JWTAuthenticationInfo.html">JWTAuthenticationInfo</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/LogMessage.html">LogMessage</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/MediaOption.html">MediaOption</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Membership.html">Membership</a>
@@ -174,7 +166,7 @@
                 <a href="../Structs/Message.html">Message</a>
               </li>
               <li class="nav-group-task">
-                <a href="../Structs/OAuthAuthenticationInfo.html">OAuthAuthenticationInfo</a>
+                <a href="../Structs/OAuthTokens.html">OAuthTokens</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Structs/Person.html">Person</a>
@@ -204,7 +196,7 @@
             <h1>Membership</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Membership</span><span class="p">:</span> <span class="kt">Mappable</span><span class="p">,</span> <span class="kt">Equatable</span></code></pre>
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Membership</span></code></pre>
 
                 </div>
               </div>
@@ -403,6 +395,10 @@
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
                 <li class="item">
                   <div>
                     <code>
@@ -417,7 +413,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Membership constructor.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     for internal use only.
@@ -450,7 +445,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Membership mapping from JSON.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     for internal use only.
@@ -474,8 +468,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco</a>. All rights reserved. (Last updated: 2017-02-26)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

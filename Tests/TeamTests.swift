@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ class XCTeamSpec: XCTestCase {
         let teams = listTeams()
         if let teams = teams {
             XCTAssertGreaterThan(teams.count, 0)
-            XCTAssert(teams.contains() { $0 == team })
+            XCTAssert(teams.contains() { $0.id == team?.id })
         } else {
             XCTFail("Failed to list team")
         }
@@ -86,7 +86,7 @@ class XCTeamSpec: XCTestCase {
     func testBasicGetTeam() {
         if let teamCreated = fixture.createTeam(testCase: self, teamName: "test team"), let teamId = teamCreated.id, let teamFromGet = getTeam(teamId: teamId) {
             self.validate(team: teamFromGet)
-            XCTAssertEqual(teamFromGet, teamCreated)
+            XCTAssertEqual(teamFromGet.id, teamCreated.id)
         } else {
             XCTFail("Failed to get team")
         }

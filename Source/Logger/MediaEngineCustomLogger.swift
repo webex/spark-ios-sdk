@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,27 @@
 // THE SOFTWARE.
 
 import Foundation
-import CocoaLumberjack
 import Wme
 
 class MediaEngineCustomLogger : CustomLogger {
     
-    // May have some different log level setting on media engine
-    let wmedefaultLevel = DDLogLevel.info
-    
     @objc func logVerbose(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.verbose(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.verbose(message, file: file, function: function, line: line)
     }
     
     @objc func logDebug(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.debug(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.debug(message, file: file, function: function, line: line)
     }
     
     @objc func logInfo(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.info(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.info(message, file: file, function: function, line: line)
     }
     
     @objc func logWarn(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.warn(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.warn(message, file: file, function: function, line: line)
     }
     
     @objc func logError(_ message: String!, file: String!, function: String!, line: UInt) {
-        Logger.error(message, level: wmedefaultLevel, file: file, function: function, line: line)
+        SDKLogger.shared.error(message, file: file, function: function, line: line)
     }
 }

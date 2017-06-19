@@ -7,7 +7,7 @@
 //
 
 CISCO_SSL = $(SRCROOT)/Submodules/ciscossl-1.0.2k.6.2.9
-WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine7.0
+WEBEX_MEDIA_ENGINE = $(SRCROOT)/Submodules/WebexMediaEngine7.5.1
 HEADER_SEARCH_PATHS = $(inherited) "$(CISCO_SSL)/include" "$(WEBEX_MEDIA_ENGINE)/sdk/include" "$(WEBEX_MEDIA_ENGINE)/external/include" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wrtp" "$(WEBEX_MEDIA_ENGINE)/sdk/include/wqos" "$(WEBEX_MEDIA_ENGINE)/external/include/ios" "$(WEBEX_MEDIA_ENGINE)/external/include/client"
 LIBRARY_SEARCH_PATHS = $(inherited) "$(CISCO_SSL)/lib" "$(WEBEX_MEDIA_ENGINE)/sdk/libs/Release$(EFFECTIVE_PLATFORM_NAME)" "$(WEBEX_MEDIA_ENGINE)/external/libs/Release$(EFFECTIVE_PLATFORM_NAME)"
 

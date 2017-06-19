@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,7 @@ import Foundation
 import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
+import SwiftyJSON
 
 class ServiceRequest {
     
@@ -32,10 +33,10 @@ class ServiceRequest {
     private let query: RequestParameter?
     private let keyPath: String?
     private let queue: DispatchQueue?
-    private let authenticationStrategy: AuthenticationStrategy
+    private let authenticator: Authenticator
     
-    private init(authenticationStrategy: AuthenticationStrategy, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
-        self.authenticationStrategy = authenticationStrategy
+    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
+        self.authenticator = authenticator
         self.url = url
         self.headers = headers
         self.method = method
@@ -48,7 +49,7 @@ class ServiceRequest {
     class Builder {
         
         private static let apiBaseUrl: URL = URL(string: "https://api.ciscospark.com/v1")!
-        private let authenticationStrategy: AuthenticationStrategy
+        private let authenticator: Authenticator
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod
         private var baseUrl: URL
@@ -59,17 +60,18 @@ class ServiceRequest {
         private var queue: DispatchQueue?
         
         
-        init(_ authenticationStrategy: AuthenticationStrategy) {
-            self.authenticationStrategy = authenticationStrategy
+        init(_ authenticator: Authenticator) {
+            self.authenticator = authenticator
             self.headers = ["Content-Type": "application/json",
-                            "User-Agent": UserAgent.string]
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
             self.baseUrl = Builder.apiBaseUrl
             self.method = .get
             self.path = ""
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticationStrategy: authenticationStrategy, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -229,9 +231,22 @@ class ServiceRequest {
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
-        authenticationStrategy.accessToken { accessToken in
+        authenticator.accessToken { accessToken in
             accessTokenCallback(accessToken)
         }
     }
+}
+
+extension SparkError {
+    
+    /// Converts the error data to NSError
+    static func requestErrorWith(data: Data) -> Error {
+        var failureReason = "Service request failed without error message"
+        if let errorMessage = JSON(data: data)["message"].string {
+            failureReason = errorMessage
+        }
+        return SparkError.serviceFailed(code: -7000, reason: failureReason)
+    }
+    
 }
 

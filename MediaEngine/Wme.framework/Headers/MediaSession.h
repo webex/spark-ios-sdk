@@ -36,10 +36,12 @@
 - (void)setDefaultCamera:(BOOL)useFront;
 - (void)toggleCamera;
 - (BOOL)isFrontCameraSelected;
+- (void)setCamrea:(BOOL)frontCamera;
 
 - (void)setDefaultAudioOutput:(BOOL)useSpeaker;
 - (void)toggleSpeaker;
 - (BOOL)isSpeakerSelected;
+- (void)setSpeaker:(BOOL)useSpeaker;
 
 - (void)muteAudio;
 - (void)muteVideo;
@@ -55,5 +57,10 @@
 
 - (void)connectToCloud;
 - (void)disconnectFromCloud;
+
+- (void)startLocalVideoRenderView;
+- (void)stopLocalVideoRenderView:(BOOL)removeRender;
+- (void)startRemoteVideoRenderView;
+- (void)stopRemoteVideoRenderView:(BOOL)removeRender;
 
 @end

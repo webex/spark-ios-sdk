@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,32 +20,29 @@
 
 import Foundation
 
-/// Webhook HTTP client.
+/// An iOS client wrapper of the Cisco Spark [Webhooks REST API](https://developer.ciscospark.com/resource-webhooks.html) .
+///
+/// - since: 1.2.0
 public class WebhookClient {
     
-    /// Alias for closure to handle a service response along with a Webhook object.
-    public typealias ObjectHandler = (ServiceResponse<Webhook>) -> Void
+    let authenticator: Authenticator
     
-    /// Alias for closure to handle a service response along with a Webhook array.
-    public typealias ArrayHandler = (ServiceResponse<[Webhook]>) -> Void
-    
-    let authenticationStrategy: AuthenticationStrategy
-    
-    init(authenticationStrategy: AuthenticationStrategy) {
-        self.authenticationStrategy = authenticationStrategy
+    init(authenticator: Authenticator) {
+        self.authenticator = authenticator
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticationStrategy).path("webhooks")
+        return ServiceRequest.Builder(authenticator).path("webhooks")
     }
     
-    /// Lists all webhooks.
+    /// Lists all webhooks of the authenticated user.
     ///
-    /// - parameter max: Limit the maximum number of webhooks in the response.
+    /// - parameter max: The maximum number of webhooks in the response.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping ArrayHandler) {
+    /// - since: 1.2.0
+    open func list(max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Webhook]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .query(RequestParameter(["max": max]))
@@ -56,7 +53,7 @@ public class WebhookClient {
         request.responseArray(completionHandler)
     }
     
-    /// Posts a webhook.
+    /// Posts a webhook for the authenticated user.
     ///
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
@@ -66,7 +63,8 @@ public class WebhookClient {
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    /// - since: 1.2.0
+    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,
@@ -83,13 +81,14 @@ public class WebhookClient {
         request.responseObject(completionHandler)
     }
     
-    /// Shows details for a webhook by id.
+    /// Retrieves the details for a webhook by id.
     ///
-    /// - parameter webhookId: A webhook id.
+    /// - parameter webhookId: The identifier of  the webhook.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func get(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    /// - since: 1.2.0
+    open func get(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path(webhookId)
@@ -101,13 +100,14 @@ public class WebhookClient {
     
     /// Updates a webhook by id.
     ///
-    /// - parameter webhookId: A webhook id.
+    /// - parameter webhookId: The identifier of  the webhook.
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping ObjectHandler) {
+    /// - since: 1.2.0
+    open func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .body(RequestParameter(["name": name, "targetUrl": targetUrl]))
@@ -120,11 +120,13 @@ public class WebhookClient {
     
     /// Deletes a webhook by id.
     ///
-    /// - parameter webhookId: A webhook id.
+    /// - parameter webhookId: The identifier of  the webhook.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    open func delete(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping AnyHandler) {
+    /// - parameter webhookId: The identifier of  the webhook.
+    /// - since: 1.2.0
+    open func delete(webhookId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.delete)
             .path(webhookId)

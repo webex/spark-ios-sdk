@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,6 @@ class InterfaceAddress {
         
         for i in 0..<oldAddrs.count {
             if !isSameAddress(oldAddr: oldAddrs[i], newAddr: newAddrs[i]) {
-                Logger.info("Address changed: \(oldAddrs[i]) -> \(newAddrs[i])")
                 return false
             }
         }

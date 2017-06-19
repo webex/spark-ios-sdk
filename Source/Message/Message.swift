@@ -24,7 +24,7 @@ import ObjectMapper
 /// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.2.0
-public struct Message: Mappable {
+public struct Message {
     
     /// The identifier of this message.
     public var id: String?
@@ -52,6 +52,10 @@ public struct Message: Mappable {
     
     /// The timestamp that the message being created.
     public var created: Date?
+
+}
+
+extension Message: Mappable {
     
     /// Message constructor.
     ///
@@ -76,10 +80,8 @@ public struct Message: Mappable {
 }
 
 class EmailTransform: TransformType {
-    typealias Object = EmailAddress
-    typealias JSON = String
     
-    func transformFromJSON(_ value: Any?) -> Object? {
+    func transformFromJSON(_ value: Any?) -> EmailAddress? {
         if let value = value as? String {
             return EmailAddress.fromString(value)
         } else {
@@ -87,7 +89,7 @@ class EmailTransform: TransformType {
         }
     }
     
-    func transformToJSON(_ value: Object?) -> JSON? {
-        return nil
+    func transformToJSON(_ value: EmailAddress?) -> String? {
+        return value?.toString()
     }
 }

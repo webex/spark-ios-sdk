@@ -1,4 +1,4 @@
-// Copyright 2016 Cisco Systems Inc
+// Copyright 2016-2017 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,8 @@
 
 import Foundation
 
-struct DeviceRegistrationInformation {
+struct Device {
+    let phone: Phone
     let deviceUrl: URL
     let webSocketUrl: URL
     let locusServiceUrl: URL
@@ -32,81 +33,65 @@ class DeviceService {
     
     private let client: DeviceClient
     
-    init(authenticationStrategy: AuthenticationStrategy) {
-        client = DeviceClient(authenticationStrategy: authenticationStrategy)
+    init(authenticator: Authenticator) {
+        client = DeviceClient(authenticator: authenticator)
     }
 
-    var device: DeviceRegistrationInformation?
+    var device: Device?
     
-    var deviceUrl: String? {
-        get {
-            return UserDefaults.sharedInstance.deviceUrl
-        }
-        
-        set {
-            UserDefaults.sharedInstance.deviceUrl = newValue
-        }
-    }
-    
-    func registerDevice(_ completionHandler: @escaping (DeviceRegistrationInformation?) -> Void) {
-        let registrationHandler = createRegistrationHandler(completionHandler)
-        if let deviceUrl = deviceUrl {
-            client.update(registeredDeviceUrl: deviceUrl, deviceInfo: UIDevice.current, completionHandler: registrationHandler)
-        } else {
-            client.create(deviceInfo: UIDevice.current, completionHandler: registrationHandler)
-        }
-    }
-    
-    func deregisterDevice(_ completionHandler: @escaping (Bool) -> Void) {
-        if let deviceUrl = deviceUrl {
-            client.delete(registeredDeviceUrl: deviceUrl) {
-                (response: ServiceResponse<Any>) in
-                self.onDeregisterDeviceCompleted(response, completionHandler: completionHandler)
-            }
-            self.deviceUrl = nil
-        } else {
-            completionHandler(true)
-        }
-    }
-    
-    private func createRegistrationHandler(_ completionHandler: @escaping (DeviceRegistrationInformation?) -> Void) -> ((ServiceResponse<Device>) -> Void) {
-        return { serviceResponse in
-            var deviceRegistrationInformation: DeviceRegistrationInformation?
-            switch serviceResponse.result {
-            case .success(let device):
-                if let deviceUrlString = device.deviceUrl,
+    func registerDevice(phone: Phone, queue: DispatchQueue, completionHandler: @escaping (Result<Device>) -> Void) {
+        let registrationHandler: (ServiceResponse<DeviceModel>) -> Void = { response in
+            switch response.result {
+            case .success(let model):
+                if let deviceUrlString = model.deviceUrl,
                     let deviceUrl = URL(string: deviceUrlString),
-                    let webSocketUrlString = device.webSocketUrl,
+                    let webSocketUrlString = model.webSocketUrl,
                     let webSocketUrl = URL(string: webSocketUrlString),
-                    let servicesDictionary = device.services,
+                    let servicesDictionary = model.services,
                     let locusServiceUrlString = servicesDictionary["locusServiceUrl"],
                     let locusServiceUrl = URL(string: locusServiceUrlString),
                     let calliopeDiscoveryServiceUrlString = servicesDictionary["calliopeDiscoveryServiceUrl"],
                     let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
                     let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
                     let metricsServiceUrl = URL(string: metricsServiceUrlString) {
-                    
-                    deviceRegistrationInformation = DeviceRegistrationInformation(deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
-                    self.device = deviceRegistrationInformation
-                    self.deviceUrl = deviceUrlString
+                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
+                    self.device = device
+                    UserDefaults.sharedInstance.deviceUrl = deviceUrlString
+                    completionHandler(Result.success(device));
                 } else {
-                    Logger.error("Missing required URLs when registering device")
+                    let error = SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")
+                    SDKLogger.shared.error("Failed to register device", error: error)
+                    completionHandler(Result.failure(error))
                 }
             case .failure(let error):
-                Logger.error("Failed to register device", error: error)
+                SDKLogger.shared.error("Failed to register device", error: error)
+                completionHandler(Result.failure(error))
             }
-            completionHandler(deviceRegistrationInformation)
+        }
+        if let deviceUrl = UserDefaults.sharedInstance.deviceUrl {
+            self.client.update(registeredDeviceUrl: deviceUrl, deviceInfo: UIDevice.current, queue: queue, completionHandler: registrationHandler)
+        }
+        else {
+            self.client.create(deviceInfo: UIDevice.current, queue: queue, completionHandler: registrationHandler)
         }
     }
     
-    private func onDeregisterDeviceCompleted(_ response: ServiceResponse<Any>, completionHandler: (Bool) -> Void) {
-        switch response.result {
-        case .success:
-            completionHandler(true)
-        case .failure(let error):
-            Logger.error("Failed to deregister device", error: error)
-            completionHandler(false)
+    func deregisterDevice(queue: DispatchQueue, completionHandler: @escaping (Error?) -> Void) {
+        if let deviceUrl = UserDefaults.sharedInstance.deviceUrl {
+            self.client.delete(registeredDeviceUrl: deviceUrl, queue: queue) { (response: ServiceResponse<Any>) in
+                switch response.result {
+                case .success:
+                    completionHandler(nil)
+                case .failure(let error):
+                    SDKLogger.shared.error("Failed to deregister device", error: error)
+                    completionHandler(error)
+                }
+            }
+            UserDefaults.sharedInstance.deviceUrl = nil
+        } else {
+            completionHandler(nil)
         }
+        self.device = nil
     }
 }
 

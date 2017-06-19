@@ -1,7 +1,8 @@
 xcodebuild_arguments: [-workspace, SparkSDK.xcworkspace, -scheme,SparkSDK]
 clean: true
-author: Cisco
+author: Cisco Systems, Inc.
 author_url: https://developer.ciscospark.com
+github_url: https://github.com/ciscospark/spark-ios-sdk/
 output: Docs
 #min_acl: private
 #source_directory: ../source/
