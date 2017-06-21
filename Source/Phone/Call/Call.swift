@@ -494,7 +494,10 @@ public class Call {
     }
     
     func stopMedia() {
-        self.mediaSession.stopMedia()
+        //stopMedia must run in the main thread.Because WME will remove the videoRender view.
+        DispatchQueue.main.async {
+            self.mediaSession.stopMedia()
+        }
     }
     
     func doCallModel(_ model: CallModel) {
