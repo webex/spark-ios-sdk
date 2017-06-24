@@ -40,8 +40,11 @@ class CallClient {
         return RequestParameter(result)
     }
     
-    private func convertToJson(mediaInfo: MediaModel) -> [String:Any?] {
+    private func convertToJson(_ mediaID: String? = nil, mediaInfo: MediaModel) -> [String:Any?] {
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)!
+        if let id = mediaID {
+            return ["localMedias": [["mediaId":id ,"type": "SDP", "localSdp": mediaInfoJSON]]]
+        }
         return ["localMedias": [["type": "SDP", "localSdp": mediaInfoJSON]]]
     }
     
@@ -132,8 +135,8 @@ class CallClient {
         request.responseJSON(completionHandler)
     }
     
-    func update(_ mediaUrl: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
-        let json = convertToJson(mediaInfo: localMedia)
+    func update(_ mediaUrl: String,by mediaID: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
+        let json = convertToJson(mediaID,mediaInfo: localMedia)
         let request = requestBuilder()
             .method(.put)
             .baseUrl(mediaUrl)
