@@ -452,12 +452,12 @@ public class Phone {
         DispatchQueue.main.async {
             let reachabilities = self.reachability.feedback?.reachabilities
             self.queue.sync {
-                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.localSdp?.sdp else {
+                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.localSdp?.sdp, let mediaID = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.mediaId else {
                     self.queue.yield()
                     return
                 }
                 let media = MediaModel(sdp: sdp, audioMuted: !sendingAudio, videoMuted: !sendingVideo, reachabilities: reachabilities)
-                self.client.update(url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
+                self.client.update(url,by: mediaID,by: call.device, localMedia: media, queue: self.queue.underlying) { res in
                     self.doLocusResponse(LocusResult.update(call, res))
                     self.queue.yield()
                 }
