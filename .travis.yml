@@ -24,7 +24,7 @@ env:
 before_install:
   - gem install cocoapods --pre
   - pod repo update > /dev/null
-
+  - brew install sendemail
 script:
   - set -o pipefail
   - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clientSecret="$CLIENTSECRET" test | xcpretty -c
