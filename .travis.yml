@@ -7,7 +7,7 @@ env:
   - WORKSPACE=SparkSDK.xcworkspace
   - SCHEME=SparkSDK
   matrix:
-    - DESTINATION="OS=9.0,name=iPhone 5"       CONFIGURATION="Debug"
+    - DESTINATION="OS=9.0,name=iPhone 5"       CONFIGURATION="Debug"     IsIntegrationTestingTask="true"
     - DESTINATION="OS=9.0,name=iPhone 5"       CONFIGURATION="ReleaseTest"
     - DESTINATION="OS=9.1,name=iPhone 5s"      CONFIGURATION="Debug"
     - DESTINATION="OS=9.1,name=iPhone 5s"      CONFIGURATION="ReleaseTest"
