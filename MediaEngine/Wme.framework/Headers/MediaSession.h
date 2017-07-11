@@ -52,6 +52,9 @@
 - (void)unmuteAudioOutput;
 - (void)unmuteVideoOutput;
 
+- (void)stopAudio;
+- (void)startAudio;
+
 - (NSString*)createLocalSdpOffer;
 - (void)receiveRemoteSdpAnswer:(NSString*)sdp;
 
