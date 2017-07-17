@@ -187,4 +187,9 @@ class MediaSessionWrapper {
         mediaSession.disconnectFromCloud()
         self.status = .initial
     }
+    
+    func restartAudio() {
+        mediaSession.stopAudio()
+        mediaSession.startAudio()
+    }
 }

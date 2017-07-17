@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'ObjectMapper', '~> 2.0'
   s.dependency 'AlamofireObjectMapper', '~> 4.0'
-  s.dependency 'SwiftyJSON', '~> 3.1'
+  s.dependency 'SwiftyJSON', '~> 3.0'
   s.dependency 'Starscream', '~> 2.0'
   s.dependency 'KeychainAccess', '~> 3.0'
 end

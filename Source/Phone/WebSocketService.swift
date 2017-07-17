@@ -55,7 +55,6 @@ class WebSocketService: WebSocketDelegate {
                     if let token = token {
                         socket.headers["Authorization"] = "Bearer " + token
                     }
-                    socket.voipEnabled = true
                     socket.callbackQueue = self.queue
                     socket.delegate = self
                     self.onConnected = block
