@@ -154,7 +154,15 @@ class SparkTestFixture {
     
     @discardableResult
     func createUser() -> TestUser? {
-        return SparkTestFixture.createUser(adminAccessToken: adminAccessToken, adminClientId: adminClientId, adminClientSecret: adminClientSecret)
+        for _ in 1...3 {
+            if let user = SparkTestFixture.createUser(adminAccessToken: adminAccessToken, adminClientId: adminClientId, adminClientSecret: adminClientSecret) {
+                return user
+            }
+            else {
+                Thread.sleep(forTimeInterval: Config.TestcaseInterval)
+            }
+        }
+        return nil
     }
     
     @discardableResult
