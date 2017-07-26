@@ -27,6 +27,8 @@ struct Device {
     let locusServiceUrl: URL
     let calliopeDiscoveryServiceUrl: URL
     let metricsServiceUrl: URL
+    var regionCode: String?
+    var countryCode: String?
 }
 
 class DeviceService {
@@ -40,6 +42,20 @@ class DeviceService {
     var device: Device?
     
     func registerDevice(phone: Phone, queue: DispatchQueue, completionHandler: @escaping (Result<Device>) -> Void) {
+        
+        let updateRegionHandler: (ServiceResponse<RegionModel>) -> Void = {
+            response in
+            switch response.result {
+            case .success(let model):
+                self.device?.regionCode = model.regionCode
+                self.device?.countryCode = model.countryCode
+                
+            case .failure(let error):
+                SDKLogger.shared.error("Failed to update device region", error: error)
+            }
+            
+        }
+        
         let registrationHandler: (ServiceResponse<DeviceModel>) -> Void = { response in
             switch response.result {
             case .success(let model):
@@ -54,9 +70,10 @@ class DeviceService {
                     let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
                     let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
                     let metricsServiceUrl = URL(string: metricsServiceUrlString) {
-                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
+                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, regionCode: nil,countryCode: nil)
                     self.device = device
                     UserDefaults.sharedInstance.deviceUrl = deviceUrlString
+                    self.client.updateRegion(queue: queue, completionHandler: updateRegionHandler)
                     completionHandler(Result.success(device));
                 } else {
                     let error = SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")
@@ -68,6 +85,7 @@ class DeviceService {
                 completionHandler(Result.failure(error))
             }
         }
+        
         if let deviceUrl = UserDefaults.sharedInstance.deviceUrl {
             self.client.update(registeredDeviceUrl: deviceUrl, deviceInfo: UIDevice.current, queue: queue, completionHandler: registrationHandler)
         }

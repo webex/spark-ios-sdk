@@ -33,10 +33,29 @@ class CallClient {
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(authenticator).keyPath("locus")
     }
-    
     private func body(deviceUrl: URL, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
         result["deviceUrl"] = deviceUrl.absoluteString
+        return RequestParameter(result)
+    }
+    private func body(device: Device, json: [String:Any?] = [:]) -> RequestParameter {
+        var result = json
+        let deviceType: String
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            deviceType = "IPAD"
+        } else if UIDevice.current.userInterfaceIdiom == .phone {
+            deviceType = "IPHONE"
+        } else {
+            deviceType = "UNKNOWN"
+        }
+        
+        if let countryCode = device.countryCode,let regionCode = device.regionCode {
+            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":deviceType,"regionCode":countryCode,"countryCode":regionCode]
+        }
+        else {
+            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":deviceType,"regionCode":"US-WEST","countryCode":"01"]
+        }
+        
         return RequestParameter(result)
     }
     
@@ -56,7 +75,7 @@ class CallClient {
             .method(.post)
             .baseUrl(device.locusServiceUrl)
             .path("loci/call")
-            .body(body(deviceUrl: device.deviceUrl, json: json))
+            .body(body(device: device, json: json))
             .queue(queue)
             .build()
         
@@ -69,7 +88,7 @@ class CallClient {
             .method(.post)
             .baseUrl(callUrl)
             .path("participant")
-            .body(body(deviceUrl: device.deviceUrl, json: json))
+            .body(body(device: device, json: json))
             .queue(queue)
             .build()
         
