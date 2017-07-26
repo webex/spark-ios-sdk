@@ -40,20 +40,12 @@ class CallClient {
     }
     private func body(device: Device, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
-        let deviceType: String
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            deviceType = "IPAD"
-        } else if UIDevice.current.userInterfaceIdiom == .phone {
-            deviceType = "IPHONE"
-        } else {
-            deviceType = "UNKNOWN"
-        }
         
         if let countryCode = device.countryCode,let regionCode = device.regionCode {
-            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":deviceType,"regionCode":countryCode,"countryCode":regionCode]
+            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":device.deviceType,"regionCode":countryCode,"countryCode":regionCode]
         }
         else {
-            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":deviceType,"regionCode":"US-WEST","countryCode":"01"]
+            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":device.deviceType,"regionCode":"US-WEST","countryCode":"01"]
         }
         
         return RequestParameter(result)

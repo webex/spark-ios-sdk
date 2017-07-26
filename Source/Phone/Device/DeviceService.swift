@@ -27,6 +27,7 @@ struct Device {
     let locusServiceUrl: URL
     let calliopeDiscoveryServiceUrl: URL
     let metricsServiceUrl: URL
+    let deviceType:String
     var regionCode: String?
     var countryCode: String?
 }
@@ -47,11 +48,19 @@ class DeviceService {
             response in
             switch response.result {
             case .success(let model):
-                self.device?.regionCode = model.regionCode
-                self.device?.countryCode = model.countryCode
-                
+                if let device = self.device,let regionCode = model.regionCode,let countryCode = model.countryCode {
+                    self.device?.regionCode = regionCode
+                    self.device?.countryCode = countryCode
+                    completionHandler(Result.success(device))
+                }
+                else {
+                    let error = SparkError.serviceFailed(code: -7000, reason: "Missing required region info when registering device")
+                    SDKLogger.shared.error("Failed to register device", error: error)
+                    completionHandler(Result.failure(error))
+                }
             case .failure(let error):
                 SDKLogger.shared.error("Failed to update device region", error: error)
+                completionHandler(Result.failure(error))
             }
             
         }
@@ -70,11 +79,20 @@ class DeviceService {
                     let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
                     let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
                     let metricsServiceUrl = URL(string: metricsServiceUrlString) {
-                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, regionCode: nil,countryCode: nil)
+                    
+                    let deviceType: String
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        deviceType = "IPAD"
+                    } else if UIDevice.current.userInterfaceIdiom == .phone {
+                        deviceType = "IPHONE"
+                    } else {
+                        deviceType = "UNKNOWN"
+                    }
+                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl,deviceType: deviceType, regionCode: nil,countryCode: nil)
                     self.device = device
                     UserDefaults.sharedInstance.deviceUrl = deviceUrlString
                     self.client.updateRegion(queue: queue, completionHandler: updateRegionHandler)
-                    completionHandler(Result.success(device));
+                    
                 } else {
                     let error = SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")
                     SDKLogger.shared.error("Failed to register device", error: error)
