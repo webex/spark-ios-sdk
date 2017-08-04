@@ -28,6 +28,9 @@ import Foundation
 
 public class SSOAuthenticator: OAuthAuthenticator {
     
+    /// The spark email address of the SSO user.
+    private let email: String
+    
     /// The base uri of the identity provider, which should conform to SAML 2.0 specifications.
     private let identityProviderUri: String
     
@@ -45,8 +48,9 @@ public class SSOAuthenticator: OAuthAuthenticator {
     ///
     /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
     /// - since: 1.2.0
-    public init(clientId: String, clientSecret: String, scope: String, redirectUri: String, identityProviderUri: String,
+    public init(clientId: String, clientSecret: String, scope: String, redirectUri: String, email: String, identityProviderUri: String,
          queryItems: [URLQueryItem] = []) {
+        self.email = email
         self.identityProviderUri = identityProviderUri
         self.additionalQueryItems = queryItems
         super.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri,
@@ -63,12 +67,19 @@ public class SSOAuthenticator: OAuthAuthenticator {
     /// use their account.
     override func authorizationUrl() -> URL? {
         /// Construct the request uri to the identity provider by appending any provided parameters.
-        if let authorizationUrl = super.authorizationUrl(), let components = NSURLComponents(string: identityProviderUri) {
-            var queryItems = [URLQueryItem(name: "returnTo", value: authorizationUrl.absoluteString)]
-            queryItems.append(contentsOf: additionalQueryItems)
+        if let orginalUrl = self.authorizationUrl(), let components = NSURLComponents(string: identityProviderUri),
+            let originalComponents = NSURLComponents(url: orginalUrl, resolvingAgainstBaseURL: false) {
             
-            components.queryItems = queryItems
+            // Append the email parameter to the original authorization url.
+            originalComponents.queryItems?.append(URLQueryItem(name: "email", value: self.email))
             
+            // Provide the modified authorization url as a query parameter to the identity provider.
+            components.queryItems?.append(URLQueryItem(name: "returnTo", value: originalComponents.url?.absoluteString))
+            
+            // Append any additional query parameters for the identity provider.
+            components.queryItems?.append(contentsOf: additionalQueryItems)
+            
+            // Return the constructed url.
             return components.url
         }
         
