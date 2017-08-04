@@ -45,7 +45,7 @@ public class SSOAuthenticator: OAuthAuthenticator {
     ///
     /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
     /// - since: 1.2.0
-    init(clientId: String, clientSecret: String, scope: String, redirectUri: String, identityProviderUri: String,
+    public init(clientId: String, clientSecret: String, scope: String, redirectUri: String, identityProviderUri: String,
          queryItems: [URLQueryItem] = []) {
         self.identityProviderUri = identityProviderUri
         self.additionalQueryItems = queryItems
