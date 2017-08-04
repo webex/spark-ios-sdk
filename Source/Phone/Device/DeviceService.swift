@@ -69,6 +69,7 @@ class DeviceService {
                         let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, deviceType: UIDevice.current.kind, regionCode: regionCode, countryCode: countryCode)
                         self.device = device
                         UserDefaults.sharedInstance.deviceUrl = deviceUrlString
+                        completionHandler(Result.success(device))
                     }
                     
                 } else {
