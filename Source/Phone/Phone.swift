@@ -570,7 +570,7 @@ public class Phone {
     private func doLocusEvent(_ model: CallModel) {
         SDKLogger.shared.debug("Receive locus event: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         guard let url = model.callUrl else {
-            SDKLogger.shared.error("CallInfo is missing call url")
+            SDKLogger.shared.error("CallModel is missing call url")
             return
         }
         if let call = self.calls[url] {
@@ -595,6 +595,9 @@ public class Phone {
                 SDKLogger.shared.info("Receive incoming call with error: \(model)")
             }
             // TODO: need to support other device joined case
+        }
+        else {
+            SDKLogger.shared.info("Cannot handle the CallModel.")
         }
     }
     

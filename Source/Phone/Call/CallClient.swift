@@ -39,6 +39,12 @@ class CallClient {
         result["deviceUrl"] = deviceUrl.absoluteString
         return RequestParameter(result)
     }
+
+    private func body(device: Device, json: [String:Any?] = [:]) -> RequestParameter {
+        var result = json
+        result["device"] = ["url":device.deviceUrl.absoluteString, "deviceType":device.deviceType, "regionCode":device.countryCode, "countryCode":device.regionCode]        
+        return RequestParameter(result)
+    }
     
     private func convertToJson(_ mediaID: String? = nil, mediaInfo: MediaModel) -> [String:Any?] {
         let mediaInfoJSON = Mapper().toJSONString(mediaInfo, prettyPrint: true)!
@@ -56,7 +62,7 @@ class CallClient {
             .method(.post)
             .baseUrl(device.locusServiceUrl)
             .path("loci/call")
-            .body(body(deviceUrl: device.deviceUrl, json: json))
+            .body(body(device: device, json: json))
             .queue(queue)
             .build()
         
@@ -69,7 +75,7 @@ class CallClient {
             .method(.post)
             .baseUrl(callUrl)
             .path("participant")
-            .body(body(deviceUrl: device.deviceUrl, json: json))
+            .body(body(device: device, json: json))
             .queue(queue)
             .build()
         

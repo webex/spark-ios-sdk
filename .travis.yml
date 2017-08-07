@@ -1,33 +1,23 @@
 language: objective-c
-osx_image: xcode8
-xcode_sdk: iphonesimulator10.0
+osx_image: xcode8.3
+xcode_sdk: iphonesimulator10.3
 
 env:
   global:
   - WORKSPACE=SparkSDK.xcworkspace
   - SCHEME=SparkSDK
   matrix:
-    - DESTINATION="OS=9.0,name=iPhone 5"       CONFIGURATION="Debug"
-    - DESTINATION="OS=9.0,name=iPhone 5"       CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=9.1,name=iPhone 5s"      CONFIGURATION="Debug"
-    - DESTINATION="OS=9.1,name=iPhone 5s"      CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=9.0,name=iPhone 6"       CONFIGURATION="Debug"
-    - DESTINATION="OS=9.0,name=iPhone 6"       CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=9.1,name=iPhone 6 Plus"  CONFIGURATION="Debug"
+    - DESTINATION="OS=9.0,name=iPhone 5s"      CONFIGURATION="ReleaseTest" IsIntegrationTestingTask="true"
     - DESTINATION="OS=9.1,name=iPhone 6 Plus"  CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=9.2,name=iPhone 6s"      CONFIGURATION="Debug"
-    - DESTINATION="OS=9.2,name=iPhone 6s"      CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=9.3,name=iPhone 6s Plus" CONFIGURATION="Debug"
-    - DESTINATION="OS=9.3,name=iPhone 6s Plus" CONFIGURATION="ReleaseTest"
-    - DESTINATION="OS=10.0,name=iPhone 6s"      CONFIGURATION="Debug"
-    - DESTINATION="OS=10.0,name=iPhone 6s"      CONFIGURATION="ReleaseTest"
+    - DESTINATION="OS=9.3,name=iPhone 6s"      CONFIGURATION="ReleaseTest"
+    - DESTINATION="OS=10.0,name=iPhone 6s Plus" CONFIGURATION="ReleaseTest"
+    - DESTINATION="OS=10.3.1,name=iPhone 7"      CONFIGURATION="ReleaseTest"
 before_install:
   - gem install cocoapods --pre
   - pod repo update > /dev/null
-
+  - brew install sendemail
 script:
   - set -o pipefail
   - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clientSecret="$CLIENTSECRET" test | xcpretty -c
+  - travis_wait 30 bash IntegrationTesting.sh
 branches:
-  only:
-    - master

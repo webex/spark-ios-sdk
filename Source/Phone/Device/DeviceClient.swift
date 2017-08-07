@@ -64,6 +64,15 @@ class DeviceClient {
         request.responseJSON(completionHandler)
     }
     
+    func fetchRegion(queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<RegionModel>) -> Void) {
+        let request = requestBuilder()
+            .method(.get)
+            .baseUrl("https://ds.ciscospark.com/v1/region")
+            .queue(queue)
+            .build()
+        
+        request.responseObject(completionHandler)
+    }
     
     private func createBody(_ device: UIDevice) -> RequestParameter {
         let deviceName = device.name.isEmpty ? "notset" : device.name

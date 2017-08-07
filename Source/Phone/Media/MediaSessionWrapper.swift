@@ -23,8 +23,11 @@ import Wme
 
 class MediaSessionWrapper {
     
-    private var preview: Bool = false
-    private var running: Bool = false
+    enum Status {
+        case initial, preview, prepare, running
+    }
+
+    private var status: Status = .initial
     
     private let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
@@ -124,8 +127,8 @@ class MediaSessionWrapper {
     }
     
     func startPreview(view: MediaRenderView, phone: Phone) -> Bool {
-        if !self.preview && !self.running {
-            self.preview = true
+        if self.status == .initial {
+            self.status = .preview
             mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
             mediaSession.sendVideo = true
             mediaSession.localVideoView = view
@@ -140,43 +143,53 @@ class MediaSessionWrapper {
     }
     
     func stopPreview() {
-        if self.preview {
+        if self.status == .preview {
             mediaSession.stopLocalVideoRenderView(true)
             mediaSession.localVideoView = nil
             mediaSession.sendVideo = false
             mediaSession.disconnectFromCloud()
-            self.preview = false
+            self.status = .initial
         }
     }
     
     // MARK: - lifecycle
     func prepare(option: MediaOption, phone: Phone) {
-        self.running = true;        
-        if self.preview {
+        if self.status == .preview {
             self.stopPreview()
         }
-        if option.hasVideo {
-            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
-            mediaSession.localVideoView = option.localVideoView
-            mediaSession.remoteVideoView = option.remoteVideoView
+        if self.status == .initial {
+            self.status = .prepare
+            if option.hasVideo {
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
+                mediaSession.localVideoView = option.localVideoView
+                mediaSession.remoteVideoView = option.remoteVideoView
+            }
+            else {
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
+            }
+            mediaSession.createMediaConnection()
+            mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
+            mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
         }
-        else {
-            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
-        }
-        mediaSession.createMediaConnection()
-        mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
-        mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
     }
     
     func startMedia(call: Call) {
-        mediaSessionObserver = MediaSessionObserver(call: call)
-        mediaSessionObserver?.startObserving(mediaSession)
-        mediaSession.connectToCloud()
+        if self.status == .prepare {
+            self.status = .running
+            mediaSessionObserver = MediaSessionObserver(call: call)
+            mediaSessionObserver?.startObserving(mediaSession)
+            mediaSession.connectToCloud()
+        }
     }
     
     func stopMedia() {
         mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
-        self.running = false
+        self.status = .initial
+    }
+    
+    func restartAudio() {
+        mediaSession.stopAudio()
+        mediaSession.startAudio()
     }
 }

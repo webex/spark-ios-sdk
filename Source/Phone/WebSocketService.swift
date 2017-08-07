@@ -26,7 +26,7 @@ import ObjectMapper
 class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
-    var onFailed: ((Void) -> Void)?
+    var onFailed: (() -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter
@@ -55,7 +55,6 @@ class WebSocketService: WebSocketDelegate {
                     if let token = token {
                         socket.headers["Authorization"] = "Bearer " + token
                     }
-                    socket.voipEnabled = true
                     socket.callbackQueue = self.queue
                     socket.delegate = self
                     self.onConnected = block

@@ -29,4 +29,11 @@ public extension Call {
         return self._uuid
     }
     
+    /// Update Audio Session for CallKit.
+    ///
+    /// - since: 1.3
+    public func updateAudioSession() {
+        self.mediaSession.restartAudio()
+    }
+    
 }
