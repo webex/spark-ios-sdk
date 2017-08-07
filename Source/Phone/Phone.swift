@@ -78,7 +78,7 @@ public class Phone {
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
     
-    private var debug = true;
+    var debug = true;
     
     enum LocusResult {
         case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)

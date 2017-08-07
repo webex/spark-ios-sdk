@@ -476,7 +476,7 @@ public class Call {
                 self.device.phone.client.leave(url, by: self.device, queue: self.device.phone.queue.underlying) { res in
                     switch res.result {
                     case .success(let model):
-                        SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+                        SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: self.device.phone.debug) ?? "Nil JSON")")
                     case .failure(let error):
                         SDKLogger.shared.error("Failure leave ", error: error)
                     }
