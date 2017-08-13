@@ -132,13 +132,18 @@ class PhoneTests: XCTestCase {
     private func dialCall(address: String, mediaOption: MediaOption) -> Call? {
         let expect = expectation(description: "Call dial")
         var call:Call? = nil
-        phone.dial(address, option: mediaOption) { result in
-            call = result.data
-            expect.fulfill()
-        }
+        for _ in 0...Config.TestcaseRetryCount {
+            if call != nil {
+                break
+            }
+            phone.dial(address, option: mediaOption) { result in
+                call = result.data
+                expect.fulfill()
+            }
         
-        waitForExpectations(timeout: 30) { error in
-            XCTAssertNil(error, "Phone dial timed out")
+            waitForExpectations(timeout: 30) { error in
+                XCTAssertNil(error, "Phone dial timed out")
+            }
         }
         return call
     }
