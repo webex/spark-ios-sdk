@@ -26,7 +26,7 @@ import ObjectMapper
 class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
-    var onFailed: ((Void) -> Void)?
+    var onFailed: (() -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter

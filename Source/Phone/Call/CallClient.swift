@@ -33,21 +33,16 @@ class CallClient {
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(authenticator).keyPath("locus")
     }
+    
     private func body(deviceUrl: URL, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
         result["deviceUrl"] = deviceUrl.absoluteString
         return RequestParameter(result)
     }
+
     private func body(device: Device, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
-        
-        if let countryCode = device.countryCode,let regionCode = device.regionCode {
-            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":device.deviceType,"regionCode":countryCode,"countryCode":regionCode]
-        }
-        else {
-            result["device"] = ["url":device.deviceUrl.absoluteString,"deviceType":device.deviceType,"regionCode":"US-WEST","countryCode":"01"]
-        }
-        
+        result["device"] = ["url":device.deviceUrl.absoluteString, "deviceType":device.deviceType, "regionCode":device.countryCode, "countryCode":device.regionCode]        
         return RequestParameter(result)
     }
     

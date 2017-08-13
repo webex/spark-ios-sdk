@@ -470,12 +470,27 @@ public class Call {
     }
     
     func end(reason: DisconnectReason) {
-        self.device.phone.remove(call: self)
-        self.status = .disconnected
-        self.stopMedia()
-        self.metrics.trackCallEnded(reason: reason)
-        DispatchQueue.main.async {
-            self.onDisconnected?(reason)
+        switch reason {
+        case .remoteDecline, .remoteLeft:
+            if let url = self.model.myself?.url {
+                self.device.phone.client.leave(url, by: self.device, queue: self.device.phone.queue.underlying) { res in
+                    switch res.result {
+                    case .success(let model):
+                        SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: self.device.phone.debug) ?? "Nil JSON")")
+                    case .failure(let error):
+                        SDKLogger.shared.error("Failure leave ", error: error)
+                    }
+                }
+            }
+            fallthrough
+        default:
+            self.device.phone.remove(call: self)
+            self.status = .disconnected
+            self.stopMedia()
+            self.metrics.trackCallEnded(reason: reason)
+            DispatchQueue.main.async {
+                self.onDisconnected?(reason)
+            }
         }
     }
     
