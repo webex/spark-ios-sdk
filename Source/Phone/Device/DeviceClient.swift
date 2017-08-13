@@ -71,6 +71,7 @@ class DeviceClient {
     func fetchRegion(queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<RegionModel>) -> Void) {
         let request = requestBuilder()
             .method(.get)
+            .headers(["Content-Type": "application/json"])
             .baseUrl("https://ds.ciscospark.com/v1/region")
             .queue(queue)
             .build()
