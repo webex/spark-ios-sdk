@@ -67,17 +67,15 @@ public class SSOAuthenticator: OAuthAuthenticator {
     /// use their account.
     override func authorizationUrl() -> URL? {
         /// Construct the request uri to the identity provider by appending any provided parameters.
-        if let orginalUrl = super.authorizationUrl(), let components = NSURLComponents(string: identityProviderUri),
-            let originalComponents = NSURLComponents(url: orginalUrl, resolvingAgainstBaseURL: false) {
+        if let orginalUrl = super.authorizationUrl(), let encodedEmail = email.encodeQueryParamString,
+            let components = NSURLComponents(string: identityProviderUri) {
             
-            // Append the email parameter to the original authorization url.
-            originalComponents.queryItems?.append(URLQueryItem(name: "email", value: self.email))
+            // Extend the original authorization url with the email parameter.
+            let authorizationUri = orginalUrl.absoluteString + "&email=" + encodedEmail
             
-            // Set the initial query queryItems
+            // Provide the modified authorizationUri as a query parameter to the identity provider.
             components.queryItems = components.queryItems ?? []
-            
-            // Provide the modified authorization url as a query parameter to the identity provider.
-            components.queryItems?.append(URLQueryItem(name: "returnTo", value: originalComponents.url?.absoluteString))
+            components.queryItems?.append(URLQueryItem(name: "returnTo", value: authorizationUri))
             
             // Append any additional query parameters for the identity provider.
             components.queryItems?.append(contentsOf: additionalQueryItems)
