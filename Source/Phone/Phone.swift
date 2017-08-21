@@ -46,7 +46,7 @@ public class Phone {
         /// Back camera.
         case environment
     }
-    
+        
     /// Default camera facing mode of this phone, used as the default when dialing or answering a call.
     /// The default mode is the front camera.
     ///
@@ -69,6 +69,7 @@ public class Phone {
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
+    let conversations: ConversationClient
     let prompter: H264LicensePrompter
     let queue = SerialQueue()
     let metrics: MetricsEngine
@@ -81,7 +82,7 @@ public class Phone {
     var debug = true;
     
     enum LocusResult {
-        case call(Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
+        case call(Bool, Device, UUID?, MediaSessionWrapper, ServiceResponse<CallModel>, (Result<Call>) -> Void)
         case join(Call, ServiceResponse<CallModel>, (Error?) -> Void)
         case leave(Call, ServiceResponse<CallModel>, (Error?) -> Void)
         case reject(Call, ServiceResponse<Any>, (Error?) -> Void)
@@ -95,6 +96,7 @@ public class Phone {
         self.devices = DeviceService(authenticator: authenticator)
         self.reachability = ReachabilityService(authenticator: authenticator, deviceService: self.devices)
         self.client = CallClient(authenticator: authenticator)
+        self.conversations = ConversationClient(authenticator: authenticator)
         self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
@@ -207,37 +209,41 @@ public class Phone {
                 let localSDP = mediaContext.getLocalSdp()
                 let reachabilities = self.reachability.feedback?.reachabilities
                 
-                self.queue.sync {
-                    if let device = self.devices.device {
-                        let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
-                        func call(address: String) {
-                            self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
-                                if let _ = res.result.error {
-                                    if let id = self.convertId(id: address) {
-                                        self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
+                CallClient.DialTarget.lookup(address, by: Spark(authenticator: self.authenticator)) { target in
+                    self.queue.sync {
+                        if let device = self.devices.device {
+                            let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
+                            if target.isEndpoint {
+                                self.client.create(target.address, by: device, localMedia: media, queue: self.queue.underlying) { res in
+                                    self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, res, completionHandler))
+                                    self.queue.yield()
+                                }
+                            }
+                            else {
+                                self.conversations.getLocusUrl(conversation: target.address, by: device, queue: self.queue.underlying) { res in
+                                    if let url = res.result.data?.locusUrl {
+                                        self.client.join(url, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
+                                            self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, resNew, completionHandler))
                                             self.queue.yield()
                                         }
-                                        return
+                                    }
+                                    else if let error = res.result.error {
+                                        SDKLogger.shared.error("Failure call ", error: error)
+                                        DispatchQueue.main.async {
+                                            completionHandler(Result.failure(error))
+                                        }
+                                        self.queue.yield()
                                     }
                                 }
-                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
-                                self.queue.yield()
                             }
                         }
-                        if let email = EmailAddress.fromString(address), address.contains("@") && !address.contains(".") {
-                            Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
-                                call(address: persons.result.data?.first?.id ?? address)
+                        else {
+                            SDKLogger.shared.error("Failure: unregistered device")
+                            DispatchQueue.main.async {
+                                completionHandler(Result.failure(SparkError.unregistered))
                             }
-                            return
+                            self.queue.yield()
                         }
-                        call(address: address)
-                    }
-                    else {
-                        DispatchQueue.main.async {
-                            completionHandler(Result.failure(SparkError.unregistered))
-                        }
-                        self.queue.yield()
                     }
                 }
             }
@@ -476,12 +482,12 @@ public class Phone {
     
     private func doLocusResponse(_ ret: LocusResult) {
         switch ret {
-        case .call(let device, let uuid, let media, let res, let completionHandler):
+        case .call(let group, let device, let uuid, let media, let res, let completionHandler):
             switch res.result {
             case .success(let model):
                 SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 if model.isValid {
-                    let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, uuid: uuid)
+                    let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, group: (group ? true : !model.isOneOnOne), uuid: uuid)
                     self.add(call: call)
                     DispatchQueue.main.async {
                         call.startMedia()
@@ -501,7 +507,7 @@ public class Phone {
             switch res.result {
             case .success(let model):
                 SDKLogger.shared.debug("Receive join locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
-                call.doCallModel(model)
+                call.update(model: model)
                 DispatchQueue.main.async {
                     call.startMedia()
                     completionHandler(nil)
@@ -516,7 +522,7 @@ public class Phone {
             switch res.result {
             case .success(let model):
                 SDKLogger.shared.debug("Receive leave locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
-                call.doCallModel(model)
+                call.update(model: model)
                 DispatchQueue.main.async {
                     completionHandler(nil)
                 }
@@ -559,7 +565,7 @@ public class Phone {
             switch res.result {
             case .success(let model):
                 SDKLogger.shared.debug("Receive update media locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
-                call.doCallModel(model)
+                call.update(model: model)
             case .failure(let error):
                 SDKLogger.shared.error("Failure update media ", error: error)
             }
@@ -574,7 +580,7 @@ public class Phone {
             return
         }
         if let call = self.calls[url] {
-            call.doCallModel(model)
+            call.update(model: model)
         }
         else if let device = self.devices.device, model.isIncomingCall { // || callInfo.hasJoinedOnOtherDevice(deviceUrl: deviceUrl)
             // XXX: Is this conditional intended to add this call even when there is no real device registration information?
@@ -584,7 +590,7 @@ public class Phone {
             // a race condition and this MAY be the solution to not dropping a call before reregistration has been completed.
             // If so it needs improvement, if not it may be able to be dropped.
             if model.isValid {
-                let call = Call(model: model, device: device, media: self.mediaContext ?? MediaSessionWrapper(), direction: Call.Direction.incoming, uuid: nil)
+                let call = Call(model: model, device: device, media: self.mediaContext ?? MediaSessionWrapper(), direction: Call.Direction.incoming, group: !model.isOneOnOne, uuid: nil)
                 self.add(call: call)
                 SDKLogger.shared.info("Receive incoming call: \(call.model.callUrl ?? call._uuid.uuidString)")
                 DispatchQueue.main.async {
@@ -619,19 +625,6 @@ public class Phone {
         }
     }
     
-    private func convertId(id: String) -> String? {
-        if let decode = id.base64Decoded(), let uri = URL(string: decode), uri.scheme == "ciscospark" {
-            let path = uri.pathComponents
-            if path.count > 2 {
-                let type = path[path.count - 2]
-                if type == "PEOPLE" {
-                    return path[path.count - 1]
-                }
-            }
-        }
-        return nil
-    }
-
     private func fetchActiveCalls() {
         SDKLogger.shared.info("Fetch call infos")
         if let device = self.devices.device {

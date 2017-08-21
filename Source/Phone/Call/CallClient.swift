@@ -24,6 +24,90 @@ import ObjectMapper
 
 class CallClient {
     
+    enum DialTarget {
+        case peopleId(String)
+        case peopleMail(String)
+        case roomId(String)
+        case roomMail(String)
+        case other(String)
+        
+        var isEndpoint: Bool {
+            switch self {
+            case .peopleId(_), .peopleMail(_), .roomMail(_), .other(_):
+                return true
+            case .roomId(_):
+                return false
+            }
+        }
+        
+        var isGroup: Bool {
+            switch self {
+            case .peopleId(_), .peopleMail(_), .other(_):
+                return false
+            case .roomId(_), .roomMail(_):
+                return true
+            }
+        }
+        
+        var address: String {
+            switch self {
+            case .peopleId(let id):
+                return id
+            case .peopleMail(let mail):
+                return mail
+            case .roomId(let id):
+                return id
+            case .roomMail(let mail):
+                return mail
+            case .other(let other):
+                return other
+            }
+        }
+        
+        static func lookup(_ address: String, by spark: Spark, completionHandler: @escaping (DialTarget) -> Void) {
+            if let target = parseHydraId(id: address) {
+                completionHandler(target)
+            }
+            else if let email = EmailAddress.fromString(address) {
+                if address.lowercased().hasSuffix("@meet.ciscospark.com") {
+                    completionHandler(DialTarget.roomMail(address))
+                }
+                else if address.contains("@") && !address.contains(".") {
+                    spark.people.list(email: email, displayName: nil, max: 1) { persons in
+                        if let id = persons.result.data?.first?.id, let target = parseHydraId(id: id) {
+                            completionHandler(target)
+                        }
+                        else {
+                            completionHandler(DialTarget.peopleMail(address))
+                        }
+                    }
+                }
+                else {
+                    completionHandler(DialTarget.peopleMail(address))
+                }
+            }
+            else {
+                completionHandler(DialTarget.other(address))
+            }
+        }
+        
+        private static func parseHydraId(id: String) -> DialTarget? {
+            if let decode = id.base64Decoded(), let uri = URL(string: decode), uri.scheme == "ciscospark" {
+                let path = uri.pathComponents
+                if path.count > 2 {
+                    let type = path[path.count - 2]
+                    if type == "PEOPLE" {
+                        return DialTarget.peopleId(path[path.count - 1])
+                    }
+                    else if type == "ROOM" {
+                        return DialTarget.roomId(path[path.count - 1])
+                    }
+                }
+            }
+            return nil
+        }
+    }
+    
     private let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -57,7 +141,7 @@ class CallClient {
     func create(_ toAddress: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
         var json = convertToJson(mediaInfo: localMedia)
         json["invitee"] = ["address" : toAddress]
-
+        
         let request = requestBuilder()
             .method(.post)
             .baseUrl(device.locusServiceUrl)
@@ -68,7 +152,7 @@ class CallClient {
         
         request.responseObject(completionHandler)
     }
-    
+        
     func join(_ callUrl: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
         let json = convertToJson(mediaInfo: localMedia)
         let request = requestBuilder()

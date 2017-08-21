@@ -14,6 +14,7 @@
 		208C13511E88C10500B8DEF0 /* CallEventSequencer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 208C13501E88C10500B8DEF0 /* CallEventSequencer.swift */; };
 		209360381E89DA7300D6BC4A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 209360371E89DA7300D6BC4A /* Logger.swift */; };
 		2099E2491EC44F1B002BDB0C /* MetricsEngine+Call.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2099E2481EC44F1B002BDB0C /* MetricsEngine+Call.swift */; };
+		20AD6D3E1F499FB800CCFE90 /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20AD6D3D1F499FB800CCFE90 /* ConversationClient.swift */; };
 		20EEA2771EB0E6B400D6BB75 /* CallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEA2731EB0E6B400D6BB75 /* CallModel.swift */; };
 		20EEA2781EB0E6B400D6BB75 /* MediaConnectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEA2741EB0E6B400D6BB75 /* MediaConnectionModel.swift */; };
 		20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EEA2751EB0E6B400D6BB75 /* ParticipantModel.swift */; };
@@ -155,6 +156,7 @@
 		208C13501E88C10500B8DEF0 /* CallEventSequencer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallEventSequencer.swift; sourceTree = "<group>"; };
 		209360371E89DA7300D6BC4A /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		2099E2481EC44F1B002BDB0C /* MetricsEngine+Call.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MetricsEngine+Call.swift"; sourceTree = "<group>"; };
+		20AD6D3D1F499FB800CCFE90 /* ConversationClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationClient.swift; sourceTree = "<group>"; };
 		20EEA2731EB0E6B400D6BB75 /* CallModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallModel.swift; sourceTree = "<group>"; };
 		20EEA2741EB0E6B400D6BB75 /* MediaConnectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaConnectionModel.swift; sourceTree = "<group>"; };
 		20EEA2751EB0E6B400D6BB75 /* ParticipantModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				20EEA2761EB0E6B400D6BB75 /* SequenceModel.swift */,
 				20EEA2741EB0E6B400D6BB75 /* MediaConnectionModel.swift */,
 				2099E2481EC44F1B002BDB0C /* MetricsEngine+Call.swift */,
+				20AD6D3D1F499FB800CCFE90 /* ConversationClient.swift */,
 			);
 			path = Call;
 			sourceTree = "<group>";
@@ -829,6 +832,7 @@
 				20EEA2CA1EBDAAEB00D6BB75 /* SparkError.swift in Sources */,
 				5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */,
 				208C13511E88C10500B8DEF0 /* CallEventSequencer.swift in Sources */,
+				20AD6D3E1F499FB800CCFE90 /* ConversationClient.swift in Sources */,
 				5AC09EB51DE61822005F38BC /* OAuthAuthenticator.swift in Sources */,
 				B91E75981CE2D7B70080EAE0 /* OAuthViewController.swift in Sources */,
 				B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */,

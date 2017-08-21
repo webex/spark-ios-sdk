@@ -137,6 +137,14 @@ public class Call {
         case remoteVideoViewSize
     }
     
+    public enum CallMembershipChangedEvent {
+        case joined(CallMembership)
+        case left(CallMembership)
+        case declined(CallMembership)
+        case sendingVideo(CallMembership)
+        case sendingAudio(CallMembership)
+    }
+    
     /// The enumeration of capabilities of a call.
     ///
     /// - since: 1.2.0
@@ -181,6 +189,8 @@ public class Call {
     ///
     /// - since: 1.2.0
     public var onDisconnected: ((DisconnectReason) -> Void)?
+    
+    public var onCallMembershipChanged: ((CallMembershipChangedEvent) -> Void)?
     
     /// Callback when the media types of this *call* have changed.
     ///
@@ -313,13 +323,9 @@ public class Call {
     /// Call Memberships represent participants in this *call*.
     ///
     /// - since: 1.2.0
-    public var memberships: [CallMembership] {
-        if let participants = self.model.participants {
-            return participants.filter({ $0.type == "USER" }).map { participant in
-                return CallMembership(participant: participant, call: self)
-            }
-        }
-        return []
+    public private(set) var memberships: [CallMembership] {
+        get { lock(); defer { unlock() }; return _memberships ?? [] }
+        set { lock(); defer { unlock() }; _memberships = newValue }
     }
     
     /// The initiator of this *call*.
@@ -345,6 +351,8 @@ public class Call {
         return self.model.callUrl!
     }
     
+    let isGroup: Bool
+    
     let device: Device
     let mediaSession: MediaSessionWrapper
     var _uuid: UUID
@@ -354,7 +362,8 @@ public class Call {
     
     private var _dail: String?
     private var _model: CallModel
-    private var mutex = pthread_mutex_t()
+    private var _memberships: [CallMembership]?
+    var _mutex = pthread_mutex_t()
     
     private var id: String {
         return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
@@ -368,8 +377,9 @@ public class Call {
         return self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
-    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, uuid: UUID?) {
+    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, group: Bool, uuid: UUID?) {
         self.direction = direction
+        self.isGroup = group
         self.device = device
         self.mediaSession = media
         self._model = model
@@ -377,17 +387,18 @@ public class Call {
         self.dtmfQueue = DtmfQueue(client: device.phone.client)
         self.metrics = CallMetrics()
         self.metrics.trackCallStarted()
+        self.doCallModel(model)
     }
     
     deinit{
-        pthread_mutex_init(&mutex, nil)
+        pthread_mutex_init(&_mutex, nil)
     }
     
-    @inline(__always) private func lock(){
-        pthread_mutex_lock(&mutex)
+    @inline(__always) func lock(){
+        pthread_mutex_lock(&_mutex)
     }
-    @inline(__always) private func unlock(){
-        pthread_mutex_unlock(&mutex)
+    @inline(__always) func unlock(){
+        pthread_mutex_unlock(&_mutex)
     }
     
     /// Acknowledge (without answering) an incoming call.
@@ -515,12 +526,11 @@ public class Call {
         }
     }
     
-    func doCallModel(_ model: CallModel) {
+    func update(model: CallModel) {
         if model.isValid {
             let old = self.model
             if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {
-                self.model = new
-                self.status.handle(model: new, for: self)
+                self.doCallModel(new)
                 DispatchQueue.main.async {
                     if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
                         self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(!new.isRemoteVideoMuted))
@@ -534,6 +544,47 @@ public class Call {
                 }
             }
         }
+    }
+    
+    private func doCallModel(_ model: CallModel) {
+        self.model = model
+        if let participants = model.participants?.filter({ $0.type == "USER" }) {
+            let participantIds: [String] = participants.map { return $0.id ?? "" }
+            var memberships = self.memberships.filter({ participantIds.contains($0.id) })
+            for participant in participants {
+                if var membership = memberships.find(predicate: { $0.id == participant.id }) {
+                    let oldState = membership.state
+                    let sendingAudio = membership.sendingAudio
+                    let sendingVideo = membership.sendingVideo
+                    membership.model = participant
+                    if membership.state != oldState {
+                        if membership.state == CallMembership.State.joined {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.joined(membership))
+                        }
+                        else if membership.state == CallMembership.State.left {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.left(membership))
+                        }
+                        else if membership.state == CallMembership.State.declined {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.declined(membership))
+                        }
+                    }
+                    if membership.sendingAudio != sendingAudio {
+                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingAudio(membership))
+                    }
+                    if membership.sendingVideo != sendingVideo {
+                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
+                    }
+                }
+                else {
+                    memberships.append(CallMembership(participant: participant, call: self))
+                }
+            }
+            self.memberships = memberships
+        }
+        else {
+            self.memberships = []
+        }
+        self.status.handle(model: model, for: self)
     }
 }
 

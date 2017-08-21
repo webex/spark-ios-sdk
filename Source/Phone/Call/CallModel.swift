@@ -64,24 +64,12 @@ struct CallModel {
         return self.replaces?.first?.locusUrl ?? self.locusUrl
     }
     
+    var myselfId: String? {
+        return self.myself?.id
+    }
+    
     var isOneOnOne: Bool {
         return participants?.filter({$0.type == "USER"}).count == 2
-    }
-    
-    var isRemoteLeft: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.left}).count >= 1
-    }
-    
-    var isRemoteJoined: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.joined}).count >= 1
-    }
-    
-    var isRemoteDeclined: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.declined}).count >= 1
-    }
-    
-    var isRemoteNotified: Bool {
-         return (self.participants ?? []).filter({$0.id != myself?.id && ($0.state == CallMembership.State.idle || $0.state == CallMembership.State.notified)}).count >= 1
     }
     
     var isIncomingCall: Bool {
@@ -89,19 +77,21 @@ struct CallModel {
     }
     
     var isRemoteVideoMuted: Bool {
-        var ret = false
         for participant in self.participants ?? [] where participant.id != myself?.id && participant.state == CallMembership.State.joined {
-            ret = (participant.status?.videoStatus == "RECVONLY")
+            if participant.status?.videoStatus != "RECVONLY" {
+                return false
+            }
         }
-        return ret
+        return true
     }
     
     var isRemoteAudioMuted: Bool {
-        var ret = false
         for participant in self.participants ?? [] where participant.id != myself?.id && participant.state == CallMembership.State.joined {
-            ret = (participant.status?.audioStatus == "RECVONLY")
+            if participant.status?.audioStatus != "RECVONLY" {
+                return false
+            }
         }
-        return ret
+        return true
     }
     
     var isLocalSupportDTMF: Bool {
