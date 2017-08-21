@@ -126,7 +126,7 @@ public class OAuthAuthenticator: Authenticator {
         if let encodedClientId = clientId.encodeQueryParamString,
             let encodedRedirectUri = redirectUri.encodeQueryParamString,
             let encodedScope = scope.encodeQueryParamString,
-            let authorizationUrl = URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+            let authorizationUrl = URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
             + "&client_id=" + encodedClientId
             + "&redirect_uri=" + encodedRedirectUri
             + "&scope=" + encodedScope
@@ -134,13 +134,6 @@ public class OAuthAuthenticator: Authenticator {
 
             oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
                 
-//                if let oauthCode = oauthCode {
-//                    self.fetchingAccessTokenInProcess = true
-//                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-//                        SDKLogger.shared.error("Failure retrieving the access token from the oauth code", error: error)
-//                    }))
-//                }
-//                completionHandler?(oauthCode != nil)
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
                     self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: { response in

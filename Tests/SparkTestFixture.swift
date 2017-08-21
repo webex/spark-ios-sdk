@@ -75,7 +75,10 @@ class SparkTestFixture {
                 completionHandler(accessToken)
             }
         }
+        
         spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))
+        
+        
     }
     
     private static func createAdminAccessToken(clientId: String, clientSecret: String) -> String? {
