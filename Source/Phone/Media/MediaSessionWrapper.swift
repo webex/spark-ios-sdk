@@ -125,7 +125,7 @@ class MediaSessionWrapper {
     func isSpeakerSelected() -> Bool {
         return mediaSession.isSpeakerSelected()
     }
-    
+
     func startPreview(view: MediaRenderView, phone: Phone) -> Bool {
         if self.status == .initial {
             self.status = .preview
@@ -160,12 +160,12 @@ class MediaSessionWrapper {
         if self.status == .initial {
             self.status = .prepare
             if option.hasVideo {
-                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue, withAudioMaxBandWidth: phone.audioMaxBandwidth, withVideoMaxBandwidth: phone.videoMaxBandwidth)
                 mediaSession.localVideoView = option.localVideoView
                 mediaSession.remoteVideoView = option.remoteVideoView
             }
             else {
-                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue, withAudioMaxBandWidth: phone.audioMaxBandwidth, withVideoMaxBandwidth: phone.videoMaxBandwidth)
             }
             mediaSession.createMediaConnection()
             mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
