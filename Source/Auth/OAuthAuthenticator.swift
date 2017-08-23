@@ -24,22 +24,22 @@ import Foundation
 ///
 /// - since: 1.2.0
 public struct OAuthTokens {
-    
+
     /// The OAuth access token, used throughout the SDK for authentication
     ///
     /// - since: 1.2.0
     public let accessToken: String
-    
+
     /// The date and time at which the access token will expire
     ///
     /// - since: 1.2.0
     public let accessTokenExpirationDate: Date
-    
+
     /// The OAuth refresh token, used to obtain a new access token
     ///
     /// - since: 1.2.0
     public let refreshToken: String
-    
+
     /// The date and time at which the refresh token will expire.
     /// This will itself refresh every time the refresh token is used.
     ///
@@ -51,7 +51,7 @@ public struct OAuthTokens {
 ///
 /// - since: 1.2.0
 public protocol OAuthAuthenticatorDelegate: class {
-    
+
     /// Called when an OAuth access token could not be created from the existing refresh token
     ///
     /// - since: 1.2.0
@@ -64,7 +64,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.2.0
 public class OAuthAuthenticator: Authenticator {
-    
+
     let clientId: String
     private let clientSecret: String
     private let scope: String
@@ -75,11 +75,11 @@ public class OAuthAuthenticator: Authenticator {
     private let clock: Clock
     private var accessTokenCompletionHandlers: [(_ accessToken: String?) -> Void] = []
     private var fetchingAccessTokenInProcess = false
-    
-    
+
+
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthAuthenticatorDelegate?
-    
+
     /// - see: See Authenticator.authorized
     /// - since: 1.2.0
     public var authorized: Bool {
@@ -89,7 +89,7 @@ public class OAuthAuthenticator: Authenticator {
             return fetchingAccessTokenInProcess
         }
     }
-    
+
     /// Creates a new OAuth authentication strategy
     ///
     /// - parameter clientId: the OAuth client id
@@ -104,7 +104,7 @@ public class OAuthAuthenticator: Authenticator {
                             storage: OAuthStorage = OAuthKeychainStorage()) {
         self.init(clientId: clientId, clientSecret: clientSecret, scope: scope, redirectUri: redirectUri, storage: storage, oauthClient: OAuthClient(), oauthLauncher: OAuthLauncher(), clock: Clock())
     }
-    
+
     init(clientId: String, clientSecret: String, scope: String, redirectUri: String,
          storage: OAuthStorage, oauthClient: OAuthClient, oauthLauncher: OAuthLauncher, clock: Clock) {
         self.clientId = clientId
@@ -116,7 +116,7 @@ public class OAuthAuthenticator: Authenticator {
         self.oauthLauncher = oauthLauncher
         self.clock = clock
     }
-    
+
     /// Brings up a web-based authorization view controller and directs the user through the OAuth process.
     ///
     /// - parameter parentViewController: the parent view controller for the OAuth view controller
@@ -133,7 +133,7 @@ public class OAuthAuthenticator: Authenticator {
             + "&state=iossdkstate") {
 
             oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
-                
+
 //                if let oauthCode = oauthCode {
 //                    self.fetchingAccessTokenInProcess = true
 //                    self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
@@ -156,7 +156,7 @@ public class OAuthAuthenticator: Authenticator {
             completionHandler?(false)
         }
     }
-    
+
     /// - see: See Authenticator.accessToken(completionHandler:)
     /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
@@ -169,7 +169,7 @@ public class OAuthAuthenticator: Authenticator {
             completionHandler(tokens.accessToken)
         } else {
             accessTokenCompletionHandlers.append(completionHandler)
-            
+
             if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
                 fetchingAccessTokenInProcess = true
                 oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
@@ -180,11 +180,11 @@ public class OAuthAuthenticator: Authenticator {
             }
         }
     }
-    
+
     private func createAccessTokenHandler(errorHandler: @escaping (Error)->Void) -> (ServiceResponse<OAuthTokenModel>) -> Void {
         return { response in
             self.fetchingAccessTokenInProcess = false
-            
+
             switch response.result {
             case .success(let accessTokenObject):
                 self.storage.tokens = OAuthAuthenticator.authenticationInfoFrom(accessTokenObject: accessTokenObject)
@@ -200,7 +200,7 @@ public class OAuthAuthenticator: Authenticator {
 
         }
     }
-    
+
     private static func authenticationInfoFrom(accessTokenObject: OAuthTokenModel) -> OAuthTokens? {
         if let accessToken = accessTokenObject.accessTokenString,
             let accessTokenExpiration = accessTokenObject.accessTokenExpiration,
@@ -215,7 +215,7 @@ public class OAuthAuthenticator: Authenticator {
         }
         return nil
     }
-    
+
     /// - see: See Authenticator.deauthorize()
     /// - since: 1.2.0
     public func deauthorize() {
