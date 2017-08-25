@@ -159,13 +159,14 @@ class MediaSessionWrapper {
         }
         if self.status == .initial {
             self.status = .prepare
+            
             if option.hasVideo {
-                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue, withAudioMaxBandWidth: phone.audioMaxBandwidth, withVideoMaxBandwidth: phone.videoMaxBandwidth)
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue, withCapability:MediaCapabilityConfig.init(audioMaxBandwidth: phone.audioMaxBandwidth, withVideoMaxBandwidth: phone.videoMaxBandwidth))
                 mediaSession.localVideoView = option.localVideoView
                 mediaSession.remoteVideoView = option.remoteVideoView
             }
             else {
-                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue, withAudioMaxBandWidth: phone.audioMaxBandwidth, withVideoMaxBandwidth: phone.videoMaxBandwidth)
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue, withCapability:MediaCapabilityConfig.init(audioMaxBandwidthOnly: phone.audioMaxBandwidth))
             }
             mediaSession.createMediaConnection()
             mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)

@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-
+#import "MediaCapabilityConfig.h"
 typedef NS_OPTIONS(NSUInteger, MediaConstraintFlag) {
     
     // Audio
@@ -12,18 +12,15 @@ typedef NS_OPTIONS(NSUInteger, MediaConstraintFlag) {
     MediaConstraintFlagScreenShare = (1 << 2)
 };
 
-#define DEFAULT_AUDIO_MAX_BANDWIDTH 64000
-#define DEFAULT_VIDEO_MAX_BANDWIDTH 2000000
-
 @interface MediaConstraint : NSObject
 
 - (id)initWithConstraint:(NSUInteger)constraint;
-- (id)initWithConstraint:(NSUInteger)constraint withAudioMaxBandWidth:(UInt32)audioMaxBandwidth withVideoMaxBandwidth:(UInt32)videomaxBandwidth;
+- (id)initWithConstraint:(NSUInteger)constraint withCapability:(MediaCapabilityConfig *)capabilityConfig;
 
 @property (nonatomic, readonly) BOOL hasAudio;
 @property (nonatomic, readonly) BOOL hasVideo;
 @property (nonatomic, readonly) BOOL hasScreenShare;
-@property (nonatomic, readonly) UInt32 audioMaxBandwidth;
-@property (nonatomic, readonly) UInt32 videoMaxBandwidth;
+@property (nonatomic, readonly) MediaCapabilityConfig *capability;
+
 
 @end
