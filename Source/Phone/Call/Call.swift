@@ -549,10 +549,10 @@ public class Call {
     private func doCallModel(_ model: CallModel) {
         self.model = model
         if let participants = model.participants?.filter({ $0.type == "USER" }) {
-            let participantIds: [String] = participants.map { return $0.id ?? "" }
-            var memberships = self.memberships.filter({ participantIds.contains($0.id) })
+            let oldMemberships = self.memberships
+            var newMemberships = [CallMembership]()
             for participant in participants {
-                if var membership = memberships.find(predicate: { $0.id == participant.id }) {
+                if var membership = oldMemberships.find(predicate: { $0.id == participant.id }) {
                     let oldState = membership.state
                     let sendingAudio = membership.sendingAudio
                     let sendingVideo = membership.sendingVideo
@@ -574,12 +574,13 @@ public class Call {
                     if membership.sendingVideo != sendingVideo {
                         self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
                     }
+                    newMemberships.append(membership)
                 }
                 else {
-                    memberships.append(CallMembership(participant: participant, call: self))
+                    newMemberships.append(CallMembership(participant: participant, call: self))
                 }
             }
-            self.memberships = memberships
+            self.memberships = newMemberships
         }
         else {
             self.memberships = []
