@@ -202,42 +202,44 @@ public class Phone {
                     return
                 }
                 
-                let mediaContext = self.mediaContext ?? MediaSessionWrapper()
-                mediaContext.prepare(option: option, phone: self)
-                let localSDP = mediaContext.getLocalSdp()
-                let reachabilities = self.reachability.feedback?.reachabilities
-                
-                self.queue.sync {
-                    if let device = self.devices.device {
-                        let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
-                        func call(address: String) {
-                            self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
-                                if let _ = res.result.error {
-                                    if let id = self.convertId(id: address) {
-                                        self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                            self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
-                                            self.queue.yield()
+                self.requestMediaAccess(option: option) {
+                    let mediaContext = self.mediaContext ?? MediaSessionWrapper()
+                    mediaContext.prepare(option: option, phone: self)
+                    let localSDP = mediaContext.getLocalSdp()
+                    let reachabilities = self.reachability.feedback?.reachabilities
+                    
+                    self.queue.sync {
+                        if let device = self.devices.device {
+                            let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
+                            func call(address: String) {
+                                self.client.create(address, by: device, localMedia: media, queue: self.queue.underlying) { res in
+                                    if let _ = res.result.error {
+                                        if let id = self.convertId(id: address) {
+                                            self.client.create(id, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
+                                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, resNew, completionHandler))
+                                                self.queue.yield()
+                                            }
+                                            return
                                         }
-                                        return
                                     }
+                                    self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
+                                    self.queue.yield()
                                 }
-                                self.doLocusResponse(LocusResult.call(device, option.uuid, mediaContext, res, completionHandler))
-                                self.queue.yield()
                             }
-                        }
-                        if let email = EmailAddress.fromString(address), address.contains("@") && !address.contains(".") {
-                            Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
-                                call(address: persons.result.data?.first?.id ?? address)
+                            if let email = EmailAddress.fromString(address), address.contains("@") && !address.contains(".") {
+                                Spark(authenticator: self.authenticator).people.list(email: email, displayName: nil, max: 1) { persons in
+                                    call(address: persons.result.data?.first?.id ?? address)
+                                }
+                                return
                             }
-                            return
+                            call(address: address)
                         }
-                        call(address: address)
-                    }
-                    else {
-                        DispatchQueue.main.async {
-                            completionHandler(Result.failure(SparkError.unregistered))
+                        else {
+                            DispatchQueue.main.async {
+                                completionHandler(Result.failure(SparkError.unregistered))
+                            }
+                            self.queue.yield()
                         }
-                        self.queue.yield()
                     }
                 }
             }
@@ -366,13 +368,16 @@ public class Phone {
             if let uuid = option.uuid {
                 call._uuid = uuid
             }
-            let mediaContext = call.mediaSession
-            mediaContext.prepare(option: option, phone: self)
-            let media = MediaModel(sdp: mediaContext.getLocalSdp(), audioMuted: false, videoMuted: false, reachabilities: self.reachability.feedback?.reachabilities)
-            self.queue.sync {
-                self.client.join(call.url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
-                    self.doLocusResponse(LocusResult.join(call, res, completionHandler))
-                    self.queue.yield()
+            
+            self.requestMediaAccess(option: option) {
+                let mediaContext = call.mediaSession
+                mediaContext.prepare(option: option, phone: self)
+                let media = MediaModel(sdp: mediaContext.getLocalSdp(), audioMuted: false, videoMuted: false, reachabilities: self.reachability.feedback?.reachabilities)
+                self.queue.sync {
+                    self.client.join(call.url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
+                        self.doLocusResponse(LocusResult.join(call, res, completionHandler))
+                        self.queue.yield()
+                    }
                 }
             }
         }
@@ -677,5 +682,19 @@ public class Phone {
     @objc func onApplicationDidEnterBackground() {
         SDKLogger.shared.info("Application did enter background")
         self.webSocket.disconnect();
+    }
+    
+    private func requestMediaAccess(option: MediaOption, completionHandler: @escaping () -> Void) {
+        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeAudio) { audioGranted in
+            if option.hasVideo {
+                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { videoGranted in
+                    completionHandler()
+                }
+            }
+            else {
+                completionHandler()
+            }
+            
+        }
     }
 }
