@@ -175,10 +175,12 @@ public class Call {
     public var onConnected: (() -> Void)? {
         didSet {
             self.device.phone.queue.sync {
+                self.onConnectedOnceToken = UUID.init().uuidString
                 if let block = self.onConnected, self.status == CallStatus.connected {
-                    DispatchQueue.main.async {
-                        block()
-                    }
+                        DispatchQueue.main.asyncOnce(token: self.onConnectedOnceToken) {
+                            block()
+                        }
+                    
                 }
                 self.device.phone.queue.yield()
             }
@@ -365,6 +367,12 @@ public class Call {
     private var _memberships: [CallMembership]?
     var _mutex = pthread_mutex_t()
     
+    var onConnectedOnceToken :String = "" {
+        didSet {
+            DispatchQueue.main.removeOnceToken(token: oldValue)
+        }
+    }
+
     private var id: String {
         return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
     }
@@ -392,6 +400,7 @@ public class Call {
     
     deinit{
         pthread_mutex_init(&_mutex, nil)
+        DispatchQueue.main.removeOnceToken(token: self.onConnectedOnceToken)
     }
     
     @inline(__always) func lock(){

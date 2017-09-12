@@ -95,7 +95,7 @@ public enum CallStatus {
                         }
                         else if call.isRemoteJoined {
                             call.status = .connected
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.asyncOnce(token: call.onConnectedOnceToken) {
                                 call.onConnected?()
                             }
                         }
@@ -173,6 +173,22 @@ extension Call {
             }
         }
         return false
+    }
+    
+    var isInIllegalStatus: Bool {
+        if !self.isGroup {
+            switch self.status {
+                case .initiated, .ringing:
+                    if self.direction == Call.Direction.outgoing && self.isRemoteLeft {
+                        return true
+                    }
+                break
+            default:
+                break
+            }
+        }
+        return false
+        
     }
 }
 

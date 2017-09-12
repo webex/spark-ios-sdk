@@ -120,6 +120,7 @@
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
+		C7EFD8321F675FE10023D232 /* DispatchQueue+asyncOnce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EFD8311F675FE10023D232 /* DispatchQueue+asyncOnce.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -261,6 +262,7 @@
 		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		C7EFD8311F675FE10023D232 /* DispatchQueue+asyncOnce.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+asyncOnce.swift"; sourceTree = "<group>"; };
 		E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.releasetest.xcconfig"; sourceTree = "<group>"; };
 		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
 		EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 				3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */,
 				3D2DF7581CFEAB0A00002F36 /* UserDefaults.swift */,
 				207434411E9B30CC00C5EBCD /* SerialQueue.swift */,
+				C7EFD8311F675FE10023D232 /* DispatchQueue+asyncOnce.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -872,6 +875,7 @@
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
 				20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */,
+				C7EFD8321F675FE10023D232 /* DispatchQueue+asyncOnce.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,

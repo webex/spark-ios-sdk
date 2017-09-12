@@ -488,6 +488,15 @@ public class Phone {
                 SDKLogger.shared.debug("Receive call locus response: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 if model.isValid {
                     let call = Call(model: model, device: device, media: media, direction: Call.Direction.outgoing, group: (group ? true : !model.isOneOnOne), uuid: uuid)
+                    if call.isInIllegalStatus {
+                        DispatchQueue.main.async {
+                            let error = SparkError.illegalStatus(reason: "The previous session did not end")
+                            SDKLogger.shared.error("Failure call ", error: error)
+                            completionHandler(Result.failure(error))
+                            call.end(reason: Call.DisconnectReason.error(error))
+                        }
+                        return
+                    }
                     self.add(call: call)
                     DispatchQueue.main.async {
                         call.startMedia()
