@@ -198,7 +198,7 @@ public class Phone {
                 completionHandler(Result.failure(error))
             }
             else {
-                if self.calls.count > 0 {
+                if self.calls.filter({!$0.value.isGroup || ($0.value.isGroup && $0.value.status == CallStatus.connected)}).count > 0 {
                     SDKLogger.shared.error("Failure: There are other active calls")
                     completionHandler(Result.failure(SparkError.illegalOperation(reason: "There are other active calls")))
                     return

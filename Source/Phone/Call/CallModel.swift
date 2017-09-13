@@ -87,7 +87,7 @@ struct CallModel {
     
     var isRemoteAudioMuted: Bool {
         for participant in self.participants ?? [] where participant.id != myself?.id && participant.state == CallMembership.State.joined {
-            if participant.status?.audioStatus != "RECVONLY" && participant.status?.videoStatus != "INACTIVE" {
+            if participant.status?.audioStatus != "RECVONLY" && participant.status?.audioStatus != "INACTIVE" {
                 return false
             }
         }

@@ -15,7 +15,6 @@ public extension DispatchQueue {
         self.async {
             objc_sync_enter(self); defer { objc_sync_exit(self) }
             
-            print("++++++Token :\(token)")
             if token.isEmpty || DispatchQueue._onceTracker.contains(token) {
                 return
             }
@@ -32,7 +31,6 @@ public extension DispatchQueue {
             if token.isEmpty {
                 return
             }
-            print("++++++RemoveToken :\(token)")
             DispatchQueue._onceTracker.removeObject(token)
         }
     }
