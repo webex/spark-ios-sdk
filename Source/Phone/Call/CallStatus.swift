@@ -72,7 +72,7 @@ public enum CallStatus {
                 }
             }
             else {
-                if local.isLeft {
+                if local.isLefted(device: call.device.deviceUrl) {
                     call.end(reason: Call.DisconnectReason.localCancel)
                 }
                 else if local.isJoined(by: call.device.deviceUrl) {
@@ -107,12 +107,12 @@ public enum CallStatus {
             }
         case .connected:
             if call.isGroup {
-                if local.isLeft {
+                if local.isLefted(device: call.device.deviceUrl)  {
                     call.end(reason: Call.DisconnectReason.localLeft)
                 }
             }
             else {
-                if local.isLeft {
+                if local.isLefted(device: call.device.deviceUrl)  {
                     call.end(reason: Call.DisconnectReason.localLeft)
                 }
                 else if call.isRemoteLeft {

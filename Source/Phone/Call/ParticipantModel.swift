@@ -65,6 +65,10 @@ struct ParticipantModel {
         return self.state == CallMembership.State.left
     }
     
+    func isLefted(device url: URL) -> Bool{
+        return isLeft || self.devices?.filter{ $0.url == url.absoluteString }.count == 0
+    }
+
     func isJoined(by: URL) -> Bool {
         return isJoined && self[device: by]?.state == "JOINED"
     }
