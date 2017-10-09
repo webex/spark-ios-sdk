@@ -66,6 +66,30 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// The enumeration of suggest default bandwidth.
+    ///
+    /// - since: 1.3.0
+    public enum DefaultBandwidth: UInt32 {
+        case maxBandwidth90p = 177000
+        case maxBandwidth180p = 384000
+        case maxBandwidth360p = 768000
+        case maxBandwidth720p = 2000000
+        case maxBandwidth1080p = 3000000
+        case maxBandwidthSession = 4000000
+        case maxBandwidthAudio = 64000
+    }
+    
+    /// Max bandwidth(TIAS) in unit bps for the call.
+    /// Only applicable if set before start of call.
+    /// bandwidth set to 0 media engine will set it to the default value,
+    /// audio defalut value is 64 * 1000
+    /// for video is 2000*1000
+    /// - since: 1.3.0
+    public var audioMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidthAudio.rawValue
+    
+    public var videoMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidth720p.rawValue
+    
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
