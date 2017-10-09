@@ -59,7 +59,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 }
 
 /// An [OAuth](https://oauth.net/2/) based authentication strategy
-/// is to be used to authenticate a user on Cisco Spark.
+/// for authenticating a user on Cisco Spark.
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.2.0

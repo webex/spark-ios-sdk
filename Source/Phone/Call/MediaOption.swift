@@ -39,12 +39,22 @@ public struct MediaOption {
         return MediaOption(local: local, remote: remote)
     }
     
+    /// The local video view
+    ///
+    /// - since: 1.3.0
     var localVideoView: MediaRenderView?
     
+    /// The remote video view
+    ///
+    /// - since: 1.3.0
     var remoteVideoView: MediaRenderView?
     
     fileprivate var _uuid: UUID?
     
+    /// Whether video is enabled.
+    ///
+    /// - returns: False if neither local or remote video is enabled. Otherwise, true.
+    /// - since: 1.3.0
     var hasVideo: Bool {
         return self.localVideoView != nil || self.remoteVideoView != nil
     }

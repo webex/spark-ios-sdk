@@ -267,7 +267,7 @@ public class Phone {
     
     /// Render a preview of the local party before the call is answered.
     ///
-    /// - parameter view: a UI view for rendering video.
+    /// - parameter view: an UI view for rendering video.
     /// - returns: Void
     public func startPreview(view: MediaRenderView) {
         DispatchQueue.main.async {
