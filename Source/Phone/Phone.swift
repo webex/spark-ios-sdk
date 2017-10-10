@@ -69,8 +69,10 @@ public class Phone {
     /// - since: 1.3.0
     public var audioMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidthAudio.rawValue
     
+    /// - since: 1.3.0
     public var videoMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidth720p.rawValue
     
+   /// - since: 1.3.0
     public var screenShareMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidthSession.rawValue
     
     /// Default camera facing mode of this phone, used as the default when dialing or answering a call.
@@ -297,7 +299,7 @@ public class Phone {
     
     /// Render a preview of the local party before the call is answered.
     ///
-    /// - parameter view: a UI view for rendering video.
+    /// - parameter view: an UI view for rendering video.
     /// - returns: Void
     public func startPreview(view: MediaRenderView) {
         DispatchQueue.main.async {

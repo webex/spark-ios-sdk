@@ -66,8 +66,8 @@ public struct MediaOption {
     let hasScreenShare: Bool
     
     init() {
-        hasVideo = false
-        hasScreenShare = false
+        self.hasVideo = false
+        self.hasScreenShare = false
     }
     
     init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false) {

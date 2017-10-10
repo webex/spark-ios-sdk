@@ -400,7 +400,7 @@ public class Call {
     }
     
     /// The video local render view and remote render view of this call.
-    /// If is nil,it will update the video state as inactive to the server side.
+    /// If is nil, it will update the video state as inactive to the server side.
     /// - since: 1.3.0
     public var videoRenderViews: (local:MediaRenderView, remote:MediaRenderView)? {
         didSet {
@@ -417,7 +417,7 @@ public class Call {
     }
     
     /// The screen share remote render view of this call.
-    /// If is nil,it will update the video state as inactive to the server side.
+    /// If is nil, it will update the video state as inactive to the server side.
     /// - since: 1.3.0
     public var screenShareRenderView: MediaRenderView? {
         didSet {
