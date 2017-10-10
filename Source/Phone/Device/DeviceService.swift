@@ -27,6 +27,7 @@ struct Device {
     let locusServiceUrl: URL
     let calliopeDiscoveryServiceUrl: URL
     let metricsServiceUrl: URL
+    let conversationServiceUrl: URL
     let deviceType:String
     var regionCode: String
     var countryCode: String
@@ -54,6 +55,8 @@ class DeviceService {
                     let servicesDictionary = model.services,
                     let locusServiceUrlString = servicesDictionary["locusServiceUrl"],
                     let locusServiceUrl = URL(string: locusServiceUrlString),
+                    let conversationServiceUrlString = servicesDictionary["conversationServiceUrl"],
+                    let conversationServiceUrl = URL(string: conversationServiceUrlString),
                     let calliopeDiscoveryServiceUrlString = servicesDictionary["calliopeDiscoveryServiceUrl"],
                     let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
                     let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
@@ -66,7 +69,7 @@ class DeviceService {
                             regionCode = rc
                             countryCode = cc
                         }
-                        let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, deviceType: UIDevice.current.kind, regionCode: regionCode, countryCode: countryCode)
+                        let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, conversationServiceUrl: conversationServiceUrl, deviceType: UIDevice.current.kind, regionCode: regionCode, countryCode: countryCode)
                         self.device = device
                         UserDefaults.sharedInstance.deviceUrl = deviceUrlString
                         completionHandler(Result.success(device))

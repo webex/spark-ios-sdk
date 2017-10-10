@@ -39,23 +39,43 @@ public struct MediaOption {
         return MediaOption(local: local, remote: remote)
     }
     
+    /// Constructs an audio and video media option. The render views can be set after call is connected.
+    ///
+    /// - since: 1.3.0
+    public static func audioVideo(renderViews:(local:MediaRenderView,remote:MediaRenderView)? = nil) -> MediaOption {
+        return MediaOption(local: renderViews?.local, remote: renderViews?.remote,hasVideo:true)
+    }
+    
+    /// Constructs an audio,video and screen share media option. The render views can be set after call is connected.
+    ///
+    /// - since: 1.3.0
+    public static func audioVideoScreenShare(video:(local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil) -> MediaOption {
+        return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo:true, hasScreenShare:true)
+    }
+    
     var localVideoView: MediaRenderView?
     
     var remoteVideoView: MediaRenderView?
     
+    var screenShareView: MediaRenderView?
+    
     fileprivate var _uuid: UUID?
     
-    var hasVideo: Bool {
-        return self.localVideoView != nil || self.remoteVideoView != nil
-    }
+    let hasVideo: Bool
+    
+    let hasScreenShare: Bool
     
     init() {
-        
+        hasVideo = false
+        hasScreenShare = false
     }
     
-    init(local: MediaRenderView, remote: MediaRenderView) {
+    init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false) {
+        self.hasVideo = hasVideo
+        self.hasScreenShare = hasScreenShare
         self.localVideoView = local
         self.remoteVideoView = remote
+        self.screenShareView = screenShare
     }
 }
 
@@ -75,3 +95,4 @@ public extension MediaOption {
     }
     
 }
+

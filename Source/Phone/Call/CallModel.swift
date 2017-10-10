@@ -48,6 +48,7 @@ struct CallModel {
     fileprivate(set) var fullState: FullStateModel?
     fileprivate(set) var sequence: SequenceModel? // Mandatory
     fileprivate(set) var replaces: [ReplaceModel]?
+    fileprivate(set) var mediaShares: [MediaShareModel]?
     
     subscript(participant id: String) -> ParticipantModel? {
         return self.participants?.filter({$0.id == id}).first
@@ -64,24 +65,12 @@ struct CallModel {
         return self.replaces?.first?.locusUrl ?? self.locusUrl
     }
     
+    var myselfId: String? {
+        return self.myself?.id
+    }
+    
     var isOneOnOne: Bool {
         return participants?.filter({$0.type == "USER"}).count == 2
-    }
-    
-    var isRemoteLeft: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.left}).count >= 1
-    }
-    
-    var isRemoteJoined: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.joined}).count >= 1
-    }
-    
-    var isRemoteDeclined: Bool {
-        return (self.participants ?? []).filter({$0.id != myself?.id && $0.state == CallMembership.State.declined}).count >= 1
-    }
-    
-    var isRemoteNotified: Bool {
-         return (self.participants ?? []).filter({$0.id != myself?.id && ($0.state == CallMembership.State.idle || $0.state == CallMembership.State.notified)}).count >= 1
     }
     
     var isIncomingCall: Bool {
@@ -89,23 +78,47 @@ struct CallModel {
     }
     
     var isRemoteVideoMuted: Bool {
-        var ret = false
         for participant in self.participants ?? [] where participant.id != myself?.id && participant.state == CallMembership.State.joined {
-            ret = (participant.status?.videoStatus == "RECVONLY")
+            if participant.status?.videoStatus != "RECVONLY" && participant.status?.videoStatus != "INACTIVE" {
+                return false
+            }
         }
-        return ret
+        return true
     }
     
     var isRemoteAudioMuted: Bool {
-        var ret = false
         for participant in self.participants ?? [] where participant.id != myself?.id && participant.state == CallMembership.State.joined {
-            ret = (participant.status?.audioStatus == "RECVONLY")
+            if participant.status?.audioStatus != "RECVONLY" && participant.status?.audioStatus != "INACTIVE" {
+                return false
+            }
         }
-        return ret
+        return true
     }
     
     var isLocalSupportDTMF: Bool {
         return self.myself?.enableDTMF ?? false
+    }
+    
+    var isGrantedMediaShares: Bool {
+        return (self.mediaShares?.count ?? 0) > 0
+    }
+    
+    var isGrantedScreenShare: Bool {
+        return self.screenMediaShare != nil
+    }
+    
+    var screenMediaShare: MediaShareModel? {
+        guard mediaShares != nil else {
+            return nil
+        }
+        for mediaShare in self.mediaShares ?? [] where mediaShare.shareType == MediaShareModel.MediaShareType.screen && mediaShare.shareFloor?.granted != nil {
+            return mediaShare
+        }
+        return nil
+    }
+    
+    var screenShareMediaFloor : MediaShareModel.MediaShareFloor? {
+        return self.screenMediaShare?.shareFloor
     }
 }
 
@@ -132,6 +145,7 @@ extension CallModel: Mappable {
 		fullState <- map["fullState"]
 		sequence <- map["sequence"]
         replaces <- map["replaces"]
+        mediaShares <- map["mediaShares"]
 	}
 }
 

@@ -32,4 +32,16 @@ extension Array where Element: Equatable {
             self.remove(at: index)
         }
     }
+    
+}
+
+extension Sequence {
+    func find(predicate: (Iterator.Element) throws -> Bool) rethrows -> Iterator.Element? {
+        for element in self {
+            if try predicate(element) {
+                return element
+            }
+        }
+        return nil
+    }
 }

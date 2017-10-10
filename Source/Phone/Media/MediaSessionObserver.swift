@@ -36,10 +36,13 @@ class MediaSessionObserver: NotificationObserver {
             (.MediaEngineDidSwitchCameras,         #selector(onMediaEngineDidSwitchCameras(_:))),
             (.MediaEngineDidChangeLocalViewSize,   #selector(onMediaEngineDidChangeLocalViewSize(_:))),
             (.MediaEngineDidChangeRemoteViewSize,  #selector(onMediaEngineDidChangeRemoteViewSize(_:))),
+            (.MediaEngineDidChangeScreenShareViewSize,  #selector(onMediaEngineDidChangeScreenShareViewSize(_:))),
             (.MediaEngineDidMuteVideo,             #selector(onMediaEngineDidMuteVideo(_:))),
             (.MediaEngineDidUnMuteVideo,           #selector(onMediaEngineDidUnMuteVideo(_:))),
             (.MediaEngineDidMuteVideoOutput,       #selector(onMediaEngineDidMuteVideoOutput(_:))),
             (.MediaEngineDidUnMuteVideoOutput,     #selector(onMediaEngineDidUnMuteVideoOutput(_:))),
+            (.MediaEngineDidMuteScreenShareOutput,     #selector(onMediaEngineDidMuteScreenShareOutput(_:))),
+            (.MediaEngineDidUnMuteScreenShareOutput,     #selector(onMediaEngineDidUnMuteScreenShareOutput(_:))),
             (.MediaEngineDidMuteAudio,             #selector(onMediaEngineDidMuteAudio(_:))),
             (.MediaEngineDidUnMuteAudio,           #selector(onMediaEngineDidUnMuteAudio(_:))),
             (.MediaEngineDidMuteAudioOutput,       #selector(onMediaEngineDidMuteAudioOutput(_:))),
@@ -79,6 +82,14 @@ class MediaSessionObserver: NotificationObserver {
         }
     }
     
+    @objc private func onMediaEngineDidChangeScreenShareViewSize(_ notification: Notification) {
+        DispatchQueue.main.async {
+            if let retainCall = self.call {
+                retainCall.onMediaChanged?(Call.MediaChangedEvent.remoteScreenShareViewSize)
+            }
+        }
+    }
+    
     @objc private func onMediaEngineDidMuteVideo(_ notification: Notification) {
         DispatchQueue.main.async {
             if let retainCall = self.call {
@@ -109,6 +120,22 @@ class MediaSessionObserver: NotificationObserver {
         DispatchQueue.main.async {
             if let retainCall = self.call {
                 retainCall.onMediaChanged?(Call.MediaChangedEvent.receivingVideo(true))
+            }
+        }
+    }
+    
+    @objc private func onMediaEngineDidMuteScreenShareOutput(_ notification: Notification) {
+        DispatchQueue.main.async {
+            if let retainCall = self.call {
+                retainCall.onMediaChanged?(Call.MediaChangedEvent.receivingScreenShare(false))
+            }
+        }
+    }
+    
+    @objc private func onMediaEngineDidUnMuteScreenShareOutput(_ notification: Notification) {
+        DispatchQueue.main.async {
+            if let retainCall = self.call {
+                retainCall.onMediaChanged?(Call.MediaChangedEvent.receivingScreenShare(true))
             }
         }
     }

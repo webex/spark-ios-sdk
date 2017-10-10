@@ -135,6 +135,29 @@ public class Call {
         case localVideoViewSize
         /// Remote video rendering view size has changed.
         case remoteVideoViewSize
+        /// Screen share rendering view size has changed.
+        /// - since: 1.3.0
+        case remoteScreenShareViewSize
+        /// True if the local party now is receiving screen share. Otherwise false.
+        /// This might be triggered when the local party muted or unmuted the video.
+        /// - since: 1.3.0
+        case receivingScreenShare(Bool)
+        /// True if the screen share now is receiving and joined. Otherwise false.
+        /// This might be triggered when the remote party start or stop share stream.
+        /// - since: 1.3.0
+        case remoteSendingScreenShare(Bool)
+    }
+    
+    /// The enumeration of call membership event.
+    ///
+    /// - since: 1.3.0
+    public enum CallMembershipChangedEvent {
+        case joined(CallMembership)
+        case left(CallMembership)
+        case declined(CallMembership)
+        case sendingVideo(CallMembership)
+        case sendingAudio(CallMembership)
+        case sendingScreenShare(CallMembership)
     }
     
     /// The enumeration of capabilities of a call.
@@ -167,8 +190,9 @@ public class Call {
     public var onConnected: (() -> Void)? {
         didSet {
             self.device.phone.queue.sync {
+                self.onConnectedOnceToken = UUID().uuidString
                 if let block = self.onConnected, self.status == CallStatus.connected {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncOnce(token: self.onConnectedOnceToken) {
                         block()
                     }
                 }
@@ -181,6 +205,11 @@ public class Call {
     ///
     /// - since: 1.2.0
     public var onDisconnected: ((DisconnectReason) -> Void)?
+    
+    /// Callback when the membership of this *call* have changed.
+    ///
+    /// - since: 1.3.0
+    public var onCallMembershipChanged: ((CallMembershipChangedEvent) -> Void)?
     
     /// Callback when the media types of this *call* have changed.
     ///
@@ -222,6 +251,13 @@ public class Call {
     /// - since: 1.2.0
     public var remoteSendingAudio: Bool {
         return !model.isRemoteAudioMuted
+    }
+    
+    /// True if the remote party of this *call* is sending screen share. Otherwise, false.
+    ///
+    /// - since: 1.3.0
+    public var remoteSendingScreenShare: Bool {
+        return model.isGrantedScreenShare
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.
@@ -272,6 +308,30 @@ public class Call {
         }
     }
     
+    /// True if the local party of this *call* is receiving screen share. Otherwise, false.
+    ///
+    /// - since: 1.3.0
+    public var receivingScreenShare: Bool {
+        get {
+            if !self.mediaSession.hasScreenShare && self.mediaSession.hasVideo {
+                return !self.mediaSession.videoOutputMuted
+            }
+            else {
+                return self.mediaSession.hasScreenShare && !self.mediaSession.screenShareOutputMuted
+            }
+        }
+        set {
+            if !self.mediaSession.hasScreenShare && self.mediaSession.hasVideo && self.model.isGrantedScreenShare {
+                self.receivingVideo = newValue
+            } else if self.mediaSession.hasScreenShare {
+                self.mediaSession.screenShareOutputMuted = !newValue
+            } else {
+                // not have screen share and have video and the remote doesn't start screen share.
+                // do nothing when user set the receivingScreenShare
+            }
+        }
+    }
+    
     /// True if the loud speaker is selected as the audio output device for this *call*. Otherwise, false.
     ///
     /// - since: 1.2.0
@@ -310,16 +370,19 @@ public class Call {
         return CMVideoDimensions(width: self.mediaSession.remoteVideoViewWidth, height: self.mediaSession.remoteVideoViewHeight)
     }
     
+    /// The remote screen share render view dimensions (points) of this *call*.
+    ///
+    /// - since: 1.3.0
+    public var remoteScreenShareViewSize: CMVideoDimensions {
+        return CMVideoDimensions(width: self.mediaSession.remoteScreenShareViewWidth, height: self.mediaSession.remoteScreenShareViewHeight)
+    }
+    
     /// Call Memberships represent participants in this *call*.
     ///
     /// - since: 1.2.0
-    public var memberships: [CallMembership] {
-        if let participants = self.model.participants {
-            return participants.filter({ $0.type == "USER" }).map { participant in
-                return CallMembership(participant: participant, call: self)
-            }
-        }
-        return []
+    public private(set) var memberships: [CallMembership] {
+        get { lock(); defer { unlock() }; return _memberships ?? [] }
+        set { lock(); defer { unlock() }; _memberships = newValue }
     }
     
     /// The initiator of this *call*.
@@ -336,6 +399,49 @@ public class Call {
         return self.memberships.filter({ !$0.isInitiator }).first
     }
     
+    /// The video local render view and remote render view of this call.
+    /// If is nil,it will update the video state as inactive to the server side.
+    /// - since: 1.3.0
+    public var videoRenderViews: (local:MediaRenderView, remote:MediaRenderView)? {
+        didSet {
+            DispatchQueue.main.async {
+                if !self.mediaSession.hasVideo {
+                    return
+                }
+                //update media session
+                self.mediaSession.updateMedia(mediaType:MediaSessionWrapper.MediaType.video(self.videoRenderViews))
+                //update locus local medias
+                self.device.phone.update(call: self, sendingAudio: self.sendingAudio, sendingVideo: self.sendingVideo,localSDP: self.mediaSession.getLocalSdp())
+            }
+        }
+    }
+    
+    /// The screen share remote render view of this call.
+    /// If is nil,it will update the video state as inactive to the server side.
+    /// - since: 1.3.0
+    public var screenShareRenderView: MediaRenderView? {
+        didSet {
+            DispatchQueue.main.async {
+                if !self.mediaSession.hasScreenShare {
+                    return
+                }
+                //update media session
+                self.mediaSession.updateMedia(mediaType:MediaSessionWrapper.MediaType.screenShare(self.screenShareRenderView))
+                //update locus local medias
+                self.device.phone.update(call: self, sendingAudio: self.sendingAudio, sendingVideo: self.sendingVideo,localSDP: self.mediaSession.getLocalSdp())
+                //join or leave screen share
+                if let granted = self.model.screenMediaShare?.shareFloor?.granted {
+                    if self.screenShareRenderView != nil {
+                        self.mediaSession.joinScreenShare(granted)
+                    }
+                    else {
+                        self.mediaSession.leaveScreenShare(granted)
+                    }
+                }
+            }
+        }
+    }
+    
     var model: CallModel {
         get { lock(); defer { unlock() }; return _model }
         set { lock(); defer { unlock() }; _model = newValue }
@@ -344,6 +450,8 @@ public class Call {
     var url: String {
         return self.model.callUrl!
     }
+    
+    let isGroup: Bool
     
     let device: Device
     let mediaSession: MediaSessionWrapper
@@ -354,7 +462,14 @@ public class Call {
     
     private var _dail: String?
     private var _model: CallModel
-    private var mutex = pthread_mutex_t()
+    private var _memberships: [CallMembership]?
+    var _mutex = pthread_mutex_t()
+    
+    var onConnectedOnceToken :String = "" {
+        didSet {
+            DispatchQueue.main.removeOnceToken(token: oldValue)
+        }
+    }
     
     private var id: String {
         return self.model.myself?[device: self.device.deviceUrl]?.callLegId ?? self.sessionId
@@ -368,8 +483,9 @@ public class Call {
         return self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp
     }
     
-    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, uuid: UUID?) {
+    init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, group: Bool, uuid: UUID?) {
         self.direction = direction
+        self.isGroup = group
         self.device = device
         self.mediaSession = media
         self._model = model
@@ -377,17 +493,21 @@ public class Call {
         self.dtmfQueue = DtmfQueue(client: device.phone.client)
         self.metrics = CallMetrics()
         self.metrics.trackCallStarted()
+        self.videoRenderViews = media.videoViews
+        self.screenShareRenderView = media.screenShareView
+        self.doCallModel(model)
     }
     
     deinit{
-        pthread_mutex_init(&mutex, nil)
+        pthread_mutex_init(&_mutex, nil)
+        DispatchQueue.main.removeOnceToken(token: self.onConnectedOnceToken)
     }
     
-    @inline(__always) private func lock(){
-        pthread_mutex_lock(&mutex)
+    @inline(__always) func lock(){
+        pthread_mutex_lock(&_mutex)
     }
-    @inline(__always) private func unlock(){
-        pthread_mutex_unlock(&mutex)
+    @inline(__always) func unlock(){
+        pthread_mutex_unlock(&_mutex)
     }
     
     /// Acknowledge (without answering) an incoming call.
@@ -486,9 +606,9 @@ public class Call {
         default:
             self.device.phone.remove(call: self)
             self.status = .disconnected
-            self.stopMedia()
             self.metrics.trackCallEnded(reason: reason)
             DispatchQueue.main.async {
+                self.stopMedia()
                 self.onDisconnected?(reason)
             }
         }
@@ -506,21 +626,24 @@ public class Call {
             SDKLogger.shared.error("Failure: remoteSdp is nil")
         }
         self.mediaSession.startMedia(call: self)
+        if let granted = self.model.screenShareMediaFloor?.granted, self.mediaSession.hasScreenShare {
+            self.mediaSession.joinScreenShare(granted)
+        }
     }
     
     func stopMedia() {
         //stopMedia must run in the main thread.Because WME will remove the videoRender view.
-        DispatchQueue.main.async {
-            self.mediaSession.stopMedia()
+        if let granted = self.model.screenShareMediaFloor?.granted ,self.mediaSession.hasScreenShare{
+            self.mediaSession.leaveScreenShare(granted)
         }
+        self.mediaSession.stopMedia()
     }
     
-    func doCallModel(_ model: CallModel) {
+    func update(model: CallModel) {
         if model.isValid {
             let old = self.model
             if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {
-                self.model = new
-                self.status.handle(model: new, for: self)
+                self.doCallModel(new)
                 DispatchQueue.main.async {
                     if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
                         self.onMediaChanged?(MediaChangedEvent.remoteSendingVideo(!new.isRemoteVideoMuted))
@@ -531,10 +654,98 @@ public class Call {
                     if new.isLocalSupportDTMF != old.isLocalSupportDTMF {
                         self.onCapabilitiesChanged?(Capabilities.dtmf)
                     }
+                    
+                    //screen share
+                    if (new.isGrantedScreenShare) {
+                        new.screenShareMediaFloor?.handleFloorChange(oldFloor: old.screenShareMediaFloor) { isGranted in
+                            if var granted = new.screenShareMediaFloor?.granted , self.mediaSession.hasScreenShare{
+                                if isGranted {
+                                    self.mediaSession.joinScreenShare(granted)
+                                }
+                                else {
+                                    if let oldGranted = old.screenShareMediaFloor?.granted {
+                                        granted = oldGranted
+                                    }
+                                    self.mediaSession.leaveScreenShare(granted)
+                                }
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(isGranted))
+                        }
+                    }
+                    //whiteboard
+                    //else if new.isGrantedWhiteboardShare {}
+                    
                 }
             }
         }
     }
+    
+    private func doCallModel(_ model: CallModel) {
+        self.model = model
+        if let participants = model.participants?.filter({ $0.type == "USER" }) {
+            let oldMemberships = self.memberships
+            var newMemberships = [CallMembership]()
+            for participant in participants {
+                if var membership = oldMemberships.find(predicate: { $0.id == participant.id }) {
+                    let oldState = membership.state
+                    let sendingAudio = membership.sendingAudio
+                    let sendingVideo = membership.sendingVideo
+                    membership.model = participant
+                    if membership.state != oldState {
+                        if membership.state == CallMembership.State.joined {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.joined(membership))
+                        }
+                        else if membership.state == CallMembership.State.left {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.left(membership))
+                        }
+                        else if membership.state == CallMembership.State.declined {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.declined(membership))
+                        }
+                    }
+                    if membership.sendingAudio != sendingAudio {
+                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingAudio(membership))
+                    }
+                    if membership.sendingVideo != sendingVideo {
+                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
+                    }
+                    newMemberships.append(membership)
+                }
+                else {
+                    newMemberships.append(CallMembership(participant: participant, call: self))
+                }
+            }
+            self.memberships = newMemberships
+        }
+        else {
+            self.memberships = []
+        }
+        self.status.handle(model: model, for: self)
+    }
 }
 
+public extension DispatchQueue {
+    
+    private static var _onceTracker = [String]()
+    
+    public func asyncOnce(token: String, block:@escaping ()->Void) {
+        self.async {
+            objc_sync_enter(self); defer { objc_sync_exit(self) }
+            if token.isEmpty || DispatchQueue._onceTracker.contains(token) {
+                return
+            }
+            DispatchQueue._onceTracker.append(token)
+            block()
+        }
+    }
+    
+    public func removeOnceToken(token: String) {
+        self.async {
+            objc_sync_enter(self); defer { objc_sync_exit(self) }
+            if token.isEmpty {
+                return
+            }
+            DispatchQueue._onceTracker.removeObject(token)
+        }
+    }
+}
 
