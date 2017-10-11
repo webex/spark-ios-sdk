@@ -231,46 +231,47 @@ public class Phone {
                     completionHandler(Result.failure(SparkError.illegalOperation(reason: "There are other active calls")))
                     return
                 }
-                
-                let mediaContext = self.mediaContext ?? MediaSessionWrapper()
-                mediaContext.prepare(option: option, phone: self)
-                let localSDP = mediaContext.getLocalSdp()
-                let reachabilities = self.reachability.feedback?.reachabilities
-                
-                CallClient.DialTarget.lookup(address, by: Spark(authenticator: self.authenticator)) { target in
-                    self.queue.sync {
-                        if let device = self.devices.device {
-                            let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
-                            if target.isEndpoint {
-                                self.client.create(target.address, by: device, localMedia: media, queue: self.queue.underlying) { res in
-                                    self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, res, completionHandler))
-                                    self.queue.yield()
-                                }
-                            }
-                            else {
-                                self.conversations.getLocusUrl(conversation: target.address, by: device, queue: self.queue.underlying) { res in
-                                    if let url = res.result.data?.locusUrl {
-                                        self.client.join(url, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
-                                            self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, resNew, completionHandler))
-                                            self.queue.yield()
-                                        }
-                                    }
-                                    else if let error = res.result.error {
-                                        SDKLogger.shared.error("Failure call ", error: error)
-                                        DispatchQueue.main.async {
-                                            completionHandler(Result.failure(error))
-                                        }
+                self.requestMediaAccess(option: option) {
+                    let mediaContext = self.mediaContext ?? MediaSessionWrapper()
+                    mediaContext.prepare(option: option, phone: self)
+                    let localSDP = mediaContext.getLocalSdp()
+                    let reachabilities = self.reachability.feedback?.reachabilities
+                    
+                    CallClient.DialTarget.lookup(address, by: Spark(authenticator: self.authenticator)) { target in
+                        self.queue.sync {
+                            if let device = self.devices.device {
+                                let media = MediaModel(sdp: localSDP, audioMuted: false, videoMuted: false, reachabilities: reachabilities)
+                                if target.isEndpoint {
+                                    self.client.create(target.address, by: device, localMedia: media, queue: self.queue.underlying) { res in
+                                        self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, res, completionHandler))
                                         self.queue.yield()
                                     }
                                 }
+                                else {
+                                    self.conversations.getLocusUrl(conversation: target.address, by: device, queue: self.queue.underlying) { res in
+                                        if let url = res.result.data?.locusUrl {
+                                            self.client.join(url, by: device, localMedia: media, queue: self.queue.underlying) { resNew in
+                                                self.doLocusResponse(LocusResult.call(target.isGroup, device, option.uuid, mediaContext, resNew, completionHandler))
+                                                self.queue.yield()
+                                            }
+                                        }
+                                        else if let error = res.result.error {
+                                            SDKLogger.shared.error("Failure call ", error: error)
+                                            DispatchQueue.main.async {
+                                                completionHandler(Result.failure(error))
+                                            }
+                                            self.queue.yield()
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        else {
-                            SDKLogger.shared.error("Failure: unregistered device")
-                            DispatchQueue.main.async {
-                                completionHandler(Result.failure(SparkError.unregistered))
+                            else {
+                                SDKLogger.shared.error("Failure: unregistered device")
+                                DispatchQueue.main.async {
+                                    completionHandler(Result.failure(SparkError.unregistered))
+                                }
+                                self.queue.yield()
                             }
-                            self.queue.yield()
                         }
                     }
                 }
@@ -401,13 +402,15 @@ public class Phone {
                 call._uuid = uuid
             }
             
-            let mediaContext = call.mediaSession
-            mediaContext.prepare(option: option, phone: self)
-            let media = MediaModel(sdp: mediaContext.getLocalSdp(), audioMuted: false, videoMuted: false, reachabilities: self.reachability.feedback?.reachabilities)
-            self.queue.sync {
-                self.client.join(call.url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
-                    self.doLocusResponse(LocusResult.join(call, res, completionHandler))
-                    self.queue.yield()
+            self.requestMediaAccess(option: option) {
+                let mediaContext = call.mediaSession
+                mediaContext.prepare(option: option, phone: self)
+                let media = MediaModel(sdp: mediaContext.getLocalSdp(), audioMuted: false, videoMuted: false, reachabilities: self.reachability.feedback?.reachabilities)
+                self.queue.sync {
+                    self.client.join(call.url, by: call.device, localMedia: media, queue: self.queue.underlying) { res in
+                        self.doLocusResponse(LocusResult.join(call, res, completionHandler))
+                        self.queue.yield()
+                    }
                 }
             }
         }
