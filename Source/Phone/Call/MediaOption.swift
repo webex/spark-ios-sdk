@@ -36,7 +36,7 @@ public struct MediaOption {
     ///
     /// - since: 1.2.0
     public static func audioVideo(local: MediaRenderView, remote: MediaRenderView) -> MediaOption {
-        return MediaOption(local: local, remote: remote)
+        return MediaOption(local: local, remote: remote,hasVideo:true)
     }
     
     /// Constructs an audio and video media option with optional render views.
