@@ -14,7 +14,7 @@
     <a title="Phone Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -204,6 +218,7 @@
 The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
+
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
@@ -212,6 +227,7 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -225,9 +241,9 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OC8SparkSDK5Phone10FacingMode"></a>
+                    <a name="/s:8SparkSDK5PhoneC10FacingModeO"></a>
                     <a name="//apple_ref/swift/Enum/FacingMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OC8SparkSDK5Phone10FacingMode">FacingMode</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC10FacingModeO">FacingMode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -236,6 +252,7 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of Camera facing modes.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -258,9 +275,148 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Phone17defaultFacingModeOS0_10FacingMode"></a>
+                    <a name="/s:8SparkSDK5PhoneC16DefaultBandwidthO"></a>
+                    <a name="//apple_ref/swift/Enum/DefaultBandwidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC16DefaultBandwidthO">DefaultBandwidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The enumeration of common bandwidth choices.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                        <a href="../Classes/Phone/DefaultBandwidth.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DefaultBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK5PhoneC17audioMaxBandwidths6UInt32Vv"></a>
+                    <a name="//apple_ref/swift/Property/audioMaxBandwidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC17audioMaxBandwidths6UInt32Vv">audioMaxBandwidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The max bandwidth for audio in unit bps for the call.
+Only effective if set before the start of call.
+if 0, default value of 64 * 1000 is used.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">audioMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthAudio</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK5PhoneC17videoMaxBandwidths6UInt32Vv"></a>
+                    <a name="//apple_ref/swift/Property/videoMaxBandwidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC17videoMaxBandwidths6UInt32Vv">videoMaxBandwidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The max bandwidth for video in unit bps for the call.
+Only effective if set before the start of call.
+if 0, default value of 2000*1000 is used.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidth720p</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK5PhoneC23screenShareMaxBandwidths6UInt32Vv"></a>
+                    <a name="//apple_ref/swift/Property/screenShareMaxBandwidth" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC23screenShareMaxBandwidths6UInt32Vv">screenShareMaxBandwidth</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The max bandwidth for screen sharing in unit bps for the call.
+Only effective if set before the start of call.
+if 0, default value of 4000*1000 is used.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthSession</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK5PhoneC17defaultFacingModeAC0eF0Ov"></a>
                     <a name="//apple_ref/swift/Property/defaultFacingMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone17defaultFacingModeOS0_10FacingMode">defaultFacingMode</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC17defaultFacingModeAC0eF0Ov">defaultFacingMode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -270,11 +426,13 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="abstract">
                         <p>Default camera facing mode of this phone, used as the default when dialing or answering a call.
 The default mode is the front camera.</p>
+
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -296,9 +454,9 @@ The default mode is the front camera.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Phone18defaultLoudSpeakerSb"></a>
+                    <a name="/s:8SparkSDK5PhoneC18defaultLoudSpeakerSbv"></a>
                     <a name="//apple_ref/swift/Property/defaultLoudSpeaker" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone18defaultLoudSpeakerSb">defaultLoudSpeaker</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC18defaultLoudSpeakerSbv">defaultLoudSpeaker</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -308,11 +466,13 @@ The default mode is the front camera.</p>
                       <div class="abstract">
                         <p>Default loud speaker mode of this phone, used as the default when dialing or answering a call.
 True as using loud speaker, False as not. The default is using loud speaker.</p>
+
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -334,9 +494,9 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Phone10onIncomingGSqFCS_4CallT__"></a>
+                    <a name="/s:8SparkSDK5PhoneC10onIncomingyAA4CallCcSgv"></a>
                     <a name="//apple_ref/swift/Property/onIncoming" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Phone10onIncomingGSqFCS_4CallT__">onIncoming</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC10onIncomingyAA4CallCcSgv">onIncoming</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -345,6 +505,7 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when call is incoming.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -366,9 +527,9 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone8registerFFGSqPs5Error__T_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC8registeryys5Error_pSgcF"></a>
                     <a name="//apple_ref/swift/Method/register(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone8registerFFGSqPs5Error__T_T_">register(_:)</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC8registeryys5Error_pSgcF">register(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -379,6 +540,7 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                         <p>Registers this phone to Cisco Spark cloud on behalf of the authenticated user.
 It also creates the websocket and connects to Cisco Spark cloud.
 Subsequent invocations of this method refresh the registration.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -394,38 +556,15 @@ Subsequent invocations of this method refresh the registration.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the registration is completed. True means success, and False means failure.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone10deregisterFFGSqPs5Error__T_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC10deregisteryys5Error_pSgcF"></a>
                     <a name="//apple_ref/swift/Method/deregister(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone10deregisterFFGSqPs5Error__T_T_">deregister(_:)</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC10deregisteryys5Error_pSgcF">deregister(_:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -436,6 +575,7 @@ Subsequent invocations of this method refresh the registration.</p>
                         <p>Removes this <em>phone</em> from Cisco Spark cloud on behalf of the authenticated user.
 It also disconnects the websocket from Cisco Spark cloud.
 Subsequent invocations of this method behave as a no-op.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -451,38 +591,15 @@ Subsequent invocations of this method behave as a no-op.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone4dialFTSS6optionVS_11MediaOption17completionHandlerFGOS_6ResultCS_4Call_T__T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC4dialySS_AA11MediaOptionV6optionyAA6ResultOyAA4CallCGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/dial(_:option:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone4dialFTSS6optionVS_11MediaOption17completionHandlerFGOS_6ResultCS_4Call_T__T_">dial(_:option:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC4dialySS_AA11MediaOptionV6optionyAA6ResultOyAA4CallCGc17completionHandlertF">dial(_:option:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -502,17 +619,18 @@ It supports the following address formats for the receipient:</p>
 <li>Email address: e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a></li>
 </ul>
 </blockquote>
-<li>throw:</li>
+
+<p><li>throw:</li>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
-    1.2.0
+    1.2.0</p>
 
-</div>
+<p></div>
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
-    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.
+    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.</p>
 
-</div>
+<p></div></p>
 
                       </div>
                       <div class="declaration">
@@ -523,62 +641,15 @@ It supports the following address formats for the receipient:</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>address</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Intended recipient address in one of the supported formats.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>option</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Intended media options - audio only or audio and video - for the call.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the action is completed. True means success, and False means failure.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>a Call object</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone27requestVideoCodecActivationFT_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC27requestVideoCodecActivationyyF"></a>
                     <a name="//apple_ref/swift/Method/requestVideoCodecActivation()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone27requestVideoCodecActivationFT_T_">requestVideoCodecActivation()</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC27requestVideoCodecActivationyyF">requestVideoCodecActivation()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -587,11 +658,13 @@ It supports the following address formats for the receipient:</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.</p>
+
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     Invoking this function is optional since the alert will appear automatically during the first video call.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -607,19 +680,15 @@ It supports the following address formats for the receipient:</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone27disableVideoCodecActivationFT_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC27disableVideoCodecActivationyyF"></a>
                     <a name="//apple_ref/swift/Method/disableVideoCodecActivation()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone27disableVideoCodecActivationFT_T_">disableVideoCodecActivation()</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC27disableVideoCodecActivationyyF">disableVideoCodecActivation()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -629,11 +698,13 @@ It supports the following address formats for the receipient:</p>
                       <div class="abstract">
                         <p>Prevents Cisco Spark iOS SDK from poping up an Alert for the end user
 to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
+
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -649,19 +720,15 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone12startPreviewFT4viewCSo15MediaRenderView_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC12startPreviewySo15MediaRenderViewC4view_tF"></a>
                     <a name="//apple_ref/swift/Method/startPreview(view:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone12startPreviewFT4viewCSo15MediaRenderView_T_">startPreview(view:)</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC12startPreviewySo15MediaRenderViewC4view_tF">startPreview(view:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -680,38 +747,15 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>view</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>a UI view for rendering video.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5Phone11stopPreviewFT_T_"></a>
+                    <a name="/s:8SparkSDK5PhoneC11stopPreviewyyF"></a>
                     <a name="//apple_ref/swift/Method/stopPreview()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5Phone11stopPreviewFT_T_">stopPreview()</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC11stopPreviewyyF">stopPreview()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -730,10 +774,6 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -742,8 +782,8 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

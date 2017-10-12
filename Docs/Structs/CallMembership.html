@@ -14,7 +14,7 @@
     <a title="CallMembership Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -201,6 +215,7 @@
                 </div>
               </div>
             <p>A data type represents a relationship between <em>Call</em> and <em>Person</em> at Cisco Spark cloud.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -214,9 +229,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OV8SparkSDK14CallMembership5State"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV5StateO"></a>
                     <a name="//apple_ref/swift/Enum/State" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OV8SparkSDK14CallMembership5State">State</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV5StateO">State</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -225,6 +240,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of the status of the person in the membership.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -247,41 +263,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership2idSS"></a>
-                    <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership2idSS">id</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>The identifier of the membership.</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">id</span><span class="p">:</span> <span class="kt">String</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:vV8SparkSDK14CallMembership11isInitiatorSb"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV11isInitiatorSbv"></a>
                     <a name="//apple_ref/swift/Property/isInitiator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership11isInitiatorSb">isInitiator</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV11isInitiatorSbv">isInitiator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -290,6 +274,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the person is the initiator of the call.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -301,7 +286,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">isInitiator</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isInitiator</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -311,9 +296,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership8presonIdGSqSS_"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV8presonIdSSSgv"></a>
                     <a name="//apple_ref/swift/Property/presonId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership8presonIdGSqSS_">presonId</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV8presonIdSSSgv">presonId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -322,6 +307,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The identifier of the person.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -333,7 +319,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">presonId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">presonId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -343,9 +329,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership5stateOS0_5State"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV5stateAC5StateOv"></a>
                     <a name="//apple_ref/swift/Property/state" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership5stateOS0_5State">state</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV5stateAC5StateOv">state</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -354,6 +340,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The status of the person in this <em>CallMembership</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -375,9 +362,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership5emailGSqSS_"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV5emailSSSgv"></a>
                     <a name="//apple_ref/swift/Property/email" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership5emailGSqSS_">email</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV5emailSSSgv">email</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -386,6 +373,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The email address of the person in this <em>CallMembership</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -407,9 +395,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership6sipUrlGSqSS_"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV6sipUrlSSSgv"></a>
                     <a name="//apple_ref/swift/Property/sipUrl" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership6sipUrlGSqSS_">sipUrl</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV6sipUrlSSSgv">sipUrl</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -418,6 +406,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The SIP address of the person in this <em>CallMembership</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -439,9 +428,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK14CallMembership11phoneNumberGSqSS_"></a>
+                    <a name="/s:8SparkSDK14CallMembershipV11phoneNumberSSSgv"></a>
                     <a name="//apple_ref/swift/Property/phoneNumber" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK14CallMembership11phoneNumberGSqSS_">phoneNumber</a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV11phoneNumberSSSgv">phoneNumber</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -450,6 +439,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The phone number of the person in this <em>CallMembership</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -468,13 +458,79 @@
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK14CallMembershipV12sendingVideoSbv"></a>
+                    <a name="//apple_ref/swift/Property/sendingVideo" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV12sendingVideoSbv">sendingVideo</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>True if the <em>CallMembership</em> is sending video. Otherwise, false.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK14CallMembershipV12sendingAudioSbv"></a>
+                    <a name="//apple_ref/swift/Property/sendingAudio" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK14CallMembershipV12sendingAudioSbv">sendingAudio</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>True if the <em>CallMembership</em> is sending audio. Otherwise, false.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

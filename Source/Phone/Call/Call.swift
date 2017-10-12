@@ -136,27 +136,38 @@ public class Call {
         /// Remote video rendering view size has changed.
         case remoteVideoViewSize
         /// Screen share rendering view size has changed.
+        ///
         /// - since: 1.3.0
         case remoteScreenShareViewSize
         /// True if the local party now is receiving screen share. Otherwise false.
-        /// This might be triggered when the local party muted or unmuted the video.
+        /// This might be triggered when the local party muted or unmuted the video
+        /// if screen sharing is sent via the video stream.
+        /// This might also be triggered when the local party started or stopped the screen share.
+        ///
         /// - since: 1.3.0
         case receivingScreenShare(Bool)
         /// True if the screen share now is receiving and joined. Otherwise false.
-        /// This might be triggered when the remote party start or stop share stream.
+        /// This might be triggered when the remote party started or stopped share stream.
+        ///
         /// - since: 1.3.0
         case remoteSendingScreenShare(Bool)
     }
     
-    /// The enumeration of call membership event.
+    /// The enumeration of call membership events.
     ///
     /// - since: 1.3.0
     public enum CallMembershipChangedEvent {
+        /// The person in the membership joined this *call*.
         case joined(CallMembership)
+        /// The person in the membership left this *call*.
         case left(CallMembership)
+        /// The person in the membership declined this *call*.
         case declined(CallMembership)
+        /// The person in the membership started sending video this *call*.
         case sendingVideo(CallMembership)
+        /// The person in the membership started sending audio.
         case sendingAudio(CallMembership)
+        /// The person in the membership started screen sharing.
         case sendingScreenShare(CallMembership)
     }
     
@@ -206,7 +217,7 @@ public class Call {
     /// - since: 1.2.0
     public var onDisconnected: ((DisconnectReason) -> Void)?
     
-    /// Callback when the membership of this *call* have changed.
+    /// Callback when the memberships of this *call* have changed.
     ///
     /// - since: 1.3.0
     public var onCallMembershipChanged: ((CallMembershipChangedEvent) -> Void)?
@@ -399,7 +410,7 @@ public class Call {
         return self.memberships.filter({ !$0.isInitiator }).first
     }
     
-    /// The video local render view and remote render view of this call.
+    /// The render views for local and remote video of this call.
     /// If is nil, it will update the video state as inactive to the server side.
     /// - since: 1.3.0
     public var videoRenderViews: (local:MediaRenderView, remote:MediaRenderView)? {
@@ -416,8 +427,9 @@ public class Call {
         }
     }
     
-    /// The screen share remote render view of this call.
-    /// If is nil, it will update the video state as inactive to the server side.
+    /// The render view for the remote screen share of this call.
+    /// If is nil, it will update the screen sharing state as inactive to the server side.
+    ///
     /// - since: 1.3.0
     public var screenShareRenderView: MediaRenderView? {
         didSet {

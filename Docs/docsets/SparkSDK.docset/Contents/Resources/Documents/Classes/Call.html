@@ -14,7 +14,7 @@
     <a title="Call Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -203,6 +217,7 @@
             <p>A Call represents a media call on Cisco Spark.</p>
 
 <p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
+
 <pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
     <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
     <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
@@ -224,6 +239,7 @@
 </code></pre>
 
 <p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
+
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
       <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -235,16 +251,19 @@
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see Phone API about how to create calls.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -258,9 +277,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OC8SparkSDK4Call9Direction"></a>
+                    <a name="/s:8SparkSDK4CallC9DirectionO"></a>
                     <a name="//apple_ref/swift/Enum/Direction" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OC8SparkSDK4Call9Direction">Direction</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC9DirectionO">Direction</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -269,6 +288,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of directions of a call</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -291,9 +311,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OC8SparkSDK4Call16DisconnectReason"></a>
+                    <a name="/s:8SparkSDK4CallC16DisconnectReasonO"></a>
                     <a name="//apple_ref/swift/Enum/DisconnectReason" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OC8SparkSDK4Call16DisconnectReason">DisconnectReason</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC16DisconnectReasonO">DisconnectReason</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -302,6 +322,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumuaration of reasons for a call being disconnected.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -324,9 +345,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OC8SparkSDK4Call17MediaChangedEvent"></a>
+                    <a name="/s:8SparkSDK4CallC17MediaChangedEventO"></a>
                     <a name="//apple_ref/swift/Enum/MediaChangedEvent" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OC8SparkSDK4Call17MediaChangedEvent">MediaChangedEvent</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC17MediaChangedEventO">MediaChangedEvent</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -335,6 +356,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of media change event</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -357,9 +379,43 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:OC8SparkSDK4Call12Capabilities"></a>
+                    <a name="/s:8SparkSDK4CallC0C22MembershipChangedEventO"></a>
+                    <a name="//apple_ref/swift/Enum/CallMembershipChangedEvent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC0C22MembershipChangedEventO">CallMembershipChangedEvent</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The enumeration of call membership events.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                        <a href="../Classes/Call/CallMembershipChangedEvent.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CallMembershipChangedEvent</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC12CapabilitiesO"></a>
                     <a name="//apple_ref/swift/Enum/Capabilities" class="dashAnchor"></a>
-                    <a class="token" href="#/s:OC8SparkSDK4Call12Capabilities">Capabilities</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC12CapabilitiesO">Capabilities</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -368,6 +424,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of capabilities of a call.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -390,9 +447,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call9onRingingGSqFT_T__"></a>
+                    <a name="/s:8SparkSDK4CallC9onRingingyycSgv"></a>
                     <a name="//apple_ref/swift/Property/onRinging" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call9onRingingGSqFT_T__">onRinging</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC9onRingingyycSgv">onRinging</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -401,6 +458,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) is ringing.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -422,9 +480,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call11onConnectedGSqFT_T__"></a>
+                    <a name="/s:8SparkSDK4CallC11onConnectedyycSgv"></a>
                     <a name="//apple_ref/swift/Property/onConnected" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call11onConnectedGSqFT_T__">onConnected</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC11onConnectedyycSgv">onConnected</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -433,6 +491,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) answered and this <em>call</em> is connected.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -454,9 +513,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call14onDisconnectedGSqFOS0_16DisconnectReasonT__"></a>
+                    <a name="/s:8SparkSDK4CallC14onDisconnectedyAC16DisconnectReasonOcSgv"></a>
                     <a name="//apple_ref/swift/Property/onDisconnected" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call14onDisconnectedGSqFOS0_16DisconnectReasonT__">onDisconnected</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC14onDisconnectedyAC16DisconnectReasonOcSgv">onDisconnected</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -465,6 +524,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when this <em>call</em> is disconnected (hangup, cancelled, get declined or other self device pickup the call).</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -486,9 +546,42 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call14onMediaChangedGSqFOS0_17MediaChangedEventT__"></a>
+                    <a name="/s:8SparkSDK4CallC02onC17MembershipChangedyAC0ceF5EventOcSgv"></a>
+                    <a name="//apple_ref/swift/Property/onCallMembershipChanged" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC02onC17MembershipChangedyAC0ceF5EventOcSgv">onCallMembershipChanged</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Callback when the memberships of this <em>call</em> have changed.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onCallMembershipChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/CallMembershipChangedEvent.html">CallMembershipChangedEvent</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC14onMediaChangedyAC0eF5EventOcSgv"></a>
                     <a name="//apple_ref/swift/Property/onMediaChanged" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call14onMediaChangedGSqFOS0_17MediaChangedEventT__">onMediaChanged</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC14onMediaChangedyAC0eF5EventOcSgv">onMediaChanged</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -497,6 +590,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the media types of this <em>call</em> have changed.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -518,9 +612,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call21onCapabilitiesChangedGSqFOS0_12CapabilitiesT__"></a>
+                    <a name="/s:8SparkSDK4CallC21onCapabilitiesChangedyAC0E0OcSgv"></a>
                     <a name="//apple_ref/swift/Property/onCapabilitiesChanged" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call21onCapabilitiesChangedGSqFOS0_12CapabilitiesT__">onCapabilitiesChanged</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC21onCapabilitiesChangedyAC0E0OcSgv">onCapabilitiesChanged</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -529,6 +623,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the capabilities of this <em>call</em> have changed.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -550,9 +645,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call6statusOS_10CallStatus"></a>
+                    <a name="/s:8SparkSDK4CallC6statusAA0C6StatusOv"></a>
                     <a name="//apple_ref/swift/Property/status" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call6statusOS_10CallStatus">status</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC6statusAA0C6StatusOv">status</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -561,11 +656,13 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The status of this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus
@@ -587,9 +684,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call9directionOS0_9Direction"></a>
+                    <a name="/s:8SparkSDK4CallC9directionAC9DirectionOv"></a>
                     <a name="//apple_ref/swift/Property/direction" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call9directionOS0_9Direction">direction</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC9directionAC9DirectionOv">direction</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -598,6 +695,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The direction of this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -619,9 +717,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call18sendingDTMFEnabledSb"></a>
+                    <a name="/s:8SparkSDK4CallC18sendingDTMFEnabledSbv"></a>
                     <a name="//apple_ref/swift/Property/sendingDTMFEnabled" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call18sendingDTMFEnabledSb">sendingDTMFEnabled</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC18sendingDTMFEnabledSbv">sendingDTMFEnabled</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -630,6 +728,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the DTMF keypad is enabled for this <em>call</em>. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -651,9 +750,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call18remoteSendingVideoSb"></a>
+                    <a name="/s:8SparkSDK4CallC18remoteSendingVideoSbv"></a>
                     <a name="//apple_ref/swift/Property/remoteSendingVideo" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call18remoteSendingVideoSb">remoteSendingVideo</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC18remoteSendingVideoSbv">remoteSendingVideo</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -662,6 +761,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending video. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -683,9 +783,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call18remoteSendingAudioSb"></a>
+                    <a name="/s:8SparkSDK4CallC18remoteSendingAudioSbv"></a>
                     <a name="//apple_ref/swift/Property/remoteSendingAudio" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call18remoteSendingAudioSb">remoteSendingAudio</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC18remoteSendingAudioSbv">remoteSendingAudio</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -694,6 +794,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending audio. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -715,9 +816,42 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call12sendingVideoSb"></a>
+                    <a name="/s:8SparkSDK4CallC24remoteSendingScreenShareSbv"></a>
+                    <a name="//apple_ref/swift/Property/remoteSendingScreenShare" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC24remoteSendingScreenShareSbv">remoteSendingScreenShare</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>True if the remote party of this <em>call</em> is sending screen share. Otherwise, false.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC12sendingVideoSbv"></a>
                     <a name="//apple_ref/swift/Property/sendingVideo" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call12sendingVideoSb">sendingVideo</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC12sendingVideoSbv">sendingVideo</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -726,6 +860,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is sending video. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -747,9 +882,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call12sendingAudioSb"></a>
+                    <a name="/s:8SparkSDK4CallC12sendingAudioSbv"></a>
                     <a name="//apple_ref/swift/Property/sendingAudio" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call12sendingAudioSb">sendingAudio</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC12sendingAudioSbv">sendingAudio</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -758,6 +893,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if this <em>call</em> is sending audio. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -779,9 +915,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call14receivingVideoSb"></a>
+                    <a name="/s:8SparkSDK4CallC14receivingVideoSbv"></a>
                     <a name="//apple_ref/swift/Property/receivingVideo" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call14receivingVideoSb">receivingVideo</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC14receivingVideoSbv">receivingVideo</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -790,6 +926,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving video. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -811,9 +948,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call14receivingAudioSb"></a>
+                    <a name="/s:8SparkSDK4CallC14receivingAudioSbv"></a>
                     <a name="//apple_ref/swift/Property/receivingAudio" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call14receivingAudioSb">receivingAudio</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC14receivingAudioSbv">receivingAudio</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -822,6 +959,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving audio. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -843,9 +981,42 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call9isSpeakerSb"></a>
+                    <a name="/s:8SparkSDK4CallC20receivingScreenShareSbv"></a>
+                    <a name="//apple_ref/swift/Property/receivingScreenShare" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC20receivingScreenShareSbv">receivingScreenShare</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>True if the local party of this <em>call</em> is receiving screen share. Otherwise, false.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC9isSpeakerSbv"></a>
                     <a name="//apple_ref/swift/Property/isSpeaker" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call9isSpeakerSb">isSpeaker</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC9isSpeakerSbv">isSpeaker</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -854,6 +1025,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the loud speaker is selected as the audio output device for this <em>call</em>. Otherwise, false.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -875,9 +1047,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call10facingModeOCS_5Phone10FacingMode"></a>
+                    <a name="/s:8SparkSDK4CallC10facingModeAA5PhoneC06FacingE0Ov"></a>
                     <a name="//apple_ref/swift/Property/facingMode" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call10facingModeOCS_5Phone10FacingMode">facingMode</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC10facingModeAA5PhoneC06FacingE0Ov">facingMode</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -886,6 +1058,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The camera facing mode selected for this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -907,9 +1080,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call18localVideoViewSizeVSC17CMVideoDimensions"></a>
+                    <a name="/s:8SparkSDK4CallC18localVideoViewSizeSC17CMVideoDimensionsVv"></a>
                     <a name="//apple_ref/swift/Property/localVideoViewSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call18localVideoViewSizeVSC17CMVideoDimensions">localVideoViewSize</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC18localVideoViewSizeSC17CMVideoDimensionsVv">localVideoViewSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -918,6 +1091,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The local video render view dimensions (points) of this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -939,9 +1113,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call19remoteVideoViewSizeVSC17CMVideoDimensions"></a>
+                    <a name="/s:8SparkSDK4CallC19remoteVideoViewSizeSC17CMVideoDimensionsVv"></a>
                     <a name="//apple_ref/swift/Property/remoteVideoViewSize" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call19remoteVideoViewSizeVSC17CMVideoDimensions">remoteVideoViewSize</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC19remoteVideoViewSizeSC17CMVideoDimensionsVv">remoteVideoViewSize</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -950,6 +1124,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The remote video render view dimensions (points) of this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -971,9 +1146,42 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call11membershipsGSaVS_14CallMembership_"></a>
+                    <a name="/s:8SparkSDK4CallC25remoteScreenShareViewSizeSC17CMVideoDimensionsVv"></a>
+                    <a name="//apple_ref/swift/Property/remoteScreenShareViewSize" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC25remoteScreenShareViewSizeSC17CMVideoDimensionsVv">remoteScreenShareViewSize</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The remote screen share render view dimensions (points) of this <em>call</em>.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteScreenShareViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC11membershipsSayAA0C10MembershipVGv"></a>
                     <a name="//apple_ref/swift/Property/memberships" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call11membershipsGSaVS_14CallMembership_">memberships</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC11membershipsSayAA0C10MembershipVGv">memberships</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -982,6 +1190,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Call Memberships represent participants in this <em>call</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -993,7 +1202,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -1003,9 +1212,138 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call11acknowledgeFT17completionHandlerFGSqPs5Error__T__T_"></a>
+                    <a name="/s:8SparkSDK4CallC4fromAA0C10MembershipVSgv"></a>
+                    <a name="//apple_ref/swift/Property/from" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC4fromAA0C10MembershipVSgv">from</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The initiator of this <em>call</em>.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">from</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC2toAA0C10MembershipVSgv"></a>
+                    <a name="//apple_ref/swift/Property/to" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC2toAA0C10MembershipVSgv">to</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The intended recipient of this <em>call</em>.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">to</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC16videoRenderViewsSo05MediaE4ViewC5local_AF6remotetSgv"></a>
+                    <a name="//apple_ref/swift/Property/videoRenderViews" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC16videoRenderViewsSo05MediaE4ViewC5local_AF6remotetSgv">videoRenderViews</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The render views for local and remote video of this call.
+If is nil, it will update the video state as inactive to the server side.
+- since: 1.3.0</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoRenderViews</span><span class="p">:</span> <span class="p">(</span><span class="nv">local</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">)?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC21screenShareRenderViewSo05MediafG0CSgv"></a>
+                    <a name="//apple_ref/swift/Property/screenShareRenderView" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC21screenShareRenderViewSo05MediafG0CSgv">screenShareRenderView</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The render view for the remote screen share of this call.
+If is nil, it will update the screen sharing state as inactive to the server side.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareRenderView</span><span class="p">:</span> <span class="kt">MediaRenderView</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC11acknowledgeyys5Error_pSgc17completionHandler_tF"></a>
                     <a name="//apple_ref/swift/Method/acknowledge(completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call11acknowledgeFT17completionHandlerFGSqPs5Error__T__T_">acknowledge(completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC11acknowledgeyys5Error_pSgc17completionHandler_tF">acknowledge(completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1014,13 +1352,14 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Acknowledge (without answering) an incoming call.
-Will cause the initiator&rsquo;s Call instance to emit the ringing event.
-Otherwise error will occur and onError callback will be dispatched.</p>
+Will cause the initiator&rsquo;s Call instance to emit the ringing event.</p>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1036,38 +1375,15 @@ Otherwise error will occur and onError callback will be dispatched.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call6answerFT6optionVS_11MediaOption17completionHandlerFGSqPs5Error__T__T_"></a>
+                    <a name="/s:8SparkSDK4CallC6answeryAA11MediaOptionV6option_ys5Error_pSgc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/answer(option:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call6answerFT6optionVS_11MediaOption17completionHandlerFGSqPs5Error__T__T_">answer(option:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC6answeryAA11MediaOptionV6option_ys5Error_pSgc17completionHandlertF">answer(option:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1076,13 +1392,14 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Answers this call.
-This can only be invoked when this call is incoming and in ringing status.
-Otherwise error will occur and onError callback will be dispatched.</p>
+This can only be invoked when this call is incoming and in ringing status.</p>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1098,50 +1415,15 @@ Otherwise error will occur and onError callback will be dispatched.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>option</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>Intended media options - audio only or audio and video - for the call.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call6rejectFT17completionHandlerFGSqPs5Error__T__T_"></a>
+                    <a name="/s:8SparkSDK4CallC6rejectyys5Error_pSgc17completionHandler_tF"></a>
                     <a name="//apple_ref/swift/Method/reject(completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call6rejectFT17completionHandlerFGSqPs5Error__T__T_">reject(completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC6rejectyys5Error_pSgc17completionHandler_tF">reject(completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1150,13 +1432,14 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Rejects this call. 
-This can only be invoked when this call is incoming and in ringing status.
-Otherwise error will occur and onError callback will be dispatched.</p>
+This can only be invoked when this call is incoming and in ringing status.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1172,38 +1455,15 @@ Otherwise error will occur and onError callback will be dispatched.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call6hangupFT17completionHandlerFGSqPs5Error__T__T_"></a>
+                    <a name="/s:8SparkSDK4CallC6hangupyys5Error_pSgc17completionHandler_tF"></a>
                     <a name="//apple_ref/swift/Method/hangup(completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call6hangupFT17completionHandlerFGSqPs5Error__T__T_">hangup(completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC6hangupyys5Error_pSgc17completionHandler_tF">hangup(completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1213,11 +1473,13 @@ Otherwise error will occur and onError callback will be dispatched.</p>
                       <div class="abstract">
                         <p>Disconnects this call.
 This can only be invoked when this call is in answered status.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1233,38 +1495,15 @@ This can only be invoked when this call is in answered status.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call16sendFeedbackWithFT6ratingSi8commentsGSqSS_11includeLogsSb_T_"></a>
+                    <a name="/s:8SparkSDK4CallC16sendFeedbackWithySi6rating_SSSg8commentsSb11includeLogstF"></a>
                     <a name="//apple_ref/swift/Method/sendFeedbackWith(rating:comments:includeLogs:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call16sendFeedbackWithFT6ratingSi8commentsGSqSS_11includeLogsSb_T_">sendFeedbackWith(rating:comments:includeLogs:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC16sendFeedbackWithySi6rating_SSSg8commentsSb11includeLogstF">sendFeedbackWith(rating:comments:includeLogs:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1273,6 +1512,7 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends feedback for this call to Cisco Spark team.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1288,62 +1528,15 @@ This can only be invoked when this call is in answered status.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>rating</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The rating of the quality of this call between 1 and 5 where 5 means excellent quality.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>comments</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The comments for this call.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>includeLogs</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>True if to include logs, False as not.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK4Call4sendFT4dtmfSS17completionHandlerGSqFGSqPs5Error__T___T_"></a>
+                    <a name="/s:8SparkSDK4CallC4sendySS4dtmf_ys5Error_pSgcSg17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/send(dtmf:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK4Call4sendFT4dtmfSS17completionHandlerGSqFGSqPs5Error__T___T_">send(dtmf:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC4sendySS4dtmf_ys5Error_pSgcSg17completionHandlertF">send(dtmf:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1352,6 +1545,7 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1367,53 +1561,6 @@ This can only be invoked when this call is in answered status.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the action is completed. True means success, False means failure.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>dtmf</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>any combination of valid DTMF events matching regex mattern <q>^[0-9#\*abcdABCD]+$</q></p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the action is completed. True means success, False means failure.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -1424,9 +1571,9 @@ This can only be invoked when this call is in answered status.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK4Call4uuidV10Foundation4UUID"></a>
+                    <a name="/s:8SparkSDK4CallC4uuid10Foundation4UUIDVv"></a>
                     <a name="//apple_ref/swift/Property/uuid" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK4Call4uuidV10Foundation4UUID">uuid</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC4uuid10Foundation4UUIDVv">uuid</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1435,6 +1582,7 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A local unique identifier of a <em>Call</em> for <a href="https://developer.apple.com/reference/callkit">Apple CallKit</a>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1453,13 +1601,46 @@ This can only be invoked when this call is in answered status.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4CallC18updateAudioSessionyyF"></a>
+                    <a name="//apple_ref/swift/Method/updateAudioSession()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4CallC18updateAudioSessionyyF">updateAudioSession()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Update Audio Session for CallKit.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateAudioSession</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

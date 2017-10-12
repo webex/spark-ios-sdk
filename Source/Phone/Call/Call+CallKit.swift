@@ -31,7 +31,7 @@ public extension Call {
     
     /// Update Audio Session for CallKit.
     ///
-    /// - since: 1.3
+    /// - since: 1.3.0
     public func updateAudioSession() {
         self.mediaSession.restartAudio()
     }
