@@ -667,26 +667,57 @@ public class Call {
                         self.onCapabilitiesChanged?(Capabilities.dtmf)
                     }
                     
-                    //screen share
-                    if (new.isGrantedScreenShare) {
-                        new.screenShareMediaFloor?.handleFloorChange(oldFloor: old.screenShareMediaFloor) { isGranted in
-                            if var granted = new.screenShareMediaFloor?.granted , self.mediaSession.hasScreenShare{
-                                if isGranted {
-                                    self.mediaSession.joinScreenShare(granted)
-                                }
-                                else {
-                                    if let oldGranted = old.screenShareMediaFloor?.granted {
-                                        granted = oldGranted
-                                    }
-                                    self.mediaSession.leaveScreenShare(granted)
-                                }
-                            }
-                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(isGranted))
+                    func leaveScreenShare(participant: String, granted: String) {
+                        if self.mediaSession.hasScreenShare {
+                            self.mediaSession.leaveScreenShare(granted)
+                        }
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
+                        if let membership = self.memberships.filter({$0.id == participant}).first {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
                         }
                     }
-                    //whiteboard
-                    //else if new.isGrantedWhiteboardShare {}
                     
+                    func joinScreenShare(participant: String, granted: String) {
+                        if self.mediaSession.hasScreenShare {
+                            self.mediaSession.joinScreenShare(granted)
+                        }
+                        self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
+                        if let membership = self.memberships.filter({$0.id == participant}).first {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
+                        }
+                    }
+                    
+                    //screen share
+                    if let newFloor = new.screenShareMediaFloor, let newBeneficiary = newFloor.beneficiary?.id, let newGranted = newFloor.granted, let newDisposition = newFloor.disposition {
+                        if let oldFloor = old.screenShareMediaFloor, let oldBeneficiary = oldFloor.beneficiary?.id, let oldDisposition = oldFloor.disposition {
+                            if newDisposition != oldDisposition {
+                                if newDisposition == MediaShareModel.ShareFloorDisposition.granted {
+                                    joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                                }
+                                else if newDisposition == MediaShareModel.ShareFloorDisposition.released {
+                                    leaveScreenShare(participant: oldFloor.granted != nil ? oldBeneficiary : newBeneficiary, granted: oldFloor.granted ?? newGranted)
+                                }
+                                else {
+                                    SDKLogger.shared.error("Failure: floor dispostion is unknown.")
+                                }
+                            }
+                            else if let oldGranted = oldFloor.granted, newGranted != oldGranted {
+                                leaveScreenShare(participant: oldBeneficiary, granted: oldGranted)
+                                joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                            }
+                        }
+                        else {
+                            if newDisposition == MediaShareModel.ShareFloorDisposition.granted {
+                                joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                            }
+                            else if newDisposition == MediaShareModel.ShareFloorDisposition.released {
+                                leaveScreenShare(participant: newBeneficiary, granted: newGranted)
+                            }
+                            else {
+                                SDKLogger.shared.error("Failure: floor dispostion is unknown.")
+                            }
+                        }
+                    }                    
                 }
             }
         }
@@ -735,11 +766,11 @@ public class Call {
     }
 }
 
-public extension DispatchQueue {
+extension DispatchQueue {
     
     private static var _onceTracker = [String]()
     
-    public func asyncOnce(token: String, block:@escaping ()->Void) {
+    func asyncOnce(token: String, block:@escaping ()->Void) {
         self.async {
             objc_sync_enter(self); defer { objc_sync_exit(self) }
             if token.isEmpty || DispatchQueue._onceTracker.contains(token) {
@@ -750,7 +781,7 @@ public extension DispatchQueue {
         }
     }
     
-    public func removeOnceToken(token: String) {
+    func removeOnceToken(token: String) {
         self.async {
             objc_sync_enter(self); defer { objc_sync_exit(self) }
             if token.isEmpty {

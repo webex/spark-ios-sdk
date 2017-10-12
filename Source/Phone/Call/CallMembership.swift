@@ -93,6 +93,15 @@ public struct CallMembership {
         return self.model.status?.audioStatus == "SENDRECV"
     }
     
+    /// True if the *CallMembership* is sending screen share. Otherwise, false.
+    ///
+    /// - since: 1.3.0
+    public var sendingScreenShare: Bool {
+        return self.call.model.isGrantedScreenShare
+            && self.call.model.screenShareMediaFloor?.beneficiary?.id == self.id
+            && self.call.model.screenShareMediaFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
+    }
+    
     let id: String
     
     let isSelf: Bool
