@@ -1,20 +1,6 @@
 {
   "warnings": [
     {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 742,
-      "symbol": "DispatchQueue.asyncOnce(token:block:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Call/Call.swift",
-      "line": 753,
-      "symbol": "DispatchQueue.removeOnceToken(token:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/wechen3/Development/sources/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 54,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth90p",
