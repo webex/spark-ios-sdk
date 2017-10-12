@@ -29,7 +29,8 @@ public extension Call {
         return self._uuid
     }
     
-    /// Update Audio Session for CallKit.
+    /// Update audio session for CallKit.
+    /// This must be called on [provider:didActivateAudioSession:](https://developer.apple.com/documentation/callkit/cxproviderdelegate/1833280-provider) to reactivate the audio session.
     ///
     /// - since: 1.3.0
     public func updateAudioSession() {
