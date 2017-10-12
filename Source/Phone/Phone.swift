@@ -51,12 +51,19 @@ public class Phone {
     ///
     /// - since: 1.3.0
     public enum DefaultBandwidth: UInt32 {
+        //
         case maxBandwidth90p = 177000
+        //
         case maxBandwidth180p = 384000
+        //
         case maxBandwidth360p = 768000
+        //
         case maxBandwidth720p = 2000000
+        //
         case maxBandwidth1080p = 3000000
+        //
         case maxBandwidthSession = 4000000
+        //
         case maxBandwidthAudio = 64000
     }
     
