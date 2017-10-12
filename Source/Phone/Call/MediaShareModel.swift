@@ -48,24 +48,6 @@ struct MediaShareModel {
         var released: String?
         var requested: String?
         var requester: ParticipantModel?
-        
-        func handleFloorChange(oldFloor:MediaShareFloor?, isGrantedHandler: ((Bool) -> Void)?) {
-            if oldFloor == nil || (oldFloor != nil && oldFloor?.disposition != self.disposition) {
-                if self.disposition == MediaShareModel.ShareFloorDisposition.granted {
-                    isGrantedHandler?(true)
-                } else if self.disposition == MediaShareModel.ShareFloorDisposition.released {
-                    isGrantedHandler?(false)
-                } else {
-                    SDKLogger.shared.error("Failure: floor dispostion is unknown.")
-                }
-            } else if let oldGranted = oldFloor?.granted, let newGranted = self.granted, oldGranted != newGranted {
-                //if the disposition of both oldFloor and newFloor
-                //are granted, but the granted time is not the same, we believe they are not the same floor. We should send
-                //the old floor released notifcaiton first, then send the new floor granted notification.
-                isGrantedHandler?(false)
-                isGrantedHandler?(true)
-            }
-        }
     }
     
     var shareType: MediaShareType?
@@ -91,7 +73,7 @@ extension MediaShareModel: Mappable {
             guard let type = value as? String else {
                 return nil
             }
-            return type == "content" ? MediaShareModel.MediaShareType.screen:MediaShareModel.MediaShareType(rawValue: type.lowercased())
+            return type == "content" ? MediaShareModel.MediaShareType.screen : MediaShareModel.MediaShareType(rawValue: type.lowercased())
         }
         
         func transformToJSON(_ value: MediaShareModel.MediaShareType?) -> String? {

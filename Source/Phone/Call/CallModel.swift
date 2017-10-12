@@ -99,16 +99,12 @@ struct CallModel {
         return self.myself?.enableDTMF ?? false
     }
     
-    var isGrantedMediaShares: Bool {
-        return (self.mediaShares?.count ?? 0) > 0
-    }
-    
     var isGrantedScreenShare: Bool {
         return self.screenMediaShare != nil
     }
     
     var screenMediaShare: MediaShareModel? {
-        guard mediaShares != nil else {
+        guard self.mediaShares != nil else {
             return nil
         }
         for mediaShare in self.mediaShares ?? [] where mediaShare.shareType == MediaShareModel.MediaShareType.screen && mediaShare.shareFloor?.granted != nil {
