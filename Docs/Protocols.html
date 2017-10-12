@@ -13,7 +13,7 @@
     <a title="Protocols  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -41,6 +41,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/Capabilities.html">– Capabilities</a>
@@ -74,6 +77,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
@@ -113,10 +119,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -202,9 +216,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P8SparkSDK26OAuthAuthenticatorDelegate"></a>
+                    <a name="/s:8SparkSDK26OAuthAuthenticatorDelegateP"></a>
                     <a name="//apple_ref/swift/Protocol/OAuthAuthenticatorDelegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P8SparkSDK26OAuthAuthenticatorDelegate">OAuthAuthenticatorDelegate</a>
+                    <a class="token" href="#/s:8SparkSDK26OAuthAuthenticatorDelegateP">OAuthAuthenticatorDelegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -213,6 +227,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A delegate to handle OAuth events.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -239,9 +254,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P8SparkSDK6Logger"></a>
+                    <a name="/s:8SparkSDK6LoggerP"></a>
                     <a name="//apple_ref/swift/Protocol/Logger" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P8SparkSDK6Logger">Logger</a>
+                    <a class="token" href="#/s:8SparkSDK6LoggerP">Logger</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -250,6 +265,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A protocol for logging in the SDK.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -276,9 +292,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P8SparkSDK12OAuthStorage"></a>
+                    <a name="/s:8SparkSDK12OAuthStorageP"></a>
                     <a name="//apple_ref/swift/Protocol/OAuthStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P8SparkSDK12OAuthStorage">OAuthStorage</a>
+                    <a class="token" href="#/s:8SparkSDK12OAuthStorageP">OAuthStorage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -287,6 +303,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A protocol represents a storage mechanism for OAuth authorization information</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -313,9 +330,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P8SparkSDK13Authenticator"></a>
+                    <a name="/s:8SparkSDK13AuthenticatorP"></a>
                     <a name="//apple_ref/swift/Protocol/Authenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P8SparkSDK13Authenticator">Authenticator</a>
+                    <a class="token" href="#/s:8SparkSDK13AuthenticatorP">Authenticator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -325,6 +342,7 @@
                       <div class="abstract">
                         <p>A protocol for generic authentication strategies in Cisco Spark. Each authentication strategy
 is responsible for providing an accessToken used throughout this SDK.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -351,9 +369,9 @@ is responsible for providing an accessToken used throughout this SDK.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:P8SparkSDK14JWTAuthStorage"></a>
+                    <a name="/s:8SparkSDK14JWTAuthStorageP"></a>
                     <a name="//apple_ref/swift/Protocol/JWTAuthStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:P8SparkSDK14JWTAuthStorage">JWTAuthStorage</a>
+                    <a class="token" href="#/s:8SparkSDK14JWTAuthStorageP">JWTAuthStorage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -362,6 +380,7 @@ is responsible for providing an accessToken used throughout this SDK.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A protocol represents a storage mechanism for JWT authorization information</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -386,8 +405,8 @@ is responsible for providing an accessToken used throughout this SDK.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

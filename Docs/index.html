@@ -13,7 +13,7 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -41,6 +41,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/Capabilities.html">– Capabilities</a>
@@ -74,6 +77,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
@@ -113,10 +119,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -193,7 +207,7 @@
         <section>
           <section class="section">
             
-            <h1 id='cisco-spark-ios-sdk' class='heading'>Cisco Spark iOS SDK</h1>
+            <a href='#cisco-spark-ios-sdk' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='cisco-spark-ios-sdk'>Cisco Spark iOS SDK</h1>
 
 <p><a href="https://cocoapods.org/pods/SparkSDK"><img src="https://img.shields.io/cocoapods/v/SparkSDK.svg" alt="CocoaPods"></a>
 <a href="https://travis-ci.org/ciscospark/spark-ios-sdk"><img src="https://travis-ci.org/ciscospark/spark-ios-sdk.svg?branch=master" alt="Travis CI"></a>
@@ -202,14 +216,14 @@
 <p>The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.</p>
 
 <p>This SDK is written in <a href="https://developer.apple.com/swift">Swift 3</a> and requires <strong>iOS 9</strong> or later.</p>
-<h2 id='table-of-contents' class='heading'>Table of Contents</h2>
+<a href='#table-of-contents' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='table-of-contents'>Table of Contents</h2>
 
 <ul>
 <li><a href="#install">Install</a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#license">License</a></li>
 </ul>
-<h2 id='install' class='heading'>Install</h2>
+<a href='#install' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='install'>Install</h2>
 
 <p>Assuming you already have an Xcode project, e.g. <em>MySparkApp</em>, for your iOS app, here are the steps to integrate the Spark iOS SDK into your Xcode project using <a href="http://cocoapods.org">CocoaPods</a>:</p>
 
@@ -234,12 +248,12 @@
 <pre class="highlight shell"><code>pod install
 </code></pre></li>
 </ol>
-<h2 id='usage' class='heading'>Usage</h2>
+<a href='#usage' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='usage'>Usage</h2>
 
 <p>To use the SDK, you will need Cisco Spark integration credentials. If you do not already have a Cisco Spark account, visit <a href="https://developer.ciscospark.com/">Spark for Developers</a> to create your account and <a href="https://developer.ciscospark.com/authentication.html#registering-your-integration">register your integration</a>. Your app will need to authenticate users via an <a href="https://oauth.net/">OAuth</a> grant flow for existing Cisco Spark users or a <a href="https://jwt.io/">JSON Web Token</a> for guest users without a Cisco Spark account.</p>
 
 <p>See the <a href="https://developer.ciscospark.com/sdk-for-ios.html">iOS SDK area</a> of the Spark for Developers site for more information about this SDK.</p>
-<h3 id='example' class='heading'>Example</h3>
+<a href='#example' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='example'>Example</h3>
 
 <p>Here are some examples of how to use the iOS SDK in your app.</p>
 
@@ -337,7 +351,7 @@
 <span class="p">}</span>
 </code></pre></li>
 </ol>
-<h2 id='license' class='heading'>License</h2>
+<a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
 
 <p>&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.</p>
 
@@ -346,8 +360,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

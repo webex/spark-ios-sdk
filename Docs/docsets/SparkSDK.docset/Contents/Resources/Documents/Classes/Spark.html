@@ -14,7 +14,7 @@
     <a title="Spark Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -205,6 +219,7 @@
 <ul>
 <li><em>OAuthAuthenticator</em> - this should be used when the SDK is to be authenticated as a registered user to Cisco Spark cloud.</li>
 </ul>
+
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
    <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
    <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:all"</span>
@@ -224,6 +239,7 @@
 <ul>
 <li><em>JWTAuthenticator</em> - this should be used when the SDK is to be authenticated as a guest user to Cisco Spark cloud.</li>
 </ul>
+
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">authenticator</span> <span class="o">=</span> <span class="kt">JWTAuthenticator</span><span class="p">()</span>
    <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">authenticator</span><span class="p">)</span>
    <span class="o">...</span>
@@ -231,11 +247,13 @@
      <span class="n">authenticator</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
    <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     All APIs on Cisco Spark iOS SDK are expected to run on the application&rsquo;s main thread, unless specified otherwise.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -249,9 +267,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:ZvC8SparkSDK5Spark7versionSS"></a>
+                    <a name="/s:8SparkSDK0A0C7versionSSvZ"></a>
                     <a name="//apple_ref/swift/Variable/version" class="dashAnchor"></a>
-                    <a class="token" href="#/s:ZvC8SparkSDK5Spark7versionSS">version</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C7versionSSvZ">version</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -276,9 +294,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark6loggerGSqPS_6Logger__"></a>
+                    <a name="/s:8SparkSDK0A0C6loggerAA6Logger_pSgv"></a>
                     <a name="//apple_ref/swift/Property/logger" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark6loggerGSqPS_6Logger__">logger</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C6loggerAA6Logger_pSgv">logger</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -303,9 +321,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark13consoleLoggerOS_8LogLevel"></a>
+                    <a name="/s:8SparkSDK0A0C13consoleLoggerAA8LogLevelOv"></a>
                     <a name="//apple_ref/swift/Property/consoleLogger" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark13consoleLoggerOS_8LogLevel">consoleLogger</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C13consoleLoggerAA8LogLevelOv">consoleLogger</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -330,9 +348,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_"></a>
+                    <a name="/s:8SparkSDK0A0C13authenticatorAA13Authenticator_pv"></a>
                     <a name="//apple_ref/swift/Property/authenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_">authenticator</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C13authenticatorAA13Authenticator_pv">authenticator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -358,9 +376,9 @@ It can be used to check and modify authentication state.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark5phoneCS_5Phone"></a>
+                    <a name="/s:8SparkSDK0A0C5phoneAA5PhoneCv"></a>
                     <a name="//apple_ref/swift/Property/phone" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark5phoneCS_5Phone">phone</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C5phoneAA5PhoneCv">phone</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -376,7 +394,7 @@ It can be used to make audio and video calls on Cisco Spark.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n"><a href="../Classes/Spark.html#/s:vC8SparkSDK5Spark13authenticatorPS_13Authenticator_">authenticator</a></span><span class="p">)</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">phone</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="k">self</span><span class="o">.</span><span class="n"><a href="../Classes/Spark.html#/s:8SparkSDK0A0C13authenticatorAA13Authenticator_pv">authenticator</a></span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -386,9 +404,9 @@ It can be used to make audio and video calls on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK5SparkcFT13authenticatorPS_13Authenticator__S0_"></a>
+                    <a name="/s:8SparkSDK0A0CAcA13Authenticator_p13authenticator_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(authenticator:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK5SparkcFT13authenticatorPS_13Authenticator__S0_">init(authenticator:)</a>
+                    <a class="token" href="#/s:8SparkSDK0A0CAcA13Authenticator_p13authenticator_tcfc">init(authenticator:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -397,6 +415,7 @@ It can be used to make audio and video calls on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Constructs a new <em>Spark</em> object with an <em>Authenticator</em>.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -412,34 +431,15 @@ It can be used to make audio and video calls on Cisco Spark.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>authenticator</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The authentication strategy for this SDK.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark5roomsCS_10RoomClient"></a>
+                    <a name="/s:8SparkSDK0A0C5roomsAA10RoomClientCv"></a>
                     <a name="//apple_ref/swift/Property/rooms" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark5roomsCS_10RoomClient">rooms</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C5roomsAA10RoomClientCv">rooms</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -449,16 +449,19 @@ It can be used to make audio and video calls on Cisco Spark.</p>
                       <div class="abstract">
                         <p>Rooms are virtual meeting places in Cisco Spark where people post messages and collaborate to get work done.
 Use <em>rooms</em> to manage the rooms on behalf of the authenticated user.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Memberships API about how to manage people in a room.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Messages API about how post or otherwise manage the content in a room.
@@ -480,9 +483,9 @@ Use <em>rooms</em> to manage the rooms on behalf of the authenticated user.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark6peopleCS_12PersonClient"></a>
+                    <a name="/s:8SparkSDK0A0C6peopleAA12PersonClientCv"></a>
                     <a name="//apple_ref/swift/Property/people" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark6peopleCS_12PersonClient">people</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C6peopleAA12PersonClientCv">people</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -492,16 +495,19 @@ Use <em>rooms</em> to manage the rooms on behalf of the authenticated user.</p>
                       <div class="abstract">
                         <p>People are registered users of Cisco Spark.
 Use <em>people</em>  to find a person on behalf of the authenticated user.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Memberships API about how to manage people in a room.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Messages API about how post or otherwise manage the content in a room.
@@ -523,9 +529,9 @@ Use <em>people</em>  to find a person on behalf of the authenticated user.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark11membershipsCS_16MembershipClient"></a>
+                    <a name="/s:8SparkSDK0A0C11membershipsAA16MembershipClientCv"></a>
                     <a name="//apple_ref/swift/Property/memberships" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark11membershipsCS_16MembershipClient">memberships</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C11membershipsAA16MembershipClientCv">memberships</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -535,16 +541,19 @@ Use <em>people</em>  to find a person on behalf of the authenticated user.</p>
                       <div class="abstract">
                         <p>Memberships represent a person&rsquo;s relationships to rooms.
 Use <em>membership</em> to manage the authenticated user&rsquo;s relationship to rooms.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Rooms API about how to manage rooms.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Messages API about how post or otherwise manage the content in a room.
@@ -566,9 +575,9 @@ Use <em>membership</em> to manage the authenticated user&rsquo;s relationship to
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark8messagesCS_13MessageClient"></a>
+                    <a name="/s:8SparkSDK0A0C8messagesAA13MessageClientCv"></a>
                     <a name="//apple_ref/swift/Property/messages" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark8messagesCS_13MessageClient">messages</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C8messagesAA13MessageClientCv">messages</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -578,16 +587,19 @@ Use <em>membership</em> to manage the authenticated user&rsquo;s relationship to
                       <div class="abstract">
                         <p>Messages are how we communicate in a room.
 Use <em>messages</em> to manage the messages on behalf of the authenticated user.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Rooms API about how to manage rooms.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Memberships API about how to manage people in a room.
@@ -609,9 +621,9 @@ Use <em>messages</em> to manage the messages on behalf of the authenticated user
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark8webhooksCS_13WebhookClient"></a>
+                    <a name="/s:8SparkSDK0A0C8webhooksAA13WebhookClientCv"></a>
                     <a name="//apple_ref/swift/Property/webhooks" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark8webhooksCS_13WebhookClient">webhooks</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C8webhooksAA13WebhookClientCv">webhooks</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -622,6 +634,7 @@ Use <em>messages</em> to manage the messages on behalf of the authenticated user
                         <p>Webhooks allow the application to be notified via HTTP (or HTTPS?) when a specific event occurs in Cisco Spark,
 e.g. a new message is posted into a specific room.
 Use <em>Webhooks</em> to create and manage the webhooks for specific events.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -643,9 +656,9 @@ Use <em>Webhooks</em> to create and manage the webhooks for specific events.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark5teamsCS_10TeamClient"></a>
+                    <a name="/s:8SparkSDK0A0C5teamsAA10TeamClientCv"></a>
                     <a name="//apple_ref/swift/Property/teams" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark5teamsCS_10TeamClient">teams</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C5teamsAA10TeamClientCv">teams</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -655,16 +668,19 @@ Use <em>Webhooks</em> to create and manage the webhooks for specific events.</p>
                       <div class="abstract">
                         <p>Teams are groups of people with a set of rooms that are visible to all members of that team.
 Use <em>teams</em> to create and manage the teams on behalf of the authenticated user.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Team Memberships API about how to manage people in a team.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Memberships API about how to manage people in a room.
@@ -686,9 +702,9 @@ Use <em>teams</em> to create and manage the teams on behalf of the authenticated
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK5Spark15teamMembershipsCS_20TeamMembershipClient"></a>
+                    <a name="/s:8SparkSDK0A0C15teamMembershipsAA20TeamMembershipClientCv"></a>
                     <a name="//apple_ref/swift/Property/teamMemberships" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK5Spark15teamMembershipsCS_20TeamMembershipClient">teamMemberships</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C15teamMembershipsAA20TeamMembershipClientCv">teamMemberships</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -698,16 +714,19 @@ Use <em>teams</em> to create and manage the teams on behalf of the authenticated
                       <div class="abstract">
                         <p>Team Memberships represent a person&rsquo;s relationships to teams.
 Use <em>teamMemberships</em> to create and manage the team membership on behalf of the authenticated user.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Teams API about how to manage teams.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     Rooms API about how to manage rooms.
@@ -731,8 +750,8 @@ Use <em>teamMemberships</em> to create and manage the team membership on behalf 
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

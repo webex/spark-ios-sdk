@@ -39,14 +39,16 @@ public struct MediaOption {
         return MediaOption(local: local, remote: remote)
     }
     
-    /// Constructs an audio and video media option. The render views can be set after call is connected.
+    /// Constructs an audio and video media option with optional render views.
+    /// The render views can be set after call is connected.
     ///
     /// - since: 1.3.0
     public static func audioVideo(renderViews:(local:MediaRenderView,remote:MediaRenderView)? = nil) -> MediaOption {
         return MediaOption(local: renderViews?.local, remote: renderViews?.remote,hasVideo:true)
     }
     
-    /// Constructs an audio,video and screen share media option. The render views can be set after call is connected.
+    /// Constructs an audio, video, and screen share media option with option render views.
+    /// The render views can be set after call is connected.
     ///
     /// - since: 1.3.0
     public static func audioVideoScreenShare(video:(local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil) -> MediaOption {

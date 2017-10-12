@@ -14,7 +14,7 @@
     <a title="TeamClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -201,6 +215,7 @@
                 </div>
               </div>
             <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-teams.html">Teams REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -214,9 +229,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10TeamClient4listFT3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_4Team__T__T_"></a>
+                    <a name="/s:8SparkSDK10TeamClientC4listySiSg3max_So13DispatchQueueCSg5queueyAA15ServiceResponseVySayAA0C0VGGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/list(max:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10TeamClient4listFT3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_4Team__T__T_">list(max:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC4listySiSg3max_So13DispatchQueueCSg5queueyAA15ServiceResponseVySayAA0C0VGGc17completionHandlertF">list(max:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -225,6 +240,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Lists teams to which the authenticated user belongs.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -240,62 +256,15 @@
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>max</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The maximum number of teams in the response.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The queue on which the completion handler is dispatched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10TeamClient6createFT4nameSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_"></a>
+                    <a name="/s:8SparkSDK10TeamClientC6createySS4name_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/create(name:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10TeamClient6createFT4nameSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_">create(name:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC6createySS4name_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">create(name:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -305,11 +274,13 @@
                       <div class="abstract">
                         <p>Creates a team. The authenticated user is automatically added as a member of the team. 
 See the Team Memberships API to learn how to add more people to the team.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see TeamMemebershipClient API
@@ -325,62 +296,15 @@ See the Team Memberships API to learn how to add more people to the team.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>title</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A user-friendly name for the team.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The queue on which the completion handler is dispatched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10TeamClient3getFT6teamIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_"></a>
+                    <a name="/s:8SparkSDK10TeamClientC3getySS6teamId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/get(teamId:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10TeamClient3getFT6teamIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_">get(teamId:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC3getySS6teamId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">get(teamId:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -389,6 +313,7 @@ See the Team Memberships API to learn how to add more people to the team.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Retrieves the details for a team by id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -404,62 +329,15 @@ See the Team Memberships API to learn how to add more people to the team.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>teamId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the team.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The queue on which the completion handler is dispatched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10TeamClient6updateFT6teamIdSS4nameSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_"></a>
+                    <a name="/s:8SparkSDK10TeamClientC6updateySS6teamId_SS4nameSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/update(teamId:name:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10TeamClient6updateFT6teamIdSS4nameSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_4Team_T__T_">update(teamId:name:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC6updateySS6teamId_SS4nameSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">update(teamId:name:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -468,6 +346,7 @@ See the Team Memberships API to learn how to add more people to the team.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Updates the details for a team by id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -483,74 +362,15 @@ See the Team Memberships API to learn how to add more people to the team.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>teamId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The team id.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>name</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A user-friendly name for the team.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The queue on which the completion handler is dispatched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK10TeamClient6deleteFT6teamIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseP__T__T_"></a>
+                    <a name="/s:8SparkSDK10TeamClientC6deleteySS6teamId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyypGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/delete(teamId:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK10TeamClient6deleteFT6teamIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseP__T__T_">delete(teamId:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC6deleteySS6teamId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyypGc17completionHandlertF">delete(teamId:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -559,6 +379,7 @@ See the Team Memberships API to learn how to add more people to the team.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Deletes a team by id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -574,53 +395,6 @@ See the Team Memberships API to learn how to add more people to the team.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>teamId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The team id.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The queue on which the completion handler is dispatched.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -629,8 +403,8 @@ See the Team Memberships API to learn how to add more people to the team.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

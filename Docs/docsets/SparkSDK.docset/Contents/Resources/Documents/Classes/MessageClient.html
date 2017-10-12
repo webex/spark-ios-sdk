@@ -14,7 +14,7 @@
     <a title="MessageClient Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -114,10 +120,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -201,6 +215,7 @@
                 </div>
               </div>
             <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-messages.html">Messages REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -214,9 +229,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4listFT6roomIdSS6beforeGSqSS_13beforeMessageGSqSS_3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_7Message__T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4listySS6roomId_SSSg6beforeAF0hC0SiSg3maxSo13DispatchQueueCSg5queueyAA15ServiceResponseVySayAA0C0VGGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/list(roomId:before:beforeMessage:max:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4listFT6roomIdSS6beforeGSqSS_13beforeMessageGSqSS_3maxGSqSi_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseGSaVS_7Message__T__T_">list(roomId:before:beforeMessage:max:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4listySS6roomId_SSSg6beforeAF0hC0SiSg3maxSo13DispatchQueueCSg5queueyAA15ServiceResponseVySayAA0C0VGGc17completionHandlertF">list(roomId:before:beforeMessage:max:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -227,6 +242,7 @@
                         <p>Lists all messages in a room by room Id.
 If present, it includes the associated media content attachment for each message.
 The list sorts the messages in descending order by creation date.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -242,98 +258,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>roomId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the room.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>before</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, only list messages sent only before this date and time, in ISO8601 format.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>beforeMessage</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>if not nil, only list messages sent only before this message by id.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>max</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The maximum number of messages in the response.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT6roomIdSS4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postySS6roomId_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(roomId:text:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT6roomIdSS4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(roomId:text:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postySS6roomId_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(roomId:text:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -342,6 +275,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a plain text message, and optionally, a media content attachment, to a room by room Id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -357,86 +291,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>roomId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the room where the message is to be posted.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>text</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The plain text message to be posted to the room.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT6roomIdSS5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postySS6roomId_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(roomId:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT6roomIdSS5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(roomId:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postySS6roomId_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(roomId:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -445,6 +308,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a room by room Id without text.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -460,74 +324,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>roomId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the room.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT8personIdSS4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postySS8personId_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(personId:text:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT8personIdSS4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(personId:text:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postySS8personId_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(personId:text:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -536,6 +341,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -551,86 +357,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>personId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the recipient of this private 1:1 message.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>text</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The plain text message to post to the recipient.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT8personIdSS5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postySS8personId_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(personId:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT8personIdSS5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(personId:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postySS8personId_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(personId:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -639,6 +374,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a person by person Id without text.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -654,74 +390,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>personId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the recipient of this media content.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT11personEmailCS_12EmailAddress4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postyAA12EmailAddressC06personF0_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(personEmail:text:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT11personEmailCS_12EmailAddress4textSS5filesGSqSS_5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(personEmail:text:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postyAA12EmailAddressC06personF0_SS4textSSSg5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(personEmail:text:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -730,6 +407,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -745,86 +423,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>personEmail</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The email address of the recipient when sending a private 1:1 message.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>text</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The plain text message to post to the room.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient4postFT11personEmailCS_12EmailAddress5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC4postyAA12EmailAddressC06personF0_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/post(personEmail:files:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient4postFT11personEmailCS_12EmailAddress5filesSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">post(personEmail:files:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC4postyAA12EmailAddressC06personF0_SS5filesSo13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">post(personEmail:files:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -833,6 +440,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Posts a media content attachment to a person by email address without text.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -848,74 +456,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>personEmail</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The email address of the recipient of this media content.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>files</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient3getFT9messageIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC3getySS9messageId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/get(messageId:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient3getFT9messageIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseVS_7Message_T__T_">get(messageId:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC3getySS9messageId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyAA0C0VGc17completionHandlertF">get(messageId:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -924,6 +473,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Retrieves the details for a message by message Id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -939,62 +489,15 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>messageId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the message.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK13MessageClient6deleteFT9messageIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseP__T__T_"></a>
+                    <a name="/s:8SparkSDK13MessageClientC6deleteySS9messageId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyypGc17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/delete(messageId:queue:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK13MessageClient6deleteFT9messageIdSS5queueGSqCSo13DispatchQueue_17completionHandlerFGVS_15ServiceResponseP__T__T_">delete(messageId:queue:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC6deleteySS9messageId_So13DispatchQueueCSg5queueyAA15ServiceResponseVyypGc17completionHandlertF">delete(messageId:queue:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -1003,6 +506,7 @@ The list sorts the messages in descending order by creation date.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Deletes a message by message id.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1018,53 +522,6 @@ The list sorts the messages in descending order by creation date.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>messageId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>The identifier of the message.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>queue</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application&rsquo;s main thread.</p>
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>A closure to be executed once the request has finished.</p>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div>
-                        <h4>Return Value</h4>
-                        <p>Void</p>
-                      </div>
                     </section>
                   </div>
                 </li>
@@ -1073,8 +530,8 @@ The list sorts the messages in descending order by creation date.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

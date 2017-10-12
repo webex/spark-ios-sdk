@@ -47,7 +47,7 @@ public class Phone {
         case environment
     }
     
-    /// The enumeration of suggest default bandwidth.
+    /// The enumeration of common bandwidth choices.
     ///
     /// - since: 1.3.0
     public enum DefaultBandwidth: UInt32 {
@@ -60,19 +60,25 @@ public class Phone {
         case maxBandwidthAudio = 64000
     }
     
-    /// Max bandwidth(TIAS) in unit bps for the call.
-    /// Only applicable if set before start of call.
-    /// bandwidth set to 0 media engine will set it to the default value,
-    /// audio defalut value is 64 * 1000
-    /// for video is 2000*1000
-    /// screen share defalut is 4000 * 1000
+    /// The max bandwidth for audio in unit bps for the call.
+    /// Only effective if set before the start of call.
+    /// if 0, default value of 64 * 1000 is used.
+    ///
     /// - since: 1.3.0
     public var audioMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidthAudio.rawValue
     
+    /// The max bandwidth for video in unit bps for the call.
+    /// Only effective if set before the start of call.
+    /// if 0, default value of 2000*1000 is used.
+    ///
     /// - since: 1.3.0
     public var videoMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidth720p.rawValue
     
-   /// - since: 1.3.0
+    /// The max bandwidth for screen sharing in unit bps for the call.
+    /// Only effective if set before the start of call.
+    /// if 0, default value of 4000*1000 is used.
+    ///
+    /// - since: 1.3.0
     public var screenShareMaxBandwidth: UInt32 = DefaultBandwidth.maxBandwidthSession.rawValue
     
     /// Default camera facing mode of this phone, used as the default when dialing or answering a call.

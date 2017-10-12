@@ -13,7 +13,7 @@
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -41,6 +41,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/Capabilities.html">– Capabilities</a>
@@ -74,6 +77,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
@@ -113,10 +119,18 @@
             </ul>
           </li>
           <li class="nav-group-name">
+            <a href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -202,9 +216,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK10TeamClient"></a>
+                    <a name="/s:8SparkSDK10TeamClientC"></a>
                     <a name="//apple_ref/swift/Class/TeamClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK10TeamClient">TeamClient</a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC">TeamClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -213,6 +227,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-teams.html">Teams REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -239,9 +254,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK4Call"></a>
+                    <a name="/s:8SparkSDK4CallC"></a>
                     <a name="//apple_ref/swift/Class/Call" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK4Call">Call</a>
+                    <a class="token" href="#/s:8SparkSDK4CallC">Call</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -252,6 +267,7 @@
                         <p>A Call represents a media call on Cisco Spark.</p>
 
 <p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
+
 <pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
     <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
     <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
@@ -273,6 +289,7 @@
 </code></pre>
 
 <p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
+
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
       <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -284,16 +301,19 @@
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see Phone API about how to create calls.
 
 </div>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -320,9 +340,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK22JWTAuthKeychainStorage"></a>
+                    <a name="/s:8SparkSDK22JWTAuthKeychainStorageC"></a>
                     <a name="//apple_ref/swift/Class/JWTAuthKeychainStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK22JWTAuthKeychainStorage">JWTAuthKeychainStorage</a>
+                    <a class="token" href="#/s:8SparkSDK22JWTAuthKeychainStorageC">JWTAuthKeychainStorage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -331,6 +351,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A JWTAuthStorage implementation based on the iOS device keychain.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -357,9 +378,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK5Phone"></a>
+                    <a name="/s:8SparkSDK5PhoneC"></a>
                     <a name="//apple_ref/swift/Class/Phone" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK5Phone">Phone</a>
+                    <a class="token" href="#/s:8SparkSDK5PhoneC">Phone</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -371,6 +392,7 @@
 The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
+
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
@@ -379,6 +401,7 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -405,9 +428,9 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK18OAuthAuthenticator"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC"></a>
                     <a name="//apple_ref/swift/Class/OAuthAuthenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK18OAuthAuthenticator">OAuthAuthenticator</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC">OAuthAuthenticator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -416,12 +439,14 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An <a href="https://oauth.net/2/">OAuth</a> based authentication strategy
-is to be used to authenticate a user on Cisco Spark.</p>
+for authenticating a user on Cisco Spark.</p>
+
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -448,9 +473,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK13WebhookClient"></a>
+                    <a name="/s:8SparkSDK13WebhookClientC"></a>
                     <a name="//apple_ref/swift/Class/WebhookClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK13WebhookClient">WebhookClient</a>
+                    <a class="token" href="#/s:8SparkSDK13WebhookClientC">WebhookClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -459,6 +484,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-webhooks.html">Webhooks REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -485,9 +511,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK13MessageClient"></a>
+                    <a name="/s:8SparkSDK13MessageClientC"></a>
                     <a name="//apple_ref/swift/Class/MessageClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK13MessageClient">MessageClient</a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC">MessageClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -496,6 +522,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-messages.html">Messages REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -522,9 +549,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK16MembershipClient"></a>
+                    <a name="/s:8SparkSDK16MembershipClientC"></a>
                     <a name="//apple_ref/swift/Class/MembershipClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK16MembershipClient">MembershipClient</a>
+                    <a class="token" href="#/s:8SparkSDK16MembershipClientC">MembershipClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -533,6 +560,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-memberships.html">Room Memberships REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -559,9 +587,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK12EmailAddress"></a>
+                    <a name="/s:8SparkSDK12EmailAddressC"></a>
                     <a name="//apple_ref/swift/Class/EmailAddress" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK12EmailAddress">EmailAddress</a>
+                    <a class="token" href="#/s:8SparkSDK12EmailAddressC">EmailAddress</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -570,6 +598,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A data type represents an email address with validation and equatable implementation.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -596,9 +625,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK16JWTAuthenticator"></a>
+                    <a name="/s:8SparkSDK16JWTAuthenticatorC"></a>
                     <a name="//apple_ref/swift/Class/JWTAuthenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK16JWTAuthenticator">JWTAuthenticator</a>
+                    <a class="token" href="#/s:8SparkSDK16JWTAuthenticatorC">JWTAuthenticator</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -608,6 +637,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
                       <div class="abstract">
                         <p>A <a href="https://jwt.io/introduction">JSON Web Token</a> (JWT) based authentication strategy
 is to be used to authenticate a guest user on Cisco Spark.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -634,9 +664,9 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK12PersonClient"></a>
+                    <a name="/s:8SparkSDK12PersonClientC"></a>
                     <a name="//apple_ref/swift/Class/PersonClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK12PersonClient">PersonClient</a>
+                    <a class="token" href="#/s:8SparkSDK12PersonClientC">PersonClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -645,6 +675,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-people.html">People REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -671,9 +702,9 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK20OAuthKeychainStorage"></a>
+                    <a name="/s:8SparkSDK20OAuthKeychainStorageC"></a>
                     <a name="//apple_ref/swift/Class/OAuthKeychainStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK20OAuthKeychainStorage">OAuthKeychainStorage</a>
+                    <a class="token" href="#/s:8SparkSDK20OAuthKeychainStorageC">OAuthKeychainStorage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -682,6 +713,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An OAuthStorage implementation based on the iOS device keychain.</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -708,9 +740,9 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK5Spark"></a>
+                    <a name="/s:8SparkSDK0A0C"></a>
                     <a name="//apple_ref/swift/Class/Spark" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK5Spark">Spark</a>
+                    <a class="token" href="#/s:8SparkSDK0A0C">Spark</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -723,6 +755,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
 <ul>
 <li><em>OAuthAuthenticator</em> - this should be used when the SDK is to be authenticated as a registered user to Cisco Spark cloud.</li>
 </ul>
+
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">clientId</span> <span class="o">=</span> <span class="s">"Def123456..."</span>
    <span class="k">let</span> <span class="nv">clientSecret</span> <span class="o">=</span> <span class="s">"fed456..."</span>
    <span class="k">let</span> <span class="nv">scope</span> <span class="o">=</span> <span class="s">"spark:all"</span>
@@ -742,6 +775,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
 <ul>
 <li><em>JWTAuthenticator</em> - this should be used when the SDK is to be authenticated as a guest user to Cisco Spark cloud.</li>
 </ul>
+
 <pre class="highlight swift"><code>   <span class="k">let</span> <span class="nv">authenticator</span> <span class="o">=</span> <span class="kt">JWTAuthenticator</span><span class="p">()</span>
    <span class="k">let</span> <span class="nv">spark</span> <span class="o">=</span> <span class="kt">Spark</span><span class="p">(</span><span class="nv">authenticator</span><span class="p">:</span> <span class="n">authenticator</span><span class="p">)</span>
    <span class="o">...</span>
@@ -749,11 +783,13 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
      <span class="n">authenticator</span><span class="o">.</span><span class="nf">authorizedWith</span><span class="p">(</span><span class="nv">jwt</span><span class="p">:</span> <span class="n">myJwt</span><span class="p">)</span>
    <span class="p">}</span>
 </code></pre>
+
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     All APIs on Cisco Spark iOS SDK are expected to run on the application&rsquo;s main thread, unless specified otherwise.
 
 </div>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -780,9 +816,9 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK10RoomClient"></a>
+                    <a name="/s:8SparkSDK10RoomClientC"></a>
                     <a name="//apple_ref/swift/Class/RoomClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK10RoomClient">RoomClient</a>
+                    <a class="token" href="#/s:8SparkSDK10RoomClientC">RoomClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -791,6 +827,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-rooms.html">Rooms REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -817,9 +854,9 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:C8SparkSDK20TeamMembershipClient"></a>
+                    <a name="/s:8SparkSDK20TeamMembershipClientC"></a>
                     <a name="//apple_ref/swift/Class/TeamMembershipClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:C8SparkSDK20TeamMembershipClient">TeamMembershipClient</a>
+                    <a class="token" href="#/s:8SparkSDK20TeamMembershipClientC">TeamMembershipClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -828,6 +865,7 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-team-memberships.html">TeamMemberships REST API</a> .</p>
+
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -852,8 +890,8 @@ is to be used to authenticate a guest user on Cisco Spark.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-16)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-11)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
