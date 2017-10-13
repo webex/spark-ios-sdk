@@ -736,20 +736,30 @@ public class Call {
                     membership.model = participant
                     if membership.state != oldState {
                         if membership.state == CallMembership.State.joined {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.joined(membership))
+                            DispatchQueue.main.async {
+                                self.onCallMembershipChanged?(CallMembershipChangedEvent.joined(membership))
+                            }
                         }
                         else if membership.state == CallMembership.State.left {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.left(membership))
+                            DispatchQueue.main.async {
+                                self.onCallMembershipChanged?(CallMembershipChangedEvent.left(membership))
+                            }
                         }
                         else if membership.state == CallMembership.State.declined {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.declined(membership))
+                            DispatchQueue.main.async {
+                                self.onCallMembershipChanged?(CallMembershipChangedEvent.declined(membership))
+                            }
                         }
                     }
                     if membership.sendingAudio != sendingAudio {
-                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingAudio(membership))
+                        DispatchQueue.main.async {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingAudio(membership))
+                        }
                     }
                     if membership.sendingVideo != sendingVideo {
-                        self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
+                        DispatchQueue.main.async {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
+                        }
                     }
                     newMemberships.append(membership)
                 }

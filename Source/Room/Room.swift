@@ -57,7 +57,13 @@ public struct Room {
     /// Last activity of this room.
     ///
     /// - since: 1.2.0
+    @available(*, deprecated: 1.3.0, renamed: "lastActivityTimestamp")
     public var lastActivity: String?
+    
+    /// The timestamp that last activity of this room.
+    ///
+    /// - since: 1.3.0
+    public var lastActivityTimestamp: Date?
     
     /// The timestamp that this room being created.
     ///
@@ -87,6 +93,7 @@ extension Room: Mappable {
         type <- (map["type"], EnumTransform<RoomType>())
         isLocked <- map["isLocked"]
         lastActivity <- map["lastActivity"]
+        lastActivityTimestamp <- (map["lastActivity"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         teamId <- map["teamId"]
     }
