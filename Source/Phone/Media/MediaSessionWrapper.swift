@@ -23,8 +23,16 @@ import Wme
 
 class MediaSessionWrapper {
     
-    private var preview: Bool = false
-    private var running: Bool = false
+    enum Status {
+        case initial, preview, prepare, running
+    }
+    
+    enum MediaType {
+        case video((local:MediaRenderView, remote:MediaRenderView)?)
+        case screenShare(MediaRenderView?)
+    }
+
+    private var status: Status = .initial
     
     private let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
@@ -68,6 +76,25 @@ class MediaSessionWrapper {
         return Int32(mediaSession.remoteVideoViewWidth)
     }
     
+    var remoteScreenShareViewHeight: Int32 {
+        return Int32(mediaSession.screenShareViewHeight)
+    }
+    
+    var remoteScreenShareViewWidth: Int32 {
+        return Int32(mediaSession.screenShareViewWidth)
+    }
+    
+    var videoViews: (local:MediaRenderView,remote:MediaRenderView)? {
+        if let localView = mediaSession.localVideoView, let remoteView = mediaSession.remoteVideoView {
+            return (local:localView, remote:remoteView)
+        }
+        return nil
+    }
+    
+    var screenShareView: MediaRenderView? {
+        return mediaSession.screenShareView
+    }
+    
     // MARK: - Audio & Video
     var audioMuted: Bool {
         get {
@@ -105,6 +132,15 @@ class MediaSessionWrapper {
         }
     }
     
+    var screenShareOutputMuted: Bool {
+        get {
+            return mediaSession.screenShareOutputMuted
+        }
+        set {
+            newValue ? mediaSession.muteScreenShareOutput() : mediaSession.unmuteScreenShareOutput()
+        }
+    }
+    
     // MARK: - Camera
     func setFacingMode(mode: Phone.FacingMode) {
         mediaSession.setCamrea(mode == .user)
@@ -124,8 +160,8 @@ class MediaSessionWrapper {
     }
     
     func startPreview(view: MediaRenderView, phone: Phone) -> Bool {
-        if !self.preview && !self.running {
-            self.preview = true
+        if self.status == .initial {
+            self.status = .preview
             mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
             mediaSession.sendVideo = true
             mediaSession.localVideoView = view
@@ -140,43 +176,92 @@ class MediaSessionWrapper {
     }
     
     func stopPreview() {
-        if self.preview {
+        if self.status == .preview {
             mediaSession.stopLocalVideoRenderView(true)
             mediaSession.localVideoView = nil
             mediaSession.sendVideo = false
             mediaSession.disconnectFromCloud()
-            self.preview = false
+            self.status = .initial
         }
     }
     
     // MARK: - lifecycle
     func prepare(option: MediaOption, phone: Phone) {
-        self.running = true;        
-        if self.preview {
+        if self.status == .preview {
             self.stopPreview()
         }
-        if option.hasVideo {
-            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue)
-            mediaSession.localVideoView = option.localVideoView
-            mediaSession.remoteVideoView = option.remoteVideoView
+        if self.status == .initial {
+            self.status = .prepare
+            
+            let mediaConfig :MediaCapabilityConfig = MediaCapabilityConfig()
+            mediaConfig.audioMaxBandwidth = phone.audioMaxBandwidth
+            
+            if option.hasVideo && option.hasScreenShare {
+                mediaConfig.videoMaxBandwidth = phone.videoMaxBandwidth
+                mediaConfig.screenShareMaxBandwidth = phone.screenShareMaxBandwidth
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue | MediaConstraintFlag.screenShare.rawValue, withCapability:mediaConfig)
+                mediaSession.localVideoView = option.localVideoView
+                mediaSession.remoteVideoView = option.remoteVideoView
+                mediaSession.screenShareView = option.screenShareView
+            }
+            else if option.hasVideo {
+                mediaConfig.videoMaxBandwidth = phone.videoMaxBandwidth
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue | MediaConstraintFlag.video.rawValue, withCapability:mediaConfig)
+                mediaSession.localVideoView = option.localVideoView
+                mediaSession.remoteVideoView = option.remoteVideoView
+            }
+            else {
+                mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue, withCapability:mediaConfig)
+            }
+            mediaSession.createMediaConnection()
+            mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
+            mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
         }
-        else {
-            mediaSession.mediaConstraint = MediaConstraint(constraint: MediaConstraintFlag.audio.rawValue)
-        }
-        mediaSession.createMediaConnection()
-        mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
-        mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
     }
     
     func startMedia(call: Call) {
-        mediaSessionObserver = MediaSessionObserver(call: call)
-        mediaSessionObserver?.startObserving(mediaSession)
-        mediaSession.connectToCloud()
+        if self.status == .prepare {
+            self.status = .running
+            mediaSessionObserver = MediaSessionObserver(call: call)
+            mediaSessionObserver?.startObserving(mediaSession)
+            mediaSession.connectToCloud()
+        }
     }
     
     func stopMedia() {
         mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
-        self.running = false
+        self.status = .initial
+    }
+    
+    func updateMedia(mediaType:MediaType) {
+        guard self.status != .preview || self.status != .initial else {
+            return
+        }
+        switch mediaType {
+        case .video(let renderViews):
+            mediaSession.updateSdpDirection(withLocalView: renderViews?.local, remoteView: renderViews?.remote)
+            break
+        case .screenShare(let renderView):
+            mediaSession.updateSdpDirection(withScreenShare: renderView)
+            break
+        }
+    }
+    
+    func restartAudio() {
+        mediaSession.stopAudio()
+        mediaSession.startAudio()
+    }
+    
+    func joinScreenShare(_ shareId: String) {
+        if mediaSession.mediaConstraint.hasScreenShare {
+            mediaSession.joinScreenShare(shareId)
+        }
+    }
+    
+    func leaveScreenShare(_ shareId: String) {
+        if mediaSession.mediaConstraint.hasScreenShare {
+            mediaSession.leaveScreenShare(shareId)
+        }
     }
 }

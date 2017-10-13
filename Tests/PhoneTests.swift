@@ -26,17 +26,22 @@ class PhoneTests: XCTestCase {
     
     private var fixture: SparkTestFixture! = SparkTestFixture.sharedInstance
     private var phone: Phone!
-    
+    private var localView:MediaRenderView?
+    private var remoteView:MediaRenderView?
     override func setUp() {
         continueAfterFailure = false
         XCTAssertNotNil(fixture)
         phone = fixture.spark.phone
         XCTAssertNotNil(phone)
         XCTAssertTrue(registerPhone())
+        localView = MediaRenderView()
+        remoteView = MediaRenderView()
     }
     
     override func tearDown() {
         XCTAssertTrue(deregisterPhone())
+        localView = nil
+        remoteView = nil
     }
     
     func testWhenRegisterAndDeregisterPhoneThenBothSucceed() {
@@ -44,17 +49,20 @@ class PhoneTests: XCTestCase {
     }
     
     func testWhenRegisterPhoneTwiceThenBothSucceed() {
+        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
         XCTAssertTrue(registerPhone())
     }
     
     func testWhenDeregisterPhoneTwiceThenBothSuceed() {
         XCTAssertTrue(deregisterPhone())
+        Thread.sleep(forTimeInterval: Config.TestcaseInterval)
     }
     
     func testWhenDialThenReturnsSuccessAndHangsUp() {
         if let user = fixture.createUser() {
-            let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+            let mediaOption = MediaOption.audioVideo(local: localView!, remote: remoteView!)
             phone.disableVideoCodecActivation()
+            Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             let call = dialCall(address: user.email.toString(), mediaOption: mediaOption)
             XCTAssertNotNil(call)
             XCTAssertTrue(hangupCall(call: call!))
@@ -65,6 +73,7 @@ class PhoneTests: XCTestCase {
     
     func testWhenDialWithAudioOnlyThenReturnsSuccessAndHangsUp() {
         if let user = fixture.createUser() {
+            Thread.sleep(forTimeInterval: Config.TestcaseInterval)
             let call = dialCall(address: user.email.toString(), mediaOption: MediaOption.audioOnly())
             XCTAssertNotNil(call)
             XCTAssertTrue(hangupCall(call: call!))
@@ -74,7 +83,7 @@ class PhoneTests: XCTestCase {
     }
     
     func testWhenDialWithSipAddressThenReturnsSuccessAndHangsUp() {
-        let mediaOption = MediaOption.audioVideo(local: MediaRenderView(), remote: MediaRenderView())
+        let mediaOption = MediaOption.audioVideo(local: localView!, remote: remoteView!)
         phone.disableVideoCodecActivation()
         let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: mediaOption)
         XCTAssertNotNil(call)
@@ -123,13 +132,18 @@ class PhoneTests: XCTestCase {
     private func dialCall(address: String, mediaOption: MediaOption) -> Call? {
         let expect = expectation(description: "Call dial")
         var call:Call? = nil
-        phone.dial(address, option: mediaOption) { result in
-            call = result.data
-            expect.fulfill()
-        }
+        for _ in 0...Config.TestcaseRetryCount {
+            if call != nil {
+                break
+            }
+            phone.dial(address, option: mediaOption) { result in
+                call = result.data
+                expect.fulfill()
+            }
         
-        waitForExpectations(timeout: 30) { error in
-            XCTAssertNil(error, "Phone dial timed out")
+            waitForExpectations(timeout: 30) { error in
+                XCTAssertNil(error, "Phone dial timed out")
+            }
         }
         return call
     }

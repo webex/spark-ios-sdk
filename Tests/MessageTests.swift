@@ -32,12 +32,19 @@ class MessageTests: XCTestCase {
     private var roomId: String!
     
     private func getISO8601Date() -> String {
+        
+        return getISO8601DateWithDate(Date())
+    }
+    
+    private func getISO8601DateWithDate(_ date:Date) -> String {
         let formatter = DateFormatter()
         let enUSPosixLocale = Locale(identifier: "en_US_POSIX")
         formatter.locale = enUSPosixLocale
+        formatter.timeZone = TimeZone(abbreviation: "GMT")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
-        return formatter.string(from: Date())
+        return formatter.string(from: date)
     }
+
     
     private func validate(message: Message?) {
         XCTAssertNotNil(message)
@@ -166,7 +173,12 @@ class MessageTests: XCTestCase {
     func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
         let message1 = postMessage(roomId: roomId, text: text, files: nil)
         Thread.sleep(forTimeInterval: Config.TestcaseInterval)
-        let now = self.getISO8601Date()
+        var nowDate = Date()
+        if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(3){
+                nowDate = createDate.addingTimeInterval(3)
+        }
+        let now = getISO8601DateWithDate(nowDate)
+        
         let message2 = postMessage(roomId: roomId, text: text, files: nil)
         let messageArray = listMessages(roomId: roomId, before: now, beforeMessage: nil, max: nil)
         XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)

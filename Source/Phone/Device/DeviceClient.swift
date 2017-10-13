@@ -23,7 +23,11 @@ import Foundation
 class DeviceClient {
     
     private let authenticator: Authenticator
-    
+#if INTEGRATIONTEST
+    static let WDM_SERVER_ADDRESS:String = ProcessInfo().environment["WDM_SERVER_ADDRESS"] == nil ? "https://wdm-a.wbx2.com/wdm/api/v1/devices/ios":ProcessInfo().environment["WDM_SERVER_ADDRESS"]!
+#else
+    static let WDM_SERVER_ADDRESS:String = "https://wdm-a.wbx2.com/wdm/api/v1/devices/ios"
+#endif
     init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }
@@ -35,7 +39,7 @@ class DeviceClient {
     func create(deviceInfo: UIDevice, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<DeviceModel>) -> Void) {
         let request = requestBuilder()
             .method(.post)
-            .baseUrl("https://wdm-a.wbx2.com/wdm/api/v1/devices/ios")
+            .baseUrl(DeviceClient.WDM_SERVER_ADDRESS)
             .body(createBody(deviceInfo))
             .queue(queue)
             .build()
@@ -64,6 +68,16 @@ class DeviceClient {
         request.responseJSON(completionHandler)
     }
     
+    func fetchRegion(queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<RegionModel>) -> Void) {
+        let request = requestBuilder()
+            .method(.get)
+            .headers(["Content-Type": "application/json"])
+            .baseUrl("https://ds.ciscospark.com/v1/region")
+            .queue(queue)
+            .build()
+        
+        request.responseObject(completionHandler)
+    }
     
     private func createBody(_ device: UIDevice) -> RequestParameter {
         let deviceName = device.name.isEmpty ? "notset" : device.name
@@ -89,5 +103,5 @@ class DeviceClient {
         
         return RequestParameter(deviceParameters)
     }
-   
+    
 }

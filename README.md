@@ -169,6 +169,59 @@ Here are some examples of how to use the iOS SDK in your app.
     }
     ```
 
+7. Make an room call:
+
+    ```swift
+    spark.phone.dial(roomId, option: MediaOption.audioVideo(local: ..., remote: ...)) { ret in
+        switch ret {
+        case .success(let call):
+            call.onConnected = {
+                // ...
+            }
+            call.onDisconnected = { reason in
+                // ...
+            }
+            call.onCallMembershipChanged = { changed in
+                switch changed {
+                case .joined(let membership):
+                    //
+                case .left(let membership):
+                    //
+                default:
+                    //
+                }                
+            }            
+        case .failure(let error):
+            // failure
+        }
+    }
+    ```
+    
+8. Screen share (view only):
+
+    ```swift
+    spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideoScreenShare(video: (local: ..., remote: ...))) { ret in
+        switch ret {
+        case .success(let call):
+            call.onConnected = {
+                // ...
+            }
+            call.onDisconnected = { reason in
+                // ...
+            }
+            call.onMediaChanged = { changed in
+                switch changed {
+                    ...
+                case .remoteSendingScreenShare(let sending):
+                    call.screenShareRenderView = sending ? view : nil
+                }
+            }
+        case .failure(let error):
+            // failure
+        }
+    }
+    ```
+
 ## License
 
 &copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.

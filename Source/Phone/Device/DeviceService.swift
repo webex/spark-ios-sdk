@@ -27,6 +27,10 @@ struct Device {
     let locusServiceUrl: URL
     let calliopeDiscoveryServiceUrl: URL
     let metricsServiceUrl: URL
+    let conversationServiceUrl: URL
+    let deviceType:String
+    var regionCode: String
+    var countryCode: String
 }
 
 class DeviceService {
@@ -40,6 +44,7 @@ class DeviceService {
     var device: Device?
     
     func registerDevice(phone: Phone, queue: DispatchQueue, completionHandler: @escaping (Result<Device>) -> Void) {
+        
         let registrationHandler: (ServiceResponse<DeviceModel>) -> Void = { response in
             switch response.result {
             case .success(let model):
@@ -50,14 +55,26 @@ class DeviceService {
                     let servicesDictionary = model.services,
                     let locusServiceUrlString = servicesDictionary["locusServiceUrl"],
                     let locusServiceUrl = URL(string: locusServiceUrlString),
+                    let conversationServiceUrlString = servicesDictionary["conversationServiceUrl"],
+                    let conversationServiceUrl = URL(string: conversationServiceUrlString),
                     let calliopeDiscoveryServiceUrlString = servicesDictionary["calliopeDiscoveryServiceUrl"],
                     let calliopeDiscoveryServiceUrl = URL(string: calliopeDiscoveryServiceUrlString),
                     let metricsServiceUrlString = servicesDictionary["metricsServiceUrl"],
                     let metricsServiceUrl = URL(string: metricsServiceUrlString) {
-                    let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl)
-                    self.device = device
-                    UserDefaults.sharedInstance.deviceUrl = deviceUrlString
-                    completionHandler(Result.success(device));
+                    
+                    self.client.fetchRegion(queue: queue) { regionRes in
+                        var regionCode = "US-WEST";
+                        var countryCode = "US";
+                        if let model = regionRes.result.data, let rc = model.regionCode, let cc = model.countryCode {
+                            regionCode = rc
+                            countryCode = cc
+                        }
+                        let device = Device(phone: phone, deviceUrl: deviceUrl, webSocketUrl: webSocketUrl, locusServiceUrl: locusServiceUrl, calliopeDiscoveryServiceUrl: calliopeDiscoveryServiceUrl, metricsServiceUrl: metricsServiceUrl, conversationServiceUrl: conversationServiceUrl, deviceType: UIDevice.current.kind, regionCode: regionCode, countryCode: countryCode)
+                        self.device = device
+                        UserDefaults.sharedInstance.deviceUrl = deviceUrlString
+                        completionHandler(Result.success(device))
+                    }
+                    
                 } else {
                     let error = SparkError.serviceFailed(code: -7000, reason: "Missing required URLs when registering device")
                     SDKLogger.shared.error("Failed to register device", error: error)
@@ -68,6 +85,7 @@ class DeviceService {
                 completionHandler(Result.failure(error))
             }
         }
+        
         if let deviceUrl = UserDefaults.sharedInstance.deviceUrl {
             self.client.update(registeredDeviceUrl: deviceUrl, deviceInfo: UIDevice.current, queue: queue, completionHandler: registrationHandler)
         }
@@ -93,5 +111,19 @@ class DeviceService {
         }
         self.device = nil
     }
+}
+
+fileprivate extension UIDevice {
+    
+    var kind: String {
+        if self.userInterfaceIdiom == .pad {
+            return "IPAD"
+        } else if self.userInterfaceIdiom == .phone {
+            return "IPHONE"
+        } else {
+            return "UNKNOWN"
+        }
+    }
+    
 }
 

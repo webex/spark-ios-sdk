@@ -38,3 +38,24 @@ extension DeviceModel: Mappable {
         services <- map["services"]
     }
 }
+
+struct RegionModel  {
+    var clientAddress: String?
+    var clientRegion: String?
+    var countryCode: String?
+    var regionCode: String?
+    var timezone: String?
+}
+
+extension RegionModel: Mappable {
+    init?(map: Map){
+    }
+    
+    mutating func mapping(map: Map) {
+        clientAddress <- map["clientAddress"]
+        clientRegion <- map["clientRegion"]
+        countryCode <- map["countryCode"]
+        regionCode <- map["regionCode"]
+        timezone <- map["timezone"]
+    }
+}

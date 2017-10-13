@@ -21,6 +21,7 @@
 
 import Foundation
 import UIKit
+import Alamofire
 
 /// *Spark* object is the entry point to use this Cisco Spark iOS SDK. A *Spark* object must be created with one of the following *Authenticator*.
 ///
@@ -59,7 +60,7 @@ import UIKit
 public class Spark {
     
     /// The version number of this Cisco Spark iOS SDK.
-    public static let version = "1.2.0"
+    public static let version = "1.3.0"
     
     /// The logger for this SDK.
     public var logger: Logger? {
@@ -94,6 +95,16 @@ public class Spark {
     public init(authenticator: Authenticator) {
         self.authenticator = authenticator
         verbose()
+        let sessionManager = Alamofire.SessionManager.default
+        sessionManager.delegate.taskWillPerformHTTPRedirection = { session, task, response, request in
+            var redirectedRequest = request
+            if let originalRequest = task.originalRequest, let headers = originalRequest.allHTTPHeaderFields, let authorizationHeaderValue = headers["Authorization"] {
+                var mutableRequest = request
+                mutableRequest.setValue(authorizationHeaderValue, forHTTPHeaderField: "Authorization")
+                redirectedRequest = mutableRequest
+            }
+            return redirectedRequest
+        }
     }
     
     /// Rooms are virtual meeting places in Cisco Spark where people post messages and collaborate to get work done.

@@ -35,6 +35,13 @@ class ServiceRequest {
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
     
+#if INTEGRATIONTEST
+    static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
+#else
+    static let HYDRA_SERVER_ADDRESS:String = "https://api.ciscospark.com/v1"
+#endif
+    
+    
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator
         self.url = url
@@ -48,7 +55,7 @@ class ServiceRequest {
     
     class Builder {
         
-        private static let apiBaseUrl: URL = URL(string: "https://api.ciscospark.com/v1")!
+        private static let apiBaseUrl: URL = URL(string: ServiceRequest.HYDRA_SERVER_ADDRESS)!
         private let authenticator: Authenticator
         private var headers: [String: String]
         private var method: Alamofire.HTTPMethod

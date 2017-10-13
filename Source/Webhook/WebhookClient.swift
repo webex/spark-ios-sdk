@@ -60,12 +60,13 @@ public class WebhookClient {
     /// - parameter resource: The resource type for the webhook.
     /// - parameter event: The event type for the webhook.
     /// - parameter filter: The filter that defines the webhook scope.
+    /// - parameter secet: Secret use to generate payload signiture
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter secet: Secret use to generate payload signiture
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String? = nil, secret: String? = nil,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
+    open func create(name: String, targetUrl: String, resource: String, event: String, filter: String? = nil, secret: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let body = RequestParameter([
             "name": name,
             "targetUrl": targetUrl,
@@ -82,7 +83,7 @@ public class WebhookClient {
         
         request.responseObject(completionHandler)
     }
-    
+
     /// Retrieves the details for a webhook by id.
     ///
     /// - parameter webhookId: The identifier of  the webhook.
