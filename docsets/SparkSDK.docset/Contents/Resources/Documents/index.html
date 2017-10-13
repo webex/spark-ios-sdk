@@ -13,7 +13,7 @@
     <a title="SparkSDK  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -41,6 +41,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Call/Capabilities.html">– Capabilities</a>
@@ -74,6 +77,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/RoomClient.html">RoomClient</a>
@@ -116,7 +122,7 @@
             <a href="Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -336,6 +342,53 @@
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></li>
+<li><p>Make an room call:</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="n">roomId</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideo</span><span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span> <span class="p">{</span> <span class="n">ret</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">ret</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">call</span><span class="p">):</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onConnected</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onDisconnected</span> <span class="o">=</span> <span class="p">{</span> <span class="n">reason</span> <span class="k">in</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onCallMembershipChanged</span> <span class="o">=</span> <span class="p">{</span> <span class="n">changed</span> <span class="k">in</span>
+            <span class="k">switch</span> <span class="n">changed</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nf">joined</span><span class="p">(</span><span class="k">let</span> <span class="nv">membership</span><span class="p">):</span>
+                <span class="c1">//</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nf">left</span><span class="p">(</span><span class="k">let</span> <span class="nv">membership</span><span class="p">):</span>
+                <span class="c1">//</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="c1">//</span>
+            <span class="p">}</span>                
+        <span class="p">}</span>            
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// failure</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
+<li><p>Screen share (view only):</p>
+<pre class="highlight swift"><code><span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">dial</span><span class="p">(</span><span class="s">"coworker@acm.com"</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt">MediaOption</span><span class="o">.</span><span class="nf">audioVideoScreenShare</span><span class="p">(</span><span class="nv">video</span><span class="p">:</span> <span class="p">(</span><span class="nv">local</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span> <span class="o">...</span><span class="p">)))</span> <span class="p">{</span> <span class="n">ret</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">ret</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">call</span><span class="p">):</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onConnected</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onDisconnected</span> <span class="o">=</span> <span class="p">{</span> <span class="n">reason</span> <span class="k">in</span>
+            <span class="c1">// ...</span>
+        <span class="p">}</span>
+        <span class="n">call</span><span class="o">.</span><span class="n">onMediaChanged</span> <span class="o">=</span> <span class="p">{</span> <span class="n">changed</span> <span class="k">in</span>
+            <span class="k">switch</span> <span class="n">changed</span> <span class="p">{</span>
+                <span class="o">...</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nf">remoteSendingScreenShare</span><span class="p">(</span><span class="k">let</span> <span class="nv">sending</span><span class="p">):</span>
+                <span class="n">call</span><span class="o">.</span><span class="n">screenShareRenderView</span> <span class="o">=</span> <span class="n">sending</span> <span class="p">?</span> <span class="nv">view</span> <span class="p">:</span> <span class="kc">nil</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="c1">// failure</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></li>
 </ol>
 <a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='license'>License</h2>
 
@@ -346,7 +399,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-19)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

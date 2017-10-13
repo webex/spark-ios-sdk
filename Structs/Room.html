@@ -14,7 +14,7 @@
     <a title="Room Struct Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -117,7 +123,7 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -221,9 +227,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room2idGSqSS_"></a>
+                    <a name="/s:8SparkSDK4RoomV2idSSSgv"></a>
                     <a name="//apple_ref/swift/Property/id" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room2idGSqSS_">id</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV2idSSSgv">id</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -254,9 +260,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room5titleGSqSS_"></a>
+                    <a name="/s:8SparkSDK4RoomV5titleSSSgv"></a>
                     <a name="//apple_ref/swift/Property/title" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room5titleGSqSS_">title</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV5titleSSSgv">title</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -287,9 +293,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room4typeGSqOS_8RoomType_"></a>
+                    <a name="/s:8SparkSDK4RoomV4typeAA0C4TypeOSgv"></a>
                     <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room4typeGSqOS_8RoomType_">type</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV4typeAA0C4TypeOSgv">type</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -320,9 +326,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room8isLockedGSqSb_"></a>
+                    <a name="/s:8SparkSDK4RoomV8isLockedSbSgv"></a>
                     <a name="//apple_ref/swift/Property/isLocked" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room8isLockedGSqSb_">isLocked</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV8isLockedSbSgv">isLocked</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -353,9 +359,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room12lastActivityGSqSS_"></a>
+                    <a name="/s:8SparkSDK4RoomV12lastActivitySSSgv"></a>
                     <a name="//apple_ref/swift/Property/lastActivity" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room12lastActivityGSqSS_">lastActivity</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV12lastActivitySSSgv">lastActivity</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -386,9 +392,42 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room7createdGSqV10Foundation4Date_"></a>
+                    <a name="/s:8SparkSDK4RoomV21lastActivityTimestamp10Foundation4DateVSgv"></a>
+                    <a name="//apple_ref/swift/Property/lastActivityTimestamp" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV21lastActivityTimestamp10Foundation4DateVSgv">lastActivityTimestamp</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The timestamp that last activity of this room.</p>
+
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">lastActivityTimestamp</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK4RoomV7created10Foundation4DateVSgv"></a>
                     <a name="//apple_ref/swift/Property/created" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room7createdGSqV10Foundation4Date_">created</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV7created10Foundation4DateVSgv">created</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -419,9 +458,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vV8SparkSDK4Room6teamIdGSqSS_"></a>
+                    <a name="/s:8SparkSDK4RoomV6teamIdSSSgv"></a>
                     <a name="//apple_ref/swift/Property/teamId" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vV8SparkSDK4Room6teamIdGSqSS_">teamId</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV6teamIdSSSgv">teamId</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -456,9 +495,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV8SparkSDK4RoomcFT3mapC12ObjectMapper3Map_GSqS0__"></a>
+                    <a name="/s:8SparkSDK4RoomVACSg12ObjectMapper3MapC3map_tcfc"></a>
                     <a name="//apple_ref/swift/Method/init(map:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV8SparkSDK4RoomcFT3mapC12ObjectMapper3Map_GSqS0__">init(map:)</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomVACSg12ObjectMapper3MapC3map_tcfc">init(map:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -489,9 +528,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FV8SparkSDK4Room7mappingFT3mapC12ObjectMapper3Map_T_"></a>
+                    <a name="/s:8SparkSDK4RoomV7mappingy12ObjectMapper3MapC3map_tF"></a>
                     <a name="//apple_ref/swift/Method/mapping(map:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FV8SparkSDK4Room7mappingFT3mapC12ObjectMapper3Map_T_">mapping(map:)</a>
+                    <a class="token" href="#/s:8SparkSDK4RoomV7mappingy12ObjectMapper3MapC3map_tF">mapping(map:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -524,7 +563,7 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-19)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>

@@ -14,7 +14,7 @@
     <a title="OAuthAuthenticator Class Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="../index.html">SparkSDK Docs</a> (100% documented)</p>
+        <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="../img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -42,6 +42,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/MediaChangedEvent.html">– MediaChangedEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Call/Capabilities.html">– Capabilities</a>
@@ -75,6 +78,9 @@
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/Phone/FacingMode.html">– FacingMode</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/Phone/DefaultBandwidth.html">– DefaultBandwidth</a>
               </li>
               <li class="nav-group-task">
                 <a href="../Classes/RoomClient.html">RoomClient</a>
@@ -117,7 +123,7 @@
             <a href="../Functions.html">Functions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="../Functions.html#/s:F8SparkSDKoi2eeFTCS_12EmailAddressS0__Sb">==(_:_:)</a>
+                <a href="../Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
               </li>
             </ul>
           </li>
@@ -201,7 +207,7 @@
                 </div>
               </div>
             <p>An <a href="https://oauth.net/2/">OAuth</a> based authentication strategy
-is to be used to authenticate a user on Cisco Spark.</p>
+for authenticating a user on Cisco Spark.</p>
 
 <div class="aside aside-see">
     <p class="aside-title">See</p>
@@ -222,9 +228,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK18OAuthAuthenticator8delegateXwGSqPS_26OAuthAuthenticatorDelegate__"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC8delegateAA0cD8Delegate_pSgXwv"></a>
                     <a name="//apple_ref/swift/Property/delegate" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK18OAuthAuthenticator8delegateXwGSqPS_26OAuthAuthenticatorDelegate__">delegate</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC8delegateAA0cD8Delegate_pSgXwv">delegate</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -249,9 +255,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:vC8SparkSDK18OAuthAuthenticator10authorizedSb"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC10authorizedSbv"></a>
                     <a name="//apple_ref/swift/Property/authorized" class="dashAnchor"></a>
-                    <a class="token" href="#/s:vC8SparkSDK18OAuthAuthenticator10authorizedSb">authorized</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC10authorizedSbv">authorized</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -286,9 +292,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK18OAuthAuthenticatorcFT8clientIdSS12clientSecretSS5scopeSS11redirectUriSS7storagePS_12OAuthStorage__S0_"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorCACSS8clientId_SS0E6SecretSS5scopeSS11redirectUriAA0C7Storage_p7storagetcfc"></a>
                     <a name="//apple_ref/swift/Method/init(clientId:clientSecret:scope:redirectUri:storage:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK18OAuthAuthenticatorcFT8clientIdSS12clientSecretSS5scopeSS11redirectUriSS7storagePS_12OAuthStorage__S0_">init(clientId:clientSecret:scope:redirectUri:storage:)</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorCACSS8clientId_SS0E6SecretSS5scopeSS11redirectUriAA0C7Storage_p7storagetcfc">init(clientId:clientSecret:scope:redirectUri:storage:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -320,87 +326,15 @@ is to be used to authenticate a user on Cisco Spark.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>clientId</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the OAuth client id</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>clientSecret</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the OAuth client secret</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>scope</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>space-separated string representing which permissions the application needs</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>redirectUri</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the redirect URI that will be called when completing the authentication. This must match the redirect URI registered to your clientId.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>storage</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the storage mechanism for persisting authentication information</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK18OAuthAuthenticator9authorizeFT20parentViewControllerCSo16UIViewController17completionHandlerGSqFSbT___T_"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC9authorizeySo16UIViewControllerC010parentViewG0_ySbcSg17completionHandlertF"></a>
                     <a name="//apple_ref/swift/Method/authorize(parentViewController:completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK18OAuthAuthenticator9authorizeFT20parentViewControllerCSo16UIViewController17completionHandlerGSqFSbT___T_">authorize(parentViewController:completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC9authorizeySo16UIViewControllerC010parentViewG0_ySbcSg17completionHandlertF">authorize(parentViewController:completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -425,48 +359,15 @@ is to be used to authenticate a user on Cisco Spark.</p>
 
                         </div>
                       </div>
-                      <div>
-                        <h4>Parameters</h4>
-                        <table class="graybox">
-                          <tbody>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>parentViewController</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the parent view controller for the OAuth view controller</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <code>
-                                <em>completionHandler</em>
-                                </code>
-                              </td>
-                              <td>
-                                <div>
-                                  <p>the completion handler will be called when authentication is complete, with a boolean to indicate if the authentication process was successful. It will be called directly after the OAuth view controller has begun to dismiss itself in an animated way.</p>
-
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
                     </section>
                   </div>
                 </li>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK18OAuthAuthenticator11accessTokenFT17completionHandlerFGSqSS_T__T_"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC11accessTokenyySSSgc17completionHandler_tF"></a>
                     <a name="//apple_ref/swift/Method/accessToken(completionHandler:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK18OAuthAuthenticator11accessTokenFT17completionHandlerFGSqSS_T__T_">accessToken(completionHandler:)</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC11accessTokenyySSSgc17completionHandler_tF">accessToken(completionHandler:)</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -501,9 +402,9 @@ is to be used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:FC8SparkSDK18OAuthAuthenticator11deauthorizeFT_T_"></a>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC11deauthorizeyyF"></a>
                     <a name="//apple_ref/swift/Method/deauthorize()" class="dashAnchor"></a>
-                    <a class="token" href="#/s:FC8SparkSDK18OAuthAuthenticator11deauthorizeFT_T_">deauthorize()</a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC11deauthorizeyyF">deauthorize()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -540,7 +441,7 @@ is to be used to authenticate a user on Cisco Spark.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-05-19)</p>
+          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
           <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
