@@ -60,7 +60,7 @@ import Alamofire
 public class Spark {
     
     /// The version number of this Cisco Spark iOS SDK.
-    public static let version = "1.2.0"
+    public static let version = "1.3.0"
     
     /// The logger for this SDK.
     public var logger: Logger? {
