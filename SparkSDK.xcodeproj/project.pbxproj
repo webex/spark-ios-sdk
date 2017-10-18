@@ -85,6 +85,8 @@
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
 		5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEB81D29E0C700196F6F /* Timestamp.swift */; };
 		8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */; };
+		991DA8AC1F389D6200939724 /* SSOAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */; };
+		99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */; };
 		B900B6A51CE2DB3100DC83CB /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B900B6A41CE2DB3100DC83CB /* Wme.framework */; };
 		B91E75981CE2D7B70080EAE0 /* OAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */; };
 		B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E753B1CE2D7B70080EAE0 /* Result.swift */; };
@@ -225,6 +227,8 @@
 		5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
 		5D93AEB81D29E0C700196F6F /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
 		6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSOAuthenticatorTests.swift; path = Tests/SSOAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSOAuthenticator.swift; sourceTree = "<group>"; };
 		B900B6A41CE2DB3100DC83CB /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = MediaEngine/Wme.framework; sourceTree = "<group>"; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthViewController.swift; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 				3DA099FF1D3EF82500205DF6 /* WebhookTests.swift */,
 				C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */,
 				C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */,
+				991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */,
 			);
 			name = Tests;
 			path = SparkSDKTests;
@@ -439,6 +444,7 @@
 		B91E75311CE2D7B70080EAE0 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */,
 				5AC09EB21DE4D02C005F38BC /* Authenticator.swift */,
 				5AFB6E8B1DF5C5110027E989 /* JWTAuthClient.swift */,
 				5AFB6E8D1DF5C5110027E989 /* JWTAuthKeychainStorage.swift */,
@@ -796,6 +802,7 @@
 				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,
 				3D31B78B1D41B7F500D8DB55 /* SequenceTests.swift in Sources */,
 				5A9350DB1E00742D00374B99 /* MockClock.swift in Sources */,
+				991DA8AC1F389D6200939724 /* SSOAuthenticatorTests.swift in Sources */,
 				C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */,
 				3D31B78A1D41B7F500D8DB55 /* RoomTests.swift in Sources */,
 				3D31B7871D41B7F500D8DB55 /* MessageTests.swift in Sources */,
@@ -873,6 +880,7 @@
 				20EEA27C1EB0E77300D6BB75 /* Call+CallKit.swift in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
 				5AFB6E951DF5C5110027E989 /* JWTAuthenticator.swift in Sources */,
+				99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
 				20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */,

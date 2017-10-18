@@ -76,7 +76,6 @@ public class OAuthAuthenticator: Authenticator {
     private var accessTokenCompletionHandlers: [(_ accessToken: String?) -> Void] = []
     private var fetchingAccessTokenInProcess = false
     
-    
     /// The delegate, which gets callbacks for refresh access token failure
     public weak var delegate: OAuthAuthenticatorDelegate?
     
@@ -123,17 +122,8 @@ public class OAuthAuthenticator: Authenticator {
     /// - parameter completionHandler: the completion handler will be called when authentication is complete, with a boolean to indicate if the authentication process was successful. It will be called directly after the OAuth view controller has begun to dismiss itself in an animated way.
     /// - since: 1.2.0
     public func authorize(parentViewController: UIViewController, completionHandler: ((_ success: Bool) -> Void)? = nil) {
-        if let encodedClientId = clientId.encodeQueryParamString,
-            let encodedRedirectUri = redirectUri.encodeQueryParamString,
-            let encodedScope = scope.encodeQueryParamString,
-            let authorizationUrl = URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
-            + "&client_id=" + encodedClientId
-            + "&redirect_uri=" + encodedRedirectUri
-            + "&scope=" + encodedScope
-            + "&state=iossdkstate") {
-
+        if let authorizationUrl = self.authorizationUrl() {
             oauthLauncher.launchOAuthViewController(parentViewController: parentViewController, authorizationUrl: authorizationUrl, redirectUri: redirectUri) { oauthCode in
-                
                 if let oauthCode = oauthCode {
                     self.fetchingAccessTokenInProcess = true
                     self.oauthClient.fetchAccessTokenFrom(oauthCode: oauthCode, clientId: self.clientId, clientSecret: self.clientSecret, redirectUri: self.redirectUri, completionHandler: { response in
@@ -150,6 +140,20 @@ public class OAuthAuthenticator: Authenticator {
         }
     }
     
+    func authorizationUrl() -> URL? {
+        if let encodedClientId = clientId.encodeQueryParamString,
+           let encodedRedirectUri = redirectUri.encodeQueryParamString,
+           let encodedScope = scope.encodeQueryParamString {
+           return URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
+                + "&client_id=" + encodedClientId
+                + "&redirect_uri=" + encodedRedirectUri
+                + "&scope=" + encodedScope
+                + "&state=iossdkstate")
+        }
+        
+        return nil
+    }
+
     /// - see: See Authenticator.accessToken(completionHandler:)
     /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
