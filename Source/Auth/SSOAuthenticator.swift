@@ -23,7 +23,7 @@
 /// based authentication strategy used to authenticate a user on Cisco Spark.
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
-/// - since: 1.2.0
+/// - since: 1.4.0
 import Foundation
 
 public class SSOAuthenticator: OAuthAuthenticator {
@@ -47,7 +47,7 @@ public class SSOAuthenticator: OAuthAuthenticator {
     /// - parameter additionalQueryItems: a collection of additional *URLQueryItem* to be appended to the identityProviderUri.
     ///
     /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
-    /// - since: 1.2.0
+    /// - since: 1.4.0
     public init(clientId: String, clientSecret: String, scope: String, redirectUri: String, email: String, identityProviderUri: String,
          queryItems: [URLQueryItem] = []) {
         self.email = email
