@@ -59,7 +59,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 }
 
 /// An [OAuth](https://oauth.net/2/) based authentication strategy
-/// is to be used to authenticate a user on Cisco Spark.
+/// for authenticating a user on Cisco Spark.
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.2.0
@@ -144,7 +144,7 @@ public class OAuthAuthenticator: Authenticator {
         if let encodedClientId = clientId.encodeQueryParamString,
            let encodedRedirectUri = redirectUri.encodeQueryParamString,
            let encodedScope = scope.encodeQueryParamString {
-           return URL(string: "https://api.ciscospark.com/v1/authorize?response_type=code"
+           return URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
                 + "&client_id=" + encodedClientId
                 + "&redirect_uri=" + encodedRedirectUri
                 + "&scope=" + encodedScope

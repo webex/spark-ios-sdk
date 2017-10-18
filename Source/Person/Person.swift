@@ -33,7 +33,7 @@ public struct Person {
     /// The display name of this person.
     public var displayName: String?
     
-    /// The avatar name of this person.
+    /// The URL of this person's avatar.
     public var avatar: String?
     
     /// The timestamp that this person being created.

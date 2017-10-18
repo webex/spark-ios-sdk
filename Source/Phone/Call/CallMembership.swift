@@ -29,8 +29,6 @@ public struct CallMembership {
     ///
     /// - since: 1.2.0
     public enum State : String {
-        /// The person status is unknown.
-        case unknown
         /// The person is idle w/o any call.
         case idle
         /// The person has been notified about the call.
@@ -57,36 +55,65 @@ public struct CallMembership {
     ///
     /// - since: 1.2.0
     public var state: State {
-        return self.call.model[participant: self.id]?.state ?? .unknown
+        return self.model.state ?? .idle
     }
     
     /// The email address of the person in this *CallMembership*.
     ///
     /// - since: 1.2.0
     public var email: String? {
-        return self.call.model[participant: self.id]?.person?.email
+        return self.model.person?.email
     }
     
     /// The SIP address of the person in this *CallMembership*.
     ///
     /// - since: 1.2.0
     public var sipUrl: String? {
-        return self.call.model[participant: self.id]?.person?.sipUrl
+        return self.model.person?.sipUrl
     }
     
     /// The phone number of the person in this *CallMembership*.
     ///
     /// - since: 1.2.0
     public var phoneNumber: String? {
-        return self.call.model[participant: self.id]?.person?.phoneNumber
+        return self.model.person?.phoneNumber
     }
     
-    /// The identifier of the membership.
+    /// True if the *CallMembership* is sending video. Otherwise, false.
     ///
-    /// - since: 1.2.0
-    private let id: String
+    /// - since: 1.3.0
+    public var sendingVideo: Bool {
+        return self.model.status?.videoStatus == "SENDRECV"
+    }
+    
+    /// True if the *CallMembership* is sending audio. Otherwise, false.
+    ///
+    /// - since: 1.3.0
+    public var sendingAudio: Bool {
+        return self.model.status?.audioStatus == "SENDRECV"
+    }
+    
+    /// True if the *CallMembership* is sending screen share. Otherwise, false.
+    ///
+    /// - since: 1.3.0
+    public var sendingScreenShare: Bool {
+        return self.call.model.isGrantedScreenShare
+            && self.call.model.screenShareMediaFloor?.beneficiary?.id == self.id
+            && self.call.model.screenShareMediaFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
+    }
+    
+    let id: String
+    
+    let isSelf: Bool
+    
+    var model: ParticipantModel {
+        get { self.call.lock(); defer { self.call.unlock() }; return _model }
+        set { self.call.lock(); defer { self.call.unlock() }; _model = newValue }
+    }
     
     private let call: Call
+    
+    private var _model: ParticipantModel
 
     /// Constructs a new *CallMembership*.
     ///
@@ -94,9 +121,11 @@ public struct CallMembership {
     init(participant: ParticipantModel, call: Call) {
         self.id = participant.id ?? ""
         self.call = call
+        self.isSelf = participant.id == call.model.myselfId
         self.isInitiator = participant.isCreator ?? false
         if let personId = participant.person?.id {
             self.presonId = "ciscospark://us/PEOPLE/\(personId)".base64Encoded()
         }
+        self._model = participant
     }
 }

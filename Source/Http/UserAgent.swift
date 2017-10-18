@@ -36,6 +36,10 @@ class UserAgent {
     private static func platform() -> String {
         var sysinfo = utsname()
         uname(&sysinfo)
-        return NSString(bytes: &sysinfo.machine, length: Int(_SYS_NAMELEN), encoding: String.Encoding.ascii.rawValue)! as String
+        let machineMirror = Mirror(reflecting: sysinfo.machine)
+        return machineMirror.children.reduce("") { identifier, element in
+            guard let value = element.value as? Int8, value != 0 else { return identifier }
+            return identifier + String(UnicodeScalar(UInt8(value)))
+        }
     }
 }

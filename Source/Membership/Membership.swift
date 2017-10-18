@@ -36,10 +36,10 @@ public struct Membership {
     /// The id of the room.
     public var roomId: String?
     
-    /// Moderator of a room.
+    /// Whether this member is a moderator of the room in this membership.
     public var isModerator: Bool?
     
-    /// Monitor of a room.
+    /// Whether this member is a monitor of the room in this membership.
     public var isMonitor: Bool?
     
     /// The timestamp that the membership being created.

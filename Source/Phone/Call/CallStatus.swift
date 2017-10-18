@@ -20,9 +20,9 @@
 
 import Foundation
 
-/// The status of a *Call*. 
+/// The status of a *Call*.
 ///
-/// The following diagram shows all statuses and transitions triggered 
+/// The following diagram shows all statuses and transitions triggered
 /// by either an API call or an event received by the Spark iOS SDK.
 /// The <span style="color:orange">orange</span> transtions are triggered by API calls.
 /// The <span style="color:blue">blue</span> transitions are triggered by events.
@@ -50,7 +50,7 @@ public enum CallStatus {
         switch self {
         case .initiated, .ringing:
             if call.direction == Call.Direction.incoming {
-                if model.isRemoteJoined {
+                if call.isRemoteJoined {
                     if local.isJoined(by: call.device.deviceUrl) {
                         call.status = .connected
                         DispatchQueue.main.async {
@@ -67,41 +67,127 @@ public enum CallStatus {
                         call.end(reason: Call.DisconnectReason.otherDeclined)
                     }
                 }
-                else if model.isRemoteDeclined || model.isRemoteLeft {
+                else if call.isRemoteDeclined || call.isRemoteLeft {
                     call.end(reason: Call.DisconnectReason.remoteCancel)
                 }
             }
             else {
-                if local.isLeft {
+                if local.isLefted(device: call.device.deviceUrl) {
                     call.end(reason: Call.DisconnectReason.localCancel)
                 }
                 else if local.isJoined(by: call.device.deviceUrl) {
-                    if model.isRemoteNotified {
+                    if call.isGroup {
                         call.status = .ringing
                         DispatchQueue.main.async {
                             call.onRinging?()
+                            call.status = .connected
+                            DispatchQueue.main.async {
+                                call.onConnected?()
+                            }
                         }
                     }
-                    else if model.isRemoteJoined {
-                        call.status = .connected
-                        DispatchQueue.main.async {
-                            call.onConnected?()
+                    else {
+                        if call.isRemoteNotified {
+                            call.status = .ringing
+                            DispatchQueue.main.async {
+                                call.onRinging?()
+                            }
                         }
-                    }
-                    else if model.isRemoteDeclined {
-                        call.end(reason: Call.DisconnectReason.remoteDecline)
+                        else if call.isRemoteJoined {
+                            call.status = .connected
+                            DispatchQueue.main.asyncOnce(token: call.onConnectedOnceToken) {
+                                call.onConnected?()
+                            }
+                        }
+                        else if call.isRemoteDeclined {
+                            call.end(reason: Call.DisconnectReason.remoteDecline)
+                        }
                     }
                 }
             }
         case .connected:
-            if local.isLeft {
-                call.end(reason: Call.DisconnectReason.localLeft)
+            if call.isGroup {
+                if local.isLefted(device: call.device.deviceUrl)  {
+                    call.end(reason: Call.DisconnectReason.localLeft)
+                }
             }
-            else if model.isRemoteLeft {
-                call.end(reason: Call.DisconnectReason.remoteLeft)
+            else {
+                if local.isLefted(device: call.device.deviceUrl)  {
+                    call.end(reason: Call.DisconnectReason.localLeft)
+                }
+                else if call.isRemoteLeft {
+                    call.end(reason: Call.DisconnectReason.remoteLeft)
+                }
             }
         case .disconnected:
             break;
         }
+    }
+}
+
+extension Call {
+    
+    var isRemoteLeft: Bool {
+        if self.isGroup {
+            return false
+        }
+        for membership in self.memberships {
+            if !membership.isSelf && membership.state != CallMembership.State.left {
+                return false
+            }
+        }
+        return true
+    }
+    
+    var isRemoteJoined: Bool {
+        if self.isGroup {
+            return true
+        }
+        for membership in self.memberships {
+            if !membership.isSelf && membership.state != CallMembership.State.joined {
+                return false
+            }
+        }
+        return true
+    }
+    
+    var isRemoteDeclined: Bool {
+        if self.isGroup {
+            return false
+        }
+        for membership in self.memberships {
+            if !membership.isSelf && membership.state != CallMembership.State.declined {
+                return false
+            }
+        }
+        return true
+    }
+    
+    var isRemoteNotified: Bool {
+        if self.isGroup {
+            return true
+        }
+        for membership in self.memberships {
+            if !membership.isSelf && (membership.state == CallMembership.State.idle || membership.state == CallMembership.State.notified) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    var isInIllegalStatus: Bool {
+        if !self.isGroup {
+            switch self.status {
+            case .initiated, .ringing:
+                if self.direction == Call.Direction.outgoing && self.isRemoteLeft {
+                    return true
+                }
+                break
+            default:
+                break
+            }
+        }
+        return false
+        
     }
 }

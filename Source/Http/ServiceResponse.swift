@@ -21,6 +21,8 @@
 import Foundation
 
 /// Service response for a request.
+///
+/// - since: 1.2.0
 public struct ServiceResponse<T> {
     
     /// Represents a response to an HTTP URL load.

@@ -24,6 +24,7 @@ import SparkSDK
 
 struct Config {
     static let TestcaseInterval = 3.0
+    static let TestcaseRetryCount = 3
     static let TestcasePendingCheckTimeout = 20.0
     static let TestcasePendingCheckPollInterval = 0.2
     
