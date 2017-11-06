@@ -730,11 +730,15 @@ public class Phone {
         AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeAudio) { audioGranted in
             if option.hasVideo {
                 AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { videoGranted in
-                    completionHandler()
+                    DispatchQueue.main.async {
+                        completionHandler()
+                    }
                 }
             }
             else {
-                completionHandler()
+                DispatchQueue.main.async {
+                    completionHandler()
+                }
             }
             
         }
