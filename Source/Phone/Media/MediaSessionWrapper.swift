@@ -34,7 +34,7 @@ class MediaSessionWrapper {
 
     private var status: Status = .initial
     
-    private let mediaSession = MediaSession()
+    fileprivate let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
     
     // MARK: - SDP
@@ -263,5 +263,11 @@ class MediaSessionWrapper {
         if mediaSession.mediaConstraint.hasScreenShare {
             mediaSession.leaveScreenShare(shareId)
         }
+    }
+}
+
+extension MediaSessionWrapper {
+    internal func getMediaSession() -> MediaSession {
+        return self.mediaSession
     }
 }

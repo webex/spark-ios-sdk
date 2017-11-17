@@ -153,6 +153,30 @@ public class Phone {
             }
         }
     }
+
+    init(authenticator: Authenticator,devices:DeviceService,reachability:ReachabilityService,client:CallClient,conversations:ConversationClient,metrics:MetricsEngine,prompter:H264LicensePrompter,webSocket:WebSocketService) {
+        let _ = MediaEngineWrapper.sharedInstance.WMEVersion
+        self.authenticator = authenticator
+        self.devices = devices
+        self.reachability = reachability
+        self.client = client
+        self.conversations = conversations
+        self.metrics = metrics
+        self.prompter = prompter
+        self.webSocket = webSocket
+        self.webSocket.onFailed = { [weak self] in
+            self?.register {_ in
+            }
+        }
+        self.webSocket.onCallModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                strong.doLocusEvent(model);
+                }
+            }
+        }
+    }
+    
     
     deinit {
         self.metrics.release()

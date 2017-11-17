@@ -37,7 +37,7 @@ class RoomTests: XCTestCase {
         XCTAssertNotNil(room?.title)
         XCTAssertNotNil(room?.type)
         XCTAssertNotNil(room?.isLocked)
-        XCTAssertNotNil(room?.lastActivity)
+        XCTAssertNotNil(room?.lastActivityTimestamp)
         XCTAssertNotNil(room?.created)
     }
     
