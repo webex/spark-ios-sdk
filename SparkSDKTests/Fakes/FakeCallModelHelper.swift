@@ -26,8 +26,8 @@ class FakeCallModelHelper {
                                                                     "audioStatus" : "SENDRECV",
                                                                     "csis" : [
                                                                         955581697,
-                                                                        4099885313,
-                                                                        4099885312]])
+                                                                        409988531,
+                                                                        409988531]])
         let alertHint = AlertHintModel(JSON: ["action" : "NONE"])
         let alertType = AlertTypeModel(JSON: ["action" : "NONE"])
         let callerDeviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
@@ -68,9 +68,9 @@ class FakeCallModelHelper {
                                                    "count" : 1])
         let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
                                                  "entries" : [
-                                                    "494027522700000",
-                                                    "494027523130000",
-                                                    "494027540210000"],
+                                                    "4940275227",
+                                                    "4940275231",
+                                                    "4940275402"],
                                                  "rangeEnd" : "0"])
         
         let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
@@ -120,8 +120,8 @@ class FakeCallModelHelper {
                                                                     "audioStatus" : "SENDRECV",
                                                                     "csis" : [
                                                                         955581697,
-                                                                        4099885313,
-                                                                        4099885312]])
+                                                                        409988531,
+                                                                        409988531]])
         let alertHint = AlertHintModel(JSON: ["action" : "NONE"])
         let alertType = AlertTypeModel(JSON: ["action" : "NONE"])
         let callerDeviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
@@ -162,9 +162,9 @@ class FakeCallModelHelper {
                                                    "count" : 1])
         let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
                                                  "entries" : [
-                                                    "494027522700000",
-                                                    "494027523130000",
-                                                    "494027540210000"],
+                                                    "49402752270",
+                                                    "49402752313",
+                                                    "49402754021"],
                                                  "rangeEnd" : "0"])
         
         let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
@@ -222,9 +222,9 @@ class FakeCallModelHelper {
         if mySelf?.person?.id == hanupUser.personId {
             mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
                                                                  "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [1805773313,
-                                                                           1805773312,
-                                                                           242846209]])
+                                                                 "csis" : [18057733,
+                                                                           18057733,
+                                                                           24284620]])
             mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
             mySelf?.state = CallMembership.State.left
             newModel.setMyself(newParticipant:mySelf)
@@ -254,10 +254,10 @@ class FakeCallModelHelper {
         
         
         
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701580000",
+        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
                                                  "entries" : [
-                                                    "494076856310000"],
-                                                 "rangeEnd" : "494076709420000"])
+                                                    "49407685631"],
+                                                 "rangeEnd" : "49407670942"])
         newModel.setSequence(newSequence: sequenceModel)
         
         return newModel
@@ -284,8 +284,8 @@ class FakeCallModelHelper {
                                                                   "audioStatus" : "SENDRECV",
                                                                   "csis" : [
                                                                     955581697,
-                                                                    4099885313,
-                                                                    4099885312]])
+                                                                    409988531,
+                                                                    409988531]])
             if let device = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
                                                                 "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
                                                                 "mediaConnections" : [
@@ -361,9 +361,9 @@ class FakeCallModelHelper {
                 modelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
                                                                   "audioStatus" : "SENDRECV",
                                                                   "csis" : [
-                                                                    955581697,
-                                                                    4099885313,
-                                                                    4099885312]])
+                                                                    95558169,
+                                                                    40998853,
+                                                                    40998853]])
                 deviceUrl = (testUser.personId == selfUser.personId ? Config.FakeSelfDeviceUrl : Config.FakeOtherDeviceUrl)
                 
                 if let device = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
@@ -419,9 +419,9 @@ class FakeCallModelHelper {
                                                    "count" : 1])
         let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
                                                  "entries" : [
-                                                    "494027522700000",
-                                                    "494027523130000",
-                                                    "494027540210000"],
+                                                    "49402752270",
+                                                    "49402752313",
+                                                    "49402754021"],
                                                  "rangeEnd" : "0"])
         
         let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
@@ -450,9 +450,9 @@ class FakeCallModelHelper {
 
             let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
                                                               "actionsUrl" : "actionsUrl",
-                                                              "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"remoteSDP\"}",
+                                                              "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
                                                               "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                              "localSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"localSDP\"}",
+                                                              "localSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"localSDP\"}",
                                                               "keepAliveSecs" : 20,
                                                               "type" : "SDP"])!
             let mediaConnections:[MediaConnectionModel] = [mediaConnection!]
@@ -494,10 +494,10 @@ class FakeCallModelHelper {
         
         newModel.setParticipants(newParticipants: participants)
         
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701580000",
+        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701",
                                                  "entries" : [
-                                                    "494076856310000"],
-                                                 "rangeEnd" : "494076709420000"])
+                                                    "494076856"],
+                                                 "rangeEnd" : "494076709"])
         newModel.setSequence(newSequence: sequenceModel)
         
         return newModel
@@ -513,9 +513,9 @@ class FakeCallModelHelper {
         if mySelf?.person?.id == declineUser.personId {
             mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
                                                                  "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [1805773313,
-                                                                           1805773312,
-                                                                           242846209]])
+                                                                 "csis" : [1805773,
+                                                                           1805773,
+                                                                           2428462]])
             mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
             
             
@@ -549,10 +549,10 @@ class FakeCallModelHelper {
         
         
         
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701580000",
+        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701",
                                                  "entries" : [
-                                                    "494076856310000"],
-                                                 "rangeEnd" : "494076709420000"])
+                                                    "494076856"],
+                                                 "rangeEnd" : "494076709"])
         newModel.setSequence(newSequence: sequenceModel)
         
         return newModel
@@ -568,9 +568,9 @@ class FakeCallModelHelper {
         if mySelf?.person?.id == alertUser.personId {
             mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
                                                                  "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [1805773313,
-                                                                           1805773312,
-                                                                           242846209]])
+                                                                 "csis" : [1805773,
+                                                                           1805773,
+                                                                           2428462]])
             mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
             mySelf?.devices = [ParticipantModel.DeviceModel(JSON: ["state" : "IDLE",
                                                                    "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
@@ -614,10 +614,10 @@ class FakeCallModelHelper {
         
         newModel.setParticipants(newParticipants: participants)
         
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701580000",
+        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
                                                  "entries" : [
-                                                    "494076856310000"],
-                                                 "rangeEnd" : "494076709420000"])
+                                                    "49407685631"],
+                                                 "rangeEnd" : "49407670942"])
         newModel.setSequence(newSequence: sequenceModel)
         
         return newModel
@@ -643,10 +643,10 @@ class FakeCallModelHelper {
             else {
                 mySelf?.status?.videoStatus = "SENDRECV"
             }
-            let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"localSDP\"}"
+            let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"localSDP\"}"
             let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
                                                                                     "actionsUrl" : "actionsUrl",
-                                                                                    "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"remoteSDP\"}",
+                                                                                    "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
                                                                                     "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
                                                                                     "localSdp" : localSDP,
                                                                                     "keepAliveSecs" : 20,
@@ -666,10 +666,10 @@ class FakeCallModelHelper {
             if participant.person?.id == updateUser.personId ,let devices = participant.devices {
                 for var device in devices {
                     
-                    let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"localSDP\"}"
+                    let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[6219714,6219717,42446699],\"sdp\":\"localSDP\"}"
                     let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
                                                                                             "actionsUrl" : "actionsUrl",
-                                                                                            "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[621971456,621971457,4244669953],\"sdp\":\"remoteSDP\"}",
+                                                                                            "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
                                                                                             "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
                                                                                             "localSdp" : localSDP,
                                                                                             "keepAliveSecs" : 20,
@@ -695,10 +695,10 @@ class FakeCallModelHelper {
         
         newModel.setParticipants(newParticipants: participants)
         
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701580000",
+        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
                                                  "entries" : [
-                                                    "494076856310000"],
-                                                 "rangeEnd" : "494076709420000"])
+                                                    "49407685631"],
+                                                 "rangeEnd" : "49407670942"])
         newModel.setSequence(newSequence: sequenceModel)
         
         return newModel
