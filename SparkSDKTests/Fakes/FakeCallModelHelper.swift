@@ -1,10 +1,22 @@
+// Copyright 2016-2017 Cisco Systems Inc
 //
-//  FakeCallModelHelper.swift
-//  SparkSDKTests
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  Created by panzh on 09/11/2017.
-//  Copyright © 2017 Cisco. All rights reserved.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 import Foundation
 @testable import SparkSDK
@@ -16,200 +28,43 @@ class FakeCallModelHelper {
     }
     
     static func dialCallModel(caller:TestUser,callee:TestUser) -> CallModel {
-        let locusUrl = "locusUrl"
-        let callerModel = PersonModel(JSON: ["name" : caller.name,
-                                             "email" : caller.email,
-                                             "id" : caller.personId,
-                                             "orgId" : caller.orgId])
+        let locusUrl = FakeCallModelHelper.getLocusUrl()
         
-        let callerModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                    "audioStatus" : "SENDRECV",
-                                                                    "csis" : [
-                                                                        955581697,
-                                                                        409988531,
-                                                                        409988531]])
-        let alertHint = AlertHintModel(JSON: ["action" : "NONE"])
-        let alertType = AlertTypeModel(JSON: ["action" : "NONE"])
-        let callerDeviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                    "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                    "mediaConnections" : [
-                                                                        MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                    "actionsUrl" : "actionsUrl",
-                                                                                                    "remoteSdp" : "remoteSdp",
-                                                                                                    "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                    "localSdp" : "localSdp",
-                                                                                                    "keepAliveSecs" : 20,
-                                                                                                    "type" : "SDP"])],
-                                                                    "deviceType" : "IPHONE",
-                                                                    "url" : Config.FakeSelfDeviceUrl])
+        let myselfModel = getParticipant(userInfo: caller, userState: CallMembership.State.joined, isSelfModel: true, isCreater: true)
         
-        let caller = ParticipantModel.init(isCreator: true,
-                                           id: caller.personId ,
-                                           url: "callerUrl",
-                                           state: CallMembership.State.joined,
-                                           type: "USER",
-                                           person: callerModel,
-                                           status:  callerModelStatus,
-                                           deviceUrl: Config.FakeSelfDeviceUrl,
-                                           mediaBaseUrl: "mediaBaseUrl",
-                                           guest: false,
-                                           alertHint: alertHint,
-                                           alertType: alertType,
-                                           enableDTMF: false,
-                                           devices: [callerDeviceModel!])
+        let host = getPersonModel(testUser: caller)
         
-        let host = callerModel
-        
-        let fullStateModel = FullStateModel(JSON: ["state" : "ACTIVE",
-                                                   "locked" : false,
-                                                   "active" : true,
-                                                   "type" : "CALL",
-                                                   "lastActive" : "2017-11-08T02:59:12.270Z",
-                                                   "count" : 1])
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
-                                                 "entries" : [
-                                                    "4940275227",
-                                                    "4940275231",
-                                                    "4940275402"],
-                                                 "rangeEnd" : "0"])
-        
-        let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
-                                                  "url" : "MediaShareModelUrl"])
-        let mediaShares2 = MediaShareModel(JSON: ["name" : "whiteboard",
-                                                  "url" : "MediaShareModelUrl"])
+        let callerParticipantModel = getParticipant(userInfo: caller, userState: CallMembership.State.joined, isCreater: true,deviceUrl: myselfModel.deviceUrl)
+        let calleeParticipantModel = getParticipant(userInfo: callee, userState: CallMembership.State.idle, isCreater: false)
         
         
+        let participants :[ParticipantModel] = [callerParticipantModel,calleeParticipantModel]
         
-        let calleeModel = PersonModel(JSON: ["name" : callee.name,
-                                             "email" : callee.email,
-                                             "id" : callee.personId,
-                                             "orgId" : callee.orgId])
+        let fullStateModel = getFullState(participants: participants)
         
-        let calleeModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                    "audioStatus" : "INACTIVE",
-                                                                    "csis" : []])
-        let callee = ParticipantModel.init(isCreator: true,
-                                           id: callee.personId,
-                                           url: "calleeUrl",
-                                           state: CallMembership.State.idle,
-                                           type: "USER",
-                                           person: calleeModel,
-                                           status:  calleeModelStatus,
-                                           deviceUrl: Config.FakeOtherDeviceUrl,
-                                           mediaBaseUrl: "mediaBaseUrl",
-                                           guest: false,
-                                           alertHint: nil,
-                                           alertType: nil,
-                                           enableDTMF: false,
-                                           devices: [])
-        
-        return CallModel.init(locusUrl: locusUrl, participants: [caller,callee], myself: caller, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: [mediaShares1!,mediaShares2!])
+        let sequenceModel = getSequenceModel()
+        let mediaShares = getMediaShareModels()
+        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: myselfModel, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShares)
     }
     
     static func dialIllegalCallModel(caller:TestUser,callee:TestUser,type:CallIllegalStatusType) -> CallModel {
-        var locusUrl:String? = "locusUrl"
-        
-        
-        
-        let callerModel = PersonModel(JSON: ["name" : caller.name,
-                                             "email" : caller.email,
-                                             "id" : caller.personId,
-                                             "orgId" : caller.orgId])
-        
-        let callerModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                    "audioStatus" : "SENDRECV",
-                                                                    "csis" : [
-                                                                        955581697,
-                                                                        409988531,
-                                                                        409988531]])
-        let alertHint = AlertHintModel(JSON: ["action" : "NONE"])
-        let alertType = AlertTypeModel(JSON: ["action" : "NONE"])
-        let callerDeviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                    "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                    "mediaConnections" : [
-                                                                        MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                    "actionsUrl" : "actionsUrl",
-                                                                                                    "remoteSdp" : "remoteSdp",
-                                                                                                    "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                    "localSdp" : "localSdp",
-                                                                                                    "keepAliveSecs" : 20,
-                                                                                                    "type" : "SDP"])],
-                                                                    "deviceType" : "IPHONE",
-                                                                    "url" : Config.FakeSelfDeviceUrl])
-        
-        let caller = ParticipantModel.init(isCreator: true,
-                                           id: caller.personId ,
-                                           url: "callerUrl",
-                                           state: CallMembership.State.joined,
-                                           type: "USER",
-                                           person: callerModel,
-                                           status:  callerModelStatus,
-                                           deviceUrl: Config.FakeSelfDeviceUrl,
-                                           mediaBaseUrl: "mediaBaseUrl",
-                                           guest: false,
-                                           alertHint: alertHint,
-                                           alertType: alertType,
-                                           enableDTMF: false,
-                                           devices: [callerDeviceModel!])
-        
-        let host = callerModel
-        
-        let fullStateModel = FullStateModel(JSON: ["state" : "ACTIVE",
-                                                   "locked" : false,
-                                                   "active" : true,
-                                                   "type" : "CALL",
-                                                   "lastActive" : "2017-11-08T02:59:12.270Z",
-                                                   "count" : 1])
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
-                                                 "entries" : [
-                                                    "49402752270",
-                                                    "49402752313",
-                                                    "49402754021"],
-                                                 "rangeEnd" : "0"])
-        
-        let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
-                                                  "url" : "MediaShareModelUrl"])
-        let mediaShares2 = MediaShareModel(JSON: ["name" : "whiteboard",
-                                                  "url" : "MediaShareModelUrl"])
-        
-        
-        
-        let calleeModel = PersonModel(JSON: ["name" : callee.name,
-                                             "email" : callee.email,
-                                             "id" : callee.personId,
-                                             "orgId" : callee.orgId])
-        
-        let calleeModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                    "audioStatus" : "INACTIVE",
-                                                                    "csis" : []])
-        
-        var calleeState : CallMembership.State = .idle
+        var callModel = dialCallModel(caller: caller, callee: callee)
         
         switch type {
         case .isRemoteLeft:
-            calleeState = .left
+            var participants:[ParticipantModel] = []
+            for var participant in callModel.participants! {
+                if participant.person!.id == callee.personId {
+                    participant.state = CallMembership.State.left
+                }
+                participants.append(participant)
+            }
+            callModel.setParticipants(newParticipants: participants)
         case .missingCallUrl:
-            locusUrl = nil
-        default:
-            break
+            callModel.setLocusUrl(newLocusUrl: nil)
         }
         
-        let callee = ParticipantModel.init(isCreator: true,
-                                           id: callee.personId,
-                                           url: "calleeUrl",
-                                           state: calleeState,
-                                           type: "USER",
-                                           person: calleeModel,
-                                           status:  calleeModelStatus,
-                                           deviceUrl: Config.FakeOtherDeviceUrl,
-                                           mediaBaseUrl: "mediaBaseUrl",
-                                           guest: false,
-                                           alertHint: nil,
-                                           alertType: nil,
-                                           enableDTMF: false,
-                                           devices: [])
-        
-        return CallModel.init(locusUrl: locusUrl, participants: [caller,callee], myself: caller, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: [mediaShares1!,mediaShares2!])
+        return callModel
     }
     
     
@@ -220,125 +75,34 @@ class FakeCallModelHelper {
         var participants:[ParticipantModel] = []
         
         if mySelf?.person?.id == hanupUser.personId {
-            mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
-                                                                 "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [18057733,
-                                                                           18057733,
-                                                                           24284620]])
-            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
+            mySelf?.status = getParticipantStatus(participantState: .left)
             mySelf?.state = CallMembership.State.left
             newModel.setMyself(newParticipant:mySelf)
-            
-            
         }
         
         for var participant in newModel.participants! {
             if participant.person?.id == hanupUser.personId {
                 participant.state = CallMembership.State.left
-                participant.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                         "audioStatus" : "INACTIVE",
-                                                                         "csis" : []])
+                participant.status = getParticipantStatus(participantState: .left)
             }
             participants.append(participant)
         }
         
         newModel.setParticipants(newParticipants: participants)
-        
-        if newModel.participants?.filter({ $0.state == .joined }).count == 0 {
-            var newFullState = newModel.fullState
-            newFullState?.setState(newState: "INACTIVE")
-            newFullState?.setCount(newCount: 0)
-            newModel.setFullState(newFullState: newFullState)
-            
-        }
-        
-        
-        
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
-                                                 "entries" : [
-                                                    "49407685631"],
-                                                 "rangeEnd" : "49407670942"])
-        newModel.setSequence(newSequence: sequenceModel)
-        
+        newModel.setFullState(newFullState: getFullState(participants: newModel.participants!))
+        newModel.setSequence(newSequence: getSequenceModel())
         return newModel
         
     }
     
     static func initCallModel(caller:TestUser,allParticipantUsers:[TestUser],selfUser:TestUser) -> CallModel {
-        
-        
         //self part
-        let selfModel = PersonModel(JSON: ["name" : selfUser.name,
-                                           "email" : selfUser.email,
-                                           "id" : selfUser.personId,
-                                           "orgId" : selfUser.orgId])
-        var alertHint:AlertHintModel?
-        var alertType:AlertTypeModel?
-        
-        var selfModelStatus:ParticipantModel.StatusModel?
-        var selfDeviceModels:[ParticipantModel.DeviceModel] = []
-        var selfState:CallMembership.State
-        var isCreator: Bool?
-        if caller.personId == selfUser.personId {
-            selfModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                  "audioStatus" : "SENDRECV",
-                                                                  "csis" : [
-                                                                    955581697,
-                                                                    409988531,
-                                                                    409988531]])
-            if let device = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                "mediaConnections" : [
-                                                                    MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                "actionsUrl" : "actionsUrl",
-                                                                                                "remoteSdp" : "remoteSdp",
-                                                                                                "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                "localSdp" : "localSdp",
-                                                                                                "keepAliveSecs" : 20,
-                                                                                                "type" : "SDP"])],
-                                                                "deviceType" : "IPHONE",
-                                                                "url" : Config.FakeSelfDeviceUrl]) {
-                selfDeviceModels.append(device)
-            }
-            
-            selfState = CallMembership.State.joined
-            isCreator = true
-            alertHint = AlertHintModel(JSON: ["action" : "NONE"])
-            alertType = AlertTypeModel(JSON: ["action" : "NONE"])
-        }
-        else {
-            alertHint = AlertHintModel(JSON: ["expiration" : "2017-11-09T08:37:38.968Z",
-            "action" : "RING"])
-            alertType = AlertTypeModel(JSON: ["action" : "FULL"])
-            
-            selfModelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                  "audioStatus" : "INACTIVE",
-                                                                  "csis" : []])
-            selfState = .idle
-            isCreator = false
-        }
-        
-        
-        let myself = ParticipantModel.init(isCreator: isCreator,
-                                           id: selfUser.personId ,
-                                           url: "callerUrl",
-                                           state: selfState,
-                                           type: "USER",
-                                           person: selfModel,
-                                           status:  selfModelStatus,
-                                           deviceUrl: selfUser.personId == caller.personId ? Config.FakeSelfDeviceUrl:nil,
-                                           mediaBaseUrl: "mediaBaseUrl",
-                                           guest: false,
-                                           alertHint: alertHint,
-                                           alertType: alertType,
-                                           enableDTMF: false,
-                                           devices: selfDeviceModels)
+        let isCreator = caller.personId == selfUser.personId ? true:false
+        let selfState = caller.personId == selfUser.personId ? CallMembership.State.joined:CallMembership.State.idle
+        let mySelf = getParticipant(userInfo: selfUser,userState: selfState,isSelfModel: true, isCreater: isCreator)
         
         //caller part
-        let callerModel = PersonModel(JSON: ["name" : caller.name,
-                                             "email" : caller.email,
-                                             "id" : caller.personId,
-                                             "orgId" : caller.orgId])
+        let callerModel = getPersonModel(testUser: caller)
         
         let host = callerModel
         
@@ -347,290 +111,115 @@ class FakeCallModelHelper {
         var participants:[ParticipantModel] = []
         
         for testUser in allParticipantUsers {
-            
-            let calleeModel = PersonModel(JSON: ["name" : testUser.name,
-                                                 "email" : testUser.email,
-                                                 "id" : testUser.personId,
-                                                 "orgId" : testUser.orgId])
-            var modelStatus:ParticipantModel.StatusModel?
-            var deviceModels:[ParticipantModel.DeviceModel] = []
             var state:CallMembership.State
-            var deviceUrl:String?
-            var isCreator: Bool?
+            var isCreator: Bool = false
             if testUser.personId == caller.personId {
-                modelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                  "audioStatus" : "SENDRECV",
-                                                                  "csis" : [
-                                                                    95558169,
-                                                                    40998853,
-                                                                    40998853]])
-                deviceUrl = (testUser.personId == selfUser.personId ? Config.FakeSelfDeviceUrl : Config.FakeOtherDeviceUrl)
-                
-                if let device = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                    "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                    "mediaConnections" : [
-                                                                        MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                    "actionsUrl" : "actionsUrl",
-                                                                                                    "remoteSdp" : "remoteSdp",
-                                                                                                    "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                    "localSdp" : "localSdp",
-                                                                                                    "keepAliveSecs" : 20,
-                                                                                                    "type" : "SDP"])],
-                                                                    "deviceType" : "IPHONE",
-                                                                    "url" : deviceUrl!]) {
-                                    deviceModels.append(device)
-                }
-                state = CallMembership.State.joined
                 isCreator = true
+                state = CallMembership.State.joined
             }
             else {
-                modelStatus = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                  "audioStatus" : "INACTIVE",
-                                                                  "csis" : []])
                 state = CallMembership.State.idle
-                deviceUrl = nil
                 isCreator = false
             }
-            
-            let participant = ParticipantModel.init(isCreator: isCreator,
-                                                    id: testUser.personId,
-                                                    url: "calleeUrl",
-                                                    state: state,
-                                                    type: "USER",
-                                                    person: calleeModel,
-                                                    status:  modelStatus,
-                                                    deviceUrl: deviceUrl,
-                                                    mediaBaseUrl: "mediaBaseUrl",
-                                                    guest: false,
-                                                    alertHint: nil,
-                                                    alertType: nil,
-                                                    enableDTMF: false,
-                                                    devices:deviceModels)
+            let participant = getParticipant(userInfo: testUser, userState: state, isCreater: isCreator)
             participants.append(participant)
         }
         
-        let locusUrl = "locusUrl+\(UUID.init())"
+        let locusUrl = getLocusUrl()
         
-        let fullStateModel = FullStateModel(JSON: ["state" : "ACTIVE",
-                                                   "locked" : false,
-                                                   "active" : true,
-                                                   "type" : "CALL",
-                                                   "lastActive" : "2017-11-08T02:59:12.270Z",
-                                                   "count" : 1])
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "0",
-                                                 "entries" : [
-                                                    "49402752270",
-                                                    "49402752313",
-                                                    "49402754021"],
-                                                 "rangeEnd" : "0"])
-        
-        let mediaShares1 = MediaShareModel(JSON: ["name" : "content",
-                                                  "url" : "MediaShareModelUrl"])
-        let mediaShares2 = MediaShareModel(JSON: ["name" : "whiteboard",
-                                                  "url" : "MediaShareModelUrl"])
-        
-        
-        
-        
-        
-        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: myself, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: [mediaShares1!,mediaShares2!])
+        let fullStateModel = getFullState(participants: participants)
+        let sequenceModel = getSequenceModel()
+        let mediaShareModels = getMediaShareModels()
+        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: mySelf, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShareModels)
     }
     
     static func answerCallModel(callModel:CallModel,answerUser:TestUser) -> CallModel {
-        
         var newModel = callModel
         var mySelf = newModel.myself
         var participants:[ParticipantModel] = []
         if mySelf?.person?.id == answerUser.personId {
-            let csis:[UInt] = [1805773313,1805773312,242846209]
-            mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                 "audioStatus" : "SENDRECV",
-                                                                 "csis" :csis])
-            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
-
-            let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                              "actionsUrl" : "actionsUrl",
-                                                              "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
-                                                              "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                              "localSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"localSDP\"}",
-                                                              "keepAliveSecs" : 20,
-                                                              "type" : "SDP"])!
-            let mediaConnections:[MediaConnectionModel] = [mediaConnection!]
-            
-            var deviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                  "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                  "mediaConnections" : mediaConnections,
-                                                                  "deviceType" : "IPHONE",
-                                                                  "url" : Config.FakeSelfDeviceUrl])
-            deviceModel?.mediaConnections = mediaConnections
-            mySelf?.devices = [deviceModel!]
             mySelf?.state = CallMembership.State.joined
+            mySelf?.status = getParticipantStatus(participantState: CallMembership.State.joined)
+            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
+            mySelf?.devices = getParticipantDevice(participantState: CallMembership.State.joined, isSelfModel: true, deviceUrl: Config.FakeSelfDeviceUrl)
             newModel.setMyself(newParticipant:mySelf)
-            
-            
         }
         
         for var participant in newModel.participants! {
             if participant.person?.id == answerUser.personId {
-                participant.devices = [ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
-                                                                           "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                           "mediaConnections" : [
-                                                                            MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                        "actionsUrl" : "actionsUrl",
-                                                                                                        "remoteSdp" : "remoteSdp",
-                                                                                                        "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                        "localSdp" : "localSdp",
-                                                                                                        "keepAliveSecs" : 20,
-                                                                                                        "type" : "SDP"])],
-                                                                           "deviceType" : "IPHONE",
-                                                                           "url" : Config.FakeSelfDeviceUrl])!]
                 participant.state = .joined
-                participant.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
-                                                                         "audioStatus" : "SENDRECV",
-                                                                         "csis" : []])
+                participant.deviceUrl = getDeviceUrl(isSelfModel: participant.person?.id == mySelf?.person?.id, userState: .joined,deviceUrl: participant.deviceUrl)
+                participant.devices = getParticipantDevice(participantState: .joined, isSelfModel: false, deviceUrl: participant.deviceUrl)
+                participant.status = getParticipantStatus(participantState: .joined)
             }
             participants.append(participant)
         }
         
         newModel.setParticipants(newParticipants: participants)
-        
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701",
-                                                 "entries" : [
-                                                    "494076856"],
-                                                 "rangeEnd" : "494076709"])
-        newModel.setSequence(newSequence: sequenceModel)
+        newModel.setSequence(newSequence: getSequenceModel())
         
         return newModel
         
     }
     
     static func declineCallModel(callModel:CallModel,declineUser:TestUser) -> CallModel {
-        
         var newModel = callModel
         var mySelf = newModel.myself
         var participants:[ParticipantModel] = []
         
         if mySelf?.person?.id == declineUser.personId {
-            mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
-                                                                 "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [1805773,
-                                                                           1805773,
-                                                                           2428462]])
-            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
-            
-            
             mySelf?.state = CallMembership.State.declined
+            mySelf?.status = getParticipantStatus(participantState: CallMembership.State.declined)
+            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
             newModel.setMyself(newParticipant:mySelf)
-            
-            
         }
         
         for var participant in newModel.participants! {
             if participant.person?.id == declineUser.personId {
-                
                 participant.state = CallMembership.State.declined
-                
-                participant.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
-                                                                         "audioStatus" : "INACTIVE",
-                                                                         "csis" : []])
+                participant.status = getParticipantStatus(participantState: CallMembership.State.declined)
             }
             participants.append(participant)
         }
-        
         newModel.setParticipants(newParticipants: participants)
         
-        if newModel.participants?.filter({ $0.state == .joined }).count == 0 {
-            var newFullState = newModel.fullState
-            newFullState?.setState(newState: "INACTIVE")
-            newFullState?.setCount(newCount: 0)
-            newModel.setFullState(newFullState: newFullState)
-            
-        }
-        
-        
-        
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "494076701",
-                                                 "entries" : [
-                                                    "494076856"],
-                                                 "rangeEnd" : "494076709"])
-        newModel.setSequence(newSequence: sequenceModel)
-        
+        newModel.setFullState(newFullState: getFullState(participants: newModel.participants!))
+        newModel.setSequence(newSequence: getSequenceModel())
         return newModel
-        
     }
     
-    
     static func alertCallModel(callModel:CallModel,alertUser:TestUser) -> CallModel {
-        
         var newModel = callModel
         var mySelf = newModel.myself
         var participants:[ParticipantModel] = []
         if mySelf?.person?.id == alertUser.personId {
-            mySelf?.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
-                                                                 "audioStatus" : "UNKNOWN",
-                                                                 "csis" : [1805773,
-                                                                           1805773,
-                                                                           2428462]])
-            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
-            mySelf?.devices = [ParticipantModel.DeviceModel(JSON: ["state" : "IDLE",
-                                                                   "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                   "mediaConnections" : [
-                                                                    MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                "actionsUrl" : "actionsUrl",
-                                                                                                "remoteSdp" : "remoteSdp",
-                                                                                                "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                "localSdp" : "localSdp",
-                                                                                                "keepAliveSecs" : 20,
-                                                                                                "type" : "SDP"])],
-                                                                   "deviceType" : "IPHONE",
-                                                                   "url" : Config.FakeSelfDeviceUrl])!]
             mySelf?.state = CallMembership.State.notified
+            mySelf?.status = getParticipantStatus(participantState: .notified)
+            mySelf?.deviceUrl = Config.FakeSelfDeviceUrl
+            mySelf?.devices = getParticipantDevice(participantState: CallMembership.State.notified, isSelfModel: true, deviceUrl: Config.FakeSelfDeviceUrl)
             newModel.setMyself(newParticipant:mySelf)
-            
-            
         }
         
         for var participant in newModel.participants! {
             if participant.person?.id == alertUser.personId {
-                participant.devices = [ParticipantModel.DeviceModel(JSON: ["state" : "IDLE",
-                                                                           "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
-                                                                           "mediaConnections" : [
-                                                                            MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                                        "actionsUrl" : "actionsUrl",
-                                                                                                        "remoteSdp" : "remoteSdp",
-                                                                                                        "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                                        "localSdp" : "localSdp",
-                                                                                                        "keepAliveSecs" : 20,
-                                                                                                        "type" : "SDP"])],
-                                                                           "deviceType" : "IPHONE",
-                                                                           "url" : Config.FakeSelfDeviceUrl])!]
                 participant.state = .notified
-                participant.status = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
-                                                                         "audioStatus" : "UNKNOWN",
-                                                                         "csis" : []])
+                participant.deviceUrl = getDeviceUrl(isSelfModel: participant.person?.id == mySelf?.person?.id, userState: .joined,deviceUrl: participant.deviceUrl)
+                participant.devices = getParticipantDevice(participantState: CallMembership.State.notified, isSelfModel: false, deviceUrl: participant.deviceUrl)
+                participant.status = getParticipantStatus(participantState: .notified)
             }
             participants.append(participant)
         }
         
         newModel.setParticipants(newParticipants: participants)
-        
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
-                                                 "entries" : [
-                                                    "49407685631"],
-                                                 "rangeEnd" : "49407670942"])
-        newModel.setSequence(newSequence: sequenceModel)
-        
+        newModel.setSequence(newSequence: getSequenceModel())
         return newModel
-        
     }
     
     static func updateMediaCallModel(callModel:CallModel,updateUser:TestUser,localMedia:MediaModel) -> CallModel {
-        
         var newModel = callModel
         var mySelf = newModel.myself
         var participants:[ParticipantModel] = []
         if mySelf?.person?.id == updateUser.personId {
-            
             if localMedia.audioMuted == true {
                 mySelf?.status?.audioStatus = "RECVONLY"
             }
@@ -643,40 +232,23 @@ class FakeCallModelHelper {
             else {
                 mySelf?.status?.videoStatus = "SENDRECV"
             }
-            let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"localSDP\"}"
-            let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                    "actionsUrl" : "actionsUrl",
-                                                                                    "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
-                                                                                    "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                    "localSdp" : localSDP,
-                                                                                    "keepAliveSecs" : 20,
-                                                                                    "type" : "SDP"])!
+            
+            let mediaConnection:MediaConnectionModel? = getMediaConectionModel(remoteAudioMuted: false, remoteVideoMuted: false, localAudioMuted: localMedia.audioMuted!, localVideoMuted: localMedia.videoMuted!)
+            
             let mediaConnections:[MediaConnectionModel] = [mediaConnection!]
             if let devices = mySelf?.devices {
-            for var device in devices {
-                device.mediaConnections = mediaConnections
+                var newDevices:[ParticipantModel.DeviceModel] = []
+                for var device in devices {
+                    device.mediaConnections = mediaConnections
+                    newDevices.append(device)
+                }
+                mySelf?.devices = newDevices
             }
-            }
-            
             newModel.setMyself(newParticipant:mySelf)
-            
         }
         
         for var participant in newModel.participants! {
-            if participant.person?.id == updateUser.personId ,let devices = participant.devices {
-                for var device in devices {
-                    
-                    let localSDP = "{\"audioMuted\":\(localMedia.audioMuted==true ? "true":"false"),\"videoMuted\":\(localMedia.videoMuted==true ? "true":"false"),\"type\":\"SDP\",\"csis\":[6219714,6219717,42446699],\"sdp\":\"localSDP\"}"
-                    let mediaConnection:MediaConnectionModel? = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
-                                                                                            "actionsUrl" : "actionsUrl",
-                                                                                            "remoteSdp" : "{\"audioMuted\":false,\"videoMuted\":false,\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}",
-                                                                                            "mediaId" : "b3f69b17-0212-4c61-925e-497d2ad867d3",
-                                                                                            "localSdp" : localSDP,
-                                                                                            "keepAliveSecs" : 20,
-                                                                                            "type" : "SDP"])!
-                    device.mediaConnections = [mediaConnection!]
-                }
-               
+            if participant.person?.id == updateUser.personId {
                 if localMedia.audioMuted == true {
                     participant.status?.audioStatus = "RECVONLY"
                 }
@@ -694,16 +266,205 @@ class FakeCallModelHelper {
         }
         
         newModel.setParticipants(newParticipants: participants)
-        
-        let sequenceModel = SequenceModel(JSON: ["rangeStart" : "49407670158",
-                                                 "entries" : [
-                                                    "49407685631"],
-                                                 "rangeEnd" : "49407670942"])
-        newModel.setSequence(newSequence: sequenceModel)
-        
+        newModel.setSequence(newSequence: getSequenceModel())
         return newModel
-        
     }
     
+    static func getLocusUrl() -> String {
+        return "locusUrl\(UUID.init())"
+    }
     
+    private static func getPersonModel(testUser:TestUser) -> PersonModel {
+        return PersonModel(JSON: ["name" : testUser.name,
+                                  "email" : testUser.email,
+                                  "id" : testUser.personId,
+                                  "orgId" : testUser.orgId])!
+    }
+    
+    private static func getParticipantStatus(participantState:CallMembership.State) -> ParticipantModel.StatusModel {
+        var statusModel :ParticipantModel.StatusModel?
+        switch participantState {
+        case .idle:
+            statusModel = ParticipantModel.StatusModel(JSON: ["videoStatus" : "INACTIVE",
+                                                              "audioStatus" : "INACTIVE",
+                                                              "csis" : []])
+        case .joined:
+            statusModel = ParticipantModel.StatusModel(JSON: ["videoStatus" : "SENDRECV",
+                                                              "audioStatus" : "SENDRECV",
+                                                              "csis" : [111111,
+                                                                        222222,
+                                                                        333333]])
+        case .declined,.left,.notified:
+            statusModel = ParticipantModel.StatusModel(JSON: ["videoStatus" : "UNKNOWN",
+                                                              "audioStatus" : "UNKNOWN",
+                                                              "csis" : [111111,222222,333333]])
+        }
+        
+        
+        return statusModel!
+    }
+    
+    private static func getParticipantDevice(participantState:CallMembership.State,isSelfModel:Bool = false,deviceUrl:String?) -> [ParticipantModel.DeviceModel] {
+        
+        var deviceModels:[ParticipantModel.DeviceModel] = []
+        var deviceModel:ParticipantModel.DeviceModel? = nil
+        
+        switch participantState {
+        case .idle,.declined,.left,.notified:
+            break
+        case .joined:
+            if let url = deviceUrl {
+                if isSelfModel == true {
+                    let mediaConnections:[MediaConnectionModel] = [getMediaConectionModel()]
+                    deviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
+                                                                      "callLegId" : "0908e0c4-1d37-4696-9e9c-1fb4f910eb13",
+                                                                      "deviceType" : "IPHONE",
+                                                                      "url" : url])
+                    deviceModel?.mediaConnections = mediaConnections
+                }
+                else {
+                    deviceModel = ParticipantModel.DeviceModel(JSON: ["state" : "JOINED",
+                                                                      "deviceType" : "IPHONE",
+                                                                      "url" : url])
+                }
+            }
+        }
+        
+        if let device = deviceModel {
+            deviceModels.append(device)
+        }
+        
+        return deviceModels
+    }
+    
+    private static func getMediaConectionModel(remoteAudioMuted:Bool = false,remoteVideoMuted:Bool = false,localAudioMuted: Bool = false,localVideoMuted: Bool = false) ->MediaConnectionModel {
+        let remoteSDP = "{\"audioMuted\":\(remoteAudioMuted ? "false":"true"),\"videoMuted\":\(remoteVideoMuted ? "false":"true"),\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"remoteSDP\"}"
+        let localSDP = "{\"audioMuted\":\(localAudioMuted ? "false":"true"),\"videoMuted\":\(localVideoMuted ? "false":"true"),\"type\":\"SDP\",\"csis\":[6219714,6219714,42446699],\"sdp\":\"localSDP\"}"
+        let mediaConnection:MediaConnectionModel = MediaConnectionModel(JSON: ["keepAliveUrl" : "keepAliveUrl",
+                                                                               "actionsUrl" : "actionsUrl",
+                                                                               "remoteSdp" : remoteSDP,
+                                                                               "mediaId" : "\(UUID.init())",
+                                                                               "localSdp" : localSDP,
+                                                                               "keepAliveSecs" : 20,
+                                                                               "type" : "SDP"])!
+        return mediaConnection
+    }
+    
+    private static func getFullState(participants:[ParticipantModel]) -> FullStateModel {
+        var stateModel:FullStateModel = FullStateModel(JSON: ["state" : "ACTIVE",
+                                                              "locked" : false,
+                                                              "active" : true,
+                                                              "type" : "CALL",
+                                                              "lastActive" : "2017-11-08T02:59:12.270Z",
+                                                              "count" : 1])!
+        
+        if participants.filter({ $0.state == .joined }).count == 0 {
+            stateModel.setState(newState: "INACTIVE")
+            stateModel.setCount(newCount: 0)
+        }
+        
+        return stateModel
+    }
+    
+    private static func getSequenceModel() -> SequenceModel {
+        return SequenceModel(JSON: ["rangeStart" : "0",
+                                    "entries" : [
+                                        "4940275227",
+                                        "4940275231",
+                                        "4940275402"],
+                                    "rangeEnd" : "0"])!
+    }
+    
+    private static func getMediaShareModels() -> [MediaShareModel] {
+        let whiteboard = MediaShareModel(JSON: ["name" : "whiteboard",
+                                                "url" : "MediaShareModelUrl"])!
+        let screenShare = MediaShareModel(JSON: ["name" : "content",
+                                                 "url" : "MediaShareModelUrl"])!
+        
+        return [whiteboard,screenShare]
+    }
+    
+    private static func getAlertHintModel(userState:CallMembership.State,isCreater:Bool,isSeflModel:Bool) ->AlertHintModel? {
+        guard isSeflModel == true else {
+            return nil
+        }
+        
+        var alertHint:AlertHintModel? = nil
+        switch userState {
+        case .notified,.idle:
+            if !isCreater {
+                alertHint = AlertHintModel(JSON: ["expiration" : "2017-11-09T08:37:38.968Z",
+                                                  "action" : "RING"])
+                
+            }
+            break
+        default:
+            alertHint = AlertHintModel(JSON: ["action" : "NONE"])
+            break
+        }
+        return alertHint
+    }
+    
+    private static func getAlertTypeModel(userState:CallMembership.State,isCreater:Bool,isSeflModel:Bool) ->AlertTypeModel? {
+        guard isSeflModel == true else {
+            return nil
+        }
+        
+        var alertType:AlertTypeModel? = nil
+        switch userState {
+        case .notified,.idle:
+            if !isCreater {
+                alertType = AlertTypeModel(JSON: ["action" : "FULL"])
+            }
+            break
+        default:
+            alertType = AlertTypeModel(JSON: ["action" : "NONE"])
+            break
+        }
+        return alertType
+    }
+    
+    private static func getDeviceUrl(isSelfModel:Bool,userState:CallMembership.State,deviceUrl:String? = nil) -> String? {
+        var result: String? = nil
+        switch userState {
+        case .joined:
+            if deviceUrl == nil {
+                result = isSelfModel ? Config.FakeSelfDeviceUrl:Config.FakeOtherDeviceUrl
+            }
+            else {
+                result = deviceUrl
+            }
+        default:
+            break
+        }
+        return result
+    }
+    
+    private static func getParticipant(userInfo:TestUser,userState:CallMembership.State,isSelfModel:Bool = false,isCreater:Bool,deviceUrl:String? = nil) -> ParticipantModel {
+        let personModel = getPersonModel(testUser: userInfo)
+        let userModelStatus = getParticipantStatus(participantState: userState)
+        
+        let alertHint = getAlertHintModel(userState: userState, isCreater: isCreater, isSeflModel: isSelfModel)
+        let alertType = getAlertTypeModel(userState: userState, isCreater: isCreater, isSeflModel: isSelfModel)
+        
+        
+        let selfDeviceUrl = getDeviceUrl(isSelfModel: isSelfModel, userState: userState,deviceUrl: deviceUrl)
+        let callerDeviceModel = getParticipantDevice(participantState: userState,isSelfModel:isSelfModel,deviceUrl: selfDeviceUrl)
+        let participantModel:ParticipantModel = ParticipantModel.init(isCreator: isCreater,
+                                                                      id: userInfo.personId ,
+                                                                      url: userInfo.personId,
+                                                                      state: userState,
+                                                                      type: "USER",
+                                                                      person: personModel,
+                                                                      status:  userModelStatus,
+                                                                      deviceUrl: selfDeviceUrl,
+                                                                      mediaBaseUrl: "mediaBaseUrl",
+                                                                      guest: false,
+                                                                      alertHint: alertHint,
+                                                                      alertType: alertType,
+                                                                      enableDTMF: false,
+                                                                      devices: callerDeviceModel)
+        
+        return participantModel
+    }
 }
