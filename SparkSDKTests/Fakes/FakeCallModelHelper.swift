@@ -274,6 +274,46 @@ class FakeCallModelHelper {
         return "locusUrl\(UUID.init())"
     }
     
+    static func grantedScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        var newModel = callModel
+        var newMediaShares :[MediaShareModel] = []
+        
+        if let oldMediaShares = newModel.mediaShares {
+            for var mediaShare in oldMediaShares {
+                if mediaShare.shareType == MediaShareModel.MediaShareType.screen {
+                    mediaShare = getGrantedScreenShareModel(shareUser: shareUser)
+                }
+                newMediaShares.append(mediaShare)
+            }
+        }
+        else {
+            newMediaShares.append(getGrantedScreenShareModel(shareUser: shareUser))
+        }
+        
+        newModel.setMediaShares(newMediaShares: newMediaShares)
+        return newModel
+    }
+    
+    static func releaseScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        var newModel = callModel
+        var newMediaShares :[MediaShareModel] = []
+        
+        if let oldMediaShares = newModel.mediaShares {
+            for var mediaShare in oldMediaShares {
+                if mediaShare.shareType == MediaShareModel.MediaShareType.screen {
+                    mediaShare = getReleaseScreenShareModel(shareUser: shareUser)
+                }
+                newMediaShares.append(mediaShare)
+            }
+        }
+        else {
+            newMediaShares.append(getReleaseScreenShareModel(shareUser: shareUser))
+        }
+        
+        newModel.setMediaShares(newMediaShares: newMediaShares)
+        return newModel
+    }
+    
     private static func getPersonModel(testUser:TestUser) -> PersonModel {
         return PersonModel(JSON: ["name" : testUser.name,
                                   "email" : testUser.email,
@@ -467,4 +507,23 @@ class FakeCallModelHelper {
         
         return participantModel
     }
+    
+    private static func getGrantedScreenShareModel(shareUser:TestUser) -> MediaShareModel {
+        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
+        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: nil, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
+        
+        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.granted, granted: "2017-11-22T06:31:16.188Z", released: nil, requested: "2017-11-22T06:31:14.917Z", requester: requestParticipant)
+        
+        return MediaShareModel.init(shareType: MediaShareModel.MediaShareType.screen, url: "MediaShareModelUrl", shareFloor: mediaShareFloor)
+    }
+    
+    private static func getReleaseScreenShareModel(shareUser:TestUser) -> MediaShareModel {
+        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
+        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: nil, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
+        
+        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.released, granted: "2017-11-22T06:31:16.188Z", released: "2017-11-22T06:33:53.603Z", requested: "2017-11-22T06:31:14.917Z", requester: requestParticipant)
+        
+        return MediaShareModel.init(shareType: MediaShareModel.MediaShareType.screen, url: "MediaShareModelUrl", shareFloor: mediaShareFloor)
+    }
+    
 }
