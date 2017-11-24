@@ -123,6 +123,15 @@
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
+		C79F14061FBE7C3A00B43596 /* FakeCallClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */; };
+		C79F14071FBE7C3A00B43596 /* FakeCallModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */; };
+		C79F14081FBE7C3A00B43596 /* FakeConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */; };
+		C79F14091FBE7C3A00B43596 /* FakeDeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14011FBE7BE500B43596 /* FakeDeviceService.swift */; };
+		C79F140A1FBE7C3A00B43596 /* FakeMediaSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14021FBE7BE500B43596 /* FakeMediaSession.swift */; };
+		C79F140B1FBE7C3A00B43596 /* FakeMetricsEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14031FBE7BE500B43596 /* FakeMetricsEngine.swift */; };
+		C79F140C1FBE7C3A00B43596 /* FakeReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */; };
+		C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */; };
+		C79F14101FC3B8C900B43596 /* CallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F140E1FC3B88900B43596 /* CallTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,7 +248,7 @@
 		B91E75441CE2D7B70080EAE0 /* Membership.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Membership.swift; sourceTree = "<group>"; };
 		B91E75461CE2D7B70080EAE0 /* MembershipClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MembershipClient.swift; sourceTree = "<group>"; };
 		B91E75481CE2D7B70080EAE0 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		B91E754A1CE2D7B70080EAE0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageClient.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		B91E754A1CE2D7B70080EAE0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MessageClient.swift; sourceTree = "<group>"; };
 		B91E754C1CE2D7B70080EAE0 /* Metric+Names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Metric+Names.swift"; sourceTree = "<group>"; };
 		B91E754D1CE2D7B70080EAE0 /* Metric.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metric.swift; sourceTree = "<group>"; };
 		B91E754E1CE2D7B70080EAE0 /* MetricsBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetricsBuffer.swift; sourceTree = "<group>"; };
@@ -267,6 +276,15 @@
 		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallClient.swift; sourceTree = "<group>"; };
+		C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallModelHelper.swift; sourceTree = "<group>"; };
+		C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeConversationClient.swift; sourceTree = "<group>"; };
+		C79F14011FBE7BE500B43596 /* FakeDeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeDeviceService.swift; sourceTree = "<group>"; };
+		C79F14021FBE7BE500B43596 /* FakeMediaSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeMediaSession.swift; sourceTree = "<group>"; };
+		C79F14031FBE7BE500B43596 /* FakeMetricsEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeMetricsEngine.swift; sourceTree = "<group>"; };
+		C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReachabilityService.swift; sourceTree = "<group>"; };
+		C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
+		C79F140E1FC3B88900B43596 /* CallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CallTests.swift; path = Tests/CallTests.swift; sourceTree = SOURCE_ROOT; };
 		E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.releasetest.xcconfig"; sourceTree = "<group>"; };
 		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
 		EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -322,6 +340,7 @@
 		3D15B70C1D3E176C003BB682 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				C79F13FD1FBE7BE500B43596 /* Fakes */,
 				3DA099F11D3EF82500205DF6 /* Config.swift */,
 				5AFB6E961DF5C5D50027E989 /* JWTAuthKeychainStorageTests.swift */,
 				3DA099F31D3EF82500205DF6 /* MembershipTests.swift */,
@@ -341,6 +360,7 @@
 				C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */,
 				C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */,
 				991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */,
+				C79F140E1FC3B88900B43596 /* CallTests.swift */,
 			);
 			name = Tests;
 			path = SparkSDKTests;
@@ -601,6 +621,21 @@
 			path = Webhook;
 			sourceTree = "<group>";
 		};
+		C79F13FD1FBE7BE500B43596 /* Fakes */ = {
+			isa = PBXGroup;
+			children = (
+				C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */,
+				C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */,
+				C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */,
+				C79F14011FBE7BE500B43596 /* FakeDeviceService.swift */,
+				C79F14021FBE7BE500B43596 /* FakeMediaSession.swift */,
+				C79F14031FBE7BE500B43596 /* FakeMetricsEngine.swift */,
+				C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */,
+				C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */,
+			);
+			path = Fakes;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -795,6 +830,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C79F14101FC3B8C900B43596 /* CallTests.swift in Sources */,
+				C79F14061FBE7C3A00B43596 /* FakeCallClient.swift in Sources */,
+				C79F14071FBE7C3A00B43596 /* FakeCallModelHelper.swift in Sources */,
+				C79F14081FBE7C3A00B43596 /* FakeConversationClient.swift in Sources */,
+				C79F14091FBE7C3A00B43596 /* FakeDeviceService.swift in Sources */,
+				C79F140A1FBE7C3A00B43596 /* FakeMediaSession.swift in Sources */,
+				C79F140B1FBE7C3A00B43596 /* FakeMetricsEngine.swift in Sources */,
+				C79F140C1FBE7C3A00B43596 /* FakeReachabilityService.swift in Sources */,
+				C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */,
 				3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */,
 				3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */,
 				3D3131431D3EF932007717B2 /* Config.swift in Sources */,
@@ -934,6 +978,10 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
@@ -949,6 +997,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1037,6 +1089,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
 				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

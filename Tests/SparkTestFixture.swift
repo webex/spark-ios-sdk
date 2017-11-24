@@ -22,7 +22,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
-import SparkSDK
+//import SparkSDK
 import XCTest
 @testable import SparkSDK
 
@@ -41,8 +41,7 @@ class SparkTestFixture {
     private let adminClientSecret: String
     private let adminAccessToken: String
     let selfUser: TestUser
-    let spark: Spark
-    
+    var spark: Spark
     private init?() {
         guard let adminClientSecretValue = ProcessInfo().environment["CLIENTSECRET"] else { // check , !adminClientSecretValue.isEmpty()
             print("Failed to get client secret from CLIENTSECRET environment variable")
@@ -77,8 +76,6 @@ class SparkTestFixture {
         }
         
         spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))
-        
-        
     }
     
     private static func createAdminAccessToken(clientId: String, clientSecret: String) -> String? {
@@ -216,3 +213,5 @@ class SparkTestFixture {
         return getResponse(testCase: testCase, request: request) == nil ? false : true
     }
 }
+
+

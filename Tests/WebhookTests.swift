@@ -62,6 +62,17 @@ class WebhookTests: XCTestCase {
         // Tests that basic setup and teardown work without issue.
     }
     
+    func testCreateFilterWebhookThenItExistsAndHasAnId() {
+        let filterWebhook = createFilterWebhook()
+        XCTAssertNotNil(filterWebhook)
+        
+        let webhooks = listWebhooks()
+        XCTAssertEqual(webhooks?.count, 2)
+        deleteWebhook(id: filterWebhook!.id!)
+        let webhooks1 = listWebhooks()
+        XCTAssertEqual(webhooks1?.count, 1)
+    }
+    
     func testWhenThereIsOneWebhookThenTheListFunctionReturnsOneWebhook() {
         let webhooks = listWebhooks()
         XCTAssertEqual(webhooks?.count, 1)
@@ -80,12 +91,48 @@ class WebhookTests: XCTestCase {
         XCTAssertEqual(updated?.targetUrl, updatedTargetUrl)
     }
     
+    func testWhenWebhookIsDeletedThenItCannotBeUpdated() {
+        deleteWebhook(id: webhookId)
+        let updatedName = "updated_test_webhook"
+        let updatedTargetUrl = "https://example.com/updated_test_webhook"
+        let updated = updateWebhook(id: webhookId, name: updatedName, targetUrl: updatedTargetUrl)
+        XCTAssertNil(updated)
+        
+    }
+    
     func testWhenWebhookIsDeletedThenItCannotBeGotten() {
         deleteWebhook(id: webhookId)
         XCTAssertNil(getWebhook(id: webhookId))
     }
     
+    func testWhenWebhookIsDeletedThenItCannotBeListed() {
+        deleteWebhook(id: webhookId)
+        let webHooks = listWebhooks()
+        XCTAssertEqual(webHooks?.count, 0)
+    }
+    
+    func testCreateSameWebhookThenDeleteIt() {
+        let webhook1 = createWebhook()
+        XCTAssertNotNil(webhook1)
+        
+        let webhooks = listWebhooks()
+        XCTAssertEqual(webhooks?.count, 2)
+        deleteWebhook(id: webhook1!.id!)
+        let webhooks1 = listWebhooks()
+        XCTAssertEqual(webhooks1?.count, 1)
+        XCTAssertEqual(webhooks1?.filter(){$0.id == webhook1!.id!}.count, 0)
+        
+    }
+    
+    
     private func createWebhook() -> Webhook? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
+            self.webhooks.create(name: "test_webhook", targetUrl: "https://example.com/test_webhook", resource: "messages", event: "created", filter: nil, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
+    
+    private func createFilterWebhook() -> Webhook? {
         let request = { (completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) in
             self.webhooks.create(name: "test_webhook", targetUrl: "https://example.com/test_webhook", resource: "messages", event: "created", filter: "roomId=" + self.roomId, completionHandler: completionHandler)
         }

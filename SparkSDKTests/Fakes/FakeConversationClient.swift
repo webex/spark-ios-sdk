@@ -19,28 +19,15 @@
 // THE SOFTWARE.
 
 import Foundation
-import SparkSDK
-
-
-struct Config {
-    static let TestcaseInterval = 1.0
-    static let TestcaseRetryCount = 3
-    static let TestcasePendingCheckTimeout = 20.0
-    static let TestcasePendingCheckPollInterval = 0.2
-    static let TestcasePendingMediaInit = 3.0
-    
-    static let InvalidId = "abc"
-    static let InvalidEmail = EmailAddress.fromString("abc@a.aa")!
-    static let FakeRoomId = "Y2lzY29zcGFyazovL3VzL1JPT00vYWNmNjg3MDAtY2FhZC0xMWU3LTg1Y2EtMjUzNjhiNjY3YjQz"
-    static let FakeSelfDeviceUrl = "https://wdmServer.com/self"
-    static let FakeOtherDeviceUrl = "https://wdmServer.com/other"
-    static let FakeWebSocketUrl = "https://WebSocketServer.com/"
-    static let FakeLocusServiceUrl = "https://locusServer.com/"
-    static let FakeConversationServiceUrl = "https://conversationServiceUrl.com/"
-    static let FakeCalliopeDiscoveryServiceUrl = "https://calliopeDiscoveryServiceUrl.com/"
-    static let FakeMetricsServiceUrl = "https://metricsServiceUrl.com/"
-    
+@testable import SparkSDK
+class FakeConversationClient : ConversationClient {
+    var disableConversation: Bool = false
+    override func getLocusUrl(conversation: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<ConversationLocusModel>) -> Void) {
+        if disableConversation {
+            completionHandler(ServiceResponse(HTTPURLResponse(url: URL(string: "www.aaa.com")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: ["Content-Type":"application/json;charset=UTF-8"]), Result.failure(SparkError.serviceFailed(code: -7000, reason: "getLocusUrl error"))))
+        }
+        else {
+        completionHandler(ServiceResponse(HTTPURLResponse(url: URL(string: "www.aaa.com")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: ["Content-Type":"application/json;charset=UTF-8"]), Result.success(ConversationLocusModel.init(locusUrl: "locusUrl+\(UUID.init())"))))
+        }
+    }
 }
-
-
-

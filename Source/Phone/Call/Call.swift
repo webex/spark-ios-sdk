@@ -268,7 +268,7 @@ public class Call {
     ///
     /// - since: 1.3.0
     public var remoteSendingScreenShare: Bool {
-        return model.isGrantedScreenShare
+        return model.isGrantedScreenShare && model.screenShareMediaFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.

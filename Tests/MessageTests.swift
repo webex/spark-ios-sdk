@@ -174,8 +174,8 @@ class MessageTests: XCTestCase {
         let message1 = postMessage(roomId: roomId, text: text, files: nil)
         Thread.sleep(forTimeInterval: Config.TestcaseInterval)
         var nowDate = Date()
-        if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(3){
-                nowDate = createDate.addingTimeInterval(3)
+        if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(Config.TestcaseInterval){
+                nowDate = createDate.addingTimeInterval(Config.TestcaseInterval)
         }
         let now = getISO8601DateWithDate(nowDate)
         
@@ -234,6 +234,30 @@ class MessageTests: XCTestCase {
     func testDeletingMessageWithBadIdFails() {
         XCTAssertFalse(deleteMessage(messageId: Config.InvalidId))
     }
+    
+    func testSendListDeleteMessage() {
+        let message1 = postMessage(roomId: roomId, text: text, files: nil)
+        let message2 = postMessage(roomId: roomId, text: text, files: nil)
+        let message3 = postMessage(roomId: roomId, text: text, files: fileUrl)
+        XCTAssertEqual(message1?.text, text)
+        XCTAssertEqual(message2?.text, text)
+        XCTAssertEqual(message3?.text, text)
+        XCTAssertNotNil(message3?.files)
+        
+        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: 3)
+        XCTAssertEqual(messageArray?.count, 3)
+        
+        
+        XCTAssertTrue(deleteMessage(messageId: message2!.id!))
+        let messageArray1 = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: 3)
+        XCTAssertEqual(messageArray1?.count, 2)
+        XCTAssertEqual(messageArray1?.filter(){$0.id == message2!.id}.count, 0)
+        
+        XCTAssertTrue(deleteMessage(messageId: message3!.id!))
+        let messageArray2 = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: 3)
+        XCTAssertEqual(messageArray2?.count, 1)
+    }
+    
     
     private func deleteMessage(messageId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in

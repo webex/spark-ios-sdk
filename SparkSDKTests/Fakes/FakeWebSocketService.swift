@@ -19,28 +19,33 @@
 // THE SOFTWARE.
 
 import Foundation
-import SparkSDK
+@testable import SparkSDK
+import Starscream
+import SwiftyJSON
+import ObjectMapper
 
-
-struct Config {
-    static let TestcaseInterval = 1.0
-    static let TestcaseRetryCount = 3
-    static let TestcasePendingCheckTimeout = 20.0
-    static let TestcasePendingCheckPollInterval = 0.2
-    static let TestcasePendingMediaInit = 3.0
+class FakeWebSocketService:WebSocketService {
+    private var callModel:CallModel?
     
-    static let InvalidId = "abc"
-    static let InvalidEmail = EmailAddress.fromString("abc@a.aa")!
-    static let FakeRoomId = "Y2lzY29zcGFyazovL3VzL1JPT00vYWNmNjg3MDAtY2FhZC0xMWU3LTg1Y2EtMjUzNjhiNjY3YjQz"
-    static let FakeSelfDeviceUrl = "https://wdmServer.com/self"
-    static let FakeOtherDeviceUrl = "https://wdmServer.com/other"
-    static let FakeWebSocketUrl = "https://WebSocketServer.com/"
-    static let FakeLocusServiceUrl = "https://locusServer.com/"
-    static let FakeConversationServiceUrl = "https://conversationServiceUrl.com/"
-    static let FakeCalliopeDiscoveryServiceUrl = "https://calliopeDiscoveryServiceUrl.com/"
-    static let FakeMetricsServiceUrl = "https://metricsServiceUrl.com/"
+    override func connect(_ webSocketUrl: URL, _ block: @escaping (Error?) -> Void) {
+        block(nil)
+    }
+    
+    
+    override func disconnect() {
+        
+    }
+    
+    
+    override func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+        if let call = self.callModel {
+            self.onCallModel?(call)
+        }
+    }
+    
+    func sendOnincomingCall(caller:TestUser,callee:TestUser) {
+        self.callModel = FakeCallModelHelper.initCallModel(caller: caller, allParticipantUsers: [caller,callee], selfUser: callee)
+        self.websocketDidReceiveMessage(socket: WebSocket(url: URL(fileURLWithPath: Config.FakeWebSocketUrl)), text: "test")
+    }
     
 }
-
-
-
