@@ -176,6 +176,14 @@ public class Spark {
         return TeamMembershipClient(authenticator: authenticator)
     }
     
+    /// Team Memberships represent a person's relationships to teams.
+    /// Use *activities* to create and manage the activities on behalf of the authenticated user.
+    ///
+    /// - since: 1.4.0
+    public var activityClient: ActivityClient{
+        return ActivityClient(authenticator: authenticator)
+    }
+    
     private func verbose() {
         var systemInfo = utsname()
         uname(&systemInfo)

@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import ObjectMapper
 
-class ActivityClient: NSObject {
+public class ActivityClient: NSObject {
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {
@@ -23,14 +24,11 @@ class ActivityClient: NSObject {
     /// If present, it includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
     ///
-    /// - parameter roomId: The identifier of the room.
-    /// - parameter before: If not nil, only list messages sent only before this date and time, in ISO8601 format.
-    /// - parameter beforeMessage: if not nil, only list messages sent only before this message by id.
-    /// - parameter max: The maximum number of messages in the response.
+    /// - parameter activityID: The identifier of the activity.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    /// - since: 1.2.0
+    /// - since: 1.4.0
     public func detail(activityID: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void) {
         let request = requestBuilder()
             .method(.get)
@@ -38,6 +36,21 @@ class ActivityClient: NSObject {
             .build()
         request.responseObject(completionHandler)
     }
+    
+    public func postMessage(conversationID: String, content: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
+        
+        let body = RequestParameter([
+            "verb": "post",
+            "object" : createActivityObjectWith(content: content).toJSONString(prettyPrint: true),
+            "target" : createActivityTargetWith(conversationId: conversationID).toJSONString(prettyPrint: true)
+        ])
+        let request = requestBuilder()
+            .method(.post)
+            .body(body)
+            .build()
+         request.responseObject(completionHandler)
+    }
+    
     
     /// Posts a plain text message, and optionally, a media content attachment, to a room by room Id.
     ///
@@ -164,5 +177,23 @@ class ActivityClient: NSObject {
             .build()
         
         request.responseJSON(completionHandler)
+    }
+    
+    
+    
+    private func createActivityObjectWith(content: String? = nil) -> ActivityObjectModel{
+        var model = ActivityObjectModel()
+        if let contentStr = content{
+            model.content = contentStr
+        }
+        return model
+    }
+    
+    private func createActivityTargetWith(conversationId: String? = nil) -> ActivityTargetModel{
+        var model = ActivityTargetModel()
+        if let idStr = conversationId{
+            model.id = idStr
+        }
+        return model
     }
 }

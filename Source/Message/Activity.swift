@@ -52,13 +52,13 @@ public struct Activity {
     public var verb: String?
     
     /// The actor of the Acitivity
-    public var actor: ActorModel?
+    public var actor: ActivityActorModel?
     
     /// The activity object bring message/file info.
-    public var object: ObjectModel?
+    public var object: ActivityObjectModel?
     
     /// The target of the activity
-    public var target: TargetModel?
+    public var target: ActivityTargetModel?
     
     /// The clientTempId of the activity
     public var clientTempId: String?
@@ -90,7 +90,7 @@ extension Activity: Mappable {
     }
 }
 
-public struct ActorModel {
+public struct ActivityActorModel {
     var id: String?
     var objectType: String?
     var displayName: String?
@@ -100,7 +100,7 @@ public struct ActorModel {
     var actorType: String? // Default is "PERSON"
 }
 
-public struct ObjectModel {
+public struct ActivityObjectModel {
     var objectType: String?
     var displayName: String?
     var contentCategory: String?
@@ -108,7 +108,7 @@ public struct ObjectModel {
     var contentType: String?
 }
 
-public struct TargetModel {
+public struct ActivityTargetModel {
     var id: String?
     var objectType: String? // Default is "conversation"
     var url: String?
@@ -116,7 +116,7 @@ public struct TargetModel {
     var encryptionKeyUrl: String?
 }
 
-extension ActorModel: Mappable {
+extension ActivityActorModel: Mappable {
     public init?(map: Map) {}
     public mutating func mapping(map: Map) {
         id <- map["id"]
@@ -129,7 +129,7 @@ extension ActorModel: Mappable {
     }
 }
 
-extension ObjectModel: Mappable {
+extension ActivityObjectModel: Mappable {
     public init?(map: Map) {}
     public mutating func mapping(map: Map) {
         objectType <- map["objectType"]
@@ -140,7 +140,7 @@ extension ObjectModel: Mappable {
     }
 }
 
-extension TargetModel: Mappable {
+extension ActivityTargetModel: Mappable {
     public init?(map: Map){ }
     public mutating func mapping(map: Map) {
         id <- map["id"]
