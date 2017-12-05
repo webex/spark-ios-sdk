@@ -31,6 +31,9 @@ public struct Activity {
     /// The objectType of the Activity. Default is "activity"
     public var objectType: String?
     
+    /// The url of the Activity. Default is "activity"
+    public var url: String?
+    
     /// The the time activity published "YYYY-MM-DDTHH:MM:SS.SSSZ".
     public var published: Date?
     
@@ -65,6 +68,9 @@ public struct Activity {
     
     /// The encryptionKeyUrl of the activity
     public var encryptionKeyUrl: String?
+    
+    ///
+    
 }
 
 extension Activity: Mappable {
@@ -80,6 +86,7 @@ extension Activity: Mappable {
     public mutating func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
+        url <- map["url"]
         published <- (map["published"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         verb <- map["verb"]
         actor <- map["actor"]
@@ -101,7 +108,9 @@ public struct ActivityActorModel {
 }
 
 public struct ActivityObjectModel {
+    var id: String?
     var objectType: String?
+    var url: String?
     var displayName: String?
     var contentCategory: String?
     var content: String?
@@ -114,6 +123,14 @@ public struct ActivityTargetModel {
     var url: String?
     var clientTempId: String?
     var encryptionKeyUrl: String?
+}
+
+public struct ActivityFlagItem{
+    var activityUrl: String?
+    var state: String? // Default is "flagged/unflagged"
+    var id: String?
+    var url: String?
+    var created: Date?
 }
 
 extension ActivityActorModel: Mappable {
@@ -132,7 +149,9 @@ extension ActivityActorModel: Mappable {
 extension ActivityObjectModel: Mappable {
     public init?(map: Map) {}
     public mutating func mapping(map: Map) {
+        id <- map["id"]
         objectType <- map["objectType"]
+        url <- map["url"]
         displayName <- map["displayName"]
         contentCategory <- map["contentCategory"]
         content <- map["content"]
@@ -148,6 +167,17 @@ extension ActivityTargetModel: Mappable {
         url <- map["url"]
         clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
+    }
+}
+
+extension ActivityFlagItem: Mappable {
+    public init?(map: Map){ }
+    public mutating func mapping(map: Map) {
+        activityUrl <- map["flag-item"]
+        state <- map["state"]
+        id <- map["id"]
+        url <- map["url"]
+        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
 

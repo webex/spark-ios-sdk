@@ -20,6 +20,15 @@ public class ActivityClient: NSObject {
         return ServiceRequest.ActivityServerBuilder(authenticator).path("activities")
     }
     
+    private func statusRequestBuilder() ->ServiceRequest.ActivityServerBuilder {
+        return ServiceRequest.ActivityServerBuilder(authenticator).path("status")
+    }
+    
+    private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
+        return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
+    }
+    
+    
     /// Lists all messages in a room by room Id.
     /// If present, it includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
@@ -29,7 +38,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func detail(activityID: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void) {
+    public func getActivityDetail(activityID: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void) {
         let request = requestBuilder()
             .method(.get)
             .path(activityID)
@@ -37,12 +46,20 @@ public class ActivityClient: NSObject {
         request.responseObject(completionHandler)
     }
     
+    /// Posts a plain text message, to a conversation by conversation Id.
+    ///
+    /// - parameter conversation: The identifier of the conversation where the message is to be posted.
+    /// - parameter content: The plain text message to be posted to the room.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
     public func postMessage(conversationID: String, content: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
         
         let body = RequestParameter([
             "verb": "post",
-            "object" : createActivityObjectWith(content: content).toJSONString(prettyPrint: true),
-            "target" : createActivityTargetWith(conversationId: conversationID).toJSONString(prettyPrint: true)
+            "object" : createActivityObject(objectType: "comment",content: content).toJSON(),
+            "target" : createActivityTarget(conversationId: conversationID).toJSON()
         ])
         let request = requestBuilder()
             .method(.post)
@@ -51,146 +68,135 @@ public class ActivityClient: NSObject {
          request.responseObject(completionHandler)
     }
     
-    
-    /// Posts a plain text message, and optionally, a media content attachment, to a room by room Id.
+    /// Deletes a message, to a conversation by conversation Id.
     ///
-    /// - parameter roomId: The identifier of the room where the message is to be posted.
-    /// - parameter text: The plain text message to be posted to the room.
-    /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
+    /// - parameter conversation: The identifier of the conversation where the message is to be posted.
+    /// - parameter activityId: The messageId to be deleted in the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    /// - since: 1.2.0
-    public func post(roomId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: roomId, personId: nil, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    /// Posts a media content attachment to a room by room Id without text.
-    ///
-    /// - parameter roomId: The identifier of the room.
-    /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func post(roomId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: roomId, personId: nil, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    /// Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.
-    ///
-    /// - parameter personId: The identifier of the recipient of this private 1:1 message.
-    /// - parameter text: The plain text message to post to the recipient.
-    /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func post(personId: String, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: nil, personId: personId, personEmail: nil, text: text, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    /// Posts a media content attachment to a person by person Id without text.
-    ///
-    /// - parameter personId: The identifier of the recipient of this media content.
-    /// - parameter files: A public URL that Cisco Spark can use to fetch attachments. Currently supports only a single URL. Cisco Spark  downloads the content from the URL one time shortly after the message is created and automatically converts it to a format that all Cisco Spark clients can render.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func post(personId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: nil, personId: personId, personEmail: nil, text: nil, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    /// Posts a private 1:1 message in plain text, and optionally, a media content attachment, to a person by person Id.
-    ///
-    /// - parameter personEmail: The email address of the recipient when sending a private 1:1 message.
-    /// - parameter text: The plain text message to post to the room.
-    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func post(personEmail: EmailAddress, text: String, files: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: nil, personId: nil, personEmail: personEmail, text: text, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    /// Posts a media content attachment to a person by email address without text.
-    ///
-    /// - parameter personEmail: The email address of the recipient of this media content.
-    /// - parameter files: A public URL that Spark can use to fetch attachments. Currently supports only a single URL. The Spark Cloud downloads the content one time shortly after the message is created and automatically converts it to a format that all Spark clients can render.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.2.0
-    public func post(personEmail: EmailAddress, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        post(roomId: nil, personId: nil, personEmail: personEmail, text: nil, files: files, queue: queue, completionHandler: completionHandler)
-    }
-    
-    private func post(roomId: String?, personId: String?, personEmail: EmailAddress?, text: String?, files: String?, queue: DispatchQueue?, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        let email: String? = personEmail == nil ? nil : personEmail!.toString()
+    /// - since: 1.4.0
+    public func deleteMessage(conversationID: String, activityId: String,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
         let body = RequestParameter([
-            "roomId": roomId,
-            "toPersonId": personId,
-            "toPersonEmail": email,
-            "text": text,
-            "files": files])
-        
+            "verb": "delete",
+            "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
+            "target" : createActivityTarget(conversationId: conversationID).toJSON()
+            ])
         let request = requestBuilder()
             .method(.post)
             .body(body)
-            .queue(queue)
             .build()
-        
         request.responseObject(completionHandler)
     }
     
-    /// Retrieves the details for a message by message Id.
+    /// Post a message read indicator, to a conversation by conversation Id.
     ///
-    /// - parameter messageId: The identifier of the message.
+    /// - parameter conversation: The identifier of the conversation where the indicator is to be posted.
+    /// - parameter activityId: The activity that is read .
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    /// - since: 1.2.0
-    public func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void){
+    /// - since: 1.4.0
+    public func postReadIndicator(conversationID: String, activityId: String,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
+        let body = RequestParameter([
+            "verb": "acknowledge",
+            "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
+            "target" : createActivityTarget(conversationId: conversationID).toJSON()
+            ])
         let request = requestBuilder()
-            .method(.get)
-            .path(messageId)
-            .queue(queue)
+            .method(.post)
+            .body(body)
             .build()
-        
         request.responseObject(completionHandler)
     }
     
-    /// Deletes a message by message id.
+    /// Post a typing indicator, to a conversation by conversation Id.
     ///
-    /// - parameter messageId: The identifier of the message.
+    /// - parameter conversation: The identifier of the conversation where the indicator is to be posted.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    /// - since: 1.2.0
-    public func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
-        let request = requestBuilder()
+    /// - since: 1.4.0
+    public func postTypingIndicator(conversationID: String, queue: DispatchQueue? = nil) -> Void{
+        let body = RequestParameter([
+            "eventType": "status.start_typing",
+            "conversationId" : conversationID
+            ])
+        let request = statusRequestBuilder().path("typing")
+            .method(.post)
+            .body(body)
+            .build()
+        request.responseNothing()
+    }
+    
+    /// Post a stop-typing indicator, to a conversation by conversation Id.
+    ///
+    /// - parameter conversation: The identifier of the conversation where the indicator is to be posted.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func postStopTypingIndicator(conversationID: String, queue: DispatchQueue? = nil) -> Void{
+        let body = RequestParameter([
+            "eventType": "status.stop_typing",
+            "conversationId" : conversationID
+            ])
+        let request = statusRequestBuilder().path("typing")
+            .method(.post)
+            .body(body)
+            .build()
+        request.responseNothing()
+    }
+    
+    /// Post flag an activity action, to a activity by activity url.
+    ///
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func flagActivity(activityUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void{
+        let body = RequestParameter([
+            "flag-item": activityUrl,
+            "state": "flagged"
+            ])
+        
+        let request = flagRequestBuilder()
+            .method(.post)
+            .body(body)
+            .build()
+        request.responseObject(completionHandler)
+    }
+    
+    /// Post  unflag an activity action, to a flag tem by flagId.
+    ///
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func unFlagAction(flagId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void{
+        let request = flagRequestBuilder().path(flagId)
             .method(.delete)
-            .path(messageId)
-            .queue(queue)
             .build()
-        
-        request.responseJSON(completionHandler)
+        request.responseNothing()
     }
     
-    
-    
-    private func createActivityObjectWith(content: String? = nil) -> ActivityObjectModel{
+    /// MARK: private functions
+    private func createActivityObject(objectType: String, objectId: String? = nil , content: String? = nil) -> ActivityObjectModel{
         var model = ActivityObjectModel()
+        model.objectType = objectType
+        if let objectIdStr = objectId{
+            model.id = objectIdStr
+        }
         if let contentStr = content{
             model.content = contentStr
+            model.displayName = contentStr
         }
         return model
     }
     
-    private func createActivityTargetWith(conversationId: String? = nil) -> ActivityTargetModel{
+    private func createActivityTarget(conversationId: String? = nil) -> ActivityTargetModel{
         var model = ActivityTargetModel()
+        model.objectType = "conversation"
         if let idStr = conversationId{
             model.id = idStr
         }
