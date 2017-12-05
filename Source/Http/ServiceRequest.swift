@@ -40,6 +40,7 @@ class ServiceRequest {
 #else
     static let HYDRA_SERVER_ADDRESS:String = "https://api.ciscospark.com/v1"
 #endif
+    static let CONVERSATION_SERVER_ADDRESS: String = "https://conv-a.wbx2.com/conversation/api/v1"
     
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
@@ -51,6 +52,79 @@ class ServiceRequest {
         self.query = query
         self.keyPath = keyPath
         self.queue = queue
+    }
+    
+    class ActivityServerBuilder{
+        private static let apiBaseUrl: URL = URL(string: ServiceRequest.CONVERSATION_SERVER_ADDRESS)!
+        private let authenticator: Authenticator
+        private var headers: [String: String]
+        private var method: Alamofire.HTTPMethod
+        private var baseUrl: URL
+        private var path: String
+        private var body: RequestParameter?
+        private var query: RequestParameter?
+        private var keyPath: String?
+        private var queue: DispatchQueue?
+        
+        
+        init(_ authenticator: Authenticator) {
+            self.authenticator = authenticator
+            self.headers = ["Content-Type": "application/json",
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
+            self.baseUrl = ActivityServerBuilder.apiBaseUrl
+            self.method = .get
+            self.path = ""
+        }
+        
+        func build() -> ServiceRequest {
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
+        }
+        
+        func method(_ method: Alamofire.HTTPMethod) -> ActivityServerBuilder {
+            self.method = method
+            return self
+        }
+        
+        func headers(_ headers: [String: String]) -> ActivityServerBuilder {
+            self.headers = headers
+            return self
+        }
+        
+        func baseUrl(_ baseUrl: String) -> ActivityServerBuilder {
+            self.baseUrl = URL(string: baseUrl)!
+            return self
+        }
+        
+        func baseUrl(_ baseUrl: URL) -> ActivityServerBuilder {
+            self.baseUrl = baseUrl
+            return self
+        }
+        
+        func path(_ path: String) -> ActivityServerBuilder {
+            self.path += "/" + path
+            return self
+        }
+        
+        func body(_ body: RequestParameter) -> ActivityServerBuilder {
+            self.body = body
+            return self
+        }
+        
+        func query(_ query: RequestParameter) -> ActivityServerBuilder {
+            self.query = query
+            return self
+        }
+        
+        func keyPath(_ keyPath: String) -> ActivityServerBuilder {
+            self.keyPath = keyPath
+            return self
+        }
+        
+        func queue(_ queue: DispatchQueue?) -> ActivityServerBuilder {
+            self.queue = queue
+            return self
+        }
     }
     
     class Builder {
