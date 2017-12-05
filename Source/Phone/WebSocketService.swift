@@ -26,6 +26,7 @@ import ObjectMapper
 class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
+    var onActivityModel: ((Activity) -> Void)?
     var onFailed: (() -> Void)?
     
     private var socket: WebSocket?
@@ -142,6 +143,16 @@ class WebSocketService: WebSocketDelegate {
                 }
                 SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
+            }else if(eventType == "conversation.activity"){
+                let activityObj = eventData["activity"].object;
+                guard let eventJson = activityObj as? [String: Any],
+                    let activity = Mapper<Activity>().map(JSON: eventJson)
+                    else {
+                        return
+                }
+                SDKLogger.shared.info("Receive ConverSation Activity: \(activity.verb!)")
+                // acitivity code here
+                self.onActivityModel?(activity)
             }
         }
     }

@@ -107,6 +107,11 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// Callback when receive activities.
+    ///
+    /// - since: 1.4.0
+    public var onReceivingActivity:((Activity) -> Void)?
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -152,6 +157,14 @@ public class Phone {
                 }
             }
         }
+        
+        self.webSocket.onActivityModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivity(model);
+                }
+            }
+        }
     }
 
     init(authenticator: Authenticator,devices:DeviceService,reachability:ReachabilityService,client:CallClient,conversations:ConversationClient,metrics:MetricsEngine,prompter:H264LicensePrompter,webSocket:WebSocketService) {
@@ -174,6 +187,22 @@ public class Phone {
                 strong.doLocusEvent(model);
                 }
             }
+        }
+        
+        self.webSocket.onActivityModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivity(model);
+                }
+            }
+        }
+    }
+    
+    
+    private func doConversationAcivity(_ model: Activity){
+        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+        DispatchQueue.main.async {
+            self.onReceivingActivity?(model)
         }
     }
     

@@ -154,7 +154,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postReadIndicator(conversationID: String,
+    public func read(conversationID: String,
                                   activityId: String,
                                   queue: DispatchQueue? = nil,
                                   completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
@@ -179,7 +179,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postTypingIndicator(conversationID: String,
+    public func startTyping(conversationID: String,
                                     queue: DispatchQueue? = nil,
                                     completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
@@ -202,7 +202,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postStopTypingIndicator(conversationID: String,
+    public func stopTyping(conversationID: String,
                                         queue: DispatchQueue? = nil,
                                         completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
@@ -224,7 +224,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func flagActivity(activityUrl: String,
+    public func flag(activityUrl: String,
                              queue: DispatchQueue? = nil,
                              completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void
     {
@@ -247,7 +247,7 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func unFlagAction(flagId: String,
+    public func unFlag(flagId: String,
                              queue: DispatchQueue? = nil,
                              completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {

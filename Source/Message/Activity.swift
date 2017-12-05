@@ -98,39 +98,39 @@ extension Activity: Mappable {
 }
 
 public struct ActivityActorModel {
-    var id: String?
-    var objectType: String?
-    var displayName: String?
-    var orgId: String?
-    var emailAddress: String?
-    var entryUUID: String?
-    var actorType: String? // Default is "PERSON"
+    public var id: String?
+    public var objectType: String?
+    public var displayName: String?
+    public var orgId: String?
+    public var emailAddress: String?
+    public var entryUUID: String?
+    public var actorType: String? // Default is "PERSON"
 }
 
 public struct ActivityObjectModel {
-    var id: String?
-    var objectType: String?
-    var url: String?
-    var displayName: String?
-    var contentCategory: String?
-    var content: String?
-    var contentType: String?
+    public var id: String?
+    public var objectType: String?
+    public var url: String?
+    public var displayName: String?
+    public var contentCategory: String?
+    public var content: String?
+    public var contentType: String?
 }
 
 public struct ActivityTargetModel {
-    var id: String?
-    var objectType: String? // Default is "conversation"
-    var url: String?
-    var clientTempId: String?
-    var encryptionKeyUrl: String?
+    public var id: String?
+    public var objectType: String? // Default is "conversation"
+    public var url: String?
+    public var clientTempId: String?
+    public var encryptionKeyUrl: String?
 }
 
 public struct ActivityFlagItem{
-    var activityUrl: String?
-    var state: String? // Default is "flagged/unflagged"
-    var id: String?
-    var url: String?
-    var created: Date?
+    public var activityUrl: String?
+    public var state: String? // Default is "flagged/unflagged"
+    public var id: String?
+    public var url: String?
+    public var created: Date?
 }
 
 extension ActivityActorModel: Mappable {
