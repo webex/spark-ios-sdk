@@ -27,7 +27,51 @@ public class ActivityClient: NSObject {
     private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
         return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
     }
-    
+
+    /// Lists all messages in a room by room Id.
+    /// If present, it includes the associated media content attachment for each message.
+    /// The list sorts the messages in descending order by creation date.
+    ///
+    /// - parameter conversationId: The identifier of the conversation.
+    /// - parameter sinceDate: the activities published date is after this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter midDate: The activities published date is before or after this date. At most limit/2 activities activities before and limit/2 activities after the date will be included, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter maxDate: the activities published date is before this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter limit:  Maximum number of activities return. Default is 6.
+    /// - parameter personRefresh: (experimental)control if the person detail in activity need to be refreshed to latest. If person detail got      refreshed, person.id will be in UUID format even if original one is email. Default is false.
+    /// - parameter lastActivityFirst: Sort order for the activities. Default is true.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func list(conversationId: String,
+                     sinceDate: String? = nil,
+                     maxDate: String? = nil,
+                     midDate: String? = nil,
+                     limit: Int? = nil,
+                     personRefresh: Bool? = false,
+                     lastActivityFirst: Bool? = false,
+                     queue: DispatchQueue? = nil,
+                     completionHandler: @escaping (ServiceResponse<[Activity]>) -> Void)
+    {
+        let query = RequestParameter([
+            "conversationId": conversationId,
+            "sinceDate": sinceDate,
+            "maxDate": maxDate,
+            "maxDate": maxDate,
+            "midDate": midDate,
+            "limit": limit,
+            "personRefresh": personRefresh,
+            "lastActivityFirst": lastActivityFirst,
+            ])
+        
+        let request = requestBuilder()
+            .method(.get)
+            .query(query)
+            .queue(queue)
+            .build()
+        
+        request.responseArray(completionHandler)
+    }
     
     /// Lists all messages in a room by room Id.
     /// If present, it includes the associated media content attachment for each message.
@@ -38,10 +82,14 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func getActivityDetail(activityID: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void) {
+    public func activityDetail(activityID: String,
+                               queue: DispatchQueue? = nil,
+                               completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+    {
         let request = requestBuilder()
             .method(.get)
             .path(activityID)
+            .queue(queue)
             .build()
         request.responseObject(completionHandler)
     }
@@ -54,8 +102,11 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postMessage(conversationID: String, content: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
-        
+    public func postMessage(conversationID: String,
+                            content: String,
+                            queue: DispatchQueue? = nil,
+                            completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+    {
         let body = RequestParameter([
             "verb": "post",
             "object" : createActivityObject(objectType: "comment",content: content).toJSON(),
@@ -64,6 +115,7 @@ public class ActivityClient: NSObject {
         let request = requestBuilder()
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
          request.responseObject(completionHandler)
     }
@@ -76,7 +128,11 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func deleteMessage(conversationID: String, activityId: String,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
+    public func deleteMessage(conversationID: String,
+                              activityId: String,
+                              queue: DispatchQueue? = nil,
+                              completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+    {
         let body = RequestParameter([
             "verb": "delete",
             "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
@@ -85,6 +141,7 @@ public class ActivityClient: NSObject {
         let request = requestBuilder()
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
         request.responseObject(completionHandler)
     }
@@ -97,7 +154,11 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postReadIndicator(conversationID: String, activityId: String,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Activity>) -> Void){
+    public func postReadIndicator(conversationID: String,
+                                  activityId: String,
+                                  queue: DispatchQueue? = nil,
+                                  completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+    {
         let body = RequestParameter([
             "verb": "acknowledge",
             "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
@@ -106,6 +167,7 @@ public class ActivityClient: NSObject {
         let request = requestBuilder()
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
         request.responseObject(completionHandler)
     }
@@ -117,7 +179,10 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postTypingIndicator(conversationID: String, queue: DispatchQueue? = nil) -> Void{
+    public func postTypingIndicator(conversationID: String,
+                                    queue: DispatchQueue? = nil,
+                                    completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
+    {
         let body = RequestParameter([
             "eventType": "status.start_typing",
             "conversationId" : conversationID
@@ -125,8 +190,9 @@ public class ActivityClient: NSObject {
         let request = statusRequestBuilder().path("typing")
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
-        request.responseNothing()
+        request.responseJSON(completionHandler)
     }
     
     /// Post a stop-typing indicator, to a conversation by conversation Id.
@@ -136,7 +202,10 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postStopTypingIndicator(conversationID: String, queue: DispatchQueue? = nil) -> Void{
+    public func postStopTypingIndicator(conversationID: String,
+                                        queue: DispatchQueue? = nil,
+                                        completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
+    {
         let body = RequestParameter([
             "eventType": "status.stop_typing",
             "conversationId" : conversationID
@@ -144,8 +213,9 @@ public class ActivityClient: NSObject {
         let request = statusRequestBuilder().path("typing")
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
-        request.responseNothing()
+        request.responseJSON(completionHandler)
     }
     
     /// Post flag an activity action, to a activity by activity url.
@@ -154,7 +224,10 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func flagActivity(activityUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void{
+    public func flagActivity(activityUrl: String,
+                             queue: DispatchQueue? = nil,
+                             completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void
+    {
         let body = RequestParameter([
             "flag-item": activityUrl,
             "state": "flagged"
@@ -163,6 +236,7 @@ public class ActivityClient: NSObject {
         let request = flagRequestBuilder()
             .method(.post)
             .body(body)
+            .queue(queue)
             .build()
         request.responseObject(completionHandler)
     }
@@ -173,15 +247,22 @@ public class ActivityClient: NSObject {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func unFlagAction(flagId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void{
+    public func unFlagAction(flagId: String,
+                             queue: DispatchQueue? = nil,
+                             completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
+    {
         let request = flagRequestBuilder().path(flagId)
             .method(.delete)
+            .queue(queue)
             .build()
-        request.responseNothing()
+        request.responseJSON(completionHandler)
     }
     
     /// MARK: private functions
-    private func createActivityObject(objectType: String, objectId: String? = nil , content: String? = nil) -> ActivityObjectModel{
+    private func createActivityObject(objectType: String,
+                                      objectId: String? = nil ,
+                                      content: String? = nil) -> ActivityObjectModel
+    {
         var model = ActivityObjectModel()
         model.objectType = objectType
         if let objectIdStr = objectId{

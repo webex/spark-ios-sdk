@@ -352,14 +352,6 @@ class ServiceRequest {
             }   
         }
     }
-    func responseNothing(){
-        let queue = self.queue
-        createAlamofireRequest() { request in
-            request.responseJSON(queue: queue) { (_) in
-            
-            }
-        }
-    }
     
     private func createAlamofireRequest(completionHandler: @escaping (Alamofire.DataRequest) -> Void) {
         let accessTokenCallback: (String?) -> Void = { accessToken in
