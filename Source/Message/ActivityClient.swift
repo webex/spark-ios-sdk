@@ -9,7 +9,29 @@
 import UIKit
 import ObjectMapper
 
+public enum TypingStatus{
+    case StartTyping
+    case StopTyping
+}
+
 public class ActivityClient: NSObject {
+
+    /// Callback when receive Message.
+    ///
+    /// - since: 1.4.0
+    public var onReceivingMessage:((Activity) -> Void)?
+    
+    /// Callback when receive start/stop Typing.
+    ///
+    /// - since: 1.4.0
+    public var onReceivingStartorStopTyping:((Activity,TypingStatus) -> Void)?
+    
+    /// Callback when receive acknowledge activity.
+    ///
+    /// - since: 1.4.0
+    public var onAcknowledgeActivity:((Activity) -> Void)?
+    
+    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {

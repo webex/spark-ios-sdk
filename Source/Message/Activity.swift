@@ -69,7 +69,11 @@ public struct Activity {
     /// The encryptionKeyUrl of the activity
     public var encryptionKeyUrl: String?
     
-    ///
+    /// The eventType of the activity
+    public var eventType: String?
+    
+    /// The conversationId of the activity
+    public var conversationId: String?
     
 }
 
@@ -94,6 +98,8 @@ extension Activity: Mappable {
         target <- map["target"]
         clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
+        eventType <- map["clientTempId"]
+        conversationId <- map["encryptionKeyUrl"]
     }
 }
 

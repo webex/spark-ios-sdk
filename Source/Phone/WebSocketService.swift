@@ -153,6 +153,15 @@ class WebSocketService: WebSocketDelegate {
                 SDKLogger.shared.info("Receive ConverSation Activity: \(activity.verb!)")
                 // acitivity code here
                 self.onActivityModel?(activity)
+            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
+                let activityObj = eventData.object;
+                guard let eventJson = activityObj as? [String: Any],
+                    var activity = Mapper<Activity>().map(JSON: eventJson)
+                    else {
+                        return
+                }
+                activity.verb = eventType
+                self.onActivityModel?(activity)
             }
         }
     }

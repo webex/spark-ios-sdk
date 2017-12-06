@@ -107,10 +107,8 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
-    /// Callback when receive activities.
-    ///
-    /// - since: 1.4.0
-    public var onReceivingActivity:((Activity) -> Void)?
+    /// Activity Client
+    public var activityClient: ActivityClient?
     
     let authenticator: Authenticator
     let reachability: ReachabilityService
@@ -146,6 +144,7 @@ public class Phone {
         self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
+        self.activityClient = ActivityClient(authenticator: authenticator)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -177,6 +176,7 @@ public class Phone {
         self.metrics = metrics
         self.prompter = prompter
         self.webSocket = webSocket
+        self.activityClient = ActivityClient(authenticator: authenticator)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -202,7 +202,24 @@ public class Phone {
     private func doConversationAcivity(_ model: Activity){
         SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
-            self.onReceivingActivity?(model)
+            if let activityClient = self.activityClient{
+                switch model.verb!{
+                case "post":
+                    activityClient.onReceivingMessage?(model)
+                    break
+                case "acknowledge":
+                    activityClient.onAcknowledgeActivity?(model)
+                    break
+                case "status.start_typing":
+                    activityClient.onReceivingStartorStopTyping?(model,.StartTyping)
+                    break
+                case "status.stop_typing":
+                    activityClient.onReceivingStartorStopTyping?(model,.StopTyping)
+                    break
+                default:
+                    break
+                }
+            }
         }
     }
     
