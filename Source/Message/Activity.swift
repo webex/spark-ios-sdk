@@ -107,6 +107,7 @@ extension Activity: Mappable {
         eventType <- map["eventType"]
         conversationId <- map["conversationId"]
         flagItem <- map["appData"]
+        action <- map["action"]
     }
 }
 
