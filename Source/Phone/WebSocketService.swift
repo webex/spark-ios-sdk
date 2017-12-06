@@ -146,21 +146,19 @@ class WebSocketService: WebSocketDelegate {
             }else if(eventType == "conversation.activity"){
                 let activityObj = eventData["activity"].object;
                 guard let eventJson = activityObj as? [String: Any],
-                    let activity = Mapper<Activity>().map(JSON: eventJson)
-                    else {
-                        return
-                }
-                SDKLogger.shared.info("Receive ConverSation Activity: \(activity.verb!)")
-                // acitivity code here
-                self.onActivityModel?(activity)
-            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
-                let activityObj = eventData.object;
-                guard let eventJson = activityObj as? [String: Any],
                     var activity = Mapper<Activity>().map(JSON: eventJson)
                     else {
                         return
                 }
-                activity.verb = eventType
+                activity.eventType = eventType
+                self.onActivityModel?(activity)
+            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing" || eventType == "user.app_item"){
+                let activityObj = eventData.object;
+                guard let eventJson = activityObj as? [String: Any],
+                    let activity = Mapper<Activity>().map(JSON: eventJson)
+                    else {
+                        return
+                }
                 self.onActivityModel?(activity)
             }
         }

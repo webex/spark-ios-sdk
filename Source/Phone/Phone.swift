@@ -203,19 +203,26 @@ public class Phone {
         SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let activityClient = self.activityClient{
-                switch model.verb!{
-                case "post":
-                    activityClient.onReceivingMessage?(model)
-                    break
-                case "acknowledge":
-                    activityClient.onAcknowledgeActivity?(model)
+                switch model.eventType!{
+                case "conversation.activity":
+                    if(model.verb == "pose"){
+                        activityClient.onReceivingMessage?(model)
+                    }else if(model.verb == "acknowledge"){
+                        activityClient.onAcknowledgeActivity?(model)
+                    }
                     break
                 case "status.start_typing":
-                    activityClient.onReceivingStartorStopTyping?(model,.StartTyping)
+                    activityClient.onReceivingStartOrStopTyping?(model,.StartTyping)
                     break
                 case "status.stop_typing":
-                    activityClient.onReceivingStartorStopTyping?(model,.StopTyping)
+                    activityClient.onReceivingStartOrStopTyping?(model,.StopTyping)
                     break
+                case "user.app_item":
+                    if(model.action == "create"){
+                        activityClient.onReceivingFlagOrUnflag?(model, .FlagCreated)
+                    }else if(model.action == "delete"){
+                        activityClient.onReceivingFlagOrUnflag?(model, .FlagDeleted)
+                    }
                 default:
                     break
                 }

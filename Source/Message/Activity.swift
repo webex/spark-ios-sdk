@@ -28,6 +28,9 @@ public struct Activity {
     /// The identifier of this activity.
     public var id: String?
     
+    /// The eventType of the activity
+    public var eventType: String?
+    
     /// The objectType of the Activity. Default is "activity"
     public var objectType: String?
     
@@ -69,11 +72,14 @@ public struct Activity {
     /// The encryptionKeyUrl of the activity
     public var encryptionKeyUrl: String?
     
-    /// The eventType of the activity
-    public var eventType: String?
-    
-    /// The conversationId of the activity
+    /// The conversationId of the activity, should only use for receive typing/untyping activity
     public var conversationId: String?
+    
+    
+    /// The activity flag item action, should only use for receive flag/unflag activity "create"/"delete"
+    public var action: String?
+    /// The activity flag item info, should only use for receive flag/unflag activity
+    public var flagItem: ActivityFlagItem?
     
 }
 
@@ -100,6 +106,7 @@ extension Activity: Mappable {
         encryptionKeyUrl <- map["encryptionKeyUrl"]
         eventType <- map["clientTempId"]
         conversationId <- map["encryptionKeyUrl"]
+        flagItem <- map["appData"]
     }
 }
 

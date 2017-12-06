@@ -14,6 +14,11 @@ public enum TypingStatus{
     case StopTyping
 }
 
+public enum FlagStatus{
+    case FlagCreated
+    case FlagDeleted
+}
+
 public class ActivityClient: NSObject {
 
     /// Callback when receive Message.
@@ -21,15 +26,20 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public var onReceivingMessage:((Activity) -> Void)?
     
-    /// Callback when receive start/stop Typing.
-    ///
-    /// - since: 1.4.0
-    public var onReceivingStartorStopTyping:((Activity,TypingStatus) -> Void)?
-    
     /// Callback when receive acknowledge activity.
     ///
     /// - since: 1.4.0
     public var onAcknowledgeActivity:((Activity) -> Void)?
+    
+    /// Callback when receive start/stop Typing.
+    ///
+    /// - since: 1.4.0
+    public var onReceivingStartOrStopTyping:((Activity,TypingStatus) -> Void)?
+    
+    /// Callback when receive flag/unflag activity.
+    ///
+    /// - since: 1.4.0
+    public var onReceivingFlagOrUnflag:((Activity,FlagStatus) -> Void)?
     
     
     let authenticator: Authenticator
