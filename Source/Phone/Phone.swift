@@ -205,7 +205,7 @@ public class Phone {
             if let activityClient = self.activityClient{
                 switch model.eventType!{
                 case "conversation.activity":
-                    if(model.verb == "pose"){
+                    if(model.verb == "post"){
                         activityClient.onReceivingMessage?(model)
                     }else if(model.verb == "acknowledge"){
                         activityClient.onAcknowledgeActivity?(model)

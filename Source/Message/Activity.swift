@@ -104,8 +104,8 @@ extension Activity: Mappable {
         target <- map["target"]
         clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
-        eventType <- map["clientTempId"]
-        conversationId <- map["encryptionKeyUrl"]
+        eventType <- map["eventType"]
+        conversationId <- map["conversationId"]
         flagItem <- map["appData"]
     }
 }
