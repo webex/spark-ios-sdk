@@ -209,6 +209,8 @@ public class Phone {
                         activityClient.onReceivingMessage?(model)
                     }else if(model.verb == "acknowledge"){
                         activityClient.onAcknowledgeActivity?(model)
+                    }else if(model.verb == "delete"){
+                        activityClient.onDeletedMessage?(model)
                     }
                     break
                 case "status.start_typing":

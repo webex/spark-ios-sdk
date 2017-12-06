@@ -31,6 +31,11 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public var onAcknowledgeActivity:((Activity) -> Void)?
     
+    /// Callback when delete Message.
+    ///
+    /// - since: 1.4.0
+    public var onDeletedMessage:((Activity) -> Void)?
+    
     /// Callback when receive start/stop Typing.
     ///
     /// - since: 1.4.0
