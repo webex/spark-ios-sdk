@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.dependency 'SwiftyJSON', '~> 3.0'
   s.dependency 'Starscream', '~> 2.0'
   s.dependency 'KeychainAccess', '~> 3.0'
-  s.dependency 'ObjectiveGumbo', '~>0.1'
+  s.dependency "ObjectiveGumbo", "0.1"
 end
