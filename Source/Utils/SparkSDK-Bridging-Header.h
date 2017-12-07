@@ -21,4 +21,7 @@
 #pragma once
 
 #import "Wme/Wme.h"
-
+#import "MessageParser.h"
+#import "NSAttributedString+Extensions.h"
+#import "GTMNSMutableString+HTML.h"
+#import "RuntimeHelpers.h"
