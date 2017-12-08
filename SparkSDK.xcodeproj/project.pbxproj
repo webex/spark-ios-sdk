@@ -7,16 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1046F4911FD9487E0008B2DB /* NSAttributedString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 1046F4861FD9487D0008B2DB /* NSAttributedString+Extensions.m */; };
-		1046F4921FD9487E0008B2DB /* GTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = 1046F4881FD9487D0008B2DB /* GTMDefines.h */; };
-		1046F4931FD9487E0008B2DB /* GTMNSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 1046F4891FD9487D0008B2DB /* GTMNSMutableString+HTML.h */; };
-		1046F4941FD9487E0008B2DB /* GTMNSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 1046F48A1FD9487D0008B2DB /* GTMNSMutableString+HTML.m */; };
-		1046F4951FD9487E0008B2DB /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 1046F48B1FD9487D0008B2DB /* LICENSE */; };
-		1046F4961FD9487E0008B2DB /* RuntimeHelpers.h in Headers */ = {isa = PBXBuildFile; fileRef = 1046F48C1FD9487D0008B2DB /* RuntimeHelpers.h */; };
-		1046F4971FD9487E0008B2DB /* NSAttributedString+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1046F48D1FD9487D0008B2DB /* NSAttributedString+Extensions.h */; };
-		1046F4981FD9487E0008B2DB /* MessageParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 1046F48E1FD9487E0008B2DB /* MessageParser.h */; };
-		1046F4991FD9487E0008B2DB /* RuntimeHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 1046F48F1FD9487E0008B2DB /* RuntimeHelpers.m */; };
-		1046F49A1FD9487E0008B2DB /* MessageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 1046F4901FD9487E0008B2DB /* MessageParser.m */; };
 		10739F061FD620A700601412 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10739F051FD620A700601412 /* Activity.swift */; };
 		10739F081FD633E400601412 /* ActivityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10739F071FD633E400601412 /* ActivityClient.swift */; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
@@ -172,16 +162,6 @@
 /* Begin PBXFileReference section */
 		03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.releasetest.xcconfig"; sourceTree = "<group>"; };
 		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1046F4861FD9487D0008B2DB /* NSAttributedString+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAttributedString+Extensions.m"; sourceTree = "<group>"; };
-		1046F4881FD9487D0008B2DB /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
-		1046F4891FD9487D0008B2DB /* GTMNSMutableString+HTML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GTMNSMutableString+HTML.h"; sourceTree = "<group>"; };
-		1046F48A1FD9487D0008B2DB /* GTMNSMutableString+HTML.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GTMNSMutableString+HTML.m"; sourceTree = "<group>"; };
-		1046F48B1FD9487D0008B2DB /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		1046F48C1FD9487D0008B2DB /* RuntimeHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RuntimeHelpers.h; sourceTree = "<group>"; };
-		1046F48D1FD9487D0008B2DB /* NSAttributedString+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAttributedString+Extensions.h"; sourceTree = "<group>"; };
-		1046F48E1FD9487E0008B2DB /* MessageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageParser.h; sourceTree = "<group>"; };
-		1046F48F1FD9487E0008B2DB /* RuntimeHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RuntimeHelpers.m; sourceTree = "<group>"; };
-		1046F4901FD9487E0008B2DB /* MessageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageParser.m; sourceTree = "<group>"; };
 		10739F051FD620A700601412 /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
 		10739F071FD633E400601412 /* ActivityClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityClient.swift; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -337,31 +317,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1046F4851FD948220008B2DB /* MessageParseHelper */ = {
-			isa = PBXGroup;
-			children = (
-				1046F4871FD9487D0008B2DB /* GTM */,
-				1046F48E1FD9487E0008B2DB /* MessageParser.h */,
-				1046F4901FD9487E0008B2DB /* MessageParser.m */,
-				1046F48D1FD9487D0008B2DB /* NSAttributedString+Extensions.h */,
-				1046F4861FD9487D0008B2DB /* NSAttributedString+Extensions.m */,
-				1046F48C1FD9487D0008B2DB /* RuntimeHelpers.h */,
-				1046F48F1FD9487E0008B2DB /* RuntimeHelpers.m */,
-			);
-			path = MessageParseHelper;
-			sourceTree = "<group>";
-		};
-		1046F4871FD9487D0008B2DB /* GTM */ = {
-			isa = PBXGroup;
-			children = (
-				1046F4881FD9487D0008B2DB /* GTMDefines.h */,
-				1046F4891FD9487D0008B2DB /* GTMNSMutableString+HTML.h */,
-				1046F48A1FD9487D0008B2DB /* GTMNSMutableString+HTML.m */,
-				1046F48B1FD9487D0008B2DB /* LICENSE */,
-			);
-			path = GTM;
-			sourceTree = "<group>";
-		};
 		20E5E3BD68BFD3198EE748AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,7 +599,6 @@
 		B91E75891CE2D7B70080EAE0 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				1046F4851FD948220008B2DB /* MessageParseHelper */,
 				5A9350D81E00737900374B99 /* Clock.swift */,
 				B91E758B1CE2D7B70080EAE0 /* Array+Extension.swift */,
 				B91E758C1CE2D7B70080EAE0 /* Dictionary+Extension.swift */,
@@ -695,12 +649,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1046F4931FD9487E0008B2DB /* GTMNSMutableString+HTML.h in Headers */,
-				1046F4981FD9487E0008B2DB /* MessageParser.h in Headers */,
-				1046F4961FD9487E0008B2DB /* RuntimeHelpers.h in Headers */,
-				1046F4921FD9487E0008B2DB /* GTMDefines.h in Headers */,
 				B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */,
-				1046F4971FD9487E0008B2DB /* NSAttributedString+Extensions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -799,7 +748,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1046F4951FD9487E0008B2DB /* LICENSE in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -972,7 +920,6 @@
 				2074343E1E98B7A200C5EBCD /* CallStatus.swift in Sources */,
 				B91E75AA1CE2D7B70080EAE0 /* Metric+Names.swift in Sources */,
 				20EEA2D01EBDE43300D6BB75 /* MediaEngineObserver.swift in Sources */,
-				1046F49A1FD9487E0008B2DB /* MessageParser.m in Sources */,
 				20EEA2771EB0E6B400D6BB75 /* CallModel.swift in Sources */,
 				209360381E89DA7300D6BC4A /* Logger.swift in Sources */,
 				B91E75AC1CE2D7B70080EAE0 /* MetricsBuffer.swift in Sources */,
@@ -984,7 +931,6 @@
 				B91E75B71CE2D7B70080EAE0 /* CallMetrics.swift in Sources */,
 				10739F061FD620A700601412 /* Activity.swift in Sources */,
 				20EEA2D31EBDE43300D6BB75 /* MediaSessionWrapper.swift in Sources */,
-				1046F4991FD9487E0008B2DB /* RuntimeHelpers.m in Sources */,
 				5AC09EB91DE63C66005F38BC /* OAuthStorage.swift in Sources */,
 				5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */,
 				5AC09EB31DE4D02C005F38BC /* Authenticator.swift in Sources */,
@@ -1009,7 +955,6 @@
 				5AFB6E951DF5C5110027E989 /* JWTAuthenticator.swift in Sources */,
 				99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
-				1046F4911FD9487E0008B2DB /* NSAttributedString+Extensions.m in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
 				20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
@@ -1030,7 +975,6 @@
 				5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */,
 				3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */,
 				B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */,
-				1046F4941FD9487E0008B2DB /* GTMNSMutableString+HTML.m in Sources */,
 				5A8B997F1DF1D43C003633E1 /* OAuthLauncher.swift in Sources */,
 				3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */,
 				B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */,
@@ -1155,7 +1099,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
 				);
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1298,7 +1242,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
 				);
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1323,7 +1267,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MediaEngine",
 				);
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

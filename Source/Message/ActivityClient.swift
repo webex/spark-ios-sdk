@@ -47,12 +47,6 @@ public class ActivityClient: NSObject {
     public var onReceivingFlagOrUnflag:((Activity,FlagStatus) -> Void)?
     
     
-    //／  Message Parser Use to convert markdown text to Attributed Text/ convert Attributed text to MarkDown
-    ///
-    /// - since: 1.4.0
-    public let messageParser = MessageParser.sharedInstance()
-    
-    
     let authenticator: Authenticator
     
     init(authenticator: Authenticator) {

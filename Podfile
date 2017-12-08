@@ -9,8 +9,6 @@ def shared_pods
 	pod 'SwiftyJSON', '~> 3.1'
 	pod 'Starscream', '~> 2.0'
 	pod 'KeychainAccess', '~> 3.0'
-    pod 'ObjectiveGumbo', '~>0.1'
-    
 end
 
 target 'SparkSDK' do
