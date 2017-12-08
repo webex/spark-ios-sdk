@@ -11,7 +11,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "9.0"
   s.preserve_paths = 'MediaEngine/Wme.framework'
   s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/MediaEngine', 'ENABLE_BITCODE' => 'NO'}
-  s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/ObjectiveGumbo', 'ENABLE_BITCODE' => 'NO'}
   s.vendored_frameworks = "MediaEngine/Wme.framework"
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'ObjectMapper', '~> 2.0'
@@ -19,5 +18,4 @@ Pod::Spec.new do |s|
   s.dependency 'SwiftyJSON', '~> 3.0'
   s.dependency 'Starscream', '~> 2.0'
   s.dependency 'KeychainAccess', '~> 3.0'
-  s.dependency 'ObjectiveGumbo', '~>0.1'
 end
