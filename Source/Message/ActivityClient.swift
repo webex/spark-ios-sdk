@@ -329,8 +329,8 @@ public class ActivityClient: NSObject {
                         mentionItem.objectType = "person"
                         let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
                         let endPostion = (mentionItem.range.upperBound) + mentionStringLength
-                        let startIndex = contentStr.index(contentStr.startIndex, offsetBy: startPosition)
-                        let endIndex = contentStr.index(contentStr.startIndex, offsetBy: endPostion)
+                        let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
+                        let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
                         let mentionContent = markedUpContent[startPosition..<endPostion]
                         let markupStr = createMentionStartString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
