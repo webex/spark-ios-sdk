@@ -324,14 +324,14 @@ public class ActivityClient: NSObject {
             if let mentionsArr = mentions{
                 var mentionStringLength = 0
                 for index in 0..<mentionsArr.count{
-                    var mentionItem = mentionsArr[index]
+                    let mentionItem = mentionsArr[index]
                     if(mentionItem.mentionType == MentionItemType.person){
                         let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
                         let endPostion = (mentionItem.range.upperBound) + mentionStringLength
                         let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
                         let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
                         let mentionContent = markedUpContent[startPosition..<endPostion]
-                        let markupStr = createMentionStartString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
+                        let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
                         mentionStringLength += (markupStr.count - mentionContent.count) + 1
                     }else{
@@ -358,7 +358,7 @@ public class ActivityClient: NSObject {
         return model
     }
     
-    private func createMentionStartString(mentionContent: String?, mentionId: String?, mentionType: String?)->String{
+    private func markUpString(mentionContent: String?, mentionId: String?, mentionType: String?)->String{
         var result = "<spark-mention"
         if let mentionid = mentionId{
             result = result + " data-object-id=" + mentionid
@@ -372,5 +372,29 @@ public class ActivityClient: NSObject {
         }
         result = result + "</spark-mention>"
         return result
+    }
+    
+    class public func markDownString(activityModel: Activity){
+        var markDownContent = ""
+        if let mentions = activityModel.object?.mentions , let content = activityModel.object?.content{
+            markDownContent = content
+            let mentionArr = mentions["items"]!
+            for index in 0 ..< mentionArr.count{
+                let startSyntaxIndex = markDownContent.range(of: "<spark-mention")?.lowerBound
+                let endSyntaxRange = markDownContent.range(of: "</spark-mention>")?.upperBound
+                let subString = markDownContent.substring(with: startSyntaxIndex..<endSyntaxRange)
+                
+                let mentionContentBeginIndex = subString.range(of: ">")?.upperBound
+                let mentionContentEndIndex = subString.range(of: "</spark-mention>")?.lowerBound
+                let mentionContentString = subString.substring(with: mentionContentBeginIndex..<mentionContentEndIndex)
+                
+                markDownContent = markDownContent.replacingCharacters(in: startSyntaxIndex..<endSyntaxRange, with: mentionContentString)
+                
+                var mentionItem = mentionArr[index]
+                let startPosition = markDownContent.distance(from: markDownContent.startIndex, to: startSyntaxIndex!)
+                let range = startPosition...(startPosition+mentionContentString.count-1)
+                mentionItem.range = range
+            }
+        }
     }
 }

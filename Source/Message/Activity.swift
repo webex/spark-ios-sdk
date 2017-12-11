@@ -151,10 +151,10 @@ public struct ActivityFlagItem{
 public struct ActivityMention{
     public var id: String
     public var objectType: String?
-    public var range: ClosedRange<Int>
+    public var range: CountableClosedRange<Int>
     public var mentionType: MentionItemType
     
-    public init(id: String, range: ClosedRange<Int>, type: MentionItemType){
+    public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
         self.id  = id
         self.range  = range
         self.mentionType = type
