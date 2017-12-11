@@ -49,5 +49,22 @@ extension String {
         }
         return nil
     }
+
+    subscript(r: Range<Int>) -> String {
+        get {
+            let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound+1)
+            
+            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+        }
+    }
     
+    subscript(start: Int, end: Int) -> String {
+        get {
+            let startIndex = self.index(self.startIndex, offsetBy: start)
+            let endIndex = self.index(self.startIndex, offsetBy: end+1)
+            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+        }
+    }
+
 }

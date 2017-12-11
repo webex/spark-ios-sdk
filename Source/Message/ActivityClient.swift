@@ -8,15 +8,27 @@
 
 import UIKit
 import ObjectMapper
-
+/// The struct of a TypingStatus on Cisco Spark.
+///
+/// - since: 1.4.0
 public enum TypingStatus{
     case StartTyping
     case StopTyping
 }
-
+/// The struct of a FlagItemStatus on Cisco Spark.
+///
+/// - since: 1.4.0
 public enum FlagStatus{
     case FlagCreated
     case FlagDeleted
+}
+
+/// The struct of a MentionItemType on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum MentionItemType : String{
+    case person = "person"
+    case group = "group"
 }
 
 public class ActivityClient: NSObject {
@@ -142,11 +154,12 @@ public class ActivityClient: NSObject {
     public func postMessage(conversationID: String,
                             content: String,
                             queue: DispatchQueue? = nil,
+                            mentions: [ActivityMention]? = nil,
                             completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "post",
-            "object" : createActivityObject(objectType: "comment",content: content).toJSON(),
+            "object" : createActivityObject(objectType: "comment",content: content,mentions: mentions).toJSON(),
             "target" : createActivityTarget(conversationId: conversationID).toJSON()
         ])
         let request = requestBuilder()
@@ -298,7 +311,8 @@ public class ActivityClient: NSObject {
     /// MARK: private functions
     private func createActivityObject(objectType: String,
                                       objectId: String? = nil ,
-                                      content: String? = nil) -> ActivityObjectModel
+                                      content: String? = nil,
+                                      mentions: [ActivityMention]? = nil) -> ActivityObjectModel
     {
         var model = ActivityObjectModel()
         model.objectType = objectType
@@ -306,8 +320,32 @@ public class ActivityClient: NSObject {
             model.id = objectIdStr
         }
         if let contentStr = content{
-            model.content = contentStr
-            model.displayName = contentStr
+            var markedUpContent = contentStr
+            if let mentionsArr = mentions{
+                var mentionStringLength = 0
+                for index in 0..<mentionsArr.count{
+                    var mentionItem = mentionsArr[index]
+                    if(mentionItem.mentionType == MentionItemType.person){
+                        mentionItem.objectType = "person"
+                        let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
+                        let endPostion = (mentionItem.range.upperBound) + mentionStringLength
+                        let startIndex = contentStr.index(contentStr.startIndex, offsetBy: startPosition)
+                        let endIndex = contentStr.index(contentStr.startIndex, offsetBy: endPostion)
+                        let mentionContent = markedUpContent[startPosition..<endPostion]
+                        let markupStr = createMentionStartString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
+                        markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
+                        mentionStringLength += (markupStr.count - mentionContent.count) + 1
+                    }else{
+                        /// group mention codes goes heere
+                    }
+                }
+                model.content = markedUpContent
+                model.displayName = contentStr
+                model.mentions = mentionsArr
+            }else{
+                model.content = contentStr
+                model.displayName = contentStr
+            }
         }
         return model
     }
@@ -319,5 +357,21 @@ public class ActivityClient: NSObject {
             model.id = idStr
         }
         return model
+    }
+    
+    private func createMentionStartString(mentionContent: String?, mentionId: String?, mentionType: String?)->String{
+        var result = "<spark-mention"
+        if let mentionid = mentionId{
+            result = result + " data-object-id=" + mentionid
+        }
+        if let type = mentionType{
+            result = result + " data-object-type=" + type
+        }
+        result = result + ">"
+        if let content = mentionContent{
+            result = result + content
+        }
+        result = result + "</spark-mention>"
+        return result
     }
 }

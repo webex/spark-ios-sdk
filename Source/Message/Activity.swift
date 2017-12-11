@@ -21,7 +21,7 @@
 import UIKit
 import ObjectMapper
 
-/// The struct of a Message on Cisco Spark.
+/// The struct of a Activity on Cisco Spark.
 ///
 /// - since: 1.4.0
 public struct Activity {
@@ -129,6 +129,7 @@ public struct ActivityObjectModel {
     public var contentCategory: String?
     public var content: String?
     public var contentType: String?
+    public var mentions: [ActivityMention]?
 }
 
 public struct ActivityTargetModel {
@@ -145,6 +146,19 @@ public struct ActivityFlagItem{
     public var id: String?
     public var url: String?
     public var created: Date?
+}
+
+public struct ActivityMention{
+    public var id: String
+    public var objectType: String?
+    public var range: ClosedRange<Int>
+    public var mentionType: MentionItemType
+    
+    public init(id: String, range: ClosedRange<Int>, type: MentionItemType){
+        self.id  = id
+        self.range  = range
+        self.mentionType = type
+    }
 }
 
 extension ActivityActorModel: Mappable {
@@ -170,6 +184,7 @@ extension ActivityObjectModel: Mappable {
         contentCategory <- map["contentCategory"]
         content <- map["content"]
         contentType <- map["contentType"]
+        mentions <- map["mentions"]
     }
 }
 
@@ -192,6 +207,18 @@ extension ActivityFlagItem: Mappable {
         id <- map["id"]
         url <- map["url"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+    }
+}
+
+extension ActivityMention: Mappable {
+    public init?(map: Map){
+        self.range  = 0...0
+        self.id = String(describing: map["id"])
+        self.mentionType = MentionItemType(rawValue:  String(describing: map["objectType"]))!
+    }
+    public mutating func mapping(map: Map) {
+        id <- map["id"]
+        objectType <- map["objectType"]
     }
 }
 
