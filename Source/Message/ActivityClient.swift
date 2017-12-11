@@ -153,8 +153,8 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public func postMessage(conversationID: String,
                             content: String,
-                            queue: DispatchQueue? = nil,
                             mentions: [ActivityMention]? = nil,
+                            queue: DispatchQueue? = nil,
                             completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
     {
         let body = RequestParameter([
@@ -326,7 +326,6 @@ public class ActivityClient: NSObject {
                 for index in 0..<mentionsArr.count{
                     var mentionItem = mentionsArr[index]
                     if(mentionItem.mentionType == MentionItemType.person){
-                        mentionItem.objectType = "person"
                         let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
                         let endPostion = (mentionItem.range.upperBound) + mentionStringLength
                         let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
@@ -341,7 +340,7 @@ public class ActivityClient: NSObject {
                 }
                 model.content = markedUpContent
                 model.displayName = contentStr
-                model.mentions = mentionsArr
+                model.mentions =  ["items" : mentionsArr]
             }else{
                 model.content = contentStr
                 model.displayName = contentStr

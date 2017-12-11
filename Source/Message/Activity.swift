@@ -129,7 +129,7 @@ public struct ActivityObjectModel {
     public var contentCategory: String?
     public var content: String?
     public var contentType: String?
-    public var mentions: [ActivityMention]?
+    public var mentions: [String : [ActivityMention]]?
 }
 
 public struct ActivityTargetModel {
@@ -158,6 +158,11 @@ public struct ActivityMention{
         self.id  = id
         self.range  = range
         self.mentionType = type
+        if (self.mentionType == .person){
+            self.objectType = "person"
+        }else if(self.mentionType == .group){
+            self.objectType = "group"
+        }
     }
 }
 
@@ -212,9 +217,9 @@ extension ActivityFlagItem: Mappable {
 
 extension ActivityMention: Mappable {
     public init?(map: Map){
+        self.id = map.JSON["id"] as! String
+        self.mentionType = MentionItemType(rawValue:(map.JSON["objectType"] as! String))!
         self.range  = 0...0
-        self.id = String(describing: map["id"])
-        self.mentionType = MentionItemType(rawValue:  String(describing: map["objectType"]))!
     }
     public mutating func mapping(map: Map) {
         id <- map["id"]
