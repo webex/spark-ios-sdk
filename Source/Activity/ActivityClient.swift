@@ -8,56 +8,24 @@
 
 import UIKit
 import ObjectMapper
-/// The struct of a TypingStatus on Cisco Spark.
-///
-/// - since: 1.4.0
-public enum TypingStatus{
-    case StartTyping
-    case StopTyping
-}
-/// The struct of a FlagItemStatus on Cisco Spark.
-///
-/// - since: 1.4.0
-public enum FlagStatus{
-    case FlagCreated
-    case FlagDeleted
-}
 
-/// The struct of a MentionItemType on Cisco Spark.
-///
-/// - since: 1.4.0
-public enum MentionItemType : String{
-    case person = "person"
-    case group = "group"
-}
 
-public class ActivityClient: NSObject {
+public class ActivityClient {
 
     /// Callback when receive Message.
     ///
     /// - since: 1.4.0
-    public var onReceivingMessage:((Activity) -> Void)?
-    
+    public var onMessageActivity:((MessageActivity) -> Void)?
+
     /// Callback when receive acknowledge activity.
     ///
     /// - since: 1.4.0
-    public var onAcknowledgeActivity:((Activity) -> Void)?
-    
+    public var onTypingActivity:((TypingActivity) -> Void)?
+
     /// Callback when delete Message.
     ///
     /// - since: 1.4.0
-    public var onDeletedMessage:((Activity) -> Void)?
-    
-    /// Callback when receive start/stop Typing.
-    ///
-    /// - since: 1.4.0
-    public var onReceivingStartOrStopTyping:((Activity,TypingStatus) -> Void)?
-    
-    /// Callback when receive flag/unflag activity.
-    ///
-    /// - since: 1.4.0
-    public var onReceivingFlagOrUnflag:((Activity,FlagStatus) -> Void)?
-    
+    public var onFlagActivity:((FlagActivity) -> Void)?
     
     let authenticator: Authenticator
     
@@ -100,7 +68,7 @@ public class ActivityClient: NSObject {
                      personRefresh: Bool? = false,
                      lastActivityFirst: Bool? = false,
                      queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<[Activity]>) -> Void)
+                     completionHandler: @escaping (ServiceResponse<[MessageActivity]>) -> Void)
     {
         let query = RequestParameter([
             "conversationId": conversationId,
@@ -133,7 +101,7 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public func activityDetail(activityID: String,
                                queue: DispatchQueue? = nil,
-                               completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+                               completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let request = requestBuilder()
             .method(.get)
@@ -153,9 +121,9 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public func postMessage(conversationID: String,
                             content: String,
-                            mentions: [ActivityMention]? = nil,
+                            mentions: [ActivityMentionModel]? = nil,
                             queue: DispatchQueue? = nil,
-                            completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+                            completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "post",
@@ -181,7 +149,7 @@ public class ActivityClient: NSObject {
     public func deleteMessage(conversationID: String,
                               activityId: String,
                               queue: DispatchQueue? = nil,
-                              completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+                              completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "delete",
@@ -207,7 +175,7 @@ public class ActivityClient: NSObject {
     public func read(conversationID: String,
                                   activityId: String,
                                   queue: DispatchQueue? = nil,
-                                  completionHandler: @escaping (ServiceResponse<Activity>) -> Void)
+                                  completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "acknowledge",
@@ -276,7 +244,7 @@ public class ActivityClient: NSObject {
     /// - since: 1.4.0
     public func flag(activityUrl: String,
                              queue: DispatchQueue? = nil,
-                             completionHandler: @escaping (ServiceResponse<ActivityFlagItem>) -> Void) -> Void
+                             completionHandler: @escaping (ServiceResponse<FlagActivity>) -> Void) -> Void
     {
         let body = RequestParameter([
             "flag-item": activityUrl,
@@ -312,7 +280,7 @@ public class ActivityClient: NSObject {
     private func createActivityObject(objectType: String,
                                       objectId: String? = nil ,
                                       content: String? = nil,
-                                      mentions: [ActivityMention]? = nil) -> ActivityObjectModel
+                                      mentions: [ActivityMentionModel]? = nil) -> ActivityObjectModel
     {
         var model = ActivityObjectModel()
         model.objectType = objectType
@@ -372,29 +340,5 @@ public class ActivityClient: NSObject {
         }
         result = result + "</spark-mention>"
         return result
-    }
-    
-    class public func markDownString(activityModel: Activity){
-        var markDownContent = ""
-        if let mentions = activityModel.object?.mentions , let content = activityModel.object?.content{
-            markDownContent = content
-            let mentionArr = mentions["items"]!
-            for index in 0 ..< mentionArr.count{
-                let startSyntaxIndex = markDownContent.range(of: "<spark-mention")?.lowerBound
-                let endSyntaxRange = markDownContent.range(of: "</spark-mention>")?.upperBound
-                let subString = markDownContent.substring(with: startSyntaxIndex..<endSyntaxRange)
-                
-                let mentionContentBeginIndex = subString.range(of: ">")?.upperBound
-                let mentionContentEndIndex = subString.range(of: "</spark-mention>")?.lowerBound
-                let mentionContentString = subString.substring(with: mentionContentBeginIndex..<mentionContentEndIndex)
-                
-                markDownContent = markDownContent.replacingCharacters(in: startSyntaxIndex..<endSyntaxRange, with: mentionContentString)
-                
-                var mentionItem = mentionArr[index]
-                let startPosition = markDownContent.distance(from: markDownContent.startIndex, to: startSyntaxIndex!)
-                let range = startPosition...(startPosition+mentionContentString.count-1)
-                mentionItem.range = range
-            }
-        }
     }
 }

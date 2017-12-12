@@ -199,33 +199,22 @@ public class Phone {
     }
     
     
-    private func doConversationAcivity(_ model: Activity){
+    private func doConversationAcivity(_ model: ActivityModel){
         SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let activityClient = self.activityClient{
-                switch model.eventType!{
-                case "conversation.activity":
-                    if(model.verb == "post"){
-                        activityClient.onReceivingMessage?(model)
-                    }else if(model.verb == "acknowledge"){
-                        activityClient.onAcknowledgeActivity?(model)
-                    }else if(model.verb == "delete"){
-                        activityClient.onDeletedMessage?(model)
-                    }
+                switch model.actionType!{
+                case .MessageActivity:
+                    let messageActivity = MessageActivity(activitModel: model)
+                    activityClient.onMessageActivity?(messageActivity)
                     break
-                case "status.start_typing":
-                    activityClient.onReceivingStartOrStopTyping?(model,.StartTyping)
+                case .TypingActivity:
+                    let typeActivity = TypingActivity(activitModel: model)
+                    activityClient.onTypingActivity?(typeActivity)
                     break
-                case "status.stop_typing":
-                    activityClient.onReceivingStartOrStopTyping?(model,.StopTyping)
-                    break
-                case "user.app_item":
-                    if(model.action == "create"){
-                        activityClient.onReceivingFlagOrUnflag?(model, .FlagCreated)
-                    }else if(model.action == "delete"){
-                        activityClient.onReceivingFlagOrUnflag?(model, .FlagDeleted)
-                    }
-                default:
+                case .FlagActivity:
+                    let flagActivity = FlagActivity(activitModel: model)
+                    activityClient.onFlagActivity?(flagActivity)
                     break
                 }
             }

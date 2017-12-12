@@ -21,24 +21,49 @@
 import UIKit
 import ObjectMapper
 
+
+/// The struct of a MentionItemType on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum ActivityType : String{
+    case MessageActivity
+    case FlagActivity
+    case TypingActivity
+}
+
 /// The struct of a Activity on Cisco Spark.
 ///
 /// - since: 1.4.0
-public struct Activity {
+public struct ActivityModel {
+    
     /// The identifier of this activity.
-    public var id: String?
+    fileprivate(set) var id: String?
     
     /// The eventType of the activity
-    public var eventType: String?
+    var eventType: String?
+    {
+        didSet {
+           if(eventType == "conversation.activity"){
+                self.actionType = ActivityType.MessageActivity
+           }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
+                self.actionType = ActivityType.TypingActivity
+           }else if(eventType == "user.app_item"){
+                self.actionType = ActivityType.FlagActivity
+           }
+        }
+    }
+    
+    /// The activityType of the activity
+    fileprivate(set) var actionType: ActivityType?
     
     /// The objectType of the Activity. Default is "activity"
-    public var objectType: String?
+    fileprivate(set) var objectType: String?
     
     /// The url of the Activity. Default is "activity"
-    public var url: String?
+    fileprivate(set) var url: String?
     
     /// The the time activity published "YYYY-MM-DDTHH:MM:SS.SSSZ".
-    public var published: Date?
+    fileprivate(set) var published: Date?
     
     /* The action verb the Activiy do
         add : adding participant to conversation
@@ -55,35 +80,34 @@ public struct Activity {
         share : share a content with participant in a conversation
         delete : delete an activity item (the target of this activity)
     */
-    public var verb: String?
+    fileprivate(set) var verb: String?
     
     /// The actor of the Acitivity
-    public var actor: ActivityActorModel?
+    fileprivate(set) var actor: ActivityActorModel?
     
     /// The activity object bring message/file info.
-    public var object: ActivityObjectModel?
+    fileprivate(set) var object: ActivityObjectModel?
     
     /// The target of the activity
-    public var target: ActivityTargetModel?
+    fileprivate(set) var target: ActivityTargetModel?
     
     /// The clientTempId of the activity
-    public var clientTempId: String?
+    fileprivate(set) var clientTempId: String?
     
     /// The encryptionKeyUrl of the activity
-    public var encryptionKeyUrl: String?
+    fileprivate(set) var encryptionKeyUrl: String?
     
     /// The conversationId of the activity, should only use for receive typing/untyping activity
-    public var conversationId: String?
+    fileprivate(set) var conversationId: String?
     
     
     /// The activity flag item action, should only use for receive flag/unflag activity "create"/"delete"
-    public var action: String?
+    fileprivate(set) var action: String?
     /// The activity flag item info, should only use for receive flag/unflag activity
-    public var flagItem: ActivityFlagItem?
-    
+    fileprivate(set) var flagItem: ActivityFlagItemModel?
 }
 
-extension Activity: Mappable {
+extension ActivityModel: Mappable {
     
     /// Activity constructor.
     ///
@@ -112,47 +136,47 @@ extension Activity: Mappable {
 }
 
 public struct ActivityActorModel {
-    public var id: String?
-    public var objectType: String?
-    public var displayName: String?
-    public var orgId: String?
-    public var emailAddress: String?
-    public var entryUUID: String?
-    public var actorType: String? // Default is "PERSON"
+    var id: String?
+    var objectType: String?
+    var displayName: String?
+    var orgId: String?
+    var emailAddress: String?
+    var entryUUID: String?
+    var actorType: String? // Default is "PERSON"
 }
 
 public struct ActivityObjectModel {
-    public var id: String?
-    public var objectType: String?
-    public var url: String?
-    public var displayName: String?
-    public var contentCategory: String?
-    public var content: String?
-    public var contentType: String?
-    public var mentions: [String : [ActivityMention]]?
+    var id: String?
+    var objectType: String?
+    var url: String?
+    var displayName: String?
+    var contentCategory: String?
+    var content: String?
+    var contentType: String?
+    var mentions: [String : [ActivityMentionModel]]?
 }
 
 public struct ActivityTargetModel {
-    public var id: String?
-    public var objectType: String? // Default is "conversation"
-    public var url: String?
-    public var clientTempId: String?
-    public var encryptionKeyUrl: String?
+    var id: String?
+    var objectType: String? // Default is "conversation"
+    var url: String?
+    var clientTempId: String?
+    var encryptionKeyUrl: String?
 }
 
-public struct ActivityFlagItem{
-    public var activityUrl: String?
-    public var state: String? // Default is "flagged/unflagged"
-    public var id: String?
-    public var url: String?
-    public var created: Date?
+public struct ActivityFlagItemModel{
+    var activityUrl: String?
+    var state: String? // Default is "flagged/unflagged"
+    var id: String?
+    var url: String?
+    var created: Date?
 }
 
-public struct ActivityMention{
-    public var id: String
-    public var objectType: String?
-    public var range: CountableClosedRange<Int>
-    public var mentionType: MentionItemType
+public struct ActivityMentionModel{
+    var id: String
+    var objectType: String?
+    var range: CountableClosedRange<Int>
+    var mentionType: MentionItemType
     
     public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
         self.id  = id
@@ -204,7 +228,7 @@ extension ActivityTargetModel: Mappable {
     }
 }
 
-extension ActivityFlagItem: Mappable {
+extension ActivityFlagItemModel: Mappable {
     public init?(map: Map){ }
     public mutating func mapping(map: Map) {
         activityUrl <- map["flag-item"]
@@ -215,7 +239,7 @@ extension ActivityFlagItem: Mappable {
     }
 }
 
-extension ActivityMention: Mappable {
+extension ActivityMentionModel: Mappable {
     public init?(map: Map){
         self.id = map.JSON["id"] as! String
         self.mentionType = MentionItemType(rawValue:(map.JSON["objectType"] as! String))!

@@ -23,7 +23,6 @@ import ObjectMapper
 
 /// Person contents.
 public struct Person {
-    
     /// The id of this person.
     public var id: String?
     

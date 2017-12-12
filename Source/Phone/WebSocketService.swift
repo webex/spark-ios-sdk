@@ -26,7 +26,7 @@ import ObjectMapper
 class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
-    var onActivityModel: ((Activity) -> Void)?
+    var onActivityModel: ((ActivityModel) -> Void)?
     var onFailed: (() -> Void)?
     
     private var socket: WebSocket?
@@ -146,20 +146,20 @@ class WebSocketService: WebSocketDelegate {
             }else if(eventType == "conversation.activity"){
                 let activityObj = eventData["activity"].object;
                 guard let eventJson = activityObj as? [String: Any],
-                    var activity = Mapper<Activity>().map(JSON: eventJson)
+                    var activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
                     else {
                         return
                 }
-                activity.eventType = eventType
-                self.onActivityModel?(activity)
+                activityModel.eventType = eventType
+                self.onActivityModel?(activityModel)
             }else if(eventType == "status.start_typing" || eventType == "status.stop_typing" || eventType == "user.app_item"){
                 let activityObj = eventData.object;
                 guard let eventJson = activityObj as? [String: Any],
-                    let activity = Mapper<Activity>().map(JSON: eventJson)
+                    let activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
                     else {
                         return
                 }
-                self.onActivityModel?(activity)
+                self.onActivityModel?(activityModel)
             }
         }
     }
