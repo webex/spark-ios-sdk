@@ -37,7 +37,7 @@ public enum ActivityType : String{
 public struct ActivityModel {
     
     /// The identifier of this activity.
-    fileprivate(set) var id: String?
+    public var id: String?
     
     /// The eventType of the activity
     var eventType: String?
@@ -54,16 +54,16 @@ public struct ActivityModel {
     }
     
     /// The activityType of the activity
-    fileprivate(set) var actionType: ActivityType?
+    public var actionType: ActivityType?
     
     /// The objectType of the Activity. Default is "activity"
-    fileprivate(set) var objectType: String?
+    public var objectType: String?
     
     /// The url of the Activity. Default is "activity"
-    fileprivate(set) var url: String?
+    public var url: String?
     
     /// The the time activity published "YYYY-MM-DDTHH:MM:SS.SSSZ".
-    fileprivate(set) var published: Date?
+    public var published: Date?
     
     /* The action verb the Activiy do
         add : adding participant to conversation
@@ -80,31 +80,31 @@ public struct ActivityModel {
         share : share a content with participant in a conversation
         delete : delete an activity item (the target of this activity)
     */
-    fileprivate(set) var verb: String?
+    public var verb: String?
     
     /// The actor of the Acitivity
-    fileprivate(set) var actor: ActivityActorModel?
+    public var actor: ActivityActorModel?
     
     /// The activity object bring message/file info.
-    fileprivate(set) var object: ActivityObjectModel?
+    public var object: ActivityObjectModel?
     
     /// The target of the activity
-    fileprivate(set) var target: ActivityTargetModel?
+    public var target: ActivityTargetModel?
     
     /// The clientTempId of the activity
-    fileprivate(set) var clientTempId: String?
+    public var clientTempId: String?
     
     /// The encryptionKeyUrl of the activity
-    fileprivate(set) var encryptionKeyUrl: String?
+    public var encryptionKeyUrl: String?
     
     /// The conversationId of the activity, should only use for receive typing/untyping activity
-    fileprivate(set) var conversationId: String?
+    public var conversationId: String?
     
     
     /// The activity flag item action, should only use for receive flag/unflag activity "create"/"delete"
-    fileprivate(set) var action: String?
+    public var action: String?
     /// The activity flag item info, should only use for receive flag/unflag activity
-    fileprivate(set) var flagItem: ActivityFlagItemModel?
+    public var flagItem: ActivityFlagItemModel?
 }
 
 extension ActivityModel: Mappable {
@@ -136,47 +136,47 @@ extension ActivityModel: Mappable {
 }
 
 public struct ActivityActorModel {
-    var id: String?
-    var objectType: String?
-    var displayName: String?
-    var orgId: String?
-    var emailAddress: String?
-    var entryUUID: String?
-    var actorType: String? // Default is "PERSON"
+   public var id: String?
+   public var objectType: String?
+   public var displayName: String?
+   public var orgId: String?
+   public var emailAddress: String?
+   public var entryUUID: String?
+   public var actorType: String? // Default is "PERSON"
 }
 
 public struct ActivityObjectModel {
-    var id: String?
-    var objectType: String?
-    var url: String?
-    var displayName: String?
-    var contentCategory: String?
-    var content: String?
-    var contentType: String?
-    var mentions: [String : [ActivityMentionModel]]?
+   public var id: String?
+   public var objectType: String?
+   public var url: String?
+   public var displayName: String?
+   public var contentCategory: String?
+   public var content: String?
+   public var contentType: String?
+   public var mentions: [String : [ActivityMentionModel]]?
 }
 
 public struct ActivityTargetModel {
-    var id: String?
-    var objectType: String? // Default is "conversation"
-    var url: String?
-    var clientTempId: String?
-    var encryptionKeyUrl: String?
+   public var id: String?
+   public var objectType: String? // Default is "conversation"
+   public var url: String?
+   public var clientTempId: String?
+   public var encryptionKeyUrl: String?
 }
 
 public struct ActivityFlagItemModel{
-    var activityUrl: String?
-    var state: String? // Default is "flagged/unflagged"
-    var id: String?
-    var url: String?
-    var created: Date?
+   public var activityUrl: String?
+   public var state: String? // Default is "flagged/unflagged"
+   public var id: String?
+   public var url: String?
+   public var created: Date?
 }
 
 public struct ActivityMentionModel{
-    var id: String
-    var objectType: String?
-    var range: CountableClosedRange<Int>
-    var mentionType: MentionItemType
+   public var id: String
+   public var objectType: String?
+   public var range: CountableClosedRange<Int>
+   public var mentionType: MentionItemType
     
     public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
         self.id  = id

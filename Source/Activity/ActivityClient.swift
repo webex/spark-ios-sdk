@@ -72,7 +72,7 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func list(conversationId: String,
+    public func listMessageActivities(conversationId: String,
                      sinceDate: String? = nil,
                      maxDate: String? = nil,
                      midDate: String? = nil,
@@ -102,16 +102,14 @@ public class ActivityClient {
         request.responseArray(completionHandler)
     }
     
-    /// Lists all messages in a room by room Id.
-    /// If present, it includes the associated media content attachment for each message.
-    /// The list sorts the messages in descending order by creation date.
+    /// Detail of one messate activity.
     ///
     /// - parameter activityID: The identifier of the activity.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func activityDetail(activityID: String,
+    public func messageActivityDetail(activityID: String,
                                queue: DispatchQueue? = nil,
                                completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
@@ -159,13 +157,13 @@ public class ActivityClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func deleteMessage(conversationID: String,
-                              activityId: String,
+                              messageActivityId: String,
                               queue: DispatchQueue? = nil,
                               completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "delete",
-            "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
+            "object" : createActivityObject(objectType: "activity", objectId:messageActivityId).toJSON(),
             "target" : createActivityTarget(conversationId: conversationID).toJSON()
             ])
         let request = requestBuilder()
@@ -185,13 +183,13 @@ public class ActivityClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func read(conversationID: String,
-                                  activityId: String,
+                                  massageActivityId: String,
                                   queue: DispatchQueue? = nil,
                                   completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let body = RequestParameter([
             "verb": "acknowledge",
-            "object" : createActivityObject(objectType: "activity", objectId:activityId).toJSON(),
+            "object" : createActivityObject(objectType: "activity", objectId:massageActivityId).toJSON(),
             "target" : createActivityTarget(conversationId: conversationID).toJSON()
             ])
         let request = requestBuilder()
@@ -254,12 +252,12 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func flag(activityUrl: String,
+    public func flag(flagItemUrl: String,
                              queue: DispatchQueue? = nil,
                              completionHandler: @escaping (ServiceResponse<FlagActivity>) -> Void) -> Void
     {
         let body = RequestParameter([
-            "flag-item": activityUrl,
+            "flag-item": flagItemUrl,
             "state": "flagged"
             ])
         
@@ -277,18 +275,20 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func unFlag(flagId: String,
+    public func unFlag(flagItemId: String,
                              queue: DispatchQueue? = nil,
                              completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
-        let request = flagRequestBuilder().path(flagId)
+        let request = flagRequestBuilder().path(flagItemId)
             .method(.delete)
             .queue(queue)
             .build()
         request.responseJSON(completionHandler)
     }
     
-    /// MARK: private functions
+    
+    
+    /// MARK: client private functions
     private func createActivityObject(objectType: String,
                                       objectId: String? = nil ,
                                       content: String? = nil,

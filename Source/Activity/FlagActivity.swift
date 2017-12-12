@@ -24,15 +24,15 @@ import ObjectMapper
 /// The struct of a FlagItemStatus on Cisco Spark.
 ///
 /// - since: 1.4.0
-public enum FlagStatus:String{
+public enum FlagAction:String{
     case FlagCreated = "create"
     case FlagDeleted = "delete"
 }
 
 public class FlagActivity : Mappable{
 
-    public var action: FlagStatus?{
-        return FlagStatus(rawValue: self.activityModel.action!)
+    public var action: FlagAction?{
+        return FlagAction(rawValue: self.activityModel.action!)
     }
     
     public var flagItemUrl: String?{

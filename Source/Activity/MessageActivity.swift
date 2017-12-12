@@ -98,7 +98,19 @@ public class MessageActivity: Mappable {
     ///
     /// - since: 1.4.0
     public var conversationId: String?{
-        return self.activityModel.conversationId
+        if(self.activityModel.conversationId != nil){
+            return self.activityModel.conversationId
+        }else{
+            if self.target != nil{
+                if(target?.objectType == "conversation"){
+                    return target?.id
+                }else{
+                    return nil
+                }
+            }else{
+                return nil
+            }
+        }
     }
     
     /// markup text of this activity

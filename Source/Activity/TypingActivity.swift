@@ -24,15 +24,15 @@ import ObjectMapper
 /// The struct of a TypingStatus on Cisco Spark.
 ///
 /// - since: 1.4.0
-public enum TypingStatus : String{
+public enum TypingAction : String{
     case StartTyping = "status.start_typing"
     case StopTyping = "status.stop_typing"
 }
 
 public class TypingActivity {
     
-    public var action: TypingStatus?{
-        return TypingStatus(rawValue: self.activityModel.eventType!)!
+    public var action: TypingAction?{
+        return TypingAction(rawValue: self.activityModel.eventType!)!
     }
     public var actor: ActivityActorModel?{
         return self.activityModel.actor
