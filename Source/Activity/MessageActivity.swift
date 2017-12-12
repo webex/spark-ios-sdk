@@ -1,10 +1,24 @@
+// Copyright 2016-2017 Cisco Systems Inc
 //
-//  Activity.swift
-//  SparkSDK
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  Created by qucui on 2017/12/12.
-//  Copyright © 2017年 Cisco. All rights reserved.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+
 import UIKit
 import ObjectMapper
 
@@ -28,65 +42,97 @@ public enum MentionItemType : String{
 
 public class MessageActivity: Mappable {
 
+    /// The action of this message activity.
+    ///
+    /// - since: 1.4.0
     public var action: MessageAction?{
         return MessageAction(rawValue: self.activityModel.verb!)
     }
-    /// The person who sent this *message*.
+    /// The actor who created this activity.
     ///
     /// - since: 1.4.0
-    public var from: ActivityActorModel?{
+    public var actor: ActivityActorModel?{
         return self.activityModel.actor
     }
-    /// Where who sent this *message*.
+    /// Where target where this activity sent to.
     ///
     /// - since: 1.4.0
     public var target: ActivityTargetModel?{
         return self.activityModel.target
     }
     
-    /// Where who sent this *message*.
+    /// id of this activty
     ///
     /// - since: 1.4.0
     public var activityId: String?{
         return self.activityModel.id
     }
     
-    /// Where who sent this *message*.
+    /// url of this activity.
     ///
     /// - since: 1.4.0
     public var activityUrl: String?{
         return self.activityModel.url
     }
     
-    /// Where who sent this *message*.
+    /// craate date of this activity
     ///
     /// - since: 1.4.0
     public var publishedDate: Date?{
         return self.activityModel.published
     }
     
-    public var plainText: String?{
-        return self.activityModel.object?.displayName
-    }
+    /// plain text without markup
+    ///
+    /// - since: 1.4.0
+    public var plainText: String?
     
+    /// encryptionKeyUrl of this activity
+    ///
+    /// - since: 1.4.0
     public var encryptionKeyUrl: String?{
         return self.activityModel.encryptionKeyUrl
     }
     
+    /// target conversation id of this activity
+    ///
+    /// - since: 1.4.0
     public var conversationId: String?{
         return self.activityModel.conversationId
     }
     
-    public var markUpText: String?
+    /// markup text of this activity
+    ///
+    /// - since: 1.4.0
+    public var markUpText: String?{
+        return self.activityModel.object?.content
+    }
     
+    /// mention item list of this activity
+    ///
+    /// - since: 1.4.0
     public var mentionItems: [ActivityMentionModel]?
     
     
     private var activityModel: ActivityModel
     init(activitModel: ActivityModel) {
         self.activityModel = activitModel
+        self.markDownString()
     }
     
+    
+    public required convenience init?(map: Map){
+        let acivitiModel = Mapper<ActivityModel>().map(JSON: map.JSON)
+        self.init(activitModel: acivitiModel!)
+        self.markDownString()
+    }
+    public func mapping(map: Map) {
+        self.activityModel <- map
+    }
+    
+    /// convert mark up text in to plain text
+    ///
+    /// - since: 1.4.0
     private func markDownString(){
         var markDownContent = ""
         self.mentionItems = [ActivityMentionModel]()
@@ -112,17 +158,7 @@ public class MessageActivity: Mappable {
                 self.mentionItems?.append(mentionItem)
             }
         }
-        self.markUpText = markDownContent
-    }
-    
-    
-    public required convenience init?(map: Map){
-        let acivitiModel = ActivityModel(map: map)
-        self.init(activitModel: acivitiModel!)
-        self.markDownString()
-    }
-    public func mapping(map: Map) {
-        self.activityModel <- map
+        self.plainText = markDownContent
     }
 }
 
