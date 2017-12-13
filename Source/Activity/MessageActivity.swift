@@ -147,8 +147,8 @@ public class MessageActivity: Mappable {
     /// - since: 1.4.0
     private func markDownString(){
         var markDownContent = ""
-        self.mentionItems = [ActivityMentionModel]()
         if let mentions = self.activityModel.object?.mentions , let content = self.activityModel.object?.content{
+            self.mentionItems = [ActivityMentionModel]()
             markDownContent = content
             let mentionArr = mentions["items"]!
             for index in 0 ..< mentionArr.count{
@@ -170,7 +170,15 @@ public class MessageActivity: Mappable {
                 self.mentionItems?.append(mentionItem)
             }
         }
-        self.plainText = markDownContent
+        if(markDownContent == ""){
+            if(self.action == .post && self.activityModel.object?.objectType == "comment"){
+                self.plainText = self.activityModel.object?.content
+            }else{
+                self.plainText = ""
+            }
+        }else{
+            self.plainText = markDownContent
+        }
     }
 }
 
