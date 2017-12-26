@@ -9,9 +9,9 @@ Pod::Spec.new do |s|
   s.source_files = "Source/**/*.{h,m,swift}"
   s.requires_arc = true
   s.ios.deployment_target = "9.0"
-  s.preserve_paths = 'Vendors/Wme.framework'
+  s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = { 'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors', 'ENABLE_BITCODE' => 'NO'}
-  s.vendored_frameworks = "Vendors/Wme.framework"
+  s.vendored_frameworks = "Vendors/*.framework"
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'ObjectMapper', '~> 2.0'
   s.dependency 'AlamofireObjectMapper', '~> 4.0'
