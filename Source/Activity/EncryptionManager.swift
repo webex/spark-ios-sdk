@@ -113,7 +113,7 @@ class EncryptionManager: NSObject {
 //        }
     }
 
-    private func requestUserId(){
+    public func requestUserId(){
         let request = kmsReqeustBuilder().path("kms")
             .method(.get)
             .build()
@@ -133,7 +133,7 @@ class EncryptionManager: NSObject {
         }
     }
     
-    private func requestClusterInfo(){
+    public func requestClusterInfo(){
         let request = userInoRequestBuilder().path("users")
             .method(.get)
             .build()
@@ -152,7 +152,7 @@ class EncryptionManager: NSObject {
         }
     }
     
-    private func ephemaralKeyRequst(){
+    public func ephemaralKeyRequst(){
         let request = kmsReqeustBuilder().path("kms/messages")
             .method(.get)
             .build()
@@ -172,10 +172,10 @@ class EncryptionManager: NSObject {
         }
     }
     
-    private func kmsReqeustBuilder() -> ServiceRequest.KmsServerBuilder {
+    public func kmsReqeustBuilder() -> ServiceRequest.KmsServerBuilder {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }
-    private func userInoRequestBuilder() -> ServiceRequest.ActivityServerBuilder {
+    public func userInoRequestBuilder() -> ServiceRequest.ActivityServerBuilder {
         return ServiceRequest.ActivityServerBuilder(authenticator)
     }
     
