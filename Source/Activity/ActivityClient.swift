@@ -21,7 +21,6 @@
 import UIKit
 import ObjectMapper
 
-
 public class ActivityClient {
 
     /// Callback when receive Message.
@@ -38,6 +37,7 @@ public class ActivityClient {
     ///
     /// - since: 1.4.0
     public var onFlagActivity:((FlagActivity) -> Void)?
+    
     
     let authenticator: Authenticator
     

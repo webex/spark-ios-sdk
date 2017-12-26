@@ -42,8 +42,9 @@ class ServiceRequest {
 #endif
     static let CONVERSATION_SERVER_ADDRESS: String = "https://conv-a.wbx2.com/conversation/api/v1"
     
-    static let RAINDROP_SERVER_ADDRESS: String = "https://conv-a.wbx2.com/conversation/api/v1"
+    static let RAINDROP_SERVER_ADDRESS: String = "https://raindrop-a.wbx2.com/user/api/v1"
     
+    static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1/kms"
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator

@@ -160,7 +160,15 @@ public class Phone {
         self.webSocket.onActivityModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
-                    strong.doConversationAcivity(model);
+                    strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
                 }
             }
         }
@@ -192,14 +200,14 @@ public class Phone {
         self.webSocket.onActivityModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
-                    strong.doConversationAcivity(model);
+                    strong.doConversationAcivityEvent(model);
                 }
             }
         }
     }
     
     
-    private func doConversationAcivity(_ model: ActivityModel){
+    private func doConversationAcivityEvent(_ model: ActivityModel){
         SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let activityClient = self.activityClient{
@@ -217,6 +225,15 @@ public class Phone {
                     activityClient.onFlagActivity?(flagActivity)
                     break
                 }
+            }
+        }
+    }
+    
+    private func doKmsMessageEvent( _ model: KmsMessageModel){
+        SDKLogger.shared.debug("Receive Kms MessageModel: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+        DispatchQueue.main.async {
+            if let activityClient = self.activityClient{
+//                activityClient.onKmsMessageEvent
             }
         }
     }
