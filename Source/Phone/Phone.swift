@@ -108,7 +108,15 @@ public class Phone {
     public var onIncoming: ((Call) -> Void)?
     
     /// Activity Client
+    ///
+    /// - since: 1.4.0
     public var activityClient: ActivityClient?
+    
+    /// private Encryption Manager
+    ///
+    /// - since: 1.4.0
+    private var encryptionManager: EncryptionManager?
+    
     
     let authenticator: Authenticator
     let reachability: ReachabilityService
@@ -145,6 +153,7 @@ public class Phone {
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
         self.activityClient = ActivityClient(authenticator: authenticator)
+        self.encryptionManager = EncryptionManager(authenticator: authenticator, diviceUrl: (self.devices.device?.deviceUrl)!, activityClient: self.activityClient!)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -185,6 +194,7 @@ public class Phone {
         self.prompter = prompter
         self.webSocket = webSocket
         self.activityClient = ActivityClient(authenticator: authenticator)
+        self.encryptionManager = EncryptionManager(authenticator: authenticator, diviceUrl: (self.devices.device?.deviceUrl)!, activityClient: self.activityClient!)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -214,7 +224,11 @@ public class Phone {
                 switch model.actionType!{
                 case .MessageActivity:
                     let messageActivity = MessageActivity(activitModel: model)
-                    activityClient.onMessageActivity?(messageActivity)
+                    if(messageActivity.encryptionKeyUrl != nil){
+                        self.encryptionManager?.receiNewMessageActivity(messageActivity: messageActivity)
+                    }else{
+                        activityClient.onMessageActivity?(messageActivity)
+                    }
                     break
                 case .TypingActivity:
                     let typeActivity = TypingActivity(activitModel: model)
@@ -229,11 +243,11 @@ public class Phone {
         }
     }
     
-    private func doKmsMessageEvent( _ model: KmsMessageModel){
-        SDKLogger.shared.debug("Receive Kms MessageModel: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+    private func doKmsMessageEvent( _ kmsMessage: KmsMessageModel){
+        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessage.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
-            if let activityClient = self.activityClient{
-//                activityClient.onKmsMessageEvent
+            if let encryptionManager = self.encryptionManager{
+                encryptionManager.receiveKmsMessage(message: kmsMessage)
             }
         }
     }

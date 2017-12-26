@@ -44,7 +44,7 @@ class ServiceRequest {
     
     static let RAINDROP_SERVER_ADDRESS: String = "https://raindrop-a.wbx2.com/user/api/v1"
     
-    static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1/kms"
+    static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1"
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator
@@ -55,6 +55,79 @@ class ServiceRequest {
         self.query = query
         self.keyPath = keyPath
         self.queue = queue
+    }
+    
+    class KmsServerBuilder{
+        private static let apiBaseUrl: URL = URL(string: ServiceRequest.KMS_SERVER_ADDRESS)!
+        private let authenticator: Authenticator
+        private var headers: [String: String]
+        private var method: Alamofire.HTTPMethod
+        private var baseUrl: URL
+        private var path: String
+        private var body: RequestParameter?
+        private var query: RequestParameter?
+        private var keyPath: String?
+        private var queue: DispatchQueue?
+        
+        
+        init(_ authenticator: Authenticator) {
+            self.authenticator = authenticator
+            self.headers = ["Content-Type": "application/json",
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
+            self.baseUrl = KmsServerBuilder.apiBaseUrl
+            self.method = .get
+            self.path = ""
+        }
+        
+        func build() -> ServiceRequest {
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
+        }
+        
+        func method(_ method: Alamofire.HTTPMethod) -> KmsServerBuilder {
+            self.method = method
+            return self
+        }
+        
+        func headers(_ headers: [String: String]) -> KmsServerBuilder {
+            self.headers = headers
+            return self
+        }
+        
+        func baseUrl(_ baseUrl: String) -> KmsServerBuilder {
+            self.baseUrl = URL(string: baseUrl)!
+            return self
+        }
+        
+        func baseUrl(_ baseUrl: URL) -> KmsServerBuilder {
+            self.baseUrl = baseUrl
+            return self
+        }
+        
+        func path(_ path: String) -> KmsServerBuilder {
+            self.path += "/" + path
+            return self
+        }
+        
+        func body(_ body: RequestParameter) -> KmsServerBuilder {
+            self.body = body
+            return self
+        }
+        
+        func query(_ query: RequestParameter) -> KmsServerBuilder {
+            self.query = query
+            return self
+        }
+        
+        func keyPath(_ keyPath: String) -> KmsServerBuilder {
+            self.keyPath = keyPath
+            return self
+        }
+        
+        func queue(_ queue: DispatchQueue?) -> KmsServerBuilder {
+            self.queue = queue
+            return self
+        }
     }
 
     class RainDropServerBuilder{
