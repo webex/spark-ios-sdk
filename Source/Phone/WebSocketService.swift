@@ -168,7 +168,7 @@ class WebSocketService: WebSocketDelegate {
                     else{
                         return;
                 }
-//                self.onKmsMessage?(kmsMessageModel)
+                self.onKmsMessageModel?(kmsMessageModel)
             }
         }
     }

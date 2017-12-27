@@ -41,7 +41,7 @@ public enum MentionItemType : String{
 }
 
 public class MessageActivity: Mappable {
-
+    
     /// The action of this message activity.
     ///
     /// - since: 1.4.0
@@ -172,7 +172,13 @@ public class MessageActivity: Mappable {
         }
         if(markDownContent == ""){
             if(self.action == .post && self.activityModel.object?.objectType == "comment"){
-                self.plainText = self.activityModel.object?.content
+                if let content = self.activityModel.object?.content{
+                    self.plainText = content
+                }else{
+                    if let displayName = self.activityModel.object?.displayName{
+                        self.plainText = displayName
+                    }
+                }
             }else{
                 self.plainText = ""
             }

@@ -126,7 +126,7 @@ public class Phone {
     let queue = SerialQueue()
     let metrics: MetricsEngine
     
-    private let devices: DeviceService    
+    private let devices: DeviceService
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
@@ -153,7 +153,7 @@ public class Phone {
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
         self.activityClient = ActivityClient(authenticator: authenticator)
-        self.encryptionManager = EncryptionManager(authenticator: authenticator, diviceUrl: (self.devices.device?.deviceUrl)!, activityClient: self.activityClient!)
+        
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -182,7 +182,7 @@ public class Phone {
             }
         }
     }
-
+    
     init(authenticator: Authenticator,devices:DeviceService,reachability:ReachabilityService,client:CallClient,conversations:ConversationClient,metrics:MetricsEngine,prompter:H264LicensePrompter,webSocket:WebSocketService) {
         let _ = MediaEngineWrapper.sharedInstance.WMEVersion
         self.authenticator = authenticator
@@ -194,7 +194,6 @@ public class Phone {
         self.prompter = prompter
         self.webSocket = webSocket
         self.activityClient = ActivityClient(authenticator: authenticator)
-        self.encryptionManager = EncryptionManager(authenticator: authenticator, diviceUrl: (self.devices.device?.deviceUrl)!, activityClient: self.activityClient!)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -202,7 +201,7 @@ public class Phone {
         self.webSocket.onCallModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
-                strong.doLocusEvent(model);
+                    strong.doLocusEvent(model);
                 }
             }
         }
@@ -211,6 +210,14 @@ public class Phone {
             if let strong = self {
                 strong.queue.underlying.async {
                     strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
                 }
             }
         }
@@ -243,11 +250,11 @@ public class Phone {
         }
     }
     
-    private func doKmsMessageEvent( _ kmsMessage: KmsMessageModel){
-        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessage.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+    private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
+        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let encryptionManager = self.encryptionManager{
-                encryptionManager.receiveKmsMessage(message: kmsMessage)
+                encryptionManager.receiveKmsMessage(kmsMessageModel)
             }
         }
     }
@@ -273,6 +280,7 @@ public class Phone {
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
+                        self?.encryptionManager = EncryptionManager(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!, activityClient: (self?.activityClient!)!)
                         self?.queue.underlying.async {
                             self?.fetchActiveCalls()
                             DispatchQueue.main.async {
@@ -843,3 +851,4 @@ public class Phone {
         }
     }
 }
+
