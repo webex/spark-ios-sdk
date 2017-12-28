@@ -90,25 +90,26 @@ public class MessageActivity: Mappable {
     /// encryptionKeyUrl of this activity
     ///
     /// - since: 1.4.0
-    public var encryptionKeyUrl: String?{
-        return self.activityModel.encryptionKeyUrl
-    }
+    public var encryptionKeyUrl: String?
     
     /// target conversation id of this activity
     ///
     /// - since: 1.4.0
     public var conversationId: String?{
-        if(self.activityModel.conversationId != nil){
-            return self.activityModel.conversationId
-        }else{
-            if self.target != nil{
-                if(target?.objectType == "conversation"){
-                    return target?.id
+        set{}
+        get{
+            if(self.activityModel.conversationId != nil){
+                return self.activityModel.conversationId
+            }else{
+                if self.target != nil{
+                    if(target?.objectType == "conversation"){
+                        return target?.id
+                    }else{
+                        return nil
+                    }
                 }else{
                     return nil
                 }
-            }else{
-                return nil
             }
         }
     }
@@ -129,7 +130,18 @@ public class MessageActivity: Mappable {
     private var activityModel: ActivityModel
     init(activitModel: ActivityModel) {
         self.activityModel = activitModel
-        self.markDownString()
+        self.encryptionKeyUrl = activitModel.encryptionKeyUrl
+        if(self.action == .post && self.activityModel.object?.objectType == "comment"){
+            if let content = self.activityModel.object?.content{
+                self.plainText = content
+            }else{
+                if let displayName = self.activityModel.object?.displayName{
+                    self.plainText = displayName
+                }
+            }
+        }else{
+            self.plainText = ""
+        }
     }
     
     
@@ -145,9 +157,9 @@ public class MessageActivity: Mappable {
     /// convert mark up text in to plain text
     ///
     /// - since: 1.4.0
-    private func markDownString(){
+    public func markDownString(){
         var markDownContent = ""
-        if let mentions = self.activityModel.object?.mentions , let content = self.activityModel.object?.content{
+        if let mentions = self.activityModel.object?.mentions , let content = self.plainText{
             self.mentionItems = [ActivityMentionModel]()
             markDownContent = content
             let mentionArr = mentions["items"]!
@@ -170,19 +182,7 @@ public class MessageActivity: Mappable {
                 self.mentionItems?.append(mentionItem)
             }
         }
-        if(markDownContent == ""){
-            if(self.action == .post && self.activityModel.object?.objectType == "comment"){
-                if let content = self.activityModel.object?.content{
-                    self.plainText = content
-                }else{
-                    if let displayName = self.activityModel.object?.displayName{
-                        self.plainText = displayName
-                    }
-                }
-            }else{
-                self.plainText = ""
-            }
-        }else{
+        if(markDownContent != ""){
             self.plainText = markDownContent
         }
     }

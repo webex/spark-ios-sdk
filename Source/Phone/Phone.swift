@@ -112,11 +112,6 @@ public class Phone {
     /// - since: 1.4.0
     public var activityClient: ActivityClient?
     
-    /// private Encryption Manager
-    ///
-    /// - since: 1.4.0
-    private var encryptionManager: EncryptionManager?
-    
     
     let authenticator: Authenticator
     let reachability: ReachabilityService
@@ -152,7 +147,6 @@ public class Phone {
         self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
-        self.activityClient = ActivityClient(authenticator: authenticator)
         
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
@@ -193,7 +187,6 @@ public class Phone {
         self.metrics = metrics
         self.prompter = prompter
         self.webSocket = webSocket
-        self.activityClient = ActivityClient(authenticator: authenticator)
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -225,15 +218,18 @@ public class Phone {
     
     
     private func doConversationAcivityEvent(_ model: ActivityModel){
-        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+        //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let activityClient = self.activityClient{
                 switch model.actionType!{
                 case .MessageActivity:
                     let messageActivity = MessageActivity(activitModel: model)
                     if(messageActivity.encryptionKeyUrl != nil){
-                        self.encryptionManager?.receiNewMessageActivity(messageActivity: messageActivity)
+                        if let acitivityClient = self.activityClient{
+                            acitivityClient.receiNewMessageActivity(messageActivity: messageActivity)
+                        }
                     }else{
+                        messageActivity.markDownString()
                         activityClient.onMessageActivity?(messageActivity)
                     }
                     break
@@ -253,8 +249,8 @@ public class Phone {
     private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
         SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
-            if let encryptionManager = self.encryptionManager{
-                encryptionManager.receiveKmsMessage(kmsMessageModel)
+            if let acitivityClient = self.activityClient{
+                acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }
     }
@@ -280,7 +276,7 @@ public class Phone {
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
-                        self?.encryptionManager = EncryptionManager(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!, activityClient: (self?.activityClient!)!)
+                        self?.activityClient = ActivityClient(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!)
                         self?.queue.underlying.async {
                             self?.fetchActiveCalls()
                             DispatchQueue.main.async {

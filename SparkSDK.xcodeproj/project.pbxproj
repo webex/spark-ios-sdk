@@ -9,13 +9,13 @@
 /* Begin PBXBuildFile section */
 		105E8EF91FF2976200EB33F1 /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
 		105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
+		105E8F061FF4BC6800EB33F1 /* ActivityPostOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */; };
 		10F499B61FDF85E10028426A /* MessageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B31FDF85E10028426A /* MessageActivity.swift */; };
 		10F499B71FDF85E10028426A /* ActivityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B41FDF85E10028426A /* ActivityClient.swift */; };
 		10F499B81FDF85E10028426A /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B51FDF85E10028426A /* ActivityModel.swift */; };
 		10F499BA1FDF88450028426A /* TypingActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B91FDF88450028426A /* TypingActivity.swift */; };
 		10F499BC1FDF896A0028426A /* FlagActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499BB1FDF896A0028426A /* FlagActivity.swift */; };
 		10F576711FF2005800A574D6 /* KmsMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F576701FF2005800A574D6 /* KmsMessageModel.swift */; };
-		10F576731FF207FB00A574D6 /* EncryptionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F576721FF207FB00A574D6 /* EncryptionManager.swift */; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -167,13 +167,13 @@
 		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
+		105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityPostOperation.swift; sourceTree = "<group>"; };
 		10F499B31FDF85E10028426A /* MessageActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageActivity.swift; sourceTree = "<group>"; };
 		10F499B41FDF85E10028426A /* ActivityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityClient.swift; sourceTree = "<group>"; };
 		10F499B51FDF85E10028426A /* ActivityModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
 		10F499B91FDF88450028426A /* TypingActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingActivity.swift; sourceTree = "<group>"; };
 		10F499BB1FDF896A0028426A /* FlagActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagActivity.swift; sourceTree = "<group>"; };
 		10F576701FF2005800A574D6 /* KmsMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KmsMessageModel.swift; sourceTree = "<group>"; };
-		10F576721FF207FB00A574D6 /* EncryptionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionManager.swift; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -335,7 +335,7 @@
 				10F499B91FDF88450028426A /* TypingActivity.swift */,
 				10F499B31FDF85E10028426A /* MessageActivity.swift */,
 				10F499B41FDF85E10028426A /* ActivityClient.swift */,
-				10F576721FF207FB00A574D6 /* EncryptionManager.swift */,
+				105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -916,7 +916,6 @@
 				3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */,
-				10F576731FF207FB00A574D6 /* EncryptionManager.swift in Sources */,
 				10F499BA1FDF88450028426A /* TypingActivity.swift in Sources */,
 				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
 				10F499BC1FDF896A0028426A /* FlagActivity.swift in Sources */,
@@ -928,6 +927,7 @@
 				20EEA2781EB0E6B400D6BB75 /* MediaConnectionModel.swift in Sources */,
 				5AFB6E931DF5C5110027E989 /* JWTAuthKeychainStorage.swift in Sources */,
 				5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */,
+				105E8F061FF4BC6800EB33F1 /* ActivityPostOperation.swift in Sources */,
 				204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */,
 				5D1A5D091CF8130E00313515 /* ReachabilityTransportStatusModel.swift in Sources */,
 				B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */,
