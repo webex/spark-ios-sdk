@@ -43,13 +43,13 @@ public struct ActivityModel {
     var eventType: String?
     {
         didSet {
-           if(eventType == "conversation.activity"){
+            if(eventType == "conversation.activity"){
                 self.actionType = ActivityType.MessageActivity
-           }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
+            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
                 self.actionType = ActivityType.TypingActivity
-           }else if(eventType == "user.app_item"){
+            }else if(eventType == "user.app_item"){
                 self.actionType = ActivityType.FlagActivity
-           }
+            }
         }
     }
     
@@ -59,27 +59,28 @@ public struct ActivityModel {
     /// The objectType of the Activity. Default is "activity"
     public var objectType: String?
     
-    /// The url of the Activity. Default is "activity"
+    /// The url of the Activity.
     public var url: String?
+    
     
     /// The the time activity published "YYYY-MM-DDTHH:MM:SS.SSSZ".
     public var published: Date?
     
     /* The action verb the Activiy do
-        add : adding participant to conversation
-        leave : leave a conversation
-        post : send a text message to conversation
-        acknowledge: acknowledge an activity
-        update: update a conversation title
-        hide : hide a conversation
-        unhide : unhide a conversation
-        mute : mute a conversation
-        unmute : unmute a conversation
-        favorite : favorite a conversation
-        unfavorite : unfavorite a conversation
-        share : share a content with participant in a conversation
-        delete : delete an activity item (the target of this activity)
-    */
+     add : adding participant to conversation
+     leave : leave a conversation
+     post : send a text message to conversation
+     acknowledge: acknowledge an activity
+     update: update a conversation title
+     hide : hide a conversation
+     unhide : unhide a conversation
+     mute : mute a conversation
+     unmute : unmute a conversation
+     favorite : favorite a conversation
+     unfavorite : unfavorite a conversation
+     share : share a content with participant in a conversation
+     delete : delete an activity item (the target of this activity)
+     */
     public var verb: String?
     
     /// The actor of the Acitivity
@@ -135,59 +136,15 @@ extension ActivityModel: Mappable {
     }
 }
 
+// MARK: ActivityActorModel
 public struct ActivityActorModel {
-   public var id: String?
-   public var objectType: String?
-   public var displayName: String?
-   public var orgId: String?
-   public var emailAddress: String?
-   public var entryUUID: String?
-   public var actorType: String? // Default is "PERSON"
-}
-
-public struct ActivityObjectModel {
-   public var id: String?
-   public var objectType: String?
-   public var url: String?
-   public var displayName: String?
-   public var contentCategory: String?
-   public var content: String?
-   public var contentType: String?
-   public var mentions: [String : [ActivityMentionModel]]?
-}
-
-public struct ActivityTargetModel {
-   public var id: String?
-   public var objectType: String? // Default is "conversation"
-   public var url: String?
-   public var clientTempId: String?
-   public var encryptionKeyUrl: String?
-}
-
-public struct ActivityFlagItemModel{
-   public var activityUrl: String?
-   public var state: String? // Default is "flagged/unflagged"
-   public var id: String?
-   public var url: String?
-   public var created: Date?
-}
-
-public struct ActivityMentionModel{
-   public var id: String
-   public var objectType: String?
-   public var range: CountableClosedRange<Int>
-   public var mentionType: MentionItemType
-    
-    public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
-        self.id  = id
-        self.range  = range
-        self.mentionType = type
-        if (self.mentionType == .person){
-            self.objectType = "person"
-        }else if(self.mentionType == .group){
-            self.objectType = "group"
-        }
-    }
+    public var id: String?
+    public var objectType: String?
+    public var displayName: String?
+    public var orgId: String?
+    public var emailAddress: String?
+    public var entryUUID: String?
+    public var actorType: String? // Default is "PERSON"
 }
 
 extension ActivityActorModel: Mappable {
@@ -203,6 +160,17 @@ extension ActivityActorModel: Mappable {
     }
 }
 
+// MARK: ActivityObjectModel
+public struct ActivityObjectModel {
+    public var id: String?
+    public var objectType: String?
+    public var url: String?
+    public var displayName: String?
+    public var contentCategory: String?
+    public var content: String?
+    public var contentType: String?
+    public var mentions: [String : [ActivityMentionModel]]?
+}
 extension ActivityObjectModel: Mappable {
     public init?(map: Map) {}
     public mutating func mapping(map: Map) {
@@ -217,6 +185,29 @@ extension ActivityObjectModel: Mappable {
     }
 }
 
+// MARK: FileObjectModel
+public struct FileObjectModel{
+    public var displayName: String?
+    public var mimeType: String?
+    public var objectType: String?
+    public var image: String?
+    public var fileSize: String?
+    public var scr: String?
+    public var url: String?
+}
+public struct ThumnailModel{
+    
+}
+
+// MARK: ActivityTargetModel
+public struct ActivityTargetModel {
+    public var id: String?
+    public var objectType: String? // Default is "conversation"
+    public var url: String?
+    public var clientTempId: String?
+    public var encryptionKeyUrl: String?
+}
+
 extension ActivityTargetModel: Mappable {
     public init?(map: Map){ }
     public mutating func mapping(map: Map) {
@@ -227,7 +218,14 @@ extension ActivityTargetModel: Mappable {
         encryptionKeyUrl <- map["encryptionKeyUrl"]
     }
 }
-
+// MARK: ActivityFlagItemModel
+public struct ActivityFlagItemModel{
+    public var activityUrl: String?
+    public var state: String? // Default is "flagged/unflagged"
+    public var id: String?
+    public var url: String?
+    public var created: Date?
+}
 extension ActivityFlagItemModel: Mappable {
     public init?(map: Map){ }
     public mutating func mapping(map: Map) {
@@ -236,6 +234,25 @@ extension ActivityFlagItemModel: Mappable {
         id <- map["id"]
         url <- map["url"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+    }
+}
+
+// MARK: ActivityMentionModel
+public struct ActivityMentionModel{
+    public var id: String
+    public var objectType: String?
+    public var range: CountableClosedRange<Int>
+    public var mentionType: MentionItemType
+    
+    public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
+        self.id  = id
+        self.range  = range
+        self.mentionType = type
+        if (self.mentionType == .person){
+            self.objectType = "person"
+        }else if(self.mentionType == .group){
+            self.objectType = "group"
+        }
     }
 }
 
@@ -250,10 +267,4 @@ extension ActivityMentionModel: Mappable {
         objectType <- map["objectType"]
     }
 }
-
-
-
-
-
-
 

@@ -30,6 +30,7 @@ public enum MessageAction : String{
     case post = "post"
     case share = "share"
     case delete = "delete"
+    case none = "none"
 }
 
 /// The struct of a MentionItemType on Cisco Spark.
@@ -45,9 +46,8 @@ public class MessageActivity: Mappable {
     /// The action of this message activity.
     ///
     /// - since: 1.4.0
-    public var action: MessageAction?{
-        return MessageAction(rawValue: self.activityModel.verb!)
-    }
+    public var action: MessageAction?
+    
     /// The actor who created this activity.
     ///
     /// - since: 1.4.0
@@ -64,9 +64,7 @@ public class MessageActivity: Mappable {
     /// id of this activty
     ///
     /// - since: 1.4.0
-    public var activityId: String?{
-        return self.activityModel.id
-    }
+    public var activityId: String?
     
     /// url of this activity.
     ///
@@ -95,24 +93,7 @@ public class MessageActivity: Mappable {
     /// target conversation id of this activity
     ///
     /// - since: 1.4.0
-    public var conversationId: String?{
-        set{}
-        get{
-            if(self.activityModel.conversationId != nil){
-                return self.activityModel.conversationId
-            }else{
-                if self.target != nil{
-                    if(target?.objectType == "conversation"){
-                        return target?.id
-                    }else{
-                        return nil
-                    }
-                }else{
-                    return nil
-                }
-            }
-        }
-    }
+    public var conversationId: String?
     
     /// markup text of this activity
     ///
@@ -126,11 +107,22 @@ public class MessageActivity: Mappable {
     /// - since: 1.4.0
     public var mentionItems: [ActivityMentionModel]?
     
-    
     private var activityModel: ActivityModel
     init(activitModel: ActivityModel) {
         self.activityModel = activitModel
         self.encryptionKeyUrl = activitModel.encryptionKeyUrl
+        self.activityId = activitModel.object?.id
+        self.action = MessageAction(rawValue:activitModel.verb!)
+        if(self.activityModel.conversationId != nil){
+            self.conversationId = self.activityModel.conversationId
+        }else{
+            if self.target != nil{
+                if(target?.objectType == "conversation"){
+                    self.conversationId = target?.id
+                }
+            }
+        }
+        
         if(self.action == .post && self.activityModel.object?.objectType == "comment"){
             if let content = self.activityModel.object?.content{
                 self.plainText = content
@@ -142,6 +134,9 @@ public class MessageActivity: Mappable {
         }else{
             self.plainText = ""
         }
+    }
+    init(){
+        self.activityModel = ActivityModel()
     }
     
     

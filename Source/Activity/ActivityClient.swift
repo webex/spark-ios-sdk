@@ -24,6 +24,7 @@ import SparkSDKEncryptionKit
 import Alamofire
 import SwiftyJSON
 
+
 public class ActivityClient {
     
     /// Callback when receive Message.
@@ -54,6 +55,14 @@ public class ActivityClient {
     
     private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
         return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
+    }
+    
+    private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
+        return ServiceRequest.KmsServerBuilder(authenticator)
+    }
+    
+    private func userInfoRequestBuilder() -> ServiceRequest.ActivityServerBuilder {
+        return ServiceRequest.ActivityServerBuilder(authenticator)
     }
     
     /// Lists all messages in a room by room Id.
@@ -124,6 +133,8 @@ public class ActivityClient {
     ///
     /// - parameter conversation: The identifier of the conversation where the message is to be posted.
     /// - parameter content: The plain text message to be posted to the room.
+    /// - parameter medtions: The mention items to be posted to the room.
+    /// - parameter files: local file pathes to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -131,49 +142,33 @@ public class ActivityClient {
     public func postMessage(conversationID: String,
                             content: String,
                             mentions: [ActivityMentionModel]? = nil,
+                            files: [String]? = nil,
                             queue: DispatchQueue? = nil,
                             completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
-        if let encrptionUrl = self.conversationEncryptUrlDict[conversationID]{
-            let body = RequestParameter([
-                "verb": "post",
-                "encryptionKeyUrl" : encrptionUrl,
-                "object" : createActivityObject(objectType: "comment",content: content,encryptionUrl: encrptionUrl,mentions: mentions).toJSON(),
-                "target" : createActivityTarget(conversationId: conversationID).toJSON()
-                ])
-            let request = requestBuilder()
-                .method(.post)
-                .body(body)
-                .queue(queue)
-                .build()
-            request.responseObject(completionHandler)
-        }else{
-            
-            let params : [String : Any] = ["verb": "post",
-                                           "object" : createActivityObject(objectType: "comment",content: content,mentions: mentions).toJSON(),
-                                           "target" : createActivityTarget(conversationId: conversationID).toJSON()]
-            
-            let newPostingModel = ActivityModel(JSON: params)
-            let newPostingMessage = MessageActivity(activitModel: newPostingModel!)
-            newPostingMessage.conversationId = conversationID
-            self.postCompeletionHandler = completionHandler
-            self.postingActivityQueue.append(newPostingMessage)
-            self.postNewMessageActivity(messageActivity: newPostingMessage)
-            
-            
-            //            let body = RequestParameter([
-            //                "verb": "post",
-            //                "object" : createActivityObject(objectType: "comment",content: content,mentions: mentions).toJSON(),
-            //                "target" : createActivityTarget(conversationId: conversationID).toJSON()
-            //                ])
-            //            let request = requestBuilder()
-            //                .method(.post)
-            //                .body(body)
-            //                .queue(queue)
-            //                .build()
-            //            request.responseObject(completionHandler)
+        
+        let messageActivity = MessageActivity()
+        messageActivity.conversationId = conversationID
+        messageActivity.plainText = content
+        messageActivity.action = MessageAction.post
+        if let mentionItems = mentions{
+            messageActivity.mentionItems = mentionItems
         }
         
+        if let encrptionUrl = self.roomResources.filter({$0.conversationID == conversationID}).first?.encryptionUrl,
+            let keyMetarial = self.roomResources.filter({$0.conversationID == conversationID}).first?.keyMaterial{
+            messageActivity.encryptionKeyUrl = encrptionUrl
+            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,messageActivity: messageActivity, keyMaterial:  keyMetarial ,queue:queue, completionHandler: completionHandler)
+            self.postingOperationQueue.addOperation(msgPostOperation)
+        }else{
+            if self.roomResources.filter({$0.conversationID == conversationID}).first == nil{
+                let roomModel = ActivityRoomResource(conversationId: conversationID)
+                self.roomResources.append(roomModel)
+            }
+            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,messageActivity: messageActivity ,queue:queue, completionHandler: completionHandler)
+            self.pendingOperationQueue.append(msgPostOperation)
+            self.postNewMessageActivity(messageActivity: messageActivity)
+        }
     }
     
     /// Deletes a message, to a conversation by conversation Id.
@@ -189,17 +184,13 @@ public class ActivityClient {
                               queue: DispatchQueue? = nil,
                               completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
-        let body = RequestParameter([
-            "verb": "delete",
-            "object" : createActivityObject(objectType: "activity", objectId:messageActivityId).toJSON(),
-            "target" : createActivityTarget(conversationId: conversationID).toJSON()
-            ])
-        let request = requestBuilder()
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        request.responseObject(completionHandler)
+        
+        let messageActivity = MessageActivity()
+        messageActivity.conversationId = conversationID
+        messageActivity.activityId = messageActivityId
+        messageActivity.action = MessageAction.delete
+        let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        self.postingOperationQueue.addOperation(msgPostOperation)
     }
     
     /// Post a message read indicator, to a conversation by conversation Id.
@@ -215,17 +206,12 @@ public class ActivityClient {
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
-        let body = RequestParameter([
-            "verb": "acknowledge",
-            "object" : createActivityObject(objectType: "activity", objectId:massageActivityId).toJSON(),
-            "target" : createActivityTarget(conversationId: conversationID).toJSON()
-            ])
-        let request = requestBuilder()
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        request.responseObject(completionHandler)
+        let messageActivity = MessageActivity()
+        messageActivity.conversationId = conversationID
+        messageActivity.activityId = massageActivityId
+        messageActivity.action = MessageAction.acknowledge
+        let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        self.postingOperationQueue.addOperation(msgPostOperation)
     }
     
     /// Post a typing indicator, to a conversation by conversation Id.
@@ -315,87 +301,6 @@ public class ActivityClient {
     }
     
     
-    
-    // MARK: Client Private Functions
-    private func createActivityObject(objectType: String,
-                                      objectId: String? = nil ,
-                                      content: String? = nil,
-                                      encryptionUrl: String? = nil,
-                                      mentions: [ActivityMentionModel]? = nil) -> ActivityObjectModel
-    {
-        var model = ActivityObjectModel()
-        model.objectType = objectType
-        if let objectIdStr = objectId{
-            model.id = objectIdStr
-        }
-        if let contentStr = content{
-            var markedUpContent = contentStr
-            if let mentionsArr = mentions{
-                var mentionStringLength = 0
-                for index in 0..<mentionsArr.count{
-                    let mentionItem = mentionsArr[index]
-                    if(mentionItem.mentionType == MentionItemType.person){
-                        let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
-                        let endPostion = (mentionItem.range.upperBound) + mentionStringLength
-                        let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
-                        let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
-                        let mentionContent = markedUpContent[startPosition..<endPostion]
-                        let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
-                        markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.count - mentionContent.count) + 1
-                    }else{
-                        /// group mention codes goes heere
-                    }
-                }
-                model.content = markedUpContent
-                model.displayName = contentStr
-                model.mentions =  ["items" : mentionsArr]
-            }else{
-                model.content = contentStr
-                model.displayName = contentStr
-            }
-        }
-        if let encryptionUrl = encryptionUrl{
-            guard let keyMaterial = self.keyMaterialDict[encryptionUrl] else{
-                return model
-            }
-            do {
-                let displayNameChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
-                let contentChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
-                model.displayName = displayNameChiper
-                model.content = contentChiper
-            }catch let error as NSError {
-                SDKLogger.shared.debug("Process Activity Error - \(error.description)")
-            }
-        }
-        return model
-    }
-    
-    private func createActivityTarget(conversationId: String? = nil) -> ActivityTargetModel{
-        var model = ActivityTargetModel()
-        model.objectType = "conversation"
-        if let idStr = conversationId{
-            model.id = idStr
-        }
-        return model
-    }
-    
-    private func markUpString(mentionContent: String?, mentionId: String?, mentionType: String?)->String{
-        var result = "<spark-mention"
-        if let mentionid = mentionId{
-            result = result + " data-object-id=" + mentionid
-        }
-        if let type = mentionType{
-            result = result + " data-object-type=" + type
-        }
-        result = result + ">"
-        if let content = mentionContent{
-            result = result + content
-        }
-        result = result + "</spark-mention>"
-        return result
-    }
-    
     // MARK: Encryption Feature Variables
     private let successStr:String = "SUCCESS:"
     private let kmsMessageServerUri = ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages"
@@ -405,11 +310,12 @@ public class ActivityClient {
     private var ephemeralKeyFetched: Bool = false
     private var ephemeralKeyStr: String = ""
     private var receivedActivityQueue : [MessageActivity] = [MessageActivity]()
-    private var postingActivityQueue : [MessageActivity] = [MessageActivity]()
     private var kmsRequestQueue : [KmsRequest] = [KmsRequest]()
-    private var keyMaterialDict : [String : String] = [String : String]()
-    private var conversationEncryptUrlDict : [String : String] = [String : String]()
+    private var roomResources : [ActivityRoomResource] = [ActivityRoomResource]()
     private var postCompeletionHandler : ((ServiceResponse<MessageActivity>) -> Void)?
+    private var postingOperationQueue: OperationQueue = OperationQueue()
+    private var pendingOperationQueue: [ActivityPostOperation] = [ActivityPostOperation]()
+    
     
     var userId :String = ""
     var deviceUrl : URL
@@ -420,11 +326,16 @@ public class ActivityClient {
         self.authenticator = authenticator
         self.deviceUrl = diviceUrl
         self.uuid = UUID().uuidString
+        self.postingOperationQueue.maxConcurrentOperationCount = 1
     }
     
     // MARK: Encryption Feature Functions
     public func receiNewMessageActivity( messageActivity: MessageActivity){
         self.receivedActivityQueue.append(messageActivity)
+        if self.roomResources.filter({$0.conversationID == messageActivity.conversationId}).first == nil{
+            let roomModel = ActivityRoomResource(conversationId: messageActivity.conversationId!)
+            self.roomResources.append(roomModel)
+        }
         if(self.userId == ""){
             self.requestUserId()
         }else if(self.kmsCluster == nil){
@@ -432,9 +343,8 @@ public class ActivityClient {
         }else if(!self.ephemeralKeyFetched){
             self.requestEphemeralKey()
         }else{
-            if((self.keyMaterialDict[messageActivity.encryptionKeyUrl!]) != nil){
-                self.processMessageActivity(messageActivity)
-                return;
+            if let _ = self.roomResources.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial {
+                self.processReceivedMessageActivity(messageActivity)
             }else{
                 self.requestKeyMaterialFor(messageActivity.encryptionKeyUrl!)
             }
@@ -451,17 +361,7 @@ public class ActivityClient {
         }else{
             self.requestConversationDetail(convasationId: messageActivity.conversationId!)
         }
-        //        else{
-        //            if((self.keyMaterialDict[activityModel.encryptionKeyUrl!]) != nil){
-        //                self.processPostingActivity(activityModel)
-        //                return
-        //            }else{
-        //                self.requestKeyMaterialFor(activityModel.encryptionKeyUrl!)
-        //            }
-        //        }
     }
-    
-    
     
     public func receiveKmsMessage( _ kmsMessageModel: KmsMessageModel){
         if(self.ephemeralKeyRequest == nil && self.ephemeralKeyFetched){
@@ -476,8 +376,8 @@ public class ActivityClient {
                 }
                 if let keyMaterial = JSON(dict["jwk"]!).rawString(),
                     let keyUri = JSON(dict["uri"]!).rawString(){
-                    if(self.keyMaterialDict[keyUri] == nil){
-                        self.keyMaterialDict[keyUri] = keyMaterial
+                    if let room = self.roomResources.filter({$0.encryptionUrl == keyUri}).first{
+                        room.keyMaterial = keyMaterial
                         self.processMessageActivitiesWithEncrptionUrl(keyUri)
                     }
                 }
@@ -495,7 +395,7 @@ public class ActivityClient {
                 if let receveiMessage = self.receivedActivityQueue.first{
                     self.requestKeyMaterialFor(receveiMessage.encryptionKeyUrl!)
                 }
-                if let postingMessage = self.postingActivityQueue.first{
+                if let postingMessage = self.pendingOperationQueue.first?.messageActivity{
                     self.requestConversationDetail(convasationId: postingMessage.conversationId!)
                 }
                 
@@ -505,11 +405,11 @@ public class ActivityClient {
         }
     }
     
-    private func processMessageActivity(_ messageActivity: MessageActivity){
-        _ = self.receivedActivityQueue.removeObject(equality: { $0.activityId == messageActivity.activityId })
-        guard let acitivityKeyMaterial = self.keyMaterialDict[messageActivity.encryptionKeyUrl!] else{
+    private func processReceivedMessageActivity(_ messageActivity: MessageActivity){
+        guard let acitivityKeyMaterial = self.roomResources.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial else{
             return
         }
+        _ = self.receivedActivityQueue.removeObject(equality: { $0.activityId == messageActivity.activityId })
         do {
             guard let chiperText = messageActivity.plainText
                 else{
@@ -525,38 +425,18 @@ public class ActivityClient {
         }
     }
     
-    private func processPostingActivity( _ messageActivity: MessageActivity){
-        _ = self.postingActivityQueue.removeObject(equality: { $0.conversationId == messageActivity.conversationId })
-        let content = messageActivity.plainText
-        let encrptionUrl = self.conversationEncryptUrlDict[messageActivity.conversationId!]
-        let mentions = messageActivity.mentionItems
-        let conversationID = messageActivity.conversationId
-        
-        let body = RequestParameter([
-            "verb": "post",
-            "encryptionKeyUrl" : encrptionUrl,
-            "object" : createActivityObject(objectType: "comment",content: content,encryptionUrl: encrptionUrl,mentions: mentions).toJSON(),
-            "target" : createActivityTarget(conversationId: conversationID).toJSON()
-            ])
-        let request = requestBuilder()
-            .method(.post)
-            .body(body)
-            .build()
-        request.responseObject(self.postCompeletionHandler!)
-    }
-    
     private func processMessageActivitiesWithEncrptionUrl( _ encryptionUrl: String){
         let receivePendingActivityArray = self.receivedActivityQueue.filter({$0.encryptionKeyUrl == encryptionUrl})
         for activity in receivePendingActivityArray{
-            self.conversationEncryptUrlDict[activity.conversationId!] = encryptionUrl
-            self.processMessageActivity(activity)
+            self.processReceivedMessageActivity(activity)
         }
-        let postPendingActivityArray = self.postingActivityQueue.filter({$0.encryptionKeyUrl == encryptionUrl})
-        for activity in postPendingActivityArray{
-            self.conversationEncryptUrlDict[activity.conversationId!] = encryptionUrl
-            self.processPostingActivity(activity)
+        let postPendingActivityArray = self.pendingOperationQueue.filter({$0.messageActivity.encryptionKeyUrl == encryptionUrl})
+        let keyMaterial = self.roomResources.filter({$0.encryptionUrl == encryptionUrl}).first?.keyMaterial
+        for pendingOperation in postPendingActivityArray{
+            pendingOperation.keyMaterial = keyMaterial
+            self.postingOperationQueue.addOperation(pendingOperation)
+            self.pendingOperationQueue.removeObject(pendingOperation)
         }
-        
     }
     
     private func requestEphemeralKey(){
@@ -633,39 +513,17 @@ public class ActivityClient {
                 }
                 if(responseDict["encryptionKeyUrl"] != nil) {
                     let encryptionUrl = responseDict["encryptionKeyUrl"]
-                    let postPendingActivityArray = self.postingActivityQueue.filter({$0.conversationId == convasationId})
-                    for messageActivity in postPendingActivityArray{
-                        messageActivity.encryptionKeyUrl = encryptionUrl as? String
+                    let postPendingOperations = self.pendingOperationQueue.filter({$0.messageActivity.conversationId == convasationId})
+                    for pendingOperation in postPendingOperations{
+                        pendingOperation.messageActivity.encryptionKeyUrl = encryptionUrl as? String
                     }
                     self.requestKeyMaterialFor(encryptionUrl as! String)
-                    
                 }
                 break
             case .failure:
                 break
             }
         })
-        
-        
-        //        let request = userInfoRequestBuilder().path(query)
-        //            .method(.get)
-        //            .build()
-        //        request.responseJSON{ (response: ServiceResponse<Any>) in
-        //            switch response.result {
-        //            case .success(let value):
-        //                guard let responseDict = value as? [String: Any]
-        //                    else{
-        //                        return
-        //                }
-        //                if(responseDict["encryptionKeyUrl"] != nil) {
-        //                    let encryptionUrl = responseDict["encryptionKeyUrl"]
-        //                    self.requestKeyMaterialFor(encryptionUrl as! String)
-        //                }
-        //                break
-        //            case .failure:
-        //                break
-        //            }
-        //        }
     }
     
     private func requestUserId(){
@@ -707,13 +565,6 @@ public class ActivityClient {
                 break
             }
         }
-    }
-    
-    private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
-        return ServiceRequest.KmsServerBuilder(authenticator)
-    }
-    private func userInfoRequestBuilder() -> ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator)
     }
 }
 

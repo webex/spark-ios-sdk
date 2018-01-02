@@ -10,6 +10,7 @@
 		105E8EF91FF2976200EB33F1 /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
 		105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
 		105E8F061FF4BC6800EB33F1 /* ActivityPostOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */; };
+		108930E71FFB6F2600363E71 /* ActivityRoomResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108930E61FFB6F2600363E71 /* ActivityRoomResource.swift */; };
 		10F499B61FDF85E10028426A /* MessageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B31FDF85E10028426A /* MessageActivity.swift */; };
 		10F499B71FDF85E10028426A /* ActivityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B41FDF85E10028426A /* ActivityClient.swift */; };
 		10F499B81FDF85E10028426A /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B51FDF85E10028426A /* ActivityModel.swift */; };
@@ -168,6 +169,7 @@
 		105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
 		105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityPostOperation.swift; sourceTree = "<group>"; };
+		108930E61FFB6F2600363E71 /* ActivityRoomResource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRoomResource.swift; sourceTree = "<group>"; };
 		10F499B31FDF85E10028426A /* MessageActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageActivity.swift; sourceTree = "<group>"; };
 		10F499B41FDF85E10028426A /* ActivityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityClient.swift; sourceTree = "<group>"; };
 		10F499B51FDF85E10028426A /* ActivityModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				10F499B31FDF85E10028426A /* MessageActivity.swift */,
 				10F499B41FDF85E10028426A /* ActivityClient.swift */,
 				105E8F051FF4BC6800EB33F1 /* ActivityPostOperation.swift */,
+				108930E61FFB6F2600363E71 /* ActivityRoomResource.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */,
 				3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */,
 				5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */,
+				108930E71FFB6F2600363E71 /* ActivityRoomResource.swift in Sources */,
 				B91E75A71CE2D7B70080EAE0 /* Message.swift in Sources */,
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
 				3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */,
