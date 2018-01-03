@@ -226,7 +226,7 @@ public class Phone {
                     let messageActivity = MessageActivity(activitModel: model)
                     if(messageActivity.encryptionKeyUrl != nil){
                         if let acitivityClient = self.activityClient{
-                            acitivityClient.receiNewMessageActivity(messageActivity: messageActivity)
+                            acitivityClient.receiveNewMessageActivity(messageActivity: messageActivity)
                         }
                     }else{
                         messageActivity.markDownString()

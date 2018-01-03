@@ -170,6 +170,7 @@ public struct ActivityObjectModel {
     public var content: String?
     public var contentType: String?
     public var mentions: [String : [ActivityMentionModel]]?
+    public var files: [String: [FileObjectModel]]?
 }
 extension ActivityObjectModel: Mappable {
     public init?(map: Map) {}
@@ -182,6 +183,7 @@ extension ActivityObjectModel: Mappable {
         content <- map["content"]
         contentType <- map["contentType"]
         mentions <- map["mentions"]
+        files <- map["files"]
     }
 }
 
@@ -190,13 +192,39 @@ public struct FileObjectModel{
     public var displayName: String?
     public var mimeType: String?
     public var objectType: String?
-    public var image: String?
-    public var fileSize: String?
+    public var image: ThumbNailImageModel?
+    public var fileSize: UInt64?
     public var scr: String?
     public var url: String?
 }
-public struct ThumnailModel{
-    
+
+extension FileObjectModel: Mappable {
+    public init?(map: Map) {}
+    public mutating func mapping(map: Map) {
+        displayName <- map["displayName"]
+        mimeType <- map["mimeType"]
+        objectType <- map["objectType"]
+        fileSize <- map["fileSize"]
+        scr <- map["scr"]
+        url <- map["url"]
+        image <- map["image"]
+    }
+}
+
+public struct ThumbNailImageModel{
+    public var width: Int?
+    public var height: Int?
+    public var scr: String?
+    public var url: String?
+}
+extension ThumbNailImageModel: Mappable {
+    public init?(map: Map) {}
+    public mutating func mapping(map: Map) {
+        width <- map["width"]
+        height <- map["height"]
+        scr <- map["scr"]
+        url <- map["url"]
+    }
 }
 
 // MARK: ActivityTargetModel

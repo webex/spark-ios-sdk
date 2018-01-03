@@ -85,6 +85,12 @@ public class MessageActivity: Mappable {
     /// - since: 1.4.0
     public var plainText: String?
     
+    
+    /// file uploading local file path
+    ///
+    /// - since: 1.4.0
+    public var localFileList: [URL]?
+    
     /// encryptionKeyUrl of this activity
     ///
     /// - since: 1.4.0
@@ -102,6 +108,12 @@ public class MessageActivity: Mappable {
         return self.activityModel.object?.content
     }
     
+    /// files attached to this activity.
+    ///
+    /// - since: 1.4.0
+    public var files: [FileObjectModel]?
+    
+    
     /// mention item list of this activity
     ///
     /// - since: 1.4.0
@@ -113,6 +125,7 @@ public class MessageActivity: Mappable {
         self.encryptionKeyUrl = activitModel.encryptionKeyUrl
         self.activityId = activitModel.object?.id
         self.action = MessageAction(rawValue:activitModel.verb!)
+        
         if(self.activityModel.conversationId != nil){
             self.conversationId = self.activityModel.conversationId
         }else{
@@ -123,7 +136,7 @@ public class MessageActivity: Mappable {
             }
         }
         
-        if(self.action == .post && self.activityModel.object?.objectType == "comment"){
+        if(self.action == .post || self.action == .share){
             if let content = self.activityModel.object?.content{
                 self.plainText = content
             }else{
@@ -133,6 +146,12 @@ public class MessageActivity: Mappable {
             }
         }else{
             self.plainText = ""
+        }
+        
+        if(self.action == .share){
+            if let files = self.activityModel.object?.files!["items"]{
+                self.files = files
+            }
         }
     }
     init(){
@@ -182,6 +201,3 @@ public class MessageActivity: Mappable {
         }
     }
 }
-
-
-

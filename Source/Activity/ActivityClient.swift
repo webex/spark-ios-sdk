@@ -61,7 +61,7 @@ public class ActivityClient {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }
     
-    private func userInfoRequestBuilder() -> ServiceRequest.ActivityServerBuilder {
+    private func activityServiceBuilder() -> ServiceRequest.ActivityServerBuilder {
         return ServiceRequest.ActivityServerBuilder(authenticator)
     }
     
@@ -140,9 +140,9 @@ public class ActivityClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func postMessage(conversationID: String,
-                            content: String,
+                            content: String?=nil,
                             mentions: [ActivityMentionModel]? = nil,
-                            files: [String]? = nil,
+                            files: [URL]? = nil,
                             queue: DispatchQueue? = nil,
                             completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
@@ -150,22 +150,42 @@ public class ActivityClient {
         let messageActivity = MessageActivity()
         messageActivity.conversationId = conversationID
         messageActivity.plainText = content
-        messageActivity.action = MessageAction.post
-        if let mentionItems = mentions{
+        
+        if let fileList = files {
+            messageActivity.action = MessageAction.share
+            messageActivity.localFileList = fileList
+        }else{
+            messageActivity.action = MessageAction.post
+        }
+        
+        if let mentionItems = mentions {
             messageActivity.mentionItems = mentionItems
         }
         
-        if let encrptionUrl = self.roomResources.filter({$0.conversationID == conversationID}).first?.encryptionUrl,
-            let keyMetarial = self.roomResources.filter({$0.conversationID == conversationID}).first?.keyMaterial{
-            messageActivity.encryptionKeyUrl = encrptionUrl
-            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,messageActivity: messageActivity, keyMaterial:  keyMetarial ,queue:queue, completionHandler: completionHandler)
+        if let roomResource = self.roomResources.filter({$0.conversationID == conversationID}).first,
+            let encryptionUrl = roomResource.encryptionUrl,
+            let keyMetarial = roomResource.keyMaterial,
+            let spaceUrl = roomResource.spaceUrl
+        {
+            messageActivity.encryptionKeyUrl = encryptionUrl
+            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,
+                                                         messageActivity: messageActivity,
+                                                         keyMaterial:  keyMetarial,
+                                                         spaceUrl: spaceUrl,
+                                                         queue:queue,
+                                                         completionHandler: completionHandler)
+            SDKLogger.shared.info("Activity Added POSTing Queue...")
             self.postingOperationQueue.addOperation(msgPostOperation)
         }else{
             if self.roomResources.filter({$0.conversationID == conversationID}).first == nil{
                 let roomModel = ActivityRoomResource(conversationId: conversationID)
                 self.roomResources.append(roomModel)
             }
-            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,messageActivity: messageActivity ,queue:queue, completionHandler: completionHandler)
+            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,
+                                                         messageActivity: messageActivity ,
+                                                         queue:queue,
+                                                         completionHandler: completionHandler)
+            SDKLogger.shared.info("Activity Added PENDing Queue...")
             self.pendingOperationQueue.append(msgPostOperation)
             self.postNewMessageActivity(messageActivity: messageActivity)
         }
@@ -302,14 +322,13 @@ public class ActivityClient {
     
     
     // MARK: Encryption Feature Variables
-    private let successStr:String = "SUCCESS:"
     private let kmsMessageServerUri = ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages"
     private var kmsCluster: String?
     private var rsaPublicKey: String?
     private var ephemeralKeyRequest: KmsEphemeralKeyRequest?
     private var ephemeralKeyFetched: Bool = false
     private var ephemeralKeyStr: String = ""
-    private var receivedActivityQueue : [MessageActivity] = [MessageActivity]()
+    private var receivedActivityPendingQueue : [MessageActivity] = [MessageActivity]()
     private var kmsRequestQueue : [KmsRequest] = [KmsRequest]()
     private var roomResources : [ActivityRoomResource] = [ActivityRoomResource]()
     private var postCompeletionHandler : ((ServiceResponse<MessageActivity>) -> Void)?
@@ -330,10 +349,11 @@ public class ActivityClient {
     }
     
     // MARK: Encryption Feature Functions
-    public func receiNewMessageActivity( messageActivity: MessageActivity){
-        self.receivedActivityQueue.append(messageActivity)
+    public func receiveNewMessageActivity( messageActivity: MessageActivity){
+        self.receivedActivityPendingQueue.append(messageActivity)
         if self.roomResources.filter({$0.conversationID == messageActivity.conversationId}).first == nil{
             let roomModel = ActivityRoomResource(conversationId: messageActivity.conversationId!)
+            roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
             self.roomResources.append(roomModel)
         }
         if(self.userId == ""){
@@ -344,9 +364,9 @@ public class ActivityClient {
             self.requestEphemeralKey()
         }else{
             if let _ = self.roomResources.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial {
-                self.processReceivedMessageActivity(messageActivity)
+                self.processReadyMessageActivity(messageActivity)
             }else{
-                self.requestKeyMaterialFor(messageActivity.encryptionKeyUrl!)
+                self.requestKeyMaterial(messageActivity.encryptionKeyUrl!)
             }
         }
     }
@@ -359,7 +379,27 @@ public class ActivityClient {
         }else if(!self.ephemeralKeyFetched){
             self.requestEphemeralKey()
         }else{
-            self.requestConversationDetail(convasationId: messageActivity.conversationId!)
+            if let roomResource = self.roomResources.filter({$0.conversationID == messageActivity.conversationId!}).first{
+                guard let encryptionUrl = roomResource.encryptionUrl
+                    else{
+                        self.requestConversationDetail(convasationId: roomResource.conversationID)
+                        return
+                }
+                guard let _ = roomResource.keyMaterial
+                    else{
+                        self.requestKeyMaterial(encryptionUrl)
+                        return
+                }
+                if let _ = messageActivity.localFileList{
+                    guard let _ = roomResource.spaceUrl
+                        else{
+                            self.requestSpaceUrl(convasationId: roomResource.conversationID)
+                            return
+                    }
+                }else{
+                    self.processReadyMessageActivity(messageActivity)
+                }
+            }
         }
     }
     
@@ -378,8 +418,9 @@ public class ActivityClient {
                     let keyUri = JSON(dict["uri"]!).rawString(){
                     if let room = self.roomResources.filter({$0.encryptionUrl == keyUri}).first{
                         room.keyMaterial = keyMaterial
-                        self.processMessageActivitiesWithEncrptionUrl(keyUri)
+                        self.processPendingMessageActivities(keyUri)
                     }
+                    _ = self.kmsRequestQueue.removeObject(equality: { $0.uri == keyUri})
                 }
             }catch let error as NSError {
                 SDKLogger.shared.debug("Error - Receive KmsMessage: \(error.debugDescription)")
@@ -392,8 +433,8 @@ public class ActivityClient {
                 self.ephemeralKeyStr = kmsresponse.jwkEphemeralKey
                 self.ephemeralKeyFetched = true
                 self.ephemeralKeyRequest = nil
-                if let receveiMessage = self.receivedActivityQueue.first{
-                    self.requestKeyMaterialFor(receveiMessage.encryptionKeyUrl!)
+                for receivedActivity in self.receivedActivityPendingQueue{
+                    self.requestKeyMaterial(receivedActivity.encryptionKeyUrl!)
                 }
                 if let postingMessage = self.pendingOperationQueue.first?.messageActivity{
                     self.requestConversationDetail(convasationId: postingMessage.conversationId!)
@@ -405,41 +446,75 @@ public class ActivityClient {
         }
     }
     
-    private func processReceivedMessageActivity(_ messageActivity: MessageActivity){
+    private func processReadyMessageActivity(_ messageActivity: MessageActivity){
         guard let acitivityKeyMaterial = self.roomResources.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial else{
             return
         }
-        _ = self.receivedActivityQueue.removeObject(equality: { $0.activityId == messageActivity.activityId })
+        _ = self.receivedActivityPendingQueue.removeObject(equality: { $0.activityId == messageActivity.activityId })
         do {
             guard let chiperText = messageActivity.plainText
                 else{
                     return;
             }
-            let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
-            let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-            messageActivity.plainText = clearText! as String
-            messageActivity.markDownString()
+            if(chiperText != ""){
+                let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
+                let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
+                messageActivity.plainText = clearText! as String
+                messageActivity.markDownString()
+            }
+            if let files = messageActivity.files{
+                var newFiles = [FileObjectModel]()
+                for file in files{
+                    if let displayname = file.displayName,
+                        let src = file.scr
+                    {
+                        let nameData = try CjoseWrapper.content(fromCiphertext: displayname, key: acitivityKeyMaterial)
+                        let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        let srcData = try CjoseWrapper.content(fromCiphertext: src, key: acitivityKeyMaterial)
+                        let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        let newFile = FileObjectModel(displayName: clearName , mimeType: file.mimeType, objectType: file.objectType, image: file.image, fileSize: file.fileSize, scr: clearSrc, url: file.url)
+                        newFiles.append(newFile)
+                    }
+                }
+                messageActivity.files = newFiles
+            }
             self.onMessageActivity?(messageActivity)
         }catch let error as NSError {
             SDKLogger.shared.debug("Process Activity Error - \(error.description)")
         }
     }
     
-    private func processMessageActivitiesWithEncrptionUrl( _ encryptionUrl: String){
-        let receivePendingActivityArray = self.receivedActivityQueue.filter({$0.encryptionKeyUrl == encryptionUrl})
+    /// Process received | posting pending activities
+    private func processPendingMessageActivities( _ encryptionUrl: String){
+        let receivePendingActivityArray = self.receivedActivityPendingQueue.filter({$0.encryptionKeyUrl == encryptionUrl})
         for activity in receivePendingActivityArray{
-            self.processReceivedMessageActivity(activity)
+            self.processReadyMessageActivity(activity)
         }
-        let postPendingActivityArray = self.pendingOperationQueue.filter({$0.messageActivity.encryptionKeyUrl == encryptionUrl})
-        let keyMaterial = self.roomResources.filter({$0.encryptionUrl == encryptionUrl}).first?.keyMaterial
-        for pendingOperation in postPendingActivityArray{
-            pendingOperation.keyMaterial = keyMaterial
-            self.postingOperationQueue.addOperation(pendingOperation)
-            self.pendingOperationQueue.removeObject(pendingOperation)
+        self.processFilePostingMessageActivities(encryptionUrl)
+    }
+    /// Process posting pending activities
+    private func processFilePostingMessageActivities(_ encryptionUrl: String){
+        if let roomResource = self.roomResources.filter({$0.encryptionUrl == encryptionUrl}).first,
+            let keyMaterial = roomResource.keyMaterial
+        {
+            let postPendingActivityArray = self.pendingOperationQueue.filter({$0.encryptionUrl == encryptionUrl})
+            for pendingOperation in postPendingActivityArray{
+                pendingOperation.keyMaterial = keyMaterial
+                if(pendingOperation.files == nil || roomResource.spaceUrl != nil){
+                    pendingOperation.spaceUrl = roomResource.spaceUrl
+                    self.postingOperationQueue.addOperation(pendingOperation)
+                    self.pendingOperationQueue.removeObject(pendingOperation)
+                }else{
+                    self.requestSpaceUrl(convasationId: pendingOperation.messageActivity.conversationId!)
+                }
+            }
         }
     }
     
     private func requestEphemeralKey(){
+        if(self.ephemeralKeyRequest != nil || self.ephemeralKeyFetched){
+            return
+        }
         self.authenticator.accessToken { (res) in
             self.accessTokenStr = res!
         }
@@ -451,32 +526,51 @@ public class ActivityClient {
             let kmsClusterUri = clusterUri + "/ecdhe"
             self.ephemeralKeyRequest = try KmsEphemeralKeyRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString , userId: self.userId, bearer: self.accessTokenStr , method: "create", uri: kmsClusterUri, kmsStaticKey: self.rsaPublicKey!)
             
-            guard let message = self.ephemeralKeyRequest?.message
-                else {
-                    return
-            }
-            
-            let parameters : [String: String] = ["kmsMessages" : message, "destination" : clusterUri]
-            let header : [String: String]  = ["Cisco-Request-ID" : self.uuid,
-                                              "Authorization" : "Bearer " + self.accessTokenStr]
-            
-            let url = URL(string: kmsMessageServerUri)
-            Alamofire.request(url!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseString(completionHandler: { (response) in
-                SDKLogger.shared.debug("\(response) - RequestEphemeralKey")
-            })
+            self.requestEphemeralKey(ephemeralKeyRequest: self.ephemeralKeyRequest)
         }catch let error as NSError{
             SDKLogger.shared.debug("Error - RequestEphemeralKey \(error.description)")
         }
     }
     
-    
-    private func requestKeyMaterialFor(_ encryptionUrl: String){
-        do{
-            let requestedKmsRequest = self.kmsRequestQueue.filter({$0.uri == encryptionUrl})
-            if(requestedKmsRequest.count > 0){
-                return;
+    private func requestEphemeralKey(ephemeralKeyRequest: KmsEphemeralKeyRequest?){
+        guard let message = ephemeralKeyRequest?.message,
+            let clusterUri = ephemeralKeyRequest?.uri
+            else {
+                return
+        }
+        
+        let parameters : [String: String] = ["kmsMessages" : message, "destination" : clusterUri]
+        let header : [String: String]  = ["Cisco-Request-ID" : self.uuid,
+                                          "Authorization" : "Bearer " + self.accessTokenStr]
+        
+        let url = URL(string: kmsMessageServerUri)
+        Alamofire.request(url!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseString(completionHandler: { (response) in
+            switch response.result{
+            case .success(_):
+                break
+            case .failure(_):
+                break
             }
-            let kmsRequest = try KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString , userId: self.userId, bearer: self.accessTokenStr, method: "retrieve", uri: encryptionUrl)
+            SDKLogger.shared.debug("\(response) - RequestEphemeralKey")
+        })
+    }
+    
+    private func requestKeyMaterial(_ encryptionUrl: String){
+        if let _ = self.kmsRequestQueue.filter({$0.uri == encryptionUrl}).first{
+            return
+        }else{
+            do{
+                let kmsRequest = try KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString , userId: self.userId, bearer: self.accessTokenStr, method: "retrieve", uri: encryptionUrl)
+                self.kmsRequestQueue.append(kmsRequest)
+                self.requestKeyMaterial(kmsRequest: kmsRequest)
+            }catch let error as NSError{
+                SDKLogger.shared.debug("Error - CreateKMSReuqes: \(error.description)")
+            }
+        }
+    }
+    
+    private func requestKeyMaterial(kmsRequest: KmsRequest){
+        do{
             let serrizeData = kmsRequest.serialize()
             let chiperText = try CjoseWrapper.ciphertext(fromContent: serrizeData?.data(using: .utf8), key: self.ephemeralKeyStr)
             let kmsMessages = [chiperText]
@@ -487,24 +581,30 @@ public class ActivityClient {
             Alamofire.request(url!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseString(completionHandler: { (response) in
                 switch response.result{
                 case .success:
-                    self.kmsRequestQueue.append(kmsRequest)
                     break
                 case .failure(let error):
                     SDKLogger.shared.debug("Error - requestKeyMaterial: \(error.localizedDescription)")
-                    break
                 }
             })
-        }catch let errror as NSError{
-            SDKLogger.shared.debug("Error - requestKeyMaterial: \(errror.description)")
+        }catch let error as NSError{
+            SDKLogger.shared.debug("Error - requestKeyMaterial: \(error.localizedDescription)")
         }
     }
     
     
     private func requestConversationDetail(convasationId: String){
-        let query = "/conversations/" + convasationId + "?includeActivities=false&includeParticipants=false"
-        let url = URL(string: ServiceRequest.CONVERSATION_SERVER_ADDRESS + query)
+        
+        let path = "conversations/" + convasationId
+        let query = RequestParameter(["includeActivities": false,
+                                      "includeParticipants": false
+            ])
         let header : [String: String]  = [ "Authorization" : "Bearer " + self.accessTokenStr]
-        Alamofire.request(url!, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: header).responseJSON(completionHandler: { (response) in
+        let request = activityServiceBuilder().path(path)
+            .query(query)
+            .headers(header)
+            .method(.get)
+            .build()
+        request.responseJSON{ (response: ServiceResponse<Any>) in
             switch response.result {
             case .success(let value):
                 guard let responseDict = value as? [String: Any]
@@ -513,21 +613,54 @@ public class ActivityClient {
                 }
                 if(responseDict["encryptionKeyUrl"] != nil) {
                     let encryptionUrl = responseDict["encryptionKeyUrl"]
+                    if let room = self.roomResources.filter({$0.conversationID == convasationId}).first{
+                        room.encryptionUrl = encryptionUrl as? String
+                    }
                     let postPendingOperations = self.pendingOperationQueue.filter({$0.messageActivity.conversationId == convasationId})
                     for pendingOperation in postPendingOperations{
                         pendingOperation.messageActivity.encryptionKeyUrl = encryptionUrl as? String
+                        pendingOperation.encryptionUrl = encryptionUrl as? String
                     }
-                    self.requestKeyMaterialFor(encryptionUrl as! String)
+                    self.requestKeyMaterial(encryptionUrl as! String)
                 }
                 break
             case .failure:
                 break
             }
-        })
+        }
     }
     
+    private func requestSpaceUrl(convasationId: String){
+        let path = "conversations/" + convasationId + "/space"
+        let header : [String: String]  = [ "Authorization" : "Bearer " + self.accessTokenStr]
+        let request = activityServiceBuilder().path(path)
+            .headers(header)
+            .method(.put)
+            .build()
+        request.responseJSON{ (response: ServiceResponse<Any>) in
+            print(response)
+            switch response.result {
+            case .success(let value):
+                guard let responseDict = value as? [String: Any]
+                    else{
+                        return;
+                }
+                if let room = self.roomResources.filter({$0.conversationID == convasationId}).first{
+                    room.spaceUrl = responseDict["spaceUrl"]! as? String
+                    self.processFilePostingMessageActivities(room.encryptionUrl!)
+                    return;
+                }
+                break
+            case .failure:
+                break
+            }
+        }
+    }
+    
+    
+    
     private func requestUserId(){
-        let request = userInfoRequestBuilder().path("users")
+        let request = activityServiceBuilder().path("users")
             .method(.get)
             .build()
         request.responseJSON{ (response: ServiceResponse<Any>) in
@@ -541,6 +674,7 @@ public class ActivityClient {
                 self.requestClusterInfo()
                 break
             case .failure:
+                self.requestUserId()
                 break
             }
         }
@@ -562,6 +696,7 @@ public class ActivityClient {
                 self.requestEphemeralKey()
                 break
             case .failure:
+                self.requestClusterInfo()
                 break
             }
         }

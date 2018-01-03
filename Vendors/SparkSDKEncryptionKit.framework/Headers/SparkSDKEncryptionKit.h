@@ -21,5 +21,8 @@ FOUNDATION_EXPORT const unsigned char SparkSDKEncryptionKitVersionString[];
 #import <SparkSDKEncryptionKit/KmsEphemeralKeyRequest.h>
 #import <SparkSDKEncryptionKit/KmsEphemeralKeyResponse.h>
 #import <SparkSDKEncryptionKit/KmsResponse.h>
-#import <SparkSDKEncryptionKit/KmsKey.h>
 #import <SparkSDKEncryptionKit/NSDictionary+Extensions.h>
+#import <SparkSDKEncryptionKit/SecureContentReference.h>
+#import <SparkSDKEncryptionKit/CipherA256GCM.h>
+#import <SparkSDKEncryptionKit/SecureInputStream.h>
+#import <SparkSDKEncryptionKit/SecureOutputStream.h>
