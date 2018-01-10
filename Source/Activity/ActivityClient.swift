@@ -45,26 +45,6 @@ public class ActivityClient {
     
     let authenticator: Authenticator
     
-    private func requestBuilder() -> ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator).path("activities")
-    }
-    
-    private func statusRequestBuilder() ->ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator).path("status")
-    }
-    
-    private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
-        return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
-    }
-    
-    private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
-        return ServiceRequest.KmsServerBuilder(authenticator)
-    }
-    
-    private func activityServiceBuilder() -> ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator)
-    }
-    
     /// Lists all messages in a room by room Id.
     /// If present, it includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
@@ -101,7 +81,7 @@ public class ActivityClient {
             "lastActivityFirst": lastActivityFirst,
             ])
         
-        let request = requestBuilder()
+        let request = activityServiceBuilder().path("activities")
             .method(.get)
             .query(query)
             .queue(queue)
@@ -121,7 +101,7 @@ public class ActivityClient {
                                       queue: DispatchQueue? = nil,
                                       completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
-        let request = requestBuilder()
+        let request = activityServiceBuilder().path("activities")
             .method(.get)
             .path(activityID)
             .queue(queue)
@@ -168,7 +148,7 @@ public class ActivityClient {
             let spaceUrl = roomResource.spaceUrl
         {
             messageActivity.encryptionKeyUrl = encryptionUrl
-            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,
+            let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                          messageActivity: messageActivity,
                                                          keyMaterial:  keyMetarial,
                                                          spaceUrl: spaceUrl,
@@ -178,10 +158,10 @@ public class ActivityClient {
             self.postingOperationQueue.addOperation(msgPostOperation)
         }else{
             if self.roomResources.filter({$0.conversationID == conversationID}).first == nil{
-                let roomModel = ActivityRoomResource(conversationId: conversationID)
+                let roomModel = AcitivityRoomResourceModel(conversationId: conversationID)
                 self.roomResources.append(roomModel)
             }
-            let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator,
+            let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                          messageActivity: messageActivity ,
                                                          queue:queue,
                                                          completionHandler: completionHandler)
@@ -209,7 +189,7 @@ public class ActivityClient {
         messageActivity.conversationId = conversationID
         messageActivity.activityId = messageActivityId
         messageActivity.action = MessageAction.delete
-        let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
         self.postingOperationQueue.addOperation(msgPostOperation)
     }
     
@@ -230,7 +210,7 @@ public class ActivityClient {
         messageActivity.conversationId = conversationID
         messageActivity.activityId = massageActivityId
         messageActivity.action = MessageAction.acknowledge
-        let msgPostOperation = ActivityPostOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
         self.postingOperationQueue.addOperation(msgPostOperation)
     }
     
@@ -249,7 +229,7 @@ public class ActivityClient {
             "eventType": "status.start_typing",
             "conversationId" : conversationID
             ])
-        let request = statusRequestBuilder().path("typing")
+        let request = activityServiceBuilder().path("status/typing")
             .method(.post)
             .body(body)
             .queue(queue)
@@ -272,7 +252,7 @@ public class ActivityClient {
             "eventType": "status.stop_typing",
             "conversationId" : conversationID
             ])
-        let request = statusRequestBuilder().path("typing")
+        let request = activityServiceBuilder().path("status/typing")
             .method(.post)
             .body(body)
             .queue(queue)
@@ -330,10 +310,10 @@ public class ActivityClient {
     private var ephemeralKeyStr: String = ""
     private var receivedActivityPendingQueue : [MessageActivity] = [MessageActivity]()
     private var kmsRequestQueue : [KmsRequest] = [KmsRequest]()
-    private var roomResources : [ActivityRoomResource] = [ActivityRoomResource]()
+    private var roomResources : [AcitivityRoomResourceModel] = [AcitivityRoomResourceModel]()
     private var postCompeletionHandler : ((ServiceResponse<MessageActivity>) -> Void)?
     private var postingOperationQueue: OperationQueue = OperationQueue()
-    private var pendingOperationQueue: [ActivityPostOperation] = [ActivityPostOperation]()
+    private var pendingOperationQueue: [PostMessageOperation] = [PostMessageOperation]()
     
     
     var userId :String = ""
@@ -352,7 +332,7 @@ public class ActivityClient {
     public func receiveNewMessageActivity( messageActivity: MessageActivity){
         self.receivedActivityPendingQueue.append(messageActivity)
         if self.roomResources.filter({$0.conversationID == messageActivity.conversationId}).first == nil{
-            let roomModel = ActivityRoomResource(conversationId: messageActivity.conversationId!)
+            let roomModel = AcitivityRoomResourceModel(conversationId: messageActivity.conversationId!)
             roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
             self.roomResources.append(roomModel)
         }
@@ -701,6 +681,21 @@ public class ActivityClient {
             }
         }
     }
+    
+    //MARK: RequestBuilders
+    
+    private func activityServiceBuilder() -> ServiceRequest.ActivityServerBuilder {
+        return ServiceRequest.ActivityServerBuilder(authenticator)
+    }
+    
+    private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
+        return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
+    }
+    
+    private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
+        return ServiceRequest.KmsServerBuilder(authenticator)
+    }
+
 }
 
 extension Array {

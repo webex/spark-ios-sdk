@@ -24,7 +24,7 @@ import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
 
-class ActivityPostOperation: Operation {
+class PostMessageOperation: Operation {
     var messageActivity : MessageActivity
     var completionHandler :  (ServiceResponse<MessageActivity>) -> Void
     var queue : DispatchQueue?

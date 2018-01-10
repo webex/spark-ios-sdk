@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ActivityRoomResource: NSObject {
+class AcitivityRoomResourceModel: NSObject {
     public var conversationID : String
     public var encryptionUrl: String?
     public var keyMaterial: String?
