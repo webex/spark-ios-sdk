@@ -21,4 +21,4 @@
 #pragma once
 
 #import "Wme/Wme.h"
-
+#import "SparkSDKEncryptionKit/SparkSDKEncryptionKit.h"

@@ -84,7 +84,7 @@ public class Spark {
     /// It can be used to check and modify authentication state.
     public let authenticator: Authenticator
     
-    /// *Phone* represents a calling device in Cisco Spark iOS SDK. 
+    /// *Phone* represents a calling device in Cisco Spark iOS SDK.
     /// It can be used to make audio and video calls on Cisco Spark.
     public lazy var phone: Phone = Phone(authenticator: self.authenticator)
     
@@ -176,6 +176,20 @@ public class Spark {
         return TeamMembershipClient(authenticator: authenticator)
     }
     
+    
+    /// ActivityClient represent activities relates to the user.
+    /// Use *activities* to create and manage the activities on behalf of the authenticated user.
+    ///
+    /// - since: 1.4.0
+    
+    public var activityClient: ActivityClient?{
+        if let activityCient = self.phone.activityClient{
+            return activityCient
+        }else{
+            return nil
+        }
+    }
+    
     private func verbose() {
         var systemInfo = utsname()
         uname(&systemInfo)
@@ -194,8 +208,8 @@ public class Spark {
         }
     }
     
-//    var buildInfo: [String: String] {
-//        return []
-//    }
+    //    var buildInfo: [String: String] {
+    //        return []
+    //    }
 }
 

@@ -27,6 +27,8 @@ class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
     var onFailed: (() -> Void)?
+    var onActivityModel: ((ActivityModel) -> Void)?
+    var onKmsMessageModel: ((KmsMessageModel) -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter
@@ -142,6 +144,31 @@ class WebSocketService: WebSocketDelegate {
                 }
                 SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
+            }else if(eventType == "conversation.activity"){
+                let activityObj = eventData["activity"].object;
+                guard let eventJson = activityObj as? [String: Any],
+                    var activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
+                    else {
+                        return
+                }
+                activityModel.eventType = eventType
+                self.onActivityModel?(activityModel)
+            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing" || eventType == "user.app_item"){
+                let activityObj = eventData.object;
+                guard let eventJson = activityObj as? [String: Any],
+                    let activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
+                    else {
+                        return
+                }
+                self.onActivityModel?(activityModel)
+            }else if(eventType == "encryption.kms_message"){
+                 let kmsMessageObj = eventData["encryption"].object
+                guard let kmsMessageJson = kmsMessageObj as? [String: Any],
+                    let kmsMessageModel = Mapper<KmsMessageModel>().map(JSON: kmsMessageJson)
+                    else{
+                        return;
+                }
+                self.onKmsMessageModel?(kmsMessageModel)
             }
         }
     }

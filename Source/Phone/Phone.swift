@@ -107,6 +107,12 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// Activity Client
+    ///
+    /// - since: 1.4.0
+    public var activityClient: ActivityClient?
+    
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -115,7 +121,7 @@ public class Phone {
     let queue = SerialQueue()
     let metrics: MetricsEngine
     
-    private let devices: DeviceService    
+    private let devices: DeviceService
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
@@ -141,6 +147,7 @@ public class Phone {
         self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
+        
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -152,8 +159,24 @@ public class Phone {
                 }
             }
         }
+        
+        self.webSocket.onActivityModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
+                }
+            }
+        }
     }
-
+    
     init(authenticator: Authenticator,devices:DeviceService,reachability:ReachabilityService,client:CallClient,conversations:ConversationClient,metrics:MetricsEngine,prompter:H264LicensePrompter,webSocket:WebSocketService) {
         let _ = MediaEngineWrapper.sharedInstance.WMEVersion
         self.authenticator = authenticator
@@ -171,8 +194,63 @@ public class Phone {
         self.webSocket.onCallModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
-                strong.doLocusEvent(model);
+                    strong.doLocusEvent(model);
                 }
+            }
+        }
+        
+        self.webSocket.onActivityModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
+                }
+            }
+        }
+    }
+    
+    
+    private func doConversationAcivityEvent(_ model: ActivityModel){
+        //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+        DispatchQueue.main.async {
+            if let activityClient = self.activityClient{
+                switch model.actionType!{
+                case .MessageActivity:
+                    let messageActivity = MessageActivity(activitModel: model)
+                    if(messageActivity.encryptionKeyUrl != nil){
+                        if let acitivityClient = self.activityClient{
+                            acitivityClient.receiveNewMessageActivity(messageActivity: messageActivity)
+                        }
+                    }else{
+                        messageActivity.markDownString()
+                        activityClient.onMessageActivity?(messageActivity)
+                    }
+                    break
+                case .TypingActivity:
+                    let typeActivity = TypingActivity(activitModel: model)
+                    activityClient.onTypingActivity?(typeActivity)
+                    break
+                case .FlagActivity:
+                    let flagActivity = FlagActivity(activitModel: model)
+                    activityClient.onFlagActivity?(flagActivity)
+                    break
+                }
+            }
+        }
+    }
+    
+    private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
+        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+        DispatchQueue.main.async {
+            if let acitivityClient = self.activityClient{
+                acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }
     }
@@ -198,6 +276,7 @@ public class Phone {
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
+                        self?.activityClient = ActivityClient(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!)
                         self?.queue.underlying.async {
                             self?.fetchActiveCalls()
                             DispatchQueue.main.async {
@@ -768,3 +847,4 @@ public class Phone {
         }
     }
 }
+
