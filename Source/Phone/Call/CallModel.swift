@@ -34,6 +34,7 @@ struct FullStateModel {
     fileprivate(set) var locked: Bool?
     fileprivate(set) var lastActive: String?
     fileprivate(set) var state: String?
+    fileprivate(set) var type: String?
 }
 
 struct ReplaceModel  {
@@ -70,7 +71,7 @@ struct CallModel {
     }
     
     var isOneOnOne: Bool {
-        return participants?.filter({$0.type == "USER"}).count == 2
+        return !(fullState?.type == "MEETING")
     }
     
     var isIncomingCall: Bool {
@@ -154,6 +155,7 @@ extension FullStateModel: Mappable {
         locked <- map["locked"]
         lastActive <- map["lastActive"]
         state <- map["state"]
+        type <- map["type"]
     }
 }
 
