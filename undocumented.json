@@ -1,13 +1,6 @@
 {
   "warnings": [
     {
-      "file": "/Users/qucui/Desktop/SparkSdk/Source/Auth/SSOAuthenticator.swift",
-      "line": 29,
-      "symbol": "SSOAuthenticator",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
       "file": "/Users/qucui/Desktop/SparkSdk/Source/Phone/Phone.swift",
       "line": 55,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth90p",
