@@ -42,7 +42,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 ## [1.3.1](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.3.1)
-Released on 2018-1-112.
+Released on 2018-1-12.
 
 #### Feature:
           SSO Authenticator
