@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>CallMembership Struct Reference</title>
+    <title>CallMembership Structure Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset='utf-8'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <a name="//apple_ref/swift/Struct/CallMembership" class="dashAnchor"></a>
-    <a title="CallMembership Struct Reference"></a>
+    <a title="CallMembership Structure Reference"></a>
     <header>
       <div class="content-wrapper">
         <p><a href="../index.html">SparkSDK Docs</a> (97% documented)</p>
@@ -22,7 +22,7 @@
       <p id="breadcrumbs">
         <a href="../index.html">SparkSDK Reference</a>
         <img id="carat" src="../img/carat.png" />
-        CallMembership Struct Reference
+        CallMembership Structure Reference
       </p>
     </div>
     <div class="content-wrapper">
@@ -86,6 +86,9 @@
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/SSOAuthenticator.html">SSOAuthenticator</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
               </li>
               <li class="nav-group-task">
@@ -100,7 +103,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/CallStatus.html">CallStatus</a>
@@ -148,7 +151,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/CallMembership.html">CallMembership</a>
@@ -202,12 +205,11 @@
             <h1>CallMembership</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CallMembership</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CallMembership</span></code></pre>
 
                 </div>
               </div>
             <p>A data type represents a relationship between <em>Call</em> and <em>Person</em> at Cisco Spark cloud.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -232,7 +234,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of the status of the person in the membership.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -245,7 +246,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">State</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">State</span> <span class="p">:</span> <span class="kt">String</span></code></pre>
 
                         </div>
                       </div>
@@ -266,7 +267,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the person is the initiator of the call.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -278,7 +278,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isInitiator</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">isInitiator</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -299,7 +299,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The identifier of the person.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -311,7 +310,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">presonId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">presonId</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -332,7 +331,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The status of the person in this <em>CallMembership</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -344,7 +342,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership/State.html">State</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership/State.html">State</a></span></code></pre>
 
                         </div>
                       </div>
@@ -365,7 +363,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The email address of the person in this <em>CallMembership</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -377,7 +374,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -398,7 +395,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The SIP address of the person in this <em>CallMembership</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -410,7 +406,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sipUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sipUrl</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -431,7 +427,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The phone number of the person in this <em>CallMembership</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -443,7 +438,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">phoneNumber</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">phoneNumber</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -464,7 +459,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the <em>CallMembership</em> is sending video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -476,7 +470,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -497,7 +491,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the <em>CallMembership</em> is sending audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -509,7 +502,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -530,7 +523,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the <em>CallMembership</em> is sending screen share. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -542,7 +534,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -554,8 +546,8 @@
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2018-01-12)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

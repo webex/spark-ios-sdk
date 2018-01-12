@@ -86,6 +86,9 @@
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/SSOAuthenticator.html">SSOAuthenticator</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
               </li>
               <li class="nav-group-task">
@@ -100,7 +103,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/CallStatus.html">CallStatus</a>
@@ -148,7 +151,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/CallMembership.html">CallMembership</a>
@@ -202,14 +205,13 @@
             <h1>Call</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Call</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Call</span></code></pre>
 
                 </div>
               </div>
             <p>A Call represents a media call on Cisco Spark.</p>
 
 <p>The application can create an outgoing <em>call</em> by calling <em>phone.dial</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="k">let</span> <span class="nv">address</span> <span class="o">=</span> <span class="s">"coworker@example.com"</span>
     <span class="k">let</span> <span class="nv">localVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
     <span class="k">let</span> <span class="nv">remoteVideoView</span> <span class="o">=</span> <span class="kt">MediaRenderView</span><span class="p">()</span>
@@ -231,7 +233,6 @@
 </code></pre>
 
 <p>The application can receive an incoming <em>call</em> on <em>phone.onIncoming</em> function:</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="n">onIncoming</span> <span class="o">=</span> <span class="p">{</span> <span class="n">call</span> <span class="k">in</span>
       <span class="n">call</span><span class="o">.</span><span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="n">mediaOption</span><span class="p">)</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
         <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
@@ -243,19 +244,16 @@
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see Phone API about how to create calls.
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus for the states and transitions of a <em>Call</em>.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -280,7 +278,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of directions of a call</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -293,7 +290,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Direction</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Direction</span></code></pre>
 
                         </div>
                       </div>
@@ -314,7 +311,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumuaration of reasons for a call being disconnected.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -327,7 +323,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DisconnectReason</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DisconnectReason</span></code></pre>
 
                         </div>
                       </div>
@@ -348,7 +344,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of media change event</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -361,7 +356,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MediaChangedEvent</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">MediaChangedEvent</span></code></pre>
 
                         </div>
                       </div>
@@ -382,7 +377,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of call membership events.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -395,7 +389,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CallMembershipChangedEvent</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">CallMembershipChangedEvent</span></code></pre>
 
                         </div>
                       </div>
@@ -416,7 +410,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of capabilities of a call.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -429,7 +422,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Capabilities</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Capabilities</span></code></pre>
 
                         </div>
                       </div>
@@ -450,7 +443,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) is ringing.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -462,7 +454,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onRinging</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onRinging</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -483,7 +475,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when remote participant(s) answered and this <em>call</em> is connected.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -495,7 +486,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onConnected</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onConnected</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -516,7 +507,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when this <em>call</em> is disconnected (hangup, cancelled, get declined or other self device pickup the call).</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -528,7 +518,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onDisconnected</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/DisconnectReason.html">DisconnectReason</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onDisconnected</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/DisconnectReason.html">DisconnectReason</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -549,7 +539,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the memberships of this <em>call</em> have changed.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -561,7 +550,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onCallMembershipChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/CallMembershipChangedEvent.html">CallMembershipChangedEvent</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onCallMembershipChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/CallMembershipChangedEvent.html">CallMembershipChangedEvent</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -582,7 +571,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the media types of this <em>call</em> have changed.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -594,7 +582,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onMediaChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/MediaChangedEvent.html">MediaChangedEvent</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onMediaChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/MediaChangedEvent.html">MediaChangedEvent</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -615,7 +603,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when the capabilities of this <em>call</em> have changed.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -627,7 +614,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onCapabilitiesChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/Capabilities.html">Capabilities</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onCapabilitiesChanged</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call/Capabilities.html">Capabilities</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -648,13 +635,11 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The status of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     CallStatus
@@ -666,7 +651,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Enums/CallStatus.html">CallStatus</a></span> <span class="o">=</span> <span class="kt"><a href="../Enums/CallStatus.html">CallStatus</a></span><span class="o">.</span><span class="n">initiated</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">internal(set)</span> <span class="k">var</span> <span class="nv">status</span><span class="p">:</span> <span class="kt"><a href="../Enums/CallStatus.html">CallStatus</a></span> <span class="o">=</span> <span class="kt"><a href="../Enums/CallStatus.html">CallStatus</a></span><span class="o">.</span><span class="n">initiated</span></code></pre>
 
                         </div>
                       </div>
@@ -687,7 +672,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The direction of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -699,7 +683,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/Direction.html">Direction</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">direction</span><span class="p">:</span> <span class="kt"><a href="../Classes/Call/Direction.html">Direction</a></span></code></pre>
 
                         </div>
                       </div>
@@ -720,7 +704,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the DTMF keypad is enabled for this <em>call</em>. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -732,7 +715,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingDTMFEnabled</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -753,7 +736,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -765,7 +747,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -786,7 +768,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -798,7 +779,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -819,7 +800,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the remote party of this <em>call</em> is sending screen share. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -831,7 +811,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteSendingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -852,7 +832,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is sending video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -864,7 +843,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -885,7 +864,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if this <em>call</em> is sending audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -897,7 +875,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">sendingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -918,7 +896,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving video. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -930,7 +907,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingVideo</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -951,7 +928,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving audio. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -963,7 +939,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingAudio</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -984,7 +960,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the local party of this <em>call</em> is receiving screen share. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -996,7 +971,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">receivingScreenShare</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -1017,7 +992,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>True if the loud speaker is selected as the audio output device for this <em>call</em>. Otherwise, false.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1029,7 +1003,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isSpeaker</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">isSpeaker</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
 
                         </div>
                       </div>
@@ -1050,7 +1024,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The camera facing mode selected for this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1062,7 +1035,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">facingMode</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span><span class="o">.</span><span class="kt">FacingMode</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">facingMode</span><span class="p">:</span> <span class="kt"><a href="../Classes/Phone.html">Phone</a></span><span class="o">.</span><span class="kt">FacingMode</span></code></pre>
 
                         </div>
                       </div>
@@ -1083,7 +1056,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The local video render view dimensions (points) of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1095,7 +1067,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">localVideoViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">localVideoViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
 
                         </div>
                       </div>
@@ -1116,7 +1088,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The remote video render view dimensions (points) of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1128,7 +1099,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteVideoViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteVideoViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
 
                         </div>
                       </div>
@@ -1149,7 +1120,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The remote screen share render view dimensions (points) of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -1161,7 +1131,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteScreenShareViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">remoteScreenShareViewSize</span><span class="p">:</span> <span class="kt">CMVideoDimensions</span></code></pre>
 
                         </div>
                       </div>
@@ -1182,7 +1152,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Call Memberships represent participants in this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1194,7 +1163,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">]</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">memberships</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">]</span></code></pre>
 
                         </div>
                       </div>
@@ -1215,7 +1184,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The initiator of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1227,7 +1195,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">from</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">from</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1248,7 +1216,6 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The intended recipient of this <em>call</em>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1260,7 +1227,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">to</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">to</span><span class="p">:</span> <span class="kt"><a href="../Structs/CallMembership.html">CallMembership</a></span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1281,15 +1248,19 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The render views for local and remote video of this call.
-If is nil, it will update the video state as inactive to the server side.
-- since: 1.3.0</p>
+If is nil, it will update the video state as inactive to the server side.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.0
+
+</div>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoRenderViews</span><span class="p">:</span> <span class="p">(</span><span class="nv">local</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoRenderViews</span><span class="p">:</span> <span class="p">(</span><span class="nv">local</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">,</span> <span class="nv">remote</span><span class="p">:</span><span class="kt">MediaRenderView</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -1311,7 +1282,6 @@ If is nil, it will update the video state as inactive to the server side.
                       <div class="abstract">
                         <p>The render view for the remote screen share of this call.
 If is nil, it will update the screen sharing state as inactive to the server side.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -1323,7 +1293,7 @@ If is nil, it will update the screen sharing state as inactive to the server sid
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareRenderView</span><span class="p">:</span> <span class="kt">MediaRenderView</span><span class="p">?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareRenderView</span><span class="p">:</span> <span class="kt">MediaRenderView</span><span class="p">?</span></code></pre>
 
                         </div>
                       </div>
@@ -1345,13 +1315,11 @@ If is nil, it will update the screen sharing state as inactive to the server sid
                       <div class="abstract">
                         <p>Acknowledge (without answering) an incoming call.
 Will cause the initiator&rsquo;s Call instance to emit the ringing event.</p>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1363,9 +1331,32 @@ Will cause the initiator&rsquo;s Call instance to emit the ringing event.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">acknowledge</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">acknowledge</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1385,13 +1376,11 @@ Will cause the initiator&rsquo;s Call instance to emit the ringing event.</p>
                       <div class="abstract">
                         <p>Answers this call.
 This can only be invoked when this call is incoming and in ringing status.</p>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1403,9 +1392,44 @@ This can only be invoked when this call is incoming and in ringing status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Structs/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">answer</span><span class="p">(</span><span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Structs/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>option</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Intended media options - audio only or audio and video - for the call.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1425,13 +1449,11 @@ This can only be invoked when this call is incoming and in ringing status.</p>
                       <div class="abstract">
                         <p>Rejects this call. 
 This can only be invoked when this call is incoming and in ringing status.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1443,9 +1465,32 @@ This can only be invoked when this call is incoming and in ringing status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reject</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">reject</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1465,13 +1510,11 @@ This can only be invoked when this call is incoming and in ringing status.</p>
                       <div class="abstract">
                         <p>Disconnects this call.
 This can only be invoked when this call is in answered status.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
-
 <div class="aside aside-see">
     <p class="aside-title">See</p>
     see CallStatus
@@ -1483,9 +1526,32 @@ This can only be invoked when this call is in answered status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hangup</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">hangup</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1504,7 +1570,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends feedback for this call to Cisco Spark team.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1516,9 +1581,56 @@ This can only be invoked when this call is in answered status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendFeedbackWith</span><span class="p">(</span><span class="nv">rating</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">comments</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">includeLogs</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">sendFeedbackWith</span><span class="p">(</span><span class="nv">rating</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">comments</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">includeLogs</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rating</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The rating of the quality of this call between 1 and 5 where 5 means excellent quality.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>comments</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The comments for this call.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>includeLogs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>True if to include logs, False as not.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1537,7 +1649,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Sends DTMF events to the remote party. Valid DTMF events are 0-9, *, #, a-d, and A-D.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1549,9 +1660,44 @@ This can only be invoked when this call is in answered status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="nv">dtmf</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">send</span><span class="p">(</span><span class="nv">dtmf</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dtmf</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>any combination of valid DTMF events matching regex mattern <q>^[0-9#\*abcdABCD]+$</q></p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.<br></p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -1574,7 +1720,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>A local unique identifier of a <em>Call</em> for <a href="https://developer.apple.com/reference/callkit">Apple CallKit</a>.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -1586,7 +1731,7 @@ This can only be invoked when this call is in answered status.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">uuid</span><span class="p">:</span> <span class="kt">UUID</span></code></pre>
 
                         </div>
                       </div>
@@ -1608,7 +1753,6 @@ This can only be invoked when this call is in answered status.</p>
                       <div class="abstract">
                         <p>Update audio session for CallKit.
 This must be called on <a href="https://developer.apple.com/documentation/callkit/cxproviderdelegate/1833280-provider">provider:didActivateAudioSession:</a> to reactivate the audio session.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -1620,7 +1764,7 @@ This must be called on <a href="https://developer.apple.com/documentation/callki
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateAudioSession</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">updateAudioSession</span><span class="p">()</span></code></pre>
 
                         </div>
                       </div>
@@ -1632,8 +1776,8 @@ This must be called on <a href="https://developer.apple.com/documentation/callki
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2018-01-12)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>

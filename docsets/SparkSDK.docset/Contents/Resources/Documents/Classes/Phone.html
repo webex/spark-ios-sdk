@@ -86,6 +86,9 @@
                 <a href="../Classes/RoomClient.html">RoomClient</a>
               </li>
               <li class="nav-group-task">
+                <a href="../Classes/SSOAuthenticator.html">SSOAuthenticator</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="../Classes/Spark.html">Spark</a>
               </li>
               <li class="nav-group-task">
@@ -100,7 +103,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Enums.html">Enums</a>
+            <a href="../Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Enums/CallStatus.html">CallStatus</a>
@@ -148,7 +151,7 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="../Structs.html">Structs</a>
+            <a href="../Structs.html">Structures</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
                 <a href="../Structs/CallMembership.html">CallMembership</a>
@@ -202,7 +205,7 @@
             <h1>Phone</h1>
               <div class="declaration">
                 <div class="language">
-                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Phone</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">Phone</span></code></pre>
 
                 </div>
               </div>
@@ -210,7 +213,6 @@
 The application can obtain a <em>phone</em> object from <em>Spark</em> object
 and use <em>phone</em> to call other Cisco Spark users or PSTN when enabled.
 The <em>phone</em> must be registered before it can make or receive calls.</p>
-
 <pre class="highlight swift"><code>    <span class="n">spark</span><span class="o">.</span><span class="n">phone</span><span class="o">.</span><span class="nf">register</span><span class="p">()</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
       <span class="k">if</span> <span class="k">let</span> <span class="nv">error</span> <span class="o">=</span> <span class="n">error</span> <span class="p">{</span>
         <span class="o">...</span> <span class="c1">// Device was not registered, and no calls can be sent or received</span>
@@ -219,7 +221,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
       <span class="p">}</span>
     <span class="p">}</span>
 </code></pre>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -244,7 +245,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of Camera facing modes.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -257,7 +257,7 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">FacingMode</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">FacingMode</span></code></pre>
 
                         </div>
                       </div>
@@ -278,7 +278,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>The enumeration of common bandwidth choices.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -291,7 +290,7 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DefaultBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">DefaultBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span></code></pre>
 
                         </div>
                       </div>
@@ -314,7 +313,6 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                         <p>The max bandwidth for audio in unit bps for the call.
 Only effective if set before the start of call.
 if 0, default value of 64 * 1000 is used.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -326,7 +324,7 @@ if 0, default value of 64 * 1000 is used.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">audioMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthAudio</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">audioMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthAudio</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
 
                         </div>
                       </div>
@@ -349,7 +347,6 @@ if 0, default value of 64 * 1000 is used.</p>
                         <p>The max bandwidth for video in unit bps for the call.
 Only effective if set before the start of call.
 if 0, default value of 2000*1000 is used.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -361,7 +358,7 @@ if 0, default value of 2000*1000 is used.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidth720p</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">videoMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidth720p</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
 
                         </div>
                       </div>
@@ -384,7 +381,6 @@ if 0, default value of 2000*1000 is used.</p>
                         <p>The max bandwidth for screen sharing in unit bps for the call.
 Only effective if set before the start of call.
 if 0, default value of 4000*1000 is used.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.3.0
@@ -396,7 +392,7 @@ if 0, default value of 4000*1000 is used.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthSession</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">screenShareMaxBandwidth</span><span class="p">:</span> <span class="kt">UInt32</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/DefaultBandwidth.html">DefaultBandwidth</a></span><span class="o">.</span><span class="n">maxBandwidthSession</span><span class="o">.</span><span class="n">rawValue</span></code></pre>
 
                         </div>
                       </div>
@@ -418,13 +414,11 @@ if 0, default value of 4000*1000 is used.</p>
                       <div class="abstract">
                         <p>Default camera facing mode of this phone, used as the default when dialing or answering a call.
 The default mode is the front camera.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -436,7 +430,7 @@ The default mode is the front camera.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/FacingMode.html">FacingMode</a></span><span class="o">.</span><span class="n">user</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultFacingMode</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Phone/FacingMode.html">FacingMode</a></span><span class="o">.</span><span class="n">user</span></code></pre>
 
                         </div>
                       </div>
@@ -458,13 +452,11 @@ The default mode is the front camera.</p>
                       <div class="abstract">
                         <p>Default loud speaker mode of this phone, used as the default when dialing or answering a call.
 True as using loud speaker, False as not. The default is using loud speaker.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     The setting is not persistent.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -476,7 +468,7 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultLoudSpeaker</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">defaultLoudSpeaker</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span></code></pre>
 
                         </div>
                       </div>
@@ -497,7 +489,6 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Callback when call is incoming.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -509,7 +500,7 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onIncoming</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">onIncoming</span><span class="p">:</span> <span class="p">((</span><span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span></code></pre>
 
                         </div>
                       </div>
@@ -532,7 +523,6 @@ True as using loud speaker, False as not. The default is using loud speaker.</p>
                         <p>Registers this phone to Cisco Spark cloud on behalf of the authenticated user.
 It also creates the websocket and connects to Cisco Spark cloud.
 Subsequent invocations of this method refresh the registration.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -544,9 +534,32 @@ Subsequent invocations of this method refresh the registration.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">register</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -567,7 +580,6 @@ Subsequent invocations of this method refresh the registration.</p>
                         <p>Removes this <em>phone</em> from Cisco Spark cloud on behalf of the authenticated user.
 It also disconnects the websocket from Cisco Spark cloud.
 Subsequent invocations of this method behave as a no-op.</p>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -579,9 +591,32 @@ Subsequent invocations of this method behave as a no-op.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deregister</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">deregister</span><span class="p">(</span><span class="n">_</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -611,27 +646,73 @@ It supports the following address formats for the receipient:</p>
 <li>Email address: e.g. <a href="mailto:shenning@cisco.com">shenning@cisco.com</a></li>
 </ul>
 </blockquote>
-
-<p><li>throw:</li>
+<li>throw:</li>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
-    1.2.0</p>
+    1.2.0
 
-<p></div>
+</div>
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
-    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.</p>
+    Currently the SDK only supports one active call at a time. Invoking this function while there is an active call will generate an exception.
 
-<p></div></p>
+</div>
 
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="n">_</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Structs/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">dial</span><span class="p">(</span><span class="n">_</span> <span class="nv">address</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">option</span><span class="p">:</span> <span class="kt"><a href="../Structs/MediaOption.html">MediaOption</a></span><span class="p">,</span> <span class="nv">completionHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">((</span><span class="kt"><a href="../Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/Call.html">Call</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">))</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>address</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Intended recipient address in one of the supported formats.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>option</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Intended media options - audio only or audio and video - for the call.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>completionHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>A closure to be executed when completed.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a Call object</p>
                       </div>
                     </section>
                   </div>
@@ -650,13 +731,11 @@ It supports the following address formats for the receipient:</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Pops up an Alert for the end user to approve the use of H.264 codec license from Cisco Systems, Inc.</p>
-
 <div class="aside aside-note">
     <p class="aside-title">Note</p>
     Invoking this function is optional since the alert will appear automatically during the first video call.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -668,9 +747,13 @@ It supports the following address formats for the receipient:</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestVideoCodecActivation</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">requestVideoCodecActivation</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -690,13 +773,11 @@ It supports the following address formats for the receipient:</p>
                       <div class="abstract">
                         <p>Prevents Cisco Spark iOS SDK from poping up an Alert for the end user
 to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
-
 <div class="aside aside-attention">
     <p class="aside-title">Attention</p>
     The function is expected to be called only by Cisco internal applications. 3rd-party applications should NOT call this function.
 
 </div>
-
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
@@ -708,9 +789,13 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disableVideoCodecActivation</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">disableVideoCodecActivation</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -735,9 +820,32 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startPreview</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">MediaRenderView</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">startPreview</span><span class="p">(</span><span class="nv">view</span><span class="p">:</span> <span class="kt">MediaRenderView</span><span class="p">)</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>view</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>an UI view for rendering video.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -762,9 +870,13 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stopPreview</span><span class="p">()</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">stopPreview</span><span class="p">()</span></code></pre>
 
                         </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>Void</p>
                       </div>
                     </section>
                   </div>
@@ -774,8 +886,8 @@ to approve the use of H.264 video codec license from Cisco Systems, Inc.</p>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2017 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2017-10-13)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.4</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2018-01-12)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
