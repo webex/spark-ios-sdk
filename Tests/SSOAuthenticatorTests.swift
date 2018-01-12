@@ -26,8 +26,8 @@ class SSOAuthenticatorTests: XCTestCase {
     func testAuthorizationUrlContainsEmail() {
         let testObject = createTestObject()
         let authorizationUrl = testObject.authorizationUrl()
-        
-        XCTAssert((authorizationUrl?.absoluteString.contains(email))!, "Overriden authorization url should contain email parameter")
+        let encodeEmail = email.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)?.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+        XCTAssert((authorizationUrl?.absoluteString.contains(encodeEmail!))!, "Overriden authorization url should contain email parameter")
     }
     
     func testAuthorizationUrlAcceptsAdditionalQueryItems() {
