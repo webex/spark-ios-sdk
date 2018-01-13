@@ -132,7 +132,7 @@ class MembershipTests: XCTestCase {
     
     func testCreateMembershipWithValidRoomIdButInvalidEmail() {
         membership = createMembership(roomId: roomId, personEmail: Config.InvalidEmail, isModerator: false)
-        XCTAssertNotNil(membership, "Failed to creature membership")
+        XCTAssertNil(membership, "Failed to creature membership")
     }
     
     func testCreateModeratorMembershipWithRoomIdAndPersonEmail() {
