@@ -82,13 +82,13 @@ class PhoneTests: XCTestCase {
         }
     }
     
-    func testWhenDialWithSipAddressThenReturnsSuccessAndHangsUp() {
-        let mediaOption = MediaOption.audioVideo(local: localView!, remote: remoteView!)
-        phone.disableVideoCodecActivation()
-        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: mediaOption)
-        XCTAssertNotNil(call)
-        XCTAssertTrue(hangupCall(call: call!))
-    }
+//    func testWhenDialWithSipAddressThenReturnsSuccessAndHangsUp() {
+//        let mediaOption = MediaOption.audioVideo(local: localView!, remote: remoteView!)
+//        phone.disableVideoCodecActivation()
+//        let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: mediaOption)
+//        XCTAssertNotNil(call)
+//        XCTAssertTrue(hangupCall(call: call!))
+//    }
     
     func testWhenDialWithAudioOnlyAndSipAddressThenReturnsSuccessAndHangsUp() {
         let call = dialCall(address: "sip:9995839764@sip.tropo.com", mediaOption: MediaOption.audioOnly())
