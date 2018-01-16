@@ -34,7 +34,7 @@ public enum ActivityType : String{
 /// The struct of a Activity on Cisco Spark.
 ///
 /// - since: 1.4.0
-public struct ActivityModel {
+public class ActivityModel : Mappable {
     
     /// The identifier of this activity.
     public var id: String?
@@ -106,19 +106,21 @@ public struct ActivityModel {
     public var action: String?
     /// The activity flag item info, should only use for receive flag/unflag activity
     public var flagItem: ActivityFlagItemModel?
-}
-
-extension ActivityModel: Mappable {
     
     /// Activity constructor.
     ///
     /// - note: for internal use only.
-    public init?(map: Map){}
+    public init(){}
+    
+    /// Activity constructor.
+    ///
+    /// - note: for internal use only.
+    public required init?(map: Map){}
     
     /// Message mapping from JSON.
     ///
     /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
+    public func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
         url <- map["url"]
@@ -137,7 +139,7 @@ extension ActivityModel: Mappable {
 }
 
 // MARK: ActivityActorModel
-public struct ActivityActorModel {
+public class ActivityActorModel : Mappable{
     public var id: String?
     public var objectType: String?
     public var displayName: String?
@@ -145,11 +147,9 @@ public struct ActivityActorModel {
     public var emailAddress: String?
     public var entryUUID: String?
     public var actorType: String? // Default is "PERSON"
-}
-
-extension ActivityActorModel: Mappable {
-    public init?(map: Map) {}
-    public mutating func mapping(map: Map) {
+    
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
         displayName <- map["displayName"]
@@ -161,7 +161,7 @@ extension ActivityActorModel: Mappable {
 }
 
 // MARK: ActivityObjectModel
-public struct ActivityObjectModel {
+public class ActivityObjectModel : Mappable{
     public var id: String?
     public var objectType: String?
     public var url: String?
@@ -171,10 +171,10 @@ public struct ActivityObjectModel {
     public var contentType: String?
     public var mentions: [String : [ActivityMentionModel]]?
     public var files: [String: [FileObjectModel]]?
-}
-extension ActivityObjectModel: Mappable {
-    public init?(map: Map) {}
-    public mutating func mapping(map: Map) {
+    
+    public init(){}
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
         url <- map["url"]
@@ -188,7 +188,7 @@ extension ActivityObjectModel: Mappable {
 }
 
 // MARK: FileObjectModel
-public struct FileObjectModel{
+public class FileObjectModel : Mappable{
     public var displayName: String?
     public var mimeType: String?
     public var objectType: String?
@@ -196,11 +196,15 @@ public struct FileObjectModel{
     public var fileSize: UInt64?
     public var scr: String?
     public var url: String?
-}
-
-extension FileObjectModel: Mappable {
-    public init?(map: Map) {}
-    public mutating func mapping(map: Map) {
+    public var localFileUrl: String?
+    
+    public init(name: String, localFileUrl: String ,thumbNail: ThumbNailImageModel? = nil){
+        self.displayName = name
+        self.localFileUrl = localFileUrl
+        self.image = thumbNail
+    }
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         displayName <- map["displayName"]
         mimeType <- map["mimeType"]
         objectType <- map["objectType"]
@@ -211,15 +215,19 @@ extension FileObjectModel: Mappable {
     }
 }
 
-public struct ThumbNailImageModel{
+public class ThumbNailImageModel : Mappable {
     public var width: Int?
     public var height: Int?
     public var scr: String?
     public var url: String?
-}
-extension ThumbNailImageModel: Mappable {
-    public init?(map: Map) {}
-    public mutating func mapping(map: Map) {
+    public var localFileUrl: String?
+    public init(localFileUrl: String ,width: Int? = nil, height : Int? = nil){
+        self.localFileUrl = localFileUrl
+        self.width = width
+        self.height = height
+    }
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         width <- map["width"]
         height <- map["height"]
         scr <- map["scr"]
@@ -228,17 +236,16 @@ extension ThumbNailImageModel: Mappable {
 }
 
 // MARK: ActivityTargetModel
-public struct ActivityTargetModel {
+public class ActivityTargetModel : Mappable{
     public var id: String?
     public var objectType: String? // Default is "conversation"
     public var url: String?
     public var clientTempId: String?
     public var encryptionKeyUrl: String?
-}
-
-extension ActivityTargetModel: Mappable {
-    public init?(map: Map){ }
-    public mutating func mapping(map: Map) {
+    
+    public init(){}
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
         url <- map["url"]
@@ -246,17 +253,17 @@ extension ActivityTargetModel: Mappable {
         encryptionKeyUrl <- map["encryptionKeyUrl"]
     }
 }
+
 // MARK: ActivityFlagItemModel
-public struct ActivityFlagItemModel{
+public class ActivityFlagItemModel: Mappable{
     public var activityUrl: String?
     public var state: String? // Default is "flagged/unflagged"
     public var id: String?
     public var url: String?
     public var created: Date?
-}
-extension ActivityFlagItemModel: Mappable {
-    public init?(map: Map){ }
-    public mutating func mapping(map: Map) {
+    
+    public required init?(map: Map) {}
+    public func mapping(map: Map) {
         activityUrl <- map["flag-item"]
         state <- map["state"]
         id <- map["id"]
@@ -266,7 +273,7 @@ extension ActivityFlagItemModel: Mappable {
 }
 
 // MARK: ActivityMentionModel
-public struct ActivityMentionModel{
+public class ActivityMentionModel : Mappable{
     public var id: String
     public var objectType: String?
     public var range: CountableClosedRange<Int>
@@ -282,15 +289,13 @@ public struct ActivityMentionModel{
             self.objectType = "group"
         }
     }
-}
-
-extension ActivityMentionModel: Mappable {
-    public init?(map: Map){
+    
+    public required init?(map: Map){
         self.id = map.JSON["id"] as! String
         self.mentionType = MentionItemType(rawValue:(map.JSON["objectType"] as! String))!
         self.range  = 0...0
     }
-    public mutating func mapping(map: Map) {
+    public func mapping(map: Map) {
         id <- map["id"]
         objectType <- map["objectType"]
     }

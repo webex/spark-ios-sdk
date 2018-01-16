@@ -46,7 +46,14 @@ public class MessageActivity: Mappable {
     /// The action of this message activity.
     ///
     /// - since: 1.4.0
-    public var action: MessageAction?
+    public var action: MessageAction?{
+        get {
+            return MessageAction(rawValue:self.activityModel.verb!)
+        }
+        set{
+            self.activityModel.verb = newValue?.rawValue
+        }
+    }
     
     /// The actor who created this activity.
     ///
@@ -64,7 +71,14 @@ public class MessageActivity: Mappable {
     /// id of this activty
     ///
     /// - since: 1.4.0
-    public var activityId: String?
+    public var activityId: String?{
+        get {
+            return self.activityModel.id
+        }
+        set{
+            self.activityModel.id = newValue
+        }
+    }
     
     /// url of this activity.
     ///
@@ -89,17 +103,41 @@ public class MessageActivity: Mappable {
     /// file uploading local file path
     ///
     /// - since: 1.4.0
-    public var localFileList: [URL]?
+    public var files: [FileObjectModel]?
     
     /// encryptionKeyUrl of this activity
     ///
     /// - since: 1.4.0
-    public var encryptionKeyUrl: String?
+    public var encryptionKeyUrl: String?{
+        get {
+            return self.activityModel.encryptionKeyUrl
+        }
+        set{
+            self.activityModel.encryptionKeyUrl = newValue
+        }
+    }
     
     /// target conversation id of this activity
     ///
     /// - since: 1.4.0
-    public var conversationId: String?
+    public var conversationId: String?{
+        get{
+            if(self.activityModel.conversationId != nil){
+                return self.activityModel.conversationId
+            }else if self.target != nil{
+                if(target?.objectType == "conversation"){
+                    return target?.id
+                }else{
+                    return nil
+                }
+            }else{
+                return nil
+            }
+        }
+        set{
+            self.activityModel.conversationId = newValue
+        }
+    }
     
     /// markup text of this activity
     ///
@@ -108,11 +146,6 @@ public class MessageActivity: Mappable {
         return self.activityModel.object?.content
     }
     
-    /// files attached to this activity.
-    ///
-    /// - since: 1.4.0
-    public var files: [FileObjectModel]?
-    
     
     /// mention item list of this activity
     ///
@@ -120,22 +153,13 @@ public class MessageActivity: Mappable {
     public var mentionItems: [ActivityMentionModel]?
     
     private var activityModel: ActivityModel
+    
+    init(){
+        self.activityModel = ActivityModel()
+    }
+    
     init(activitModel: ActivityModel) {
         self.activityModel = activitModel
-        self.encryptionKeyUrl = activitModel.encryptionKeyUrl
-        self.activityId = activitModel.object?.id
-        self.action = MessageAction(rawValue:activitModel.verb!)
-        
-        if(self.activityModel.conversationId != nil){
-            self.conversationId = self.activityModel.conversationId
-        }else{
-            if self.target != nil{
-                if(target?.objectType == "conversation"){
-                    self.conversationId = target?.id
-                }
-            }
-        }
-        
         if(self.action == .post || self.action == .share){
             if let content = self.activityModel.object?.content{
                 self.plainText = content
@@ -154,16 +178,13 @@ public class MessageActivity: Mappable {
             }
         }
     }
-    init(){
-        self.activityModel = ActivityModel()
-    }
-    
     
     public required convenience init?(map: Map){
         let acivitiModel = Mapper<ActivityModel>().map(JSON: map.JSON)
         self.init(activitModel: acivitiModel!)
         self.markDownString()
     }
+    
     public func mapping(map: Map) {
         self.activityModel <- map
     }
@@ -188,7 +209,7 @@ public class MessageActivity: Mappable {
                 
                 markDownContent = markDownContent.replacingCharacters(in: startSyntaxIndex..<endSyntaxRange, with: mentionContentString)
                 
-                var mentionItem = mentionArr[index]
+                let mentionItem = mentionArr[index]
                 let startPosition = markDownContent.distance(from: markDownContent.startIndex, to: startSyntaxIndex!)
                 let range = startPosition...(startPosition+mentionContentString.count-1)
                 mentionItem.range = range
@@ -201,3 +222,4 @@ public class MessageActivity: Mappable {
         }
     }
 }
+

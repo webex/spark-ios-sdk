@@ -26,16 +26,23 @@ import MobileCoreServices.UTType
 
 class PostMessageOperation: Operation {
     var messageActivity : MessageActivity
+    var uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil
     var completionHandler :  (ServiceResponse<MessageActivity>) -> Void
     var queue : DispatchQueue?
     var keyMaterial : String?
     var action : MessageAction?
     var encryptionUrl : String?
     let authenticator: Authenticator
-    var files : [URL]?
+    var files : [FileObjectModel]?
     var spaceUrl: String?
-    var fileModelArray: [FileObjectModel]?
-    init(authenticator: Authenticator, messageActivity: MessageActivity, keyMaterial: String?=nil, spaceUrl: String? = nil ,queue:DispatchQueue? = nil ,completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void) {
+    init(authenticator: Authenticator,
+         messageActivity: MessageActivity,
+         keyMaterial: String?=nil,
+         spaceUrl: String? = nil,
+         queue:DispatchQueue? = nil,
+         uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil,
+         completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+    {
         self.authenticator = authenticator
         self.messageActivity = messageActivity
         self.action = messageActivity.action
@@ -45,8 +52,8 @@ class PostMessageOperation: Operation {
         self.keyMaterial = keyMaterial
         if(messageActivity.action == MessageAction.share){
             self.spaceUrl = spaceUrl
-            self.fileModelArray = [FileObjectModel]()
-            self.files = messageActivity.localFileList
+            self.files = messageActivity.files
+            self.uploadingProgressHandler = uploadingProgressHandler
         }
         super.init()
         if(self.action == MessageAction.post && self.encryptionUrl == nil){
@@ -71,7 +78,7 @@ class PostMessageOperation: Operation {
             if(self.keyMaterial == nil){
                 self.cancel()
             }else{
-                self.shareOperation()
+                self.upLoadOperation()
             }
         case .acknowledge:
             self.readOperation()
@@ -85,122 +92,49 @@ class PostMessageOperation: Operation {
         }
     }
     
-    private func shareOperation(){
+    private func upLoadOperation(){
         guard let spaceUrl = self.spaceUrl,
             let files = self.files else{
                 return
         }
-        
         self.authenticator.accessToken { token in
-            let header : [String: String]  = ["Authorization" : "Bearer " + token!]
-            let uploadSessionUrl = URL(string: spaceUrl+"/upload_sessions")
-            var fileSize: UInt64 = 0
-            do{
-                SDKLogger.shared.info("Uploading File Data ......")
-                for localUrl in files{
-                    let fileAttr = try FileManager.default.attributesOfItem(atPath: localUrl.absoluteString)
-                    fileSize = fileAttr[FileAttributeKey.size] as! UInt64
-                    let nsInputStream = InputStream(fileAtPath: localUrl.absoluteString)
-                    let fileScr = try SecureContentReference(error: ())
-                    let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
-                    let parameters : Parameters = [ "fileSize": fileSize ]
-                    Alamofire.request(uploadSessionUrl!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON(completionHandler: { response in
-                        switch response.result{
-                        case .success(let value):
-                            if let dict = value as? [String : Any]{
-                                let uploadUrl = URL(string: dict["uploadUrl"] as! String)
-                                let finishUrl = URL(string: dict["finishUploadUrl"] as! String)
-                                
-                                let uploadheadHeader: HTTPHeaders = ["Content-Length": String(fileSize)]
-                                Alamofire.upload(secureInputStream, to: uploadUrl!, method: .put, headers: uploadheadHeader).responseString(completionHandler: { (response) in
-                                    let finishHead: HTTPHeaders = [ "Authorization" : "Bearer " + token!,
-                                                                    "Content-Type": "application/json;charset=UTF-8"]
-                                    let pramDict = ["size":fileSize]
-                                    do{
-                                        var request = try Alamofire.URLRequest(url: finishUrl!, method: .post, headers: finishHead)
-                                        let pramData = try JSONSerialization.data(withJSONObject: pramDict, options: .prettyPrinted)
-                                        request.httpBody = pramData
-                                        Alamofire.request(request).responseJSON(completionHandler: { (response) in
-                                            switch response.result{
-                                            case .success(let value):
-                                                if let dict = value as? [String : Any]{
-                                                    let fileUrl = dict["url"] as! String
-                                                    let downLoadUrl = dict["downloadUrl"] as! String
-                                                    self.finishUploadFile(localUrl: localUrl, fileSize: fileSize,fileUrl: fileUrl, downloadUrl: downLoadUrl, fileScr: fileScr,accessToken: token!)
-                                                }
-                                                break
-                                            case .failure:
-                                                break
-                                            }
-                                        })
-                                    } catch{}
-                                })
-                            }
-                            break
-                        case .failure(let error):
-                            SDKLogger.shared.debug("error: \(error.localizedDescription)")
-                            self.cancel()
-                            break
-                        }
-                    })
-                    
-                }
-            }catch let error as NSError{
-                SDKLogger.shared.debug("File Create Error - \(error.description)")
-                self.cancel()
+            for file in files{
+                let uploadOperation = UploadFileOperation(token: token!, spaceUrl: spaceUrl, fileModel: file, keyMatiarial: self.keyMaterial! ,progressHandler: { (progress) in
+                    if let progressHandler = self.uploadingProgressHandler{
+                        progressHandler(file, progress)
+                    }
+                }, completionHandler: { (file, state) in
+                    self.finishUploadFile()
+                })
+                uploadOperation.start()
             }
         }
     }
-    private func finishUploadFile(localUrl: URL, fileSize: UInt64,fileUrl: String, downloadUrl: String, fileScr: SecureContentReference,accessToken: String){
-        SDKLogger.shared.info("Finish Up load Data")
-        do{
-            let fileName = try CjoseWrapper.ciphertext(fromContent: localUrl.lastPathComponent.data(using: .utf8), key: self.keyMaterial!)
-            fileScr.loc = URL(string: downloadUrl)!
-            let chiperfileSrc = try fileScr.encryptedSecureContentReference(withKey: self.keyMaterial!)
-            let mimeType = self.mimeType(fromFilename: localUrl.lastPathComponent)
-            
-            var fileDict : [String : Any] = ["displayName" : fileName,
-                                             "objectType" : "file",
-                                             "mimeType": mimeType,
-                                             "fileSize": fileSize,
-                                             "scr" : chiperfileSrc,
-                                             "url" : downloadUrl]
-            if(mimeType.hasPrefix("image") || mimeType.hasPrefix("documents")){
-                let imageDict : [String : Any] = ["mimeType": "image/png",
-                                                  "scr" : chiperfileSrc,
-                                                  "url" : downloadUrl,
-                                                  "height": 900,
-                                                  "width" : 640]
-                fileDict["image"] = imageDict
-            }
-            
-            let fileObj = FileObjectModel(JSON: fileDict)
-            self.fileModelArray?.append(fileObj!)
-            
-            if(self.fileModelArray?.count == self.files?.count){
-                guard let encryptionUrl = self.encryptionUrl else {
-                    return
-                }
-                let header : [String: String]  = ["Authorization" : "Bearer " + accessToken]
-                let body = RequestParameter([
-                    "verb": "share",
-                    "encryptionKeyUrl" : encryptionUrl,
-                    "object" : createActivityObject(objectType: "content",messagaActivity: self.messageActivity).toJSON(),
-                    "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
-                    ])
-                let request = requestBuilder()
-                    .headers(header)
-                    .method(.post)
-                    .body(body)
-                    .queue(self.queue)
-                    .build()
-                request.responseObject(self.completionHandler)
-            }
-        }catch{
-            self.cancel()
+    private func finishUploadFile(){
+        if ((self.files?.filter({$0.url == nil}).first) != nil){
+            return
+        }else{
+            self.shareOperation()
         }
     }
     
+    private func shareOperation(){
+        guard let encryptionUrl = self.encryptionUrl else {
+            return
+        }
+        let body = RequestParameter([
+            "verb": "share",
+            "encryptionKeyUrl" : encryptionUrl,
+            "object" : createActivityObject(objectType: "comment",messagaActivity: self.messageActivity).toJSON(),
+            "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
+            ])
+        let request = requestBuilder()
+            .method(.post)
+            .body(body)
+            .queue(self.queue)
+            .build()
+        request.responseObject(self.completionHandler)
+    }
     
     private func postOperation(){
         guard let encryptionUrl = self.encryptionUrl else {
@@ -255,7 +189,7 @@ class PostMessageOperation: Operation {
     private func createActivityObject(objectType: String,
                                       messagaActivity: MessageActivity) -> ActivityObjectModel
     {
-        var model = ActivityObjectModel()
+        let model = ActivityObjectModel()
         model.objectType = objectType
         if let objectIdStr = messagaActivity.activityId{
             model.id = objectIdStr
@@ -294,21 +228,30 @@ class PostMessageOperation: Operation {
                 model.displayName = displayNameChiper
                 model.content = contentChiper
             }catch let error as NSError {
-                SDKLogger.shared.debug("Process Activity Error - \(error.description)")
+                SDKLogger.shared.debug("Process Posting Activity Error - \(error.description)")
                 self.cancel()
             }
         }
         
-        if let fileDictList = self.fileModelArray{
-            model.contentCategory = "documents"
-            model.objectType = "content"
-            model.files = ["items" : fileDictList]
+        if let files = self.files{
+            do {
+                for file in files{
+                    let chiperFileName = try CjoseWrapper.ciphertext(fromContent: file.displayName?.data(using: .utf8), key: keyMaterial)
+                    file.displayName = chiperFileName
+                }
+                model.contentCategory = "documents"
+                model.objectType = "content"
+                model.files = ["items" : files]
+            }catch let error as NSError {
+                SDKLogger.shared.debug("Process Posting Activity Files Error - \(error.description)")
+                self.cancel()
+            }
         }
         return model
     }
     
     private func createActivityTarget(conversationId: String? = nil) -> ActivityTargetModel{
-        var model = ActivityTargetModel()
+        let model = ActivityTargetModel()
         model.objectType = "conversation"
         if let idStr = conversationId{
             model.id = idStr

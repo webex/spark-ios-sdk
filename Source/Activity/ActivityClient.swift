@@ -122,8 +122,9 @@ public class ActivityClient {
     public func postMessage(conversationID: String,
                             content: String?=nil,
                             mentions: [ActivityMentionModel]? = nil,
-                            files: [URL]? = nil,
+                            files: [FileObjectModel]? = nil,
                             queue: DispatchQueue? = nil,
+                            uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
                             completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         
@@ -137,7 +138,7 @@ public class ActivityClient {
         
         if let fileList = files {
             messageActivity.action = MessageAction.share
-            messageActivity.localFileList = fileList
+            messageActivity.files = fileList
             if self.readyToShareFor(conversationID){
                 let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
@@ -146,6 +147,7 @@ public class ActivityClient {
                                                             keyMaterial:  roomResource?.keyMaterial,
                                                             spaceUrl: roomResource?.spaceUrl,
                                                             queue:queue,
+                                                            uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
                 SDKLogger.shared.info("Activity Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
@@ -174,6 +176,7 @@ public class ActivityClient {
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                     messageActivity: messageActivity,
                                                     queue:queue,
+                                                    uploadingProgressHandler : uploadProgressHandler,
                                                     completionHandler: completionHandler)
         SDKLogger.shared.info("Activity Added POSTing Queue...")
         self.pendingOperationList.append(msgPostOperation)
@@ -341,7 +344,7 @@ public class ActivityClient {
     private var ephemeralKeyRequest: KmsEphemeralKeyRequest?
     private var ephemeralKeyFetched: Bool = false
     private var ephemeralKeyStr: String = ""
-
+    
     init(authenticator: Authenticator, diviceUrl: URL) {
         self.authenticator = authenticator
         self.deviceUrl = diviceUrl
@@ -431,7 +434,6 @@ public class ActivityClient {
                 messageActivity.markDownString()
             }
             if let files = messageActivity.files{
-                var newFiles = [FileObjectModel]()
                 for file in files{
                     if let displayname = file.displayName,
                         let src = file.scr
@@ -440,11 +442,10 @@ public class ActivityClient {
                         let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
                         let srcData = try CjoseWrapper.content(fromCiphertext: src, key: acitivityKeyMaterial)
                         let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
-                        let newFile = FileObjectModel(displayName: clearName , mimeType: file.mimeType, objectType: file.objectType, image: file.image, fileSize: file.fileSize, scr: clearSrc, url: file.url)
-                        newFiles.append(newFile)
+                        file.displayName = clearName
+                        file.scr = clearSrc
                     }
                 }
-                messageActivity.files = newFiles
             }
             self.onMessageActivity?(messageActivity)
         }catch let error as NSError {
@@ -488,7 +489,7 @@ public class ActivityClient {
     }
     
     // MARK: KeyMaterial/EncryptionUrl/SpaceUrl Info Request Part
-
+    
     private func requestEncryptionUrlFor(_ convasationId: String){
         
         let path = "conversations/" + convasationId
@@ -537,7 +538,7 @@ public class ActivityClient {
     
     private func requestKeyMaterial(_ encryptionUrl: String){
         if let roomResouce = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
-           let _ = roomResouce.keyMaterial{
+            let _ = roomResouce.keyMaterial{
             return
         }else{
             do{
@@ -721,7 +722,7 @@ public class ActivityClient {
     private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }
-
+    
     
     private var isClientReady: Bool{
         get{
