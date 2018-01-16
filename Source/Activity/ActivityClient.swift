@@ -317,6 +317,23 @@ public class ActivityClient {
         request.responseJSON(completionHandler)
     }
     
+    public func downLoadFile(conversationID: String,
+                             file: FileObjectModel,
+                             downLoadProgressHandler: ((Double)->Void)? = nil,
+                             completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
+        
+        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
+                                                      uuid: self.uuid,
+                                                      fileModel: file,
+                                                      keyMatiarial: (roomResource?.keyMaterial)!,
+                                                      progressHandler: downLoadProgressHandler,
+                                                      completionHandler:completionHandler)
+        
+        SDKLogger.shared.info("File Added Downloading Queue...")
+        self.executeOperationQueue.addOperation(downLoadOperation)
+        
+    }
     
     // MARK: Encryption Feature Variables
     /// ActivityClient Errors
@@ -436,17 +453,24 @@ public class ActivityClient {
             if let files = messageActivity.files{
                 for file in files{
                     if let displayname = file.displayName,
-                        let src = file.scr
+                        let scr = file.scr
                     {
                         let nameData = try CjoseWrapper.content(fromCiphertext: displayname, key: acitivityKeyMaterial)
                         let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
-                        let srcData = try CjoseWrapper.content(fromCiphertext: src, key: acitivityKeyMaterial)
+                        let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
                         let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        if let image = file.image{
+                            let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
+                            let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                            image.scr = imageClearSrc
+                        }
                         file.displayName = clearName
                         file.scr = clearSrc
                     }
                 }
+                messageActivity.files = files
             }
+            
             self.onMessageActivity?(messageActivity)
         }catch let error as NSError {
             SDKLogger.shared.debug("Process Activity Error - \(error.description)")
