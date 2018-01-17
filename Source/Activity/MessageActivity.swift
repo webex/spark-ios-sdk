@@ -30,6 +30,7 @@ public enum MessageAction : String{
     case post = "post"
     case share = "share"
     case delete = "delete"
+    case update = "update"
     case none = "none"
 }
 

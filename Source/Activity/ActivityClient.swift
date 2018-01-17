@@ -66,14 +66,13 @@ public class ActivityClient {
                                       midDate: String? = nil,
                                       limit: Int? = nil,
                                       personRefresh: Bool? = false,
-                                      lastActivityFirst: Bool? = false,
+                                      lastActivityFirst: Bool? = true,
                                       queue: DispatchQueue? = nil,
                                       completionHandler: @escaping (ServiceResponse<[MessageActivity]>) -> Void)
     {
         let query = RequestParameter([
             "conversationId": conversationId,
             "sinceDate": sinceDate,
-            "maxDate": maxDate,
             "maxDate": maxDate,
             "midDate": midDate,
             "limit": limit,
@@ -82,6 +81,7 @@ public class ActivityClient {
             ])
         
         let request = activityServiceBuilder().path("activities")
+            .keyPath("items")
             .method(.get)
             .query(query)
             .queue(queue)
