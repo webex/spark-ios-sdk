@@ -23,9 +23,29 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-private let SparkTempPath = NSTemporaryDirectory()
 
-/// The struct of a UploadFileOperation on Cisco Spark.
+private var SparkTempPath: String {
+    get{
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
+            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+            return path
+        } catch _ as NSError {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
+            return path
+        }
+    }
+}
+
+/// The struct of a DownLoadType on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum DownLoadType : String{
+    case BodyAndThumb
+    case ThumbOnly
+    case BodyOnly
+}
+/// The struct of a DownloadFileOperationState on Cisco Spark.
 ///
 /// - since: 1.4.0
 public enum FileDownLoadState : String{
@@ -56,10 +76,12 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     private var bodyDownLoadFinish: Bool = false
     private var thumbNailDownLoadFinish: Bool = false
     private var keyMatiarial: String
+    private var downLoadType : DownLoadType
     init(token: String,
          uuid: String,
          fileModel: FileObjectModel,
          keyMatiarial: String,
+         downLoadType: DownLoadType? = .BodyAndThumb,
          progressHandler: ((Double) -> Void)? = nil,
          completionHandler: @escaping ((FileObjectModel,FileDownLoadState) -> Void))
     {
@@ -67,6 +89,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
         self.fileModel = fileModel
         self.uuid = uuid
         self.keyMatiarial = keyMatiarial
+        self.downLoadType = downLoadType!
         self.progressHandler = progressHandler
         self.completionHandler = completionHandler
         super.init()
@@ -77,15 +100,28 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     }
     
     private func downLoadOperation(){
-        let trackingID = "ITCLIENT_\(self.uuid)_0" + "_imi:true"
+        switch self.downLoadType {
+        case .BodyAndThumb:
+            self.startThumbAndBodyDownLoad()
+            break
+        case .BodyOnly:
+            self.startBodyOnlyDownLoad()
+            break
+        case .ThumbOnly:
+            self.startThumbOnlyDownLoad()
+            break
+        }
+    }
+    
+    private func startThumbAndBodyDownLoad(){
+        let trackingID = "ITCLIENT_\(self.uuid)_0"
         let config = URLSessionConfiguration.default
-        
         if let image = self.fileModel.image{
             self.hasThumbNail = true
             let urlSTR = image.url
             let urlString = URL(string: urlSTR!)
             self.thumbDownLoadSession = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
-            self.thumbDownLoadPath = SparkTempPath + "thumb_" + self.fileModel.displayName!
+            self.thumbDownLoadPath = createFilePahtWithName("thumb_" + self.fileModel.displayName!)
             var request = NSURLRequest(url: urlString!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0) as URLRequest
             request.setValue("Bearer " + self.token, forHTTPHeaderField: "Authorization")
             request.setValue(trackingID, forHTTPHeaderField: "TrackingID")
@@ -96,54 +132,108 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
         let urlSTR = self.fileModel.url
         let urlString = URL(string: urlSTR!)
         self.bodyDownLoadSeesion = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
-        self.bodyDownLoadPath = SparkTempPath + self.fileModel.displayName!
+        self.bodyDownLoadPath = createFilePahtWithName(self.fileModel.displayName!)
         var request = NSURLRequest(url: urlString!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0) as URLRequest
         request.setValue("Bearer " + self.token, forHTTPHeaderField: "Authorization")
         request.setValue(trackingID, forHTTPHeaderField: "TrackingID")
         if let dataTask = self.bodyDownLoadSeesion?.dataTask(with: request){
             dataTask.resume()
         }
-        
+    }
+    
+    private func startThumbOnlyDownLoad(){
+        let trackingID = "ITCLIENT_\(self.uuid)_0"
+        let config = URLSessionConfiguration.default
+        if let image = self.fileModel.image{
+            self.hasThumbNail = true
+            let urlSTR = image.url
+            let urlString = URL(string: urlSTR!)
+            self.thumbDownLoadSession = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+            self.thumbDownLoadPath = createFilePahtWithName("thumb_" + self.fileModel.displayName!)
+            var request = NSURLRequest(url: urlString!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0) as URLRequest
+            request.setValue("Bearer " + self.token, forHTTPHeaderField: "Authorization")
+            request.setValue(trackingID, forHTTPHeaderField: "TrackingID")
+            if let dataTask = self.thumbDownLoadSession?.dataTask(with: request){
+                dataTask.resume()
+            }
+        }else{
+            self.downLoadError()
+        }
+    }
+    
+    private func startBodyOnlyDownLoad(){
+        let trackingID = "ITCLIENT_\(self.uuid)_0"
+        let config = URLSessionConfiguration.default
+        let urlSTR = self.fileModel.url
+        let urlString = URL(string: urlSTR!)
+        self.bodyDownLoadSeesion = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+        self.bodyDownLoadPath = createFilePahtWithName(self.fileModel.displayName!)
+        var request = NSURLRequest(url: urlString!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0) as URLRequest
+        request.setValue("Bearer " + self.token, forHTTPHeaderField: "Authorization")
+        request.setValue(trackingID, forHTTPHeaderField: "TrackingID")
+        if let dataTask = self.bodyDownLoadSeesion?.dataTask(with: request){
+            dataTask.resume()
+        }
     }
     
     private func downLoadProgress(_ progress: Double){
-        print(progress)
-        
         self.progress += progress
-        if self.hasThumbNail{
-            self.progress = progress
-            if let progressHandler = self.progressHandler{
-                progressHandler((self.progress+self.thumNaliProgress)/2)
+        if(self.downLoadType == .BodyAndThumb){
+            if self.hasThumbNail{
+                if let progressHandler = self.progressHandler{
+                    progressHandler((self.progress+self.thumNaliProgress)/2)
+                }
+            }else{
+                if let progressHandler = self.progressHandler{
+                    progressHandler(self.progress)
+                }
             }
         }else{
-            self.progress += progress
             if let progressHandler = self.progressHandler{
                 progressHandler(self.progress)
             }
         }
     }
     private func downLoadThumbNailProgress(_ progress: Double){
-        print("tumb Progress: \(progress)")
         self.thumNaliProgress += progress
-        if let progressHandler = self.progressHandler{
-            progressHandler((self.progress+self.thumNaliProgress)/2)
+        if self.downLoadType == .ThumbOnly{
+            if let progressHandler = self.progressHandler{
+                progressHandler(self.thumNaliProgress)
+            }
+        }else{
+            if let progressHandler = self.progressHandler{
+                progressHandler((self.progress+self.thumNaliProgress)/2)
+            }
         }
     }
     
     private func finishDownLoadFileBody(){
         self.bodyDownLoadFinish = true
         self.fileModel.localFileUrl = self.bodyDownLoadPath
-        if(!self.hasThumbNail){
-            self.completionHandler(self.fileModel, .DownloadSuccess)
-        }else if(self.hasThumbNail && self.thumbNailDownLoadFinish){
+        if(self.downLoadType == .BodyAndThumb){
+            if(!self.hasThumbNail){
+                self.cancel()
+                self.completionHandler(self.fileModel, .DownloadSuccess)
+            }else if(self.hasThumbNail && self.thumbNailDownLoadFinish){
+                self.cancel()
+                self.completionHandler(self.fileModel, .DownloadSuccess)
+            }
+        }else if(self.downLoadType == .BodyOnly){
+            self.cancel()
             self.completionHandler(self.fileModel, .DownloadSuccess)
         }
     }
     private func finishDownLoadThumbNail(){
         self.thumbNailDownLoadFinish = true
         self.fileModel.image?.localFileUrl = self.thumbDownLoadPath
-        if(self.bodyDownLoadFinish){
+        if(self.downLoadType == .ThumbOnly){
+            self.cancel()
             self.completionHandler(self.fileModel, .DownloadSuccess)
+        }else{
+            if(self.bodyDownLoadFinish){
+                self.cancel()
+                self.completionHandler(self.fileModel, .DownloadSuccess)
+            }
         }
     }
     
@@ -157,7 +247,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
             let stri : String = string.components(separatedBy: "/").last!
             self.totalBodySize = UInt64(stri)!
             do{
-                var outputStream = OutputStream(toMemory: ())
+                var outputStream = OutputStream(toFileAtPath: self.bodyDownLoadPath!, append: true)
                 let jsonstr =  self.fileModel.scr!
                 let scr = try SecureContentReference(json: jsonstr)
                 outputStream = try SecureOutputStream(stream: outputStream, scr: scr) as OutputStream
@@ -202,26 +292,35 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?){
-        //        if(session == self.bodyDownLoadSeesion){
-        if (error == nil) {
+        if(session == self.bodyDownLoadSeesion){
+            if (error != nil) {
+                self.downLoadError()
+            }
+            SDKLogger.shared.info("File DownLoad Finished")
+            self.bodyOutPutStream?.close()
+            self.finishDownLoadFileBody()
+        }else{
+            if (error != nil) {
+                self.downLoadError()
+            }
             
-        }else {
-            print("DownLoad Error \(error.debugDescription)")
+            SDKLogger.shared.info("ThumbNail DownLoad Finished")
+            self.thumbOutPutStream?.close()
+            self.finishDownLoadThumbNail()
         }
-        SDKLogger.shared.info("DownLoad Finished")
-        //            self.bodyOutPutStream?.close()
-        self.finishDownLoadFileBody()
-        //        }else{
-        //            if (error == nil) {
-        //
-        //            }else {
-        //                SDKLogger.shared.info("ThumbNail DownLoad Error \(error.debugDescription)")
-        //            }
-        //            SDKLogger.shared.info("ThumbNail DownLoad Finished")
-        ////            self.thumbOutPutStream?.close()
-        ////            self.finishDownLoadThumbNail()
-        //        }
-        
+    }
+    
+    private func createFilePahtWithName(_ name: String) -> String{
+        let date : Date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMddyyyy:hhmmSSS"
+        let todaysDate = dateFormatter.string(from: date)
+        return SparkTempPath + todaysDate + "-" + name
+    }
+    
+    private func downLoadError(){
+        self.cancel()
+        self.completionHandler(self.fileModel, .DownloadFialure)
     }
 }
 

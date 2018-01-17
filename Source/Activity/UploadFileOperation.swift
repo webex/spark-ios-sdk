@@ -132,13 +132,13 @@ class UploadFileOperation: Operation {
                     break
                 case .failure(let error):
                     SDKLogger.shared.debug("error: \(error.localizedDescription)")
-                    self.cancel()
+                    self.finishUploadWithError()
                     break
                 }
             })
         }catch let error as NSError{
             SDKLogger.shared.debug("File Create Error - \(error.description)")
-            self.cancel()
+            self.finishUploadWithError()
         }
     }
     
@@ -184,7 +184,7 @@ class UploadFileOperation: Operation {
                                                 let chiperfileSrc = try fileScr.encryptedSecureContentReference(withKey: self.keyMatiarial)
                                                 self.fileModel.image?.scr = chiperfileSrc
                                             }catch{}
-                                            self.finishLoadThumbNail(fileScr: fileScr)
+                                            self.finishUpLoadThumbNail(fileScr: fileScr)
                                         }
                                         break
                                     case .failure:
@@ -197,13 +197,13 @@ class UploadFileOperation: Operation {
                     break
                 case .failure(let error):
                     SDKLogger.shared.debug("error: \(error.localizedDescription)")
-                    self.cancel()
+                    self.finishUploadWithError()
                     break
                 }
             })
         }catch let error as NSError{
             SDKLogger.shared.debug("File Create Error - \(error.description)")
-            self.cancel()
+            self.finishUploadWithError()
         }
     }
     
@@ -236,15 +236,15 @@ class UploadFileOperation: Operation {
             self.completionHandler(self.fileModel, .UploadSuccess)
         }
     }
-    private func finishLoadThumbNail(fileScr: SecureContentReference?=nil, error: Error?=nil){
+    private func finishUpLoadThumbNail(fileScr: SecureContentReference?=nil, error: Error?=nil){
         self.thumbNailUploadFinish = true
         if(self.bodyUploadFinish){
             self.completionHandler(self.fileModel, .UploadSuccess)
         }
     }
     
-    private func finishUploadWithError(error: Error?=nil){
-        
+    private func finishUploadWithError(){
+        self.cancel()
+        self.completionHandler(self.fileModel, .UploadFialure)
     }
 }
-

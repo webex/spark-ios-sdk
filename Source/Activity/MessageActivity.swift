@@ -182,7 +182,6 @@ public class MessageActivity: Mappable {
     public required convenience init?(map: Map){
         let acivitiModel = Mapper<ActivityModel>().map(JSON: map.JSON)
         self.init(activitModel: acivitiModel!)
-        self.markDownString()
     }
     
     public func mapping(map: Map) {

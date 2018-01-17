@@ -317,6 +317,14 @@ public class ActivityClient {
         request.responseJSON(completionHandler)
     }
     
+    /// Download a file object, download both file body / thumbnail if exist.
+    ///
+    /// - parameter conversation: The identifier of the conversation where the fike is fetched.
+    /// - parameter file: file object.
+    /// - parameter downLoadProgressHandler: the download progress indicator.
+    /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
+    /// - returns: Void
+    /// - since: 1.4.0
     public func downLoadFile(conversationID: String,
                              file: FileObjectModel,
                              downLoadProgressHandler: ((Double)->Void)? = nil,
@@ -329,11 +337,62 @@ public class ActivityClient {
                                                       keyMatiarial: (roomResource?.keyMaterial)!,
                                                       progressHandler: downLoadProgressHandler,
                                                       completionHandler:completionHandler)
-        
         SDKLogger.shared.info("File Added Downloading Queue...")
         self.executeOperationQueue.addOperation(downLoadOperation)
-        
     }
+    
+    /// Download a file object, download both file thumbnail only if exist.
+    ///
+    /// - parameter conversation: The identifier of the conversation where the fike is fetched.
+    /// - parameter file: file object.
+    /// - parameter downLoadProgressHandler: the download progress indicator.
+    /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func downLoadThumbNail(conversationID: String,
+                                  file: FileObjectModel,
+                                  downLoadProgressHandler: ((Double)->Void)? = nil,
+                                  completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
+        
+        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
+                                                      uuid: self.uuid,
+                                                      fileModel: file,
+                                                      keyMatiarial: (roomResource?.keyMaterial)!,
+                                                      downLoadType: .ThumbOnly,
+                                                      progressHandler: downLoadProgressHandler,
+                                                      completionHandler:completionHandler)
+        SDKLogger.shared.info("File Added Downloading Queue...")
+        self.executeOperationQueue.addOperation(downLoadOperation)
+    }
+    
+    /// Download a file object, download both file body only if exist.
+    ///
+    /// - parameter conversation: The identifier of the conversation where the fike is fetched.
+    /// - parameter file: file object.
+    /// - parameter downLoadProgressHandler: the download progress indicator.
+    /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func downLoadFileBody(conversationID: String,
+                                 file: FileObjectModel,
+                                 downLoadProgressHandler: ((Double)->Void)? = nil,
+                                 completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
+        
+        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
+                                                      uuid: self.uuid,
+                                                      fileModel: file,
+                                                      keyMatiarial: (roomResource?.keyMaterial)!,
+                                                      downLoadType: .BodyOnly,
+                                                      progressHandler: downLoadProgressHandler,
+                                                      completionHandler:completionHandler)
+        SDKLogger.shared.info("File Added Downloading Queue...")
+        self.executeOperationQueue.addOperation(downLoadOperation)
+    }
+    
+    
+    
     
     // MARK: Encryption Feature Variables
     /// ActivityClient Errors
@@ -592,7 +651,6 @@ public class ActivityClient {
             .method(.put)
             .build()
         request.responseJSON{ (response: ServiceResponse<Any>) in
-            print(response)
             switch response.result {
             case .success(let value):
                 guard let responseDict = value as? [String: Any]
