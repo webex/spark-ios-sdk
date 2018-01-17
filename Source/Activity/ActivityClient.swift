@@ -87,7 +87,29 @@ public class ActivityClient {
             .queue(queue)
             .build()
         
-        request.responseArray(completionHandler)
+        if self.readyToPostFor(conversationId){
+            let roomResource = self.roomResourceList.filter({$0.conversationID == conversationId}).first
+            let listOperation = ListActivityOperation(conversationId: conversationId,
+                                                      listRequest: request,
+                                                      keyMaterial: roomResource?.keyMaterial,
+                                                      completionHandler: completionHandler)
+            self.executeOperationQueue.addOperation(listOperation)
+            return
+        }else{
+            if (self.roomResourceList.filter({$0.conversationID == conversationId}).first == nil){
+                let roomSource = AcitivityRoomResourceModel(conversationId: conversationId)
+                self.roomResourceList.append(roomSource)
+            }
+            let listOperation = ListActivityOperation(conversationId: conversationId,
+                                                      listRequest: request,
+                                                      completionHandler: completionHandler)
+            self.pendingListOperationList.append(listOperation)
+            if(!self.isClientReady){
+                self.requestClientInfo()
+            }else{
+                self.requestEncryptionUrlFor(conversationId)
+            }
+        }
     }
     
     /// Detail of one messate activity.
@@ -409,6 +431,7 @@ public class ActivityClient {
     private var kmsRequestList : [KmsRequest] = [KmsRequest]()
     private var receivedActivityList : [MessageActivity] = [MessageActivity]()
     private var pendingOperationList: [PostMessageOperation] = [PostMessageOperation]()
+    private var pendingListOperationList: [ListActivityOperation] = [ListActivityOperation]()
     private var executeOperationQueue: OperationQueue = OperationQueue()
     
     var deviceUrl : URL
@@ -545,6 +568,9 @@ public class ActivityClient {
         }
         /// process post pending activities
         self.processFilePostingMessageActivities(encryptionUrl)
+        
+        /// process pending list requests if exist
+        self.processPendingListRequest(encryptionUrl)
     }
     
     /// Process posting pending activities
@@ -567,6 +593,20 @@ public class ActivityClient {
                         self.requestSpaceUrl(convasationId: pendingOperation.messageActivity.conversationId!)
                     }
                 }
+            }
+        }
+    }
+    /// Process List Acitivities Requests
+    private func processPendingListRequest(_ encryptionUrl: String){
+        if let roomResource = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
+            let keyMaterial = roomResource.keyMaterial
+        {
+            let conversationId = roomResource.conversationID
+            let listActivityRqeustList = self.pendingListOperationList.filter({$0.conversationId == conversationId})
+            for pendingOperation in listActivityRqeustList{
+                pendingOperation.keyMaterial = keyMaterial
+                self.executeOperationQueue.addOperation(pendingOperation)
+                self.pendingListOperationList.removeObject(pendingOperation)
             }
         }
     }

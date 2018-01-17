@@ -13,6 +13,7 @@
 		105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
 		105E8F061FF4BC6800EB33F1 /* PostMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */; };
 		108930E71FFB6F2600363E71 /* AcitivityRoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108930E61FFB6F2600363E71 /* AcitivityRoomResourceModel.swift */; };
+		10BAB764200F6B2300C6CCB7 /* ListActivityOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10BAB763200F6B2300C6CCB7 /* ListActivityOperation.swift */; };
 		10F499B61FDF85E10028426A /* MessageActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B31FDF85E10028426A /* MessageActivity.swift */; };
 		10F499B71FDF85E10028426A /* ActivityClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B41FDF85E10028426A /* ActivityClient.swift */; };
 		10F499B81FDF85E10028426A /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B51FDF85E10028426A /* ActivityModel.swift */; };
@@ -174,6 +175,7 @@
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
 		105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMessageOperation.swift; sourceTree = "<group>"; };
 		108930E61FFB6F2600363E71 /* AcitivityRoomResourceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcitivityRoomResourceModel.swift; sourceTree = "<group>"; };
+		10BAB763200F6B2300C6CCB7 /* ListActivityOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListActivityOperation.swift; sourceTree = "<group>"; };
 		10F499B31FDF85E10028426A /* MessageActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageActivity.swift; sourceTree = "<group>"; };
 		10F499B41FDF85E10028426A /* ActivityClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityClient.swift; sourceTree = "<group>"; };
 		10F499B51FDF85E10028426A /* ActivityModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */,
 				104D5F1B2005C319001F908B /* UploadFileOperation.swift */,
 				104D5F1D2005C330001F908B /* DownLoadFileOperation.swift */,
+				10BAB763200F6B2300C6CCB7 /* ListActivityOperation.swift */,
 			);
 			path = Activity;
 			sourceTree = "<group>";
@@ -994,6 +997,7 @@
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
 				104D5F1E2005C330001F908B /* DownLoadFileOperation.swift in Sources */,
+				10BAB764200F6B2300C6CCB7 /* ListActivityOperation.swift in Sources */,
 				20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
