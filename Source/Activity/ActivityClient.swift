@@ -88,7 +88,7 @@ public class ActivityClient {
             .build()
         
         if self.readyToPostFor(conversationId){
-            let roomResource = self.roomResourceList.filter({$0.conversationID == conversationId}).first
+            let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
             let listOperation = ListActivityOperation(conversationId: conversationId,
                                                       listRequest: request,
                                                       keyMaterial: roomResource?.keyMaterial,
@@ -96,7 +96,7 @@ public class ActivityClient {
             self.executeOperationQueue.addOperation(listOperation)
             return
         }else{
-            if (self.roomResourceList.filter({$0.conversationID == conversationId}).first == nil){
+            if (self.roomResourceList.filter({$0.conversationId == conversationId}).first == nil){
                 let roomSource = AcitivityRoomResourceModel(conversationId: conversationId)
                 self.roomResourceList.append(roomSource)
             }
@@ -141,7 +141,7 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postMessage(conversationID: String,
+    public func postMessage(conversationId: String,
                             content: String?=nil,
                             mentions: [ActivityMentionModel]? = nil,
                             files: [FileObjectModel]? = nil,
@@ -151,7 +151,7 @@ public class ActivityClient {
     {
         
         let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationID
+        messageActivity.conversationId = conversationId
         messageActivity.plainText = content
         
         if let mentionItems = mentions {
@@ -161,8 +161,8 @@ public class ActivityClient {
         if let fileList = files {
             messageActivity.action = MessageAction.share
             messageActivity.files = fileList
-            if self.readyToShareFor(conversationID){
-                let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+            if self.readyToShareFor(conversationId){
+                let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                             messageActivity: messageActivity,
@@ -177,8 +177,8 @@ public class ActivityClient {
             }
         }else{
             messageActivity.action = MessageAction.post
-            if self.readyToPostFor(conversationID){
-                let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+            if self.readyToPostFor(conversationId){
+                let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                             messageActivity: messageActivity,
@@ -191,8 +191,8 @@ public class ActivityClient {
             }
         }
         
-        if (self.roomResourceList.filter({$0.conversationID == conversationID}).first == nil){
-            let roomSource = AcitivityRoomResourceModel(conversationId: conversationID)
+        if (self.roomResourceList.filter({$0.conversationId == conversationId}).first == nil){
+            let roomSource = AcitivityRoomResourceModel(conversationId: conversationId)
             self.roomResourceList.append(roomSource)
         }
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
@@ -205,7 +205,7 @@ public class ActivityClient {
         if(!self.isClientReady){
             self.requestClientInfo()
         }else{
-            self.requestEncryptionUrlFor(conversationID)
+            self.requestEncryptionUrlFor(conversationId)
             
         }
     }
@@ -218,14 +218,14 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func deleteMessage(conversationID: String,
+    public func deleteMessage(conversationId: String,
                               messageActivityId: String,
                               queue: DispatchQueue? = nil,
                               completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         
         let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationID
+        messageActivity.conversationId = conversationId
         messageActivity.activityId = messageActivityId
         messageActivity.action = MessageAction.delete
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
@@ -240,13 +240,13 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func read(conversationID: String,
+    public func read(conversationId: String,
                      massageActivityId: String,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
     {
         let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationID
+        messageActivity.conversationId = conversationId
         messageActivity.activityId = massageActivityId
         messageActivity.action = MessageAction.acknowledge
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
@@ -260,13 +260,13 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func startTyping(conversationID: String,
+    public func startTyping(conversationId: String,
                             queue: DispatchQueue? = nil,
                             completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
         let body = RequestParameter([
             "eventType": "status.start_typing",
-            "conversationId" : conversationID
+            "conversationId" : conversationId
             ])
         let request = activityServiceBuilder().path("status/typing")
             .method(.post)
@@ -283,13 +283,13 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func stopTyping(conversationID: String,
+    public func stopTyping(conversationId: String,
                            queue: DispatchQueue? = nil,
                            completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
         let body = RequestParameter([
             "eventType": "status.stop_typing",
-            "conversationId" : conversationID
+            "conversationId" : conversationId
             ])
         let request = activityServiceBuilder().path("status/typing")
             .method(.post)
@@ -347,12 +347,12 @@ public class ActivityClient {
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
-    public func downLoadFile(conversationID: String,
+    public func downLoadFile(conversationId: String,
                              file: FileObjectModel,
                              downLoadProgressHandler: ((Double)->Void)? = nil,
                              completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
         
-        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
         let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
                                                       uuid: self.uuid,
                                                       fileModel: file,
@@ -371,12 +371,12 @@ public class ActivityClient {
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
-    public func downLoadThumbNail(conversationID: String,
+    public func downLoadThumbNail(conversationId: String,
                                   file: FileObjectModel,
                                   downLoadProgressHandler: ((Double)->Void)? = nil,
                                   completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
         
-        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
         let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
                                                       uuid: self.uuid,
                                                       fileModel: file,
@@ -396,12 +396,12 @@ public class ActivityClient {
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
-    public func downLoadFileBody(conversationID: String,
+    public func downLoadFileBody(conversationId: String,
                                  file: FileObjectModel,
                                  downLoadProgressHandler: ((Double)->Void)? = nil,
                                  completionHandler: @escaping (FileObjectModel,FileDownLoadState) -> Void){
         
-        let roomResource = self.roomResourceList.filter({$0.conversationID == conversationID}).first
+        let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
         let downLoadOperation = DownLoadFileOperation(token: accessTokenStr,
                                                       uuid: self.uuid,
                                                       fileModel: file,
@@ -454,7 +454,7 @@ public class ActivityClient {
     // MARK: Encryption Feature Functions
     public func receiveNewMessageActivity( messageActivity: MessageActivity){
         self.receivedActivityList.append(messageActivity)
-        if self.roomResourceList.filter({$0.conversationID == messageActivity.conversationId}).first == nil{
+        if self.roomResourceList.filter({$0.conversationId == messageActivity.conversationId}).first == nil{
             let roomModel = AcitivityRoomResourceModel(conversationId: messageActivity.conversationId!)
             roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
             self.roomResourceList.append(roomModel)
@@ -506,7 +506,7 @@ public class ActivityClient {
                             self.requestKeyMaterial(encrptionUrl)
                         }
                     }else{
-                        self.requestEncryptionUrlFor(roomResouce.conversationID)
+                        self.requestEncryptionUrlFor(roomResouce.conversationId)
                     }
                 }
             }catch let error as NSError {
@@ -601,7 +601,7 @@ public class ActivityClient {
         if let roomResource = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
             let keyMaterial = roomResource.keyMaterial
         {
-            let conversationId = roomResource.conversationID
+            let conversationId = roomResource.conversationId
             let listActivityRqeustList = self.pendingListOperationList.filter({$0.conversationId == conversationId})
             for pendingOperation in listActivityRqeustList{
                 pendingOperation.keyMaterial = keyMaterial
@@ -634,7 +634,7 @@ public class ActivityClient {
                 }
                 if(responseDict["encryptionKeyUrl"] != nil) {
                     let encryptionUrl = responseDict["encryptionKeyUrl"]
-                    if let room = self.roomResourceList.filter({$0.conversationID == convasationId}).first{
+                    if let room = self.roomResourceList.filter({$0.conversationId == convasationId}).first{
                         if(room.encryptionUrl == nil){
                             room.encryptionUrl = encryptionUrl as? String
                         }else{
@@ -697,7 +697,7 @@ public class ActivityClient {
                     else{
                         return;
                 }
-                if let room = self.roomResourceList.filter({$0.conversationID == convasationId}).first{
+                if let room = self.roomResourceList.filter({$0.conversationId == convasationId}).first{
                     room.spaceUrl = responseDict["spaceUrl"]! as? String
                     self.processFilePostingMessageActivities(room.encryptionUrl!)
                     return;
@@ -860,7 +860,7 @@ public class ActivityClient {
     }
     
     private func readyToPostFor(_ conversationId: String) -> Bool{
-        if let room = self.roomResourceList.filter({$0.conversationID == conversationId}).first{
+        if let room = self.roomResourceList.filter({$0.conversationId == conversationId}).first{
             if let _ = room.encryptionUrl,
                 let _ = room.keyMaterial
             {
@@ -873,7 +873,7 @@ public class ActivityClient {
         }
     }
     private func readyToShareFor(_ conversationId: String) -> Bool{
-        if let room = self.roomResourceList.filter({$0.conversationID == conversationId}).first{
+        if let room = self.roomResourceList.filter({$0.conversationId == conversationId}).first{
             if let _ = room.encryptionUrl,
                 let _ = room.keyMaterial,
                 let _ = room.spaceUrl

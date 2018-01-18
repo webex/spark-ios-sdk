@@ -37,7 +37,7 @@ public class TypingActivity {
     public var actor: ActivityActorModel?{
         return self.activityModel.actor
     }
-    public var conversationID: String?{
+    public var conversationId: String?{
         return self.activityModel.conversationId
     }
     private var activityModel: ActivityModel
@@ -52,3 +52,4 @@ public class TypingActivity {
         self.activityModel <- map
     }
 }
+

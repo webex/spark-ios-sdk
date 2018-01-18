@@ -9,11 +9,11 @@
 import UIKit
 
 class AcitivityRoomResourceModel: NSObject {
-    public var conversationID : String
+    public var conversationId : String
     public var encryptionUrl: String?
     public var keyMaterial: String?
     public var spaceUrl: String?
     init(conversationId: String) {
-       self.conversationID = conversationId
+       self.conversationId = conversationId
     }
 }

@@ -35,6 +35,10 @@ public class FlagActivity : Mappable{
         return FlagAction(rawValue: self.activityModel.action!)
     }
     
+    public var conversationId: String?{
+        return self.activityModel.conversationId
+    }
+
     public var flagItemUrl: String?{
         return self.activityModel.flagItem?.activityUrl
     }

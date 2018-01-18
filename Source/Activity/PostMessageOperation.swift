@@ -236,6 +236,11 @@ class PostMessageOperation: Operation {
         if let files = self.files{
             do {
                 for file in files{
+                    if let displayName = file.displayName{
+                        file.mimeType = self.mimeType(fromFilename: displayName)
+                    }else{
+                        file.mimeType = self.mimeType(fromFilename: "")
+                    }
                     let chiperFileName = try CjoseWrapper.ciphertext(fromContent: file.displayName?.data(using: .utf8), key: keyMaterial)
                     file.displayName = chiperFileName
                 }
