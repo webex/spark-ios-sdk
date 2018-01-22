@@ -161,9 +161,8 @@ public class ActivityClient {
         if let fileList = files {
             messageActivity.action = MessageAction.share
             messageActivity.files = fileList
-            let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
-            SDKLogger.shared.info("Activity Added POSTing Queue...")
             if self.readyToShareFor(conversationId){
+                let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                             messageActivity: messageActivity,
@@ -172,9 +171,11 @@ public class ActivityClient {
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
+                SDKLogger.shared.info("Activity Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
             }else if self.readyToPostFor(conversationId){
+                let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                             messageActivity: messageActivity,
@@ -182,6 +183,7 @@ public class ActivityClient {
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
+                SDKLogger.shared.info("Activity Added POSTing Queue...")
                 self.pendingOperationList.append(msgPostOperation)
                 self.requestSpaceUrl(convasationId: conversationId)
                 return
@@ -643,8 +645,8 @@ public class ActivityClient {
                     else{
                         return
                 }
-                if(responseDict["encryptionKeyUrl"] != nil) {
-                    let encryptionUrl = responseDict["encryptionKeyUrl"]
+                if(responseDict["encryptionKeyUrl"] != nil || responseDict["defaultActivityEncryptionKeyUrl"] != nil) {
+                    let encryptionUrl = responseDict["encryptionKeyUrl"] != nil ? responseDict["encryptionKeyUrl"] : responseDict["defaultActivityEncryptionKeyUrl"]
                     if let room = self.roomResourceList.filter({$0.conversationId == convasationId}).first{
                         if(room.encryptionUrl == nil){
                             room.encryptionUrl = encryptionUrl as? String
