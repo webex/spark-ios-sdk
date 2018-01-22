@@ -161,8 +161,9 @@ public class ActivityClient {
         if let fileList = files {
             messageActivity.action = MessageAction.share
             messageActivity.files = fileList
+            let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
+            SDKLogger.shared.info("Activity Added POSTing Queue...")
             if self.readyToShareFor(conversationId){
-                let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
                                                             messageActivity: messageActivity,
@@ -171,8 +172,18 @@ public class ActivityClient {
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Activity Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
+                return
+            }else if self.readyToPostFor(conversationId){
+                messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
+                let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
+                                                            messageActivity: messageActivity,
+                                                            keyMaterial:  roomResource?.keyMaterial,
+                                                            queue:queue,
+                                                            uploadingProgressHandler : uploadProgressHandler,
+                                                            completionHandler: completionHandler)
+                self.pendingOperationList.append(msgPostOperation)
+                self.requestSpaceUrl(convasationId: conversationId)
                 return
             }
         }else{
