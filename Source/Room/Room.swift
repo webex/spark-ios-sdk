@@ -34,6 +34,21 @@ public enum RoomType: String {
 /// - note: Room has been renamed to Space in Cisco Spark.
 /// - since: 1.2.0
 public struct Room {
+    
+    /// The conversaitonId of this room.
+    ///
+    /// - since: 1.4.0
+    public var conversationId: String?{
+        get {
+            if let id = self.id,
+                let convId = (id.base64Decoded())!.split(separator: "/").last{
+                return String(convId)
+            }else{
+                return nil
+            }
+        }
+    }
+    
     /// The identifier of this room.
     ///
     /// - since: 1.2.0
