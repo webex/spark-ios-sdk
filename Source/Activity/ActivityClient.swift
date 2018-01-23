@@ -442,6 +442,7 @@ public class ActivityClient {
     private let kmsMessageServerUri = ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages"
     private var roomResourceList : [AcitivityRoomResourceModel] = [AcitivityRoomResourceModel]()
     private var kmsRequestList : [KmsRequest] = [KmsRequest]()
+    private var noEncryptionConvasationList : [String] = [String]()
     private var receivedActivityList : [MessageActivity] = [MessageActivity]()
     private var pendingOperationList: [PostMessageOperation] = [PostMessageOperation]()
     private var pendingListOperationList: [ListActivityOperation] = [ListActivityOperation]()
@@ -488,17 +489,28 @@ public class ActivityClient {
                 let responseStr = kmsMessageModel.kmsMessageStrs?.first!
                 let kmsMessageData = try CjoseWrapper.content(fromCiphertext: responseStr, key: self.ephemeralKeyStr)
                 let kmsMessageJson = JSON(data: kmsMessageData)
-                let keyDict = kmsMessageJson["key"].object
-                guard let dict = keyDict as? [String:Any] else{
-                    throw NSError(domain: "error", code: 0, userInfo: nil)
-                }
-                if let keyMaterial = JSON(dict["jwk"]!).rawString(),
-                    let keyUri = JSON(dict["uri"]!).rawString(){
-                    if let room = self.roomResourceList.filter({$0.encryptionUrl == keyUri}).first{
-                        room.keyMaterial = keyMaterial
-                        self.processPendingMessageActivities(keyUri)
+                
+                if let dict = kmsMessageJson["key"].object as? [String:Any]{
+                    if let keyMaterial = JSON(dict["jwk"]!).rawString(),
+                        let keyUri = JSON(dict["uri"]!).rawString(){
+                        if let room = self.roomResourceList.filter({$0.encryptionUrl == keyUri}).first{
+                            room.keyMaterial = keyMaterial
+                            self.processPendingMessageActivities(keyUri)
+                        }
+                        _ = self.kmsRequestList.removeObject(equality: { $0.uri == keyUri})
                     }
-                    _ = self.kmsRequestList.removeObject(equality: { $0.uri == keyUri})
+                }else if let conversationId = self.noEncryptionConvasationList.popLast(),
+                    let keys = kmsMessageJson["keys"].object as? [[String : Any]]{
+                    for keyDict in keys{
+                        let key : KmsKey = try KmsKey(from: keyDict)
+                        let encriptionUrl = key.uri
+                        let keyMaterial = key.jwk
+                        if let room = self.roomResourceList.filter({$0.conversationId == conversationId}).first{
+                            room.keyMaterial = keyMaterial
+                            room.encryptionUrl = encriptionUrl
+                            self.processFilePostingMessageActivitiesWith(conversationId)
+                        }
+                    }
                 }
             }catch let error as NSError {
                 SDKLogger.shared.debug("Error - Receive KmsMessage: \(error.debugDescription)")
@@ -609,6 +621,31 @@ public class ActivityClient {
             }
         }
     }
+    
+    private func processFilePostingMessageActivitiesWith( _ conversationId: String){
+        if let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first,
+            let keyMaterial = roomResource.keyMaterial,
+            let encryptionUrl = roomResource.encryptionUrl
+        {
+            let postPendingActivityArray = self.pendingOperationList.filter({$0.messageActivity.conversationId == conversationId})
+            for pendingOperation in postPendingActivityArray{
+                pendingOperation.keyMaterial = keyMaterial
+                pendingOperation.encryptionUrl = encryptionUrl
+                if(pendingOperation.messageActivity.action == .post){
+                    self.executeOperationQueue.addOperation(pendingOperation)
+                    self.pendingOperationList.removeObject(pendingOperation)
+                }else{
+                    if let spaceUrl =  roomResource.spaceUrl{
+                        pendingOperation.spaceUrl = spaceUrl
+                        self.executeOperationQueue.addOperation(pendingOperation)
+                        self.pendingOperationList.removeObject(pendingOperation)
+                    }else{
+                        self.requestSpaceUrl(convasationId: pendingOperation.messageActivity.conversationId!)
+                    }
+                }
+            }
+        }
+    }
     /// Process List Acitivities Requests
     private func processPendingListRequest(_ encryptionUrl: String){
         if let roomResource = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
@@ -645,7 +682,7 @@ public class ActivityClient {
                     else{
                         return
                 }
-                if(responseDict["encryptionKeyUrl"] != nil || responseDict["defaultActivityEncryptionKeyUrl"] != nil) {
+                if(responseDict["encryptionKeyUrl"] != nil  || responseDict["defaultActivityEncryptionKeyUrl"] != nil) {
                     let encryptionUrl = responseDict["encryptionKeyUrl"] != nil ? responseDict["encryptionKeyUrl"] : responseDict["defaultActivityEncryptionKeyUrl"]
                     if let room = self.roomResourceList.filter({$0.conversationId == convasationId}).first{
                         if(room.encryptionUrl == nil){
@@ -660,6 +697,26 @@ public class ActivityClient {
                         pendingOperation.encryptionUrl = encryptionUrl as? String
                     }
                     self.requestKeyMaterial(encryptionUrl as! String)
+                }else{
+                    do{
+                        let kmsRequest = try KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString , userId: self.userId, bearer: self.accessTokenStr, method: "create", uri: "/keys")
+                        kmsRequest.additionalAttributes = ["count" : 1]
+                        let serrizeData = kmsRequest.serialize()
+                        let chiperText = try CjoseWrapper.ciphertext(fromContent: serrizeData?.data(using: .utf8), key: self.ephemeralKeyStr)
+                        let kmsMessages = [chiperText]
+                        let parameters = ["kmsMessages" : kmsMessages, "destination" : "unused" ] as [String : Any]
+                        let header : [String: String]  = ["Cisco-Request-ID" : self.uuid,
+                                                          "Authorization" : "Bearer " + self.accessTokenStr]
+                        let url = URL(string: self.kmsMessageServerUri)
+                        Alamofire.request(url!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseString(completionHandler: { (response) in
+                            SDKLogger.shared.debug("RequestKMS UnUsed Key Response ============  \(response)")
+                            if self.noEncryptionConvasationList.filter({$0 == convasationId}).first == nil{
+                                self.noEncryptionConvasationList.append(convasationId)
+                            }
+                        })
+                    }catch let error as NSError{
+                        SDKLogger.shared.debug("Error - CreateKMSReuqes: \(error.description)")
+                    }
                 }
                 break
             case .failure:

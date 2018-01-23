@@ -26,3 +26,5 @@ FOUNDATION_EXPORT const unsigned char SparkSDKEncryptionKitVersionString[];
 #import <SparkSDKEncryptionKit/CipherA256GCM.h>
 #import <SparkSDKEncryptionKit/SecureInputStream.h>
 #import <SparkSDKEncryptionKit/SecureOutputStream.h>
+#import <SparkSDKEncryptionKit/KmsKey.h>
+
