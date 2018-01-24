@@ -103,8 +103,14 @@ class PostMessageOperation: Operation {
                     if let progressHandler = self.uploadingProgressHandler{
                         progressHandler(file, progress)
                     }
-                }, completionHandler: { (file, state) in
-                    self.finishUploadFile()
+                }, completionHandler: { (file, error) in
+                    if let err = error {
+                        self.cancel()
+                        let result = Result<MessageActivity>.failure(err)
+                        self.completionHandler(ServiceResponse(nil, result))
+                    }else{
+                        self.finishUploadFile()
+                    }
                 })
                 uploadOperation.start()
             }
@@ -208,7 +214,7 @@ class PostMessageOperation: Operation {
                         let mentionContent = markedUpContent[startPosition..<endPostion]
                         let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.count - mentionContent.count) + 1
+                        mentionStringLength += (markupStr.count - mentionContent.count)
                     }else{
                         /// group mention codes goes heere
                     }
@@ -223,10 +229,12 @@ class PostMessageOperation: Operation {
         }
         if let keyMaterial = self.keyMaterial{
             do {
-                let displayNameChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
-                let contentChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
-                model.displayName = displayNameChiper
-                model.content = contentChiper
+                if(model.content != nil && model.content != ""){
+                    let displayNameChiper = try CjoseWrapper.ciphertext(fromContent: model.displayName?.data(using: .utf8), key: keyMaterial)
+                    let contentChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
+                    model.displayName = displayNameChiper
+                    model.content = contentChiper
+                }
             }catch let error as NSError {
                 SDKLogger.shared.debug("Process Posting Activity Error - \(error.description)")
                 self.cancel()

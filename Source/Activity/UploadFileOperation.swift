@@ -42,7 +42,7 @@ class UploadFileOperation: Operation {
     private var progress : Double = 0.0
     private var thumNaliProgress: Double = 0.0
     private var progressHandler : ((Double) -> Void)?
-    private var completionHandler : ((FileObjectModel,FileUploadState) -> Void)
+    private var completionHandler : ((FileObjectModel,Error?) -> Void)
     private var uploadState : FileUploadState = FileUploadState.Initiated
     private var bodyUploadFinish: Bool = false
     private var thumbNailUploadFinish: Bool = false
@@ -52,7 +52,7 @@ class UploadFileOperation: Operation {
          fileModel: FileObjectModel,
          keyMatiarial: String,
          progressHandler: ((Double) -> Void)? = nil,
-         completionHandler: @escaping ((FileObjectModel,FileUploadState) -> Void))
+         completionHandler: @escaping ((FileObjectModel,Error?) -> Void))
     {
         self.token = token
         self.fileModel = fileModel
@@ -82,9 +82,10 @@ class UploadFileOperation: Operation {
         do{
             SDKLogger.shared.info("Begin To Upload File Data ......")
             self.uploadState = .Uploading
-            let fileAttr = try FileManager.default.attributesOfItem(atPath: self.fileModel.localFileUrl!)
+            let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
+            let fileAttr = try FileManager.default.attributesOfItem(atPath: fileUrl!)
             fileSize = fileAttr[FileAttributeKey.size] as! UInt64
-            let nsInputStream = InputStream(fileAtPath: self.fileModel.localFileUrl!)
+            let nsInputStream = InputStream(fileAtPath: fileUrl!)
             let fileScr = try SecureContentReference(error: ())
             let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
             let parameters : Parameters = ["fileSize": fileSize]
@@ -131,14 +132,12 @@ class UploadFileOperation: Operation {
                     }
                     break
                 case .failure(let error):
-                    SDKLogger.shared.debug("error: \(error.localizedDescription)")
-                    self.finishUploadWithError()
+                    self.finishUploadWithError(error)
                     break
                 }
             })
         }catch let error as NSError{
-            SDKLogger.shared.debug("File Create Error - \(error.description)")
-            self.finishUploadWithError()
+            self.finishUploadWithError(error)
         }
     }
     
@@ -196,14 +195,12 @@ class UploadFileOperation: Operation {
                     }
                     break
                 case .failure(let error):
-                    SDKLogger.shared.debug("error: \(error.localizedDescription)")
-                    self.finishUploadWithError()
+                    self.finishUploadWithError(error)
                     break
                 }
             })
         }catch let error as NSError{
-            SDKLogger.shared.debug("File Create Error - \(error.description)")
-            self.finishUploadWithError()
+            self.finishUploadWithError(error)
         }
     }
     
@@ -231,20 +228,20 @@ class UploadFileOperation: Operation {
     private func finishUploadFileBody(fileScr: SecureContentReference?=nil){
         self.bodyUploadFinish = true
         if(!self.hasThumbNail){
-            self.completionHandler(self.fileModel, .UploadSuccess)
+            self.completionHandler(self.fileModel, nil)
         }else if(self.hasThumbNail && self.thumbNailUploadFinish){
-            self.completionHandler(self.fileModel, .UploadSuccess)
+            self.completionHandler(self.fileModel, nil)
         }
     }
     private func finishUpLoadThumbNail(fileScr: SecureContentReference?=nil, error: Error?=nil){
         self.thumbNailUploadFinish = true
         if(self.bodyUploadFinish){
-            self.completionHandler(self.fileModel, .UploadSuccess)
+            self.completionHandler(self.fileModel, nil)
         }
     }
     
-    private func finishUploadWithError(){
+    private func finishUploadWithError(_ error : Error){
         self.cancel()
-        self.completionHandler(self.fileModel, .UploadFialure)
+        self.completionHandler(self.fileModel, error)
     }
 }

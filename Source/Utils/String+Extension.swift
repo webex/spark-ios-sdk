@@ -49,11 +49,11 @@ extension String {
         }
         return nil
     }
-
+    
     subscript(r: Range<Int>) -> String {
         get {
             let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
-            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound+1)
+            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound)
             
             return self[Range(uncheckedBounds: (startIndex, endIndex))]
         }
@@ -66,5 +66,6 @@ extension String {
             return self[Range(uncheckedBounds: (startIndex, endIndex))]
         }
     }
-
+    
 }
+
