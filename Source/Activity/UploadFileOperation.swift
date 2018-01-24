@@ -148,9 +148,10 @@ class UploadFileOperation: Operation {
         var fileSize: UInt64 = 0
         do{
             SDKLogger.shared.info("Begin To Uploading Thumbnail Data ......")
-            let fileAttr = try FileManager.default.attributesOfItem(atPath: (self.fileModel.image?.localFileUrl!)!)
+            let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
+            let fileAttr = try FileManager.default.attributesOfItem(atPath:fileUrl!)
             fileSize = fileAttr[FileAttributeKey.size] as! UInt64
-            let nsInputStream = InputStream(fileAtPath: (self.fileModel.image?.localFileUrl!)!)
+            let nsInputStream = InputStream(fileAtPath: fileUrl!)
             let fileScr = try SecureContentReference(error: ())
             let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
             let parameters : Parameters = [ "fileSize": fileSize ]
