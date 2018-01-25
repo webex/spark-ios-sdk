@@ -87,7 +87,7 @@ public class ActivityClient {
             .queue(queue)
             .build()
         
-        if self.readyToPostFor(conversationId){
+        if self.encryptKeyReadyFor(conversationId){
             let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
             let listOperation = ListActivityOperation(conversationId: conversationId,
                                                       listRequest: request,
@@ -128,7 +128,22 @@ public class ActivityClient {
             .path(activityID)
             .queue(queue)
             .build()
-        request.responseObject(completionHandler)
+        request.responseObject { (response : ServiceResponse<MessageActivity>) in
+            switch response.result{
+            case .success(let message):
+                if self.encryptKeyReadyFor(message.conversationId!){
+                    self.decryptMessage(message)
+                    completionHandler(response)
+                }else{
+                    self.pendingDetailMessageList[message.activityId!] = completionHandler
+                    self.receiveNewMessageActivity(messageActivity: message)
+                }
+                break
+            case .failure(_):
+                completionHandler(response)
+                break
+            }
+        }
     }
     
     /// Posts a plain text message, to a conversation by conversation Id.
@@ -174,7 +189,7 @@ public class ActivityClient {
                 SDKLogger.shared.info("Activity Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
-            }else if self.readyToPostFor(conversationId){
+            }else if self.encryptKeyReadyFor(conversationId){
                 let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
@@ -190,7 +205,7 @@ public class ActivityClient {
             }
         }else{
             messageActivity.action = MessageAction.post
-            if self.readyToPostFor(conversationId){
+            if self.encryptKeyReadyFor(conversationId){
                 let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
                 messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
@@ -446,6 +461,7 @@ public class ActivityClient {
     private var receivedActivityList : [MessageActivity] = [MessageActivity]()
     private var pendingOperationList: [PostMessageOperation] = [PostMessageOperation]()
     private var pendingListOperationList: [ListActivityOperation] = [ListActivityOperation]()
+    private var pendingDetailMessageList: [String: (ServiceResponse<MessageActivity>) -> Void] = [String: (ServiceResponse<MessageActivity>) -> Void]()
     private var executeOperationQueue: OperationQueue = OperationQueue()
     
     var deviceUrl : URL
@@ -467,18 +483,29 @@ public class ActivityClient {
     
     // MARK: Encryption Feature Functions
     public func receiveNewMessageActivity( messageActivity: MessageActivity){
-        self.receivedActivityList.append(messageActivity)
-        if self.roomResourceList.filter({$0.conversationId == messageActivity.conversationId}).first == nil{
-            let roomModel = AcitivityRoomResourceModel(conversationId: messageActivity.conversationId!)
-            roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
-            self.roomResourceList.append(roomModel)
-        }
-        if(!self.isClientReady){
-            self.requestClientInfo()
-        }else if(self.readyToPostFor(messageActivity.conversationId!)){
-            self.processReceivedMessage(messageActivity)
+        if(messageActivity.encryptionKeyUrl != nil){
+            self.receivedActivityList.append(messageActivity)
+            if self.roomResourceList.filter({$0.conversationId == messageActivity.conversationId}).first == nil{
+                let roomModel = AcitivityRoomResourceModel(conversationId: messageActivity.conversationId!)
+                roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
+                self.roomResourceList.append(roomModel)
+            }
+            if(!self.isClientReady){
+                self.requestClientInfo()
+            }else if(self.encryptKeyReadyFor(messageActivity.conversationId!)){
+                self.processReceivedMessage(messageActivity)
+            }else{
+                self.requestKeyMaterial(messageActivity.encryptionKeyUrl!)
+            }
         }else{
-            self.requestKeyMaterial(messageActivity.encryptionKeyUrl!)
+            messageActivity.markDownString()
+            if let comHandler = self.pendingDetailMessageList[messageActivity.activityId!]{
+                let result = Result<MessageActivity>.success(messageActivity)
+                comHandler(ServiceResponse.init(nil, result))
+                self.pendingDetailMessageList.removeValue(forKey: messageActivity.activityId!)
+            }else{
+                self.onMessageActivity?(messageActivity)
+            }
         }
     }
     
@@ -577,12 +604,59 @@ public class ActivityClient {
                 }
                 messageActivity.files = files
             }
-            
-            self.onMessageActivity?(messageActivity)
+            if let comHandler = self.pendingDetailMessageList[messageActivity.activityId!]{
+                let result = Result<MessageActivity>.success(messageActivity)
+                comHandler(ServiceResponse.init(nil, result))
+                self.pendingDetailMessageList.removeValue(forKey: messageActivity.activityId!)
+            }else{
+                self.onMessageActivity?(messageActivity)
+            }
         }catch let error as NSError {
             SDKLogger.shared.debug("Process Activity Error - \(error.description)")
         }
     }
+    
+    private func decryptMessage(_ messageActivity: MessageActivity){
+        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial else{
+            return
+        }
+        _ = self.receivedActivityList.removeObject(equality: { $0.activityId == messageActivity.activityId })
+        do {
+            guard let chiperText = messageActivity.plainText
+                else{
+                    return;
+            }
+            if(chiperText != ""){
+                let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
+                let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
+                messageActivity.plainText = clearText! as String
+                messageActivity.markDownString()
+            }
+            if let files = messageActivity.files{
+                for file in files{
+                    if let displayname = file.displayName,
+                        let scr = file.scr
+                    {
+                        let nameData = try CjoseWrapper.content(fromCiphertext: displayname, key: acitivityKeyMaterial)
+                        let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
+                        let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        if let image = file.image{
+                            let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
+                            let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                            image.scr = imageClearSrc
+                        }
+                        file.displayName = clearName
+                        file.scr = clearSrc
+                    }
+                }
+                messageActivity.files = files
+            }
+        }catch let error as NSError {
+            SDKLogger.shared.debug("Process Activity Error - \(error.description)")
+        }
+    }
+    
     
     /// Process received | posting pending activities
     private func processPendingMessageActivities( _ encryptionUrl: String){
@@ -929,7 +1003,7 @@ public class ActivityClient {
         }
     }
     
-    private func readyToPostFor(_ conversationId: String) -> Bool{
+    private func encryptKeyReadyFor(_ conversationId: String) -> Bool{
         if let room = self.roomResourceList.filter({$0.conversationId == conversationId}).first{
             if let _ = room.encryptionUrl,
                 let _ = room.keyMaterial

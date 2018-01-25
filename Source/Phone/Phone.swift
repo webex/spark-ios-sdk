@@ -224,13 +224,8 @@ public class Phone {
                 switch model.actionType!{
                 case .MessageActivity:
                     let messageActivity = MessageActivity(activitModel: model)
-                    if(messageActivity.encryptionKeyUrl != nil){
-                        if let acitivityClient = self.activityClient{
-                            acitivityClient.receiveNewMessageActivity(messageActivity: messageActivity)
-                        }
-                    }else{
-                        messageActivity.markDownString()
-                        activityClient.onMessageActivity?(messageActivity)
+                    if let acitivityClient = self.activityClient{
+                        acitivityClient.receiveNewMessageActivity(messageActivity: messageActivity)
                     }
                     break
                 case .TypingActivity:
