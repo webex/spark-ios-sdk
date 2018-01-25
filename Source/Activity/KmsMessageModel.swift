@@ -13,7 +13,7 @@ import ObjectMapper
 ///
 /// - since: 1.4.0
 public struct KmsMessageModel {
-    /// The identifier of this activity.
+    /// The identifier of this message.
     public var destination: String?
     public var success : Bool?
     /// The Array of the messages
@@ -22,7 +22,7 @@ public struct KmsMessageModel {
 
 extension KmsMessageModel: Mappable {
     
-    /// Activity constructor.
+    /// Message constructor.
     ///
     /// - note: for internal use only.
     public init?(map: Map){}

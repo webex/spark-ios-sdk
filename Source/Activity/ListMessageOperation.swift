@@ -11,17 +11,17 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-class ListActivityOperation: Operation {
+class ListMessageOperation: Operation {
     var conversationId: String
     var listRequest: ServiceRequest
-    var completionHandler : (ServiceResponse<[MessageActivity]>) -> Void
-    var response: ServiceResponse<[MessageActivity]>?
+    var completionHandler : (ServiceResponse<[Message]>) -> Void
+    var response: ServiceResponse<[Message]>?
     var keyMaterial : String?
     init(conversationId : String,
          listRequest: ServiceRequest,
          keyMaterial: String?=nil,
          queue:DispatchQueue? = nil,
-         completionHandler: @escaping (ServiceResponse<[MessageActivity]>) -> Void)
+         completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
     {
         self.conversationId = conversationId
         self.listRequest = listRequest
@@ -31,7 +31,7 @@ class ListActivityOperation: Operation {
     }
     
     override func main() {
-        self.listRequest.responseArray {(response: ServiceResponse<[MessageActivity]>) in
+        self.listRequest.responseArray {(response: ServiceResponse<[Message]>) in
             self.response = response
             switch response.result{
             case .success(let list):
@@ -44,23 +44,23 @@ class ListActivityOperation: Operation {
         }
     }
     
-    private func decryptList(_ activityList: [MessageActivity]){
+    private func decryptList(_ messageList: [Message]){
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
-        for messageActivity in activityList{
+        for message in messageList{
             do {
-                guard let chiperText = messageActivity.plainText
+                guard let chiperText = message.plainText
                     else{
                         return;
                 }
                 if(chiperText != ""){
                     let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                     let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                    messageActivity.plainText = clearText! as String
-                    messageActivity.markDownString()
+                    message.plainText = clearText! as String
+                    message.markDownString()
                 }
-                if let files = messageActivity.files{
+                if let files = message.files{
                     for file in files{
                         if let displayname = file.displayName,
                             let scr = file.scr
@@ -78,7 +78,7 @@ class ListActivityOperation: Operation {
                             file.scr = clearSrc
                         }
                     }
-                    messageActivity.files = files
+                    message.files = files
                 }
             }catch{}
         }

@@ -22,55 +22,55 @@ import UIKit
 import ObjectMapper
 
 
-/// The struct of a MentionItemType on Cisco Spark.
+/// The struct of a MessageType on Cisco Spark.
 ///
 /// - since: 1.4.0
-public enum ActivityType : String{
-    case MessageActivity
-    case FlagActivity
-    case TypingActivity
+public enum MessageType : String{
+    case TextMessage
+    case FlagMessage
+    case TypingMessage
 }
 
-/// The struct of a Activity on Cisco Spark.
+/// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.4.0
-public class ActivityModel : Mappable {
+public class MessageModel : Mappable {
     
-    /// The identifier of this activity.
+    /// The identifier of this message.
     public var id: String?
     
-    /// The eventType of the activity
+    /// The eventType of the message
     var eventType: String?
     {
         didSet {
             if(eventType == "conversation.activity"){
-                self.actionType = ActivityType.MessageActivity
+                self.messageType = MessageType.TextMessage
             }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
-                self.actionType = ActivityType.TypingActivity
+                self.messageType = MessageType.TypingMessage
             }else if(eventType == "user.app_item"){
-                self.actionType = ActivityType.FlagActivity
+                self.messageType = MessageType.FlagMessage
             }
         }
     }
     
-    /// The activityType of the activity
-    public var actionType: ActivityType?
+    /// The messageType of the message
+    public var messageType: MessageType?
     
-    /// The objectType of the Activity. Default is "activity"
+    /// The objectType of the Message. Default is "message"
     public var objectType: String?
     
-    /// The url of the Activity.
+    /// The url of the Message.
     public var url: String?
     
     
-    /// The the time activity published "YYYY-MM-DDTHH:MM:SS.SSSZ".
+    /// The the time message published "YYYY-MM-DDTHH:MM:SS.SSSZ".
     public var published: Date?
     
     /* The action verb the Activiy do
      add : adding participant to conversation
      leave : leave a conversation
      post : send a text message to conversation
-     acknowledge: acknowledge an activity
+     acknowledge: acknowledge an message
      update: update a conversation title
      hide : hide a conversation
      unhide : unhide a conversation
@@ -79,40 +79,40 @@ public class ActivityModel : Mappable {
      favorite : favorite a conversation
      unfavorite : unfavorite a conversation
      share : share a content with participant in a conversation
-     delete : delete an activity item (the target of this activity)
+     delete : delete an message item (the target of this message)
      */
     public var verb: String?
     
     /// The actor of the Acitivity
-    public var actor: ActivityActorModel?
+    public var actor: MessageActorModel?
     
-    /// The activity object bring message/file info.
-    public var object: ActivityObjectModel?
+    /// The message object bring message/file info.
+    public var object: MessageObjectModel?
     
-    /// The target of the activity
-    public var target: ActivityTargetModel?
+    /// The target of the message
+    public var target: MessageTargetModel?
     
-    /// The clientTempId of the activity
+    /// The clientTempId of the message
     public var clientTempId: String?
     
-    /// The encryptionKeyUrl of the activity
+    /// The encryptionKeyUrl of the message
     public var encryptionKeyUrl: String?
     
-    /// The conversationId of the activity, should only use for receive typing/untyping activity
+    /// The conversationId of the message, should only use for receive typing/untyping message
     public var conversationId: String?
     
     
-    /// The activity flag item action, should only use for receive flag/unflag activity "create"/"delete"
+    /// The message flag item action, should only use for receive flag/unflag message "create"/"delete"
     public var action: String?
-    /// The activity flag item info, should only use for receive flag/unflag activity
-    public var flagItem: ActivityFlagItemModel?
+    /// The message flag item info, should only use for receive flag/unflag message
+    public var flagItem: MessageFlagItemModel?
     
-    /// Activity constructor.
+    /// MessageModel constructor.
     ///
     /// - note: for internal use only.
     public init(){}
     
-    /// Activity constructor.
+    /// Message constructor.
     ///
     /// - note: for internal use only.
     public required init?(map: Map){}
@@ -138,8 +138,8 @@ public class ActivityModel : Mappable {
     }
 }
 
-// MARK: ActivityActorModel
-public class ActivityActorModel : Mappable{
+// MARK: MessageActorModel
+public class MessageActorModel : Mappable{
     public var id: String?
     public var objectType: String?
     public var displayName: String?
@@ -160,8 +160,8 @@ public class ActivityActorModel : Mappable{
     }
 }
 
-// MARK: ActivityObjectModel
-public class ActivityObjectModel : Mappable{
+// MARK: MessageObjectModel
+public class MessageObjectModel : Mappable{
     public var id: String?
     public var objectType: String?
     public var url: String?
@@ -169,7 +169,7 @@ public class ActivityObjectModel : Mappable{
     public var contentCategory: String?
     public var content: String?
     public var contentType: String?
-    public var mentions: [String : [ActivityMentionModel]]?
+    public var mentions: [String : [MessageMentionModel]]?
     public var files: [String: [FileObjectModel]]?
     
     public init(){}
@@ -235,8 +235,8 @@ public class ThumbNailImageModel : Mappable {
     }
 }
 
-// MARK: ActivityTargetModel
-public class ActivityTargetModel : Mappable{
+// MARK: MessageTargetModel
+public class MessageTargetModel : Mappable{
     public var id: String?
     public var objectType: String? // Default is "conversation"
     public var url: String?
@@ -254,9 +254,9 @@ public class ActivityTargetModel : Mappable{
     }
 }
 
-// MARK: ActivityFlagItemModel
-public class ActivityFlagItemModel: Mappable{
-    public var activityUrl: String?
+// MARK: MessageFlagItemModel
+public class MessageFlagItemModel: Mappable{
+    public var messageUrl: String?
     public var state: String? // Default is "flagged/unflagged"
     public var id: String?
     public var url: String?
@@ -264,7 +264,7 @@ public class ActivityFlagItemModel: Mappable{
     
     public required init?(map: Map) {}
     public func mapping(map: Map) {
-        activityUrl <- map["flag-item"]
+        messageUrl <- map["flag-item"]
         state <- map["state"]
         id <- map["id"]
         url <- map["url"]
@@ -272,8 +272,8 @@ public class ActivityFlagItemModel: Mappable{
     }
 }
 
-// MARK: ActivityMentionModel
-public class ActivityMentionModel : Mappable{
+// MARK: MessageMentionModel
+public class MessageMentionModel : Mappable{
     public var id: String
     public var objectType: String?
     public var range: CountableClosedRange<Int>

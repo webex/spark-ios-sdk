@@ -42,57 +42,57 @@ public enum MentionItemType : String{
     case group = "group"
 }
 
-public class MessageActivity: Mappable {
+public class Message: Mappable {
     
-    /// The action of this message activity.
+    /// The action of this message.
     ///
     /// - since: 1.4.0
     public var action: MessageAction?{
         get {
-            return MessageAction(rawValue:self.activityModel.verb!)
+            return MessageAction(rawValue:self.messageModel.verb!)
         }
         set{
-            self.activityModel.verb = newValue?.rawValue
+            self.messageModel.verb = newValue?.rawValue
         }
     }
     
-    /// The actor who created this activity.
+    /// The actor who created this message.
     ///
     /// - since: 1.4.0
-    public var actor: ActivityActorModel?{
-        return self.activityModel.actor
+    public var actor: MessageActorModel?{
+        return self.messageModel.actor
     }
-    /// Where target where this activity sent to.
+    /// Where target where this message sent to.
     ///
     /// - since: 1.4.0
-    public var target: ActivityTargetModel?{
-        return self.activityModel.target
+    public var target: MessageTargetModel?{
+        return self.messageModel.target
     }
     
     /// id of this activty
     ///
     /// - since: 1.4.0
-    public var activityId: String?{
+    public var messageId: String?{
         get {
-            return self.activityModel.id
+            return self.messageModel.id
         }
         set{
-            self.activityModel.id = newValue
+            self.messageModel.id = newValue
         }
     }
     
-    /// url of this activity.
+    /// url of this message.
     ///
     /// - since: 1.4.0
-    public var activityUrl: String?{
-        return self.activityModel.url
+    public var messageUrl: String?{
+        return self.messageModel.url
     }
     
-    /// craate date of this activity
+    /// craate date of this message
     ///
     /// - since: 1.4.0
     public var publishedDate: Date?{
-        return self.activityModel.published
+        return self.messageModel.published
     }
     
     /// plain text without markup
@@ -106,25 +106,25 @@ public class MessageActivity: Mappable {
     /// - since: 1.4.0
     public var files: [FileObjectModel]?
     
-    /// encryptionKeyUrl of this activity
+    /// encryptionKeyUrl of this message
     ///
     /// - since: 1.4.0
     public var encryptionKeyUrl: String?{
         get {
-            return self.activityModel.encryptionKeyUrl
+            return self.messageModel.encryptionKeyUrl
         }
         set{
-            self.activityModel.encryptionKeyUrl = newValue
+            self.messageModel.encryptionKeyUrl = newValue
         }
     }
     
-    /// target conversation id of this activity
+    /// target conversation id of this message
     ///
     /// - since: 1.4.0
     public var conversationId: String?{
         get{
-            if(self.activityModel.conversationId != nil){
-                return self.activityModel.conversationId
+            if(self.messageModel.conversationId != nil){
+                return self.messageModel.conversationId
             }else if self.target != nil{
                 if(target?.objectType == "conversation"){
                     return target?.id
@@ -136,36 +136,36 @@ public class MessageActivity: Mappable {
             }
         }
         set{
-            self.activityModel.conversationId = newValue
+            self.messageModel.conversationId = newValue
         }
     }
     
-    /// markup text of this activity
+    /// markup text of this message
     ///
     /// - since: 1.4.0
     public var markUpText: String?{
-        return self.activityModel.object?.content
+        return self.messageModel.object?.content
     }
     
     
-    /// mention item list of this activity
+    /// mention item list of this message
     ///
     /// - since: 1.4.0
-    public var mentionItems: [ActivityMentionModel]?
+    public var mentionItems: [MessageMentionModel]?
     
-    private var activityModel: ActivityModel
+    private var messageModel: MessageModel
     
     init(){
-        self.activityModel = ActivityModel()
+        self.messageModel = MessageModel()
     }
     
-    init(activitModel: ActivityModel) {
-        self.activityModel = activitModel
+    init(activitModel: MessageModel) {
+        self.messageModel = activitModel
         if(self.action == .post || self.action == .share){
-            if let content = self.activityModel.object?.content{
+            if let content = self.messageModel.object?.content{
                 self.plainText = content
             }else{
-                if let displayName = self.activityModel.object?.displayName{
+                if let displayName = self.messageModel.object?.displayName{
                     self.plainText = displayName
                 }
             }
@@ -174,19 +174,19 @@ public class MessageActivity: Mappable {
         }
         
         if(self.action == .share){
-            if let files = self.activityModel.object?.files!["items"]{
+            if let files = self.messageModel.object?.files!["items"]{
                 self.files = files
             }
         }
     }
     
     public required convenience init?(map: Map){
-        let acivitiModel = Mapper<ActivityModel>().map(JSON: map.JSON)
+        let acivitiModel = Mapper<MessageModel>().map(JSON: map.JSON)
         self.init(activitModel: acivitiModel!)
     }
     
     public func mapping(map: Map) {
-        self.activityModel <- map
+        self.messageModel <- map
     }
     
     /// convert mark up text in to plain text
@@ -194,8 +194,8 @@ public class MessageActivity: Mappable {
     /// - since: 1.4.0
     public func markDownString(){
         var markDownContent = ""
-        if let mentions = self.activityModel.object?.mentions , let content = self.plainText{
-            self.mentionItems = [ActivityMentionModel]()
+        if let mentions = self.messageModel.object?.mentions , let content = self.plainText{
+            self.mentionItems = [MessageMentionModel]()
             markDownContent = content
             let mentionArr = mentions["items"]!
             for index in 0 ..< mentionArr.count{

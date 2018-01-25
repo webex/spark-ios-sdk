@@ -136,16 +136,7 @@ public class Spark {
     public var memberships: MembershipClient {
         return MembershipClient(authenticator: authenticator)
     }
-    
-    /// Messages are how we communicate in a room.
-    /// Use *messages* to manage the messages on behalf of the authenticated user.
-    ///
-    /// - since: 1.2.0
-    /// - see: Rooms API about how to manage rooms.
-    /// - see: Memberships API about how to manage people in a room.
-    public var messages: MessageClient {
-        return MessageClient(authenticator: authenticator)
-    }
+
     
     /// Webhooks allow the application to be notified via HTTP (or HTTPS?) when a specific event occurs in Cisco Spark,
     /// e.g. a new message is posted into a specific room.
@@ -177,14 +168,14 @@ public class Spark {
     }
     
     
-    /// ActivityClient represent activities relates to the user.
+    /// MessageClient represent activities relates to the user.
     /// Use *activities* to create and manage the activities on behalf of the authenticated user.
     ///
     /// - since: 1.4.0
     
-    public var activityClient: ActivityClient?{
-        if let activityCient = self.phone.activityClient{
-            return activityCient
+    public var messageClient: MessageClient?{
+        if let messageCient = self.phone.messageClient{
+            return messageCient
         }else{
             return nil
         }

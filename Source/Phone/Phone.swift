@@ -107,10 +107,10 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
-    /// Activity Client
+    /// Message Client
     ///
     /// - since: 1.4.0
-    public var activityClient: ActivityClient?
+    public var messageClient: MessageClient?
     
     
     let authenticator: Authenticator
@@ -160,7 +160,7 @@ public class Phone {
             }
         }
         
-        self.webSocket.onActivityModel = { [weak self] model in
+        self.webSocket.onMessageModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
                     strong.doConversationAcivityEvent(model);
@@ -199,7 +199,7 @@ public class Phone {
             }
         }
         
-        self.webSocket.onActivityModel = { [weak self] model in
+        self.webSocket.onMessageModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
                     strong.doConversationAcivityEvent(model);
@@ -217,24 +217,22 @@ public class Phone {
     }
     
     
-    private func doConversationAcivityEvent(_ model: ActivityModel){
+    private func doConversationAcivityEvent(_ model: MessageModel){
         //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
-            if let activityClient = self.activityClient{
-                switch model.actionType!{
-                case .MessageActivity:
-                    let messageActivity = MessageActivity(activitModel: model)
-                    if let acitivityClient = self.activityClient{
-                        acitivityClient.receiveNewMessageActivity(messageActivity: messageActivity)
-                    }
+            if let messageClient = self.messageClient{
+                switch model.messageType!{
+                case .TextMessage:
+                    let message = Message(activitModel: model)
+                    messageClient.receiveNewMessage(message: message)
                     break
-                case .TypingActivity:
-                    let typeActivity = TypingActivity(activitModel: model)
-                    activityClient.onTypingActivity?(typeActivity)
+                case .TypingMessage:
+                    let typeMessage = TypingMessage(activitModel: model)
+                    messageClient.onTypingMessage?(typeMessage)
                     break
-                case .FlagActivity:
-                    let flagActivity = FlagActivity(activitModel: model)
-                    activityClient.onFlagActivity?(flagActivity)
+                case .FlagMessage:
+                    let flagMessage = FlagMessage(activitModel: model)
+                    messageClient.onFlagMessage?(flagMessage)
                     break
                 }
             }
@@ -244,7 +242,7 @@ public class Phone {
     private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
         SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
-            if let acitivityClient = self.activityClient{
+            if let acitivityClient = self.messageClient{
                 acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }
@@ -271,7 +269,7 @@ public class Phone {
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
-                        self?.activityClient = ActivityClient(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!)
+                        self?.messageClient = MessageClient(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!)
                         self?.queue.underlying.async {
                             self?.fetchActiveCalls()
                             DispatchQueue.main.async {

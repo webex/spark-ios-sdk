@@ -131,7 +131,7 @@ class ServiceRequest {
         }
     }
 
-    class ActivityServerBuilder{
+    class MessageServerBuilder{
         private static let apiBaseUrl: URL = URL(string: ServiceRequest.CONVERSATION_SERVER_ADDRESS)!
         private let authenticator: Authenticator
         private var headers: [String: String]
@@ -149,7 +149,7 @@ class ServiceRequest {
             self.headers = ["Content-Type": "application/json",
                             "User-Agent": UserAgent.string,
                             "Spark-User-Agent": UserAgent.string]
-            self.baseUrl = ActivityServerBuilder.apiBaseUrl
+            self.baseUrl = MessageServerBuilder.apiBaseUrl
             self.method = .get
             self.path = ""
         }
@@ -158,47 +158,47 @@ class ServiceRequest {
             return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
-        func method(_ method: Alamofire.HTTPMethod) -> ActivityServerBuilder {
+        func method(_ method: Alamofire.HTTPMethod) -> MessageServerBuilder {
             self.method = method
             return self
         }
         
-        func headers(_ headers: [String: String]) -> ActivityServerBuilder {
+        func headers(_ headers: [String: String]) -> MessageServerBuilder {
             self.headers = headers
             return self
         }
         
-        func baseUrl(_ baseUrl: String) -> ActivityServerBuilder {
+        func baseUrl(_ baseUrl: String) -> MessageServerBuilder {
             self.baseUrl = URL(string: baseUrl)!
             return self
         }
         
-        func baseUrl(_ baseUrl: URL) -> ActivityServerBuilder {
+        func baseUrl(_ baseUrl: URL) -> MessageServerBuilder {
             self.baseUrl = baseUrl
             return self
         }
         
-        func path(_ path: String) -> ActivityServerBuilder {
+        func path(_ path: String) -> MessageServerBuilder {
             self.path += "/" + path
             return self
         }
         
-        func body(_ body: RequestParameter) -> ActivityServerBuilder {
+        func body(_ body: RequestParameter) -> MessageServerBuilder {
             self.body = body
             return self
         }
         
-        func query(_ query: RequestParameter) -> ActivityServerBuilder {
+        func query(_ query: RequestParameter) -> MessageServerBuilder {
             self.query = query
             return self
         }
         
-        func keyPath(_ keyPath: String) -> ActivityServerBuilder {
+        func keyPath(_ keyPath: String) -> MessageServerBuilder {
             self.keyPath = keyPath
             return self
         }
         
-        func queue(_ queue: DispatchQueue?) -> ActivityServerBuilder {
+        func queue(_ queue: DispatchQueue?) -> MessageServerBuilder {
             self.queue = queue
             return self
         }

@@ -25,9 +25,9 @@ import MobileCoreServices.UTType
 
 
 class PostMessageOperation: Operation {
-    var messageActivity : MessageActivity
+    var message : Message
     var uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil
-    var completionHandler :  (ServiceResponse<MessageActivity>) -> Void
+    var completionHandler :  (ServiceResponse<Message>) -> Void
     var queue : DispatchQueue?
     var keyMaterial : String?
     var action : MessageAction?
@@ -36,28 +36,28 @@ class PostMessageOperation: Operation {
     var files : [FileObjectModel]?
     var spaceUrl: String?
     init(authenticator: Authenticator,
-         messageActivity: MessageActivity,
+         message: Message,
          keyMaterial: String?=nil,
          spaceUrl: String? = nil,
          queue:DispatchQueue? = nil,
          uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil,
-         completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+         completionHandler: @escaping (ServiceResponse<Message>) -> Void)
     {
         self.authenticator = authenticator
-        self.messageActivity = messageActivity
-        self.action = messageActivity.action
-        self.encryptionUrl = messageActivity.encryptionKeyUrl
+        self.message = message
+        self.action = message.action
+        self.encryptionUrl = message.encryptionKeyUrl
         self.queue = queue
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial
-        if(messageActivity.action == MessageAction.share){
+        if(message.action == MessageAction.share){
             self.spaceUrl = spaceUrl
-            self.files = messageActivity.files
+            self.files = message.files
             self.uploadingProgressHandler = uploadingProgressHandler
         }
         super.init()
         if(self.action == MessageAction.post && self.encryptionUrl == nil){
-            self.name = messageActivity.conversationId!
+            self.name = message.conversationId!
         }
     }
     
@@ -106,7 +106,7 @@ class PostMessageOperation: Operation {
                 }, completionHandler: { (file, error) in
                     if let err = error {
                         self.cancel()
-                        let result = Result<MessageActivity>.failure(err)
+                        let result = Result<Message>.failure(err)
                         self.completionHandler(ServiceResponse(nil, result))
                     }else{
                         self.finishUploadFile()
@@ -131,8 +131,8 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "share",
             "encryptionKeyUrl" : encryptionUrl,
-            "object" : createActivityObject(objectType: "comment",messagaActivity: self.messageActivity).toJSON(),
-            "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
+            "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
+            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -149,8 +149,8 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "post",
             "encryptionKeyUrl" : encryptionUrl,
-            "object" : createActivityObject(objectType: "comment",messagaActivity: self.messageActivity).toJSON(),
-            "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
+            "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
+            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -164,8 +164,8 @@ class PostMessageOperation: Operation {
     private func readOperation(){
         let body = RequestParameter([
             "verb": "acknowledge",
-            "object" : createActivityObject(objectType: "activity", messagaActivity: self.messageActivity).toJSON(),
-            "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
+            "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
+            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -179,8 +179,8 @@ class PostMessageOperation: Operation {
     private func deleteOperation(){
         let body = RequestParameter([
             "verb": "delete",
-            "object" : createActivityObject(objectType: "activity", messagaActivity: self.messageActivity).toJSON(),
-            "target" : createActivityTarget(conversationId: self.messageActivity.conversationId).toJSON()
+            "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
+            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -192,17 +192,17 @@ class PostMessageOperation: Operation {
     
     
     // MARK: Client Private Functions
-    private func createActivityObject(objectType: String,
-                                      messagaActivity: MessageActivity) -> ActivityObjectModel
+    private func createMessageObject(objectType: String,
+                                      message: Message) -> MessageObjectModel
     {
-        let model = ActivityObjectModel()
+        let model = MessageObjectModel()
         model.objectType = objectType
-        if let objectIdStr = messagaActivity.activityId{
+        if let objectIdStr = message.messageId{
             model.id = objectIdStr
         }
-        if let contentStr = messagaActivity.plainText{
+        if let contentStr = message.plainText{
             var markedUpContent = contentStr
-            if let mentionsArr = messagaActivity.mentionItems{
+            if let mentionsArr = message.mentionItems{
                 var mentionStringLength = 0
                 for index in 0..<mentionsArr.count{
                     let mentionItem = mentionsArr[index]
@@ -236,7 +236,7 @@ class PostMessageOperation: Operation {
                     model.content = contentChiper
                 }
             }catch let error as NSError {
-                SDKLogger.shared.debug("Process Posting Activity Error - \(error.description)")
+                SDKLogger.shared.debug("Process Posting Message Error - \(error.description)")
                 self.cancel()
             }
         }
@@ -256,15 +256,15 @@ class PostMessageOperation: Operation {
                 model.objectType = "content"
                 model.files = ["items" : files]
             }catch let error as NSError {
-                SDKLogger.shared.debug("Process Posting Activity Files Error - \(error.description)")
+                SDKLogger.shared.debug("Process Posting Message Files Error - \(error.description)")
                 self.cancel()
             }
         }
         return model
     }
     
-    private func createActivityTarget(conversationId: String? = nil) -> ActivityTargetModel{
-        let model = ActivityTargetModel()
+    private func createMessageTarget(conversationId: String? = nil) -> MessageTargetModel{
+        let model = MessageTargetModel()
         model.objectType = "conversation"
         if let idStr = conversationId{
             model.id = idStr
@@ -288,8 +288,8 @@ class PostMessageOperation: Operation {
         return result
     }
     
-    private func requestBuilder() -> ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator).path("activities")
+    private func requestBuilder() -> ServiceRequest.MessageServerBuilder {
+        return ServiceRequest.MessageServerBuilder(authenticator).path("activities")
     }
     
     private func mimeType(fromFilename filename: String) -> String {

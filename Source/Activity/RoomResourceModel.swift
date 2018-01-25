@@ -1,5 +1,5 @@
 //
-//  ActivityRoomResource.swift
+//  RoomResource.swift
 //  SparkSDK
 //
 //  Created by qucui on 2018/1/2.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AcitivityRoomResourceModel: NSObject {
+class RoomResourceModel: NSObject {
     public var conversationId : String
     public var encryptionUrl: String?
     public var keyMaterial: String?

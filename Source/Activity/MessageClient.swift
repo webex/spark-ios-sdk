@@ -25,22 +25,22 @@ import Alamofire
 import SwiftyJSON
 
 
-public class ActivityClient {
+public class MessageClient {
     
     /// Callback when receive Message.
     ///
     /// - since: 1.4.0
-    public var onMessageActivity:((MessageActivity) -> Void)?
+    public var onMessage:((Message) -> Void)?
     
-    /// Callback when receive acknowledge activity.
+    /// Callback when receive acknowledge message.
     ///
     /// - since: 1.4.0
-    public var onTypingActivity:((TypingActivity) -> Void)?
+    public var onTypingMessage:((TypingMessage) -> Void)?
     
     /// Callback when delete Message.
     ///
     /// - since: 1.4.0
-    public var onFlagActivity:((FlagActivity) -> Void)?
+    public var onFlagMessage:((FlagMessage) -> Void)?
     
     
     let authenticator: Authenticator
@@ -54,21 +54,21 @@ public class ActivityClient {
     /// - parameter midDate: The activities published date is before or after this date. At most limit/2 activities activities before and limit/2 activities after the date will be included, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
     /// - parameter maxDate: the activities published date is before this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
     /// - parameter limit:  Maximum number of activities return. Default is 6.
-    /// - parameter personRefresh: (experimental)control if the person detail in activity need to be refreshed to latest. If person detail got      refreshed, person.id will be in UUID format even if original one is email. Default is false.
-    /// - parameter lastActivityFirst: Sort order for the activities. Default is true.
+    /// - parameter personRefresh: (experimental)control if the person detail in message need to be refreshed to latest. If person detail got      refreshed, person.id will be in UUID format even if original one is email. Default is false.
+    /// - parameter lastMessageFirst: Sort order for the activities. Default is true.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func listMessageActivities(conversationId: String,
-                                      sinceDate: String? = nil,
-                                      maxDate: String? = nil,
-                                      midDate: String? = nil,
-                                      limit: Int? = nil,
-                                      personRefresh: Bool? = false,
-                                      lastActivityFirst: Bool? = true,
-                                      queue: DispatchQueue? = nil,
-                                      completionHandler: @escaping (ServiceResponse<[MessageActivity]>) -> Void)
+    public func list(conversationId: String,
+                    sinceDate: String? = nil,
+                    maxDate: String? = nil,
+                    midDate: String? = nil,
+                    limit: Int? = nil,
+                    personRefresh: Bool? = false,
+                    lastMessageFirst: Bool? = true,
+                    queue: DispatchQueue? = nil,
+                    completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
     {
         let query = RequestParameter([
             "conversationId": conversationId,
@@ -77,10 +77,10 @@ public class ActivityClient {
             "midDate": midDate,
             "limit": limit,
             "personRefresh": personRefresh,
-            "lastActivityFirst": lastActivityFirst,
+            "lastActivityFirst": lastMessageFirst,
             ])
         
-        let request = activityServiceBuilder().path("activities")
+        let request = messageServiceBuilder().path("activities")
             .keyPath("items")
             .method(.get)
             .query(query)
@@ -89,7 +89,7 @@ public class ActivityClient {
         
         if self.encryptKeyReadyFor(conversationId){
             let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
-            let listOperation = ListActivityOperation(conversationId: conversationId,
+            let listOperation = ListMessageOperation(conversationId: conversationId,
                                                       listRequest: request,
                                                       keyMaterial: roomResource?.keyMaterial,
                                                       completionHandler: completionHandler)
@@ -97,10 +97,10 @@ public class ActivityClient {
             return
         }else{
             if (self.roomResourceList.filter({$0.conversationId == conversationId}).first == nil){
-                let roomSource = AcitivityRoomResourceModel(conversationId: conversationId)
+                let roomSource = RoomResourceModel(conversationId: conversationId)
                 self.roomResourceList.append(roomSource)
             }
-            let listOperation = ListActivityOperation(conversationId: conversationId,
+            let listOperation = ListMessageOperation(conversationId: conversationId,
                                                       listRequest: request,
                                                       completionHandler: completionHandler)
             self.pendingListOperationList.append(listOperation)
@@ -112,31 +112,31 @@ public class ActivityClient {
         }
     }
     
-    /// Detail of one messate activity.
+    /// Detail of one message.
     ///
-    /// - parameter activityID: The identifier of the activity.
+    /// - parameter messageID: The identifier of the message.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func messageActivityDetail(activityID: String,
-                                      queue: DispatchQueue? = nil,
-                                      completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+    public func get(messageID: String,
+                    queue: DispatchQueue? = nil,
+                    completionHandler: @escaping (ServiceResponse<Message>) -> Void)
     {
-        let request = activityServiceBuilder().path("activities")
+        let request = messageServiceBuilder().path("activities")
             .method(.get)
-            .path(activityID)
+            .path(messageID)
             .queue(queue)
             .build()
-        request.responseObject { (response : ServiceResponse<MessageActivity>) in
+        request.responseObject { (response : ServiceResponse<Message>) in
             switch response.result{
             case .success(let message):
                 if self.encryptKeyReadyFor(message.conversationId!){
                     self.decryptMessage(message)
                     completionHandler(response)
                 }else{
-                    self.pendingDetailMessageList[message.activityId!] = completionHandler
-                    self.receiveNewMessageActivity(messageActivity: message)
+                    self.pendingDetailMessageList[message.messageId!] = completionHandler
+                    self.receiveNewMessage(message: message)
                 }
                 break
             case .failure(_):
@@ -156,79 +156,79 @@ public class ActivityClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func postMessage(conversationId: String,
-                            content: String?=nil,
-                            mentions: [ActivityMentionModel]? = nil,
-                            files: [FileObjectModel]? = nil,
-                            queue: DispatchQueue? = nil,
-                            uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
-                            completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+    public func post(conversationId: String,
+                     content: String?=nil,
+                     mentions: [MessageMentionModel]? = nil,
+                     files: [FileObjectModel]? = nil,
+                     queue: DispatchQueue? = nil,
+                     uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
+                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
     {
         
-        let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationId
-        messageActivity.plainText = content
+        let message = Message()
+        message.conversationId = conversationId
+        message.plainText = content
         
         if let mentionItems = mentions {
-            messageActivity.mentionItems = mentionItems
+            message.mentionItems = mentionItems
         }
         
         if let fileList = files {
-            messageActivity.action = MessageAction.share
-            messageActivity.files = fileList
+            message.action = MessageAction.share
+            message.files = fileList
             if self.readyToShareFor(conversationId){
                 let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
-                messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
+                message.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
-                                                            messageActivity: messageActivity,
+                                                            message: message,
                                                             keyMaterial:  roomResource?.keyMaterial,
                                                             spaceUrl: roomResource?.spaceUrl,
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Activity Added POSTing Queue...")
+                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
             }else if self.encryptKeyReadyFor(conversationId){
                 let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
-                messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
+                message.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
-                                                            messageActivity: messageActivity,
+                                                            message: message,
                                                             keyMaterial:  roomResource?.keyMaterial,
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Activity Added POSTing Queue...")
+                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.pendingOperationList.append(msgPostOperation)
                 self.requestSpaceUrl(convasationId: conversationId)
                 return
             }
         }else{
-            messageActivity.action = MessageAction.post
+            message.action = MessageAction.post
             if self.encryptKeyReadyFor(conversationId){
                 let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first
-                messageActivity.encryptionKeyUrl = roomResource?.encryptionUrl
+                message.encryptionKeyUrl = roomResource?.encryptionUrl
                 let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
-                                                            messageActivity: messageActivity,
+                                                            message: message,
                                                             keyMaterial:roomResource?.keyMaterial,
                                                             queue:queue,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Activity Added POSTing Queue...")
+                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
             }
         }
         
         if (self.roomResourceList.filter({$0.conversationId == conversationId}).first == nil){
-            let roomSource = AcitivityRoomResourceModel(conversationId: conversationId)
+            let roomSource = RoomResourceModel(conversationId: conversationId)
             self.roomResourceList.append(roomSource)
         }
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator,
-                                                    messageActivity: messageActivity,
+                                                    message: message,
                                                     queue:queue,
                                                     uploadingProgressHandler : uploadProgressHandler,
                                                     completionHandler: completionHandler)
-        SDKLogger.shared.info("Activity Added POSTing Queue...")
+        SDKLogger.shared.info("Message Added POSTing Queue...")
         self.pendingOperationList.append(msgPostOperation)
         if(!self.isClientReady){
             self.requestClientInfo()
@@ -241,43 +241,43 @@ public class ActivityClient {
     /// Deletes a message, to a conversation by conversation Id.
     ///
     /// - parameter conversation: The identifier of the conversation where the message is to be posted.
-    /// - parameter activityId: The messageId to be deleted in the room.
+    /// - parameter messageId: The messageId to be deleted in the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func deleteMessage(conversationId: String,
-                              messageActivityId: String,
-                              queue: DispatchQueue? = nil,
-                              completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+    public func delete(conversationId: String,
+                       messageId: String,
+                       queue: DispatchQueue? = nil,
+                       completionHandler: @escaping (ServiceResponse<Message>) -> Void)
     {
         
-        let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationId
-        messageActivity.activityId = messageActivityId
-        messageActivity.action = MessageAction.delete
-        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        let message = Message()
+        message.conversationId = conversationId
+        message.messageId = messageId
+        message.action = MessageAction.delete
+        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, message: message,queue:queue, completionHandler: completionHandler)
         self.executeOperationQueue.addOperation(msgPostOperation)
     }
     
     /// Post a message read indicator, to a conversation by conversation Id.
     ///
     /// - parameter conversation: The identifier of the conversation where the indicator is to be posted.
-    /// - parameter activityId: The activity that is read .
+    /// - parameter messageId: The message that is read .
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
     public func read(conversationId: String,
-                     massageActivityId: String,
+                     massageId: String,
                      queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<MessageActivity>) -> Void)
+                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
     {
-        let messageActivity = MessageActivity()
-        messageActivity.conversationId = conversationId
-        messageActivity.activityId = massageActivityId
-        messageActivity.action = MessageAction.acknowledge
-        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, messageActivity: messageActivity,queue:queue, completionHandler: completionHandler)
+        let message = Message()
+        message.conversationId = conversationId
+        message.messageId = massageId
+        message.action = MessageAction.acknowledge
+        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, message: message,queue:queue, completionHandler: completionHandler)
         self.executeOperationQueue.addOperation(msgPostOperation)
     }
     
@@ -296,7 +296,7 @@ public class ActivityClient {
             "eventType": "status.start_typing",
             "conversationId" : conversationId
             ])
-        let request = activityServiceBuilder().path("status/typing")
+        let request = messageServiceBuilder().path("status/typing")
             .method(.post)
             .body(body)
             .queue(queue)
@@ -319,7 +319,7 @@ public class ActivityClient {
             "eventType": "status.stop_typing",
             "conversationId" : conversationId
             ])
-        let request = activityServiceBuilder().path("status/typing")
+        let request = messageServiceBuilder().path("status/typing")
             .method(.post)
             .body(body)
             .queue(queue)
@@ -327,7 +327,7 @@ public class ActivityClient {
         request.responseJSON(completionHandler)
     }
     
-    /// Post flag an activity action, to a activity by activity url.
+    /// Post flag an message
     ///
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -335,7 +335,7 @@ public class ActivityClient {
     /// - since: 1.4.0
     public func flag(flagItemUrl: String,
                      queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<FlagActivity>) -> Void) -> Void
+                     completionHandler: @escaping (ServiceResponse<FlagMessage>) -> Void) -> Void
     {
         let body = RequestParameter([
             "flag-item": flagItemUrl,
@@ -350,7 +350,7 @@ public class ActivityClient {
         request.responseObject(completionHandler)
     }
     
-    /// Post  unflag an activity action, to a flag tem by flagId.
+    /// Post  unflag an message
     ///
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -445,8 +445,8 @@ public class ActivityClient {
     
     
     // MARK: Encryption Feature Variables
-    /// ActivityClient Errors
-    enum ActivityError: Error {
+    /// MessageClient Errors
+    enum MessageError: Error {
         case clientInfoFetchFail
         case ephemaralKeyFetchFail
         case kmsInfoFetchFail
@@ -455,13 +455,13 @@ public class ActivityClient {
         case spaceUrlFetchFail
     }
     private let kmsMessageServerUri = ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages"
-    private var roomResourceList : [AcitivityRoomResourceModel] = [AcitivityRoomResourceModel]()
+    private var roomResourceList : [RoomResourceModel] = [RoomResourceModel]()
     private var kmsRequestList : [KmsRequest] = [KmsRequest]()
     private var noEncryptionConvasationList : [String] = [String]()
-    private var receivedActivityList : [MessageActivity] = [MessageActivity]()
+    private var receivedMessageList : [Message] = [Message]()
     private var pendingOperationList: [PostMessageOperation] = [PostMessageOperation]()
-    private var pendingListOperationList: [ListActivityOperation] = [ListActivityOperation]()
-    private var pendingDetailMessageList: [String: (ServiceResponse<MessageActivity>) -> Void] = [String: (ServiceResponse<MessageActivity>) -> Void]()
+    private var pendingListOperationList: [ListMessageOperation] = [ListMessageOperation]()
+    private var pendingDetailMessageList: [String: (ServiceResponse<Message>) -> Void] = [String: (ServiceResponse<Message>) -> Void]()
     private var executeOperationQueue: OperationQueue = OperationQueue()
     
     var deviceUrl : URL
@@ -482,29 +482,29 @@ public class ActivityClient {
     }
     
     // MARK: Encryption Feature Functions
-    public func receiveNewMessageActivity( messageActivity: MessageActivity){
-        if(messageActivity.encryptionKeyUrl != nil){
-            self.receivedActivityList.append(messageActivity)
-            if self.roomResourceList.filter({$0.conversationId == messageActivity.conversationId}).first == nil{
-                let roomModel = AcitivityRoomResourceModel(conversationId: messageActivity.conversationId!)
-                roomModel.encryptionUrl = messageActivity.encryptionKeyUrl
+    public func receiveNewMessage( message: Message){
+        if(message.encryptionKeyUrl != nil){
+            self.receivedMessageList.append(message)
+            if self.roomResourceList.filter({$0.conversationId == message.conversationId}).first == nil{
+                let roomModel = RoomResourceModel(conversationId: message.conversationId!)
+                roomModel.encryptionUrl = message.encryptionKeyUrl
                 self.roomResourceList.append(roomModel)
             }
             if(!self.isClientReady){
                 self.requestClientInfo()
-            }else if(self.encryptKeyReadyFor(messageActivity.conversationId!)){
-                self.processReceivedMessage(messageActivity)
+            }else if(self.encryptKeyReadyFor(message.conversationId!)){
+                self.processReceivedMessage(message)
             }else{
-                self.requestKeyMaterial(messageActivity.encryptionKeyUrl!)
+                self.requestKeyMaterial(message.encryptionKeyUrl!)
             }
         }else{
-            messageActivity.markDownString()
-            if let comHandler = self.pendingDetailMessageList[messageActivity.activityId!]{
-                let result = Result<MessageActivity>.success(messageActivity)
+            message.markDownString()
+            if let comHandler = self.pendingDetailMessageList[message.messageId!]{
+                let result = Result<Message>.success(message)
                 comHandler(ServiceResponse.init(nil, result))
-                self.pendingDetailMessageList.removeValue(forKey: messageActivity.activityId!)
+                self.pendingDetailMessageList.removeValue(forKey: message.messageId!)
             }else{
-                self.onMessageActivity?(messageActivity)
+                self.onMessage?(message)
             }
         }
     }
@@ -568,23 +568,23 @@ public class ActivityClient {
         }
     }
     
-    private func processReceivedMessage(_ messageActivity: MessageActivity){
-        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial else{
+    private func processReceivedMessage(_ message: Message){
+        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == message.encryptionKeyUrl!}).first?.keyMaterial else{
             return
         }
-        _ = self.receivedActivityList.removeObject(equality: { $0.activityId == messageActivity.activityId })
+        _ = self.receivedMessageList.removeObject(equality: { $0.messageId == message.messageId })
         do {
-            guard let chiperText = messageActivity.plainText
+            guard let chiperText = message.plainText
                 else{
                     return;
             }
             if(chiperText != ""){
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                messageActivity.plainText = clearText! as String
-                messageActivity.markDownString()
+                message.plainText = clearText! as String
+                message.markDownString()
             }
-            if let files = messageActivity.files{
+            if let files = message.files{
                 for file in files{
                     if let displayname = file.displayName,
                         let scr = file.scr
@@ -602,37 +602,37 @@ public class ActivityClient {
                         file.scr = clearSrc
                     }
                 }
-                messageActivity.files = files
+                message.files = files
             }
-            if let comHandler = self.pendingDetailMessageList[messageActivity.activityId!]{
-                let result = Result<MessageActivity>.success(messageActivity)
+            if let comHandler = self.pendingDetailMessageList[message.messageId!]{
+                let result = Result<Message>.success(message)
                 comHandler(ServiceResponse.init(nil, result))
-                self.pendingDetailMessageList.removeValue(forKey: messageActivity.activityId!)
+                self.pendingDetailMessageList.removeValue(forKey: message.messageId!)
             }else{
-                self.onMessageActivity?(messageActivity)
+                self.onMessage?(message)
             }
         }catch let error as NSError {
-            SDKLogger.shared.debug("Process Activity Error - \(error.description)")
+            SDKLogger.shared.debug("Process Message Error - \(error.description)")
         }
     }
     
-    private func decryptMessage(_ messageActivity: MessageActivity){
-        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == messageActivity.encryptionKeyUrl!}).first?.keyMaterial else{
+    private func decryptMessage(_ message: Message){
+        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == message.encryptionKeyUrl!}).first?.keyMaterial else{
             return
         }
-        _ = self.receivedActivityList.removeObject(equality: { $0.activityId == messageActivity.activityId })
+        _ = self.receivedMessageList.removeObject(equality: { $0.messageId == message.messageId })
         do {
-            guard let chiperText = messageActivity.plainText
+            guard let chiperText = message.plainText
                 else{
                     return;
             }
             if(chiperText != ""){
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                messageActivity.plainText = clearText! as String
-                messageActivity.markDownString()
+                message.plainText = clearText! as String
+                message.markDownString()
             }
-            if let files = messageActivity.files{
+            if let files = message.files{
                 for file in files{
                     if let displayname = file.displayName,
                         let scr = file.scr
@@ -650,10 +650,10 @@ public class ActivityClient {
                         file.scr = clearSrc
                     }
                 }
-                messageActivity.files = files
+                message.files = files
             }
         }catch let error as NSError {
-            SDKLogger.shared.debug("Process Activity Error - \(error.description)")
+            SDKLogger.shared.debug("Process Message Error - \(error.description)")
         }
     }
     
@@ -661,9 +661,9 @@ public class ActivityClient {
     /// Process received | posting pending activities
     private func processPendingMessageActivities( _ encryptionUrl: String){
         /// process received acitivities
-        let receivePendingActivityArray = self.receivedActivityList.filter({$0.encryptionKeyUrl == encryptionUrl})
-        for activity in receivePendingActivityArray{
-            self.processReceivedMessage(activity)
+        let receivePendingMessageArray = self.receivedMessageList.filter({$0.encryptionKeyUrl == encryptionUrl})
+        for message in receivePendingMessageArray{
+            self.processReceivedMessage(message)
         }
         /// process post pending activities
         self.processFilePostingMessageActivities(encryptionUrl)
@@ -677,10 +677,10 @@ public class ActivityClient {
         if let roomResource = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
             let keyMaterial = roomResource.keyMaterial
         {
-            let postPendingActivityArray = self.pendingOperationList.filter({$0.encryptionUrl == encryptionUrl})
-            for pendingOperation in postPendingActivityArray{
+            let postPendingMessageArray = self.pendingOperationList.filter({$0.encryptionUrl == encryptionUrl})
+            for pendingOperation in postPendingMessageArray{
                 pendingOperation.keyMaterial = keyMaterial
-                if(pendingOperation.messageActivity.action == .post){
+                if(pendingOperation.message.action == .post){
                     self.executeOperationQueue.addOperation(pendingOperation)
                     self.pendingOperationList.removeObject(pendingOperation)
                 }else{
@@ -689,7 +689,7 @@ public class ActivityClient {
                         self.executeOperationQueue.addOperation(pendingOperation)
                         self.pendingOperationList.removeObject(pendingOperation)
                     }else{
-                        self.requestSpaceUrl(convasationId: pendingOperation.messageActivity.conversationId!)
+                        self.requestSpaceUrl(convasationId: pendingOperation.message.conversationId!)
                     }
                 }
             }
@@ -701,11 +701,11 @@ public class ActivityClient {
             let keyMaterial = roomResource.keyMaterial,
             let encryptionUrl = roomResource.encryptionUrl
         {
-            let postPendingActivityArray = self.pendingOperationList.filter({$0.messageActivity.conversationId == conversationId})
-            for pendingOperation in postPendingActivityArray{
+            let postPendingMessageArray = self.pendingOperationList.filter({$0.message.conversationId == conversationId})
+            for pendingOperation in postPendingMessageArray{
                 pendingOperation.keyMaterial = keyMaterial
                 pendingOperation.encryptionUrl = encryptionUrl
-                if(pendingOperation.messageActivity.action == .post){
+                if(pendingOperation.message.action == .post){
                     self.executeOperationQueue.addOperation(pendingOperation)
                     self.pendingOperationList.removeObject(pendingOperation)
                 }else{
@@ -714,7 +714,7 @@ public class ActivityClient {
                         self.executeOperationQueue.addOperation(pendingOperation)
                         self.pendingOperationList.removeObject(pendingOperation)
                     }else{
-                        self.requestSpaceUrl(convasationId: pendingOperation.messageActivity.conversationId!)
+                        self.requestSpaceUrl(convasationId: pendingOperation.message.conversationId!)
                     }
                 }
             }
@@ -726,8 +726,8 @@ public class ActivityClient {
             let keyMaterial = roomResource.keyMaterial
         {
             let conversationId = roomResource.conversationId
-            let listActivityRqeustList = self.pendingListOperationList.filter({$0.conversationId == conversationId})
-            for pendingOperation in listActivityRqeustList{
+            let listMessageRqeustList = self.pendingListOperationList.filter({$0.conversationId == conversationId})
+            for pendingOperation in listMessageRqeustList{
                 pendingOperation.keyMaterial = keyMaterial
                 self.executeOperationQueue.addOperation(pendingOperation)
                 self.pendingListOperationList.removeObject(pendingOperation)
@@ -744,7 +744,7 @@ public class ActivityClient {
                                       "includeParticipants": false
             ])
         let header : [String: String]  = [ "Authorization" : "Bearer " + self.accessTokenStr]
-        let request = activityServiceBuilder().path(path)
+        let request = messageServiceBuilder().path(path)
             .query(query)
             .headers(header)
             .method(.get)
@@ -765,9 +765,9 @@ public class ActivityClient {
                             return
                         }
                     }
-                    let postPendingOperations = self.pendingOperationList.filter({$0.messageActivity.conversationId == convasationId})
+                    let postPendingOperations = self.pendingOperationList.filter({$0.message.conversationId == convasationId})
                     for pendingOperation in postPendingOperations{
-                        pendingOperation.messageActivity.encryptionKeyUrl = encryptionUrl as? String
+                        pendingOperation.message.encryptionKeyUrl = encryptionUrl as? String
                         pendingOperation.encryptionUrl = encryptionUrl as? String
                     }
                     self.requestKeyMaterial(encryptionUrl as! String)
@@ -794,8 +794,8 @@ public class ActivityClient {
                 }
                 break
             case .failure:
-                let error = ActivityError.encryptionUrlFetchFail
-                let tempError = Result<MessageActivity>.failure(error)
+                let error = MessageError.encryptionUrlFetchFail
+                let tempError = Result<Message>.failure(error)
                 self.cancelPendigActivitiesFor(convasationId, result: tempError)
                 break
             }
@@ -830,7 +830,7 @@ public class ActivityClient {
     private func requestSpaceUrl(convasationId: String){
         let path = "conversations/" + convasationId + "/space"
         let header : [String: String]  = [ "Authorization" : "Bearer " + self.accessTokenStr]
-        let request = activityServiceBuilder().path(path)
+        let request = messageServiceBuilder().path(path)
             .headers(header)
             .method(.put)
             .build()
@@ -863,22 +863,22 @@ public class ActivityClient {
                     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
                         if(!self.ephemeralKeyFetched){
                             self.ephemeralKeyRequest = nil
-                            let error = ActivityError.ephemaralKeyFetchFail
-                            let tempError = Result<MessageActivity>.failure(error)
+                            let error = MessageError.ephemaralKeyFetchFail
+                            let tempError = Result<Message>.failure(error)
                             self.cancelAllPendingActivities(result: tempError)
                         }
                     }
                 }
             }
         }else{
-            let error = ActivityError.clientInfoFetchFail
-            let tempError = Result<MessageActivity>.failure(error)
+            let error = MessageError.clientInfoFetchFail
+            let tempError = Result<Message>.failure(error)
             self.cancelAllPendingActivities(result: tempError)
         }
     }
     
     private func requestClientInfo(){
-        let userIdRequest = activityServiceBuilder().path("users")
+        let userIdRequest = messageServiceBuilder().path("users")
             .method(.get)
             .build()
         userIdRequest.responseJSON{ (response: ServiceResponse<Any>) in
@@ -958,17 +958,17 @@ public class ActivityClient {
     }
     
     // MARk: Message Operation Manage
-    private func cancelAllPendingActivities(result: Result<MessageActivity>){
+    private func cancelAllPendingActivities(result: Result<Message>){
         for pendingOperation in self.pendingOperationList{
-            let tempRes = ServiceResponse<MessageActivity>(nil, result)
+            let tempRes = ServiceResponse<Message>(nil, result)
             pendingOperation.completionHandler(tempRes)
         }
         self.pendingOperationList.removeAll()
     }
-    private func cancelPendigActivitiesFor(_ conversationId: String, result: Result<MessageActivity>){
+    private func cancelPendigActivitiesFor(_ conversationId: String, result: Result<Message>){
         for pendingOperation in self.pendingOperationList{
-            if(pendingOperation.messageActivity.conversationId == conversationId){
-                let tempRes = ServiceResponse<MessageActivity>(nil, result)
+            if(pendingOperation.message.conversationId == conversationId){
+                let tempRes = ServiceResponse<Message>(nil, result)
                 pendingOperation.completionHandler(tempRes)
                 self.pendingOperationList.removeObject(pendingOperation)
             }
@@ -977,8 +977,8 @@ public class ActivityClient {
     
     //MARK: RequestBuilders
     
-    private func activityServiceBuilder() -> ServiceRequest.ActivityServerBuilder {
-        return ServiceRequest.ActivityServerBuilder(authenticator)
+    private func messageServiceBuilder() -> ServiceRequest.MessageServerBuilder {
+        return ServiceRequest.MessageServerBuilder(authenticator)
     }
     
     private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {

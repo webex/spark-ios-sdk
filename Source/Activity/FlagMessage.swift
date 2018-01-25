@@ -21,35 +21,47 @@
 import UIKit
 import ObjectMapper
 
-/// The struct of a TypingStatus on Cisco Spark.
+/// The struct of a FlagItemStatus on Cisco Spark.
 ///
 /// - since: 1.4.0
-public enum TypingAction : String{
-    case StartTyping = "status.start_typing"
-    case StopTyping = "status.stop_typing"
+public enum FlagAction:String{
+    case FlagCreated = "create"
+    case FlagDeleted = "delete"
 }
 
-public class TypingActivity {
+public class FlagMessage : Mappable{
+
+    public var action: FlagAction?{
+        return FlagAction(rawValue: self.messageModel.action!)
+    }
     
-    public var action: TypingAction?{
-        return TypingAction(rawValue: self.activityModel.eventType!)!
-    }
-    public var actor: ActivityActorModel?{
-        return self.activityModel.actor
-    }
     public var conversationId: String?{
-        return self.activityModel.conversationId
+        return self.messageModel.conversationId
     }
-    private var activityModel: ActivityModel
-    init(activitModel: ActivityModel) {
-        self.activityModel = activitModel
+
+    public var flagItemUrl: String?{
+        return self.messageModel.flagItem?.messageUrl
     }
+    public var flagUrl: String?{
+        return self.messageModel.flagItem?.url
+    }
+    public var flagItemId: String?{
+        return self.messageModel.flagItem?.id
+    }
+    public var createdDate: Date?{
+        return self.messageModel.flagItem?.created
+    }
+    
+    private var messageModel: MessageModel
+    init(activitModel: MessageModel) {
+        self.messageModel = activitModel
+    }
+    
     public required convenience init?(map: Map){
-        let acivitiModel = Mapper<ActivityModel>().map(JSON: map.JSON)
+        let acivitiModel = Mapper<MessageModel>().map(JSON: map.JSON)
         self.init(activitModel: acivitiModel!)
     }
     public func mapping(map: Map) {
-        self.activityModel <- map
+        self.messageModel <- map
     }
 }
-

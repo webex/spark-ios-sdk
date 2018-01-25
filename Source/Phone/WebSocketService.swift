@@ -27,7 +27,7 @@ class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
     var onFailed: (() -> Void)?
-    var onActivityModel: ((ActivityModel) -> Void)?
+    var onMessageModel: ((MessageModel) -> Void)?
     var onKmsMessageModel: ((KmsMessageModel) -> Void)?
     
     private var socket: WebSocket?
@@ -145,22 +145,22 @@ class WebSocketService: WebSocketDelegate {
                 SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
             }else if(eventType == "conversation.activity"){
-                let activityObj = eventData["activity"].object;
-                guard let eventJson = activityObj as? [String: Any],
-                    var activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
+                let messageObj = eventData["activity"].object;
+                guard let eventJson = messageObj as? [String: Any],
+                    let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
                     else {
                         return
                 }
-                activityModel.eventType = eventType
-                self.onActivityModel?(activityModel)
+                messageModel.eventType = eventType
+                self.onMessageModel?(messageModel)
             }else if(eventType == "status.start_typing" || eventType == "status.stop_typing" || eventType == "user.app_item"){
-                let activityObj = eventData.object;
-                guard let eventJson = activityObj as? [String: Any],
-                    let activityModel = Mapper<ActivityModel>().map(JSON: eventJson)
+                let messageObj = eventData.object;
+                guard let eventJson = messageObj as? [String: Any],
+                    let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
                     else {
                         return
                 }
-                self.onActivityModel?(activityModel)
+                self.onMessageModel?(messageModel)
             }else if(eventType == "encryption.kms_message"){
                  let kmsMessageObj = eventData["encryption"].object
                 guard let kmsMessageJson = kmsMessageObj as? [String: Any],
