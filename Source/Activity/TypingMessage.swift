@@ -40,6 +40,15 @@ public class TypingMessage {
     public var conversationId: String?{
         return self.messageModel.conversationId
     }
+    public var isOneOnOne: Bool?{
+        get {
+            if let tags = self.messageModel.target?.tags{
+                return tags.contains("ONE_ON_ONE")
+            }else{
+                return false
+            }
+        }
+    }
     private var messageModel: MessageModel
     init(activitModel: MessageModel) {
         self.messageModel = activitModel

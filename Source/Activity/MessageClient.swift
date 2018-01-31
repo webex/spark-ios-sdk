@@ -45,7 +45,7 @@ public class MessageClient {
     
     let authenticator: Authenticator
     
-    /// Lists all messages in a room by room Id.
+    /// Lists all messages in a room by room's conversation Id.
     /// If present, it includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
     ///
@@ -146,6 +146,59 @@ public class MessageClient {
         }
     }
     
+    /// Posts a plain text message to a conversation by user email
+    ///
+    /// - parameter conversation: The identifier of the conversation where the message is to be posted.
+    /// - parameter content: The plain text message to be posted to the room.
+    /// - parameter medtions: The mention items to be posted to the room.
+    /// - parameter files: local file pathes to be uploaded to the room.
+    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
+    /// - parameter completionHandler: A closure to be executed once the request has finished.
+    /// - returns: Void
+    /// - since: 1.4.0
+    public func post(email: String,
+                     content: String?=nil,
+                     mentions: [MessageMentionModel]? = nil,
+                     files: [FileObjectModel]? = nil,
+                     queue: DispatchQueue? = nil,
+                     uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
+                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+    {
+        if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
+            self.post(conversationId: roomResource.conversationId, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
+        }else{
+            let query = RequestParameter([
+                "activitiesLimit": 0,
+                "compact": true
+                ])
+            let path = "conversations/user/"+email
+            let request = messageServiceBuilder().path(path)
+                .method(.put)
+                .query(query)
+                .queue(queue)
+                .build()
+            request.responseObject { (response: ServiceResponse<MessageModel>) in
+                switch response.result{
+                case .success(let messageModel):
+                    if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
+                        roomResource.conversationId = messageModel.conversationId!
+                    }else{
+                        let roomSource = RoomResourceModel(email: email)
+                        roomSource.conversationId = messageModel.id!
+                        self.roomResourceList.append(roomSource)
+                    }
+                    self.post(conversationId: messageModel.id!, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
+                    break
+                case .failure(let err):
+                    let result = Result<Message>.failure(err)
+                    completionHandler(ServiceResponse(nil, result))
+                    break
+                }
+            }
+            
+        }
+    }
+    
     /// Posts a plain text message, to a conversation by conversation Id.
     ///
     /// - parameter conversation: The identifier of the conversation where the message is to be posted.
@@ -186,7 +239,6 @@ public class MessageClient {
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
             }else if self.encryptKeyReadyFor(conversationId){
@@ -198,7 +250,6 @@ public class MessageClient {
                                                             queue:queue,
                                                             uploadingProgressHandler : uploadProgressHandler,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.pendingOperationList.append(msgPostOperation)
                 self.requestSpaceUrl(convasationId: conversationId)
                 return
@@ -213,7 +264,6 @@ public class MessageClient {
                                                             keyMaterial:roomResource?.keyMaterial,
                                                             queue:queue,
                                                             completionHandler: completionHandler)
-                SDKLogger.shared.info("Message Added POSTing Queue...")
                 self.executeOperationQueue.addOperation(msgPostOperation)
                 return
             }
@@ -228,7 +278,6 @@ public class MessageClient {
                                                     queue:queue,
                                                     uploadingProgressHandler : uploadProgressHandler,
                                                     completionHandler: completionHandler)
-        SDKLogger.shared.info("Message Added POSTing Queue...")
         self.pendingOperationList.append(msgPostOperation)
         if(!self.isClientReady){
             self.requestClientInfo()
@@ -485,11 +534,17 @@ public class MessageClient {
     public func receiveNewMessage( message: Message){
         if(message.encryptionKeyUrl != nil){
             self.receivedMessageList.append(message)
-            if self.roomResourceList.filter({$0.conversationId == message.conversationId}).first == nil{
+            if let room = self.roomResourceList.filter({$0.conversationId == message.conversationId}).first{
+                if(room.encryptionUrl != message.encryptionKeyUrl){
+                    room.encryptionUrl = message.encryptionKeyUrl
+                    room.keyMaterial = nil
+                }
+            }else {
                 let roomModel = RoomResourceModel(conversationId: message.conversationId!)
                 roomModel.encryptionUrl = message.encryptionKeyUrl
                 self.roomResourceList.append(roomModel)
             }
+
             if(!self.isClientReady){
                 self.requestClientInfo()
             }else if(self.encryptKeyReadyFor(message.conversationId!)){

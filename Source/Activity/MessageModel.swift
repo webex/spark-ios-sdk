@@ -242,6 +242,7 @@ public class MessageTargetModel : Mappable{
     public var url: String?
     public var clientTempId: String?
     public var encryptionKeyUrl: String?
+    public var tags: [String]?
     
     public init(){}
     public required init?(map: Map) {}
@@ -251,6 +252,7 @@ public class MessageTargetModel : Mappable{
         url <- map["url"]
         clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
+        tags <- map["tags"]
     }
 }
 

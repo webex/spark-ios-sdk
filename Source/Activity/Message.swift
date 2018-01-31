@@ -100,7 +100,6 @@ public class Message: Mappable {
     /// - since: 1.4.0
     public var plainText: String?
     
-    
     /// file uploading local file path
     ///
     /// - since: 1.4.0
@@ -115,6 +114,19 @@ public class Message: Mappable {
         }
         set{
             self.messageModel.encryptionKeyUrl = newValue
+        }
+    }
+    
+    /// if the message is from one_on_one conversation
+    ///
+    /// - since: 1.4.0
+    public var isOneOnOne: Bool?{
+        get {
+            if let tags = self.messageModel.target?.tags{
+                return tags.contains("ONE_ON_ONE")
+            }else{
+                return false
+            }
         }
     }
     
@@ -138,13 +150,6 @@ public class Message: Mappable {
         set{
             self.messageModel.conversationId = newValue
         }
-    }
-    
-    /// markup text of this message
-    ///
-    /// - since: 1.4.0
-    public var markUpText: String?{
-        return self.messageModel.object?.content
     }
     
     

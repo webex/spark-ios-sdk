@@ -30,6 +30,7 @@ class MessageTests: XCTestCase {
     private var other: TestUser!
     private var messages: MessageClient!
     private var roomId: String!
+    private var conversationId: String!
     
     private func getISO8601Date() -> String {
         
@@ -48,11 +49,10 @@ class MessageTests: XCTestCase {
     
     private func validate(message: Message?) {
         XCTAssertNotNil(message)
-        XCTAssertNotNil(message?.id)
-        XCTAssertNotNil(message?.personId)
-        XCTAssertNotNil(message?.personEmail)
-        XCTAssertNotNil(message?.roomId)
-        XCTAssertNotNil(message?.created)
+        XCTAssertNotNil(message?.messageId)
+        XCTAssertNotNil(message?.actor)
+        XCTAssertNotNil(message?.conversationId)
+        XCTAssertNotNil(message?.publishedDate)
     }
     
     override func setUp() {
@@ -65,6 +65,7 @@ class MessageTests: XCTestCase {
         let room = fixture.createRoom(testCase: self, title: "test room")
         XCTAssertNotNil(room?.id)
         roomId = room?.id
+        conversationId = room?.conversationId
     }
     
     override func tearDown() {
@@ -79,94 +80,93 @@ class MessageTests: XCTestCase {
     }
     
     func testPostingMessageToRoomWithTextReturnsMessage() {
-        let message = postMessage(roomId: roomId, text: text, files: nil)
+        let message = postMessage(conversationId: conversationId, text: text, files: nil)
         validate(message: message)
-        XCTAssertEqual(message?.text, text)
+        XCTAssertEqual(message?.plainText, text)
     }
     
     func testPostingMessageToRoomWithFileReturnsMessage() {
-        let message = postMessage(roomId: roomId, files: fileUrl)
+        let message = postMessage(conversationId: conversationId, files: fileUrl)
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
     
     func testPostingMessageToRoomWithTextAndFileReturnsMessage() {
-        let message = postMessage(roomId: roomId, text: text, files: fileUrl)
+        let message = postMessage(conversationId: conversationId, text: text, files: fileUrl)
         validate(message: message)
-        XCTAssertEqual(message?.text, text)
+        XCTAssertEqual(message?.plainText, text)
         XCTAssertNotNil(message?.files)
     }
     
     func testPostingMessageToInvalidRoomDoesNotReturnMessage() {
-        let message = postMessage(roomId: Config.InvalidId, text: text, files: fileUrl)
+        let message = postMessage(conversationId: Config.InvalidId, text: text, files: fileUrl)
         XCTAssertNil(message)
     }
     
-    func testPostingMessageUsingPersonIdWithTextReturnsMessage() {
-        let message = postMessage(personId: other.personId, text: text, files: nil)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonId, other.personId)
-        XCTAssertEqual(message?.text, text)
-    }
+//    func testPostingMessageUsingPersonIdWithTextReturnsMessage() {
+//        let message = postMessage(personId: other.personId, text: text, files: nil)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonId, other.personId)
+//        XCTAssertEqual(message?.text, text)
+//    }
+//
+//    func testPostingMessageUsingPersonIdWithFileReturnsMessage() {
+//        let message = postMessage(personId: other.personId, files: fileUrl)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonId, other.personId)
+//        XCTAssertNotNil(message?.files)
+//    }
+//
+//    func testPostingMessageUsingPersonIdWithTextAndFileReturnsMessage() {
+//        let message = postMessage(personId: other.personId, text: text, files: fileUrl)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonId, other.personId)
+//        XCTAssertEqual(message?.text, text)
+//        XCTAssertNotNil(message?.files)
+//    }
     
-    func testPostingMessageUsingPersonIdWithFileReturnsMessage() {
-        let message = postMessage(personId: other.personId, files: fileUrl)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonId, other.personId)
-        XCTAssertNotNil(message?.files)
-    }
-    
-    func testPostingMessageUsingPersonIdWithTextAndFileReturnsMessage() {
-        let message = postMessage(personId: other.personId, text: text, files: fileUrl)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonId, other.personId)
-        XCTAssertEqual(message?.text, text)
-        XCTAssertNotNil(message?.files)
-    }
-    
-    func testPostingMessageUsingInvalidPersonIdDoesNotReturnMessage() {
-        let message = postMessage(personId: Config.InvalidId, text: text, files: fileUrl)
-        XCTAssertNil(message)
-    }
-    
-    func testPostingMessageUsingPersonEmailWithTextReturnsMessage() {
-        let message = postMessage(personEmail: other.email, text: text, files: nil)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonEmail, other.email)
-        XCTAssertEqual(message?.text, text)
-    }
-    
-    func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
-        let message = postMessage(personEmail: other.email, files: fileUrl)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonEmail, other.email)
-        XCTAssertNotNil(message?.files)
-    }
-    
-    func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
-        let message = postMessage(personEmail: other.email, text: text, files: fileUrl)
-        validate(message: message)
-        XCTAssertEqual(message?.toPersonEmail, other.email)
-        XCTAssertEqual(message?.text, text)
-        XCTAssertNotNil(message?.files)
-    }
-    
-    func testPostingMessageUsingInvalidPersonEmailReturnsMessage() {
-        let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: fileUrl)
-        XCTAssertNotNil(message)
-    }
+//    func testPostingMessageUsingInvalidPersonIdDoesNotReturnMessage() {
+//        let message = postMessage(personId: Config.InvalidId, text: text, files: fileUrl)
+//        XCTAssertNil(message)
+//    }
+//
+//    func testPostingMessageUsingPersonEmailWithTextReturnsMessage() {
+//        let message = postMessage(personEmail: other.email, text: text, files: nil)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonEmail, other.email)
+//        XCTAssertEqual(message?.text, text)
+//    }
+//
+//    func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
+//        let message = postMessage(personEmail: other.email, files: fileUrl)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonEmail, other.email)
+//        XCTAssertNotNil(message?.files)
+//    }
+//
+//    func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
+//        let message = postMessage(personEmail: other.email, text: text, files: fileUrl)
+//        validate(message: message)
+//        XCTAssertEqual(message?.toPersonEmail, other.email)
+//        XCTAssertEqual(message?.text, text)
+//        XCTAssertNotNil(message?.files)
+//    }
+//
+//    func testPostingMessageUsingInvalidPersonEmailReturnsMessage() {
+//        let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: fileUrl)
+//        XCTAssertNotNil(message)
+//    }
     
     func testListingMessagesReturnsMessages() {
-        _ = postMessage(roomId: roomId, text: text, files: nil)
-        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: nil)
+        let messageArray = listMessages(conversationId: conversationId, maxdate: : nil, mindate: nil, max: nil)
         XCTAssertEqual(messageArray?.isEmpty, false)
     }
     
     func testListingMessagesWithMaxValueOf2ReturnsOnly2Messages() {
-        _ = postMessage(roomId: roomId, text: text, files: nil)
-        _ = postMessage(roomId: roomId, text: text, files: nil)
-        _ = postMessage(roomId: roomId, text: text, files: nil)
-        let messageArray = listMessages(roomId: roomId, before: nil, beforeMessage: nil, max: 2)
+        _ = postMessage(conversationId: roomId, text: text, files: nil)
+        _ = postMessage(conversationId: roomId, text: text, files: nil)
+        _ = postMessage(conversationId: roomId, text: text, files: nil)
+        let messageArray = listMessages(conversationId: conversationId, before: nil, beforeMessage: nil, max: 2)
         XCTAssertEqual(messageArray?.count, 2)
     }
     
@@ -174,7 +174,7 @@ class MessageTests: XCTestCase {
         let message1 = postMessage(roomId: roomId, text: text, files: nil)
         Thread.sleep(forTimeInterval: Config.TestcaseInterval)
         var nowDate = Date()
-        if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(Config.TestcaseInterval){
+        if let createDate = message1?.publishedDate,nowDate > createDate.addingTimeInterval(Config.TestcaseInterval){
                 nowDate = createDate.addingTimeInterval(Config.TestcaseInterval)
         }
         let now = getISO8601DateWithDate(nowDate)
@@ -266,21 +266,21 @@ class MessageTests: XCTestCase {
         return fixture.getResponse(testCase: self, request: request) != nil
     }
     
-    private func postMessage(roomId: String, text: String, files: String?) -> Message? {
+    private func postMessage(conversationId: String, text: String, files: String?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(roomId: roomId, text: text, files: files, completionHandler: completionHandler)
+            self.messages.post(conversationId: conversationId, text: text, files: files, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(roomId: String, files: String) -> Message? {
+    private func postMessage(conversationId: String, files: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: roomId, files: files, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(personId: String, text: String, files: String?) -> Message? {
+    private func postMessage(persconversationIdonId: String, text: String, files: String?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personId: personId, text: text, files: files, completionHandler: completionHandler)
         }
@@ -294,23 +294,29 @@ class MessageTests: XCTestCase {
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(personEmail: EmailAddress, text: String, files: String?) -> Message? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(personEmail: personEmail, text: text, files: files, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
-    }
+//    private func postMessage(personEmail: EmailAddress, text: String, files: String?) -> Message? {
+//        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+//            self.messages.post(personEmail: personEmail, text: text, files: files, completionHandler: completionHandler)
+//        }
+//        return fixture.getResponse(testCase: self, request: request)
+//    }
     
-    private func postMessage(personEmail: EmailAddress, files: String) -> Message? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(personEmail: personEmail, files: files, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
-    }
+//    private func postMessage(personEmail: EmailAddress, files: String) -> Message? {
+//        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
+//            self.messages.post(personEmail: personEmail, files: files, completionHandler: completionHandler)
+//        }
+//        return fixture.getResponse(testCase: self, request: request)
+//    }
     
-    private func listMessages(roomId: String, before: String?, beforeMessage: String?, max: Int?) -> [Message]? {
+    private func listMessages(conversationId: String, sinceDate: String?, maxDate: String?,midDate: String?, limit: Int?,personRefresh: Bool?) -> [Message]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
-            self.messages.list(roomId: roomId, before: before, beforeMessage: beforeMessage, max: max, completionHandler: completionHandler)
+            self.messages.list(conversationId: conversationId,
+                               sinceDate: sinceDate,
+                               maxDate: maxDate,
+                               midDate: midDate,
+                               limit: limit,
+                               personRefresh:personRefresh,
+                               completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }

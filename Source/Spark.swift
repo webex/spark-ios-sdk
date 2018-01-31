@@ -173,7 +173,7 @@ public class Spark {
     ///
     /// - since: 1.4.0
     
-    public var messageClient: MessageClient?{
+    public var messages: MessageClient?{
         if let messageCient = self.phone.messageClient{
             return messageCient
         }else{
