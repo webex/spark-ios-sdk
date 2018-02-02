@@ -50,6 +50,9 @@ class ListMessageOperation: Operation {
         }
         for message in messageList{
             do {
+                if message.plainText == nil{
+                    message.plainText = ""
+                }
                 guard let chiperText = message.plainText
                     else{
                         return;

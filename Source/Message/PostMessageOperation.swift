@@ -35,6 +35,8 @@ class PostMessageOperation: Operation {
     let authenticator: Authenticator
     var files : [FileObjectModel]?
     var spaceUrl: String?
+    var response: ServiceResponse<Message>?
+    
     init(authenticator: Authenticator,
          message: Message,
          keyMaterial: String?=nil,
@@ -139,7 +141,17 @@ class PostMessageOperation: Operation {
             .body(body)
             .queue(self.queue)
             .build()
-        request.responseObject(self.completionHandler)
+        request.responseObject{ (response: ServiceResponse<Message>) in
+            self.response = response
+            switch response.result{
+            case .success(let value):
+                self.decrypt(value)
+                break
+            case .failure(_):
+                self.completionHandler(response)
+                break
+            }
+        }
     }
     
     private func postOperation(){
@@ -157,7 +169,17 @@ class PostMessageOperation: Operation {
             .body(body)
             .queue(self.queue)
             .build()
-        request.responseObject(self.completionHandler)
+        request.responseObject{ (response: ServiceResponse<Message>) in
+            self.response = response
+            switch response.result{
+            case .success(let value):
+                self.decrypt(value)
+                break
+            case .failure(_):
+                self.completionHandler(response)
+                break
+            }
+        }
     }
     
     
@@ -306,5 +328,46 @@ class PostMessageOperation: Operation {
         return mimeType as String
     }
     
+    private func decrypt(_ newMessage: Message){
+        guard let acitivityKeyMaterial = self.keyMaterial else{
+            return
+        }
+        do {
+            if newMessage.plainText == nil{
+                newMessage.plainText = ""
+            }
+            guard let chiperText = newMessage.plainText
+                else{
+                    return
+            }
+            if(chiperText != ""){
+                let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
+                let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
+                newMessage.plainText = clearText! as String
+                newMessage.markDownString()
+            }
+            if let files = newMessage.files{
+                for file in files{
+                    if let displayname = file.displayName,
+                        let scr = file.scr
+                    {
+                        let nameData = try CjoseWrapper.content(fromCiphertext: displayname, key: acitivityKeyMaterial)
+                        let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
+                        let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                        if let image = file.image{
+                            let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
+                            let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
+                            image.scr = imageClearSrc
+                        }
+                        file.displayName = clearName
+                        file.scr = clearSrc
+                    }
+                }
+                newMessage.files = files
+            }
+        }catch{}
+        self.completionHandler(self.response!)
+    }
 }
 

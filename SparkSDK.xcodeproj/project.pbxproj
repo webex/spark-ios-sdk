@@ -7,19 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		104D5F1C2005C319001F908B /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104D5F1B2005C319001F908B /* UploadFileOperation.swift */; };
-		104D5F1E2005C330001F908B /* DownLoadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104D5F1D2005C330001F908B /* DownLoadFileOperation.swift */; };
+		101255972022C3D80072F5DC /* SparkSDKEncryptionKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		101255982022C3D80072F5DC /* Wme.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		101255992022C3E80072F5DC /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
+		1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
 		105E8EF91FF2976200EB33F1 /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
 		105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
-		105E8F061FF4BC6800EB33F1 /* PostMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */; };
-		108930E71FFB6F2600363E71 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108930E61FFB6F2600363E71 /* RoomResourceModel.swift */; };
-		10BAB764200F6B2300C6CCB7 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10BAB763200F6B2300C6CCB7 /* ListMessageOperation.swift */; };
-		10F499B61FDF85E10028426A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B31FDF85E10028426A /* Message.swift */; };
-		10F499B71FDF85E10028426A /* MessageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B41FDF85E10028426A /* MessageClient.swift */; };
-		10F499B81FDF85E10028426A /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B51FDF85E10028426A /* MessageModel.swift */; };
-		10F499BA1FDF88450028426A /* TypingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499B91FDF88450028426A /* TypingMessage.swift */; };
-		10F499BC1FDF896A0028426A /* FlagMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F499BB1FDF896A0028426A /* FlagMessage.swift */; };
-		10F576711FF2005800A574D6 /* KmsMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10F576701FF2005800A574D6 /* KmsMessageModel.swift */; };
+		1066EF0B2022F877003745D0 /* KmsMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF002022F876003745D0 /* KmsMessageModel.swift */; };
+		1066EF0C2022F877003745D0 /* MessageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF012022F876003745D0 /* MessageClient.swift */; };
+		1066EF0D2022F877003745D0 /* PostMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF022022F876003745D0 /* PostMessageOperation.swift */; };
+		1066EF0E2022F877003745D0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF032022F876003745D0 /* Message.swift */; };
+		1066EF0F2022F877003745D0 /* FlagMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF042022F876003745D0 /* FlagMessage.swift */; };
+		1066EF102022F877003745D0 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF052022F876003745D0 /* MessageModel.swift */; };
+		1066EF112022F877003745D0 /* DownLoadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF062022F877003745D0 /* DownLoadFileOperation.swift */; };
+		1066EF122022F877003745D0 /* TypingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF072022F877003745D0 /* TypingMessage.swift */; };
+		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
+		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
+		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -159,6 +163,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				101255972022C3D80072F5DC /* SparkSDKEncryptionKit.framework in CopyFiles */,
+				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,19 +173,19 @@
 /* Begin PBXFileReference section */
 		03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.releasetest.xcconfig"; sourceTree = "<group>"; };
 		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		104D5F1B2005C319001F908B /* UploadFileOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
-		104D5F1D2005C330001F908B /* DownLoadFileOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownLoadFileOperation.swift; sourceTree = "<group>"; };
 		105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
-		105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMessageOperation.swift; sourceTree = "<group>"; };
-		108930E61FFB6F2600363E71 /* RoomResourceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
-		10BAB763200F6B2300C6CCB7 /* ListMessageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
-		10F499B31FDF85E10028426A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		10F499B41FDF85E10028426A /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClient.swift; sourceTree = "<group>"; };
-		10F499B51FDF85E10028426A /* MessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
-		10F499B91FDF88450028426A /* TypingMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingMessage.swift; sourceTree = "<group>"; };
-		10F499BB1FDF896A0028426A /* FlagMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagMessage.swift; sourceTree = "<group>"; };
-		10F576701FF2005800A574D6 /* KmsMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KmsMessageModel.swift; sourceTree = "<group>"; };
+		1066EF002022F876003745D0 /* KmsMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KmsMessageModel.swift; sourceTree = "<group>"; };
+		1066EF012022F876003745D0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClient.swift; sourceTree = "<group>"; };
+		1066EF022022F876003745D0 /* PostMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostMessageOperation.swift; sourceTree = "<group>"; };
+		1066EF032022F876003745D0 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		1066EF042022F876003745D0 /* FlagMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlagMessage.swift; sourceTree = "<group>"; };
+		1066EF052022F876003745D0 /* MessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
+		1066EF062022F877003745D0 /* DownLoadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownLoadFileOperation.swift; sourceTree = "<group>"; };
+		1066EF072022F877003745D0 /* TypingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingMessage.swift; sourceTree = "<group>"; };
+		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
+		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
+		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -312,6 +318,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				101255992022C3E80072F5DC /* SparkSDKEncryptionKit.framework in Frameworks */,
+				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
 				4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */,
 			);
@@ -330,24 +338,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		10F499B21FDF85E10028426A /* Activity */ = {
-			isa = PBXGroup;
-			children = (
-				10F499B41FDF85E10028426A /* MessageClient.swift */,
-				10F499BB1FDF896A0028426A /* FlagMessage.swift */,
-				10F499B91FDF88450028426A /* TypingMessage.swift */,
-				10F499B31FDF85E10028426A /* Message.swift */,
-				10F499B51FDF85E10028426A /* MessageModel.swift */,
-				10F576701FF2005800A574D6 /* KmsMessageModel.swift */,
-				108930E61FFB6F2600363E71 /* RoomResourceModel.swift */,
-				105E8F051FF4BC6800EB33F1 /* PostMessageOperation.swift */,
-				104D5F1B2005C319001F908B /* UploadFileOperation.swift */,
-				104D5F1D2005C330001F908B /* DownLoadFileOperation.swift */,
-				10BAB763200F6B2300C6CCB7 /* ListMessageOperation.swift */,
-			);
-			path = Activity;
-			sourceTree = "<group>";
-		};
 		20E5E3BD68BFD3198EE748AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -484,7 +474,6 @@
 				B91E75371CE2D7B70080EAE0 /* Http */,
 				5D67C64C1CF04E6400758F6B /* Logger */,
 				B91E75431CE2D7B70080EAE0 /* Membership */,
-				10F499B21FDF85E10028426A /* Activity */,
 				B91E75471CE2D7B70080EAE0 /* Message */,
 				B91E754B1CE2D7B70080EAE0 /* Metrics */,
 				B91E75521CE2D7B70080EAE0 /* Person */,
@@ -544,6 +533,17 @@
 		B91E75471CE2D7B70080EAE0 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				1066EF062022F877003745D0 /* DownLoadFileOperation.swift */,
+				1066EF042022F876003745D0 /* FlagMessage.swift */,
+				1066EF002022F876003745D0 /* KmsMessageModel.swift */,
+				1066EF082022F877003745D0 /* ListMessageOperation.swift */,
+				1066EF032022F876003745D0 /* Message.swift */,
+				1066EF012022F876003745D0 /* MessageClient.swift */,
+				1066EF052022F876003745D0 /* MessageModel.swift */,
+				1066EF022022F876003745D0 /* PostMessageOperation.swift */,
+				1066EF092022F877003745D0 /* RoomResourceModel.swift */,
+				1066EF072022F877003745D0 /* TypingMessage.swift */,
+				1066EF0A2022F877003745D0 /* UploadFileOperation.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -922,9 +922,7 @@
 				3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */,
-				10F499BA1FDF88450028426A /* TypingMessage.swift in Sources */,
 				3D1E57971CEDA351006124B0 /* NSDate+Extension.swift in Sources */,
-				10F499BC1FDF896A0028426A /* FlagMessage.swift in Sources */,
 				207434421E9B30CC00C5EBCD /* SerialQueue.swift in Sources */,
 				3D66B1AD1D24AD4A0016A072 /* TeamClient.swift in Sources */,
 				B91E75B31CE2D7B70080EAE0 /* Call.swift in Sources */,
@@ -933,9 +931,10 @@
 				20EEA2781EB0E6B400D6BB75 /* MediaConnectionModel.swift in Sources */,
 				5AFB6E931DF5C5110027E989 /* JWTAuthKeychainStorage.swift in Sources */,
 				5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */,
-				105E8F061FF4BC6800EB33F1 /* PostMessageOperation.swift in Sources */,
+				1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */,
 				204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */,
 				5D1A5D091CF8130E00313515 /* ReachabilityTransportStatusModel.swift in Sources */,
+				1066EF0B2022F877003745D0 /* KmsMessageModel.swift in Sources */,
 				B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */,
 				B91E75D61CE2D7B70080EAE0 /* Phone.swift in Sources */,
 				5A8B99811DF222FB003633E1 /* OAuthUrlUtil.swift in Sources */,
@@ -944,11 +943,9 @@
 				20EEA2CA1EBDAAEB00D6BB75 /* SparkError.swift in Sources */,
 				5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */,
 				208C13511E88C10500B8DEF0 /* CallEventSequencer.swift in Sources */,
-				104D5F1C2005C319001F908B /* UploadFileOperation.swift in Sources */,
 				5AC09EB51DE61822005F38BC /* OAuthAuthenticator.swift in Sources */,
 				B91E75981CE2D7B70080EAE0 /* OAuthViewController.swift in Sources */,
 				B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */,
-				10F576711FF2005800A574D6 /* KmsMessageModel.swift in Sources */,
 				2074343E1E98B7A200C5EBCD /* CallStatus.swift in Sources */,
 				B91E75AA1CE2D7B70080EAE0 /* Metric+Names.swift in Sources */,
 				20EEA2D01EBDE43300D6BB75 /* MediaEngineObserver.swift in Sources */,
@@ -960,25 +957,26 @@
 				B91E75A61CE2D7B70080EAE0 /* MembershipClient.swift in Sources */,
 				3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */,
 				B91E75B71CE2D7B70080EAE0 /* CallMetrics.swift in Sources */,
-				10F499B61FDF85E10028426A /* Message.swift in Sources */,
+				1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */,
 				20EEA2D31EBDE43300D6BB75 /* MediaSessionWrapper.swift in Sources */,
 				5AC09EB91DE63C66005F38BC /* OAuthStorage.swift in Sources */,
+				1066EF112022F877003745D0 /* DownLoadFileOperation.swift in Sources */,
 				5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */,
-				10F499B81FDF85E10028426A /* MessageModel.swift in Sources */,
+				1066EF122022F877003745D0 /* TypingMessage.swift in Sources */,
 				5AC09EB31DE4D02C005F38BC /* Authenticator.swift in Sources */,
 				B91E75C81CE2D7B70080EAE0 /* DeviceService.swift in Sources */,
+				1066EF0D2022F877003745D0 /* PostMessageOperation.swift in Sources */,
 				3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */,
 				20EEA2D21EBDE43300D6BB75 /* MediaSessionObserver.swift in Sources */,
 				5AFB6E911DF5C5110027E989 /* JWTAuthClient.swift in Sources */,
 				3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */,
-				10F499B71FDF85E10028426A /* MessageClient.swift in Sources */,
 				204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */,
 				204583F41E83C03500EEB3FC /* CallMembership.swift in Sources */,
 				3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */,
 				5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */,
+				1066EF0F2022F877003745D0 /* FlagMessage.swift in Sources */,
 				3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */,
 				5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */,
-				108930E71FFB6F2600363E71 /* RoomResourceModel.swift in Sources */,
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
 				3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */,
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
@@ -988,12 +986,12 @@
 				99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */,
 				3D1E57931CEDA348006124B0 /* OAuthClient.swift in Sources */,
 				B91E75A41CE2D7B70080EAE0 /* Membership.swift in Sources */,
-				104D5F1E2005C330001F908B /* DownLoadFileOperation.swift in Sources */,
-				10BAB764200F6B2300C6CCB7 /* ListMessageOperation.swift in Sources */,
 				20EEA2791EB0E6B400D6BB75 /* ParticipantModel.swift in Sources */,
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
+				1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
+				1066EF0E2022F877003745D0 /* Message.swift in Sources */,
 				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */,
 				20EEA27A1EB0E6B400D6BB75 /* SequenceModel.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */,
@@ -1004,6 +1002,7 @@
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
 				5D1A5D031CF6FB3A00313515 /* ReachabilityModel.swift in Sources */,
 				5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */,
+				1066EF0C2022F877003745D0 /* MessageClient.swift in Sources */,
 				B91E75DB1CE2D7B70080EAE0 /* Spark.swift in Sources */,
 				B91E75DA1CE2D7B70080EAE0 /* RoomClient.swift in Sources */,
 				5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */,
@@ -1014,6 +1013,7 @@
 				B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */,
 				5D1A5D0B1CF821D000313515 /* MediaEngineReachabilityFeedback.swift in Sources */,
 				5A9350D91E00737900374B99 /* Clock.swift in Sources */,
+				1066EF102022F877003745D0 /* MessageModel.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,
 				20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */,
 				B91E75C61CE2D7B70080EAE0 /* DeviceModel.swift in Sources */,

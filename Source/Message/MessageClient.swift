@@ -50,12 +50,12 @@ public class MessageClient {
     /// The list sorts the messages in descending order by creation date.
     ///
     /// - parameter conversationId: The identifier of the conversation.
-    /// - parameter sinceDate: the activities published date is after this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-    /// - parameter midDate: The activities published date is before or after this date. At most limit/2 activities activities before and limit/2 activities after the date will be included, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-    /// - parameter maxDate: the activities published date is before this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-    /// - parameter limit:  Maximum number of activities return. Default is 6.
+    /// - parameter sinceDate: the messages published date is after this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter midDate: The messages published date is before or after this date. At most limit/2 messages before and limit/2 messages after the date will be included, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter maxDate: the messages published date is before this date, format in "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+    /// - parameter limit:  Maximum number of messages return. Default is 6.
     /// - parameter personRefresh: (experimental)control if the person detail in message need to be refreshed to latest. If person detail got      refreshed, person.id will be in UUID format even if original one is email. Default is false.
-    /// - parameter lastMessageFirst: Sort order for the activities. Default is true.
+    /// - parameter lastMessageFirst: Sort order for the messages. Default is true.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -181,7 +181,7 @@ public class MessageClient {
                 switch response.result{
                 case .success(let messageModel):
                     if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
-                        roomResource.conversationId = messageModel.conversationId!
+                        roomResource.conversationId = messageModel.id!
                     }else{
                         let roomSource = RoomResourceModel(email: email)
                         roomSource.conversationId = messageModel.id!
@@ -283,7 +283,6 @@ public class MessageClient {
             self.requestClientInfo()
         }else{
             self.requestEncryptionUrlFor(conversationId)
-            
         }
     }
     
@@ -577,7 +576,7 @@ public class MessageClient {
                         let keyUri = JSON(dict["uri"]!).rawString(){
                         if let room = self.roomResourceList.filter({$0.encryptionUrl == keyUri}).first{
                             room.keyMaterial = keyMaterial
-                            self.processPendingMessageActivities(keyUri)
+                            self.processPendingMessages(keyUri)
                         }
                         _ = self.kmsRequestList.removeObject(equality: { $0.uri == keyUri})
                     }
@@ -590,7 +589,7 @@ public class MessageClient {
                         if let room = self.roomResourceList.filter({$0.conversationId == conversationId}).first{
                             room.keyMaterial = keyMaterial
                             room.encryptionUrl = encriptionUrl
-                            self.processFilePostingMessageActivitiesWith(conversationId)
+                            self.processFilePostingMessagesWith(conversationId)
                         }
                     }
                 }
@@ -608,7 +607,7 @@ public class MessageClient {
                 for roomResouce in self.roomResourceList{
                     if let encrptionUrl = roomResouce.encryptionUrl{
                         if let _ = roomResouce.keyMaterial{
-                            self.processPendingMessageActivities(encrptionUrl)
+                            self.processPendingMessages(encrptionUrl)
                         }else{
                             self.requestKeyMaterial(encrptionUrl)
                         }
@@ -629,6 +628,9 @@ public class MessageClient {
         }
         _ = self.receivedMessageList.removeObject(equality: { $0.messageId == message.messageId })
         do {
+            if message.plainText == nil{
+                message.plainText = ""
+            }
             guard let chiperText = message.plainText
                 else{
                     return;
@@ -672,11 +674,14 @@ public class MessageClient {
     }
     
     private func decryptMessage(_ message: Message){
-        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == message.encryptionKeyUrl!}).first?.keyMaterial else{
+        guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.conversationId == message.conversationId!}).first?.keyMaterial else{
             return
         }
         _ = self.receivedMessageList.removeObject(equality: { $0.messageId == message.messageId })
         do {
+            if message.plainText == nil{
+                message.plainText = ""
+            }
             guard let chiperText = message.plainText
                 else{
                     return;
@@ -713,22 +718,22 @@ public class MessageClient {
     }
     
     
-    /// Process received | posting pending activities
-    private func processPendingMessageActivities( _ encryptionUrl: String){
+    /// Process received | posting pending messges
+    private func processPendingMessages( _ encryptionUrl: String){
         /// process received acitivities
         let receivePendingMessageArray = self.receivedMessageList.filter({$0.encryptionKeyUrl == encryptionUrl})
         for message in receivePendingMessageArray{
             self.processReceivedMessage(message)
         }
-        /// process post pending activities
-        self.processFilePostingMessageActivities(encryptionUrl)
+        /// process post pending messages
+        self.processFilePostingMessages(encryptionUrl)
         
         /// process pending list requests if exist
         self.processPendingListRequest(encryptionUrl)
     }
     
-    /// Process posting pending activities
-    private func processFilePostingMessageActivities(_ encryptionUrl: String){
+    /// Process posting pending messages
+    private func processFilePostingMessages(_ encryptionUrl: String){
         if let roomResource = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
             let keyMaterial = roomResource.keyMaterial
         {
@@ -751,7 +756,7 @@ public class MessageClient {
         }
     }
     
-    private func processFilePostingMessageActivitiesWith( _ conversationId: String){
+    private func processFilePostingMessagesWith( _ conversationId: String){
         if let roomResource = self.roomResourceList.filter({$0.conversationId == conversationId}).first,
             let keyMaterial = roomResource.keyMaterial,
             let encryptionUrl = roomResource.encryptionUrl
@@ -851,7 +856,7 @@ public class MessageClient {
             case .failure:
                 let error = MessageError.encryptionUrlFetchFail
                 let tempError = Result<Message>.failure(error)
-                self.cancelPendigActivitiesFor(convasationId, result: tempError)
+                self.cancelPendingMessageOperationsFor(convasationId, result: tempError)
                 break
             }
         }
@@ -898,7 +903,7 @@ public class MessageClient {
                 }
                 if let room = self.roomResourceList.filter({$0.conversationId == convasationId}).first{
                     room.spaceUrl = responseDict["spaceUrl"]! as? String
-                    self.processFilePostingMessageActivities(room.encryptionUrl!)
+                    self.processFilePostingMessages(room.encryptionUrl!)
                     return;
                 }
                 break
@@ -920,7 +925,7 @@ public class MessageClient {
                             self.ephemeralKeyRequest = nil
                             let error = MessageError.ephemaralKeyFetchFail
                             let tempError = Result<Message>.failure(error)
-                            self.cancelAllPendingActivities(result: tempError)
+                            self.cancelAllPendingMessageOperations(result: tempError)
                         }
                     }
                 }
@@ -928,7 +933,7 @@ public class MessageClient {
         }else{
             let error = MessageError.clientInfoFetchFail
             let tempError = Result<Message>.failure(error)
-            self.cancelAllPendingActivities(result: tempError)
+            self.cancelAllPendingMessageOperations(result: tempError)
         }
     }
     
@@ -1013,19 +1018,27 @@ public class MessageClient {
     }
     
     // MARk: Message Operation Manage
-    private func cancelAllPendingActivities(result: Result<Message>){
+    private func cancelAllPendingMessageOperations(result: Result<Message>){
         for pendingOperation in self.pendingOperationList{
             let tempRes = ServiceResponse<Message>(nil, result)
             pendingOperation.completionHandler(tempRes)
         }
         self.pendingOperationList.removeAll()
     }
-    private func cancelPendigActivitiesFor(_ conversationId: String, result: Result<Message>){
+    private func cancelPendingMessageOperationsFor(_ conversationId: String, result: Result<Message>){
         for pendingOperation in self.pendingOperationList{
             if(pendingOperation.message.conversationId == conversationId){
                 let tempRes = ServiceResponse<Message>(nil, result)
                 pendingOperation.completionHandler(tempRes)
                 self.pendingOperationList.removeObject(pendingOperation)
+            }
+        }
+        for pendingListOperation in self.pendingListOperationList{
+            if(pendingListOperation.conversationId == conversationId){
+                let tempError = Result<[Message]>.failure(result.error!)
+                let tempRes = ServiceResponse<[Message]>(nil, tempError)
+                pendingListOperation.completionHandler(tempRes)
+                self.pendingListOperationList.removeObject(pendingListOperation)
             }
         }
     }
