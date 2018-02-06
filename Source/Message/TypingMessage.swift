@@ -37,8 +37,8 @@ public class TypingMessage {
     public var actor: MessageActorModel?{
         return self.messageModel.actor
     }
-    public var conversationId: String?{
-        return self.messageModel.conversationId
+    public var roomId: String?{
+        return self.messageModel.roomId
     }
     public var isOneOnOne: Bool?{
         get {

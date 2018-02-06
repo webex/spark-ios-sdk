@@ -48,9 +48,9 @@ class MessageTests: XCTestCase {
     
     private func validate(message: Message?) {
         XCTAssertNotNil(message)
-        XCTAssertNotNil(message?.messageId)
+        XCTAssertNotNil(message?.id)
         XCTAssertNotNil(message?.actor)
-        XCTAssertNotNil(message?.conversationId)
+        XCTAssertNotNil(message?.roomId)
         XCTAssertNotNil(message?.publishedDate)
     }
     
@@ -64,7 +64,7 @@ class MessageTests: XCTestCase {
         self.messages = self.fixture.spark.messages
         let room = self.fixture.createRoom(testCase: self, title: "test room")
         XCTAssertNotNil(room?.id)
-        self.roomId = room?.conversationId
+        self.roomId = room?.id
     }
 
     override func tearDown() {
@@ -190,15 +190,15 @@ class MessageTests: XCTestCase {
         
         let message2 = postMessage(conversationId: roomId, text: text, files: nil)
         let messageArray = listMessages(conversationId: roomId, sinceDate: nil, maxDate: now, midDate: nil, limit: nil, personRefresh: nil)
-        XCTAssertEqual(messageArray?.contains() {$0.messageId == message1?.messageId}, true)
-        XCTAssertEqual(messageArray?.contains() {$0.messageId == message2?.messageId}, false)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
     }
     
     func testListingMessagesBeforeADateAndAMessageIdDoesNotReturnMessageWithThatId() {
         let message = postMessage(conversationId: roomId, text: text, files: nil)
         let now = self.getISO8601Date()
         let messageArray = listMessages(conversationId: roomId, sinceDate: now, maxDate: nil, midDate: nil, limit: nil, personRefresh: nil)
-        XCTAssertEqual(messageArray?.contains() {$0.messageId == message?.messageId}, false)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message?.id}, false)
     }
     
     func testListingMessageWithInvalidRoomIdDoesNotReturnMessage() {
@@ -209,10 +209,10 @@ class MessageTests: XCTestCase {
     func testGettingMessageReturnsMessage() {
         let messageFromCreate = postMessage(conversationId: roomId, text: text, files: nil)
         validate(message: messageFromCreate)
-        if let messageFromCreateId = messageFromCreate?.messageId {
+        if let messageFromCreateId = messageFromCreate?.id {
             let messageFromGet = getMessage(messageId: messageFromCreateId)
             validate(message: messageFromGet)
-            XCTAssertEqual(messageFromGet?.messageId, messageFromCreate?.messageId)
+            XCTAssertEqual(messageFromGet?.id, messageFromCreate?.id)
             XCTAssertEqual(messageFromGet?.plainText, messageFromCreate?.plainText)
         } else {
             XCTFail("Failed to get message")
@@ -226,8 +226,8 @@ class MessageTests: XCTestCase {
     
     func testDeletingMessageRemovesMessageAndItCanNoLongerBeRetrieved() {
         let message = postMessage(conversationId: roomId, text: text, files: nil)
-        XCTAssertNotNil(message?.messageId)
-        let messageId = message?.messageId
+        XCTAssertNotNil(message?.id)
+        let messageId = message?.id
         XCTAssertTrue(deleteMessage(messageId: messageId!))
         XCTAssertEqual(getMessage(messageId: messageId!)?.action, MessageAction.tombstone)
     }
@@ -249,11 +249,11 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(messageArray?.count, 3)
         
         
-        XCTAssertTrue(deleteMessage(messageId: message2!.messageId!))
+        XCTAssertTrue(deleteMessage(messageId: message2!.id!))
         let messageArray1 = listMessages(conversationId: roomId, sinceDate: nil, maxDate: nil, midDate: nil, limit: 3, personRefresh: nil)
         XCTAssertEqual(messageArray1?.filter({$0.action != MessageAction.tombstone}).count, 2)
         
-        XCTAssertTrue(deleteMessage(messageId: message3!.messageId!))
+        XCTAssertTrue(deleteMessage(messageId: message3!.id!))
         let messageArray2 = listMessages(conversationId: roomId, sinceDate: nil, maxDate: nil, midDate: nil, limit: nil, personRefresh: nil)
         XCTAssertEqual(messageArray2?.filter({$0.action == MessageAction.tombstone}).count, 2)
     }
@@ -261,21 +261,21 @@ class MessageTests: XCTestCase {
     
     private func deleteMessage(messageId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.delete(conversationId: self.roomId, messageId: messageId, completionHandler: completionHandler)
+            self.messages.delete(roomId: self.roomId, messageId: messageId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request) != nil
     }
     
     private func postMessage(conversationId: String, text: String, files: [FileObjectModel]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(conversationId: conversationId, content: text, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
+            self.messages.post(roomId: conversationId, content: text, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(conversationId: String, files: [FileObjectModel]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(conversationId: conversationId, content: nil, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
+            self.messages.post(roomId: conversationId, content: nil, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
@@ -297,7 +297,7 @@ class MessageTests: XCTestCase {
     
     private func listMessages(conversationId: String, sinceDate: String?, maxDate: String?,midDate: String?, limit: Int?,personRefresh: Bool?) -> [Message]? {
         let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
-            self.messages.list(conversationId: conversationId,
+            self.messages.list(roomId: conversationId,
                                sinceDate: sinceDate,
                                maxDate: maxDate,
                                midDate: midDate,

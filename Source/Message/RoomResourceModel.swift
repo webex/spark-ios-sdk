@@ -10,16 +10,16 @@ import UIKit
 
 class RoomResourceModel: NSObject {
     public var email: String
-    public var conversationId : String
+    public var roomId : String
     public var encryptionUrl: String?
     public var keyMaterial: String?
     public var spaceUrl: String?
-    init(conversationId: String) {
-       self.conversationId = conversationId
+    init(roomId: String) {
+       self.roomId = roomId
        self.email = ""
     }
     init(email: String) {
-        self.conversationId = ""
+        self.roomId = ""
         self.email = email
     }
     

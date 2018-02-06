@@ -12,18 +12,23 @@ import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
 class ListMessageOperation: Operation {
-    var conversationId: String
+    var roomId: String
     var listRequest: ServiceRequest
     var completionHandler : (ServiceResponse<[Message]>) -> Void
     var response: ServiceResponse<[Message]>?
     var keyMaterial : String?
-    init(conversationId : String,
+    init(roomId : String,
          listRequest: ServiceRequest,
          keyMaterial: String?=nil,
          queue:DispatchQueue? = nil,
          completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
     {
-        self.conversationId = conversationId
+        if let roomIdStr = (roomId.base64Decoded())!.split(separator: "/").last
+        {
+            self.roomId = String(roomIdStr)
+        }else{
+            self.roomId = ""
+        }
         self.listRequest = listRequest
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial

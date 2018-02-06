@@ -59,7 +59,7 @@ class PostMessageOperation: Operation {
         }
         super.init()
         if(self.action == MessageAction.post && self.encryptionUrl == nil){
-            self.name = message.conversationId!
+            self.name = message.roomId!
         }
     }
     
@@ -134,7 +134,7 @@ class PostMessageOperation: Operation {
             "verb": "share",
             "encryptionKeyUrl" : encryptionUrl,
             "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
-            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
+            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -162,7 +162,7 @@ class PostMessageOperation: Operation {
             "verb": "post",
             "encryptionKeyUrl" : encryptionUrl,
             "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
-            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
+            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -187,7 +187,7 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "acknowledge",
             "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
-            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
+            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -202,7 +202,7 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "delete",
             "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
-            "target" : createMessageTarget(conversationId: self.message.conversationId).toJSON()
+            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
             ])
         let request = requestBuilder()
             .method(.post)
@@ -219,7 +219,7 @@ class PostMessageOperation: Operation {
     {
         let model = MessageObjectModel()
         model.objectType = objectType
-        if let objectIdStr = message.messageId{
+        if let objectIdStr = message.id{
             model.id = objectIdStr
         }
         if let contentStr = message.plainText{
@@ -285,11 +285,11 @@ class PostMessageOperation: Operation {
         return model
     }
     
-    private func createMessageTarget(conversationId: String? = nil) -> MessageTargetModel{
+    private func createMessageTarget(roomId: String? = nil) -> MessageTargetModel{
         let model = MessageTargetModel()
         model.objectType = "conversation"
-        if let idStr = conversationId{
-            model.id = idStr
+        if let idStr = roomId{
+            model.id = idStr.splitString()
         }
         return model
     }

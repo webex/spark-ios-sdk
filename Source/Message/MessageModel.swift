@@ -67,18 +67,18 @@ public class MessageModel : Mappable {
     public var published: Date?
     
     /* The action verb the Activiy do
-     add : adding participant to conversation
-     leave : leave a conversation
-     post : send a text message to conversation
+     add : adding participant to room
+     leave : leave a room
+     post : send a text message to room
      acknowledge: acknowledge an message
-     update: update a conversation title
-     hide : hide a conversation
-     unhide : unhide a conversation
-     mute : mute a conversation
-     unmute : unmute a conversation
-     favorite : favorite a conversation
-     unfavorite : unfavorite a conversation
-     share : share a content with participant in a conversation
+     update: update a room title
+     hide : hide a room
+     unhide : unhide a room
+     mute : mute a room
+     unmute : unmute a room
+     favorite : favorite a room
+     unfavorite : unfavorite a room
+     share : share a content with participant in a room
      delete : delete an message item (the target of this message)
      */
     public var verb: String?
@@ -98,9 +98,11 @@ public class MessageModel : Mappable {
     /// The encryptionKeyUrl of the message
     public var encryptionKeyUrl: String?
     
-    /// The conversationId of the message, should only use for receive typing/untyping message
-    public var conversationId: String?
+    /// The timestamp of the message
+    public var timestamp: String?
     
+    /// The roomId of the message, should only use for receive typing/untyping message
+    public var roomId: String?
     
     /// The message flag item action, should only use for receive flag/unflag message "create"/"delete"
     public var action: String?
@@ -132,30 +134,33 @@ public class MessageModel : Mappable {
         clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
         eventType <- map["eventType"]
-        conversationId <- map["conversationId"]
+        roomId <- map["conversationId"]
         flagItem <- map["appData"]
         action <- map["action"]
+        timestamp<-map["timestamp"]
+        let idStr = "ciscospark://us/MESSAGE/\(map["id"])"
+        self.id = idStr.base64Encoded()
+        if let roomId = self.roomId{
+            let roomIdStr = "ciscospark://us/ROOM/\(roomId)"
+            self.roomId = roomIdStr.base64Encoded()
+        }
     }
 }
 
 // MARK: MessageActorModel
 public class MessageActorModel : Mappable{
     public var id: String?
-    public var objectType: String?
     public var displayName: String?
     public var orgId: String?
     public var emailAddress: String?
-    public var entryUUID: String?
     public var actorType: String? // Default is "PERSON"
     
     public required init?(map: Map) {}
     public func mapping(map: Map) {
         id <- map["id"]
-        objectType <- map["objectType"]
         displayName <- map["displayName"]
         orgId <- map["orgId"]
         emailAddress <- map["emailAddress"]
-        entryUUID <- map["entryUUID"]
         actorType <- map["type"]
     }
 }
@@ -240,7 +245,6 @@ public class MessageTargetModel : Mappable{
     public var id: String?
     public var objectType: String? // Default is "conversation"
     public var url: String?
-    public var clientTempId: String?
     public var encryptionKeyUrl: String?
     public var tags: [String]?
     
@@ -250,9 +254,12 @@ public class MessageTargetModel : Mappable{
         id <- map["id"]
         objectType <- map["objectType"]
         url <- map["url"]
-        clientTempId <- map["clientTempId"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
         tags <- map["tags"]
+        if(self.objectType == "conversation"){
+            let roomIdStr = "ciscospark://us/ROOM/\(self.id!)"
+            self.id = roomIdStr.base64Encoded()
+        }
     }
 }
 

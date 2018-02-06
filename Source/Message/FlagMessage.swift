@@ -35,8 +35,8 @@ public class FlagMessage : Mappable{
         return FlagAction(rawValue: self.messageModel.action!)
     }
     
-    public var conversationId: String?{
-        return self.messageModel.conversationId
+    public var roomId: String?{
+        return self.messageModel.roomId
     }
 
     public var flagItemUrl: String?{

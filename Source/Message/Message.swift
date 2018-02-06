@@ -73,7 +73,7 @@ public class Message: Mappable {
     /// id of this activty
     ///
     /// - since: 1.4.0
-    public var messageId: String?{
+    public var id: String?{
         get {
             return self.messageModel.id
         }
@@ -85,7 +85,7 @@ public class Message: Mappable {
     /// url of this message.
     ///
     /// - since: 1.4.0
-    public var messageUrl: String?{
+    public var url: String?{
         return self.messageModel.url
     }
     
@@ -118,7 +118,7 @@ public class Message: Mappable {
         }
     }
     
-    /// if the message is from one_on_one conversation
+    /// if the message is from one_on_one room
     ///
     /// - since: 1.4.0
     public var isOneOnOne: Bool?{
@@ -134,10 +134,10 @@ public class Message: Mappable {
     /// target conversation id of this message
     ///
     /// - since: 1.4.0
-    public var conversationId: String?{
+    public var roomId: String?{
         get{
-            if(self.messageModel.conversationId != nil){
-                return self.messageModel.conversationId
+            if(self.messageModel.roomId != nil){
+                return self.messageModel.roomId
             }else if self.target != nil{
                 if(target?.objectType == "conversation"){
                     return target?.id
@@ -149,7 +149,7 @@ public class Message: Mappable {
             }
         }
         set{
-            self.messageModel.conversationId = newValue
+            self.messageModel.roomId = newValue
         }
     }
     
