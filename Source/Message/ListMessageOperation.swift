@@ -23,12 +23,7 @@ class ListMessageOperation: Operation {
          queue:DispatchQueue? = nil,
          completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
     {
-        if let roomIdStr = (roomId.base64Decoded())!.split(separator: "/").last
-        {
-            self.roomId = String(roomIdStr)
-        }else{
-            self.roomId = ""
-        }
+        self.roomId = roomId.splitString()
         self.listRequest = listRequest
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial

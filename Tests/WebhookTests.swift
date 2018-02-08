@@ -62,16 +62,16 @@ class WebhookTests: XCTestCase {
         // Tests that basic setup and teardown work without issue.
     }
     
-    func testCreateFilterWebhookThenItExistsAndHasAnId() {
-        let filterWebhook = createFilterWebhook()
-        XCTAssertNotNil(filterWebhook)
-        
-        let webhooks = listWebhooks()
-        XCTAssertEqual(webhooks?.count, 2)
-        deleteWebhook(id: filterWebhook!.id!)
-        let webhooks1 = listWebhooks()
-        XCTAssertEqual(webhooks1?.count, 1)
-    }
+//    func testCreateFilterWebhookThenItExistsAndHasAnId() {
+//        let filterWebhook = createFilterWebhook()
+//        XCTAssertNotNil(filterWebhook)
+//
+//        let webhooks = listWebhooks()
+//        XCTAssertEqual(webhooks?.count, 2)
+//        deleteWebhook(id: filterWebhook!.id!)
+//        let webhooks1 = listWebhooks()
+//        XCTAssertEqual(webhooks1?.count, 1)
+//    }
     
     func testWhenThereIsOneWebhookThenTheListFunctionReturnsOneWebhook() {
         let webhooks = listWebhooks()
@@ -111,18 +111,18 @@ class WebhookTests: XCTestCase {
         XCTAssertEqual(webHooks?.count, 0)
     }
     
-    func testCreateSameWebhookThenDeleteIt() {
-        let webhook1 = createWebhook()
-        XCTAssertNotNil(webhook1)
-        
-        let webhooks = listWebhooks()
-        XCTAssertEqual(webhooks?.count, 2)
-        deleteWebhook(id: webhook1!.id!)
-        let webhooks1 = listWebhooks()
-        XCTAssertEqual(webhooks1?.count, 1)
-        XCTAssertEqual(webhooks1?.filter(){$0.id == webhook1!.id!}.count, 0)
-        
-    }
+//    func testCreateSameWebhookThenDeleteIt() {
+//        let webhook1 = createWebhook()
+//        XCTAssertNotNil(webhook1)
+//
+//        let webhooks = listWebhooks()
+//        XCTAssertEqual(webhooks?.count, 2)
+//        deleteWebhook(id: webhook1!.id!)
+//        let webhooks1 = listWebhooks()
+//        XCTAssertEqual(webhooks1?.count, 1)
+//        XCTAssertEqual(webhooks1?.filter(){$0.id == webhook1!.id!}.count, 0)
+//
+//    }
     
     
     private func createWebhook() -> Webhook? {

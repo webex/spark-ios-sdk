@@ -138,8 +138,10 @@ public class MessageModel : Mappable {
         flagItem <- map["appData"]
         action <- map["action"]
         timestamp<-map["timestamp"]
-        let idStr = "ciscospark://us/MESSAGE/\(map["id"])"
-        self.id = idStr.base64Encoded()
+        if let idStr = self.id{
+            let idString = "ciscospark://us/MESSAGE/\(idStr)"
+            self.id = idString.base64Encoded()
+        }
         if let roomId = self.roomId{
             let roomIdStr = "ciscospark://us/ROOM/\(roomId)"
             self.roomId = roomIdStr.base64Encoded()
@@ -175,8 +177,9 @@ public class MessageObjectModel : Mappable{
     public var content: String?
     public var contentType: String?
     public var mentions: [String : [MessageMentionModel]]?
+    private var groupMentions:[String: [MessageMentionModel]]?
     public var files: [String: [FileObjectModel]]?
-    
+
     public init(){}
     public required init?(map: Map) {}
     public func mapping(map: Map) {
@@ -188,7 +191,18 @@ public class MessageObjectModel : Mappable{
         content <- map["content"]
         contentType <- map["contentType"]
         mentions <- map["mentions"]
+        groupMentions <- map["groupMentions"]
         files <- map["files"]
+        if let gMentions = groupMentions{
+            if let mentions = mentions{
+                let gMentionArr = gMentions["items"]!
+                var mentionArr = mentions["items"]!
+                mentionArr.append(contentsOf: gMentionArr)
+                self.mentions = ["items": mentionArr]
+            }else{
+                self.mentions = gMentions
+            }
+        }
     }
 }
 
@@ -283,30 +297,39 @@ public class MessageFlagItemModel: Mappable{
 
 // MARK: MessageMentionModel
 public class MessageMentionModel : Mappable{
-    public var id: String
+    public var personId: String?
     public var objectType: String?
+    public var groupType: String?
     public var range: CountableClosedRange<Int>
     public var mentionType: MentionItemType
     
-    public init(id: String, range: CountableClosedRange<Int>, type: MentionItemType){
-        self.id  = id
-        self.range  = range
+    public init(range: CountableClosedRange<Int>, personId: String?, type: MentionItemType){
+        if let personid = personId,
+           let userId = personid.base64Decoded(),
+           let result = userId.split(separator: "/").last{
+            self.personId = String(result)
+        }else{
+            self.personId = personId
+        }
+        self.range = range
         self.mentionType = type
         if (self.mentionType == .person){
             self.objectType = "person"
         }else if(self.mentionType == .group){
-            self.objectType = "group"
+            self.objectType = "groupMention"
+            self.groupType = "all"
         }
     }
     
     public required init?(map: Map){
-        self.id = map.JSON["id"] as! String
+        self.personId = map.JSON["id"] as? String
         self.mentionType = MentionItemType(rawValue:(map.JSON["objectType"] as! String))!
         self.range  = 0...0
     }
     public func mapping(map: Map) {
-        id <- map["id"]
+        personId <- map["id"]
         objectType <- map["objectType"]
+        groupType <- map["groupType"]
     }
 }
 

@@ -220,7 +220,7 @@ class PostMessageOperation: Operation {
         let model = MessageObjectModel()
         model.objectType = objectType
         if let objectIdStr = message.id{
-            model.id = objectIdStr
+            model.id = objectIdStr.splitString()
         }
         if let contentStr = message.plainText{
             var markedUpContent = contentStr
@@ -228,17 +228,19 @@ class PostMessageOperation: Operation {
                 var mentionStringLength = 0
                 for index in 0..<mentionsArr.count{
                     let mentionItem = mentionsArr[index]
+                    let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
+                    let endPostion = (mentionItem.range.upperBound) + mentionStringLength
+                    let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
+                    let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
+                    let mentionContent = markedUpContent[startPosition..<endPostion]
                     if(mentionItem.mentionType == MentionItemType.person){
-                        let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
-                        let endPostion = (mentionItem.range.upperBound) + mentionStringLength
-                        let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
-                        let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
-                        let mentionContent = markedUpContent[startPosition..<endPostion]
-                        let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.id, mentionType: "person")
+                        let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.personId, mentionType: "person")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
                         mentionStringLength += (markupStr.count - mentionContent.count)
                     }else{
-                        /// group mention codes goes heere
+                        let markupStr = markUpString(mentionContent: mentionContent, groupType: "all", mentionType: "groupMention")
+                        markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
+                        mentionStringLength += (markupStr.count - mentionContent.count)
                     }
                 }
                 model.content = markedUpContent
@@ -294,14 +296,16 @@ class PostMessageOperation: Operation {
         return model
     }
     
-    private func markUpString(mentionContent: String?, mentionId: String?, mentionType: String?)->String{
+    private func markUpString(mentionContent: String?, mentionId: String? = nil, groupType: String?=nil, mentionType: String)->String{
         var result = "<spark-mention"
         if let mentionid = mentionId{
             result = result + " data-object-id=" + mentionid
         }
-        if let type = mentionType{
-            result = result + " data-object-type=" + type
+        if let grouptype = groupType{
+            result = result + " data-group-type=" + grouptype
         }
+        
+        result = result + " data-object-type=" + mentionType
         result = result + ">"
         if let content = mentionContent{
             result = result + content

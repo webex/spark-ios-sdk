@@ -47,21 +47,6 @@ public struct Membership {
     
     /// The display name of the person
     public var personDisplayName : String?
-    
-    /// The userId of this membership.
-    ///
-    /// - since: 1.4.0
-    public var userId: String?{
-        get {
-            if let id = self.personId,
-                let userId = (id.base64Decoded())!.split(separator: "/").last{
-                return String(userId)
-            }else{
-                return nil
-            }
-        }
-    }
-    
 }
 
 extension Membership: Mappable {

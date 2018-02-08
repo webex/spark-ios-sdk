@@ -177,17 +177,17 @@ public class MessageClient {
                 .query(query)
                 .queue(queue)
                 .build()
-            request.responseObject { (response: ServiceResponse<MessageModel>) in
+            request.responseObject { (response: ServiceResponse<MessageTargetModel>) in
                 switch response.result{
-                case .success(let messageModel):
+                case .success(let targetModel):
                     if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
-                        roomResource.roomId = messageModel.roomId!
+                        roomResource.roomId = targetModel.id!
                     }else{
                         let roomSource = RoomResourceModel(email: email)
-                        roomSource.roomId = messageModel.roomId!
+                        roomSource.roomId = targetModel.id!
                         self.roomResourceList.append(roomSource)
                     }
-                    self.post(roomId: messageModel.roomId!, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
+                    self.post(roomId: targetModel.id!, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
                     break
                 case .failure(let err):
                     let result = Result<Message>.failure(err)
@@ -377,16 +377,17 @@ public class MessageClient {
     
     /// Post flag an message
     ///
+    /// - parameter messageUrl: the message url that want to flag
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func flag(flagItemUrl: String,
+    public func flag(messageUrl: String,
                      queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<FlagMessage>) -> Void) -> Void
+                     completionHandler: @escaping (ServiceResponse<MessageFlagItemModel>) -> Void) -> Void
     {
         let body = RequestParameter([
-            "flag-item": flagItemUrl,
+            "flag-item": messageUrl,
             "state": "flagged"
             ])
         
@@ -404,11 +405,11 @@ public class MessageClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func unFlag(flagItemId: String,
+    public func unFlag(flagId: String,
                        queue: DispatchQueue? = nil,
                        completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
     {
-        let request = flagRequestBuilder().path(flagItemId)
+        let request = flagRequestBuilder().path(flagId)
             .method(.delete)
             .queue(queue)
             .build()
@@ -1112,11 +1113,14 @@ extension Array {
 }
 extension String{
     public func splitString()->String{
-        if let idStr = (self.base64Decoded())!.split(separator: "/").last
-        {
-            return String(idStr)
+        if let idDecode = self.base64Decoded(){
+            if let idStr = idDecode.split(separator: "/").last{
+                return String(idStr)
+            }else{
+                return self
+            }
         }else{
-            return ""
+            return self
         }
     }
 }

@@ -39,13 +39,13 @@ public class FlagMessage : Mappable{
         return self.messageModel.roomId
     }
 
-    public var flagItemUrl: String?{
+    public var flaggedMessageUrl: String?{
         return self.messageModel.flagItem?.messageUrl
     }
     public var flagUrl: String?{
         return self.messageModel.flagItem?.url
     }
-    public var flagItemId: String?{
+    public var flagId: String?{
         return self.messageModel.flagItem?.id
     }
     public var createdDate: Date?{
