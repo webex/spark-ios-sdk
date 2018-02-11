@@ -179,14 +179,14 @@ class MessageTests: XCTestCase {
         XCTAssertNotNil(message?.files)
     }
     
-    func testPostingMessageUsingInvalidPersonEmailReturnsMessage() {
-        if let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: nil){
-            XCTAssertNotNil(message)
-        }else{
-            XCTAssertNil(nil)
-        }
-        
-    }
+//    func testPostingMessageUsingInvalidPersonEmailReturnsMessage() {
+//        if let message = postMessage(personEmail: Config.InvalidEmail, text: text, files: nil){
+//            XCTAssertNotNil(message)
+//        }else{
+//            XCTAssertNil(nil)
+//        }
+//
+//    }
     
     func testFlagMessageRetrunsFlagMessages(){
         let message = postMessage(personEmail: other.email, text: text, files:nil)
