@@ -1,6 +1,6 @@
 import Foundation
 
-@objcMembers
+@objc
 public class KmsClusterInfo: NSObject {
     public let kmsCluster: String
     public let kmsPublicKey: String

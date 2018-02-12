@@ -7,5 +7,4 @@ framework module SparkSDKEncryptionKit {
 
 module SparkSDKEncryptionKit.Swift {
     header "SparkSDKEncryptionKit-Swift.h"
-    requires objc
 }
