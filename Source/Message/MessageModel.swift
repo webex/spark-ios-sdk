@@ -179,7 +179,7 @@ public class MessageObjectModel : Mappable{
     public var mentions: [String : [MessageMentionModel]]?
     private var groupMentions:[String: [MessageMentionModel]]?
     public var files: [String: [FileObjectModel]]?
-
+    
     public init(){}
     public required init?(map: Map) {}
     public func mapping(map: Map) {
@@ -305,8 +305,8 @@ public class MessageMentionModel : Mappable{
     
     public init(range: CountableClosedRange<Int>, personId: String?, type: MentionItemType){
         if let personid = personId,
-           let userId = personid.base64Decoded(),
-           let result = userId.split(separator: "/").last{
+            let userId = personid.base64Decoded(),
+            let result = userId.components(separatedBy: "/").last {
             self.personId = String(result)
         }else{
             self.personId = personId

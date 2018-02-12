@@ -61,14 +61,14 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func list(roomId: String,
-                    sinceDate: String? = nil,
-                    maxDate: String? = nil,
-                    midDate: String? = nil,
-                    limit: Int? = nil,
-                    personRefresh: Bool? = false,
-                    lastMessageFirst: Bool? = true,
-                    queue: DispatchQueue? = nil,
-                    completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
+                     sinceDate: String? = nil,
+                     maxDate: String? = nil,
+                     midDate: String? = nil,
+                     limit: Int? = nil,
+                     personRefresh: Bool? = false,
+                     lastMessageFirst: Bool? = true,
+                     queue: DispatchQueue? = nil,
+                     completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
     {
         let query = RequestParameter([
             "conversationId": roomId.splitString(),
@@ -90,9 +90,9 @@ public class MessageClient {
         if self.encryptKeyReadyFor(roomId){
             let roomResource = self.roomResourceList.filter({$0.roomId == roomId}).first
             let listOperation = ListMessageOperation(roomId: roomId,
-                                                      listRequest: request,
-                                                      keyMaterial: roomResource?.keyMaterial,
-                                                      completionHandler: completionHandler)
+                                                     listRequest: request,
+                                                     keyMaterial: roomResource?.keyMaterial,
+                                                     completionHandler: completionHandler)
             self.executeOperationQueue.addOperation(listOperation)
             return
         }else{
@@ -101,8 +101,8 @@ public class MessageClient {
                 self.roomResourceList.append(roomSource)
             }
             let listOperation = ListMessageOperation(roomId: roomId,
-                                                      listRequest: request,
-                                                      completionHandler: completionHandler)
+                                                     listRequest: request,
+                                                     completionHandler: completionHandler)
             self.pendingListOperationList.append(listOperation)
             if(!self.isClientReady){
                 self.requestClientInfo()
@@ -544,7 +544,7 @@ public class MessageClient {
                 roomModel.encryptionUrl = message.encryptionKeyUrl
                 self.roomResourceList.append(roomModel)
             }
-
+            
             if(!self.isClientReady){
                 self.requestClientInfo()
             }else if(self.encryptKeyReadyFor(message.roomId!)){
@@ -1114,7 +1114,7 @@ extension Array {
 extension String{
     public func splitString()->String{
         if let idDecode = self.base64Decoded(){
-            if let idStr = idDecode.split(separator: "/").last{
+            if let idStr = idDecode.components(separatedBy: "/").last{
                 return String(idStr)
             }else{
                 return self

@@ -207,17 +207,17 @@ public class Message: Mappable {
             while(markDownContent.contains("<spark-mention")){
                 let startSyntaxIndex = markDownContent.range(of: "<spark-mention")?.lowerBound
                 let endSyntaxRange = markDownContent.range(of: "</spark-mention>")?.upperBound
-                let subString = markDownContent.substring(with: startSyntaxIndex..<endSyntaxRange)
+                let subString = markDownContent.substring(with: startSyntaxIndex!..<endSyntaxRange!)
                 
                 let mentionContentBeginIndex = subString.range(of: ">")?.upperBound
                 let headerString = subString.substring(to: mentionContentBeginIndex!)
                 let mentionContentEndIndex = subString.range(of: "</spark-mention>")?.lowerBound
-                let mentionContentString = subString.substring(with: mentionContentBeginIndex..<mentionContentEndIndex)
+                let mentionContentString = subString.substring(with: mentionContentBeginIndex!..<mentionContentEndIndex!)
                 
-                markDownContent = markDownContent.replacingCharacters(in: startSyntaxIndex..<endSyntaxRange, with: mentionContentString)
+                markDownContent = markDownContent.replacingCharacters(in: startSyntaxIndex!..<endSyntaxRange!, with: mentionContentString)
                 
                 let startPosition = markDownContent.distance(from: markDownContent.startIndex, to: startSyntaxIndex!)
-                let range = startPosition...(startPosition+mentionContentString.count-1)
+                let range = startPosition...(startPosition+mentionContentString.characters.count-1)
                 if headerString.contains("groupMention"){
                     mentionArr.filter({$0.mentionType == .group && $0.range == 0...0}).first?.range = range
                 }else{

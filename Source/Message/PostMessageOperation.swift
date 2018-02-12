@@ -215,7 +215,7 @@ class PostMessageOperation: Operation {
     
     // MARK: Client Private Functions
     private func createMessageObject(objectType: String,
-                                      message: Message) -> MessageObjectModel
+                                     message: Message) -> MessageObjectModel
     {
         let model = MessageObjectModel()
         model.objectType = objectType
@@ -236,11 +236,11 @@ class PostMessageOperation: Operation {
                     if(mentionItem.mentionType == MentionItemType.person){
                         let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.personId, mentionType: "person")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.count - mentionContent.count)
+                        mentionStringLength += (markupStr.characters.count - mentionContent.characters.count)
                     }else{
                         let markupStr = markUpString(mentionContent: mentionContent, groupType: "all", mentionType: "groupMention")
                         markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.count - mentionContent.count)
+                        mentionStringLength += (markupStr.characters.count - mentionContent.characters.count)
                     }
                 }
                 model.content = markedUpContent
@@ -320,7 +320,7 @@ class PostMessageOperation: Operation {
     
     private func mimeType(fromFilename filename: String) -> String {
         let defaultMimeType = "application/octet-stream"
-        guard let fileType = filename.split(separator: ".").last else{
+        guard let fileType = filename.components(separatedBy: ".").last else{
             return defaultMimeType
         }
         
