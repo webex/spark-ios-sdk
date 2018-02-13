@@ -11,7 +11,6 @@
 		101255982022C3D80072F5DC /* Wme.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		101255992022C3E80072F5DC /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
 		1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
-		105E8EF91FF2976200EB33F1 /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF71FF2976200EB33F1 /* SparkSDKEncryptionKit.framework */; };
 		105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 105E8EF81FF2976200EB33F1 /* Wme.framework */; };
 		1066EF0B2022F877003745D0 /* KmsMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF002022F876003745D0 /* KmsMessageModel.swift */; };
 		1066EF0C2022F877003745D0 /* MessageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF012022F876003745D0 /* MessageClient.swift */; };
@@ -24,6 +23,36 @@
 		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
 		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
+		108B384D20327D4500DB5AE6 /* CipherA256GCM.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B382F20327D4500DB5AE6 /* CipherA256GCM.h */; };
+		108B384E20327D4500DB5AE6 /* CipherA256GCM.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383020327D4500DB5AE6 /* CipherA256GCM.m */; };
+		108B384F20327D4500DB5AE6 /* CjoseWrapper+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383120327D4500DB5AE6 /* CjoseWrapper+Private.h */; };
+		108B385020327D4500DB5AE6 /* CjoseWrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383220327D4500DB5AE6 /* CjoseWrapper.h */; };
+		108B385120327D4500DB5AE6 /* CjoseWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383320327D4500DB5AE6 /* CjoseWrapper.m */; };
+		108B385220327D4500DB5AE6 /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108B383420327D4500DB5AE6 /* DateFormatter+Extensions.swift */; };
+		108B385320327D4500DB5AE6 /* KmsClusterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108B383520327D4500DB5AE6 /* KmsClusterInfo.swift */; };
+		108B385420327D4500DB5AE6 /* KmsEphemeralKeyRequest+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383620327D4500DB5AE6 /* KmsEphemeralKeyRequest+Private.h */; };
+		108B385520327D4500DB5AE6 /* KmsEphemeralKeyRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383720327D4500DB5AE6 /* KmsEphemeralKeyRequest.h */; };
+		108B385620327D4500DB5AE6 /* KmsEphemeralKeyRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383820327D4500DB5AE6 /* KmsEphemeralKeyRequest.m */; };
+		108B385720327D4500DB5AE6 /* KmsEphemeralKeyResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383920327D4500DB5AE6 /* KmsEphemeralKeyResponse.h */; };
+		108B385820327D4500DB5AE6 /* KmsEphemeralKeyResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383A20327D4500DB5AE6 /* KmsEphemeralKeyResponse.m */; };
+		108B385920327D4500DB5AE6 /* KmsKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383B20327D4500DB5AE6 /* KmsKey.h */; };
+		108B385A20327D4500DB5AE6 /* KmsKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383C20327D4500DB5AE6 /* KmsKey.m */; };
+		108B385B20327D4500DB5AE6 /* KmsMessageCreator.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383D20327D4500DB5AE6 /* KmsMessageCreator.h */; };
+		108B385C20327D4500DB5AE6 /* KmsRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B383E20327D4500DB5AE6 /* KmsRequest.h */; };
+		108B385D20327D4500DB5AE6 /* KmsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B383F20327D4500DB5AE6 /* KmsRequest.m */; };
+		108B385E20327D4500DB5AE6 /* KmsResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384020327D4500DB5AE6 /* KmsResponse.h */; };
+		108B385F20327D4500DB5AE6 /* KmsResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384120327D4500DB5AE6 /* KmsResponse.m */; };
+		108B386020327D4500DB5AE6 /* NSData+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384220327D4500DB5AE6 /* NSData+Extensions.h */; };
+		108B386120327D4500DB5AE6 /* NSData+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384320327D4500DB5AE6 /* NSData+Extensions.m */; };
+		108B386220327D4500DB5AE6 /* NSDate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108B384420327D4500DB5AE6 /* NSDate+Extensions.swift */; };
+		108B386320327D4500DB5AE6 /* NSDictionary+Extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384520327D4500DB5AE6 /* NSDictionary+Extensions.h */; };
+		108B386420327D4500DB5AE6 /* NSDictionary+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384620327D4500DB5AE6 /* NSDictionary+Extensions.m */; };
+		108B386520327D4500DB5AE6 /* SecureContentReference.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384720327D4500DB5AE6 /* SecureContentReference.h */; };
+		108B386620327D4500DB5AE6 /* SecureContentReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384820327D4500DB5AE6 /* SecureContentReference.m */; };
+		108B386720327D4500DB5AE6 /* SecureInputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384920327D4500DB5AE6 /* SecureInputStream.h */; };
+		108B386820327D4500DB5AE6 /* SecureInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384A20327D4500DB5AE6 /* SecureInputStream.m */; };
+		108B386920327D4500DB5AE6 /* SecureOutputStream.h in Headers */ = {isa = PBXBuildFile; fileRef = 108B384B20327D4500DB5AE6 /* SecureOutputStream.h */; };
+		108B386A20327D4500DB5AE6 /* SecureOutputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 108B384C20327D4500DB5AE6 /* SecureOutputStream.m */; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -186,6 +215,36 @@
 		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
+		108B382F20327D4500DB5AE6 /* CipherA256GCM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CipherA256GCM.h; sourceTree = "<group>"; };
+		108B383020327D4500DB5AE6 /* CipherA256GCM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CipherA256GCM.m; sourceTree = "<group>"; };
+		108B383120327D4500DB5AE6 /* CjoseWrapper+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CjoseWrapper+Private.h"; sourceTree = "<group>"; };
+		108B383220327D4500DB5AE6 /* CjoseWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CjoseWrapper.h; sourceTree = "<group>"; };
+		108B383320327D4500DB5AE6 /* CjoseWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CjoseWrapper.m; sourceTree = "<group>"; };
+		108B383420327D4500DB5AE6 /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		108B383520327D4500DB5AE6 /* KmsClusterInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KmsClusterInfo.swift; sourceTree = "<group>"; };
+		108B383620327D4500DB5AE6 /* KmsEphemeralKeyRequest+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KmsEphemeralKeyRequest+Private.h"; sourceTree = "<group>"; };
+		108B383720327D4500DB5AE6 /* KmsEphemeralKeyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsEphemeralKeyRequest.h; sourceTree = "<group>"; };
+		108B383820327D4500DB5AE6 /* KmsEphemeralKeyRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KmsEphemeralKeyRequest.m; sourceTree = "<group>"; };
+		108B383920327D4500DB5AE6 /* KmsEphemeralKeyResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsEphemeralKeyResponse.h; sourceTree = "<group>"; };
+		108B383A20327D4500DB5AE6 /* KmsEphemeralKeyResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KmsEphemeralKeyResponse.m; sourceTree = "<group>"; };
+		108B383B20327D4500DB5AE6 /* KmsKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsKey.h; sourceTree = "<group>"; };
+		108B383C20327D4500DB5AE6 /* KmsKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KmsKey.m; sourceTree = "<group>"; };
+		108B383D20327D4500DB5AE6 /* KmsMessageCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsMessageCreator.h; sourceTree = "<group>"; };
+		108B383E20327D4500DB5AE6 /* KmsRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsRequest.h; sourceTree = "<group>"; };
+		108B383F20327D4500DB5AE6 /* KmsRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KmsRequest.m; sourceTree = "<group>"; };
+		108B384020327D4500DB5AE6 /* KmsResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KmsResponse.h; sourceTree = "<group>"; };
+		108B384120327D4500DB5AE6 /* KmsResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KmsResponse.m; sourceTree = "<group>"; };
+		108B384220327D4500DB5AE6 /* NSData+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Extensions.h"; sourceTree = "<group>"; };
+		108B384320327D4500DB5AE6 /* NSData+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Extensions.m"; sourceTree = "<group>"; };
+		108B384420327D4500DB5AE6 /* NSDate+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+Extensions.swift"; sourceTree = "<group>"; };
+		108B384520327D4500DB5AE6 /* NSDictionary+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Extensions.h"; sourceTree = "<group>"; };
+		108B384620327D4500DB5AE6 /* NSDictionary+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Extensions.m"; sourceTree = "<group>"; };
+		108B384720327D4500DB5AE6 /* SecureContentReference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecureContentReference.h; sourceTree = "<group>"; };
+		108B384820327D4500DB5AE6 /* SecureContentReference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecureContentReference.m; sourceTree = "<group>"; };
+		108B384920327D4500DB5AE6 /* SecureInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecureInputStream.h; sourceTree = "<group>"; };
+		108B384A20327D4500DB5AE6 /* SecureInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecureInputStream.m; sourceTree = "<group>"; };
+		108B384B20327D4500DB5AE6 /* SecureOutputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecureOutputStream.h; sourceTree = "<group>"; };
+		108B384C20327D4500DB5AE6 /* SecureOutputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecureOutputStream.m; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -330,7 +389,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
-				105E8EF91FF2976200EB33F1 /* SparkSDKEncryptionKit.framework in Frameworks */,
 				105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,6 +396,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		108B382E20327D4500DB5AE6 /* encryptionKit */ = {
+			isa = PBXGroup;
+			children = (
+				108B382F20327D4500DB5AE6 /* CipherA256GCM.h */,
+				108B383020327D4500DB5AE6 /* CipherA256GCM.m */,
+				108B383120327D4500DB5AE6 /* CjoseWrapper+Private.h */,
+				108B383220327D4500DB5AE6 /* CjoseWrapper.h */,
+				108B383320327D4500DB5AE6 /* CjoseWrapper.m */,
+				108B383420327D4500DB5AE6 /* DateFormatter+Extensions.swift */,
+				108B383520327D4500DB5AE6 /* KmsClusterInfo.swift */,
+				108B383620327D4500DB5AE6 /* KmsEphemeralKeyRequest+Private.h */,
+				108B383720327D4500DB5AE6 /* KmsEphemeralKeyRequest.h */,
+				108B383820327D4500DB5AE6 /* KmsEphemeralKeyRequest.m */,
+				108B383920327D4500DB5AE6 /* KmsEphemeralKeyResponse.h */,
+				108B383A20327D4500DB5AE6 /* KmsEphemeralKeyResponse.m */,
+				108B383B20327D4500DB5AE6 /* KmsKey.h */,
+				108B383C20327D4500DB5AE6 /* KmsKey.m */,
+				108B383D20327D4500DB5AE6 /* KmsMessageCreator.h */,
+				108B383E20327D4500DB5AE6 /* KmsRequest.h */,
+				108B383F20327D4500DB5AE6 /* KmsRequest.m */,
+				108B384020327D4500DB5AE6 /* KmsResponse.h */,
+				108B384120327D4500DB5AE6 /* KmsResponse.m */,
+				108B384220327D4500DB5AE6 /* NSData+Extensions.h */,
+				108B384320327D4500DB5AE6 /* NSData+Extensions.m */,
+				108B384420327D4500DB5AE6 /* NSDate+Extensions.swift */,
+				108B384520327D4500DB5AE6 /* NSDictionary+Extensions.h */,
+				108B384620327D4500DB5AE6 /* NSDictionary+Extensions.m */,
+				108B384720327D4500DB5AE6 /* SecureContentReference.h */,
+				108B384820327D4500DB5AE6 /* SecureContentReference.m */,
+				108B384920327D4500DB5AE6 /* SecureInputStream.h */,
+				108B384A20327D4500DB5AE6 /* SecureInputStream.m */,
+				108B384B20327D4500DB5AE6 /* SecureOutputStream.h */,
+				108B384C20327D4500DB5AE6 /* SecureOutputStream.m */,
+			);
+			path = encryptionKit;
+			sourceTree = "<group>";
+		};
 		20E5E3BD68BFD3198EE748AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,6 +628,7 @@
 		B91E75471CE2D7B70080EAE0 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				108B382E20327D4500DB5AE6 /* encryptionKit */,
 				1066EF062022F877003745D0 /* DownLoadFileOperation.swift */,
 				1066EF042022F876003745D0 /* FlagMessage.swift */,
 				1066EF002022F876003745D0 /* KmsMessageModel.swift */,
@@ -678,7 +774,22 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				108B385C20327D4500DB5AE6 /* KmsRequest.h in Headers */,
+				108B385520327D4500DB5AE6 /* KmsEphemeralKeyRequest.h in Headers */,
 				B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */,
+				108B386320327D4500DB5AE6 /* NSDictionary+Extensions.h in Headers */,
+				108B386020327D4500DB5AE6 /* NSData+Extensions.h in Headers */,
+				108B385E20327D4500DB5AE6 /* KmsResponse.h in Headers */,
+				108B385920327D4500DB5AE6 /* KmsKey.h in Headers */,
+				108B386720327D4500DB5AE6 /* SecureInputStream.h in Headers */,
+				108B385020327D4500DB5AE6 /* CjoseWrapper.h in Headers */,
+				108B385B20327D4500DB5AE6 /* KmsMessageCreator.h in Headers */,
+				108B385720327D4500DB5AE6 /* KmsEphemeralKeyResponse.h in Headers */,
+				108B384F20327D4500DB5AE6 /* CjoseWrapper+Private.h in Headers */,
+				108B384D20327D4500DB5AE6 /* CipherA256GCM.h in Headers */,
+				108B385420327D4500DB5AE6 /* KmsEphemeralKeyRequest+Private.h in Headers */,
+				108B386920327D4500DB5AE6 /* SecureOutputStream.h in Headers */,
+				108B386520327D4500DB5AE6 /* SecureContentReference.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -919,6 +1030,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				108B386220327D4500DB5AE6 /* NSDate+Extensions.swift in Sources */,
 				3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */,
 				B91E759D1CE2D7B70080EAE0 /* Result.swift in Sources */,
 				5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */,
@@ -929,11 +1041,15 @@
 				3D66B1AC1D24AD4A0016A072 /* Team.swift in Sources */,
 				2099E2491EC44F1B002BDB0C /* MetricsEngine+Call.swift in Sources */,
 				20EEA2781EB0E6B400D6BB75 /* MediaConnectionModel.swift in Sources */,
+				108B386420327D4500DB5AE6 /* NSDictionary+Extensions.m in Sources */,
 				5AFB6E931DF5C5110027E989 /* JWTAuthKeychainStorage.swift in Sources */,
+				108B385820327D4500DB5AE6 /* KmsEphemeralKeyResponse.m in Sources */,
+				108B385620327D4500DB5AE6 /* KmsEphemeralKeyRequest.m in Sources */,
 				5D67C6531CF04E6400758F6B /* MediaEngineCustomLogger.swift in Sources */,
 				1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */,
 				204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */,
 				5D1A5D091CF8130E00313515 /* ReachabilityTransportStatusModel.swift in Sources */,
+				108B386820327D4500DB5AE6 /* SecureInputStream.m in Sources */,
 				1066EF0B2022F877003745D0 /* KmsMessageModel.swift in Sources */,
 				B91E75E01CE2D7B70080EAE0 /* Array+Extension.swift in Sources */,
 				B91E75D61CE2D7B70080EAE0 /* Phone.swift in Sources */,
@@ -947,6 +1063,7 @@
 				B91E75981CE2D7B70080EAE0 /* OAuthViewController.swift in Sources */,
 				B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */,
 				2074343E1E98B7A200C5EBCD /* CallStatus.swift in Sources */,
+				108B386A20327D4500DB5AE6 /* SecureOutputStream.m in Sources */,
 				B91E75AA1CE2D7B70080EAE0 /* Metric+Names.swift in Sources */,
 				20EEA2D01EBDE43300D6BB75 /* MediaEngineObserver.swift in Sources */,
 				20EEA2771EB0E6B400D6BB75 /* CallModel.swift in Sources */,
@@ -954,6 +1071,7 @@
 				B91E75AC1CE2D7B70080EAE0 /* MetricsBuffer.swift in Sources */,
 				B91E75AD1CE2D7B70080EAE0 /* MetricsClient.swift in Sources */,
 				B91E75E21CE2D7B70080EAE0 /* NotificationObserver.swift in Sources */,
+				108B385120327D4500DB5AE6 /* CjoseWrapper.m in Sources */,
 				B91E75A61CE2D7B70080EAE0 /* MembershipClient.swift in Sources */,
 				3D2DF7591CFEAB0A00002F36 /* UserDefaults.swift in Sources */,
 				B91E75B71CE2D7B70080EAE0 /* CallMetrics.swift in Sources */,
@@ -968,6 +1086,7 @@
 				1066EF0D2022F877003745D0 /* PostMessageOperation.swift in Sources */,
 				3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */,
 				20EEA2D21EBDE43300D6BB75 /* MediaSessionObserver.swift in Sources */,
+				108B385220327D4500DB5AE6 /* DateFormatter+Extensions.swift in Sources */,
 				5AFB6E911DF5C5110027E989 /* JWTAuthClient.swift in Sources */,
 				3D3499581CF3ED30004022C3 /* ExponentialBackOffCounter.swift in Sources */,
 				204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */,
@@ -981,6 +1100,7 @@
 				3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */,
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
 				20EEA27C1EB0E77300D6BB75 /* Call+CallKit.swift in Sources */,
+				108B384E20327D4500DB5AE6 /* CipherA256GCM.m in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
 				5AFB6E951DF5C5110027E989 /* JWTAuthenticator.swift in Sources */,
 				99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */,
@@ -996,11 +1116,13 @@
 				20EEA27A1EB0E6B400D6BB75 /* SequenceModel.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */,
 				3DEEA4F11D11418800EB73F6 /* H264LicensePrompter.swift in Sources */,
+				108B385320327D4500DB5AE6 /* KmsClusterInfo.swift in Sources */,
 				20EEA2D11EBDE43300D6BB75 /* MediaEngineWrapper.swift in Sources */,
 				5AFB6E941DF5C5110027E989 /* JWTAuthStorage.swift in Sources */,
 				B91E75C71CE2D7B70080EAE0 /* DeviceClient.swift in Sources */,
 				B91E75D81CE2D7B70080EAE0 /* Room.swift in Sources */,
 				5D1A5D031CF6FB3A00313515 /* ReachabilityModel.swift in Sources */,
+				108B385D20327D4500DB5AE6 /* KmsRequest.m in Sources */,
 				5AC09EB71DE63C27005F38BC /* OAuthKeychainStorage.swift in Sources */,
 				1066EF0C2022F877003745D0 /* MessageClient.swift in Sources */,
 				B91E75DB1CE2D7B70080EAE0 /* Spark.swift in Sources */,
@@ -1008,14 +1130,18 @@
 				5D67C6661CF4525C00758F6B /* MediaCluster.swift in Sources */,
 				3D66B1B21D24AD570016A072 /* TeamMembership.swift in Sources */,
 				B91E759F1CE2D7B70080EAE0 /* ServiceResponse.swift in Sources */,
+				108B385A20327D4500DB5AE6 /* KmsKey.m in Sources */,
 				5A8B997F1DF1D43C003633E1 /* OAuthLauncher.swift in Sources */,
+				108B386620327D4500DB5AE6 /* SecureContentReference.m in Sources */,
 				3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */,
 				B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */,
 				5D1A5D0B1CF821D000313515 /* MediaEngineReachabilityFeedback.swift in Sources */,
 				5A9350D91E00737900374B99 /* Clock.swift in Sources */,
+				108B385F20327D4500DB5AE6 /* KmsResponse.m in Sources */,
 				1066EF102022F877003745D0 /* MessageModel.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,
 				20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */,
+				108B386120327D4500DB5AE6 /* NSData+Extensions.m in Sources */,
 				B91E75C61CE2D7B70080EAE0 /* DeviceModel.swift in Sources */,
 				3D66B1B31D24AD570016A072 /* TeamMembershipClient.swift in Sources */,
 			);
@@ -1133,10 +1259,39 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/openssl/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/json-c/lib",
+					"$(SRCROOT)/Vendors/cjose/lib",
+					"$(SRCROOT)/Vendors/openssl/lib",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"AlamofireObjectMapper\"",
+					"-framework",
+					"\"KeychainAccess\"",
+					"-framework",
+					"\"ObjectMapper\"",
+					"-framework",
+					"\"Starscream\"",
+					"-framework",
+					"\"SwiftyJSON\"",
+					"-Objc",
+					"-lcjose",
+					"-lcrypto",
+					"-ljson-c",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1276,10 +1431,39 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/openssl/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/json-c/lib",
+					"$(SRCROOT)/Vendors/cjose/lib",
+					"$(SRCROOT)/Vendors/openssl/lib",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"AlamofireObjectMapper\"",
+					"-framework",
+					"\"KeychainAccess\"",
+					"-framework",
+					"\"ObjectMapper\"",
+					"-framework",
+					"\"Starscream\"",
+					"-framework",
+					"\"SwiftyJSON\"",
+					"-Objc",
+					"-lcjose",
+					"-lcrypto",
+					"-ljson-c",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1301,10 +1485,39 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/openssl/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/Vendors/json-c/lib",
+					"$(SRCROOT)/Vendors/cjose/lib",
+					"$(SRCROOT)/Vendors/openssl/lib",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"AlamofireObjectMapper\"",
+					"-framework",
+					"\"KeychainAccess\"",
+					"-framework",
+					"\"ObjectMapper\"",
+					"-framework",
+					"\"Starscream\"",
+					"-framework",
+					"\"SwiftyJSON\"",
+					"-Objc",
+					"-lcjose",
+					"-lcrypto",
+					"-ljson-c",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = Cisco.SparkSDK;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

@@ -20,7 +20,6 @@
 
 import UIKit
 import ObjectMapper
-import SparkSDKEncryptionKit
 import Alamofire
 import SwiftyJSON
 
