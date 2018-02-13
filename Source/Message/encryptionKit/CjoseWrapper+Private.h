@@ -1,6 +1,6 @@
 #import "CjoseWrapper.h"
 
-#import <cjose/error.h>
+#import "cjose/error.h"
 
 @interface CjoseWrapper (Private)
 
