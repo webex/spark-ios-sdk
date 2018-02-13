@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
                 'ENABLE_BITCODE' => 'NO',
-                'HEADER_SEARCH_PATHS' => '"${PODS_ROOT}/Vendors/cjose/include"+"${PODS_ROOT}/Vendors/openssl/include"+"${PODS_ROOT}/Vendors/json-c/include"',
-                'LIBRARY_SEARCH_PATHS' => '"${PODS_ROOT}/Vendors/cjose/lib"+"${PODS_ROOT}/Vendors/openssl/lib"+"${PODS_ROOT}/Vendors/json-c/lib'
+                'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/Vendors/cjose/include'+'${PODS_ROOT}/Vendors/openssl/include'+'${PODS_ROOT}/Vendors/json-c/include',
+                'LIBRARY_SEARCH_PATHS' => '${PODS_ROOT}/Vendors/cjose/lib'+'${PODS_ROOT}/Vendors/openssl/lib'+'${PODS_ROOT}/Vendors/json-c/lib'
                 }
   s.vendored_frameworks = "Vendors/*.framework"
   s.dependency 'Alamofire', '~> 4.0'
