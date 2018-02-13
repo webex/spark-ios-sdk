@@ -35,4 +35,5 @@
 #import "SecureOutputStream.h"
 #import "KmsRequest.h"
 #import "KmsEphemeralKeyResponse.h"
+#import "cjose/header.h"
 
