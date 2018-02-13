@@ -11,7 +11,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "9.0"
   s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
-                'ENABLE_BITCODE' => 'NO'
+                'ENABLE_BITCODE' => 'NO',
+                'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/Frameworks/cjose/include'+'${PODS_ROOT}/Frameworks/openssl/include'+'${PODS_ROOT}/Frameworks/json-c/include',
+                'LIBRARY_SEARCH_PATHS' => '${PODS_ROOT}/Frameworks/cjose/lib'+'${PODS_ROOT}/Frameworks/openssl/lib'+'${PODS_ROOT}/Frameworks/json-c/lib'
                 }
   s.vendored_frameworks = "Vendors/*"
   s.dependency 'Alamofire', '~> 4.0'
