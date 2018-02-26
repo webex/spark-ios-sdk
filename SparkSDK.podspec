@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
                 'HEADER_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/include',
                 'LIBRARY_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/lib'
                 }
-  s.vendored_frameworks = "Vendors/*"
+  s.vendored_frameworks = "MediaEngine/*"
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'ObjectMapper', '~> 2.0'
   s.dependency 'AlamofireObjectMapper', '~> 4.0'
