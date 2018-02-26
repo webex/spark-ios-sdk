@@ -21,19 +21,5 @@
 #pragma once
 
 #import "Wme/Wme.h"
-#import "CipherA256GCM.h"
-#import "CjoseWrapper+Private.h"
-#import "CjoseWrapper.h"
-#import "KmsEphemeralKeyRequest+Private.h"
-#import "KmsEphemeralKeyRequest.h"
-#import "SecureContentReference.h"
-#import "NSData+Extensions.h"
-#import "KmsKey.h"
-#import "NSDictionary+Extensions.h"
-#import "KmsMessageCreator.h"
-#import "SecureInputStream.h"
-#import "SecureOutputStream.h"
-#import "KmsRequest.h"
-#import "KmsEphemeralKeyResponse.h"
-#import "cjose/header.h"
+#import "SparkSDKEncryptionKit/SparkSDKEncryptionKit.h"
 

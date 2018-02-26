@@ -1,0 +1,11 @@
+framework module SparkSDKEncryptionKit {
+  umbrella header "SparkSDKEncryptionKit.h"
+
+  export *
+  module * { export * }
+}
+
+module SparkSDKEncryptionKit.Swift {
+    header "SparkSDKEncryptionKit-Swift.h"
+    requires objc
+}
