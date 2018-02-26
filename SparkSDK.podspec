@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/MediaEngine',
                 'ENABLE_BITCODE' => 'NO',
+                'OTHER_LINK_FLAG' => "'-lcrypto','-openssl','-ljson-c'",
                 'HEADER_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/include', '$(PODS_ROOT)/SparkSDK/Vendors/json-c/include', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/include'",
                 'LIBRARY_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/lib', '$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib'"
                 }
