@@ -1251,7 +1251,7 @@
 				ENABLE_TESTABILITY = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/MediaEngine",
+					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/include",
@@ -1422,7 +1422,7 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/MediaEngine",
+					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/include",
@@ -1475,7 +1475,7 @@
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/MediaEngine",
+					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/include",
