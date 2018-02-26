@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = "9.0"
   s.preserve_paths = 'Vendors/*.framework'
-  s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
+  s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/MediaEngine',
                 'ENABLE_BITCODE' => 'NO',
                 'HEADER_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/include',
                 'LIBRARY_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/lib'
