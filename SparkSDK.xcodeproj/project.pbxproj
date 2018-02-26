@@ -1254,9 +1254,9 @@
 					"$(PROJECT_DIR)/MediaEngine",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/openssl/include",
-					"$(SRCROOT)/Vendors/json-c/include",
 					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+					"$(SRCROOT)/Vendors/openssl/include",
 				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1264,8 +1264,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
 					"$(SRCROOT)/Vendors/openssl/lib",
+					"$(SRCROOT)/Vendors/json-c/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1425,9 +1425,9 @@
 					"$(PROJECT_DIR)/MediaEngine",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/openssl/include",
-					"$(SRCROOT)/Vendors/json-c/include",
 					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+					"$(SRCROOT)/Vendors/openssl/include",
 				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1435,8 +1435,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
 					"$(SRCROOT)/Vendors/openssl/lib",
+					"$(SRCROOT)/Vendors/json-c/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1478,9 +1478,9 @@
 					"$(PROJECT_DIR)/MediaEngine",
 				);
 				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/openssl/include",
-					"$(SRCROOT)/Vendors/json-c/include",
 					"$(SRCROOT)/Vendors/cjose/include",
+					"$(SRCROOT)/Vendors/json-c/include",
+					"$(SRCROOT)/Vendors/openssl/include",
 				);
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -1488,8 +1488,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
 					"$(SRCROOT)/Vendors/openssl/lib",
+					"$(SRCROOT)/Vendors/json-c/lib",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
