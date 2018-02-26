@@ -12,6 +12,8 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
                 'ENABLE_BITCODE' => 'NO',
+                'HEADER_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/include',
+                'LIBRARY_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors/*/lib'
                 }
   s.vendored_frameworks = "Vendors/*"
   s.dependency 'Alamofire', '~> 4.0'
