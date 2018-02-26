@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/MediaEngine',
                 'ENABLE_BITCODE' => 'NO',
                 'HEADER_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/include', '$(PODS_ROOT)/SparkSDK/Vendors/json-c/include', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/include'",
-                'LIBRARY_SEARCH_PATHS' => ""'$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/lib', '$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib'"
+                'LIBRARY_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/lib', '$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib'"
                 }
   s.vendored_frameworks = "MediaEngine/*"
   s.dependency 'Alamofire', '~> 4.0'
