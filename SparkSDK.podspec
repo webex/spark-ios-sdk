@@ -12,10 +12,8 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Vendors/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
                 'ENABLE_BITCODE' => 'NO',
-                'HEADER_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/include', '$(PODS_ROOT)/SparkSDK/Vendors/json-c/include', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/include'",
-                'LIBRARY_SEARCH_PATHS' => "'$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib', '$(PODS_ROOT)/SparkSDK/Vendors/openssl/lib', '$(PODS_ROOT)/SparkSDK/Vendors/cjose/lib'"
                 }
-  s.vendored_frameworks = "Vendors/*"
+  s.vendored_frameworks = "Vendors/*.framework"
   s.dependency 'Alamofire', '~> 4.0'
   s.dependency 'ObjectMapper', '~> 2.0'
   s.dependency 'AlamofireObjectMapper', '~> 4.0'
