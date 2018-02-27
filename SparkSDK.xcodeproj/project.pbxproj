@@ -21,6 +21,9 @@
 		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
 		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
+		10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -160,6 +163,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */,
 				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,6 +185,7 @@
 		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
+		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -313,6 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
 				4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */,
@@ -323,8 +329,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
+				10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */,
+				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +437,7 @@
 		8838B91D70254D46671B19F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */,
 				105E8EF81FF2976200EB33F1 /* Wme.framework */,
 				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
 				04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */,
@@ -732,6 +740,7 @@
 					3D15B70A1D3E176C003BB682 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 					};
 					B91E75241CE2D6FF0080EAE0 = {
 						CreatedOnToolsVersion = 7.3;
@@ -1029,6 +1038,8 @@
 			baseConfigurationReference = 15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
@@ -1041,6 +1052,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -1049,6 +1061,8 @@
 			baseConfigurationReference = EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
@@ -1061,6 +1075,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
@@ -1158,6 +1173,8 @@
 			baseConfigurationReference = 03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
@@ -1170,6 +1187,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = cisco.SparkSDKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = ReleaseTest;
 		};
