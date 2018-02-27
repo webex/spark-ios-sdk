@@ -1253,25 +1253,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/include",
-					"$(SRCROOT)/Vendors/json-c/include",
-					"$(SRCROOT)/Vendors/openssl/include",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/openssl/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lcjose",
-					"-lcrypto",
-					"-ljson-c",
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
@@ -1424,25 +1413,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/include",
-					"$(SRCROOT)/Vendors/json-c/include",
-					"$(SRCROOT)/Vendors/openssl/include",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/openssl/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lcjose",
-					"-lcrypto",
-					"-ljson-c",
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
@@ -1477,25 +1455,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/include",
-					"$(SRCROOT)/Vendors/json-c/include",
-					"$(SRCROOT)/Vendors/openssl/include",
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/Vendors/cjose/lib",
-					"$(SRCROOT)/Vendors/openssl/lib",
-					"$(SRCROOT)/Vendors/json-c/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lcjose",
-					"-lcrypto",
-					"-ljson-c",
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
