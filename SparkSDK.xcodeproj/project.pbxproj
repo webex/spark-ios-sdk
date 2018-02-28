@@ -21,6 +21,8 @@
 		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
 		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
+		10675959204643D7001DA768 /* KeyStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 10675956204643D7001DA768 /* KeyStore.xcdatamodeld */; };
+		1067595A204643D7001DA768 /* KeyStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10675958204643D7001DA768 /* KeyStoreManager.swift */; };
 		10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -185,6 +187,8 @@
 		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
+		10675957204643D7001DA768 /* KeyStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = KeyStore.xcdatamodel; sourceTree = "<group>"; };
+		10675958204643D7001DA768 /* KeyStoreManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyStoreManager.swift; sourceTree = "<group>"; };
 		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
@@ -338,6 +342,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10675955204643D7001DA768 /* KeyStore */ = {
+			isa = PBXGroup;
+			children = (
+				10675956204643D7001DA768 /* KeyStore.xcdatamodeld */,
+				10675958204643D7001DA768 /* KeyStoreManager.swift */,
+			);
+			path = KeyStore;
+			sourceTree = "<group>";
+		};
 		20E5E3BD68BFD3198EE748AE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -533,6 +546,7 @@
 		B91E75471CE2D7B70080EAE0 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				10675955204643D7001DA768 /* KeyStore */,
 				1066EF062022F877003745D0 /* DownLoadFileOperation.swift */,
 				1066EF042022F876003745D0 /* FlagMessage.swift */,
 				1066EF002022F876003745D0 /* KmsMessageModel.swift */,
@@ -981,6 +995,7 @@
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
 				3D1E57991CEDA351006124B0 /* String+Extension.swift in Sources */,
 				B91E759E1CE2D7B70080EAE0 /* ServiceRequest.swift in Sources */,
+				1067595A204643D7001DA768 /* KeyStoreManager.swift in Sources */,
 				20EEA27C1EB0E77300D6BB75 /* Call+CallKit.swift in Sources */,
 				B91E75B01CE2D7B70080EAE0 /* Person.swift in Sources */,
 				5AFB6E951DF5C5110027E989 /* JWTAuthenticator.swift in Sources */,
@@ -991,6 +1006,7 @@
 				B91E75D71CE2D7B70080EAE0 /* WebSocketService.swift in Sources */,
 				1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
+				10675959204643D7001DA768 /* KeyStore.xcdatamodeld in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
 				1066EF0E2022F877003745D0 /* Message.swift in Sources */,
 				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */,
@@ -1407,6 +1423,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		10675956204643D7001DA768 /* KeyStore.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				10675957204643D7001DA768 /* KeyStore.xcdatamodel */,
+			);
+			currentVersion = 10675957204643D7001DA768 /* KeyStore.xcdatamodel */;
+			path = KeyStore.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = B91E751C1CE2D6FF0080EAE0 /* Project object */;
 }
