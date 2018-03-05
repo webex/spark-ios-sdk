@@ -79,7 +79,6 @@ class UploadFileOperation: Operation {
         let uploadSessionUrl = URL(string: self.spaceUrl+"/upload_sessions")
         var fileSize: UInt64 = 0
         do{
-            SDKLogger.shared.info("Begin To Upload File Data ......")
             self.uploadState = .Uploading
             let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
             let fileAttr = try FileManager.default.attributesOfItem(atPath: fileUrl!)
@@ -88,6 +87,7 @@ class UploadFileOperation: Operation {
             let fileScr = try SecureContentReference(error: ())
             let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
             let parameters : Parameters = ["fileSize": fileSize]
+            SDKLogger.shared.info("Begin To Upload Data......")
             Alamofire.request(uploadSessionUrl!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON(completionHandler: { response in
                 switch response.result{
                 case .success(let value):
@@ -146,7 +146,7 @@ class UploadFileOperation: Operation {
         let uploadSessionUrl = URL(string: self.spaceUrl+"/upload_sessions")
         var fileSize: UInt64 = 0
         do{
-            SDKLogger.shared.info("Begin To Uploading Thumbnail Data ......")
+            SDKLogger.shared.info("Begin To Upload Data......")
             let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
             let fileAttr = try FileManager.default.attributesOfItem(atPath:fileUrl!)
             fileSize = fileAttr[FileAttributeKey.size] as! UInt64
@@ -228,20 +228,24 @@ class UploadFileOperation: Operation {
     private func finishUploadFileBody(fileScr: SecureContentReference?=nil){
         self.bodyUploadFinish = true
         if(!self.hasThumbNail){
+            SDKLogger.shared.info("Finish Upload File Data......")
             self.completionHandler(self.fileModel, nil)
         }else if(self.hasThumbNail && self.thumbNailUploadFinish){
+            SDKLogger.shared.info("Finish Upload File Data......")
             self.completionHandler(self.fileModel, nil)
         }
     }
     private func finishUpLoadThumbNail(fileScr: SecureContentReference?=nil, error: Error?=nil){
         self.thumbNailUploadFinish = true
         if(self.bodyUploadFinish){
+            SDKLogger.shared.info("Finish Upload File Data......")
             self.completionHandler(self.fileModel, nil)
         }
     }
-    
+
     private func finishUploadWithError(_ error : Error){
         self.cancel()
+        SDKLogger.shared.info("Upload File Data Failure......")
         self.completionHandler(self.fileModel, error)
     }
 }
