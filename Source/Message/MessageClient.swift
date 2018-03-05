@@ -526,7 +526,7 @@ public class MessageClient {
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
                 message.text = clearText! as String
-                message.html = clearText! as String
+//                message.html = clearText! as String
             }
             if let files = message.files{
                 for file in files{

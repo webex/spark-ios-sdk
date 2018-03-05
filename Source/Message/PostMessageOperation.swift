@@ -84,6 +84,8 @@ class PostMessageOperation: Operation {
         case .delete:
             self.deleteOperation()
             break
+        default:
+            break
         }
     }
     
@@ -218,11 +220,7 @@ class PostMessageOperation: Operation {
             objectDict["id"] = objectIdStr.sparkSplitString()
         }
         objectDict["displayName"] = message.text
-        if let htmlStr = message.html{
-            objectDict["content"] = htmlStr
-        }else{
-            objectDict["content"] = message.text
-        }
+        objectDict["content"] = message.text
         if let peopleMentionArr = message.mentionedPeople{
             var tempArray = [[String: String]]()
             for peopleMention in peopleMentionArr{

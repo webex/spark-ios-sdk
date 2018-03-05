@@ -28,6 +28,7 @@ public enum MessageAction : String{
     case post = "post"
     case share = "share"
     case delete = "delete"
+    case tombstone = "tombstone"
 }
 
 /// The struct of a MentionItemType on Cisco Spark.
@@ -63,21 +64,21 @@ public class MessageModel : Mappable {
     public var text: String?
     
     /// MarkDown Content of Message
-    public var html: String?
+//    public var html: String?
     
     /// Id & Email of who posted the message
     public var personId: String?
     public var personEmail: String?
     
     /// CreatedTime of Message
-    public var created: String?
+    public var created: Date?
     
     /// MentionedPeople & MentionedGroup
     public var mentionedPeople: [String]?
     public var mentionedGroup: [String]?
     
     /// Attached Files of message
-    public var files : [FileObjectModel]?
+    public var files : Array<FileObjectModel>?
     
     /// The encryptionKeyUrl of the message
     public var encryptionKeyUrl: String?
@@ -104,7 +105,7 @@ public class MessageModel : Mappable {
     /// - note: for internal use only.
     public func mapping(map: Map) {
         id <- map["id"]
-        created <- map["published"]
+        created <- (map["published"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         encryptionKeyUrl <- map["encryptionKeyUrl"]
         if let idStr = self.id{
             self.id = String.sparkEncodedUserId(idStr)
@@ -141,7 +142,10 @@ public class MessageModel : Mappable {
         if let objectDict = map.JSON["object"] as? [String: Any]{
             if let displayName = objectDict["displayName"]{
                 self.text = displayName as? String
-                self.html = displayName as? String
+//                self.html = displayName as? String
+            }
+            if let content = objectDict["content"]{
+                self.text = content as? String
             }
             if let gMentions = objectDict["groupMentions"] as? [String: Any]{
                 if let gMentionArr = gMentions["items"] as? [[String: Any]]{
@@ -160,8 +164,18 @@ public class MessageModel : Mappable {
                     }
                 }
             }
-            files <- map["object"]["files"]
+            if let fileDict = objectDict["files"] as? [String: Any]{
+                if let items = fileDict["items"] as? [[String: Any]]{
+                    self.files = Array<FileObjectModel>()
+                    for item in items{
+                        let file = Mapper<FileObjectModel>().map(JSON: item)
+                        self.files?.append(file!)
+                    }
+                }
+            }
+            
         }
+
     }
     
 }
@@ -182,7 +196,7 @@ extension MessageModel{
             "toPersonId": self.toPersonId,
             "toPersonEmail": self.toPersonEmail,
             "text": self.text,
-            "html": self.html,
+//            "html": self.html,
             "personId": self.personId,
             "personEmail": self.personEmail,
             "created": self.created,
