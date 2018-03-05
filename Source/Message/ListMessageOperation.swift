@@ -1,10 +1,22 @@
+// Copyright 2016-2017 Cisco Systems Inc
 //
-//  ListActivityOperation.swift
-//  SparkSDK
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-//  Created by qucui on 2018/1/17.
-//  Copyright © 2018年 Cisco. All rights reserved.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 import UIKit
 import Alamofire
@@ -14,16 +26,16 @@ import MobileCoreServices.UTType
 class ListMessageOperation: Operation {
     var roomId: String
     var listRequest: ServiceRequest
-    var completionHandler : (ServiceResponse<[Message]>) -> Void
-    var response: ServiceResponse<[Message]>?
+    var completionHandler : (ServiceResponse<[MessageModel]>) -> Void
+    var response: ServiceResponse<[MessageModel]>?
     var keyMaterial : String?
     init(roomId : String,
          listRequest: ServiceRequest,
          keyMaterial: String?=nil,
          queue:DispatchQueue? = nil,
-         completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
+         completionHandler: @escaping (ServiceResponse<[MessageModel]>) -> Void)
     {
-        self.roomId = roomId.splitString()
+        self.roomId = roomId.sparkSplitString()
         self.listRequest = listRequest
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial
@@ -31,7 +43,7 @@ class ListMessageOperation: Operation {
     }
     
     override func main() {
-        self.listRequest.responseArray {(response: ServiceResponse<[Message]>) in
+        self.listRequest.responseArray {(response: ServiceResponse<[MessageModel]>) in
             self.response = response
             switch response.result{
             case .success(let list):
@@ -44,30 +56,27 @@ class ListMessageOperation: Operation {
         }
     }
     
-    private func decryptList(_ messageList: [Message]){
+    private func decryptList(_ messageList: [MessageModel]){
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
         for message in messageList{
             do {
-                if message.plainText == nil{
-                    message.plainText = ""
+                if message.text == nil{
+                    message.text = ""
                 }
-                guard let chiperText = message.plainText
+                guard let chiperText = message.text
                     else{
                         return;
                 }
                 if(chiperText != ""){
                     let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                     let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                    message.plainText = clearText! as String
-                    message.markDownString()
+                    message.text = clearText! as String
                 }
                 if let files = message.files{
                     for file in files{
-                        if let displayname = file.displayName,
-                            let scr = file.scr
-                        {
+                        if let displayname = file.displayName,let scr = file.scr{
                             let nameData = try CjoseWrapper.content(fromCiphertext: displayname, key: acitivityKeyMaterial)
                             let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
                             let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)

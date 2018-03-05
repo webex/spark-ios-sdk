@@ -23,11 +23,10 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-
 class PostMessageOperation: Operation {
-    var message : Message
+    var message : MessageModel
     var uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil
-    var completionHandler :  (ServiceResponse<Message>) -> Void
+    var completionHandler :  (ServiceResponse<MessageModel>) -> Void
     var queue : DispatchQueue?
     var keyMaterial : String?
     var action : MessageAction?
@@ -35,24 +34,24 @@ class PostMessageOperation: Operation {
     let authenticator: Authenticator
     var files : [FileObjectModel]?
     var spaceUrl: String?
-    var response: ServiceResponse<Message>?
+    var response: ServiceResponse<MessageModel>?
     
     init(authenticator: Authenticator,
-         message: Message,
+         message: MessageModel,
          keyMaterial: String?=nil,
          spaceUrl: String? = nil,
          queue:DispatchQueue? = nil,
          uploadingProgressHandler : ((FileObjectModel, Double) -> Void)? = nil,
-         completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+         completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void)
     {
         self.authenticator = authenticator
         self.message = message
-        self.action = message.action
+        self.action = message.messageAction
         self.encryptionUrl = message.encryptionKeyUrl
         self.queue = queue
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial
-        if(message.action == MessageAction.share){
+        if(message.messageAction == MessageAction.share){
             self.spaceUrl = spaceUrl
             self.files = message.files
             self.uploadingProgressHandler = uploadingProgressHandler
@@ -82,14 +81,8 @@ class PostMessageOperation: Operation {
             }else{
                 self.upLoadOperation()
             }
-        case .acknowledge:
-            self.readOperation()
-            break
         case .delete:
             self.deleteOperation()
-            break
-        default:
-            self.cancel()
             break
         }
     }
@@ -108,7 +101,7 @@ class PostMessageOperation: Operation {
                 }, completionHandler: { (file, error) in
                     if let err = error {
                         self.cancel()
-                        let result = Result<Message>.failure(err)
+                        let result = Result<MessageModel>.failure(err)
                         self.completionHandler(ServiceResponse(nil, result))
                     }else{
                         self.finishUploadFile()
@@ -133,15 +126,15 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "share",
             "encryptionKeyUrl" : encryptionUrl,
-            "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
-            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
+            "object" : createMessageObject(objectType: "comment",message: self.message),
+            "target" : createMessageTarget(roomId: self.message.roomId)
             ])
         let request = requestBuilder()
             .method(.post)
             .body(body)
             .queue(self.queue)
             .build()
-        request.responseObject{ (response: ServiceResponse<Message>) in
+        request.responseObject{ (response: ServiceResponse<MessageModel>) in
             self.response = response
             switch response.result{
             case .success(let value):
@@ -161,15 +154,15 @@ class PostMessageOperation: Operation {
         let body = RequestParameter([
             "verb": "post",
             "encryptionKeyUrl" : encryptionUrl,
-            "object" : createMessageObject(objectType: "comment",message: self.message).toJSON(),
-            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
+            "object" : createMessageObject(objectType: "comment",message: self.message),
+            "target" : createMessageTarget(roomId: self.message.roomId)
             ])
         let request = requestBuilder()
             .method(.post)
             .body(body)
             .queue(self.queue)
             .build()
-        request.responseObject{ (response: ServiceResponse<Message>) in
+        request.responseObject{ (response: ServiceResponse<MessageModel>) in
             self.response = response
             switch response.result{
             case .success(let value):
@@ -186,8 +179,8 @@ class PostMessageOperation: Operation {
     private func readOperation(){
         let body = RequestParameter([
             "verb": "acknowledge",
-            "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
-            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
+            "object" : createMessageObject(objectType: "activity", message: self.message),
+            "target" : createMessageTarget(roomId: self.message.roomId)
             ])
         let request = requestBuilder()
             .method(.post)
@@ -201,8 +194,8 @@ class PostMessageOperation: Operation {
     private func deleteOperation(){
         let body = RequestParameter([
             "verb": "delete",
-            "object" : createMessageObject(objectType: "activity", message: self.message).toJSON(),
-            "target" : createMessageTarget(roomId: self.message.roomId).toJSON()
+            "object" : createMessageObject(objectType: "activity", message: self.message),
+            "target" : createMessageTarget(roomId: self.message.roomId)
             ])
         let request = requestBuilder()
             .method(.post)
@@ -214,50 +207,50 @@ class PostMessageOperation: Operation {
     
     
     // MARK: Client Private Functions
-    private func createMessageObject(objectType: String,
-                                     message: Message) -> MessageObjectModel
+    private func requestBuilder() -> ServiceRequest.MessageServerBuilder {
+        return ServiceRequest.MessageServerBuilder(authenticator).path("activities")
+    }
+    private func createMessageObject(objectType: String, message: MessageModel) -> [String: Any]
     {
-        let model = MessageObjectModel()
-        model.objectType = objectType
+        var objectDict = [String: Any]()
+        objectDict["objectType"] = objectType
         if let objectIdStr = message.id{
-            model.id = objectIdStr.splitString()
+            objectDict["id"] = objectIdStr.sparkSplitString()
         }
-        if let contentStr = message.plainText{
-            var markedUpContent = contentStr
-            if let mentionsArr = message.mentionItems{
-                var mentionStringLength = 0
-                for index in 0..<mentionsArr.count{
-                    let mentionItem = mentionsArr[index]
-                    let startPosition = (mentionItem.range.lowerBound) + mentionStringLength
-                    let endPostion = (mentionItem.range.upperBound) + mentionStringLength
-                    let startIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: startPosition)
-                    let endIndex = markedUpContent.index(markedUpContent.startIndex, offsetBy: endPostion)
-                    let mentionContent = markedUpContent[startPosition..<endPostion]
-                    if(mentionItem.mentionType == MentionItemType.person){
-                        let markupStr = markUpString(mentionContent: mentionContent, mentionId: mentionItem.personId, mentionType: "person")
-                        markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.characters.count - mentionContent.characters.count)
-                    }else{
-                        let markupStr = markUpString(mentionContent: mentionContent, groupType: "all", mentionType: "groupMention")
-                        markedUpContent = markedUpContent.replacingCharacters(in: startIndex..<endIndex, with: markupStr)
-                        mentionStringLength += (markupStr.characters.count - mentionContent.characters.count)
-                    }
-                }
-                model.content = markedUpContent
-                model.displayName = contentStr
-                model.mentions =  ["items" : mentionsArr]
-            }else{
-                model.content = contentStr
-                model.displayName = contentStr
+        objectDict["displayName"] = message.text
+        if let htmlStr = message.html{
+            objectDict["content"] = htmlStr
+        }else{
+            objectDict["content"] = message.text
+        }
+        if let peopleMentionArr = message.mentionedPeople{
+            var tempArray = [[String: String]]()
+            for peopleMention in peopleMentionArr{
+                var dict = [String: String]()
+                dict["id"] = peopleMention.sparkSplitString()
+                dict["objectType"] = "person"
+                tempArray.append(dict)
             }
+            objectDict["mentions"] =  ["items" : tempArray]
         }
+        if let groupMentionArr = message.mentionedGroup{
+            var tempArray = [[String: String]]()
+            for groupType in groupMentionArr{
+                var dict = [String: String]()
+                dict["groupType"] = groupType
+                dict["objectType"] = "groupMention"
+                tempArray.append(dict)
+            }
+            objectDict["groupMentions"] =  ["items" : tempArray]
+        }
+        
         if let keyMaterial = self.keyMaterial{
             do {
-                if(model.content != nil && model.content != ""){
-                    let displayNameChiper = try CjoseWrapper.ciphertext(fromContent: model.displayName?.data(using: .utf8), key: keyMaterial)
-                    let contentChiper = try CjoseWrapper.ciphertext(fromContent: model.content?.data(using: .utf8), key: keyMaterial)
-                    model.displayName = displayNameChiper
-                    model.content = contentChiper
+                if(objectDict["content"] != nil){
+                    let displayNameChiper = try CjoseWrapper.ciphertext(fromContent: (objectDict["displayName"] as? String)?.data(using: .utf8), key: keyMaterial)
+                    let contentChiper = try CjoseWrapper.ciphertext(fromContent: (objectDict["content"] as? String)?.data(using: .utf8), key: keyMaterial)
+                    objectDict["displayName"] = displayNameChiper
+                    objectDict["content"] = contentChiper
                 }
             }catch let error as NSError {
                 SDKLogger.shared.debug("Process Posting Message Error - \(error.description)")
@@ -276,48 +269,24 @@ class PostMessageOperation: Operation {
                     let chiperFileName = try CjoseWrapper.ciphertext(fromContent: file.displayName?.data(using: .utf8), key: keyMaterial)
                     file.displayName = chiperFileName
                 }
-                model.contentCategory = "documents"
-                model.objectType = "content"
-                model.files = ["items" : files]
+                objectDict["contentCategory"] = "documents"
+                objectDict["objectType"] = "content"
+                objectDict["files"] = ["items" : files.toJSON()]
             }catch let error as NSError {
                 SDKLogger.shared.debug("Process Posting Message Files Error - \(error.description)")
                 self.cancel()
             }
         }
-        return model
+        return objectDict
     }
-    
-    private func createMessageTarget(roomId: String? = nil) -> MessageTargetModel{
-        let model = MessageTargetModel()
-        model.objectType = "conversation"
+    private func createMessageTarget(roomId: String? = nil) -> [String: Any]{
+        var objectDict = [String: Any]()
+        objectDict["objectType"] = "conversation"
         if let idStr = roomId{
-            model.id = idStr.splitString()
+            objectDict["id"] = idStr.sparkSplitString()
         }
-        return model
+        return objectDict
     }
-    
-    private func markUpString(mentionContent: String?, mentionId: String? = nil, groupType: String?=nil, mentionType: String)->String{
-        var result = "<spark-mention"
-        if let mentionid = mentionId{
-            result = result + " data-object-id=" + mentionid
-        }
-        if let grouptype = groupType{
-            result = result + " data-group-type=" + grouptype
-        }
-        
-        result = result + " data-object-type=" + mentionType
-        result = result + ">"
-        if let content = mentionContent{
-            result = result + content
-        }
-        result = result + "</spark-mention>"
-        return result
-    }
-    
-    private func requestBuilder() -> ServiceRequest.MessageServerBuilder {
-        return ServiceRequest.MessageServerBuilder(authenticator).path("activities")
-    }
-    
     private func mimeType(fromFilename filename: String) -> String {
         let defaultMimeType = "application/octet-stream"
         guard let fileType = filename.components(separatedBy: ".").last else{
@@ -332,23 +301,22 @@ class PostMessageOperation: Operation {
         return mimeType as String
     }
     
-    private func decrypt(_ newMessage: Message){
+    private func decrypt(_ newMessage: MessageModel){
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
         do {
-            if newMessage.plainText == nil{
-                newMessage.plainText = ""
+            if newMessage.text == nil{
+                newMessage.text = ""
             }
-            guard let chiperText = newMessage.plainText
+            guard let chiperText = newMessage.text
                 else{
                     return
             }
             if(chiperText != ""){
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                newMessage.plainText = clearText! as String
-                newMessage.markDownString()
+                newMessage.text = clearText! as String
             }
             if let files = newMessage.files{
                 for file in files{
@@ -374,4 +342,3 @@ class PostMessageOperation: Operation {
         self.completionHandler(self.response!)
     }
 }
-

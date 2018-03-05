@@ -21,14 +21,24 @@
 import UIKit
 import ObjectMapper
 
-
-/// The struct of a MessageType on Cisco Spark.
+/// The struct of a MentionItemType on Cisco Spark.
 ///
 /// - since: 1.4.0
-public enum MessageType : String{
-    case TextMessage
-    case FlagMessage
-    case TypingMessage
+public enum MessageAction : String{
+    case post = "post"
+    case share = "share"
+    case delete = "delete"
+}
+
+/// The struct of a MentionItemType on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum MentionItemType : String{
+    case person = "person"
+    case group = "groupMention"
+}
+public enum GroupMentionType: String{
+    case all = "all"
 }
 
 /// The struct of a Message on Cisco Spark.
@@ -39,75 +49,45 @@ public class MessageModel : Mappable {
     /// The identifier of this message.
     public var id: String?
     
-    /// The eventType of the message
-    var eventType: String?
-    {
-        didSet {
-            if(eventType == "conversation.activity"){
-                self.messageType = MessageType.TextMessage
-            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing"){
-                self.messageType = MessageType.TypingMessage
-            }else if(eventType == "user.app_item"){
-                self.messageType = MessageType.FlagMessage
-            }
-        }
-    }
+    /// The roomId of the message, should only use for receive typing/untyping message
+    public var roomId: String?
     
-    /// The messageType of the message
-    public var messageType: MessageType?
+    ///  The room type "group"/"direct"
+    public var roomType: String?
     
-    /// The objectType of the Message. Default is "message"
-    public var objectType: String?
+    /// To target's personId & personEmail of message on "direct" room
+    public var toPersonId: String?
+    public var toPersonEmail: String?
     
-    /// The url of the Message.
-    public var url: String?
+    /// Content of Message
+    public var text: String?
     
+    /// MarkDown Content of Message
+    public var html: String?
     
-    /// The the time message published "YYYY-MM-DDTHH:MM:SS.SSSZ".
-    public var published: Date?
+    /// Id & Email of who posted the message
+    public var personId: String?
+    public var personEmail: String?
     
-    /* The action verb the Activiy do
-     add : adding participant to room
-     leave : leave a room
-     post : send a text message to room
-     acknowledge: acknowledge an message
-     update: update a room title
-     hide : hide a room
-     unhide : unhide a room
-     mute : mute a room
-     unmute : unmute a room
-     favorite : favorite a room
-     unfavorite : unfavorite a room
-     share : share a content with participant in a room
-     delete : delete an message item (the target of this message)
-     */
-    public var verb: String?
+    /// CreatedTime of Message
+    public var created: String?
     
-    /// The actor of the Acitivity
-    public var actor: MessageActorModel?
+    /// MentionedPeople & MentionedGroup
+    public var mentionedPeople: [String]?
+    public var mentionedGroup: [String]?
     
-    /// The message object bring message/file info.
-    public var object: MessageObjectModel?
-    
-    /// The target of the message
-    public var target: MessageTargetModel?
-    
-    /// The clientTempId of the message
-    public var clientTempId: String?
+    /// Attached Files of message
+    public var files : [FileObjectModel]?
     
     /// The encryptionKeyUrl of the message
     public var encryptionKeyUrl: String?
     
-    /// The timestamp of the message
-    public var timestamp: String?
-    
-    /// The roomId of the message, should only use for receive typing/untyping message
-    public var roomId: String?
-    
-    /// The message flag item action, should only use for receive flag/unflag message "create"/"delete"
-    public var action: String?
-    /// The message flag item info, should only use for receive flag/unflag message
-    public var flagItem: MessageFlagItemModel?
+    /* The action of the message:
+     post : send a text message to room
+     share : share a content with participant in a room
+     delete : delete an message item (the target of this message)
+     */
+    public var messageAction: MessageAction?
     
     /// MessageModel constructor.
     ///
@@ -124,88 +104,93 @@ public class MessageModel : Mappable {
     /// - note: for internal use only.
     public func mapping(map: Map) {
         id <- map["id"]
-        objectType <- map["objectType"]
-        url <- map["url"]
-        published <- (map["published"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-        verb <- map["verb"]
-        actor <- map["actor"]
-        object <- map["object"]
-        target <- map["target"]
-        clientTempId <- map["clientTempId"]
+        created <- map["published"]
         encryptionKeyUrl <- map["encryptionKeyUrl"]
-        eventType <- map["eventType"]
-        roomId <- map["conversationId"]
-        flagItem <- map["appData"]
-        action <- map["action"]
-        timestamp<-map["timestamp"]
         if let idStr = self.id{
-            let idString = "ciscospark://us/MESSAGE/\(idStr)"
-            self.id = idString.base64Encoded()
+            self.id = String.sparkEncodedUserId(idStr)
         }
-        if let roomId = self.roomId{
-            let roomIdStr = "ciscospark://us/ROOM/\(roomId)"
-            self.roomId = roomIdStr.base64Encoded()
+        
+        if let verb = map.JSON["verb"]{
+            self.messageAction = MessageAction(rawValue: verb as! String)
         }
-    }
-}
-
-// MARK: MessageActorModel
-public class MessageActorModel : Mappable{
-    public var id: String?
-    public var displayName: String?
-    public var orgId: String?
-    public var emailAddress: String?
-    public var actorType: String? // Default is "PERSON"
-    
-    public required init?(map: Map) {}
-    public func mapping(map: Map) {
-        id <- map["id"]
-        displayName <- map["displayName"]
-        orgId <- map["orgId"]
-        emailAddress <- map["emailAddress"]
-        actorType <- map["type"]
-    }
-}
-
-// MARK: MessageObjectModel
-public class MessageObjectModel : Mappable{
-    public var id: String?
-    public var objectType: String?
-    public var url: String?
-    public var displayName: String?
-    public var contentCategory: String?
-    public var content: String?
-    public var contentType: String?
-    public var mentions: [String : [MessageMentionModel]]?
-    private var groupMentions:[String: [MessageMentionModel]]?
-    public var files: [String: [FileObjectModel]]?
-    
-    public init(){}
-    public required init?(map: Map) {}
-    public func mapping(map: Map) {
-        id <- map["id"]
-        objectType <- map["objectType"]
-        url <- map["url"]
-        displayName <- map["displayName"]
-        contentCategory <- map["contentCategory"]
-        content <- map["content"]
-        contentType <- map["contentType"]
-        mentions <- map["mentions"]
-        groupMentions <- map["groupMentions"]
-        files <- map["files"]
-        if let gMentions = groupMentions{
-            if let mentions = mentions{
-                let gMentionArr = gMentions["items"]!
-                var mentionArr = mentions["items"]!
-                mentionArr.append(contentsOf: gMentionArr)
-                self.mentions = ["items": mentionArr]
-            }else{
-                self.mentions = gMentions
+        
+        if let actorDict = map.JSON["actor"] as? [String: Any]{
+            if let personIdData = actorDict["entryUUID"]{
+                self.personId = String.sparkEncodedUserId(personIdData as? String)
+            }
+            if let emailAddress = actorDict["emailAddress"]{
+                self.personEmail = emailAddress as? String
             }
         }
+        
+        if let targetDict = map.JSON["target"] as? [String: Any]{
+            if let roomIdData = targetDict["id"]{
+                self.roomId = String.sparkEncodedRoomId(roomIdData as? String)
+            }
+            if let tags = targetDict["tags"] as? [String]{
+                if tags.contains("ONE_ON_ONE"){
+                    self.roomType = "direct"
+                }else{
+                    self.roomType = "group"
+                }
+            }else{
+                self.roomType = "group"
+            }
+        }
+        
+        if let objectDict = map.JSON["object"] as? [String: Any]{
+            if let displayName = objectDict["displayName"]{
+                self.text = displayName as? String
+                self.html = displayName as? String
+            }
+            if let gMentions = objectDict["groupMentions"] as? [String: Any]{
+                if let gMentionArr = gMentions["items"] as? [[String: Any]]{
+                    self.mentionedGroup = [String]()
+                    for mention in gMentionArr{
+                        self.mentionedGroup?.append(mention["groupType"] as! String)
+                    }
+                }
+            }
+            if let mentions = objectDict["mentions"] as? [String: Any]{
+                if let mentionArr = mentions["items"] as? [[String: Any]]{
+                    self.mentionedPeople = [String]()
+                    for mention in mentionArr{
+                        let mentionId = mention["id"] as? String
+                        self.mentionedPeople?.append(String.sparkEncodedUserId(mentionId)!)
+                    }
+                }
+            }
+            files <- map["object"]["files"]
+        }
+    }
+    
+}
+extension MessageModel{
+    fileprivate var toPersonIdStr: String?{
+        get{
+            return self.toPersonId
+        }
+        set{
+            self.toPersonId = String.sparkEncodedUserId(newValue)
+        }
+    }
+    public func dictPresent()->[String: Any?]{
+        return [
+            "id": self.id,
+            "roomId": self.roomId,
+            "roomType": self.roomType,
+            "toPersonId": self.toPersonId,
+            "toPersonEmail": self.toPersonEmail,
+            "text": self.text,
+            "html": self.html,
+            "personId": self.personId,
+            "personEmail": self.personEmail,
+            "created": self.created,
+            "mentionedPeople": self.mentionedPeople,
+            "mentionedGroup": self.mentionedGroup,
+        ]
     }
 }
-
 // MARK: FileObjectModel
 public class FileObjectModel : Mappable{
     public var displayName: String?
@@ -254,82 +239,92 @@ public class ThumbNailImageModel : Mappable {
     }
 }
 
-// MARK: MessageTargetModel
-public class MessageTargetModel : Mappable{
-    public var id: String?
-    public var objectType: String? // Default is "conversation"
-    public var url: String?
-    public var encryptionKeyUrl: String?
-    public var tags: [String]?
-    
-    public init(){}
-    public required init?(map: Map) {}
-    public func mapping(map: Map) {
-        id <- map["id"]
-        objectType <- map["objectType"]
-        url <- map["url"]
-        encryptionKeyUrl <- map["encryptionKeyUrl"]
-        tags <- map["tags"]
-        if(self.objectType == "conversation"){
-            let roomIdStr = "ciscospark://us/ROOM/\(self.id!)"
-            self.id = roomIdStr.base64Encoded()
-        }
-    }
-}
-
-// MARK: MessageFlagItemModel
-public class MessageFlagItemModel: Mappable{
-    public var messageUrl: String?
-    public var state: String? // Default is "flagged/unflagged"
-    public var id: String?
-    public var url: String?
-    public var created: Date?
-    
-    public required init?(map: Map) {}
-    public func mapping(map: Map) {
-        messageUrl <- map["flag-item"]
-        state <- map["state"]
-        id <- map["id"]
-        url <- map["url"]
-        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
-    }
-}
-
 // MARK: MessageMentionModel
 public class MessageMentionModel : Mappable{
     public var personId: String?
     public var objectType: String?
-    public var groupType: String?
-    public var range: CountableClosedRange<Int>
+    public var groupType: GroupMentionType?
     public var mentionType: MentionItemType
     
-    public init(range: CountableClosedRange<Int>, personId: String?, type: MentionItemType){
-        if let personid = personId,
-            let userId = personid.base64Decoded(),
-            let result = userId.components(separatedBy: "/").last {
-            self.personId = String(result)
-        }else{
-            self.personId = personId
-        }
-        self.range = range
+    private init(personId: String?,type: MentionItemType){
         self.mentionType = type
-        if (self.mentionType == .person){
+        if self.mentionType == .person{
+            if let personid = personId?.sparkSplitString(){
+                self.personId = personid
+            }else{
+                self.personId = personId
+            }
             self.objectType = "person"
-        }else if(self.mentionType == .group){
+        }else{
             self.objectType = "groupMention"
-            self.groupType = "all"
+            self.groupType = .all
         }
     }
+    
+    public static func createPeopleMentionItem(personId: String?)->MessageMentionModel{
+        return MessageMentionModel(personId: personId, type: MentionItemType.person)
+    }
+    public static func createGroupMentionItem()->MessageMentionModel{
+        return MessageMentionModel(personId: nil, type: MentionItemType.group)
+    }
+    
     
     public required init?(map: Map){
         self.personId = map.JSON["id"] as? String
         self.mentionType = MentionItemType(rawValue:(map.JSON["objectType"] as! String))!
-        self.range  = 0...0
     }
     public func mapping(map: Map) {
         personId <- map["id"]
         objectType <- map["objectType"]
         groupType <- map["groupType"]
+    }
+}
+extension Array {
+    mutating func removeObject(equality: (Element) -> Bool) -> Element? {
+        for (idx, element) in self.enumerated() {
+            if equality(element) {
+                return self.remove(at: idx);
+            }
+        }
+        return nil
+    }
+}
+extension String{
+    public func sparkSplitString()->String{
+        if let idDecode = self.base64Decoded(){
+            if let idStr = idDecode.components(separatedBy: "/").last{
+                if let firstid = String(idStr)?.components(separatedBy: ":").first{
+                    return String(firstid)
+                }else{
+                    return String(idStr)
+                }
+            }else{
+                return self
+            }
+        }else{
+            return self
+        }
+    }
+    public static func sparkEncodedUserId(_ userId: String?)->String?{
+        if let userIdStr = userId{
+            return "ciscospark://us/PEOPLE/\(userIdStr)".base64Encoded()
+        }else{
+            return nil
+        }
+    }
+    public static func sparkEncodedRoomId(_ roomId: String?)->String?{
+        if let roomIdStr = roomId{
+            return "ciscospark://us/ROOM/\(roomIdStr)".base64Encoded()
+        }else{
+            return nil
+        }
+    }
+    public static func sparkEncodedMessageId(_ messageId: String?)->String?{
+        if let messageIdStr = messageId{
+            return "ciscospark://us/MESSAGE/\(messageIdStr)".base64Encoded()
+        }else{
+            return nil
+        }
     }
 }
 

@@ -221,20 +221,7 @@ public class Phone {
         //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let messageClient = self.messageClient{
-                switch model.messageType!{
-                case .TextMessage:
-                    let message = Message(activitModel: model)
-                    messageClient.receiveNewMessage(message: message)
-                    break
-                case .TypingMessage:
-                    let typeMessage = TypingMessage(activitModel: model)
-                    messageClient.onTypingMessage?(typeMessage)
-                    break
-                case .FlagMessage:
-                    let flagMessage = FlagMessage(activitModel: model)
-                    messageClient.onFlagMessage?(flagMessage)
-                    break
-                }
+                messageClient.receiveNewMessage(message: model)
             }
         }
     }
@@ -840,4 +827,3 @@ public class Phone {
         }
     }
 }
-

@@ -23,7 +23,6 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-
 /// The struct of a UploadFileOperation on Cisco Spark.
 ///
 /// - since: 1.4.0

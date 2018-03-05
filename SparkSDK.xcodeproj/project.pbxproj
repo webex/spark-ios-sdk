@@ -13,11 +13,8 @@
 		1066EF0B2022F877003745D0 /* KmsMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF002022F876003745D0 /* KmsMessageModel.swift */; };
 		1066EF0C2022F877003745D0 /* MessageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF012022F876003745D0 /* MessageClient.swift */; };
 		1066EF0D2022F877003745D0 /* PostMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF022022F876003745D0 /* PostMessageOperation.swift */; };
-		1066EF0E2022F877003745D0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF032022F876003745D0 /* Message.swift */; };
-		1066EF0F2022F877003745D0 /* FlagMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF042022F876003745D0 /* FlagMessage.swift */; };
 		1066EF102022F877003745D0 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF052022F876003745D0 /* MessageModel.swift */; };
 		1066EF112022F877003745D0 /* DownLoadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF062022F877003745D0 /* DownLoadFileOperation.swift */; };
-		1066EF122022F877003745D0 /* TypingMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF072022F877003745D0 /* TypingMessage.swift */; };
 		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
 		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
@@ -177,11 +174,8 @@
 		1066EF002022F876003745D0 /* KmsMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KmsMessageModel.swift; sourceTree = "<group>"; };
 		1066EF012022F876003745D0 /* MessageClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageClient.swift; sourceTree = "<group>"; };
 		1066EF022022F876003745D0 /* PostMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostMessageOperation.swift; sourceTree = "<group>"; };
-		1066EF032022F876003745D0 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		1066EF042022F876003745D0 /* FlagMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlagMessage.swift; sourceTree = "<group>"; };
 		1066EF052022F876003745D0 /* MessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		1066EF062022F877003745D0 /* DownLoadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownLoadFileOperation.swift; sourceTree = "<group>"; };
-		1066EF072022F877003745D0 /* TypingMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypingMessage.swift; sourceTree = "<group>"; };
 		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
@@ -534,15 +528,12 @@
 			isa = PBXGroup;
 			children = (
 				1066EF062022F877003745D0 /* DownLoadFileOperation.swift */,
-				1066EF042022F876003745D0 /* FlagMessage.swift */,
 				1066EF002022F876003745D0 /* KmsMessageModel.swift */,
 				1066EF082022F877003745D0 /* ListMessageOperation.swift */,
-				1066EF032022F876003745D0 /* Message.swift */,
 				1066EF012022F876003745D0 /* MessageClient.swift */,
 				1066EF052022F876003745D0 /* MessageModel.swift */,
 				1066EF022022F876003745D0 /* PostMessageOperation.swift */,
 				1066EF092022F877003745D0 /* RoomResourceModel.swift */,
-				1066EF072022F877003745D0 /* TypingMessage.swift */,
 				1066EF0A2022F877003745D0 /* UploadFileOperation.swift */,
 			);
 			path = Message;
@@ -963,7 +954,6 @@
 				5AC09EB91DE63C66005F38BC /* OAuthStorage.swift in Sources */,
 				1066EF112022F877003745D0 /* DownLoadFileOperation.swift in Sources */,
 				5D10539B1D066CF6004B30B7 /* MediaOption.swift in Sources */,
-				1066EF122022F877003745D0 /* TypingMessage.swift in Sources */,
 				5AC09EB31DE4D02C005F38BC /* Authenticator.swift in Sources */,
 				B91E75C81CE2D7B70080EAE0 /* DeviceService.swift in Sources */,
 				1066EF0D2022F877003745D0 /* PostMessageOperation.swift in Sources */,
@@ -975,7 +965,6 @@
 				204583F41E83C03500EEB3FC /* CallMembership.swift in Sources */,
 				3D8F9BFB1D1D048400A0277D /* EmailAddress.swift in Sources */,
 				5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */,
-				1066EF0F2022F877003745D0 /* FlagMessage.swift in Sources */,
 				3D1E57981CEDA351006124B0 /* NSURL+Extension.swift in Sources */,
 				5D024F011CFBC08400D2E358 /* InterfaceAddress.swift in Sources */,
 				B91E75AB1CE2D7B70080EAE0 /* Metric.swift in Sources */,
@@ -992,7 +981,6 @@
 				1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
-				1066EF0E2022F877003745D0 /* Message.swift in Sources */,
 				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */,
 				20EEA27A1EB0E6B400D6BB75 /* SequenceModel.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */,

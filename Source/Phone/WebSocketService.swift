@@ -145,16 +145,14 @@ class WebSocketService: WebSocketDelegate {
                 SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
             }else if(eventType == "conversation.activity"){
-                let messageObj = eventData["activity"].object;
-                guard let eventJson = messageObj as? [String: Any],
-                    let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
-                    else {
+                if let verb = eventData["activity"]["verb"].string{
+                    if (verb != "post" && verb != "share" && verb != "delete"){
                         return
+                    }
+                }else{
+                    return
                 }
-                messageModel.eventType = eventType
-                self.onMessageModel?(messageModel)
-            }else if(eventType == "status.start_typing" || eventType == "status.stop_typing" || eventType == "user.app_item"){
-                let messageObj = eventData.object;
+                let messageObj = eventData["activity"].object;
                 guard let eventJson = messageObj as? [String: Any],
                     let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
                     else {
@@ -162,7 +160,7 @@ class WebSocketService: WebSocketDelegate {
                 }
                 self.onMessageModel?(messageModel)
             }else if(eventType == "encryption.kms_message"){
-                 let kmsMessageObj = eventData["encryption"].object
+                let kmsMessageObj = eventData["encryption"].object
                 guard let kmsMessageJson = kmsMessageObj as? [String: Any],
                     let kmsMessageModel = Mapper<KmsMessageModel>().map(JSON: kmsMessageJson)
                     else{

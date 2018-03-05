@@ -29,18 +29,7 @@ public class MessageClient {
     /// Callback when receive Message.
     ///
     /// - since: 1.4.0
-    public var onMessage:((Message) -> Void)?
-    
-    /// Callback when receive acknowledge message.
-    ///
-    /// - since: 1.4.0
-    public var onTypingMessage:((TypingMessage) -> Void)?
-    
-    /// Callback when delete Message.
-    ///
-    /// - since: 1.4.0
-    public var onFlagMessage:((FlagMessage) -> Void)?
-    
+    public var onMessage:((MessageModel) -> Void)?
     
     let authenticator: Authenticator
     
@@ -67,10 +56,10 @@ public class MessageClient {
                      personRefresh: Bool? = false,
                      lastMessageFirst: Bool? = true,
                      queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<[Message]>) -> Void)
+                     completionHandler: @escaping (ServiceResponse<[MessageModel]>) -> Void)
     {
         let query = RequestParameter([
-            "conversationId": roomId.splitString(),
+            "conversationId": roomId.sparkSplitString(),
             "sinceDate": sinceDate,
             "maxDate": maxDate,
             "midDate": midDate,
@@ -120,14 +109,14 @@ public class MessageClient {
     /// - since: 1.4.0
     public func get(messageID: String,
                     queue: DispatchQueue? = nil,
-                    completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+                    completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void)
     {
         let request = messageServiceBuilder().path("activities")
             .method(.get)
-            .path(messageID.splitString())
+            .path(messageID.sparkSplitString())
             .queue(queue)
             .build()
-        request.responseObject { (response : ServiceResponse<Message>) in
+        request.responseObject { (response : ServiceResponse<MessageModel>) in
             switch response.result{
             case .success(let message):
                 if self.encryptKeyReadyFor(message.roomId!){
@@ -156,15 +145,15 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func post(email: String,
-                     content: String?=nil,
+                     text: String?=nil,
                      mentions: [MessageMentionModel]? = nil,
                      files: [FileObjectModel]? = nil,
                      queue: DispatchQueue? = nil,
                      uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
-                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+                     completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void)
     {
         if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
-            self.post(roomId: roomResource.roomId, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
+            self.post(roomId: roomResource.roomId, text: text, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
         }else{
             let query = RequestParameter([
                 "activitiesLimit": 0,
@@ -176,25 +165,25 @@ public class MessageClient {
                 .query(query)
                 .queue(queue)
                 .build()
-            request.responseObject { (response: ServiceResponse<MessageTargetModel>) in
+            request.responseObject{ (response: ServiceResponse<Room>) in
                 switch response.result{
-                case .success(let targetModel):
+                case .success(let targetRoom):
+                    let roomId = String.sparkEncodedRoomId(targetRoom.id)
                     if let roomResource = self.roomResourceList.filter({$0.email == email}).first{
-                        roomResource.roomId = targetModel.id!
+                        roomResource.roomId = roomId!
                     }else{
                         let roomSource = RoomResourceModel(email: email)
-                        roomSource.roomId = targetModel.id!
+                        roomSource.roomId = roomId!
                         self.roomResourceList.append(roomSource)
                     }
-                    self.post(roomId: targetModel.id!, content: content, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
+                    self.post(roomId: roomId!, text: text, mentions: mentions, files: files, queue: queue, uploadProgressHandler: uploadProgressHandler, completionHandler: completionHandler)
                     break
                 case .failure(let err):
-                    let result = Result<Message>.failure(err)
+                    let result = Result<MessageModel>.failure(err)
                     completionHandler(ServiceResponse(nil, result))
                     break
                 }
             }
-            
         }
     }
     
@@ -209,24 +198,32 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func post(roomId: String,
-                     content: String?=nil,
+                     text: String?=nil,
                      mentions: [MessageMentionModel]? = nil,
                      files: [FileObjectModel]? = nil,
                      queue: DispatchQueue? = nil,
                      uploadProgressHandler: ((FileObjectModel, Double)->Void)? = nil,
-                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+                     completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void)
     {
-        
-        let message = Message()
+        let message = MessageModel()
         message.roomId = roomId
-        message.plainText = content
+        message.text = text
         
         if let mentionItems = mentions {
-            message.mentionItems = mentionItems
+            message.mentionedPeople = [String]()
+            message.mentionedGroup = [String]()
+            for mentionItem in mentionItems{
+                if mentionItem.mentionType == .person{
+                    message.mentionedPeople?.append(mentionItem.personId!)
+                }
+                if mentionItem.mentionType == .group{
+                    message.mentionedGroup?.append(mentionItem.groupType!.rawValue)
+                }
+            }
         }
         
         if let fileList = files {
-            message.action = MessageAction.share
+            message.messageAction = MessageAction.share
             message.files = fileList
             if self.readyToShareFor(roomId){
                 let roomResource = self.roomResourceList.filter({$0.roomId == roomId}).first
@@ -254,7 +251,7 @@ public class MessageClient {
                 return
             }
         }else{
-            message.action = MessageAction.post
+            message.messageAction = MessageAction.post
             if self.encryptKeyReadyFor(roomId){
                 let roomResource = self.roomResourceList.filter({$0.roomId == roomId}).first
                 message.encryptionKeyUrl = roomResource?.encryptionUrl
@@ -296,123 +293,15 @@ public class MessageClient {
     public func delete(roomId: String,
                        messageId: String,
                        queue: DispatchQueue? = nil,
-                       completionHandler: @escaping (ServiceResponse<Message>) -> Void)
+                       completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void)
     {
         
-        let message = Message()
+        let message = MessageModel()
         message.roomId = roomId
         message.id = messageId
-        message.action = MessageAction.delete
+        message.messageAction = MessageAction.delete
         let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, message: message,queue:queue, completionHandler: completionHandler)
         self.executeOperationQueue.addOperation(msgPostOperation)
-    }
-    
-    /// Post a message read indicator, to a room by roomId.
-    ///
-    /// - parameter roomId: The identifier of the room where the indicator is to be posted.
-    /// - parameter messageId: The message that is read .
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.4.0
-    public func read(roomId: String,
-                     massageId: String,
-                     queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<Message>) -> Void)
-    {
-        let message = Message()
-        message.roomId = roomId
-        message.id = massageId
-        message.action = MessageAction.acknowledge
-        let msgPostOperation = PostMessageOperation(authenticator:self.authenticator, message: message,queue:queue, completionHandler: completionHandler)
-        self.executeOperationQueue.addOperation(msgPostOperation)
-    }
-    
-    /// Post a typing indicator, to a room by roomId.
-    ///
-    /// - parameter roomId: The identifier of the room where the indicator is to be posted.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.4.0
-    public func startTyping(roomId: String,
-                            queue: DispatchQueue? = nil,
-                            completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
-    {
-        let body = RequestParameter([
-            "eventType": "status.start_typing",
-            "conversationId" : roomId.splitString()
-            ])
-        let request = messageServiceBuilder().path("status/typing")
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        request.responseJSON(completionHandler)
-    }
-    
-    /// Post a stop-typing indicator, to a room by roomId.
-    ///
-    /// - parameter roomId: The identifier of the room where the indicator is to be posted.
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.4.0
-    public func stopTyping(roomId: String,
-                           queue: DispatchQueue? = nil,
-                           completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
-    {
-        let body = RequestParameter([
-            "eventType": "status.stop_typing",
-            "conversationId" : roomId.splitString()
-            ])
-        let request = messageServiceBuilder().path("status/typing")
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        request.responseJSON(completionHandler)
-    }
-    
-    /// Post flag an message
-    ///
-    /// - parameter messageUrl: the message url that want to flag
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.4.0
-    public func flag(messageUrl: String,
-                     queue: DispatchQueue? = nil,
-                     completionHandler: @escaping (ServiceResponse<MessageFlagItemModel>) -> Void) -> Void
-    {
-        let body = RequestParameter([
-            "flag-item": messageUrl,
-            "state": "flagged"
-            ])
-        
-        let request = flagRequestBuilder()
-            .method(.post)
-            .body(body)
-            .queue(queue)
-            .build()
-        request.responseObject(completionHandler)
-    }
-    
-    /// Post  unflag an message
-    ///
-    /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
-    /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
-    /// - since: 1.4.0
-    public func unFlag(flagId: String,
-                       queue: DispatchQueue? = nil,
-                       completionHandler: @escaping (ServiceResponse<Any>) -> Void) -> Void
-    {
-        let request = flagRequestBuilder().path(flagId)
-            .method(.delete)
-            .queue(queue)
-            .build()
-        request.responseJSON(completionHandler)
     }
     
     /// Download a file object, download both file body / thumbnail if exist.
@@ -506,10 +395,10 @@ public class MessageClient {
     private var roomResourceList : [RoomResourceModel] = [RoomResourceModel]()
     private var kmsRequestList : [KmsRequest] = [KmsRequest]()
     private var noEncryptionConvasationList : [String] = [String]()
-    private var receivedMessageList : [Message] = [Message]()
+    private var receivedMessageList : [MessageModel] = [MessageModel]()
     private var pendingOperationList: [PostMessageOperation] = [PostMessageOperation]()
     private var pendingListOperationList: [ListMessageOperation] = [ListMessageOperation]()
-    private var pendingDetailMessageList: [String: (ServiceResponse<Message>) -> Void] = [String: (ServiceResponse<Message>) -> Void]()
+    private var pendingDetailMessageList: [String: (ServiceResponse<MessageModel>) -> Void] = [String: (ServiceResponse<MessageModel>) -> Void]()
     private var executeOperationQueue: OperationQueue = OperationQueue()
     
     var deviceUrl : URL
@@ -530,7 +419,7 @@ public class MessageClient {
     }
     
     // MARK: Encryption Feature Functions
-    public func receiveNewMessage( message: Message){
+    public func receiveNewMessage( message: MessageModel){
         if(message.encryptionKeyUrl != nil){
             self.receivedMessageList.append(message)
             if let room = self.roomResourceList.filter({$0.roomId == message.roomId}).first{
@@ -543,7 +432,6 @@ public class MessageClient {
                 roomModel.encryptionUrl = message.encryptionKeyUrl
                 self.roomResourceList.append(roomModel)
             }
-            
             if(!self.isClientReady){
                 self.requestClientInfo()
             }else if(self.encryptKeyReadyFor(message.roomId!)){
@@ -552,9 +440,8 @@ public class MessageClient {
                 self.requestKeyMaterial(message.encryptionKeyUrl!)
             }
         }else{
-            message.markDownString()
             if let comHandler = self.pendingDetailMessageList[message.id!]{
-                let result = Result<Message>.success(message)
+                let result = Result<MessageModel>.success(message)
                 comHandler(ServiceResponse.init(nil, result))
                 self.pendingDetailMessageList.removeValue(forKey: message.id!)
             }else{
@@ -622,24 +509,24 @@ public class MessageClient {
         }
     }
     
-    private func processReceivedMessage(_ message: Message){
+    private func processReceivedMessage(_ message: MessageModel){
         guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.encryptionUrl == message.encryptionKeyUrl!}).first?.keyMaterial else{
             return
         }
         _ = self.receivedMessageList.removeObject(equality: { $0.id == message.id })
         do {
-            if message.plainText == nil{
-                message.plainText = ""
+            if message.text == nil{
+                message.text = ""
             }
-            guard let chiperText = message.plainText
+            guard let chiperText = message.text
                 else{
                     return;
             }
             if(chiperText != ""){
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                message.plainText = clearText! as String
-                message.markDownString()
+                message.text = clearText! as String
+                message.html = clearText! as String
             }
             if let files = message.files{
                 for file in files{
@@ -662,10 +549,16 @@ public class MessageClient {
                 message.files = files
             }
             if let comHandler = self.pendingDetailMessageList[message.id!]{
-                let result = Result<Message>.success(message)
+                let result = Result<MessageModel>.success(message)
                 comHandler(ServiceResponse.init(nil, result))
                 self.pendingDetailMessageList.removeValue(forKey: message.id!)
             }else{
+                if message.roomType == "direct"{
+                    if let userID = userId{
+                        let personId = String.sparkEncodedUserId(userID)
+                        message.toPersonId = personId
+                    }
+                }
                 self.onMessage?(message)
             }
         }catch let error as NSError {
@@ -673,24 +566,23 @@ public class MessageClient {
         }
     }
     
-    private func decryptMessage(_ message: Message){
+    private func decryptMessage(_ message: MessageModel){
         guard let acitivityKeyMaterial = self.roomResourceList.filter({$0.roomId == message.roomId!}).first?.keyMaterial else{
             return
         }
         _ = self.receivedMessageList.removeObject(equality: { $0.id == message.id })
         do {
-            if message.plainText == nil{
-                message.plainText = ""
+            if message.text == nil{
+                message.text = ""
             }
-            guard let chiperText = message.plainText
+            guard let chiperText = message.text
                 else{
                     return;
             }
             if(chiperText != ""){
                 let plainTextData = try CjoseWrapper.content(fromCiphertext: chiperText, key: acitivityKeyMaterial)
                 let clearText = NSString(data:plainTextData ,encoding: String.Encoding.utf8.rawValue)
-                message.plainText = clearText! as String
-                message.markDownString()
+                message.text = clearText! as String
             }
             if let files = message.files{
                 for file in files{
@@ -740,7 +632,7 @@ public class MessageClient {
             let postPendingMessageArray = self.pendingOperationList.filter({$0.encryptionUrl == encryptionUrl})
             for pendingOperation in postPendingMessageArray{
                 pendingOperation.keyMaterial = keyMaterial
-                if(pendingOperation.message.action == .post){
+                if(pendingOperation.message.messageAction == .post){
                     self.executeOperationQueue.addOperation(pendingOperation)
                     self.pendingOperationList.removeObject(pendingOperation)
                 }else{
@@ -765,7 +657,7 @@ public class MessageClient {
             for pendingOperation in postPendingMessageArray{
                 pendingOperation.keyMaterial = keyMaterial
                 pendingOperation.encryptionUrl = encryptionUrl
-                if(pendingOperation.message.action == .post){
+                if(pendingOperation.message.messageAction == .post){
                     self.executeOperationQueue.addOperation(pendingOperation)
                     self.pendingOperationList.removeObject(pendingOperation)
                 }else{
@@ -799,7 +691,7 @@ public class MessageClient {
     
     private func requestEncryptionUrlFor(_ roomId: String){
         
-        let path = "conversations/" + roomId.splitString()
+        let path = "conversations/" + roomId.sparkSplitString()
         let query = RequestParameter(["includeActivities": false,
                                       "includeParticipants": false
             ])
@@ -855,13 +747,12 @@ public class MessageClient {
                 break
             case .failure:
                 let error = MessageError.encryptionUrlFetchFail
-                let tempError = Result<Message>.failure(error)
+                let tempError = Result<MessageModel>.failure(error)
                 self.cancelPendingMessageOperationsFor(roomId, result: tempError)
                 break
             }
         }
     }
-    
     
     private func requestKeyMaterial(_ encryptionUrl: String){
         if let roomResouce = self.roomResourceList.filter({$0.encryptionUrl == encryptionUrl}).first,
@@ -888,7 +779,7 @@ public class MessageClient {
     }
     
     private func requestSpaceUrl(roomId: String){
-        let path = "conversations/" + roomId.splitString() + "/space"
+        let path = "conversations/" + roomId.sparkSplitString() + "/space"
         let header : [String: String]  = [ "Authorization" : "Bearer " + self.accessTokenStr]
         let request = messageServiceBuilder().path(path)
             .headers(header)
@@ -924,7 +815,7 @@ public class MessageClient {
                         if(!self.ephemeralKeyFetched){
                             self.ephemeralKeyRequest = nil
                             let error = MessageError.ephemaralKeyFetchFail
-                            let tempError = Result<Message>.failure(error)
+                            let tempError = Result<MessageModel>.failure(error)
                             self.cancelAllPendingMessageOperations(result: tempError)
                         }
                     }
@@ -932,7 +823,7 @@ public class MessageClient {
             }
         }else{
             let error = MessageError.clientInfoFetchFail
-            let tempError = Result<Message>.failure(error)
+            let tempError = Result<MessageModel>.failure(error)
             self.cancelAllPendingMessageOperations(result: tempError)
         }
     }
@@ -1018,25 +909,25 @@ public class MessageClient {
     }
     
     // MARk: Message Operation Manage
-    private func cancelAllPendingMessageOperations(result: Result<Message>){
+    private func cancelAllPendingMessageOperations(result: Result<MessageModel>){
         for pendingOperation in self.pendingOperationList{
-            let tempRes = ServiceResponse<Message>(nil, result)
+            let tempRes = ServiceResponse<MessageModel>(nil, result)
             pendingOperation.completionHandler(tempRes)
         }
         self.pendingOperationList.removeAll()
     }
-    private func cancelPendingMessageOperationsFor(_ roomId: String, result: Result<Message>){
+    private func cancelPendingMessageOperationsFor(_ roomId: String, result: Result<MessageModel>){
         for pendingOperation in self.pendingOperationList{
             if(pendingOperation.message.roomId == roomId){
-                let tempRes = ServiceResponse<Message>(nil, result)
+                let tempRes = ServiceResponse<MessageModel>(nil, result)
                 pendingOperation.completionHandler(tempRes)
                 self.pendingOperationList.removeObject(pendingOperation)
             }
         }
         for pendingListOperation in self.pendingListOperationList{
             if(pendingListOperation.roomId == roomId){
-                let tempError = Result<[Message]>.failure(result.error!)
-                let tempRes = ServiceResponse<[Message]>(nil, tempError)
+                let tempError = Result<[MessageModel]>.failure(result.error!)
+                let tempRes = ServiceResponse<[MessageModel]>(nil, tempError)
                 pendingListOperation.completionHandler(tempRes)
                 self.pendingListOperationList.removeObject(pendingListOperation)
             }
@@ -1057,13 +948,9 @@ public class MessageClient {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }
     
-    
     private var isClientReady: Bool{
         get{
-            if let _ = self.kmsCluster,
-                let _ = self.rsaPublicKey,
-                let _ = self.userId
-            {
+            if let _ = self.kmsCluster,let _ = self.rsaPublicKey,let _ = self.userId{
                 return true
             }else{
                 return false
@@ -1073,9 +960,7 @@ public class MessageClient {
     
     private func encryptKeyReadyFor(_ roomId: String) -> Bool{
         if let room = self.roomResourceList.filter({$0.roomId == roomId}).first{
-            if let _ = room.encryptionUrl,
-                let _ = room.keyMaterial
-            {
+            if let _ = room.encryptionUrl,let _ = room.keyMaterial{
                 return true
             }else{
                 return false
@@ -1086,40 +971,13 @@ public class MessageClient {
     }
     private func readyToShareFor(_ roomId: String) -> Bool{
         if let room = self.roomResourceList.filter({$0.roomId == roomId}).first{
-            if let _ = room.encryptionUrl,
-                let _ = room.keyMaterial,
-                let _ = room.spaceUrl
-            {
+            if let _ = room.encryptionUrl,let _ = room.keyMaterial,let _ = room.spaceUrl{
                 return true
             }else{
                 return false
             }
         }else{
             return false
-        }
-    }
-}
-
-extension Array {
-    mutating func removeObject(equality: (Element) -> Bool) -> Element? {
-        for (idx, element) in self.enumerated() {
-            if equality(element) {
-                return self.remove(at: idx);
-            }
-        }
-        return nil
-    }
-}
-extension String{
-    public func splitString()->String{
-        if let idDecode = self.base64Decoded(){
-            if let idStr = idDecode.components(separatedBy: "/").last{
-                return String(idStr)
-            }else{
-                return self
-            }
-        }else{
-            return self
         }
     }
 }

@@ -23,7 +23,6 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-
 private var SparkTempPath: String {
     get{
         do {
@@ -213,13 +212,16 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
         if(self.downLoadType == .BodyAndThumb){
             if(!self.hasThumbNail){
                 self.cancel()
+                SDKLogger.shared.info("File DownLoad Success...")
                 self.completionHandler(self.fileModel, .DownloadSuccess)
             }else if(self.hasThumbNail && self.thumbNailDownLoadFinish){
                 self.cancel()
+                SDKLogger.shared.info("File DownLoad Success...")
                 self.completionHandler(self.fileModel, .DownloadSuccess)
             }
         }else if(self.downLoadType == .BodyOnly){
             self.cancel()
+            SDKLogger.shared.info("File DownLoad Success...")
             self.completionHandler(self.fileModel, .DownloadSuccess)
         }
     }
@@ -228,16 +230,16 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
         self.fileModel.image?.localFileUrl = self.thumbDownLoadPath
         if(self.downLoadType == .ThumbOnly){
             self.cancel()
+            SDKLogger.shared.info("File DownLoad Success...")
             self.completionHandler(self.fileModel, .DownloadSuccess)
         }else{
             if(self.bodyDownLoadFinish){
                 self.cancel()
+                SDKLogger.shared.info("File DownLoad Success...")
                 self.completionHandler(self.fileModel, .DownloadSuccess)
             }
         }
     }
-    
-    
     
     /// download session delegate
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Swift.Void){
@@ -320,6 +322,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     
     private func downLoadError(){
         self.cancel()
+        SDKLogger.shared.info("File DownLoad Fail...")
         self.completionHandler(self.fileModel, .DownloadFialure)
     }
 }
