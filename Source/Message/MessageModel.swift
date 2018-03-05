@@ -199,9 +199,10 @@ extension MessageModel{
 //            "html": self.html,
             "personId": self.personId,
             "personEmail": self.personEmail,
-            "created": self.created,
+            "created": self.created?.longString,
             "mentionedPeople": self.mentionedPeople,
             "mentionedGroup": self.mentionedGroup,
+            "files": self.files?.toJSON(),
         ]
     }
 }
