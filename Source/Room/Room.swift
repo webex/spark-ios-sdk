@@ -86,6 +86,12 @@ public struct Room {
     ///
     /// - since: 1.2.0
     public var teamId: String?
+    
+    /// The sipAddress that this room associated with.
+    ///
+    /// - since: 1.4.0
+    public var sipAddress: String?
+    
 }
 
 extension Room: Mappable {
