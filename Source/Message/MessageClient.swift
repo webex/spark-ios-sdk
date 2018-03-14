@@ -939,11 +939,7 @@ public class MessageClient {
     private func messageServiceBuilder() -> ServiceRequest.MessageServerBuilder {
         return ServiceRequest.MessageServerBuilder(authenticator)
     }
-    
-    private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
-        return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
-    }
-    
+
     private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }

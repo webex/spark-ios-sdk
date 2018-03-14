@@ -218,10 +218,12 @@ public class Phone {
     
     
     private func doConversationAcivityEvent(_ model: MessageModel){
-        //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let messageClient = self.messageClient{
-                messageClient.receiveNewMessage(message: model)
+                if messageClient.onMessage != nil{
+                    SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+                    messageClient.receiveNewMessage(message: model)
+                }
             }
         }
     }
