@@ -35,7 +35,7 @@ class ListMessageOperation: Operation {
          queue:DispatchQueue? = nil,
          completionHandler: @escaping (ServiceResponse<[MessageModel]>) -> Void)
     {
-        self.roomId = roomId.sparkSplitString()
+        self.roomId = roomId
         self.listRequest = listRequest
         self.completionHandler = completionHandler
         self.keyMaterial = keyMaterial

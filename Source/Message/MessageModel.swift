@@ -54,7 +54,7 @@ public class MessageModel : Mappable {
     public var roomId: String?
     
     ///  The room type "group"/"direct"
-    public var roomType: String?
+    public var roomType: RoomType?
     
     /// To target's personId & personEmail of message on "direct" room
     public var toPersonId: String?
@@ -130,12 +130,12 @@ public class MessageModel : Mappable {
             }
             if let tags = targetDict["tags"] as? [String]{
                 if tags.contains("ONE_ON_ONE"){
-                    self.roomType = "direct"
+                    self.roomType = RoomType.direct
                 }else{
-                    self.roomType = "group"
+                    self.roomType = RoomType.group
                 }
             }else{
-                self.roomType = "group"
+                self.roomType = RoomType.group
             }
         }
         
@@ -192,7 +192,7 @@ extension MessageModel{
         return [
             "id": self.id,
             "roomId": self.roomId,
-            "roomType": self.roomType,
+            "roomType": self.roomType?.rawValue,
             "toPersonId": self.toPersonId,
             "toPersonEmail": self.toPersonEmail,
             "text": self.text,
