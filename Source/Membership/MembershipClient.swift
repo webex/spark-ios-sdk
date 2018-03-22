@@ -26,13 +26,14 @@ import Foundation
 public class MembershipClient {
     
     let authenticator: Authenticator
-    
-    init(authenticator: Authenticator) {
+    let config: SparkConfig
+    init(authenticator: Authenticator,config: SparkConfig) {
         self.authenticator = authenticator
+        self.config = config
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator).path("memberships")
+        return ServiceRequest.Builder(authenticator,config).path("memberships")
     }
 
     /// Lists all room memberships where the authenticated user belongs.

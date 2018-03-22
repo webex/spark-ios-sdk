@@ -80,6 +80,11 @@ public class Spark {
         }
     }
     
+    /// The configuraion of this Cisco Spark iOS SDK.
+    ///
+    /// -since: 1.4.0
+    public var config : SparkConfig = SparkConfig()
+    
     /// This is the *Authenticator* object from the application when constructing this Spark object.
     /// It can be used to check and modify authentication state.
     public let authenticator: Authenticator
@@ -107,6 +112,27 @@ public class Spark {
         }
     }
     
+    
+    /// Constructs a new *Spark* object with an *Authenticator* & SparkConfig.
+    ///
+    /// - parameter authenticator: The authentication strategy for this SDK.
+    /// - since: 1.4.0
+    public init(authenticator: Authenticator, config: SparkConfig) {
+        self.authenticator = authenticator
+        self.config = config
+        verbose()
+        let sessionManager = Alamofire.SessionManager.default
+        sessionManager.delegate.taskWillPerformHTTPRedirection = { session, task, response, request in
+            var redirectedRequest = request
+            if let originalRequest = task.originalRequest, let headers = originalRequest.allHTTPHeaderFields, let authorizationHeaderValue = headers["Authorization"] {
+                var mutableRequest = request
+                mutableRequest.setValue(authorizationHeaderValue, forHTTPHeaderField: "Authorization")
+                redirectedRequest = mutableRequest
+            }
+            return redirectedRequest
+        }
+    }
+    
     /// Rooms are virtual meeting places in Cisco Spark where people post messages and collaborate to get work done.
     /// Use *rooms* to manage the rooms on behalf of the authenticated user.
     ///
@@ -114,7 +140,7 @@ public class Spark {
     /// - see: Memberships API about how to manage people in a room.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var rooms: RoomClient {
-        return RoomClient(authenticator: authenticator)
+        return RoomClient(authenticator: authenticator,config: self.config)
     }
     
     /// People are registered users of Cisco Spark.
@@ -124,7 +150,7 @@ public class Spark {
     /// - see: Memberships API about how to manage people in a room.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var people: PersonClient {
-        return PersonClient(authenticator: authenticator)
+        return PersonClient(authenticator: authenticator, config: self.config)
     }
     
     /// Memberships represent a person's relationships to rooms.
@@ -134,7 +160,7 @@ public class Spark {
     /// - see: Rooms API about how to manage rooms.
     /// - see: Messages API about how post or otherwise manage the content in a room.
     public var memberships: MembershipClient {
-        return MembershipClient(authenticator: authenticator)
+        return MembershipClient(authenticator: authenticator,config: self.config)
     }
 
     
@@ -144,7 +170,7 @@ public class Spark {
     ///
     /// - since: 1.2.0
     public var webhooks: WebhookClient {
-        return WebhookClient(authenticator: authenticator)
+        return WebhookClient(authenticator: authenticator,config: self.config)
     }
     
     /// Teams are groups of people with a set of rooms that are visible to all members of that team.
@@ -154,7 +180,7 @@ public class Spark {
     /// - see: Team Memberships API about how to manage people in a team.
     /// - see: Memberships API about how to manage people in a room.
     public var teams: TeamClient {
-        return TeamClient(authenticator: authenticator)
+        return TeamClient(authenticator: authenticator,config: self.config)
     }
     
     /// Team Memberships represent a person's relationships to teams.
@@ -164,7 +190,7 @@ public class Spark {
     /// - see: Teams API about how to manage teams.
     /// - see: Rooms API about how to manage rooms.
     public var teamMemberships: TeamMembershipClient {
-        return TeamMembershipClient(authenticator: authenticator)
+        return TeamMembershipClient(authenticator: authenticator,config: self.config)
     }
     
     
@@ -175,6 +201,7 @@ public class Spark {
     
     public var messages: MessageClient?{
         if let messageCient = self.phone.messageClient{
+            messageCient.config = self.config
             return messageCient
         }else{
             return nil
@@ -198,9 +225,5 @@ public class Spark {
             print(output)
         }
     }
-    
-    //    var buildInfo: [String: String] {
-    //        return []
-    //    }
 }
 

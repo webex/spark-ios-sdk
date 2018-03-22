@@ -26,13 +26,14 @@ import Foundation
 public class TeamMembershipClient {
     
     let authenticator: Authenticator
-    
-    init(authenticator: Authenticator) {
+    let config: SparkConfig
+    init(authenticator: Authenticator,config: SparkConfig) {
         self.authenticator = authenticator
+        self.config = config
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator).path("team/memberships")
+        return ServiceRequest.Builder(authenticator,config).path("team/memberships")
     }
     
     /// Lists all team memberships where the authenticated user belongs.

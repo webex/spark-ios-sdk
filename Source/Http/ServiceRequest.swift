@@ -25,15 +25,13 @@ import ObjectMapper
 import SwiftyJSON
 
 class ServiceRequest : RequestRetrier{
-    static let TIME_OUT: Int = 30
+    private var config: SparkConfig = SparkConfig()
+    private var pendingTimeCount : Int = 0
     private let sessionManager: SessionManager = {
         let configuration = URLSessionConfiguration.default
         return SessionManager(configuration: configuration)
     }()
-    private var isAutoRetryOn : Bool = true
-    private var timeOut : Int = TIME_OUT
-    private var pendingTimeCount : Int = 0
-    
+
     private let url: URL
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
@@ -52,7 +50,7 @@ class ServiceRequest : RequestRetrier{
     
     static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1"
     
-    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, timeOut: Int?, isAutoRetryOn: Bool?, queue: DispatchQueue?) {
+    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, config: SparkConfig?, queue: DispatchQueue?) {
         self.authenticator = authenticator
         self.url = url
         self.headers = headers
@@ -61,11 +59,8 @@ class ServiceRequest : RequestRetrier{
         self.query = query
         self.keyPath = keyPath
         self.queue = queue
-        if let timeOutParam = timeOut{
-            self.timeOut = timeOutParam
-        }
-        if let isRetryOnParam = isAutoRetryOn{
-            self.isAutoRetryOn = isRetryOnParam
+        if let config = config{
+            self.config = config
         }
     }
     
@@ -81,8 +76,18 @@ class ServiceRequest : RequestRetrier{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var isAutoRetryOn : Bool?
-        private var timeOut : Int?
+        private var config: SparkConfig?
+        
+        init(_ authenticator: Authenticator, _ config: SparkConfig) {
+            self.authenticator = authenticator
+            self.headers = ["Content-Type": "application/json",
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
+            self.baseUrl = Builder.apiBaseUrl
+            self.method = .get
+            self.path = ""
+            self.config = config
+        }
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -92,10 +97,11 @@ class ServiceRequest : RequestRetrier{
             self.baseUrl = Builder.apiBaseUrl
             self.method = .get
             self.path = ""
+            self.config = SparkConfig()
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, timeOut: timeOut, isAutoRetryOn: isAutoRetryOn, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -143,13 +149,8 @@ class ServiceRequest : RequestRetrier{
             return self
         }
         
-        func timeOut(_ timeOut: Int?) -> Builder{
-            self.timeOut = timeOut
-            return self
-        }
-        
-        func isAutoRetryOn(_ isOn: Bool?) -> Builder{
-            self.isAutoRetryOn = isOn
+        func config(_ config: SparkConfig?) -> Builder{
+            self.config = config
             return self
         }
     }
@@ -165,8 +166,7 @@ class ServiceRequest : RequestRetrier{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var isAutoRetryOn : Bool?
-        private var timeOut : Int?
+        private var config: SparkConfig?
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -176,10 +176,22 @@ class ServiceRequest : RequestRetrier{
             self.baseUrl = MessageServerBuilder.apiBaseUrl
             self.method = .get
             self.path = ""
+            self.config = SparkConfig()
+        }
+        
+        init(_ authenticator: Authenticator, config: SparkConfig) {
+            self.authenticator = authenticator
+            self.headers = ["Content-Type": "application/json",
+                            "User-Agent": UserAgent.string,
+                            "Spark-User-Agent": UserAgent.string]
+            self.baseUrl = MessageServerBuilder.apiBaseUrl
+            self.method = .get
+            self.path = ""
+            self.config = config
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, timeOut: timeOut, isAutoRetryOn: isAutoRetryOn, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> MessageServerBuilder {
@@ -227,13 +239,8 @@ class ServiceRequest : RequestRetrier{
             return self
         }
         
-        func timeOut(_ timeOut: Int?) -> MessageServerBuilder{
-            self.timeOut = timeOut
-            return self
-        }
-        
-        func isAutoRetryOn(_ isOn: Bool?) -> MessageServerBuilder{
-            self.isAutoRetryOn = isOn
+        func config(_ config: SparkConfig?) -> MessageServerBuilder{
+            self.config = config
             return self
         }
     }
@@ -249,8 +256,7 @@ class ServiceRequest : RequestRetrier{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var isAutoRetryOn : Bool?
-        private var timeOut : Int?
+        private var config: SparkConfig?
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -263,7 +269,7 @@ class ServiceRequest : RequestRetrier{
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, timeOut: timeOut, isAutoRetryOn: isAutoRetryOn, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config , queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> KmsServerBuilder {
@@ -311,13 +317,8 @@ class ServiceRequest : RequestRetrier{
             return self
         }
         
-        func timeOut(_ timeOut: Int?) -> KmsServerBuilder{
-            self.timeOut = timeOut
-            return self
-        }
-        
-        func isAutoRetryOn(_ isOn: Bool?) -> KmsServerBuilder{
-            self.isAutoRetryOn = isOn
+        func config(_ config: SparkConfig?) -> KmsServerBuilder{
+            self.config = config
             return self
         }
     }
@@ -423,7 +424,7 @@ class ServiceRequest : RequestRetrier{
                 }
                 urlRequestConvertible = ErrorRequestConvertible(error)
             }
-            if self.isAutoRetryOn{
+            if self.config.RequestAutoRetryOn{
                 self.sessionManager.retrier = self
                 completionHandler(self.sessionManager.request(urlRequestConvertible).validate())
             }else{
@@ -447,7 +448,7 @@ class ServiceRequest : RequestRetrier{
                     retryAfterInt = retryAfter
                 }
                 self.pendingTimeCount += retryAfterInt
-                if(self.pendingTimeCount < self.timeOut){
+                if(self.pendingTimeCount < self.config.RequestTimeOut){
                     completion(true, TimeInterval(retryAfterInt))
                 }else{
                     completion(false, 0.0)

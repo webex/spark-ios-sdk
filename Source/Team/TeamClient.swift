@@ -26,13 +26,15 @@ import Foundation
 public class TeamClient {
     
     let authenticator: Authenticator
+    let config : SparkConfig
     
-    init(authenticator: Authenticator) {
+    init(authenticator: Authenticator, config: SparkConfig) {
         self.authenticator = authenticator
+        self.config = config
     }
 
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator).path("teams")
+        return ServiceRequest.Builder(authenticator,config).path("teams")
     }
     
     /// Lists teams to which the authenticated user belongs.

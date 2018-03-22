@@ -42,6 +42,23 @@ public enum GroupMentionType: String{
     case all = "all"
 }
 
+/// The struct of a FileType of file  on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum FileType : String{
+    case Audio = "audio/m4a"
+    case Image = "image/png"
+    case PDF = "application/pdf"
+    case Text = "text/plain"
+    case PPT = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    case Excel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    case QuickTime = "video/quicktime"
+    case Word = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    case Zip = "application/x-zip-compressed"
+    case Default = "application/octet-stream"
+    case Unkown = "Unkown"
+}
+
 /// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.4.0
@@ -64,7 +81,7 @@ public class MessageModel : Mappable {
     public var text: String?
     
     /// MarkDown Content of Message
-//    public var html: String?
+    //    public var html: String?
     
     /// Id & Email of who posted the message
     public var personId: String?
@@ -142,7 +159,7 @@ public class MessageModel : Mappable {
         if let objectDict = map.JSON["object"] as? [String: Any]{
             if let displayName = objectDict["displayName"]{
                 self.text = displayName as? String
-//                self.html = displayName as? String
+                //                self.html = displayName as? String
             }
             if let content = objectDict["content"]{
                 self.text = content as? String
@@ -175,7 +192,7 @@ public class MessageModel : Mappable {
             }
             
         }
-
+        
     }
     
 }
@@ -196,7 +213,7 @@ extension MessageModel{
             "toPersonId": self.toPersonId,
             "toPersonEmail": self.toPersonEmail,
             "text": self.text,
-//            "html": self.html,
+            //            "html": self.html,
             "personId": self.personId,
             "personEmail": self.personEmail,
             "created": self.created?.longString,
@@ -206,10 +223,13 @@ extension MessageModel{
         ]
     }
 }
+
+
+
 // MARK: FileObjectModel
 public class FileObjectModel : Mappable{
     public var displayName: String?
-    public var mimeType: String?
+    public var mimeType: FileType?
     public var objectType: String?
     public var image: ThumbNailImageModel?
     public var fileSize: UInt64?
@@ -225,12 +245,12 @@ public class FileObjectModel : Mappable{
     public required init?(map: Map) {}
     public func mapping(map: Map) {
         displayName <- map["displayName"]
-        mimeType <- map["mimeType"]
         objectType <- map["objectType"]
         fileSize <- map["fileSize"]
         scr <- map["scr"]
         url <- map["url"]
         image <- map["image"]
+        mimeType = FileType(rawValue:(map.JSON["mimeType"] as! String))!
     }
 }
 
