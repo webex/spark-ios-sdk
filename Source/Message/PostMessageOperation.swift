@@ -285,17 +285,18 @@ class PostMessageOperation: Operation {
         }
         return objectDict
     }
-    private func mimeType(fromFilename filename: String) -> FileType {
+    private func mimeType(fromFilename filename: String) -> String {
+        let defaultMimeType = "application/octet-stream"
         guard let fileType = filename.components(separatedBy: ".").last else{
-            return FileType.Default
+            return defaultMimeType
         }
         
         guard let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileType as CFString, nil)?.takeRetainedValue(),
             let mimeType = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeUnretainedValue() else {
-                return FileType.Default
+                return defaultMimeType
         }
         
-        return FileType(rawValue: (mimeType as String))!
+        return mimeType as String
     }
     
     private func decrypt(_ newMessage: MessageModel){

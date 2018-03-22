@@ -46,13 +46,13 @@ public enum GroupMentionType: String{
 ///
 /// - since: 1.4.0
 public enum FileType : String{
-    case Audio = "audio/m4a"
-    case Image = "image/png"
+    case Audio = "audio/"
+    case Image = "image/"
     case PDF = "application/pdf"
     case Text = "text/plain"
     case PPT = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
     case Excel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    case QuickTime = "video/quicktime"
+    case Video = "video/"
     case Word = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     case Zip = "application/x-zip-compressed"
     case Default = "application/octet-stream"
@@ -229,13 +229,14 @@ extension MessageModel{
 // MARK: FileObjectModel
 public class FileObjectModel : Mappable{
     public var displayName: String?
-    public var mimeType: FileType?
+    public var mimeType: String?
     public var objectType: String?
     public var image: ThumbNailImageModel?
     public var fileSize: UInt64?
     public var scr: String?
     public var url: String?
     public var localFileUrl: String?
+    public var fileType: FileType?
     
     public init(name: String, localFileUrl: String ,thumbNail: ThumbNailImageModel? = nil){
         self.displayName = name
@@ -250,7 +251,19 @@ public class FileObjectModel : Mappable{
         scr <- map["scr"]
         url <- map["url"]
         image <- map["image"]
-        mimeType = FileType(rawValue:(map.JSON["mimeType"] as! String))!
+        mimeType <- map["mimeType"]
+        
+        if let mimeType = mimeType{
+            if mimeType.contains("image/"){
+                fileType = FileType.Image
+            }else if mimeType.contains("video/"){
+                fileType = FileType.Video
+            }else if mimeType.contains("audio/"){
+                fileType = FileType.Audio
+            }else{
+                fileType = FileType(rawValue:mimeType)
+            }
+        }
     }
 }
 
