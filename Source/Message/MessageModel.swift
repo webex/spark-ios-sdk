@@ -205,7 +205,7 @@ extension MessageModel{
             self.toPersonId = String.sparkEncodedUserId(newValue)
         }
     }
-    public func dictPresent()->[String: Any?]{
+    public func jsonPresent()->[String: Any?]{
         return [
             "id": self.id,
             "roomId": self.roomId,

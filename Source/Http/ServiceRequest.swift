@@ -24,7 +24,7 @@ import AlamofireObjectMapper
 import ObjectMapper
 import SwiftyJSON
 
-class ServiceRequest : RequestRetrier{
+class ServiceRequest : RequestRetrier, RequestAdapter{
     private var config: SparkConfig = SparkConfig()
     private var pendingTimeCount : Int = 0
     private let sessionManager: SessionManager = {
@@ -40,7 +40,7 @@ class ServiceRequest : RequestRetrier{
     private let keyPath: String?
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
-    
+    private var newAccessToken: String? = nil
     #if INTEGRATIONTEST
     static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
     #else
@@ -426,6 +426,7 @@ class ServiceRequest : RequestRetrier{
             }
             if self.config.RequestAutoRetryOn{
                 self.sessionManager.retrier = self
+                self.sessionManager.adapter = self
                 completionHandler(self.sessionManager.request(urlRequestConvertible).validate())
             }else{
                 completionHandler(Alamofire.request(urlRequestConvertible).validate())
@@ -434,6 +435,14 @@ class ServiceRequest : RequestRetrier{
         authenticator.accessToken { accessToken in
             accessTokenCallback(accessToken)
         }
+    }
+
+    func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+        var urlRequest = urlRequest
+        if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization"){
+            urlRequest.setValue("Bearer " + newToken, forHTTPHeaderField: "Authorization")
+        }
+        return urlRequest
     }
     
     func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion){
@@ -455,7 +464,8 @@ class ServiceRequest : RequestRetrier{
                 }
             }
         }else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
-            self.authenticator.refreshToken(completionHandler: { _ in
+            self.authenticator.refreshToken(completionHandler: { accessToken in
+                self.newAccessToken = accessToken
                 completion(true, 0.0)
             })
         }else{

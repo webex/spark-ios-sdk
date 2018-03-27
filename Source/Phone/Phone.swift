@@ -221,7 +221,7 @@ public class Phone {
         DispatchQueue.main.async {
             if let messageClient = self.messageClient{
                 if messageClient.onMessage != nil{
-                    SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+                    SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.jsonPresent())")
                     messageClient.receiveNewMessage(message: model)
                 }
             }
@@ -229,9 +229,9 @@ public class Phone {
     }
     
     private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
-        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let acitivityClient = self.messageClient{
+                SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }
