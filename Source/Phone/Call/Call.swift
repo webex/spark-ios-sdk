@@ -151,6 +151,11 @@ public class Call {
         ///
         /// - since: 1.3.0
         case remoteSendingScreenShare(Bool)
+        /// True if the screen share now is sending. Otherwise false.
+        /// This might be triggered when the local started or stopped share stream.
+        ///
+        /// - since: 1.4.0
+        case sendingScreenShare(Bool)
     }
     
     /// The enumeration of call membership events.
@@ -268,7 +273,7 @@ public class Call {
     ///
     /// - since: 1.3.0
     public var remoteSendingScreenShare: Bool {
-        return model.isGrantedScreenShare && model.screenShareMediaFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
+        return model.isGrantedScreenShare
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.
@@ -601,7 +606,53 @@ public class Call {
         }
     }
     
+    /// Start screen sharing in this call.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
+    /// - returns: Void
+    /// - since: 1.4.0
+    @available(iOS 11.0, *)
+    public func shareScreen(completionHandler: @escaping ((Error?) -> Void)) {
+        self.device.phone.shareScreen(call: self) {
+            error in
+            if error != nil {
+                completionHandler(error)
+            } else {
+                self.mediaSession.onBroadcastError = {
+                    screenShareError in
+                    switch screenShareError {
+                    case .stop, .fatal, .noLocus:
+                        self.unshareScreen() {
+                            error in
+                            //add log
+                        }
+                    default:
+                        break
+                    }
+                }
+                completionHandler(nil)
+            }
+        }
+    }
+    
+    /// Stop screen sharing in this call.
+    /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
+    /// - returns: Void
+    /// - since: 1.4.0
+    @available(iOS 11.0, *)
+    public func unshareScreen(completionHandler: @escaping ((Error?) -> Void)) {
+        self.device.phone.unshareScreen(call: self, completionHandler: completionHandler)
+    }
+    
     func end(reason: DisconnectReason) {
+        //TODO check if need stop screen share
+        if #available(iOS 11, *) {
+            self.unshareScreen() {
+                _ in
+                SDKLogger.shared.error("Unshare screen by call end!")
+            }
+            self.mediaSession.stopLocalScreenShare()
+        }
+        
         switch reason {
         case .remoteDecline, .remoteLeft:
             if let url = self.model.myself?.url {
@@ -651,6 +702,18 @@ public class Call {
         self.mediaSession.stopMedia()
     }
     
+    func isScreenSharedBySelfDevice(shareFloor:MediaShareModel.MediaShareFloor? = nil) -> Bool {
+        let floor = shareFloor ?? self.model.screenShareMediaFloor
+        if let _ = floor?.granted,self.mediaSession.hasScreenShare,floor?.disposition == MediaShareModel.ShareFloorDisposition.granted {
+            if let shareScreenDevice = floor?.beneficiary?.deviceUrl {
+                if self.device.deviceUrl.absoluteString == shareScreenDevice {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
     func update(model: CallModel) {
         if model.isValid {
             let old = self.model
@@ -667,51 +730,90 @@ public class Call {
                         self.onCapabilitiesChanged?(Capabilities.dtmf)
                     }
                     
-                    func leaveScreenShare(participant: String, granted: String) {
-                        if self.mediaSession.hasScreenShare {
-                            self.mediaSession.leaveScreenShare(granted)
+                    func leaveScreenShare(participant: ParticipantModel, granted: String, oldFloor:MediaShareModel.MediaShareFloor? = nil) {
+                        if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.stopLocalScreenShare()
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false))
+                        } else {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.leaveScreenShare(granted)
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
                         }
-                        self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
-                        if let membership = self.memberships.filter({$0.id == participant}).first {
+                        
+                        if let membership = self.memberships.filter({$0.id == participant.id}).first {
                             self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
                         }
                     }
                     
-                    func joinScreenShare(participant: String, granted: String) {
-                        if self.mediaSession.hasScreenShare {
-                            self.mediaSession.joinScreenShare(granted)
+                    func joinScreenShare(participant: ParticipantModel, granted: String) {
+                        if self.isScreenSharedBySelfDevice() {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.startLocalScreenShare()
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                        } else {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.joinScreenShare(granted)
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
                         }
-                        self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
-                        if let membership = self.memberships.filter({$0.id == participant}).first {
+                        if let membership = self.memberships.filter({$0.id == participant.id}).first {
+                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
+                        }
+                    }
+                    
+                    func replaceScreenShare(newFloor:MediaShareModel.MediaShareFloor, oldFloor:MediaShareModel.MediaShareFloor) {
+                        //someone replace my screen sharing
+                        if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) == true && self.isScreenSharedBySelfDevice(shareFloor: newFloor) == false {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.stopLocalScreenShare()
+                                self.mediaSession.joinScreenShare(newFloor.granted!)
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false))
+                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
+                            
+                        } else if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) == false && self.isScreenSharedBySelfDevice(shareFloor: newFloor) == true {
+                            if self.mediaSession.hasScreenShare {
+                                self.mediaSession.leaveScreenShare(oldFloor.granted ?? newFloor.granted!)
+                                self.mediaSession.startLocalScreenShare()
+                            }
+                            self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                        } else {
+                            
+                        }
+                        if let sharingParticipantId = newFloor.beneficiary?.id ,let membership = self.memberships.filter({$0.id == sharingParticipantId}).first{
                             self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
                         }
                     }
                     
                     //screen share
-                    if let newFloor = new.screenShareMediaFloor, let newBeneficiary = newFloor.beneficiary?.id, let newGranted = newFloor.granted, let newDisposition = newFloor.disposition {
-                        if let oldFloor = old.screenShareMediaFloor, let oldBeneficiary = oldFloor.beneficiary?.id, let oldDisposition = oldFloor.disposition {
+                    if let newFloor = new.screenShareMediaFloor, let _ = newFloor.beneficiary?.id, let newGranted = newFloor.granted, let newDisposition = newFloor.disposition {
+                        if let oldFloor = old.screenShareMediaFloor, let _ = oldFloor.beneficiary?.id, let oldDisposition = oldFloor.disposition {
                             if newDisposition != oldDisposition {
                                 if newDisposition == MediaShareModel.ShareFloorDisposition.granted {
-                                    joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                                    joinScreenShare(participant: newFloor.beneficiary!, granted: newGranted)
                                 }
                                 else if newDisposition == MediaShareModel.ShareFloorDisposition.released {
-                                    leaveScreenShare(participant: oldFloor.granted != nil ? oldBeneficiary : newBeneficiary, granted: oldFloor.granted ?? newGranted)
+                                    leaveScreenShare(participant: oldFloor.granted != nil ? oldFloor.beneficiary! : newFloor.beneficiary!, granted: oldFloor.granted ?? newGranted,oldFloor: oldFloor)
                                 }
                                 else {
                                     SDKLogger.shared.error("Failure: floor dispostion is unknown.")
                                 }
                             }
-                            else if let oldGranted = oldFloor.granted, newGranted != oldGranted {
-                                leaveScreenShare(participant: oldBeneficiary, granted: oldGranted)
-                                joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                            else if let oldGranted = oldFloor.granted, newGranted != oldGranted, newDisposition == MediaShareModel.ShareFloorDisposition.granted {
+                                replaceScreenShare(newFloor: newFloor, oldFloor: oldFloor)
                             }
                         }
                         else {
                             if newDisposition == MediaShareModel.ShareFloorDisposition.granted {
-                                joinScreenShare(participant: newBeneficiary, granted: newGranted)
+                                joinScreenShare(participant: newFloor.beneficiary!, granted: newGranted)
                             }
                             else if newDisposition == MediaShareModel.ShareFloorDisposition.released {
-                                leaveScreenShare(participant: newBeneficiary, granted: newGranted)
+                                leaveScreenShare(participant: newFloor.beneficiary!, granted: newGranted)
                             }
                             else {
                                 SDKLogger.shared.error("Failure: floor dispostion is unknown.")
@@ -801,4 +903,6 @@ extension DispatchQueue {
         }
     }
 }
+
+
 

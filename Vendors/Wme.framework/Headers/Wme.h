@@ -18,3 +18,4 @@ FOUNDATION_EXPORT const unsigned char WmeVersionString[];
 #import <Wme/WmeLogManager.h>
 #import <Wme/IFAddress.h>
 #import <Wme/NetUtils.h>
+#import <Wme/FrameInfo.h>

@@ -55,6 +55,15 @@ public struct MediaOption {
         return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo:true, hasScreenShare:true)
     }
     
+    /// Constructs an audio, video,receive and send screen share media option with optional render views.
+    /// The render views can be set after call is connected.
+    ///
+    /// - since: 1.4.0
+    @available(iOS 11, *)
+    public static func audioVideoScreenShare(video:(local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil,applicationGroupIdentifier:String) -> MediaOption {
+        return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo:true, hasScreenShare:true,applicationGroupIdentifier:applicationGroupIdentifier)
+    }
+    
     var localVideoView: MediaRenderView?
     
     var remoteVideoView: MediaRenderView?
@@ -67,17 +76,21 @@ public struct MediaOption {
     
     let hasScreenShare: Bool
     
+    let applicationGroupIdentifier:String?
+    
     init() {
         self.hasVideo = false
         self.hasScreenShare = false
+        self.applicationGroupIdentifier = nil
     }
     
-    init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false) {
+    init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false, applicationGroupIdentifier:String? = nil) {
         self.hasVideo = hasVideo
         self.hasScreenShare = hasScreenShare
         self.localVideoView = local
         self.remoteVideoView = remote
         self.screenShareView = screenShare
+        self.applicationGroupIdentifier = applicationGroupIdentifier
     }
 }
 

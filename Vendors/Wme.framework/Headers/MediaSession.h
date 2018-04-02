@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "MediaConstraint.h"
-
+#import "FrameInfo.h"
 @class MediaRenderView;
 
 @interface MediaSession : NSObject
@@ -12,12 +12,14 @@
 // audio & video
 @property (nonatomic) BOOL audioMuted;
 @property (nonatomic) BOOL videoMuted;
+@property (nonatomic) BOOL screenShareMuted;
 @property (nonatomic) BOOL audioOutputMuted;
 @property (nonatomic) BOOL videoOutputMuted;
 @property (nonatomic) BOOL screenShareOutputMuted;
 
 @property (nonatomic) BOOL sendAudio;
 @property (nonatomic) BOOL sendVideo;
+@property (nonatomic) BOOL sendScreenShare;
 @property (nonatomic) BOOL receiveAudio;
 @property (nonatomic) BOOL receiveVideo;
 @property (nonatomic) BOOL receiveScreenShare;
@@ -30,8 +32,10 @@
 @property (nonatomic) unsigned int localVideoViewWidth;
 @property (nonatomic) unsigned int remoteVideoViewHeight;
 @property (nonatomic) unsigned int remoteVideoViewWidth;
-@property (nonatomic) unsigned int screenShareViewHeight;
-@property (nonatomic) unsigned int screenShareViewWidth;
+@property (nonatomic) unsigned int localScreenShareViewHeight;
+@property (nonatomic) unsigned int localScreenShareViewWidth;
+@property (nonatomic) unsigned int remoteScreenShareViewHeight;
+@property (nonatomic) unsigned int remoteScreenShareViewWidth;
 
 // proximity
 @property (nonatomic) BOOL proximityPreferred;
@@ -50,11 +54,13 @@
 
 - (void)muteAudio;
 - (void)muteVideo;
+- (void)muteScreenShare;
 - (void)muteAudioOutput;
 - (void)muteVideoOutput;
 - (void)muteScreenShareOutput;
 - (void)unmuteAudio;
 - (void)unmuteVideo;
+- (void)unmuteScreenShare;
 - (void)unmuteAudioOutput;
 - (void)unmuteVideoOutput;
 - (void)unmuteScreenShareOutput;
@@ -77,6 +83,9 @@
 
 - (void)joinScreenShare:(NSString *)shareId;
 - (void)leaveScreenShare:(NSString *)shareId;
+- (void)startLocalScreenShare;
+- (void)stopLocalScreenShare;
+- (void)onReceiveScreenBroadcastData:(FrameInfo)frameInfo frameData:(NSData *)frameData;
 
 - (void)updateSdpDirectionWithLocalView:(MediaRenderView *)localView remoteView:(MediaRenderView *)remoteView;
 - (void)updateSdpDirectionWithScreenShare:(MediaRenderView *)screenShareView;
