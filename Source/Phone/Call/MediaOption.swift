@@ -59,7 +59,7 @@ public struct MediaOption {
     /// The render views can be set after call is connected.
     ///
     /// - since: 1.4.0
-    @available(iOS 11, *)
+    @available(iOS 11.2, *)
     public static func audioVideoScreenShare(video:(local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil,applicationGroupIdentifier:String) -> MediaOption {
         return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo:true, hasScreenShare:true,applicationGroupIdentifier:applicationGroupIdentifier)
     }

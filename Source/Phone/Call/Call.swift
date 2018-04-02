@@ -610,7 +610,7 @@ public class Call {
     /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.4.0
-    @available(iOS 11.0, *)
+    @available(iOS 11.2, *)
     public func shareScreen(completionHandler: @escaping ((Error?) -> Void)) {
         self.device.phone.shareScreen(call: self) {
             error in
@@ -638,14 +638,14 @@ public class Call {
     /// - parameter completionHandler: A closure to be executed when completed, with error if the invocation is illegal or failed, otherwise nil.
     /// - returns: Void
     /// - since: 1.4.0
-    @available(iOS 11.0, *)
+    @available(iOS 11.2, *)
     public func unshareScreen(completionHandler: @escaping ((Error?) -> Void)) {
         self.device.phone.unshareScreen(call: self, completionHandler: completionHandler)
     }
     
     func end(reason: DisconnectReason) {
         //TODO check if need stop screen share
-        if #available(iOS 11, *) {
+        if #available(iOS 11.2, *) {
             self.unshareScreen() {
                 _ in
                 SDKLogger.shared.error("Unshare screen by call end!")

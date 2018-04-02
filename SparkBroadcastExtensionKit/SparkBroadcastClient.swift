@@ -8,6 +8,7 @@
 
 import Foundation
 import SparkSDKBroadcastUtil
+@available(iOS 11.2,*)
 class SparkBroadcastClient : BroadcastConnectionClientDelegate{
     
     let config : SparkBroadcastExtension.SparkBroadcastConfig
