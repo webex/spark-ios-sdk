@@ -73,6 +73,9 @@ class SparkTestFixture {
             func accessToken(completionHandler: @escaping (String?) -> Void) {
                 completionHandler(accessToken)
             }
+            func refreshToken(completionHandler: @escaping (String?) -> Void) {
+                completionHandler(accessToken)
+            }
         }
         
         spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))

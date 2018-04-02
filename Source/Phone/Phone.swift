@@ -219,18 +219,20 @@ public class Phone {
     
     
     private func doConversationAcivityEvent(_ model: MessageModel){
-        //        SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let messageClient = self.messageClient{
-                messageClient.receiveNewMessage(message: model)
+                if messageClient.onMessage != nil{
+                    SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.jsonPresent())")
+                    messageClient.receiveNewMessage(message: model)
+                }
             }
         }
     }
     
     private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
-        SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
         DispatchQueue.main.async {
             if let acitivityClient = self.messageClient{
+                SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
                 acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }

@@ -26,6 +26,7 @@ class SimpleAuthStrategy: Authenticator {
     }
     
     private var accessToken: String?
+    private var refreshToken: String?
     
     var authorized: Bool {
         return accessToken != nil
@@ -45,5 +46,9 @@ class SimpleAuthStrategy: Authenticator {
     
     func accessToken(completionHandler: @escaping (String?) -> Void) {
         completionHandler(accessToken)
+    }
+    
+    public func refreshToken(completionHandler: @escaping (String?) -> Void){
+        completionHandler(refreshToken)
     }
 }

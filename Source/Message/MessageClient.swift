@@ -74,7 +74,7 @@ public class MessageClient {
             .query(query)
             .queue(queue)
             .build()
-        
+       
         if self.encryptKeyReadyFor(roomId){
             let roomResource = self.roomResourceList.filter({$0.roomId == roomId}).first
             let listOperation = ListMessageOperation(roomId: roomId,
@@ -383,13 +383,14 @@ public class MessageClient {
     
     // MARK: Encryption Feature Variables
     /// MessageClient Errors
-    enum MessageError: Error {
-        case clientInfoFetchFail
-        case ephemaralKeyFetchFail
-        case kmsInfoFetchFail
-        case keyMaterialFetchFail
-        case encryptionUrlFetchFail
-        case spaceUrlFetchFail
+    enum MSGErrorString: String {
+        case clientInfoFetchFail = "Client Info Fetch Fail"
+        case ephemaralKeyFetchFail = "EphemaralKey Fetch Fail"
+        case kmsInfoFetchFail = "KMS Info Fetch Fail"
+        case keyMaterialFetchFail = "Key Info Fetch Fail"
+        case encryptionUrlFetchFail = "Encryption Info Fetch Fail"
+        case spaceUrlFetchFail = "Space Info Fetch Fail"
+        case emptyTextError = "Expected Text Not Found"
     }
     private let kmsMessageServerUri = ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages"
     private var roomResourceList : [RoomResourceModel] = [RoomResourceModel]()
@@ -400,7 +401,7 @@ public class MessageClient {
     private var pendingListOperationList: [ListMessageOperation] = [ListMessageOperation]()
     private var pendingDetailMessageList: [String: (ServiceResponse<MessageModel>) -> Void] = [String: (ServiceResponse<MessageModel>) -> Void]()
     private var executeOperationQueue: OperationQueue = OperationQueue()
-    
+  
     var deviceUrl : URL
     var uuid: String = ""
     var accessTokenStr = ""
@@ -553,7 +554,7 @@ public class MessageClient {
                 comHandler(ServiceResponse.init(nil, result))
                 self.pendingDetailMessageList.removeValue(forKey: message.id!)
             }else{
-                if message.roomType == "direct"{
+                if message.roomType == RoomType.direct{
                     if let userID = userId{
                         let personId = String.sparkEncodedUserId(userID)
                         message.toPersonId = personId
@@ -746,7 +747,7 @@ public class MessageClient {
                 }
                 break
             case .failure:
-                let error = MessageError.encryptionUrlFetchFail
+                let error = SparkError.serviceFailed(code: -7000, reason: MSGErrorString.encryptionUrlFetchFail.rawValue)
                 let tempError = Result<MessageModel>.failure(error)
                 self.cancelPendingMessageOperationsFor(roomId, result: tempError)
                 break
@@ -799,6 +800,9 @@ public class MessageClient {
                 }
                 break
             case .failure:
+                let error = SparkError.serviceFailed(code: -7000, reason: MSGErrorString.spaceUrlFetchFail.rawValue)
+                let tempError = Result<MessageModel>.failure(error)
+                self.cancelPendingMessageOperationsFor(roomId, result: tempError)
                 break
             }
         }
@@ -814,7 +818,7 @@ public class MessageClient {
                     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
                         if(!self.ephemeralKeyFetched){
                             self.ephemeralKeyRequest = nil
-                            let error = MessageError.ephemaralKeyFetchFail
+                            let error = SparkError.serviceFailed(code: -7000, reason: MSGErrorString.ephemaralKeyFetchFail.rawValue)
                             let tempError = Result<MessageModel>.failure(error)
                             self.cancelAllPendingMessageOperations(result: tempError)
                         }
@@ -822,7 +826,7 @@ public class MessageClient {
                 }
             }
         }else{
-            let error = MessageError.clientInfoFetchFail
+            let error = SparkError.serviceFailed(code: -7000, reason: MSGErrorString.clientInfoFetchFail.rawValue)
             let tempError = Result<MessageModel>.failure(error)
             self.cancelAllPendingMessageOperations(result: tempError)
         }
@@ -905,7 +909,6 @@ public class MessageClient {
                 SDKLogger.shared.debug("Error - RequestEphemeralKey \(error.description)")
             }
         }
-        
     }
     
     // MARk: Message Operation Manage
@@ -935,15 +938,10 @@ public class MessageClient {
     }
     
     //MARK: RequestBuilders
-    
     private func messageServiceBuilder() -> ServiceRequest.MessageServerBuilder {
         return ServiceRequest.MessageServerBuilder(authenticator)
     }
-    
-    private func flagRequestBuilder() ->ServiceRequest.RainDropServerBuilder {
-        return ServiceRequest.RainDropServerBuilder(authenticator).path("flags")
-    }
-    
+
     private func kmsRequestBuilder() -> ServiceRequest.KmsServerBuilder {
         return ServiceRequest.KmsServerBuilder(authenticator)
     }

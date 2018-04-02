@@ -78,7 +78,7 @@ public class JWTAuthenticator: Authenticator {
     }
     
     private static func payloadFor(jwt: String?) -> [String: Any]? {
-        if let segments = jwt?.components(separatedBy: "."), 
+        if let segments = jwt?.components(separatedBy: "."),
             segments.count == 3,
             let payloadData = JWTAuthenticator.base64UrlDecode(segments[1]) {
             return (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any]
@@ -94,7 +94,7 @@ public class JWTAuthenticator: Authenticator {
         switch base64String.characters.count % 4 {
         case 0:
             break
-        case 2: 
+        case 2:
             base64String += "=="
         case 3:
             base64String += "="
@@ -104,7 +104,7 @@ public class JWTAuthenticator: Authenticator {
         }
         return Data(base64Encoded: base64String)
     }
-
+    
     /// Creates a new JWT authentication strategy
     ///
     /// - since: 1.2.0
@@ -137,7 +137,7 @@ public class JWTAuthenticator: Authenticator {
     /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
         tokenCompletionHandlers.append(completionHandler)
-        if let jwt = unexpiredJwt, unexpiredAccessToken == nil {
+        if let jwt = unexpiredJwt , unexpiredAccessToken == nil{
             if tokenCompletionHandlers.count == 1 {
                 client.fetchTokenFromJWT(jwt) { response in
                     switch response.result {
@@ -156,6 +156,27 @@ public class JWTAuthenticator: Authenticator {
             fireCompletionHandlers()
         }
     }
+    
+    public func refreshToken(completionHandler: @escaping (String?) -> Void){
+        tokenCompletionHandlers.append(completionHandler)
+        if let jwt = unexpiredJwt{
+            if tokenCompletionHandlers.count == 1 {
+                client.refreshTokenFromJWT(jwt) { response in
+                    switch response.result {
+                    case .success(let jwtAccessTokenCreationResult):
+                        if let authInfo = JWTAuthenticator.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
+                            self.storage.authenticationInfo = authInfo
+                        }
+                    case .failure(let error):
+                        self.deauthorize()
+                        SDKLogger.shared.error("Failed to refresh token", error: error)
+                    }
+                    self.fireCompletionHandlers()
+                }
+            }
+        }
+    }
+    
     
     private func fireCompletionHandlers() {
         let accessToken = unexpiredAccessToken

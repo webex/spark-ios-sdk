@@ -198,9 +198,5 @@ public class Spark {
             print(output)
         }
     }
-    
-    //    var buildInfo: [String: String] {
-    //        return []
-    //    }
 }
 

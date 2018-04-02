@@ -42,6 +42,23 @@ public enum GroupMentionType: String{
     case all = "all"
 }
 
+/// The struct of a FileType of file  on Cisco Spark.
+///
+/// - since: 1.4.0
+public enum FileType : String{
+    case Audio = "audio/"
+    case Image = "image/"
+    case PDF = "application/pdf"
+    case Text = "text/plain"
+    case PPT = "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+    case Excel = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    case Video = "video/"
+    case Word = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    case Zip = "application/x-zip-compressed"
+    case Default = "application/octet-stream"
+    case Unkown = "Unkown"
+}
+
 /// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.4.0
@@ -54,7 +71,7 @@ public class MessageModel : Mappable {
     public var roomId: String?
     
     ///  The room type "group"/"direct"
-    public var roomType: String?
+    public var roomType: RoomType?
     
     /// To target's personId & personEmail of message on "direct" room
     public var toPersonId: String?
@@ -64,7 +81,7 @@ public class MessageModel : Mappable {
     public var text: String?
     
     /// MarkDown Content of Message
-//    public var html: String?
+    //    public var html: String?
     
     /// Id & Email of who posted the message
     public var personId: String?
@@ -130,19 +147,19 @@ public class MessageModel : Mappable {
             }
             if let tags = targetDict["tags"] as? [String]{
                 if tags.contains("ONE_ON_ONE"){
-                    self.roomType = "direct"
+                    self.roomType = RoomType.direct
                 }else{
-                    self.roomType = "group"
+                    self.roomType = RoomType.group
                 }
             }else{
-                self.roomType = "group"
+                self.roomType = RoomType.group
             }
         }
         
         if let objectDict = map.JSON["object"] as? [String: Any]{
             if let displayName = objectDict["displayName"]{
                 self.text = displayName as? String
-//                self.html = displayName as? String
+                //                self.html = displayName as? String
             }
             if let content = objectDict["content"]{
                 self.text = content as? String
@@ -175,7 +192,7 @@ public class MessageModel : Mappable {
             }
             
         }
-
+        
     }
     
 }
@@ -188,15 +205,15 @@ extension MessageModel{
             self.toPersonId = String.sparkEncodedUserId(newValue)
         }
     }
-    public func dictPresent()->[String: Any?]{
+    public func jsonPresent()->[String: Any?]{
         return [
             "id": self.id,
             "roomId": self.roomId,
-            "roomType": self.roomType,
+            "roomType": self.roomType?.rawValue,
             "toPersonId": self.toPersonId,
             "toPersonEmail": self.toPersonEmail,
             "text": self.text,
-//            "html": self.html,
+            //            "html": self.html,
             "personId": self.personId,
             "personEmail": self.personEmail,
             "created": self.created?.longString,
@@ -206,6 +223,9 @@ extension MessageModel{
         ]
     }
 }
+
+
+
 // MARK: FileObjectModel
 public class FileObjectModel : Mappable{
     public var displayName: String?
@@ -216,6 +236,7 @@ public class FileObjectModel : Mappable{
     public var scr: String?
     public var url: String?
     public var localFileUrl: String?
+    public var fileType: FileType?
     
     public init(name: String, localFileUrl: String ,thumbNail: ThumbNailImageModel? = nil){
         self.displayName = name
@@ -225,12 +246,24 @@ public class FileObjectModel : Mappable{
     public required init?(map: Map) {}
     public func mapping(map: Map) {
         displayName <- map["displayName"]
-        mimeType <- map["mimeType"]
         objectType <- map["objectType"]
         fileSize <- map["fileSize"]
         scr <- map["scr"]
         url <- map["url"]
         image <- map["image"]
+        mimeType <- map["mimeType"]
+        
+        if let mimeType = mimeType{
+            if mimeType.contains("image/"){
+                fileType = FileType.Image
+            }else if mimeType.contains("video/"){
+                fileType = FileType.Video
+            }else if mimeType.contains("audio/"){
+                fileType = FileType.Audio
+            }else{
+                fileType = FileType(rawValue:mimeType)
+            }
+        }
     }
 }
 

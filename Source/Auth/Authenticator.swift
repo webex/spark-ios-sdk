@@ -53,4 +53,6 @@ public protocol Authenticator : class {
     /// - parameter completionHandler: a closure to be executed when completed, with the access token if successfuly retrieved, otherwise nil.
     /// - since: 1.2.0
     func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
+    func refreshToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
+
 }

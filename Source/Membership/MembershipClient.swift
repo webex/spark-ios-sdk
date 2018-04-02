@@ -26,7 +26,6 @@ import Foundation
 public class MembershipClient {
     
     let authenticator: Authenticator
-    
     init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }

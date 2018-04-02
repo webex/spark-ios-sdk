@@ -49,7 +49,7 @@ class JWTTokenModel: NSObject, Mappable {
 
 
 class JWTAuthClient {
-        
+    
     private func requestBuilder() -> ServiceRequest.Builder {
         return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
             .path("jwt/login")
@@ -66,5 +66,9 @@ class JWTAuthClient {
             .build()
         
         request.responseObject(completionHandler)
+    }
+    
+    func refreshTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<JWTTokenModel>) -> Void){
+        self.fetchTokenFromJWT(jwt, queue: queue, completionHandler: completionHandler)
     }
 }
