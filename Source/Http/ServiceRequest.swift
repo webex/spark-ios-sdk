@@ -41,6 +41,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
     private var newAccessToken: String? = nil
+    private var refreshTokenCount = 0
     #if INTEGRATIONTEST
     static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
     #else
@@ -441,6 +442,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         var urlRequest = urlRequest
         if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization"){
             urlRequest.setValue("Bearer " + newToken, forHTTPHeaderField: "Authorization")
+            self.refreshTokenCount += 1
         }
         return urlRequest
     }
@@ -465,8 +467,17 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             }
         }else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
             self.authenticator.refreshToken(completionHandler: { accessToken in
-                self.newAccessToken = accessToken
-                completion(true, 0.0)
+                if accessToken == nil{
+                    self.newAccessToken = accessToken
+                    completion(false, 0.0)
+                }else{
+                    if self.refreshTokenCount >= 2{// After Refreshed token twice, if still get 401 from server, returns error.
+                        completion(false, 0.0)
+                    }else{
+                        self.newAccessToken = accessToken
+                        completion(true, 0.0)
+                    }
+                }
             })
         }else{
             completion(false,0.0)
