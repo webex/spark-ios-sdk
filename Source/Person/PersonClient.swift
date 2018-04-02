@@ -26,14 +26,12 @@ import Foundation
 public class PersonClient {
     
     let authenticator: Authenticator
-    let config: SparkConfig
-    init(authenticator: Authenticator, config: SparkConfig) {
+    init(authenticator: Authenticator) {
         self.authenticator = authenticator
-        self.config = config
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator,config).path("people")
+        return ServiceRequest.Builder(authenticator).path("people")
     }
     
     /// Lists people in the authenticated user's organization.

@@ -18,7 +18,6 @@
 		1066EF132022F877003745D0 /* ListMessageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF082022F877003745D0 /* ListMessageOperation.swift */; };
 		1066EF142022F877003745D0 /* RoomResourceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* RoomResourceModel.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
-		1082664920634FC9008709A9 /* SparkConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1082664820634FC9008709A9 /* SparkConfig.swift */; };
 		10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -180,7 +179,6 @@
 		1066EF082022F877003745D0 /* ListMessageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMessageOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
-		1082664820634FC9008709A9 /* SparkConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkConfig.swift; sourceTree = "<group>"; };
 		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
@@ -466,7 +464,6 @@
 			children = (
 				B91E75841CE2D7B70080EAE0 /* Spark.swift */,
 				20EEA2C91EBDAAEB00D6BB75 /* SparkError.swift */,
-				1082664820634FC9008709A9 /* SparkConfig.swift */,
 				B91E75311CE2D7B70080EAE0 /* Auth */,
 				B91E75371CE2D7B70080EAE0 /* Http */,
 				5D67C64C1CF04E6400758F6B /* Logger */,
@@ -1004,7 +1001,6 @@
 				3DA3D58B1CF4347A008E8372 /* RequestParameter.swift in Sources */,
 				B91E75E11CE2D7B70080EAE0 /* Dictionary+Extension.swift in Sources */,
 				5D1A5D0B1CF821D000313515 /* MediaEngineReachabilityFeedback.swift in Sources */,
-				1082664920634FC9008709A9 /* SparkConfig.swift in Sources */,
 				5A9350D91E00737900374B99 /* Clock.swift in Sources */,
 				1066EF102022F877003745D0 /* MessageModel.swift in Sources */,
 				B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */,

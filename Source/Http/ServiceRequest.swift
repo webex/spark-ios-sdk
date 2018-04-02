@@ -25,13 +25,7 @@ import ObjectMapper
 import SwiftyJSON
 
 class ServiceRequest : RequestRetrier, RequestAdapter{
-    private var config: SparkConfig = SparkConfig()
     private var pendingTimeCount : Int = 0
-    private let sessionManager: SessionManager = {
-        let configuration = URLSessionConfiguration.default
-        return SessionManager(configuration: configuration)
-    }()
-
     private let url: URL
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
@@ -51,7 +45,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
     
     static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1"
     
-    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, config: SparkConfig?, queue: DispatchQueue?) {
+    private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator
         self.url = url
         self.headers = headers
@@ -60,9 +54,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         self.query = query
         self.keyPath = keyPath
         self.queue = queue
-        if let config = config{
-            self.config = config
-        }
     }
     
     class Builder {
@@ -77,18 +68,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var config: SparkConfig?
-        
-        init(_ authenticator: Authenticator, _ config: SparkConfig) {
-            self.authenticator = authenticator
-            self.headers = ["Content-Type": "application/json",
-                            "User-Agent": UserAgent.string,
-                            "Spark-User-Agent": UserAgent.string]
-            self.baseUrl = Builder.apiBaseUrl
-            self.method = .get
-            self.path = ""
-            self.config = config
-        }
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -98,11 +77,10 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             self.baseUrl = Builder.apiBaseUrl
             self.method = .get
             self.path = ""
-            self.config = SparkConfig()
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> Builder {
@@ -149,11 +127,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             self.queue = queue
             return self
         }
-        
-        func config(_ config: SparkConfig?) -> Builder{
-            self.config = config
-            return self
-        }
     }
     
     class MessageServerBuilder{
@@ -167,7 +140,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var config: SparkConfig?
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -177,22 +149,10 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             self.baseUrl = MessageServerBuilder.apiBaseUrl
             self.method = .get
             self.path = ""
-            self.config = SparkConfig()
-        }
-        
-        init(_ authenticator: Authenticator, config: SparkConfig) {
-            self.authenticator = authenticator
-            self.headers = ["Content-Type": "application/json",
-                            "User-Agent": UserAgent.string,
-                            "Spark-User-Agent": UserAgent.string]
-            self.baseUrl = MessageServerBuilder.apiBaseUrl
-            self.method = .get
-            self.path = ""
-            self.config = config
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config, queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> MessageServerBuilder {
@@ -239,11 +199,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             self.queue = queue
             return self
         }
-        
-        func config(_ config: SparkConfig?) -> MessageServerBuilder{
-            self.config = config
-            return self
-        }
     }
     
     class KmsServerBuilder{
@@ -257,7 +212,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        private var config: SparkConfig?
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -270,7 +224,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         }
         
         func build() -> ServiceRequest {
-            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, config: config , queue: queue)
+            return ServiceRequest(authenticator: authenticator, url: baseUrl.appendingPathComponent(path), headers: headers, method: method, body: body, query: query, keyPath: keyPath, queue: queue)
         }
         
         func method(_ method: Alamofire.HTTPMethod) -> KmsServerBuilder {
@@ -315,11 +269,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         
         func queue(_ queue: DispatchQueue?) -> KmsServerBuilder {
             self.queue = queue
-            return self
-        }
-        
-        func config(_ config: SparkConfig?) -> KmsServerBuilder{
-            self.config = config
             return self
         }
     }
@@ -425,14 +374,11 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
                 }
                 urlRequestConvertible = ErrorRequestConvertible(error)
             }
-            if self.config.RequestAutoRetryOn{
-                self.sessionManager.retrier = self
-                self.sessionManager.adapter = self
-                completionHandler(self.sessionManager.request(urlRequestConvertible).validate())
-            }else{
-                completionHandler(Alamofire.request(urlRequestConvertible).validate())
-            }
+            SessionManager.default.adapter = self
+            SessionManager.default.retrier = self
+            completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
+        
         authenticator.accessToken { accessToken in
             accessTokenCallback(accessToken)
         }
@@ -459,11 +405,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
                     retryAfterInt = retryAfter
                 }
                 self.pendingTimeCount += retryAfterInt
-                if(self.pendingTimeCount < self.config.RequestTimeOut){
-                    completion(true, TimeInterval(retryAfterInt))
-                }else{
-                    completion(false, 0.0)
-                }
+                completion(true, TimeInterval(retryAfterInt))
             }
         }else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
             self.authenticator.refreshToken(completionHandler: { accessToken in

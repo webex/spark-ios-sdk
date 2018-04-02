@@ -411,22 +411,12 @@ public class MessageClient {
     private var ephemeralKeyRequest: KmsEphemeralKeyRequest?
     private var ephemeralKeyFetched: Bool = false
     private var ephemeralKeyStr: String = ""
-    public var config: SparkConfig
     
     init(authenticator: Authenticator, diviceUrl: URL) {
         self.authenticator = authenticator
         self.deviceUrl = diviceUrl
         self.uuid = UUID().uuidString
         self.executeOperationQueue.maxConcurrentOperationCount = 1
-        self.config = SparkConfig()
-    }
-    
-    init(authenticator: Authenticator, diviceUrl: URL,config: SparkConfig) {
-        self.authenticator = authenticator
-        self.deviceUrl = diviceUrl
-        self.uuid = UUID().uuidString
-        self.executeOperationQueue.maxConcurrentOperationCount = 1
-        self.config = config
     }
     
     // MARK: Encryption Feature Functions

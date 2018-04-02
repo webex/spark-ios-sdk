@@ -26,15 +26,13 @@ import Foundation
 public class RoomClient {
     
     let authenticator: Authenticator
-    let config : SparkConfig
     
-    init(authenticator: Authenticator, config: SparkConfig) {
+    init(authenticator: Authenticator) {
         self.authenticator = authenticator
-        self.config = config
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator,config).path("rooms")
+        return ServiceRequest.Builder(authenticator).path("rooms")
     }
     
     /// Lists all rooms where the authenticated user belongs.
