@@ -60,8 +60,16 @@ class ListMessageOperation: Operation {
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
-        for message in messageList{
+        let filterList = messageList.filter({$0.messageAction == MessageAction.post})
+        for message in filterList{
             do {
+                if let messAction = message.messageAction{
+                    if messAction != MessageAction.post{
+                        continue
+                    }
+                }else{
+                    continue
+                }
                 if message.text == nil{
                     message.text = ""
                 }
@@ -94,6 +102,8 @@ class ListMessageOperation: Operation {
                 }
             }catch{}
         }
-        self.completionHandler(self.response!)
+        let result = Result<[MessageModel]>.success(filterList)
+        let serviceResponse = ServiceResponse(self.response?.response, result)
+        self.completionHandler(serviceResponse)
     }
 }
