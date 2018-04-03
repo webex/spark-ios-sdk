@@ -60,16 +60,9 @@ class ListMessageOperation: Operation {
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
-        let filterList = messageList.filter({$0.messageAction == MessageAction.post})
+        let filterList = messageList.filter({$0.messageAction == MessageAction.post || $0.messageAction == MessageAction.share})
         for message in filterList{
             do {
-                if let messAction = message.messageAction{
-                    if messAction != MessageAction.post{
-                        continue
-                    }
-                }else{
-                    continue
-                }
                 if message.text == nil{
                     message.text = ""
                 }
