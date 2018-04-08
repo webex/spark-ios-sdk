@@ -54,10 +54,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
         self.query = query
         self.keyPath = keyPath
         self.queue = queue
-        if SessionManager.default.adapter == nil{
-            SessionManager.default.adapter = self
-            SessionManager.default.retrier = self
-        }
     }
     
     class Builder {
@@ -378,6 +374,8 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
                 }
                 urlRequestConvertible = ErrorRequestConvertible(error)
             }
+            SessionManager.default.adapter = self
+            SessionManager.default.retrier = self
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
@@ -385,7 +383,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             accessTokenCallback(accessToken)
         }
     }
-
+    
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         var urlRequest = urlRequest
         if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization"){
