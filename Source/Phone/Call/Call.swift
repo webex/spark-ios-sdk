@@ -771,7 +771,7 @@ public class Call {
                                 self.mediaSession.stopLocalScreenShare()
                                 self.mediaSession.leaveScreenShare(granted, isSending: true)
                             }
-                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false)
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false))
                         } else {
                             if self.mediaSession.hasScreenShare {
                                 self.mediaSession.leaveScreenShare(granted, isSending: false)
@@ -800,7 +800,7 @@ public class Call {
                             self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
                         }
                         if let membership = self.memberships.filter({$0.id == participant.id}).first {
-                            if isScreenSharedBySelfDevice() && self.mediaSession.screenShareMuted {
+                            if self.isScreenSharedBySelfDevice() && self.mediaSession.screenShareMuted {
                                 
                             } else {
                                 self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
