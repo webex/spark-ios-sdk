@@ -45,6 +45,14 @@ public struct Membership {
     /// The timestamp that the membership being created.
     public var created: Date?
     
+    /// The display name of the person
+    public var personDisplayName : String?
+    
+    /// The personOrgId name of the person
+    ///
+    /// - since: 1.4.0
+    public var personOrgId : String?
+    
 }
 
 extension Membership: Mappable {
@@ -66,5 +74,7 @@ extension Membership: Mappable {
         isModerator <- map["isModerator"]
         isMonitor <- map["isMonitor"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+        personDisplayName <- map["personDisplayName"]
+        personOrgId <- map["personOrgId"]
     }
 }

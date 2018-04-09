@@ -60,6 +60,11 @@ public struct TeamMembership {
     ///
     /// - since: 1.2.0
     public var created: Date?
+    
+    /// The personOrgId of the person.
+    ///
+    /// - since: 1.4.0
+    public var personOrgId: String?
 }
 
 extension TeamMembership: Mappable {
@@ -80,6 +85,22 @@ extension TeamMembership: Mappable {
         personEmail <- (map["personEmail"], EmailTransform())
         personDisplayName <- map["personDisplayName"]
         isModerator <- map["isModerator"]
+        personOrgId <- map["personOrgId"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+    }
+}
+
+class EmailTransform: TransformType {
+    
+    func transformFromJSON(_ value: Any?) -> EmailAddress? {
+        if let value = value as? String {
+            return EmailAddress.fromString(value)
+        } else {
+            return nil
+        }
+    }
+    
+    func transformToJSON(_ value: EmailAddress?) -> String? {
+        return value?.toString()
     }
 }

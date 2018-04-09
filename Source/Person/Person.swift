@@ -23,7 +23,6 @@ import ObjectMapper
 
 /// Person contents.
 public struct Person {
-    
     /// The id of this person.
     public var id: String?
     
@@ -38,6 +37,26 @@ public struct Person {
     
     /// The timestamp that this person being created.
     public var created: Date?
+    
+    /// The nick name of person
+    /// - since: 1.4.0
+    public var nickName: String?
+    
+    /// The nick first name of person
+    /// - since: 1.4.0
+    public var firstName: String?
+    
+    /// The nick last name of person
+    /// - since: 1.4.0
+    public var lastName: String?
+    
+    /// The nick orgId of person
+    /// - since: 1.4.0
+    public var orgId: String?
+    
+    /// The nick type of person, default is "person"
+    /// - since: 1.4.0
+    public var type: String?
     
     class EmailsTransform: TransformType {
         
@@ -88,5 +107,10 @@ extension Person: Mappable {
         displayName <- map["displayName"]
         avatar <- map["avatar"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+        nickName <- map["nickName"]
+        firstName <- map["firstName"]
+        lastName <- map["lastName"]
+        orgId <- map["orgId"]
+        type <- map["type"]
     }
 }

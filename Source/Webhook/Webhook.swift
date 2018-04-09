@@ -61,6 +61,16 @@ public struct Webhook {
     ///
     /// - since: 1.2.0
     public var created: Date?
+    
+    /// The status of the webhook. Use <code>active</code> to reactivate a disabled webhook.
+    ///
+    /// - since: 1.4.0
+    public var status: String?
+    
+    /// The Secret use to generate payload signiture.
+    ///
+    /// - since: 1.4.0
+    public var secret: String?
 }
 
 extension Webhook: Mappable {

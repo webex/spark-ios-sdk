@@ -26,7 +26,6 @@ import Foundation
 public class TeamMembershipClient {
     
     let authenticator: Authenticator
-    
     init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }
@@ -65,7 +64,7 @@ public class TeamMembershipClient {
     /// - parameter isModerator: If true, make the person a moderator of the team. The default is false.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
-    /// - returns: Void
+    /// - returns: TeamMembership
     /// - since: 1.2.0
     public func create(teamId: String, personId: String, isModerator: Bool = false, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<TeamMembership>) -> Void) {
         let body = RequestParameter([

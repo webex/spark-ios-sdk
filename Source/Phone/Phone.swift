@@ -107,6 +107,12 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// Message Client
+    ///
+    /// - since: 1.4.0
+    public var messageClient: MessageClient?
+    
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -115,7 +121,7 @@ public class Phone {
     let queue = SerialQueue()
     let metrics: MetricsEngine
     
-    private let devices: DeviceService    
+    private let devices: DeviceService
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
@@ -141,6 +147,7 @@ public class Phone {
         self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
         self.prompter = H264LicensePrompter(metrics: self.metrics)
         self.webSocket = WebSocketService(authenticator: authenticator)
+        
         self.webSocket.onFailed = { [weak self] in
             self?.register {_ in
             }
@@ -152,8 +159,24 @@ public class Phone {
                 }
             }
         }
+        
+        self.webSocket.onMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
+                }
+            }
+        }
     }
-
+    
     init(authenticator: Authenticator,devices:DeviceService,reachability:ReachabilityService,client:CallClient,conversations:ConversationClient,metrics:MetricsEngine,prompter:H264LicensePrompter,webSocket:WebSocketService) {
         let _ = MediaEngineWrapper.sharedInstance.WMEVersion
         self.authenticator = authenticator
@@ -171,8 +194,45 @@ public class Phone {
         self.webSocket.onCallModel = { [weak self] model in
             if let strong = self {
                 strong.queue.underlying.async {
-                strong.doLocusEvent(model);
+                    strong.doLocusEvent(model);
                 }
+            }
+        }
+        
+        self.webSocket.onMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doConversationAcivityEvent(model);
+                }
+            }
+        }
+        
+        self.webSocket.onKmsMessageModel = { [weak self] model in
+            if let strong = self {
+                strong.queue.underlying.async {
+                    strong.doKmsMessageEvent(model);
+                }
+            }
+        }
+    }
+    
+    
+    private func doConversationAcivityEvent(_ model: MessageModel){
+        DispatchQueue.main.async {
+            if let messageClient = self.messageClient{
+                if messageClient.onMessage != nil{
+                    SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.jsonPresent())")
+                    messageClient.receiveNewMessage(message: model)
+                }
+            }
+        }
+    }
+    
+    private func doKmsMessageEvent( _ kmsMessageModel: KmsMessageModel){
+        DispatchQueue.main.async {
+            if let acitivityClient = self.messageClient{
+                SDKLogger.shared.debug("Receive Kms MessageModel: \(kmsMessageModel.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+                acitivityClient.receiveKmsMessage(kmsMessageModel)
             }
         }
     }
@@ -198,6 +258,7 @@ public class Phone {
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
+                        self?.messageClient = MessageClient(authenticator: (self?.authenticator)!, diviceUrl: (self?.devices.device?.deviceUrl)!)
                         self?.queue.underlying.async {
                             self?.fetchActiveCalls()
                             DispatchQueue.main.async {

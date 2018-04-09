@@ -105,14 +105,20 @@ public class WebhookClient {
     /// - parameter webhookId: The identifier of  the webhook.
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
+    /// - parameter status: The status of the webhook. Use "active" to reactivate a disabled webhook.
+    /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
-    /// - since: 1.2.0
-    public func update(webhookId: String, name: String, targetUrl: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
+    /// - since: 1.4.0
+    public func update(webhookId: String, name: String, targetUrl: String,  secret: String?=nil, status: String?=nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.put)
-            .body(RequestParameter(["name": name, "targetUrl": targetUrl]))
+            .body(RequestParameter(["name": name,
+                                    "targetUrl": targetUrl,
+                                    "secret" : secret,
+                                    "status" : status,
+                                    ]))
             .path(webhookId)
             .queue(queue)
             .build()

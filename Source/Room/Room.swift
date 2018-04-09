@@ -29,11 +29,23 @@ public enum RoomType: String {
     case group = "group"
 }
 
+/// The enumeration of sorting result
+/// - since: 1.4.0
+public enum RoomSortType: String{
+    /// sort result by id
+    case byId = "id"
+    /// last active room comes first
+    case byLastActivity = "lastactivity"
+    /// last created room comes first
+    case byCreated = "created"
+}
+
 /// A data type represents a Room at Cisco Spark cloud.
 ///
 /// - note: Room has been renamed to Space in Cisco Spark.
 /// - since: 1.2.0
 public struct Room {
+    
     /// The identifier of this room.
     ///
     /// - since: 1.2.0
@@ -74,6 +86,12 @@ public struct Room {
     ///
     /// - since: 1.2.0
     public var teamId: String?
+    
+    /// The sipAddress that this room associated with.
+    ///
+    /// - since: 1.4.0
+    public var sipAddress: String?
+    
 }
 
 extension Room: Mappable {

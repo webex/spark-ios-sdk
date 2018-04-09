@@ -27,6 +27,8 @@ class WebSocketService: WebSocketDelegate {
     
     var onCallModel: ((CallModel) -> Void)?
     var onFailed: (() -> Void)?
+    var onMessageModel: ((MessageModel) -> Void)?
+    var onKmsMessageModel: ((KmsMessageModel) -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter
@@ -142,6 +144,29 @@ class WebSocketService: WebSocketDelegate {
                 }
                 SDKLogger.shared.info("Receive locus event: \(type)")
                 self.onCallModel?(call)
+            }else if(eventType == "conversation.activity"){
+                if let verb = eventData["activity"]["verb"].string{
+                    if (verb != "post" && verb != "share" && verb != "delete"){
+                        return
+                    }
+                }else{
+                    return
+                }
+                let messageObj = eventData["activity"].object;
+                guard let eventJson = messageObj as? [String: Any],
+                    let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
+                    else {
+                        return
+                }
+                self.onMessageModel?(messageModel)
+            }else if(eventType == "encryption.kms_message"){
+                let kmsMessageObj = eventData["encryption"].object
+                guard let kmsMessageJson = kmsMessageObj as? [String: Any],
+                    let kmsMessageModel = Mapper<KmsMessageModel>().map(JSON: kmsMessageJson)
+                    else{
+                        return;
+                }
+                self.onKmsMessageModel?(kmsMessageModel)
             }
         }
     }
