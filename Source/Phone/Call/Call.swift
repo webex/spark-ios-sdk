@@ -156,6 +156,10 @@ public class Call {
         ///
         /// - since: 1.4.0
         case sendingScreenShare(Bool)
+        /// Local screen share size has changed.
+        /// - since: 1.4.0
+        case localScreenShareViewSize
+        
     }
     
     /// The enumeration of call membership events.
@@ -300,6 +304,18 @@ public class Call {
         }
     }
     
+    /// True if the local party of this *call* is sending screen share. Otherwise, false.
+    ///
+    /// - since: 1.4.0
+    public var sendingScreenShare: Bool {
+        get {
+            return self.mediaSession.hasScreenShare && !self.mediaSession.screenShareMuted && self.isScreenSharedBySelfDevice()
+        }
+        set {
+            self.mediaSession.screenShareMuted = !newValue
+        }
+    }
+    
     /// True if the local party of this *call* is receiving video. Otherwise, false.
     ///
     /// - since: 1.2.0
@@ -393,6 +409,13 @@ public class Call {
         return CMVideoDimensions(width: self.mediaSession.remoteScreenShareViewWidth, height: self.mediaSession.remoteScreenShareViewHeight)
     }
     
+    /// The local screen share render view dimensions (points) of this *call*.
+    ///
+    /// - since: 1.4.0
+    public var localScreenShareViewSize: CMVideoDimensions {
+        return CMVideoDimensions(width: self.mediaSession.localScreenShareViewWidth, height: self.mediaSession.localScreenShareViewHeight)
+    }
+    
     /// Call Memberships represent participants in this *call*.
     ///
     /// - since: 1.2.0
@@ -449,10 +472,10 @@ public class Call {
                 //join or leave screen share
                 if let granted = self.model.screenMediaShare?.shareFloor?.granted {
                     if self.screenShareRenderView != nil {
-                        self.mediaSession.joinScreenShare(granted)
+                        self.mediaSession.joinScreenShare(granted, isSending: false)
                     }
                     else {
-                        self.mediaSession.leaveScreenShare(granted)
+                        self.mediaSession.leaveScreenShare(granted, isSending: false)
                     }
                 }
             }
@@ -620,10 +643,9 @@ public class Call {
                 self.mediaSession.onBroadcastError = {
                     screenShareError in
                     switch screenShareError {
-                    case .stop, .fatal, .noLocus:
-                        self.unshareScreen() {
-                            error in
-                            //add log
+                    case .stop, .fatal:
+                        self.unshareScreen() { error in
+                            SDKLogger.shared.error("Failure", error: error)
                         }
                     default:
                         break
@@ -642,6 +664,19 @@ public class Call {
     public func unshareScreen(completionHandler: @escaping ((Error?) -> Void)) {
         self.device.phone.unshareScreen(call: self, completionHandler: completionHandler)
     }
+    
+    /// Call back when broadcast extension connecting to this call.
+    /// - since: 1.4.0
+    @available(iOS 11.2, *)
+    public var onBroadcasting: (() -> Void)? {
+        set {
+            self.mediaSession.onBroadcasting = newValue
+        }
+        get {
+            return self.mediaSession.onBroadcasting
+        }
+    }
+    
     
     func end(reason: DisconnectReason) {
         //TODO check if need stop screen share
@@ -690,14 +725,14 @@ public class Call {
         }
         self.mediaSession.startMedia(call: self)
         if let granted = self.model.screenShareMediaFloor?.granted, self.mediaSession.hasScreenShare {
-            self.mediaSession.joinScreenShare(granted)
+            self.mediaSession.joinScreenShare(granted, isSending: self.isScreenSharedBySelfDevice())
         }
     }
     
     func stopMedia() {
         //stopMedia must run in the main thread.Because WME will remove the videoRender view.
         if let granted = self.model.screenShareMediaFloor?.granted ,self.mediaSession.hasScreenShare{
-            self.mediaSession.leaveScreenShare(granted)
+            self.mediaSession.leaveScreenShare(granted, isSending: self.isScreenSharedBySelfDevice())
         }
         self.mediaSession.stopMedia()
     }
@@ -734,11 +769,12 @@ public class Call {
                         if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) {
                             if self.mediaSession.hasScreenShare {
                                 self.mediaSession.stopLocalScreenShare()
+                                self.mediaSession.leaveScreenShare(granted, isSending: true)
                             }
-                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false))
+                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false)
                         } else {
                             if self.mediaSession.hasScreenShare {
-                                self.mediaSession.leaveScreenShare(granted)
+                                self.mediaSession.leaveScreenShare(granted, isSending: false)
                             }
                             self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
                         }
@@ -752,16 +788,23 @@ public class Call {
                         if self.isScreenSharedBySelfDevice() {
                             if self.mediaSession.hasScreenShare {
                                 self.mediaSession.startLocalScreenShare()
+                                self.mediaSession.joinScreenShare(granted, isSending: true)
                             }
-                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                            if !self.mediaSession.screenShareMuted {
+                              self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                            }
                         } else {
                             if self.mediaSession.hasScreenShare {
-                                self.mediaSession.joinScreenShare(granted)
+                                self.mediaSession.joinScreenShare(granted, isSending: false)
                             }
                             self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
                         }
                         if let membership = self.memberships.filter({$0.id == participant.id}).first {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
+                            if isScreenSharedBySelfDevice() && self.mediaSession.screenShareMuted {
+                                
+                            } else {
+                                self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingScreenShare(membership))
+                            }
                         }
                     }
                     
@@ -770,18 +813,22 @@ public class Call {
                         if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) == true && self.isScreenSharedBySelfDevice(shareFloor: newFloor) == false {
                             if self.mediaSession.hasScreenShare {
                                 self.mediaSession.stopLocalScreenShare()
-                                self.mediaSession.joinScreenShare(newFloor.granted!)
+                                self.mediaSession.leaveScreenShare(oldFloor.granted!, isSending: true)
+                                self.mediaSession.joinScreenShare(newFloor.granted!, isSending: false)
                             }
                             self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(false))
                             self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(true))
                             
                         } else if self.isScreenSharedBySelfDevice(shareFloor: oldFloor) == false && self.isScreenSharedBySelfDevice(shareFloor: newFloor) == true {
                             if self.mediaSession.hasScreenShare {
-                                self.mediaSession.leaveScreenShare(oldFloor.granted ?? newFloor.granted!)
+                                self.mediaSession.leaveScreenShare(oldFloor.granted ?? newFloor.granted!, isSending: false)
+                                self.mediaSession.joinScreenShare(newFloor.granted!, isSending: true)
                                 self.mediaSession.startLocalScreenShare()
                             }
                             self.onMediaChanged?(MediaChangedEvent.remoteSendingScreenShare(false))
-                            self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                            if !self.mediaSession.screenShareMuted {
+                                self.onMediaChanged?(MediaChangedEvent.sendingScreenShare(true))
+                            }
                         } else {
                             
                         }

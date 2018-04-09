@@ -631,17 +631,17 @@ public class Phone {
         }
         
         if call.isScreenSharedBySelfDevice() {
-            let error = SparkError.illegalStatus(reason: "Already share by self.")
+            let error = SparkError.illegalStatus(reason: "Already shared by self.")
             completionHandler(error)
             SDKLogger.shared.error("Failure", error: error)
             return
         }
         
-        //screen recording broadcast check
-        
-        
-        if let granted = call.model.screenShareMediaFloor?.granted ,call.mediaSession.hasScreenShare{
-            call.mediaSession.leaveScreenShare(granted)
+        if call.status != .connected {
+            let error = SparkError.illegalStatus(reason: "No active call.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
         }
         
         let floor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor(beneficiary: call.model.myself, disposition: MediaShareModel.ShareFloorDisposition.granted, granted: nil, released: nil, requested: nil, requester: call.model.myself)
@@ -666,10 +666,6 @@ public class Phone {
             SDKLogger.shared.error("Failure", error: error)
             return
         }
-        
-        //screen recording broadcast check
-        
-        //
         
         let floor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor(beneficiary: call.model.myself, disposition: MediaShareModel.ShareFloorDisposition.released, granted: nil, released: nil, requested: nil, requester: call.model.myself)
         

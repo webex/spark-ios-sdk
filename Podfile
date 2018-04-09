@@ -22,7 +22,6 @@ end
 
 target 'SparkBroadcastExtensionKit' do
 	platform :ios, '11.0'
-	shared_pods
 end
 
 target 'SparkBroadcastExtensionKitTests' do

@@ -81,8 +81,8 @@
 - (void)startScreenShareRenderView;
 - (void)stopScreenShareRenderView:(BOOL)removeRender;
 
-- (void)joinScreenShare:(NSString *)shareId;
-- (void)leaveScreenShare:(NSString *)shareId;
+- (void)joinScreenShare:(NSString *)shareId isSending:(BOOL)isSending;
+- (void)leaveScreenShare:(NSString *)shareId isSending:(BOOL)isSending;
 - (void)startLocalScreenShare;
 - (void)stopLocalScreenShare;
 - (void)onReceiveScreenBroadcastData:(FrameInfo)frameInfo frameData:(NSData *)frameData;

@@ -14,7 +14,7 @@
 
 @required
 - (void)didReceivedError:(ScreenShareError)error;
-
+- (void)didFailToSendFrame:(ScreenShareError)error;
 @end
 
 @interface BroadcastConnectionClient : NSObject 

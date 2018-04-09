@@ -25,11 +25,11 @@ import Foundation
 ///
 /// - since: 1.4.0
 public enum SparkError: Error {
-    /// A service request to Cisco Spark cloud has failed.
+    /// A request to Spark SDK containing app failed.
     case serviceFailed(code: Int, reason: String)
-    /// The service request is illegal.
+    /// The request is illegal.
     case illegalOperation(reason: String)
-    /// The service is in an illegal status.
+    /// The request is in an illegal status.
     case illegalStatus(reason: String)
 }
 

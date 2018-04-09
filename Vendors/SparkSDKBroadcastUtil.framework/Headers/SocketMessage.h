@@ -9,9 +9,9 @@
 typedef NS_ENUM(int8_t, ScreenShareError) {
     ScreenShareErrorNone = 0,
     ScreenShareErrorFatal = -1,
-    ScreenShareErrorNoLocus = -2,
+    ScreenShareErrorNoCallIsActive = -2,
     ScreenShareErrorStop = -3,
-    ScreenShareErrorContainingAppSuspended  = -4,
+    ScreenShareErrorFrameProcessingSuspended  = -4,
 };
 
 typedef struct __FrameMessage {
