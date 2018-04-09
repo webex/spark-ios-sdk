@@ -62,6 +62,7 @@ public class WebhookClient {
     /// - parameter filter: The filter that defines the webhook scope.
     /// - parameter secet: Secret use to generate payload signiture
     /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter secet: Secret use to generate payload signiture
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
