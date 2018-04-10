@@ -12,7 +12,6 @@ FOUNDATION_EXPORT const unsigned char WmeVersionString[];
 #import <Wme/MediaConstraint.h>
 #import <Wme/MediaSession.h>
 #import <Wme/Notification.h>
-#import <Wme/MediaRenderView.h>
 #import <Wme/Misc.h>
 #import <Wme/CustomLogger.h>
 #import <Wme/WmeLogManager.h>

@@ -1,7 +1,6 @@
 #import <Foundation/Foundation.h>
 #import "MediaConstraint.h"
 #import "FrameInfo.h"
-@class MediaRenderView;
 
 @interface MediaSession : NSObject
 
@@ -25,9 +24,9 @@
 @property (nonatomic) BOOL receiveScreenShare;
 
 // render view
-@property (nonatomic) MediaRenderView *localVideoView;
-@property (nonatomic) MediaRenderView *remoteVideoView;
-@property (nonatomic) MediaRenderView *screenShareView;
+@property (nonatomic) UIView *localVideoView;
+@property (nonatomic) UIView *remoteVideoView;
+@property (nonatomic) UIView *screenShareView;
 @property (nonatomic) unsigned int localVideoViewHeight;
 @property (nonatomic) unsigned int localVideoViewWidth;
 @property (nonatomic) unsigned int remoteVideoViewHeight;
@@ -87,6 +86,6 @@
 - (void)stopLocalScreenShare;
 - (void)onReceiveScreenBroadcastData:(FrameInfo)frameInfo frameData:(NSData *)frameData;
 
-- (void)updateSdpDirectionWithLocalView:(MediaRenderView *)localView remoteView:(MediaRenderView *)remoteView;
-- (void)updateSdpDirectionWithScreenShare:(MediaRenderView *)screenShareView;
+- (void)updateSdpDirectionWithLocalView:(UIView *)localView remoteView:(UIView *)remoteView;
+- (void)updateSdpDirectionWithScreenShare:(UIView *)screenShareView;
 @end

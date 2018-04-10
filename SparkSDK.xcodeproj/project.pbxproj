@@ -139,6 +139,7 @@
 		C7625FF1205CC28100219F95 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FF0205CC28100219F95 /* SparkError.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
+		C7957FF8207C6FD30069D672 /* MediaRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957FF7207C6FD20069D672 /* MediaRenderView.swift */; };
 		C79F14061FBE7C3A00B43596 /* FakeCallClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */; };
 		C79F14071FBE7C3A00B43596 /* FakeCallModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */; };
 		C79F14081FBE7C3A00B43596 /* FakeConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */; };
@@ -316,6 +317,7 @@
 		C7625FF0205CC28100219F95 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		C7957FF7207C6FD20069D672 /* MediaRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaRenderView.swift; sourceTree = "<group>"; };
 		C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallClient.swift; sourceTree = "<group>"; };
 		C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallModelHelper.swift; sourceTree = "<group>"; };
 		C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeConversationClient.swift; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 		20EEA2CB1EBDE43300D6BB75 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				C7957FF7207C6FD20069D672 /* MediaRenderView.swift */,
 				20EEA2CC1EBDE43300D6BB75 /* MediaEngineObserver.swift */,
 				20EEA2CD1EBDE43300D6BB75 /* MediaEngineWrapper.swift */,
 				20EEA2CE1EBDE43300D6BB75 /* MediaSessionObserver.swift */,
@@ -1117,6 +1120,7 @@
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
 				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthStrategy.swift in Sources */,
+				C7957FF8207C6FD30069D672 /* MediaRenderView.swift in Sources */,
 				20EEA27A1EB0E6B400D6BB75 /* SequenceModel.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */,
 				3DEEA4F11D11418800EB73F6 /* H264LicensePrompter.swift in Sources */,
@@ -1259,7 +1263,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1289,7 +1293,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
@@ -1377,7 +1381,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1423,7 +1427,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1452,7 +1456,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (
@@ -1494,7 +1498,7 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_LDFLAGS = (

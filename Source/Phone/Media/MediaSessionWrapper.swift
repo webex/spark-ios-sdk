@@ -97,14 +97,14 @@ class MediaSessionWrapper {
     }
     
     var videoViews: (local:MediaRenderView,remote:MediaRenderView)? {
-        if let localView = mediaSession.localVideoView, let remoteView = mediaSession.remoteVideoView {
+        if let localView = mediaSession.localVideoView as? MediaRenderView, let remoteView = mediaSession.remoteVideoView as? MediaRenderView {
             return (local:localView, remote:remoteView)
         }
         return nil
     }
     
     var screenShareView: MediaRenderView? {
-        return mediaSession.screenShareView
+        return mediaSession.screenShareView as? MediaRenderView
     }
     
     // MARK: - Audio & Video
