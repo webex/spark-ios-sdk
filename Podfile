@@ -3,7 +3,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 def shared_pods
-	platform :ios, '9.0'
+	platform :ios, '10.0'
 	pod 'Alamofire', '~> 4.0'
 	pod 'ObjectMapper', '~> 2.0'
 	pod 'AlamofireObjectMapper', '~> 4.0'
@@ -21,9 +21,9 @@ target 'SparkSDKTests' do
 end
 
 target 'SparkBroadcastExtensionKit' do
-	platform :ios, '11.0'
+	platform :ios, '11.2'
 end
 
 target 'SparkBroadcastExtensionKitTests' do
-	shared_pods
+	platform :ios, '11.2'
 end
