@@ -277,7 +277,7 @@ public class Call {
     ///
     /// - since: 1.3.0
     public var remoteSendingScreenShare: Bool {
-        return model.isGrantedScreenShare
+        return model.isGrantedScreenShare && !self.isScreenSharedBySelfDevice()
     }
     
     /// True if the local party of this *call* is sending video. Otherwise, false.
@@ -679,13 +679,15 @@ public class Call {
     
     
     func end(reason: DisconnectReason) {
-        //TODO check if need stop screen share
+        //To end this call stop local screen share and broadcasting first.
         if #available(iOS 11.2, *) {
-            self.unshareScreen() {
-                _ in
-                SDKLogger.shared.error("Unshare screen by call end!")
+            if self.isScreenSharedBySelfDevice() {
+                self.unshareScreen() {
+                    _ in
+                    SDKLogger.shared.info("Unshare screen by call end!")
+                }
+                self.mediaSession.stopLocalScreenShare()
             }
-            self.mediaSession.stopLocalScreenShare()
         }
         
         switch reason {

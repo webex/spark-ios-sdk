@@ -21,9 +21,14 @@
 import Foundation
 import SparkSDKBroadcastUtil
 
-public enum BroadcastExtensionState : String{
+/// The enum of broadcast session state.
+///
+/// - since: 1.4.0
+public enum BroadcastExtensionState : String {
     case Initiated
+    //Connected with the containing app broadcast server.
     case Broadcasting
+    //The containing app broadcast server connection is suspended.
     case Suspended
     case Stopped
 }
@@ -64,13 +69,15 @@ public class SparkBroadcastExtension {
         }
     }
     
-    /// start broadcast session, transfer frame data to the extension containing app.
+    /// Start broadcast session, transfer frame data to the extension containing app.
     ///
     /// - since: 1.4.0
     public func start(applicationGroupIdentifier appID:String,completionHandler: @escaping ((SparkError?) -> Void)) {
-        if appID.count > 0, self.broadcastClient == nil {
-            self.broadcastClient = SparkBroadcastClient.init(applicationGroupIdentifier: appID)
+        guard if appID.count > 0 else {
+            completionHandler(SparkError.illegalOperation(reason: "Illegal Application Group Identifier."))
         }
+        
+        self.broadcastClient = self.broadcastClient == nil ? SparkBroadcastClient.init(applicationGroupIdentifier: appID):self.broadcastClient
         self.broadcastClient?.start(completionHandler: completionHandler)
     }
     
@@ -81,7 +88,7 @@ public class SparkBroadcastExtension {
         self.broadcastClient?.pushVideoSampleBuffer(sampleBuffer: sampleBuffer)
     }
     
-    /// finish broadcast session.
+    /// Finish broadcast session.
     ///
     /// - since: 1.4.0
     public func finish() {

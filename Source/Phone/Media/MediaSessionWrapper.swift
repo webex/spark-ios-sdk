@@ -263,6 +263,7 @@ class MediaSessionWrapper {
         mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
         self.status = .initial
+        self.stopBroadcasting()
         self.broadcastServer?.invalidate()
     }
     
@@ -318,7 +319,7 @@ class MediaSessionWrapper {
     }
     
     func stopBroadcasting() {
-        guard let connectionServer = self.broadcastServer,self.isSharingScreen else {
+        guard let connectionServer = self.broadcastServer else {
             return
         }
         
