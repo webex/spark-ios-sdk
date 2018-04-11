@@ -33,9 +33,8 @@ public enum FileUploadState : String{
     case UploadFialure
 }
 class UploadFileOperation: Operation {
-    
+    public var spaceUrl : String
     let token: String
-    private var spaceUrl : String
     private var fileModel : FileObjectModel
     private var hasThumbNail: Bool = false
     private var progress : Double = 0.0
@@ -67,7 +66,7 @@ class UploadFileOperation: Operation {
     }
     
     private func shareOperation(){
-        if let _ = self.fileModel.image{
+        if let _ = self.fileModel.thumb{
             self.hasThumbNail = true
             self.uploadThumbNail(token: token)
         }
@@ -177,11 +176,11 @@ class UploadFileOperation: Operation {
                                     case .success(let value):
                                         if let dict = value as? [String : Any]{
                                             let downLoadUrl = dict["downloadUrl"] as! String
-                                            self.fileModel.image?.url = downLoadUrl
+                                            self.fileModel.thumb?.url = downLoadUrl
                                             do{
                                                 fileScr.loc = URL(string: downLoadUrl)!
                                                 let chiperfileSrc = try fileScr.encryptedSecureContentReference(withKey: self.keyMatiarial)
-                                                self.fileModel.image?.scr = chiperfileSrc
+                                                self.fileModel.thumb?.scr = chiperfileSrc
                                             }catch{}
                                             self.finishUpLoadThumbNail(fileScr: fileScr)
                                         }

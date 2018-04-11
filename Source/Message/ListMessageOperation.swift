@@ -60,7 +60,8 @@ class ListMessageOperation: Operation {
         guard let acitivityKeyMaterial = self.keyMaterial else{
             return
         }
-        for message in messageList{
+        let filterList = messageList.filter({$0.messageAction == MessageAction.post || $0.messageAction == MessageAction.share})
+        for message in filterList{
             do {
                 if message.text == nil{
                     message.text = ""
@@ -81,7 +82,7 @@ class ListMessageOperation: Operation {
                             let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
                             let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
                             let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
-                            if let image = file.image{
+                            if let image = file.thumb{
                                 let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
                                 let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
                                 image.scr = imageClearSrc
@@ -94,6 +95,8 @@ class ListMessageOperation: Operation {
                 }
             }catch{}
         }
-        self.completionHandler(self.response!)
+        let result = Result<[MessageModel]>.success(filterList)
+        let serviceResponse = ServiceResponse(self.response?.response, result)
+        self.completionHandler(serviceResponse)
     }
 }

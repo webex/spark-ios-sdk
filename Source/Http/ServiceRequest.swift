@@ -383,7 +383,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter{
             accessTokenCallback(accessToken)
         }
     }
-
+    
     func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
         var urlRequest = urlRequest
         if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization"){

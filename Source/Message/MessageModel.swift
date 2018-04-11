@@ -59,6 +59,37 @@ public enum FileType : String{
     case Unkown = "Unkown"
 }
 
+/// The document path of a SparkSdk downloaded file.
+///
+/// - since: 1.4.0
+public var SparkFilePath: String {
+    get{
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
+            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+            return path
+        } catch _ as NSError {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
+            return path
+        }
+    }
+}
+/// The document path of a SparkSdk uploaded file.
+///
+/// - since: 1.4.0
+public var SparkUploadFilePath: String {
+    get{
+        do {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkUpLoads/"
+            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
+            return path
+        } catch _ as NSError {
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkUpLoads/"
+            return path
+        }
+    }
+}
+
 /// The struct of a Message on Cisco Spark.
 ///
 /// - since: 1.4.0
@@ -224,24 +255,40 @@ extension MessageModel{
     }
 }
 
-
-
 // MARK: FileObjectModel
 public class FileObjectModel : Mappable{
     public var displayName: String?
     public var mimeType: String?
     public var objectType: String?
-    public var image: ThumbNailImageModel?
+    public var thumb: ThumbNailImageModel?
     public var fileSize: UInt64?
     public var scr: String?
     public var url: String?
     public var localFileUrl: String?
     public var fileType: FileType?
-    
+    public init(name: String, image: UIImage){
+        if let data = UIImageJPEGRepresentation(image, 1.0){
+            do{
+                let date : Date = Date()
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMMddyyyy:hhmmSSS"
+                let todaysDate = dateFormatter.string(from: date)
+                let name = "Image-" + todaysDate + ".jpg"
+                let destinationPath = SparkFilePath + "/" + name
+                try data.write(to: URL(fileURLWithPath: destinationPath))
+                self.localFileUrl = destinationPath
+                let thumbFile = ThumbNailImageModel(localFileUrl: destinationPath,width: Int(image.size.width), height : Int(image.size.height))
+                self.thumb = thumbFile
+                self.fileType = FileType.Image
+            }catch let error as NSError{
+                SDKLogger.shared.error("Write File Error:" + error.description)
+            }
+        }
+    }
     public init(name: String, localFileUrl: String ,thumbNail: ThumbNailImageModel? = nil){
         self.displayName = name
         self.localFileUrl = localFileUrl
-        self.image = thumbNail
+        self.thumb = thumbNail
     }
     public required init?(map: Map) {}
     public func mapping(map: Map) {
@@ -250,9 +297,8 @@ public class FileObjectModel : Mappable{
         fileSize <- map["fileSize"]
         scr <- map["scr"]
         url <- map["url"]
-        image <- map["image"]
+        thumb <- map["image"]
         mimeType <- map["mimeType"]
-        
         if let mimeType = mimeType{
             if mimeType.contains("image/"){
                 fileType = FileType.Image

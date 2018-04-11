@@ -378,10 +378,7 @@ public class MessageClient {
         self.executeOperationQueue.addOperation(downLoadOperation)
     }
     
-    
-    
-    
-    // MARK: Encryption Feature Variables
+    // MARK: - Encryption Feature Variables
     /// MessageClient Errors
     enum MSGErrorString: String {
         case clientInfoFetchFail = "Client Info Fetch Fail"
@@ -419,7 +416,7 @@ public class MessageClient {
         self.executeOperationQueue.maxConcurrentOperationCount = 1
     }
     
-    // MARK: Encryption Feature Functions
+    // MARK: - Encryption Feature Functions
     public func receiveNewMessage( message: MessageModel){
         if(message.encryptionKeyUrl != nil){
             self.receivedMessageList.append(message)
@@ -538,7 +535,7 @@ public class MessageClient {
                         let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
                         let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
                         let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
-                        if let image = file.image{
+                        if let image = file.thumb{
                             let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
                             let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
                             image.scr = imageClearSrc
@@ -594,7 +591,7 @@ public class MessageClient {
                         let clearName = NSString(data:nameData ,encoding: String.Encoding.utf8.rawValue)! as String
                         let srcData = try CjoseWrapper.content(fromCiphertext: scr, key: acitivityKeyMaterial)
                         let clearSrc = NSString(data:srcData ,encoding: String.Encoding.utf8.rawValue)! as String
-                        if let image = file.image{
+                        if let image = file.thumb{
                             let imageSrcData = try CjoseWrapper.content(fromCiphertext: image.scr, key: acitivityKeyMaterial)
                             let imageClearSrc = NSString(data:imageSrcData ,encoding: String.Encoding.utf8.rawValue)! as String
                             image.scr = imageClearSrc
@@ -688,8 +685,7 @@ public class MessageClient {
         }
     }
     
-    // MARK: KeyMaterial/EncryptionUrl/SpaceUrl Info Request Part
-    
+    // MARK: - KeyMaterial/EncryptionUrl/SpaceUrl Info Request Part
     private func requestEncryptionUrlFor(_ roomId: String){
         
         let path = "conversations/" + roomId.sparkSplitString()
@@ -808,7 +804,7 @@ public class MessageClient {
         }
     }
     
-    // MARK: Client Info Request Part
+    // MARK: - Client Info Request Part
     private func finishClientInfoRequest(success: Bool){
         if(success){
             if(self.kmsCluster != nil && self.userId != nil){
@@ -937,7 +933,7 @@ public class MessageClient {
         }
     }
     
-    //MARK: RequestBuilders
+    //MARK: - RequestBuilders
     private func messageServiceBuilder() -> ServiceRequest.MessageServerBuilder {
         return ServiceRequest.MessageServerBuilder(authenticator)
     }

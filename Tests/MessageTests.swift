@@ -288,14 +288,13 @@ class MessageTests: XCTestCase {
         let messageArray = listMessages(conversationId: roomId, sinceDate: nil, maxDate: nil, midDate: nil, limit: 3, personRefresh: nil)
         XCTAssertEqual(messageArray?.count, 3)
         
-        
         XCTAssertTrue(deleteMessage(messageId: message2!.id!))
         let messageArray1 = listMessages(conversationId: roomId, sinceDate: nil, maxDate: nil, midDate: nil, limit: 3, personRefresh: nil)
-        XCTAssertEqual(messageArray1?.filter({$0.messageAction != MessageAction.tombstone}).count, 2)
+        XCTAssertEqual(messageArray1?.filter({$0.messageAction != MessageAction.tombstone}).count, 1)
         
         XCTAssertTrue(deleteMessage(messageId: message3!.id!))
         let messageArray2 = listMessages(conversationId: roomId, sinceDate: nil, maxDate: nil, midDate: nil, limit: nil, personRefresh: nil)
-        XCTAssertEqual(messageArray2?.filter({$0.messageAction == MessageAction.tombstone}).count, 2)
+        XCTAssertEqual(messageArray2?.filter({$0.messageAction == MessageAction.tombstone}).count, 0)
     }
     
     

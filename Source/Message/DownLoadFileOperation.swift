@@ -23,19 +23,6 @@ import Alamofire
 import MobileCoreServices.UTCoreTypes
 import MobileCoreServices.UTType
 
-private var SparkTempPath: String {
-    get{
-        do {
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
-            try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: false, attributes: nil)
-            return path
-        } catch _ as NSError {
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkDownLoads/"
-            return path
-        }
-    }
-}
-
 /// The struct of a DownLoadType on Cisco Spark.
 ///
 /// - since: 1.4.0
@@ -115,7 +102,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     private func startThumbAndBodyDownLoad(){
         let trackingID = "ITCLIENT_\(self.uuid)_0"
         let config = URLSessionConfiguration.default
-        if let image = self.fileModel.image{
+        if let image = self.fileModel.thumb{
             self.hasThumbNail = true
             let urlSTR = image.url
             let urlString = URL(string: urlSTR!)
@@ -143,7 +130,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     private func startThumbOnlyDownLoad(){
         let trackingID = "ITCLIENT_\(self.uuid)_0"
         let config = URLSessionConfiguration.default
-        if let image = self.fileModel.image{
+        if let image = self.fileModel.thumb{
             self.hasThumbNail = true
             let urlSTR = image.url
             let urlString = URL(string: urlSTR!)
@@ -227,7 +214,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
     }
     private func finishDownLoadThumbNail(){
         self.thumbNailDownLoadFinish = true
-        self.fileModel.image?.localFileUrl = self.thumbDownLoadPath
+        self.fileModel.thumb?.localFileUrl = self.thumbDownLoadPath
         if(self.downLoadType == .ThumbOnly){
             self.cancel()
             SDKLogger.shared.info("File DownLoad Success...")
@@ -266,7 +253,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
             self.totalThumbSize = UInt64(stri)!
             do{
                 var outputStream = OutputStream(toFileAtPath: self.thumbDownLoadPath!, append: true)
-                let jsonstr =  self.fileModel.image?.scr!
+                let jsonstr =  self.fileModel.thumb?.scr!
                 let scr = try SecureContentReference(json: jsonstr)
                 outputStream = try SecureOutputStream(stream: outputStream, scr: scr) as OutputStream
                 self.thumbOutPutStream = outputStream
@@ -317,7 +304,7 @@ class DownLoadFileOperation: Operation , URLSessionDataDelegate {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMMddyyyy:hhmmSSS"
         let todaysDate = dateFormatter.string(from: date)
-        return SparkTempPath + todaysDate + "-" + name
+        return SparkFilePath + todaysDate + "-" + name
     }
     
     private func downLoadError(){

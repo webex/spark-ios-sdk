@@ -879,6 +879,8 @@ public class Call {
         if let participants = model.participants?.filter({ $0.type == "USER" }) {
             let oldMemberships = self.memberships
             var newMemberships = [CallMembership]()
+            var onCallMembershipChanges = [CallMembershipChangedEvent]()
+            
             for participant in participants {
                 if var membership = oldMemberships.find(predicate: { $0.id == participant.id }) {
                     let oldState = membership.state
@@ -887,30 +889,20 @@ public class Call {
                     membership.model = participant
                     if membership.state != oldState {
                         if membership.state == CallMembership.State.joined {
-                            DispatchQueue.main.async {
-                                self.onCallMembershipChanged?(CallMembershipChangedEvent.joined(membership))
-                            }
+                            onCallMembershipChanges.append(CallMembershipChangedEvent.joined(membership))
                         }
                         else if membership.state == CallMembership.State.left {
-                            DispatchQueue.main.async {
-                                self.onCallMembershipChanged?(CallMembershipChangedEvent.left(membership))
-                            }
+                            onCallMembershipChanges.append(CallMembershipChangedEvent.left(membership))
                         }
                         else if membership.state == CallMembership.State.declined {
-                            DispatchQueue.main.async {
-                                self.onCallMembershipChanged?(CallMembershipChangedEvent.declined(membership))
-                            }
+                            onCallMembershipChanges.append(CallMembershipChangedEvent.declined(membership))
                         }
                     }
                     if membership.sendingAudio != sendingAudio {
-                        DispatchQueue.main.async {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingAudio(membership))
-                        }
+                        onCallMembershipChanges.append(CallMembershipChangedEvent.sendingAudio(membership))
                     }
                     if membership.sendingVideo != sendingVideo {
-                        DispatchQueue.main.async {
-                            self.onCallMembershipChanged?(CallMembershipChangedEvent.sendingVideo(membership))
-                        }
+                        onCallMembershipChanges.append(CallMembershipChangedEvent.sendingVideo(membership))
                     }
                     newMemberships.append(membership)
                 }
@@ -919,6 +911,11 @@ public class Call {
                 }
             }
             self.memberships = newMemberships
+            for callMembershipChange in onCallMembershipChanges {
+                DispatchQueue.main.async {
+                    self.onCallMembershipChanged?(callMembershipChange)
+                }
+            }
         }
         else {
             self.memberships = []
