@@ -73,7 +73,7 @@ public class SparkBroadcastExtension {
     ///
     /// - since: 1.4.0
     public func start(applicationGroupIdentifier appID:String,completionHandler: @escaping ((SparkError?) -> Void)) {
-        guard if appID.count > 0 else {
+        if appID.count < 1 {
             completionHandler(SparkError.illegalOperation(reason: "Illegal Application Group Identifier."))
         }
         
