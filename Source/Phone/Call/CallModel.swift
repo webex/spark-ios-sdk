@@ -177,3 +177,63 @@ extension ReplaceModel: Mappable {
         locusUrl <- map["locusUrl"]
     }
 }
+
+internal extension CallModel {
+    internal mutating func setLocusUrl(newLocusUrl:String?) {
+        self.locusUrl = newLocusUrl
+    }
+    
+    internal mutating func setParticipants(newParticipants:[ParticipantModel]?) {
+        self.participants = newParticipants
+    }
+    
+    internal mutating func setMyself(newParticipant:ParticipantModel?) {
+        self.myself = newParticipant
+    }
+    
+    internal mutating func setHost(newPerson:PersonModel?) {
+        self.host = newPerson
+    }
+    
+    internal mutating func setFullState(newFullState:FullStateModel?) {
+        self.fullState = newFullState
+    }
+    
+    internal mutating func setSequence(newSequence:SequenceModel?) {
+        self.sequence = newSequence
+    }
+    
+    internal mutating func setReplace(newReplaces:[ReplaceModel]?) {
+        self.replaces = newReplaces
+    }
+    
+    internal mutating func setMediaShares(newMediaShares:[MediaShareModel]?) {
+        self.mediaShares = newMediaShares
+    }
+}
+
+internal extension FullStateModel {
+    internal mutating func setActive(newActive:Bool?) {
+        self.active = newActive
+    }
+    
+    internal mutating func setCount(newCount:Int?) {
+        self.count = newCount
+    }
+    
+    internal mutating func setLocked(newLocked:Bool?) {
+        self.locked = newLocked
+    }
+    
+    internal mutating func setLastActive(newLastActive:String?) {
+        self.lastActive = newLastActive
+    }
+    
+    internal mutating func setState(newState:String?) {
+        self.state = newState
+    }
+    
+    internal mutating func setType(newType:String?) {
+        self.type = newType
+    }
+}
