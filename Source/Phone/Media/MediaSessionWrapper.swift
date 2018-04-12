@@ -35,9 +35,9 @@ class MediaSessionWrapper {
     var status: Status = .initial
     var isSharingScreen :Bool = false
     var onBroadcastError: ((ScreenShareError) -> Void)?
-    var onBroadcasting: (() -> Void)?
+    var onBroadcasting: ((Bool) -> Void)?
     
-    private let mediaSession = MediaSession()
+    fileprivate let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
     private var broadcastServer: BroadcastConnectionServer?
     
@@ -329,6 +329,7 @@ class MediaSessionWrapper {
             SDKLogger.shared.info("Notify broadcast extension to stop live broadcasting. Error: \(String(describing: error))")
         }
         self.isSharingScreen = false
+        self.onBroadcasting?(false)
     }
 }
 
@@ -337,7 +338,7 @@ extension MediaSessionWrapper:BroadcastConnectionServerDelegate {
     public func shouldAcceptNewConnection() -> Bool {
         SDKLogger.shared.info("Accept new broadcast client connection?: \(isSharingScreen)")
         if isSharingScreen || self.status == .running {
-            self.onBroadcasting?()
+            self.onBroadcasting?(true)
             return true
         }
         return false
@@ -355,3 +356,8 @@ extension MediaSessionWrapper:BroadcastConnectionServerDelegate {
     }
 }
 
+extension MediaSessionWrapper {
+    internal func getMediaSession() -> MediaSession {
+            return self.mediaSession
+    }
+}

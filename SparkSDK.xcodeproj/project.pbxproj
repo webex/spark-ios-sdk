@@ -68,6 +68,7 @@
 		3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */; };
 		3DEEA4F11D11418800EB73F6 /* H264LicensePrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* H264LicensePrompter.swift */; };
 		3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */; };
+		47B21B50BDD803CB8BA083A3 /* Pods_SparkBroadcastExtensionKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */; };
 		4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */; };
 		5A8B997F1DF1D43C003633E1 /* OAuthLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */; };
 		5A8B99811DF222FB003633E1 /* OAuthUrlUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */; };
@@ -96,6 +97,7 @@
 		5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */; };
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
 		5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEB81D29E0C700196F6F /* Timestamp.swift */; };
+		733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */; };
 		8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */; };
 		991DA8AC1F389D6200939724 /* SSOAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */; };
 		99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */; };
@@ -149,6 +151,8 @@
 		C79F140C1FBE7C3A00B43596 /* FakeReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */; };
 		C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */; };
 		C79F14101FC3B8C900B43596 /* CallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F140E1FC3B88900B43596 /* CallTests.swift */; };
+		C79FBEC8207F2DCA00B53AF0 /* SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */; };
+		C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,6 +179,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */,
 				10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */,
 				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
@@ -183,6 +188,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.releasetest.xcconfig"; sourceTree = "<group>"; };
 		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
@@ -195,6 +201,7 @@
 		1066EF092022F877003745D0 /* RoomResourceModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomResourceModel.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
 		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
+		13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.debug.xcconfig"; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -243,6 +250,7 @@
 		3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DtmfQueue.swift; sourceTree = "<group>"; };
 		3DEEA4F01D11418800EB73F6 /* H264LicensePrompter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = H264LicensePrompter.swift; sourceTree = "<group>"; };
 		3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
+		45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkBroadcastExtensionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLauncher.swift; sourceTree = "<group>"; };
 		5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthUrlUtil.swift; sourceTree = "<group>"; };
 		5A9350D81E00737900374B99 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
@@ -270,9 +278,13 @@
 		5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaClusterClient.swift; sourceTree = "<group>"; };
 		5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
 		5D93AEB81D29E0C700196F6F /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
+		5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.releasetest.xcconfig"; sourceTree = "<group>"; };
 		6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig"; sourceTree = "<group>"; };
+		6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.release.xcconfig"; sourceTree = "<group>"; };
 		991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSOAuthenticatorTests.swift; path = Tests/SSOAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSOAuthenticator.swift; sourceTree = "<group>"; };
+		A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkBroadcastExtensionKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthViewController.swift; sourceTree = "<group>"; };
 		B91E753B1CE2D7B70080EAE0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -327,6 +339,7 @@
 		C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReachabilityService.swift; sourceTree = "<group>"; };
 		C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
 		C79F140E1FC3B88900B43596 /* CallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CallTests.swift; path = Tests/CallTests.swift; sourceTree = SOURCE_ROOT; };
+		CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.releasetest.xcconfig"; sourceTree = "<group>"; };
 		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
 		EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -337,6 +350,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C79FBEC8207F2DCA00B53AF0 /* SparkBroadcastExtensionKit.framework in Frameworks */,
 				10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
@@ -360,6 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7394FDB20720F6700E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */,
+				733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7625FDB205CBB9700219F95 /* SparkBroadcastExtensionKit.framework in Frameworks */,
+				47B21B50BDD803CB8BA083A3 /* Pods_SparkBroadcastExtensionKitTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +399,12 @@
 				EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */,
 				E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */,
 				03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */,
+				13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */,
+				6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */,
+				5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */,
+				CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */,
+				013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */,
+				6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -479,6 +501,8 @@
 				105E8EF81FF2976200EB33F1 /* Wme.framework */,
 				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
 				04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */,
+				45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */,
+				A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -797,10 +821,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7625FE3205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKit" */;
 			buildPhases = (
+				CC3717B1BD6FDD31B57D6CDB /* [CP] Check Pods Manifest.lock */,
 				C7625FCD205CBB9600219F95 /* Sources */,
 				C7625FCE205CBB9600219F95 /* Frameworks */,
 				C7625FCF205CBB9600219F95 /* Headers */,
 				C7625FD0205CBB9600219F95 /* Resources */,
+				E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -815,9 +841,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7625FE7205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKitTests" */;
 			buildPhases = (
+				C5EB7B8F84910F513673EE82 /* [CP] Check Pods Manifest.lock */,
 				C7625FD6205CBB9600219F95 /* Sources */,
 				C7625FD7205CBB9600219F95 /* Frameworks */,
 				C7625FD8205CBB9600219F95 /* Resources */,
+				8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */,
+				255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -949,6 +978,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -979,6 +1023,57 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5EB7B8F84910F513673EE82 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SparkBroadcastExtensionKitTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC3717B1BD6FDD31B57D6CDB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SparkBroadcastExtensionKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1005,6 +1100,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1525,6 +1635,7 @@
 		};
 		C7625FE4205CBB9700219F95 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1566,6 +1677,7 @@
 		};
 		C7625FE5205CBB9700219F95 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1605,6 +1717,7 @@
 		};
 		C7625FE6205CBB9700219F95 /* ReleaseTest */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1644,6 +1757,7 @@
 		};
 		C7625FE8205CBB9700219F95 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1673,6 +1787,7 @@
 		};
 		C7625FE9205CBB9700219F95 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1701,6 +1816,7 @@
 		};
 		C7625FEA205CBB9700219F95 /* ReleaseTest */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;

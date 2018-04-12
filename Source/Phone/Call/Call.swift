@@ -159,7 +159,9 @@ public class Call {
         /// Local screen share size has changed.
         /// - since: 1.4.0
         case localScreenShareViewSize
-        
+        /// When broadcast extension connected or disconneced to this call.
+        /// - since: 1.4.0
+        case onBroadcasting(Bool)
     }
     
     /// The enumeration of call membership events.
@@ -665,19 +667,6 @@ public class Call {
         self.device.phone.unshareScreen(call: self, completionHandler: completionHandler)
     }
     
-    /// Call back when broadcast extension connecting to this call.
-    /// - since: 1.4.0
-    @available(iOS 11.2, *)
-    public var onBroadcasting: (() -> Void)? {
-        set {
-            self.mediaSession.onBroadcasting = newValue
-        }
-        get {
-            return self.mediaSession.onBroadcasting
-        }
-    }
-    
-    
     func end(reason: DisconnectReason) {
         //To end this call stop local screen share and broadcasting first.
         if #available(iOS 11.2, *) {
@@ -725,6 +714,12 @@ public class Call {
         else {
             SDKLogger.shared.error("Failure: remoteSdp is nil")
         }
+        self.mediaSession.onBroadcasting = {
+            isBroadcasting in
+            DispatchQueue.main.async {
+                self.onMediaChanged?(MediaChangedEvent.onBroadcasting(isBroadcasting))
+            }
+        }
         self.mediaSession.startMedia(call: self)
         if let granted = self.model.screenShareMediaFloor?.granted, self.mediaSession.hasScreenShare {
             self.mediaSession.joinScreenShare(granted, isSending: self.isScreenSharedBySelfDevice())
@@ -736,6 +731,7 @@ public class Call {
         if let granted = self.model.screenShareMediaFloor?.granted ,self.mediaSession.hasScreenShare{
             self.mediaSession.leaveScreenShare(granted, isSending: self.isScreenSharedBySelfDevice())
         }
+        self.mediaSession.onBroadcasting = nil
         self.mediaSession.stopMedia()
     }
     
