@@ -387,7 +387,7 @@ extension String{
     public func sparkSplitString()->String{
         if let idDecode = self.base64Decoded(){
             if let idStr = idDecode.components(separatedBy: "/").last{
-                if let firstid = String(idStr)?.components(separatedBy: ":").first{
+                if let firstid = String(idStr).components(separatedBy: ":").first{
                     return String(firstid)
                 }else{
                     return String(idStr)

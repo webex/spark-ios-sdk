@@ -454,7 +454,7 @@ public class MessageClient {
             do{
                 let responseStr = kmsMessageModel.kmsMessageStrs?.first!
                 let kmsMessageData = try CjoseWrapper.content(fromCiphertext: responseStr, key: self.ephemeralKeyStr)
-                let kmsMessageJson = JSON(data: kmsMessageData)
+                let kmsMessageJson = try JSON(data: kmsMessageData)
                 
                 if let dict = kmsMessageJson["key"].object as? [String:Any]{
                     if let keyMaterial = JSON(dict["jwk"]!).rawString(),

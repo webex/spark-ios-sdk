@@ -40,9 +40,9 @@ extension String {
     
     func base64Decoded() -> String? {
         var encoded64 = self
-        let remainder = encoded64.characters.count % 4
+        let remainder = encoded64.count % 4
         if remainder > 0 {
-            encoded64 = encoded64.padding(toLength: encoded64.characters.count + 4 - remainder, withPad: "=", startingAt: 0)
+            encoded64 = encoded64.padding(toLength: encoded64.count + 4 - remainder, withPad: "=", startingAt: 0)
         }
         if let data = Data(base64Encoded: encoded64) {
             return String(data: data, encoding: .utf8)
@@ -55,7 +55,7 @@ extension String {
             let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
             let endIndex = self.index(self.startIndex, offsetBy: r.upperBound)
             
-            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
         }
     }
     
@@ -63,7 +63,7 @@ extension String {
         get {
             let startIndex = self.index(self.startIndex, offsetBy: start)
             let endIndex = self.index(self.startIndex, offsetBy: end+1)
-            return self[Range(uncheckedBounds: (startIndex, endIndex))]
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
         }
     }
     

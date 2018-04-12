@@ -127,7 +127,7 @@ class MemoryLoggerStorage {
     func write(_ message: String) {
         synchronized(lock: self) {
             blocks[blockIndex] += message + "\n"
-            if blocks[blockIndex].characters.count > BlockSize {
+            if blocks[blockIndex].count > BlockSize {
                 blockIndex = (blockIndex + 1) % BlockCount
                 blocks[blockIndex] = ""
             }

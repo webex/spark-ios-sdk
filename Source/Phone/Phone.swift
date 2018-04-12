@@ -889,9 +889,9 @@ public class Phone {
     }
     
     private func requestMediaAccess(option: MediaOption, completionHandler: @escaping () -> Void) {
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeAudio) { audioGranted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.audio) { audioGranted in
             if option.hasVideo {
-                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { videoGranted in
+                AVCaptureDevice.requestAccess(for: AVMediaType.video) { videoGranted in
                     DispatchQueue.main.async {
                         completionHandler()
                     }

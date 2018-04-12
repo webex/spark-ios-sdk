@@ -91,7 +91,7 @@ public class JWTAuthenticator: Authenticator {
         var base64String = base64UrlString
         base64String = base64String.replacingOccurrences(of: "-", with: "+")
         base64String = base64String.replacingOccurrences(of: "_", with: "/")
-        switch base64String.characters.count % 4 {
+        switch base64String.count % 4 {
         case 0:
             break
         case 2:
