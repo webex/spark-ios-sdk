@@ -20,231 +20,117 @@
 
 import UIKit
 import Alamofire
-import MobileCoreServices.UTCoreTypes
-import MobileCoreServices.UTType
 
-/// The struct of a UploadFileOperation on Cisco Spark.
-///
-/// - since: 1.4.0
-public enum FileUploadState : String{
-    case Initiated
-    case Uploading
-    case UploadSuccess
-    case UploadFialure
+class UploadFileOperations {
+    
+    private let queue = SerialQueue()
+    
+    private var operations: [UploadFileOperation]
+    
+    init(key: EncryptionKey, files: [LocalFile]) {
+        self.operations = files.map { file in
+            return UploadFileOperation(key: key, local: file)
+        }
+    }
+    
+    func run(client: MessageClientImpl, completionHandler: @escaping (Result<[RemoteFile]>) -> Void) {
+        var sucess = [RemoteFile]()
+        self.operations.forEach { operation in
+            if !operation.done {
+                self.queue.sync {
+                    operation.run(client: client) { [weak self] result in
+                        if let file = result.data {
+                            sucess.append(file)
+                        }
+                        self?.queue.yield()
+                    }
+                }
+            }
+        }
+        self.queue.sync {
+            completionHandler(Result.success(sucess))
+        }
+    }
 }
-class UploadFileOperation: Operation {
-    public var spaceUrl : String
-    let token: String
-    private var fileModel : FileObjectModel
-    private var hasThumbNail: Bool = false
-    private var progress : Double = 0.0
-    private var thumNaliProgress: Double = 0.0
-    private var progressHandler : ((Double) -> Void)?
-    private var completionHandler : ((FileObjectModel,Error?) -> Void)
-    private var uploadState : FileUploadState = FileUploadState.Initiated
-    private var bodyUploadFinish: Bool = false
-    private var thumbNailUploadFinish: Bool = false
-    private var keyMatiarial: String
-    init(token: String,
-         spaceUrl: String,
-         fileModel: FileObjectModel,
-         keyMatiarial: String,
-         progressHandler: ((Double) -> Void)? = nil,
-         completionHandler: @escaping ((FileObjectModel,Error?) -> Void))
-    {
-        self.token = token
-        self.fileModel = fileModel
-        self.spaceUrl = spaceUrl
-        self.keyMatiarial = keyMatiarial
-        self.progressHandler = progressHandler
-        self.completionHandler = completionHandler
-        super.init()
-    }
-    
-    override func main() {
-        self.shareOperation()
-    }
-    
-    private func shareOperation(){
-        if let _ = self.fileModel.thumb{
-            self.hasThumbNail = true
-            self.uploadThumbNail(token: token)
-        }
-        self.uploadFile(token: token)
-    }
-    
-    private func uploadFile(token: String){
-        let header : [String: String]  = ["Authorization" : "Bearer " + token]
-        let uploadSessionUrl = URL(string: self.spaceUrl+"/upload_sessions")
-        var fileSize: UInt64 = 0
-        do{
-            self.uploadState = .Uploading
-            let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
-            let fileAttr = try FileManager.default.attributesOfItem(atPath: fileUrl!)
-            fileSize = fileAttr[FileAttributeKey.size] as! UInt64
-            let nsInputStream = InputStream(fileAtPath: fileUrl!)
-            let fileScr = try SecureContentReference(error: ())
-            let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
-            let parameters : Parameters = ["fileSize": fileSize]
-            SDKLogger.shared.info("Begin To Upload Data......")
-            Alamofire.request(uploadSessionUrl!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON(completionHandler: { response in
-                switch response.result{
-                case .success(let value):
-                    if let dict = value as? [String : Any]{
-                        let uploadUrl = URL(string: dict["uploadUrl"] as! String)
-                        let finishUrl = URL(string: dict["finishUploadUrl"] as! String)
-                        
-                        let uploadheadHeader: HTTPHeaders = ["Content-Length": String(fileSize)]
-                        
-                        Alamofire.upload(secureInputStream, to: uploadUrl!, method: .put, headers: uploadheadHeader).uploadProgress(closure: { (progress) in
-                            self.uploadProgress(progress.fractionCompleted)
-                        }).responseString(completionHandler: { (response) in
-                            let finishHead: HTTPHeaders = [ "Authorization" : "Bearer " + token,
-                                                            "Content-Type": "application/json;charset=UTF-8"]
-                            let pramDict = ["size":fileSize]
-                            do{
-                                var request = try Alamofire.URLRequest(url: finishUrl!, method: .post, headers: finishHead)
-                                let pramData = try JSONSerialization.data(withJSONObject: pramDict, options: .prettyPrinted)
-                                request.httpBody = pramData
-                                Alamofire.request(request).responseJSON(completionHandler: { (response) in
-                                    switch response.result{
-                                    case .success(let value):
-                                        if let dict = value as? [String : Any]{
-                                            let downLoadUrl = dict["downloadUrl"] as! String
-                                            self.fileModel.fileSize = fileSize
-                                            self.fileModel.url = downLoadUrl
-                                            do{
-                                                fileScr.loc = URL(string: downLoadUrl)!
-                                                let chiperfileSrc = try fileScr.encryptedSecureContentReference(withKey: self.keyMatiarial)
-                                                self.fileModel.scr = chiperfileSrc
-                                            }catch{}
-                                            self.finishUploadFileBody(fileScr: fileScr)
-                                        }
-                                        break
-                                    case .failure:
-                                        break
-                                    }
-                                })
-                            } catch{}
-                        })
-                    }
-                    break
-                case .failure(let error):
-                    self.finishUploadWithError(error)
-                    break
-                }
-            })
-        }catch let error as NSError{
-            self.finishUploadWithError(error)
-        }
-    }
-    
-    
-    private func uploadThumbNail(token: String){
-        let header : [String: String]  = ["Authorization" : "Bearer " + token]
-        let uploadSessionUrl = URL(string: self.spaceUrl+"/upload_sessions")
-        var fileSize: UInt64 = 0
-        do{
-            SDKLogger.shared.info("Begin To Upload Data......")
-            let fileUrl = self.fileModel.localFileUrl?.replacingOccurrences(of: "file://", with: "")
-            let fileAttr = try FileManager.default.attributesOfItem(atPath:fileUrl!)
-            fileSize = fileAttr[FileAttributeKey.size] as! UInt64
-            let nsInputStream = InputStream(fileAtPath: fileUrl!)
-            let fileScr = try SecureContentReference(error: ())
-            let secureInputStream = try SecureInputStream(stream: nsInputStream, scr: fileScr)
-            let parameters : Parameters = [ "fileSize": fileSize ]
-            Alamofire.request(uploadSessionUrl!, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: header).responseJSON(completionHandler: { response in
-                switch response.result{
-                case .success(let value):
-                    if let dict = value as? [String : Any]{
-                        let uploadUrl = URL(string: dict["uploadUrl"] as! String)
-                        let finishUrl = URL(string: dict["finishUploadUrl"] as! String)
-                        
-                        let uploadheadHeader: HTTPHeaders = ["Content-Length": String(fileSize)]
-                        Alamofire.upload(secureInputStream, to: uploadUrl!, method: .put, headers: uploadheadHeader).uploadProgress(closure: { (progress) in
-                            self.uploadThumbNailProgress(progress.fractionCompleted)
-                        }).responseString(completionHandler: { (response) in
-                            let finishHead: HTTPHeaders = [ "Authorization" : "Bearer " + token,
-                                                            "Content-Type": "application/json;charset=UTF-8"]
-                            let pramDict = ["size":fileSize]
-                            do{
-                                var request = try Alamofire.URLRequest(url: finishUrl!, method: .post, headers: finishHead)
-                                let pramData = try JSONSerialization.data(withJSONObject: pramDict, options: .prettyPrinted)
-                                request.httpBody = pramData
-                                Alamofire.request(request).responseJSON(completionHandler: { (response) in
-                                    switch response.result{
-                                    case .success(let value):
-                                        if let dict = value as? [String : Any]{
-                                            let downLoadUrl = dict["downloadUrl"] as! String
-                                            self.fileModel.thumb?.url = downLoadUrl
-                                            do{
-                                                fileScr.loc = URL(string: downLoadUrl)!
-                                                let chiperfileSrc = try fileScr.encryptedSecureContentReference(withKey: self.keyMatiarial)
-                                                self.fileModel.thumb?.scr = chiperfileSrc
-                                            }catch{}
-                                            self.finishUpLoadThumbNail(fileScr: fileScr)
-                                        }
-                                        break
-                                    case .failure:
-                                        break
-                                    }
-                                })
-                            } catch{}
-                        })
-                    }
-                    break
-                case .failure(let error):
-                    self.finishUploadWithError(error)
-                    break
-                }
-            })
-        }catch let error as NSError{
-            self.finishUploadWithError(error)
-        }
-    }
-    
-    private func uploadProgress(_ progress: Double){
-        self.progress = progress
-        if self.hasThumbNail{
-            self.progress = progress
-            if let progressHandler = self.progressHandler{
-                progressHandler((self.progress+self.thumNaliProgress)/2)
-            }
-        }else{
-            self.progress = progress
-            if let progressHandler = self.progressHandler{
-                progressHandler(self.progress)
-            }
-        }
-    }
-    private func uploadThumbNailProgress(_ progress: Double){
-        self.thumNaliProgress = progress
-        if let progressHandler = self.progressHandler{
-            progressHandler((self.progress+self.thumNaliProgress)/2)
-        }
-    }
-    
-    private func finishUploadFileBody(fileScr: SecureContentReference?=nil){
-        self.bodyUploadFinish = true
-        if(!self.hasThumbNail){
-            SDKLogger.shared.info("Finish Upload File Data......")
-            self.completionHandler(self.fileModel, nil)
-        }else if(self.hasThumbNail && self.thumbNailUploadFinish){
-            SDKLogger.shared.info("Finish Upload File Data......")
-            self.completionHandler(self.fileModel, nil)
-        }
-    }
-    private func finishUpLoadThumbNail(fileScr: SecureContentReference?=nil, error: Error?=nil){
-        self.thumbNailUploadFinish = true
-        if(self.bodyUploadFinish){
-            SDKLogger.shared.info("Finish Upload File Data......")
-            self.completionHandler(self.fileModel, nil)
-        }
-    }
 
-    private func finishUploadWithError(_ error : Error){
-        self.cancel()
-        SDKLogger.shared.info("Upload File Data Failure......")
-        self.completionHandler(self.fileModel, error)
+class UploadFileOperation {
+    
+    let local: LocalFile
+    private let key: EncryptionKey
+    private(set) var done: Bool = false
+    
+    init(key: EncryptionKey, local: LocalFile) {
+        self.local = local
+        self.key = key
     }
+    
+    func run(client: MessageClientImpl, completionHandler: @escaping (Result<RemoteFile>) -> Void) {
+        if !FileManager.default.fileExists(atPath: self.local.path) || !FileManager.default.isReadableFile(atPath: self.local.path) {
+            self.uploadError(completionHandler: completionHandler)
+            return
+        }
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: self.local.path), let size = attrs[FileAttributeKey.size] as? UInt64 else {
+            self.uploadError(completionHandler: completionHandler)
+            return
+        }
+        client.authenticator.accessToken { token in
+            guard let token = token else {
+                self.uploadError(completionHandler: completionHandler)
+                return
+            }
+            self.key.spaceUrl(authenticator: client.authenticator) { result in
+                if let url = result.data {
+                    let headers: HTTPHeaders  = ["Authorization": "Bearer " + token]
+                    let parameters: Parameters = ["fileSize": size]
+                    Alamofire.request(url + "/upload_sessions", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { (response: DataResponse<Any>) in
+                        if let dict = response.result.value as? [String : Any],
+                            let uploadUrl = dict["uploadUrl"] as? String,
+                            let finishUrl = dict["finishUploadUrl"] as? String,
+                            let scr = try? SecureContentReference(error: ()),
+                            let inputStream = try? SecureInputStream(stream: InputStream(fileAtPath: self.local.path), scr: scr) {
+                            let uploadHeaders: HTTPHeaders = ["Content-Length": String(size)]
+                            Alamofire.upload(inputStream, to: uploadUrl, method: .put, headers: uploadHeaders).uploadProgress(closure: { (progress) in
+                                self.local.progressHandler?(progress.fractionCompleted)
+                            }).responseString { response in
+                                if let _ = response.result.value {
+                                    let finishHeaders: HTTPHeaders = ["Authorization": "Bearer " + token, "Content-Type": "application/json;charset=UTF-8"]
+                                    let finishParameters: Parameters = ["size": size]
+                                    Alamofire.request(finishUrl, method: .post, parameters: finishParameters, encoding: JSONEncoding.default, headers: finishHeaders).responseJSON { response in
+                                        if let dict = response.result.value as? [String : Any], let downLoadUrl = dict["downloadUrl"] as? String, let url = URL(string: downLoadUrl) {
+                                            scr.loc = url
+                                            var file = RemoteFile(local: self.local, downloadUrl: downLoadUrl, size: size)
+                                            self.key.material(client: client) { material in
+                                                file.encrypt(key: material.data, scr: scr)
+                                                self.done = true
+                                                completionHandler(Result.success(file))
+                                            }
+                                        }
+                                        else {
+                                            self.uploadError(response.error, completionHandler: completionHandler)
+                                        }
+                                    }
+                                }
+                                else {
+                                    self.uploadError(response.error, completionHandler: completionHandler)
+                                }
+                            }
+                        }
+                        else {
+                            self.uploadError(response.error, completionHandler: completionHandler)
+                        }
+                    }
+                }
+                else {
+                    self.uploadError(result.error, completionHandler: completionHandler)
+                }
+            }
+        }
+    }
+    
+    private func uploadError(_ error: Error? = nil, completionHandler: @escaping (Result<RemoteFile>) -> Void) {
+        SDKLogger.shared.info("File Uoload Fail...")
+        self.done = true
+        completionHandler(Result.failure(error ?? SparkError.serviceFailed(code: -7000, reason: "upload error")))
+    }
+    
 }

@@ -89,18 +89,3 @@ extension TeamMembership: Mappable {
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }
-
-class EmailTransform: TransformType {
-    
-    func transformFromJSON(_ value: Any?) -> EmailAddress? {
-        if let value = value as? String {
-            return EmailAddress.fromString(value)
-        } else {
-            return nil
-        }
-    }
-    
-    func transformToJSON(_ value: EmailAddress?) -> String? {
-        return value?.toString()
-    }
-}

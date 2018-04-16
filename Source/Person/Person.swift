@@ -57,37 +57,6 @@ public struct Person {
     /// The nick type of person, default is "person"
     /// - since: 1.4.0
     public var type: String?
-    
-    class EmailsTransform: TransformType {
-        
-        func transformFromJSON(_ value: Any?) -> [EmailAddress]? {
-            var emails: [EmailAddress] = []
-
-            guard let value = (value as? [String]) else {
-                return nil
-            }
-
-            for emailString in value {
-                if let emailAddress = EmailAddress.fromString(emailString) {
-                    emails.append(emailAddress)
-                } else {
-                    SDKLogger.shared.warn("\(emailString) is not a properly formatted email address")
-                }
-            }
-            return emails
-        }
-        
-        func transformToJSON(_ value: [EmailAddress]?) ->  [String]? {
-            var emails: [String] = []
-            guard value != nil else {
-                return nil
-            }
-            for email in value! {
-                emails.append(email.toString())
-            }
-            return emails
-        }
-    }
 }
 
 extension Person: Mappable {

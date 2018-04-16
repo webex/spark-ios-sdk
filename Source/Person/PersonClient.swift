@@ -26,6 +26,7 @@ import Foundation
 public class PersonClient {
     
     let authenticator: Authenticator
+    
     init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }
@@ -45,14 +46,10 @@ public class PersonClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(email: EmailAddress? = nil, displayName: String? = nil, id: String? = nil,orgId: String? = nil,max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Person]>) -> Void) {
+    public func list(email: EmailAddress? = nil, displayName: String? = nil, id: String? = nil, orgId: String? = nil, max: Int? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Person]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
-            .query(RequestParameter(["email": email?.toString(),
-                                     "displayName": displayName,
-                                     "id": id,
-                                     "orgId":orgId,
-                                     "max": max]))
+            .query(RequestParameter(["email": email?.toString(), "displayName": displayName, "id": id, "orgId":orgId, "max": max]))
             .keyPath("items")
             .queue(queue)
             .build()
@@ -115,10 +112,10 @@ public class PersonClient {
                                      "displayName": displayName,
                                      "orgId":orgId,
                                      "firstName": firstName,
-                                     "lastName" : lastName,
-                                     "avatar" : avatar,
-                                     "orgId" : orgId,
-                                     "roles" : roles,
+                                     "lastName": lastName,
+                                     "avatar": avatar,
+                                     "orgId": orgId,
+                                     "roles": roles,
                                      "licenses": licenses,
                                      ]))
             .queue(queue)
@@ -150,10 +147,10 @@ public class PersonClient {
                                      "displayName": displayName,
                                      "orgId":orgId,
                                      "firstName": firstName,
-                                     "lastName" : lastName,
-                                     "avatar" : avatar,
-                                     "orgId" : orgId,
-                                     "roles" : roles,
+                                     "lastName": lastName,
+                                     "avatar": avatar,
+                                     "orgId": orgId,
+                                     "roles": roles,
                                      "licenses": licenses,
                                      ]))
             .queue(queue)

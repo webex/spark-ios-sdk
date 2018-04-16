@@ -1,5 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+#### 1.3.1 Releases
+
+- `1.3.1` Releases - [1.3.1](#131)
+
 #### 1.3.0 Releases
 
 - `1.3.0` Releases - [1.3.0](#130)
@@ -37,6 +41,12 @@ All notable changes to this project will be documented in this file.
 - `0.9.137` Releases - [0.9.137](#09137)
 
 ---
+## [1.3.1](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.3.1)
+Released on 2018-1-12.
+
+#### Feature:
+          SSO Authenticator
+
 ## [1.3.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.3.0)
 Released on 2017-10-13.
 

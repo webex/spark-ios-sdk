@@ -20,13 +20,13 @@
 
 import Foundation
 
-class SimpleAuthStrategy: Authenticator {
-    static func neverAuthorized() -> Authenticator {
-        return SimpleAuthStrategy(possibleAccessToken: nil)
+class SimpleAuthenticator : Authenticator {
+    
+    static func empty() -> Authenticator {
+        return SimpleAuthenticator(possibleAccessToken: nil)
     }
     
     private var accessToken: String?
-    private var refreshToken: String?
     
     var authorized: Bool {
         return accessToken != nil
@@ -49,6 +49,6 @@ class SimpleAuthStrategy: Authenticator {
     }
     
     public func refreshToken(completionHandler: @escaping (String?) -> Void){
-        completionHandler(refreshToken)
+        completionHandler(accessToken)
     }
 }

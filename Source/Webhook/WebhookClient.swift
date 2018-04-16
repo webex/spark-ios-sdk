@@ -62,6 +62,7 @@ public class WebhookClient {
     /// - parameter filter: The filter that defines the webhook scope.
     /// - parameter secet: Secret use to generate payload signiture
     /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter secet: Secret use to generate payload signiture
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
@@ -111,14 +112,10 @@ public class WebhookClient {
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.4.0
-    public func update(webhookId: String, name: String, targetUrl: String,  secret: String?=nil, status: String?=nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
+    public func update(webhookId: String, name: String, targetUrl: String,  secret: String? = nil, status: String? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Webhook>) -> Void) {
         let request = requestBuilder()
             .method(.put)
-            .body(RequestParameter(["name": name,
-                                    "targetUrl": targetUrl,
-                                    "secret" : secret,
-                                    "status" : status,
-                                    ]))
+            .body(RequestParameter(["name": name, "targetUrl": targetUrl, "secret" : secret, "status" : status ]))
             .path(webhookId)
             .queue(queue)
             .build()

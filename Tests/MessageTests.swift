@@ -22,6 +22,22 @@ import Foundation
 import XCTest
 @testable import SparkSDK
 
+extension SparkSDK.File {
+    public convenience init(name: String, localFileUrl: String ,thumbNail: FileThumbnail? = nil){
+        self.displayName = name
+        self.localFileUrl = localFileUrl
+        self.image = thumbNail
+    }
+}
+
+extension SparkSDK.FileThumbnail {
+    public convenience init(localFileUrl: String ,width: Int? = nil, height : Int? = nil){
+        self.localFileUrl = localFileUrl
+        self.width = width
+        self.height = height
+    }
+}
+
 class MessageTests: XCTestCase {
     
     private let text = "test text"
@@ -46,7 +62,7 @@ class MessageTests: XCTestCase {
     }
 
     
-    private func validate(message: MessageModel?) {
+    private func validate(message: Message?) {
         XCTAssertNotNil(message)
         XCTAssertNotNil(message?.id)
         XCTAssertNotNil(message?.personId)
@@ -117,7 +133,7 @@ class MessageTests: XCTestCase {
     }
     
     func testPostingMessageToRoomWithFileReturnsMessage() {
-        let file = FileObjectModel(name: "sample.png", localFileUrl: self.generateLocalFile()!)
+        let file = File(name: "sample.png", localFileUrl: self.generateLocalFile()!)
         let message = postMessage(conversationId: roomId,files: [file])
         validate(message: message)
         XCTAssertNotNil(message?.files)
@@ -131,7 +147,7 @@ class MessageTests: XCTestCase {
     }
 
     func testPostingMessageToRoomWithTextAndFileReturnsMessage() {
-        let file = FileObjectModel(name: "sample.png", localFileUrl: self.generateLocalFile()!)
+        let file = File(name: "sample.png", localFileUrl: self.generateLocalFile()!)
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file])
         validate(message: message)
         XCTAssertEqual(message?.text, text)
@@ -139,7 +155,7 @@ class MessageTests: XCTestCase {
     }
     
     func testPostingMessageToRoomWithTextAndFileAndMentionReturnsMessage(){
-        let file = FileObjectModel(name: "sample.png", localFileUrl: self.generateLocalFile()!)
+        let file = File(name: "sample.png", localFileUrl: self.generateLocalFile()!)
         let mentionItem = MessageMentionModel.createPeopleMentionItem(personId: Config.InvalidId)
         let message = postMessage(conversationId: roomId, text: text, mentions:[mentionItem], files: [file])
         validate(message: message)
@@ -148,7 +164,7 @@ class MessageTests: XCTestCase {
     }
 
     func testPostingMessageToRoomWithInvalidFileNotReturnMessage(){
-        let file = FileObjectModel(name: "sample.png", localFileUrl: Config.InvalidLocalAddress)
+        let file = File(name: "sample.png", localFileUrl: Config.InvalidLocalAddress)
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file])
         XCTAssertNil(message)
     }
@@ -165,14 +181,14 @@ class MessageTests: XCTestCase {
     }
     
     func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
-        let file = FileObjectModel(name: "sample.png", localFileUrl: self.generateLocalFile()!)
+        let file = File(name: "sample.png", localFileUrl: self.generateLocalFile()!)
         let message = postMessage(personEmail: other.email, text: "", files: [file])
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
 
     func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
-        let file = FileObjectModel(name: "sample.png", localFileUrl: self.generateLocalFile()!)
+        let file = File(name: "sample.png", localFileUrl: self.generateLocalFile()!)
         let message = postMessage(personEmail: other.email, text: text, files: [file])
         validate(message: message)
         XCTAssertEqual(message?.text, text)
@@ -299,43 +315,43 @@ class MessageTests: XCTestCase {
     
     
     private func deleteMessage(messageId: String) -> Bool {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.delete(roomId: self.roomId, messageId: messageId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request) != nil
     }
     
-    private func postMessage(conversationId: String, text: String, mentions:[MessageMentionModel]?,files: [FileObjectModel]?) -> MessageModel? {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+    private func postMessage(conversationId: String, text: String, mentions:[MessageMentionModel]?,files: [SparkSDK.File]?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: conversationId, text: text, mentions: mentions, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(conversationId: String, files: [FileObjectModel]?) -> MessageModel? {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+    private func postMessage(conversationId: String, files: [SparkSDK.File]?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: conversationId, text: nil, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(personEmail: EmailAddress, text: String, files: [FileObjectModel]?) -> MessageModel? {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+    private func postMessage(personEmail: EmailAddress, text: String, files: [SparkSDK.File]?) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(email: personEmail.toString(), text: text, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(personEmail: EmailAddress, files: [FileObjectModel]) -> MessageModel? {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+    private func postMessage(personEmail: EmailAddress, files: [SparkSDK.File]) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(email: personEmail.toString(), text: nil, mentions: nil, files: files, queue: nil, uploadProgressHandler: nil, completionHandler: completionHandler)
             
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func listMessages(conversationId: String, sinceDate: String?, maxDate: String?,midDate: String?, limit: Int?,personRefresh: Bool?) -> [MessageModel]? {
-        let request = { (completionHandler: @escaping (ServiceResponse<[MessageModel]>) -> Void) in
+    private func listMessages(conversationId: String, sinceDate: String?, maxDate: String?,midDate: String?, limit: Int?,personRefresh: Bool?) -> [Message]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
             self.messages.list(roomId: conversationId,
                                sinceDate: sinceDate,
                                maxDate: maxDate,
@@ -347,8 +363,8 @@ class MessageTests: XCTestCase {
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func getMessage(messageId: String) -> MessageModel? {
-        let request = { (completionHandler: @escaping (ServiceResponse<MessageModel>) -> Void) in
+    private func getMessage(messageId: String) -> Message? {
+        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.get(messageID: messageId, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)

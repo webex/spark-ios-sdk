@@ -49,10 +49,7 @@ public class RoomClient {
     public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, sortBy: RoomSortType? = nil,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
-            .query(RequestParameter(["teamId": teamId, "max": max,
-                                     "type": type?.rawValue,
-                                     "sortBy": sortBy?.rawValue
-                ]))
+            .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue, "sortBy": sortBy?.rawValue]))
             .keyPath("items")
             .queue(queue)
             .build()

@@ -60,25 +60,6 @@ extension SequenceModel: Mappable {
         rangeStart <- (map["rangeStart"], UInt64Transform())
         rangeEnd <- (map["rangeEnd"], UInt64Transform())
     }
-    
-    class UInt64Transform: TransformType {
-        
-        func transformFromJSON(_ value: Any?) -> UInt64?{
-            if let number = value as? NSNumber {
-                let uint64Value = number.uint64Value
-                return uint64Value
-            }
-            
-            return nil
-        }
-        
-        func transformToJSON(_ value: UInt64?) -> String? {
-            guard let input = value else {
-                return nil
-            }
-            return String(input)
-        }
-    }
 }
 
 

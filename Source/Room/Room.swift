@@ -31,7 +31,7 @@ public enum RoomType: String {
 
 /// The enumeration of sorting result
 /// - since: 1.4.0
-public enum RoomSortType: String{
+public enum RoomSortType : String{
     /// sort result by id
     case byId = "id"
     /// last active room comes first
@@ -114,6 +114,7 @@ extension Room: Mappable {
         lastActivityTimestamp <- (map["lastActivity"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
         teamId <- map["teamId"]
+        sipAddress <- map["sipAddress"]
     }
 }
 
