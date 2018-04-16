@@ -398,8 +398,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call answer")
             call?.onConnected = {
-                error in
-                
                 call?.hangup() { error in
                     XCTAssertTrue(error == nil)
                     expect1.fulfill()
@@ -461,7 +459,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call onConnected")
             call?.onConnected = {
-                error in
                 call?.answer(option: MediaOption.audioVideo(local: self.localView!, remote: self.remoteView!)) {
                     error in
                     XCTAssertNotNil(error)
@@ -505,7 +502,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call onConnected")
             call?.onConnected = {
-                error in
                 call?.reject() {
                     error in
                     XCTAssertNotNil(error)
@@ -570,7 +566,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call onConnected")
             call?.onConnected = {
-                error in
                 call?.hangup() { error in
                     XCTAssertTrue(error == nil)
                     expect1.fulfill()
@@ -615,7 +610,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call onConnected")
             call?.onConnected = {
-                error in
                 call?.hangup() { error in
                     XCTAssertTrue(error == nil)
                     expect1.fulfill()
@@ -660,7 +654,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call hangup")
             call?.onConnected = {
-                error in
                 call?.acknowledge() {
                     error in
                     XCTAssertNotNil(error)
@@ -932,7 +925,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call mute video")
             call?.onConnected = {
-                error in
                 call?.sendingVideo = false
                 FakeMediaSession.stubMediaChangeNotification(eventType: .sendingVideo(false),call: call!)
             }
@@ -987,7 +979,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call mute video")
             call?.onConnected = {
-                error in
                 call?.sendingVideo = false
                 self.fakeCallClient?.enableServerReturnError = true
                 FakeMediaSession.stubMediaChangeNotification(eventType: .sendingVideo(false),call: call!)
@@ -1057,7 +1048,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call onConnected")
             call?.onConnected = {
-                error in
                 call?.hangup() { error in
                     XCTAssertTrue(error == nil)
                     expect1.fulfill()
@@ -1101,7 +1091,6 @@ class PhoneTests: XCTestCase {
             }
             let expect1 = expectation(description: "Call answer")
             call?.onConnected = {
-                error in
                 var mySelf = call?.model.myself
                 mySelf?.url = nil
                 call?.model.setMyself(newParticipant: mySelf)

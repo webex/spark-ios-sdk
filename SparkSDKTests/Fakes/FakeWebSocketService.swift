@@ -36,8 +36,7 @@ class FakeWebSocketService:WebSocketService {
         
     }
     
-    
-    override func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+    override func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
         if let call = self.callModel {
             self.onCallModel?(call)
         }
@@ -45,7 +44,11 @@ class FakeWebSocketService:WebSocketService {
     
     func sendOnincomingCall(caller:TestUser,callee:TestUser) {
         self.callModel = FakeCallModelHelper.initCallModel(caller: caller, allParticipantUsers: [caller,callee], selfUser: callee)
-        self.websocketDidReceiveMessage(socket: WebSocket(url: URL(fileURLWithPath: Config.FakeWebSocketUrl)), text: "test")
+        if let call = self.callModel {
+            self.onCallModel?(call)
+        }
     }
     
+    
 }
+

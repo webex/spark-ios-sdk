@@ -57,7 +57,7 @@ class H264LicensePrompter {
                     SDKLogger.shared.info("Video license opened for viewing")
                     completionHandler(false)
                     if let url = URL(string: "http://www.openh264.org/BINARY_LICENSE.txt") {
-                        UIApplication.shared.openURL(url)
+                        UIApplication.shared.open(url, options:[:], completionHandler: nil)
                     }
                 })
                 alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) { _ in

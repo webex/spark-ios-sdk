@@ -59,10 +59,10 @@ class WebSocketService: WebSocketDelegate {
                     SDKLogger.shared.info("Web socket is being connected")
                     let socket = WebSocket(url: webSocketUrl)
                     if let token = token {
-                        socket.headers["Authorization"] = "Bearer " + token
+                        socket.request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
                     }
                     socket.callbackQueue = self.queue
-                    socket.delegate = self
+                    socket.advancedDelegate = self
                     self.onConnected = block
                     self.socket = socket
                     socket.connect()
@@ -93,15 +93,15 @@ class WebSocketService: WebSocketDelegate {
         self.connectionRetryCounter.reset()
     }
     
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+    func websocketDidDisconnect(socket: WebSocket, error: Error?) {
         if let block = self.onConnected {
             SDKLogger.shared.info("Websocket cannot connect: \(String(describing: error))")
-            let code = error?.code ?? -7000
+            let code = (error as NSError?)?.code ?? -7000
             let reason = error?.localizedDescription ?? "Websocket cannot connect"
             block(SparkError.serviceFailed(code: code, reason: reason))
             self.onConnected = nil
         }
-        else if let code = error?.code, let desc = error?.localizedDescription {
+        else if let code = (error as NSError?)?.code, let desc = error?.localizedDescription {
             SDKLogger.shared.info("Websocket is disconnected: \(code), \(desc)")
             if self.socket == nil {
                 SDKLogger.shared.info("Websocket is disconnected on purpose")
@@ -109,7 +109,7 @@ class WebSocketService: WebSocketDelegate {
             else {
                 let backoffTime = connectionRetryCounter.next()
                 despatch_after(backoffTime) {
-                    if code > Int(WebSocket.CloseCode.normal.rawValue) {
+                    if code > Int(CloseCode.normal.rawValue) {
                         // Abnormal disconnection, re-register device.
                         SDKLogger.shared.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
                         self.socket = nil
@@ -128,7 +128,7 @@ class WebSocketService: WebSocketDelegate {
         }
     }
     
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+    func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
         SDKLogger.shared.info("Websocket got some text: \(text)")
     }
     
@@ -165,6 +165,8 @@ class WebSocketService: WebSocketDelegate {
                     self.onEvent?(MercuryEvent.kms(kms))
                 }
             }
+        } catch let error {
+            SDKLogger.shared.error("Websocket data to Json error: \(error.localizedDescription)")
         }
     }
     
@@ -177,6 +179,14 @@ class WebSocketService: WebSocketDelegate {
         } catch {
             SDKLogger.shared.error("Failed to acknowledge message")
         }
+    }
+    
+    func websocketHttpUpgrade(socket: WebSocket, request: String) {
+        
+    }
+    
+    func websocketHttpUpgrade(socket: WebSocket, response: String) {
+        
     }
     
     private func despatch_after(_ delay: Double, closure: @escaping () -> Void) {

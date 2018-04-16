@@ -36,7 +36,7 @@ struct Metric {
     var type: MetricsType
     
     var isValid: Bool {
-        return (name.characters.count > 0) && (data.count > 0)
+        return (name.count > 0) && (data.count > 0)
     }
     
     init(name: String, type: MetricsType = MetricsType.Generic, data: [String: String]) {
