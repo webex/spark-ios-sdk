@@ -60,9 +60,13 @@ import Alamofire
 public class Spark {
     
     /// The version number of this Cisco Spark iOS SDK.
-    public static let version = "1.3.0"
+    ///
+    /// - since: 1.2.0
+    public static let version = "1.4.0"
     
     /// The logger for this SDK.
+    ///
+    /// - since: 1.2.0
     public var logger: Logger? {
         didSet {
             SDKLogger.shared.logger = self.logger
@@ -71,6 +75,8 @@ public class Spark {
     }
     
     /// Set the log level of the console logging.
+    ///
+    /// - since: 1.2.0
     public var consoleLogger: LogLevel {
         get {
             return SDKLogger.shared.console
@@ -82,11 +88,21 @@ public class Spark {
     
     /// This is the *Authenticator* object from the application when constructing this Spark object.
     /// It can be used to check and modify authentication state.
+    ///
+    /// - since: 1.2.0
     public let authenticator: Authenticator
     
     /// *Phone* represents a calling device in Cisco Spark iOS SDK.
     /// It can be used to make audio and video calls on Cisco Spark.
+    ///
+    /// - since: 1.2.0
     public lazy var phone: Phone = Phone(authenticator: self.authenticator)
+    
+    /// MessageClient represent activities relates to the user.
+    /// Use *activities* to create and manage the activities on behalf of the authenticated user.
+    ///
+    /// - since: 1.4.0
+    public lazy var messsages: MessageClient = MessageClient(phone: self.phone)
     
     /// Constructs a new *Spark* object with an *Authenticator*.
     ///
@@ -165,20 +181,6 @@ public class Spark {
     /// - see: Rooms API about how to manage rooms.
     public var teamMemberships: TeamMembershipClient {
         return TeamMembershipClient(authenticator: authenticator)
-    }
-    
-    
-    /// MessageClient represent activities relates to the user.
-    /// Use *activities* to create and manage the activities on behalf of the authenticated user.
-    ///
-    /// - since: 1.4.0
-    
-    public var messages: MessageClient?{
-        if let messageCient = self.phone.messageClient{
-            return messageCient
-        }else{
-            return nil
-        }
     }
     
     private func verbose() {

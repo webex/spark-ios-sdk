@@ -93,5 +93,7 @@ extension Webhook: Mappable {
         name <- map["name"]
         filter <- map["filter"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+        status <- map["status"]
+        secret <- map["secret"]
     }
 }

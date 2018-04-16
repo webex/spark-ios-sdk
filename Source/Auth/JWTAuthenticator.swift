@@ -41,7 +41,7 @@ public struct JWTAuthenticationInfo {
 /// is to be used to authenticate a guest user on Cisco Spark.
 ///
 /// - since: 1.2.0
-public class JWTAuthenticator: Authenticator {
+public class JWTAuthenticator : Authenticator {
     
     private let client: JWTAuthClient
     private let storage: JWTAuthStorage
@@ -78,9 +78,7 @@ public class JWTAuthenticator: Authenticator {
     }
     
     private static func payloadFor(jwt: String?) -> [String: Any]? {
-        if let segments = jwt?.components(separatedBy: "."),
-            segments.count == 3,
-            let payloadData = JWTAuthenticator.base64UrlDecode(segments[1]) {
+        if let segments = jwt?.components(separatedBy: "."), segments.count == 3, let payloadData = JWTAuthenticator.base64UrlDecode(segments[1]) {
             return (try? JSONSerialization.jsonObject(with: payloadData, options: [])) as? [String: Any]
         }
         return nil
@@ -136,8 +134,18 @@ public class JWTAuthenticator: Authenticator {
     /// - see: See Authenticator.accessToken(completionHandler:)
     /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
+        self.fetchToken(force: false, completionHandler: completionHandler)
+    }
+    
+    /// - see: See Authenticator.refreshToken(completionHandler:)
+    /// - since: 1.4.0
+    public func refreshToken(completionHandler: @escaping (String?) -> Void) {
+        self.fetchToken(force: true, completionHandler: completionHandler)
+    }
+    
+    private func fetchToken(force: Bool, completionHandler: @escaping (String?) -> Void) {
         tokenCompletionHandlers.append(completionHandler)
-        if let jwt = unexpiredJwt , unexpiredAccessToken == nil{
+        if let jwt = unexpiredJwt, force || unexpiredAccessToken == nil {
             if tokenCompletionHandlers.count == 1 {
                 client.fetchTokenFromJWT(jwt) { response in
                     switch response.result {
@@ -147,36 +155,15 @@ public class JWTAuthenticator: Authenticator {
                         }
                     case .failure(let error):
                         self.deauthorize()
-                        SDKLogger.shared.error("Failed to refresh token", error: error)
+                        SDKLogger.shared.error("Failed to fetch token", error: error)
                     }
                     self.fireCompletionHandlers()
                 }
             }
         } else {
-            fireCompletionHandlers()
+            self.fireCompletionHandlers()
         }
     }
-    
-    public func refreshToken(completionHandler: @escaping (String?) -> Void){
-        tokenCompletionHandlers.append(completionHandler)
-        if let jwt = unexpiredJwt{
-            if tokenCompletionHandlers.count == 1 {
-                client.refreshTokenFromJWT(jwt) { response in
-                    switch response.result {
-                    case .success(let jwtAccessTokenCreationResult):
-                        if let authInfo = JWTAuthenticator.authenticationInfoFrom(jwtAccessTokenCreationResult: jwtAccessTokenCreationResult) {
-                            self.storage.authenticationInfo = authInfo
-                        }
-                    case .failure(let error):
-                        self.deauthorize()
-                        SDKLogger.shared.error("Failed to refresh token", error: error)
-                    }
-                    self.fireCompletionHandlers()
-                }
-            }
-        }
-    }
-    
     
     private func fireCompletionHandlers() {
         let accessToken = unexpiredAccessToken

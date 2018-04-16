@@ -21,11 +21,11 @@
 import Foundation
 import ObjectMapper
 
-class JWTTokenModel: NSObject, Mappable {
+struct JWTTokenModel {
     
     var token: String?
     var tokenExpiration: TimeInterval?
-    var tokenCreationDate: Date
+    var tokenCreationDate: Date = Date()
     
     var tokenExpirationDate: Date {
         return Date(timeInterval: tokenExpiration!, since: tokenCreationDate)
@@ -33,15 +33,15 @@ class JWTTokenModel: NSObject, Mappable {
     
     init(token: String) {
         self.token = token
-        tokenCreationDate = Date()
+    }
+}
+
+extension JWTTokenModel : Mappable {
+    
+    init?(map: Map) {
     }
     
-    // MARK:- Mappable
-    
-    required init?(map: Map) {
-        tokenCreationDate = Date()
-    }
-    func mapping(map: Map) {
+    mutating func mapping(map: Map) {
         token <- map["token"]
         tokenExpiration <- map["expiresIn"]
     }
@@ -51,8 +51,7 @@ class JWTTokenModel: NSObject, Mappable {
 class JWTAuthClient {
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
-            .path("jwt/login")
+        return ServiceRequest.Builder(SimpleAuthenticator.empty()).path("jwt/login")
     }
     
     func fetchTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<JWTTokenModel>) -> Void) {
@@ -66,9 +65,5 @@ class JWTAuthClient {
             .build()
         
         request.responseObject(completionHandler)
-    }
-    
-    func refreshTokenFromJWT(_ jwt: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<JWTTokenModel>) -> Void){
-        self.fetchTokenFromJWT(jwt, queue: queue, completionHandler: completionHandler)
     }
 }

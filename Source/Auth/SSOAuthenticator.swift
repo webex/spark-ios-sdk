@@ -18,15 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+import Foundation
 
 /// An Single sign-on [SSO](https://help.webex.com/docs/DOC-9143#reference_E9B2CEDE975E4CD311C56D9B0EF2476C)
 /// based authentication strategy used to authenticate a user on Cisco Spark.
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
-/// - since: 1.4.0
-import Foundation
-
-public class SSOAuthenticator: OAuthAuthenticator {
+/// - since: 1.3.1
+public class SSOAuthenticator : OAuthAuthenticator {
     
     /// The spark email address of the SSO user.
     private let email: String
@@ -47,7 +46,7 @@ public class SSOAuthenticator: OAuthAuthenticator {
     /// - parameter additionalQueryItems: a collection of additional *URLQueryItem* to be appended to the identityProviderUri.
     ///
     /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
-    /// - since: 1.4.0
+    /// - since: 1.3.1
     public init(clientId: String, clientSecret: String, scope: String, redirectUri: String, email: String, identityProviderUri: String,
          queryItems: [URLQueryItem] = []) {
         self.email = email

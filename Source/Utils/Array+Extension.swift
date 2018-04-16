@@ -33,6 +33,14 @@ extension Array where Element: Equatable {
         }
     }
     
+    mutating func removeObject(equality: (Element) -> Bool) -> Element? {
+        for (idx, element) in self.enumerated() {
+            if equality(element) {
+                return self.remove(at: idx);
+            }
+        }
+        return nil
+    }
 }
 
 extension Sequence {

@@ -23,11 +23,16 @@ import Starscream
 import SwiftyJSON
 import ObjectMapper
 
-class WebSocketService: WebSocketAdvancedDelegate {
-    var onCallModel: ((CallModel) -> Void)?
-    var onFailed: (() -> Void)?
-    var onMessageModel: ((MessageModel) -> Void)?
-    var onKmsMessageModel: ((KmsMessageModel) -> Void)?
+class WebSocketService: WebSocketDelegate {
+    
+    enum MercuryEvent {
+        case call(CallModel)
+        case activity(ActivityModel)
+        case kms(KmsMessageModel)
+        case failure(Error?)
+    }
+    
+    var onEvent: ((MercuryEvent) -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter
@@ -65,7 +70,6 @@ class WebSocketService: WebSocketAdvancedDelegate {
             }
         }
     }
-    
     
     func disconnect() {
         self.queue.async {
@@ -109,8 +113,9 @@ class WebSocketService: WebSocketAdvancedDelegate {
                         // Abnormal disconnection, re-register device.
                         SDKLogger.shared.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
                         self.socket = nil
-                        self.onFailed?()
-                    } else {
+                        self.onEvent?(MercuryEvent.failure(error))
+                    }
+                    else {
                         // Unexpected disconnection, reconnect socket.
                         SDKLogger.shared.warn("Unexpected disconnection, websocket will reconnect in \(backoffTime) seconds")
                         if let socket = self.socket, !socket.isConnected {
@@ -127,46 +132,37 @@ class WebSocketService: WebSocketAdvancedDelegate {
         SDKLogger.shared.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
-        do {
-            let json = try JSON(data: data)
-            ackMessage(socket, messageId: json["id"].string ?? "")
-            let eventData = json["data"]
-            if let eventType = eventData["eventType"].string {
-                if eventType.hasPrefix("locus") {
-                    let eventObj = eventData.object;
-                    guard let eventJson = eventObj as? [String: Any],
-                        let event = Mapper<CallEventModel>().map(JSON: eventJson),
-                        let call = event.callModel,
-                        let type = event.type else {
-                            SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventObj)")
-                            return
-                    }
+    func websocketDidReceiveData(socket: WebSocket, data: Data) {
+        let json = JSON(data: data)
+        ackMessage(socket, messageId: json["id"].string ?? "")
+        let eventData = json["data"]
+        if let eventType = eventData["eventType"].string {
+            if eventType.hasPrefix("locus") {
+                if let eventObj = eventData.object as? [String: Any],
+                    let event = Mapper<CallEventModel>().map(JSON: eventObj),
+                    let call = event.callModel,
+                    let type = event.type {
                     SDKLogger.shared.info("Receive locus event: \(type)")
-                    self.onCallModel?(call)
-                }else if(eventType == "conversation.activity"){
-                    if let verb = eventData["activity"]["verb"].string{
-                        if (verb != "post" && verb != "share" && verb != "delete"){
-                            return
-                        }
-                    }else{
-                        return
+                    self.onEvent?(MercuryEvent.call(call))
+                }
+                else {
+                    SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventData.object)")
+                    return
+                }
+            }
+            else if eventType == "conversation.activity" {
+                if let activityObj = eventData["activity"].object as? [String: Any],
+                    let verb = activityObj["verb"] as? String,
+                    verb == "post" || verb == "share" || verb == "delete" {
+                    if let activity = try? Mapper<ActivityModel>().map(JSON: activityObj) {
+                        self.onEvent?(MercuryEvent.activity(activity))
                     }
-                    let messageObj = eventData["activity"].object;
-                    guard let eventJson = messageObj as? [String: Any],
-                        let messageModel = Mapper<MessageModel>().map(JSON: eventJson)
-                        else {
-                            return
-                    }
-                    self.onMessageModel?(messageModel)
-                }else if(eventType == "encryption.kms_message"){
-                    let kmsMessageObj = eventData["encryption"].object
-                    guard let kmsMessageJson = kmsMessageObj as? [String: Any],
-                        let kmsMessageModel = Mapper<KmsMessageModel>().map(JSON: kmsMessageJson)
-                        else{
-                            return;
-                    }
-                    self.onKmsMessageModel?(kmsMessageModel)
+                }
+            }
+            else if eventType == "encryption.kms_message" {
+                if let kmsObj = eventData["encryption"].object as? [String: Any],
+                    let kms = Mapper<KmsMessageModel>().map(JSON: kmsObj) {
+                    self.onEvent?(MercuryEvent.kms(kms))
                 }
             }
         } catch let error {

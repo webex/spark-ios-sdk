@@ -50,7 +50,7 @@ public struct OAuthTokens {
 /// A delegate to handle OAuth events.
 ///
 /// - since: 1.2.0
-public protocol OAuthAuthenticatorDelegate: class {
+public protocol OAuthAuthenticatorDelegate : AnyObject {
     
     /// Called when an OAuth access token could not be created from the existing refresh token
     ///
@@ -63,7 +63,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.2.0
-public class OAuthAuthenticator: Authenticator {
+public class OAuthAuthenticator : Authenticator {
     
     let clientId: String
     private let clientSecret: String
@@ -168,7 +168,10 @@ public class OAuthAuthenticator: Authenticator {
             self.refreshToken(completionHandler: completionHandler)
         }
     }
-    public func refreshToken(completionHandler: @escaping (String?) -> Void){
+    
+    /// - see: See Authenticator.refreshToken(completionHandler:)
+    /// - since: 1.4.0
+    public func refreshToken(completionHandler: @escaping (String?) -> Void) {
         accessTokenCompletionHandlers.append(completionHandler)
         if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
             fetchingAccessTokenInProcess = true
