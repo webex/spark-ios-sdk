@@ -345,19 +345,24 @@ class MessageClientImpl {
                 self.ephemeralKeyRequest = nil
             }
             else if let key = self.ephemeralKey, let data = try? CjoseWrapper.content(fromCiphertext: response, key: key) {
-                let json = JSON(data: data)
-                if let key = json["key"].object as? [String:Any] {
-                    if let jwk = key["jwk"], let uri = key["uri"], let keyMaterial = JSON(jwk).rawString(),
-                        let keyUri = JSON(uri).rawString(),
-                        let handler = self.keyMaterialCompletionHandlers.removeValue(forKey: keyUri) {
-                        handler(Result.success((keyUri, keyMaterial)))
+                do{
+                    let json = try JSON(data: data)
+                    if let key = json["key"].object as? [String:Any] {
+                        if let jwk = key["jwk"], let uri = key["uri"], let keyMaterial = JSON(jwk).rawString(),
+                            let keyUri = JSON(uri).rawString(),
+                            let handler = self.keyMaterialCompletionHandlers.removeValue(forKey: keyUri) {
+                            handler(Result.success((keyUri, keyMaterial)))
+                        }
                     }
-                }
-                else if let dict = (json["keys"].object as? [[String : Any]])?.first {
-                    if let key = try? KmsKey(from: dict), let handler = self.keysCompletionHandlers.popFirst()?.value {
-                        handler(Result.success((key.uri, key.jwk)))
+                    else if let dict = (json["keys"].object as? [[String : Any]])?.first {
+                        if let key = try? KmsKey(from: dict), let handler = self.keysCompletionHandlers.popFirst()?.value {
+                            handler(Result.success((key.uri, key.jwk)))
+                        }
                     }
+                }catch let error as NSError {
+                    SDKLogger.shared.debug("Process Message Error - \(error.description)")
                 }
+                
             }
         }
     }
