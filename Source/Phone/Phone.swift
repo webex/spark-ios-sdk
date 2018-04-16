@@ -519,7 +519,7 @@ public class Phone {
             if let url = call.model.myself?.url {
                 //TODO check if need stop screen share
                 if #available(iOS 11.2, *) {
-                    self.unshareScreen(call: call) {
+                    self.stopSharing(call: call) {
                         _ in
                         SDKLogger.shared.error("Unshare screen by call end!")
                     }
@@ -569,7 +569,7 @@ public class Phone {
     }
     
     @available(iOS 11.2,*)
-    func shareScreen(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
+    func startSharing(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
         if !call.mediaSession.hasScreenShare {
             let error = SparkError.illegalOperation(reason: "Call media option unsupport content share.")
             completionHandler(error)
@@ -599,7 +599,7 @@ public class Phone {
     }
     
     @available(iOS 11.2,*)
-    func unshareScreen(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
+    func stopSharing(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
         if !call.mediaSession.hasScreenShare {
             let error = SparkError.illegalOperation(reason: "Call media option unsupport content share.")
             completionHandler(error)

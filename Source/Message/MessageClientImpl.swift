@@ -344,8 +344,7 @@ class MessageClientImpl {
                 }
                 self.ephemeralKeyRequest = nil
             }
-            else if let key = self.ephemeralKey, let data = try? CjoseWrapper.content(fromCiphertext: response, key: key) {
-                let json = JSON(data: data)
+            else if let key = self.ephemeralKey, let data = try? CjoseWrapper.content(fromCiphertext: response, key: key), let json = try? JSON(data: data) {
                 if let key = json["key"].object as? [String:Any] {
                     if let jwk = key["jwk"], let uri = key["uri"], let keyMaterial = JSON(jwk).rawString(),
                         let keyUri = JSON(uri).rawString(),

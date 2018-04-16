@@ -23,7 +23,7 @@ import Starscream
 import SwiftyJSON
 import ObjectMapper
 
-class WebSocketService: WebSocketDelegate {
+class WebSocketService: WebSocketAdvancedDelegate {
     
     enum MercuryEvent {
         case call(CallModel)
@@ -132,40 +132,43 @@ class WebSocketService: WebSocketDelegate {
         SDKLogger.shared.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: Data) {
-        let json = JSON(data: data)
-        ackMessage(socket, messageId: json["id"].string ?? "")
-        let eventData = json["data"]
-        if let eventType = eventData["eventType"].string {
-            if eventType.hasPrefix("locus") {
-                if let eventObj = eventData.object as? [String: Any],
-                    let event = Mapper<CallEventModel>().map(JSON: eventObj),
-                    let call = event.callModel,
-                    let type = event.type {
-                    SDKLogger.shared.info("Receive locus event: \(type)")
-                    self.onEvent?(MercuryEvent.call(call))
+    func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
+        do {
+            let json =  try JSON(data: data)
+            ackMessage(socket, messageId: json["id"].string ?? "")
+            let eventData = json["data"]
+            if let eventType = eventData["eventType"].string {
+                if eventType.hasPrefix("locus") {
+                    if let eventObj = eventData.object as? [String: Any],
+                        let event = Mapper<CallEventModel>().map(JSON: eventObj),
+                        let call = event.callModel,
+                        let type = event.type {
+                        SDKLogger.shared.info("Receive locus event: \(type)")
+                        self.onEvent?(MercuryEvent.call(call))
+                    }
+                    else {
+                        SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventData.object)")
+                        return
+                    }
                 }
-                else {
-                    SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventData.object)")
-                    return
+                else if eventType == "conversation.activity" {
+                    if let activityObj = eventData["activity"].object as? [String: Any],
+                        let verb = activityObj["verb"] as? String,
+                        verb == "post" || verb == "share" || verb == "delete" {
+                        if let activity = try? Mapper<ActivityModel>().map(JSON: activityObj) {
+                            self.onEvent?(MercuryEvent.activity(activity))
+                        }
+                    }
                 }
-            }
-            else if eventType == "conversation.activity" {
-                if let activityObj = eventData["activity"].object as? [String: Any],
-                    let verb = activityObj["verb"] as? String,
-                    verb == "post" || verb == "share" || verb == "delete" {
-                    if let activity = try? Mapper<ActivityModel>().map(JSON: activityObj) {
-                        self.onEvent?(MercuryEvent.activity(activity))
+                else if eventType == "encryption.kms_message" {
+                    if let kmsObj = eventData["encryption"].object as? [String: Any],
+                        let kms = Mapper<KmsMessageModel>().map(JSON: kmsObj) {
+                        self.onEvent?(MercuryEvent.kms(kms))
                     }
                 }
             }
-            else if eventType == "encryption.kms_message" {
-                if let kmsObj = eventData["encryption"].object as? [String: Any],
-                    let kms = Mapper<KmsMessageModel>().map(JSON: kmsObj) {
-                    self.onEvent?(MercuryEvent.kms(kms))
-                }
-            }
-        } catch let error {
+        }
+        catch let error {
             SDKLogger.shared.error("Websocket data to Json error: \(error.localizedDescription)")
         }
     }

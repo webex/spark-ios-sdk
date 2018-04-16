@@ -159,9 +159,6 @@ public class Call {
         /// Local screen share size has changed.
         /// - since: 1.4.0
         case localScreenShareViewSize
-        /// When broadcast extension connected or disconneced to this call.
-        /// - since: 1.4.0
-        case onBroadcasting(Bool)
     }
     
     /// The enumeration of call membership events.
@@ -180,6 +177,16 @@ public class Call {
         case sendingAudio(CallMembership)
         /// The person in the membership started screen sharing.
         case sendingScreenShare(CallMembership)
+    }
+    
+    /// The enumeration of iOS broadcasting events.
+    ///
+    /// - since: 1.4.0
+    public enum iOSBroadcastingEvent {
+        /// When broadcast extension connected to this call.
+        case extensionConnected
+        /// When broadcast extension disconneted to this call.
+        case extensionDisconnected
     }
     
     /// The enumeration of capabilities of a call.
@@ -242,6 +249,11 @@ public class Call {
     ///
     /// - since: 1.2.0
     public var onCapabilitiesChanged: ((Capabilities) -> Void)?
+    
+    /// Callback when the iOS broadcasting status of this *call* have changed.
+    ///
+    /// - since: 1.4.0
+    public var oniOSBroadcastingChanged: ((iOSBroadcastingEvent) -> Void)?
     
     /// The status of this *call*.
     ///
@@ -636,17 +648,18 @@ public class Call {
     /// - returns: Void
     /// - since: 1.4.0
     @available(iOS 11.2, *)
-    public func shareScreen(completionHandler: @escaping ((Error?) -> Void)) {
-        self.device.phone.shareScreen(call: self) {
+    public func startSharing(completionHandler: @escaping ((Error?) -> Void)) {
+        self.device.phone.startSharing(call: self) {
             error in
             if error != nil {
                 completionHandler(error)
-            } else {
+            }
+            else {
                 self.mediaSession.onBroadcastError = {
                     screenShareError in
                     switch screenShareError {
                     case .stop, .fatal:
-                        self.unshareScreen() { error in
+                        self.stopSharing { error in
                             SDKLogger.shared.error("Failure", error: error)
                         }
                     default:
@@ -663,15 +676,15 @@ public class Call {
     /// - returns: Void
     /// - since: 1.4.0
     @available(iOS 11.2, *)
-    public func unshareScreen(completionHandler: @escaping ((Error?) -> Void)) {
-        self.device.phone.unshareScreen(call: self, completionHandler: completionHandler)
+    public func stopSharing(completionHandler: @escaping ((Error?) -> Void)) {
+        self.device.phone.stopSharing(call: self, completionHandler: completionHandler)
     }
     
     func end(reason: DisconnectReason) {
         //To end this call stop local screen share and broadcasting first.
         if #available(iOS 11.2, *) {
             if self.isScreenSharedBySelfDevice() {
-                self.unshareScreen() {
+                self.stopSharing() {
                     _ in
                     SDKLogger.shared.info("Unshare screen by call end!")
                 }
@@ -717,7 +730,7 @@ public class Call {
         self.mediaSession.onBroadcasting = {
             isBroadcasting in
             DispatchQueue.main.async {
-                self.onMediaChanged?(MediaChangedEvent.onBroadcasting(isBroadcasting))
+                self.oniOSBroadcastingChanged?(isBroadcasting ? iOSBroadcastingEvent.extensionConnected : iOSBroadcastingEvent.extensionDisconnected)
             }
         }
         self.mediaSession.startMedia(call: self)
@@ -737,7 +750,7 @@ public class Call {
     
     func isScreenSharedBySelfDevice(shareFloor:MediaShareModel.MediaShareFloor? = nil) -> Bool {
         let floor = shareFloor ?? self.model.screenShareMediaFloor
-        if let _ = floor?.granted,self.mediaSession.hasScreenShare,floor?.disposition == MediaShareModel.ShareFloorDisposition.granted {
+        if let _ = floor?.granted, self.mediaSession.hasScreenShare,floor?.disposition == MediaShareModel.ShareFloorDisposition.granted {
             if let shareScreenDevice = floor?.beneficiary?.deviceUrl {
                 if self.device.deviceUrl.absoluteString == shareScreenDevice {
                     return true

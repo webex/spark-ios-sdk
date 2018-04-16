@@ -239,7 +239,7 @@ class MediaSessionWrapper {
             mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
             
             if let appGroupID = option.applicationGroupIdentifier {
-                self.broadcastServer = BroadcastConnectionServer.init(applicationGroupIdentifier: appGroupID, delegate: self)
+                self.broadcastServer = BroadcastConnectionServer(applicationGroupIdentifier: appGroupID, delegate: self)
             }
         }
     }
@@ -334,7 +334,7 @@ class MediaSessionWrapper {
 }
 
 
-extension MediaSessionWrapper:BroadcastConnectionServerDelegate {
+extension MediaSessionWrapper : BroadcastConnectionServerDelegate {
     public func shouldAcceptNewConnection() -> Bool {
         SDKLogger.shared.info("Accept new broadcast client connection?: \(isSharingScreen)")
         if isSharingScreen || self.status == .running {

@@ -95,10 +95,10 @@
 		5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */; };
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
 		5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEB81D29E0C700196F6F /* Timestamp.swift */; };
-		733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */; };
 		68A7D44F2084477200AB7F8A /* MessageClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D44E2084477200AB7F8A /* MessageClientImpl.swift */; };
 		68A7D4512084822500AB7F8A /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D4502084822500AB7F8A /* Transforms.swift */; };
 		68A7D453208487B900AB7F8A /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D452208487B900AB7F8A /* ActivityModel.swift */; };
+		733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */; };
 		8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */; };
 		991DA8AC1F389D6200939724 /* SSOAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */; };
 		99E3FA891F3472AA00657180 /* SSOAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */; };
@@ -958,7 +958,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		0E6529EA775956DE9D984C24 /* [CP] Check Pods Manifest.lock */ = {
@@ -976,7 +976,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */ = {
@@ -1054,7 +1054,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CC3717B1BD6FDD31B57D6CDB /* [CP] Check Pods Manifest.lock */ = {
@@ -1072,7 +1072,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */ = {
@@ -1411,7 +1411,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
+				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1591,7 +1591,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
+				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1634,7 +1634,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
+				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

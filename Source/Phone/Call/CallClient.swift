@@ -259,11 +259,14 @@ class CallClient {
         request.responseArray(completionHandler)
     }
     
-    func updateMediaShare(_ mediaShare: MediaShareModel,by device: Device, mediaShareUrl:String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
+    func updateMediaShare(_ mediaShare: MediaShareModel, by device: Device, mediaShareUrl:String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
 //        let mediaShareJson = Mapper().toJSONString(mediaShare, prettyPrint: true)!
-        var mediaShareUpdateParam :[String:Any?]
-        let floorParam : [String:Any?] = ["disposition":mediaShare.shareFloor?.disposition?.rawValue.uppercased() ?? "RELEASE","requester":["url":mediaShare.shareFloor?.requester?.url],"beneficiary":["url":mediaShare.shareFloor?.beneficiary?.url as Any,"devices":["url":device.deviceUrl.absoluteString] as Any]]
-        mediaShareUpdateParam = ["floor":floorParam]
+        var mediaShareUpdateParam: [String: Any?]
+        let floorParam: [String: Any?] = ["disposition": mediaShare.shareFloor?.disposition?.rawValue.uppercased() ?? "RELEASE",
+                                          "requester": ["url": mediaShare.shareFloor?.requester?.url],
+                                          "beneficiary": ["url": mediaShare.shareFloor?.beneficiary?.url as Any,
+                                                          "devices": ["url": device.deviceUrl.absoluteString] as Any]]
+        mediaShareUpdateParam = ["floor": floorParam]
         let body = RequestParameter(mediaShareUpdateParam)
         let request = requestBuilder()
             .method(.put)
