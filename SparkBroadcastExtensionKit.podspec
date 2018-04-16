@@ -13,5 +13,4 @@ Pod::Spec.new do |s|
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkSDK/Vendors',
                 'ENABLE_BITCODE' => 'NO',
                 }
-  s.vendored_frameworks = "Vendors/*.framework"
 end
