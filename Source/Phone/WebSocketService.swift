@@ -134,7 +134,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
     
     func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
         do {
-            let json =  try JSON(data: data)
+            let json = try JSON(data: data)
             ackMessage(socket, messageId: json["id"].string ?? "")
             let eventData = json["data"]
             if let eventType = eventData["eventType"].string {
