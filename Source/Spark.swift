@@ -102,7 +102,7 @@ public class Spark {
     /// Use *activities* to create and manage the activities on behalf of the authenticated user.
     ///
     /// - since: 1.4.0
-    public lazy var messsages: MessageClient = MessageClient(phone: self.phone)
+    public lazy var messages: MessageClient = MessageClient(phone: self.phone)
     
     /// Constructs a new *Spark* object with an *Authenticator*.
     ///
