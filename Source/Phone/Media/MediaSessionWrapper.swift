@@ -32,10 +32,14 @@ class MediaSessionWrapper {
         case screenShare(MediaRenderView?)
     }
 
-    private var status: Status = .initial
+    var status: Status = .initial
+    var isSharingScreen :Bool = false
+    var onBroadcastError: ((ScreenShareError) -> Void)?
+    var onBroadcasting: ((Bool) -> Void)?
     
     fileprivate let mediaSession = MediaSession()
     private var mediaSessionObserver: MediaSessionObserver?
+    private var broadcastServer: BroadcastConnectionServer?
     
     // MARK: - SDP
     func getLocalSdp() -> String {
@@ -77,22 +81,30 @@ class MediaSessionWrapper {
     }
     
     var remoteScreenShareViewHeight: Int32 {
-        return Int32(mediaSession.screenShareViewHeight)
+        return Int32(mediaSession.remoteScreenShareViewHeight)
     }
     
     var remoteScreenShareViewWidth: Int32 {
-        return Int32(mediaSession.screenShareViewWidth)
+        return Int32(mediaSession.remoteScreenShareViewHeight)
+    }
+    
+    var localScreenShareViewHeight: Int32 {
+        return Int32(mediaSession.localScreenShareViewHeight)
+    }
+    
+    var localScreenShareViewWidth: Int32 {
+        return Int32(mediaSession.localScreenShareViewWidth)
     }
     
     var videoViews: (local:MediaRenderView,remote:MediaRenderView)? {
-        if let localView = mediaSession.localVideoView, let remoteView = mediaSession.remoteVideoView {
+        if let localView = mediaSession.localVideoView as? MediaRenderView, let remoteView = mediaSession.remoteVideoView as? MediaRenderView {
             return (local:localView, remote:remoteView)
         }
         return nil
     }
     
     var screenShareView: MediaRenderView? {
-        return mediaSession.screenShareView
+        return mediaSession.screenShareView as? MediaRenderView
     }
     
     // MARK: - Audio & Video
@@ -129,6 +141,15 @@ class MediaSessionWrapper {
         }
         set {
             newValue ? mediaSession.muteVideoOutput() : mediaSession.unmuteVideoOutput()
+        }
+    }
+    
+    var screenShareMuted: Bool {
+        get {
+            return mediaSession.screenShareMuted
+        }
+        set {
+            newValue ? mediaSession.muteScreenShare() : mediaSession.unmuteScreenShare()
         }
     }
     
@@ -216,6 +237,10 @@ class MediaSessionWrapper {
             mediaSession.createMediaConnection()
             mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
             mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
+            
+            if let appGroupID = option.applicationGroupIdentifier {
+                self.broadcastServer = BroadcastConnectionServer.init(applicationGroupIdentifier: appGroupID, delegate: self)
+            }
         }
     }
     
@@ -225,6 +250,12 @@ class MediaSessionWrapper {
             mediaSessionObserver = MediaSessionObserver(call: call)
             mediaSessionObserver?.startObserving(mediaSession)
             mediaSession.connectToCloud()
+            self.broadcastServer?.start() {
+                error in
+                if error != nil {
+                    SDKLogger.shared.error("Failure start broadcast server: \(error?.localizedDescription ?? "").")
+                }
+            }
         }
     }
     
@@ -232,6 +263,8 @@ class MediaSessionWrapper {
         mediaSessionObserver?.stopObserving()
         mediaSession.disconnectFromCloud()
         self.status = .initial
+        self.stopBroadcasting()
+        self.broadcastServer?.invalidate()
     }
     
     func updateMedia(mediaType:MediaType) {
@@ -253,21 +286,78 @@ class MediaSessionWrapper {
         mediaSession.startAudio()
     }
     
-    func joinScreenShare(_ shareId: String) {
+    func joinScreenShare(_ shareId: String, isSending: Bool) {
         if mediaSession.mediaConstraint.hasScreenShare {
-            mediaSession.joinScreenShare(shareId)
+            mediaSession.joinScreenShare(shareId, isSending: isSending)
         }
     }
     
-    func leaveScreenShare(_ shareId: String) {
+    func leaveScreenShare(_ shareId: String, isSending: Bool) {
         if mediaSession.mediaConstraint.hasScreenShare {
-            mediaSession.leaveScreenShare(shareId)
+            mediaSession.leaveScreenShare(shareId, isSending: isSending)
         }
+    }
+    
+    func startLocalScreenShare() {
+        if mediaSession.mediaConstraint.hasScreenShare {
+            self.isSharingScreen = true
+            mediaSession.startLocalScreenShare()
+        }
+    }
+    
+    func stopLocalScreenShare() {
+        if mediaSession.mediaConstraint.hasScreenShare {
+            stopBroadcasting()
+            mediaSession.stopLocalScreenShare()
+        }
+    }
+    
+    func onReceiveScreenBroadcastMessage(frameInfo:FrameInfo, frameData :Data) {
+        if mediaSession.mediaConstraint.hasScreenShare {
+            mediaSession.onReceiveScreenBroadcastData(frameInfo, frameData: frameData)
+        }
+    }
+    
+    func stopBroadcasting() {
+        guard let connectionServer = self.broadcastServer else {
+            return
+        }
+        
+        var feedbackMessage = FeedbackMessage(error: .stop)
+        let data = Data(bytes: &feedbackMessage, count: MemoryLayout<FeedbackMessage>.size)
+        connectionServer.broadcastMessage(data) { error in
+            SDKLogger.shared.info("Notify broadcast extension to stop live broadcasting. Error: \(String(describing: error))")
+        }
+        self.isSharingScreen = false
+        self.onBroadcasting?(false)
+    }
+}
+
+
+extension MediaSessionWrapper:BroadcastConnectionServerDelegate {
+    public func shouldAcceptNewConnection() -> Bool {
+        SDKLogger.shared.info("Accept new broadcast client connection?: \(isSharingScreen)")
+        if isSharingScreen || self.status == .running {
+            self.onBroadcasting?(true)
+            return true
+        }
+        return false
+    }
+
+    public func didReceivedFrame(_ frame: FrameInfo, frameData: Data!) {
+        if self.isSharingScreen {
+            self.onReceiveScreenBroadcastMessage(frameInfo: frame, frameData: frameData)
+        }
+    }
+
+    public func didReceivedError(_ error: ScreenShareError) {
+        SDKLogger.shared.info("Received broadcast client error message: \(error)")
+        self.onBroadcastError?(error)
     }
 }
 
 extension MediaSessionWrapper {
     internal func getMediaSession() -> MediaSession {
-        return self.mediaSession
+            return self.mediaSession
     }
 }

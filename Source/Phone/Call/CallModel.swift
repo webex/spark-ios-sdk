@@ -101,7 +101,7 @@ struct CallModel {
     }
     
     var isGrantedScreenShare: Bool {
-        return self.screenMediaShare != nil
+        return self.screenMediaShare != nil && self.screenMediaShare?.shareFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
     }
     
     var screenMediaShare: MediaShareModel? {
@@ -116,6 +116,17 @@ struct CallModel {
     
     var screenShareMediaFloor : MediaShareModel.MediaShareFloor? {
         return self.screenMediaShare?.shareFloor
+    }
+    
+    var mediaShareUrl : String? {
+        guard self.mediaShares != nil else {
+            return nil
+        }
+        
+        for mediaShare in self.mediaShares ?? [] where mediaShare.shareType == MediaShareModel.MediaShareType.screen {
+            return mediaShare.url
+        }
+        return nil
     }
 }
 

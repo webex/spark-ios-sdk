@@ -66,6 +66,7 @@
 		3DB6A8D71D35D7DB00077E56 /* DtmfQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */; };
 		3DEEA4F11D11418800EB73F6 /* H264LicensePrompter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F01D11418800EB73F6 /* H264LicensePrompter.swift */; };
 		3DEEA4F31D11419800EB73F6 /* UIAlertController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */; };
+		47B21B50BDD803CB8BA083A3 /* Pods_SparkBroadcastExtensionKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */; };
 		4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */; };
 		5A8B997F1DF1D43C003633E1 /* OAuthLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */; };
 		5A8B99811DF222FB003633E1 /* OAuthUrlUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */; };
@@ -94,6 +95,7 @@
 		5D67C66F1CF68C0700758F6B /* MediaClusterClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */; };
 		5D67C6711CF6AB1700758F6B /* ReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */; };
 		5D93AEB91D29E0C700196F6F /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D93AEB81D29E0C700196F6F /* Timestamp.swift */; };
+		733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */; };
 		68A7D44F2084477200AB7F8A /* MessageClientImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D44E2084477200AB7F8A /* MessageClientImpl.swift */; };
 		68A7D4512084822500AB7F8A /* Transforms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D4502084822500AB7F8A /* Transforms.swift */; };
 		68A7D453208487B900AB7F8A /* ActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68A7D452208487B900AB7F8A /* ActivityModel.swift */; };
@@ -131,8 +133,16 @@
 		B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75921CE2D7B70080EAE0 /* Webhook.swift */; };
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
+		C7394FDA20720F2F00E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; };
+		C7394FDB20720F6700E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; };
+		C7625FDB205CBB9700219F95 /* SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */; };
+		C7625FE0205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FDF205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift */; };
+		C7625FEC205CBC4100219F95 /* SparkBroadcastExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */; };
+		C7625FEF205CC09400219F95 /* SparkBroadcastClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FEE205CC09400219F95 /* SparkBroadcastClient.swift */; };
+		C7625FF1205CC28100219F95 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FF0205CC28100219F95 /* SparkError.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
+		C7957FF8207C6FD30069D672 /* MediaRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957FF7207C6FD20069D672 /* MediaRenderView.swift */; };
 		C79F14061FBE7C3A00B43596 /* FakeCallClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */; };
 		C79F14071FBE7C3A00B43596 /* FakeCallModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */; };
 		C79F14081FBE7C3A00B43596 /* FakeConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */; };
@@ -142,6 +152,8 @@
 		C79F140C1FBE7C3A00B43596 /* FakeReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */; };
 		C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */; };
 		C79F14101FC3B8C900B43596 /* CallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F140E1FC3B88900B43596 /* CallTests.swift */; };
+		C79FBEC8207F2DCA00B53AF0 /* SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */; };
+		C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +164,13 @@
 			remoteGlobalIDString = B91E75241CE2D6FF0080EAE0;
 			remoteInfo = SparkSDK;
 		};
+		C7625FDC205CBB9700219F95 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B91E751C1CE2D6FF0080EAE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C7625FD1205CBB9600219F95;
+			remoteInfo = SparkBroadcastExtensionKit;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -161,6 +180,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */,
 				10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */,
 				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
@@ -169,6 +189,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.release.xcconfig"; sourceTree = "<group>"; };
 		03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.releasetest.xcconfig"; sourceTree = "<group>"; };
 		04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDKTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		105E8EF81FF2976200EB33F1 /* Wme.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Wme.framework; path = Vendors/Wme.framework; sourceTree = "<group>"; };
@@ -179,6 +200,7 @@
 		1066EF092022F877003745D0 /* EncryptionKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionKey.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
 		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Vendors/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
+		13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.debug.xcconfig"; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
 		204209751F8CD132002D95EB /* MediaShareModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaShareModel.swift; sourceTree = "<group>"; };
@@ -227,6 +249,7 @@
 		3DB6A8D61D35D7DB00077E56 /* DtmfQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DtmfQueue.swift; sourceTree = "<group>"; };
 		3DEEA4F01D11418800EB73F6 /* H264LicensePrompter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = H264LicensePrompter.swift; sourceTree = "<group>"; };
 		3DEEA4F21D11419800EB73F6 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
+		45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkBroadcastExtensionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A8B997E1DF1D43C003633E1 /* OAuthLauncher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthLauncher.swift; sourceTree = "<group>"; };
 		5A8B99801DF222FB003633E1 /* OAuthUrlUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthUrlUtil.swift; sourceTree = "<group>"; };
 		5A9350D81E00737900374B99 /* Clock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clock.swift; sourceTree = "<group>"; };
@@ -254,12 +277,16 @@
 		5D67C66E1CF68C0700758F6B /* MediaClusterClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaClusterClient.swift; sourceTree = "<group>"; };
 		5D67C6701CF6AB1700758F6B /* ReachabilityService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReachabilityService.swift; sourceTree = "<group>"; };
 		5D93AEB81D29E0C700196F6F /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
+		5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.releasetest.xcconfig"; sourceTree = "<group>"; };
 		6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig"; sourceTree = "<group>"; };
+		6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.release.xcconfig"; sourceTree = "<group>"; };
 		68A7D44E2084477200AB7F8A /* MessageClientImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageClientImpl.swift; sourceTree = "<group>"; };
 		68A7D4502084822500AB7F8A /* Transforms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transforms.swift; sourceTree = "<group>"; };
 		68A7D452208487B900AB7F8A /* ActivityModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityModel.swift; sourceTree = "<group>"; };
 		991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SSOAuthenticatorTests.swift; path = Tests/SSOAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		99E3FA881F3472AA00657180 /* SSOAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSOAuthenticator.swift; sourceTree = "<group>"; };
+		A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkBroadcastExtensionKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B91E75351CE2D7B70080EAE0 /* OAuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuthViewController.swift; sourceTree = "<group>"; };
 		B91E753B1CE2D7B70080EAE0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -293,8 +320,18 @@
 		B91E75921CE2D7B70080EAE0 /* Webhook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webhook.swift; sourceTree = "<group>"; };
 		B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebhookClient.swift; sourceTree = "<group>"; };
 		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
+		C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKBroadcastUtil.framework; path = Vendors/SparkSDKBroadcastUtil.framework; sourceTree = "<group>"; };
+		C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkBroadcastExtensionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7625FD5205CBB9600219F95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7625FDA205CBB9600219F95 /* SparkBroadcastExtensionKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkBroadcastExtensionKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7625FDF205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkBroadcastExtensionKitTests.swift; sourceTree = "<group>"; };
+		C7625FE1205CBB9700219F95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkBroadcastExtension.swift; sourceTree = "<group>"; };
+		C7625FEE205CC09400219F95 /* SparkBroadcastClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkBroadcastClient.swift; sourceTree = "<group>"; };
+		C7625FF0205CC28100219F95 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		C7957FF7207C6FD20069D672 /* MediaRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaRenderView.swift; sourceTree = "<group>"; };
 		C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallClient.swift; sourceTree = "<group>"; };
 		C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallModelHelper.swift; sourceTree = "<group>"; };
 		C79F14001FBE7BE500B43596 /* FakeConversationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeConversationClient.swift; sourceTree = "<group>"; };
@@ -304,6 +341,7 @@
 		C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeReachabilityService.swift; sourceTree = "<group>"; };
 		C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeWebSocketService.swift; sourceTree = "<group>"; };
 		C79F140E1FC3B88900B43596 /* CallTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CallTests.swift; path = Tests/CallTests.swift; sourceTree = SOURCE_ROOT; };
+		CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKitTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.releasetest.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.releasetest.xcconfig"; sourceTree = "<group>"; };
 		EBB58B0ACEB459267C9C4938 /* Pods-SparkSDK.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.release.xcconfig"; sourceTree = "<group>"; };
 		EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -314,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C79FBEC8207F2DCA00B53AF0 /* SparkBroadcastExtensionKit.framework in Frameworks */,
 				10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
@@ -328,6 +367,25 @@
 				10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */,
 				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
+				C7394FDA20720F2F00E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FCE205CBB9600219F95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7394FDB20720F6700E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */,
+				733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FD7205CBB9600219F95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7625FDB205CBB9700219F95 /* SparkBroadcastExtensionKit.framework in Frameworks */,
+				47B21B50BDD803CB8BA083A3 /* Pods_SparkBroadcastExtensionKitTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +401,12 @@
 				EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */,
 				E4B21F8CB140328CB6F4F57A /* Pods-SparkSDK.releasetest.xcconfig */,
 				03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */,
+				13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */,
+				6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */,
+				5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */,
+				CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */,
+				013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */,
+				6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -350,6 +414,7 @@
 		20EEA2CB1EBDE43300D6BB75 /* Media */ = {
 			isa = PBXGroup;
 			children = (
+				C7957FF7207C6FD20069D672 /* MediaRenderView.swift */,
 				20EEA2CC1EBDE43300D6BB75 /* MediaEngineObserver.swift */,
 				20EEA2CD1EBDE43300D6BB75 /* MediaEngineWrapper.swift */,
 				20EEA2CE1EBDE43300D6BB75 /* MediaSessionObserver.swift */,
@@ -433,10 +498,13 @@
 		8838B91D70254D46671B19F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */,
 				10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */,
 				105E8EF81FF2976200EB33F1 /* Wme.framework */,
 				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
 				04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */,
+				45B6D019AB7AB7E50C49C333 /* Pods_SparkBroadcastExtensionKit.framework */,
+				A59C3B088AFEC7A1F8B44E57 /* Pods_SparkBroadcastExtensionKitTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -446,6 +514,8 @@
 			children = (
 				B91E75301CE2D7B70080EAE0 /* Source */,
 				3D15B70C1D3E176C003BB682 /* Tests */,
+				C7625FD3205CBB9600219F95 /* SparkBroadcastExtensionKit */,
+				C7625FDE205CBB9700219F95 /* SparkBroadcastExtensionKitTests */,
 				B91E75261CE2D6FF0080EAE0 /* Products */,
 				20E5E3BD68BFD3198EE748AE /* Pods */,
 				8838B91D70254D46671B19F1 /* Frameworks */,
@@ -457,6 +527,8 @@
 			children = (
 				B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */,
 				3D15B70B1D3E176C003BB682 /* SparkSDKTests.xctest */,
+				C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */,
+				C7625FDA205CBB9600219F95 /* SparkBroadcastExtensionKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -650,6 +722,26 @@
 			path = Webhook;
 			sourceTree = "<group>";
 		};
+		C7625FD3205CBB9600219F95 /* SparkBroadcastExtensionKit */ = {
+			isa = PBXGroup;
+			children = (
+				C7625FF0205CC28100219F95 /* SparkError.swift */,
+				C7625FD5205CBB9600219F95 /* Info.plist */,
+				C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */,
+				C7625FEE205CC09400219F95 /* SparkBroadcastClient.swift */,
+			);
+			path = SparkBroadcastExtensionKit;
+			sourceTree = "<group>";
+		};
+		C7625FDE205CBB9700219F95 /* SparkBroadcastExtensionKitTests */ = {
+			isa = PBXGroup;
+			children = (
+				C7625FDF205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift */,
+				C7625FE1205CBB9700219F95 /* Info.plist */,
+			);
+			path = SparkBroadcastExtensionKitTests;
+			sourceTree = "<group>";
+		};
 		C79F13FD1FBE7BE500B43596 /* Fakes */ = {
 			isa = PBXGroup;
 			children = (
@@ -673,6 +765,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FCF205CBB9600219F95 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -721,13 +820,54 @@
 			productReference = B91E75251CE2D6FF0080EAE0 /* SparkSDK.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		C7625FD1205CBB9600219F95 /* SparkBroadcastExtensionKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7625FE3205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKit" */;
+			buildPhases = (
+				CC3717B1BD6FDD31B57D6CDB /* [CP] Check Pods Manifest.lock */,
+				C7625FCD205CBB9600219F95 /* Sources */,
+				C7625FCE205CBB9600219F95 /* Frameworks */,
+				C7625FCF205CBB9600219F95 /* Headers */,
+				C7625FD0205CBB9600219F95 /* Resources */,
+				E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SparkBroadcastExtensionKit;
+			productName = SparkBroadcastExtensionKit;
+			productReference = C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C7625FD9205CBB9600219F95 /* SparkBroadcastExtensionKitTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7625FE7205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKitTests" */;
+			buildPhases = (
+				C5EB7B8F84910F513673EE82 /* [CP] Check Pods Manifest.lock */,
+				C7625FD6205CBB9600219F95 /* Sources */,
+				C7625FD7205CBB9600219F95 /* Frameworks */,
+				C7625FD8205CBB9600219F95 /* Resources */,
+				8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */,
+				255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7625FDD205CBB9700219F95 /* PBXTargetDependency */,
+			);
+			name = SparkBroadcastExtensionKitTests;
+			productName = SparkBroadcastExtensionKitTests;
+			productReference = C7625FDA205CBB9600219F95 /* SparkBroadcastExtensionKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		B91E751C1CE2D6FF0080EAE0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = Cisco;
 				TargetAttributes = {
@@ -739,6 +879,17 @@
 					B91E75241CE2D6FF0080EAE0 = {
 						CreatedOnToolsVersion = 7.3;
 						LastSwiftMigration = 0800;
+					};
+					C7625FD1205CBB9600219F95 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 3K8M2E3L9T;
+						LastSwiftMigration = 0920;
+						ProvisioningStyle = Automatic;
+					};
+					C7625FD9205CBB9600219F95 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 3K8M2E3L9T;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -756,6 +907,8 @@
 			targets = (
 				B91E75241CE2D6FF0080EAE0 /* SparkSDK */,
 				3D15B70A1D3E176C003BB682 /* SparkSDKTests */,
+				C7625FD1205CBB9600219F95 /* SparkBroadcastExtensionKit */,
+				C7625FD9205CBB9600219F95 /* SparkBroadcastExtensionKitTests */,
 			);
 		};
 /* End PBXProject section */
@@ -769,6 +922,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B91E75231CE2D6FF0080EAE0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FD0205CBB9600219F95 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FD8205CBB9600219F95 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -814,6 +981,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -844,6 +1026,57 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C5EB7B8F84910F513673EE82 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SparkBroadcastExtensionKitTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CC3717B1BD6FDD31B57D6CDB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SparkBroadcastExtensionKit-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -870,6 +1103,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -985,6 +1233,7 @@
 				1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */,
 				B91E75B21CE2D7B70080EAE0 /* PersonClient.swift in Sources */,
 				B91E75A11CE2D7B70080EAE0 /* UserAgent.swift in Sources */,
+				C7957FF8207C6FD30069D672 /* MediaRenderView.swift in Sources */,
 				5AFA0BD51DEE376A00B6F6C9 /* SimpleAuthenticator.swift in Sources */,
 				20EEA27A1EB0E6B400D6BB75 /* SequenceModel.swift in Sources */,
 				5D67C6511CF04E6400758F6B /* SDKLogger.swift in Sources */,
@@ -1014,6 +1263,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7625FCD205CBB9600219F95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7625FF1205CC28100219F95 /* SparkError.swift in Sources */,
+				C7625FEF205CC09400219F95 /* SparkBroadcastClient.swift in Sources */,
+				C7625FEC205CBC4100219F95 /* SparkBroadcastExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7625FD6205CBB9600219F95 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7625FE0205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1021,6 +1288,11 @@
 			isa = PBXTargetDependency;
 			target = B91E75241CE2D6FF0080EAE0 /* SparkSDK */;
 			targetProxy = 3D15B7111D3E176C003BB682 /* PBXContainerItemProxy */;
+		};
+		C7625FDD205CBB9700219F95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C7625FD1205CBB9600219F95 /* SparkBroadcastExtensionKit */;
+			targetProxy = C7625FDC205CBB9700219F95 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1105,7 +1377,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1224,7 +1496,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1270,7 +1542,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1368,6 +1640,216 @@
 			};
 			name = Release;
 		};
+		C7625FE4205CBB9700219F95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7625FE5205CBB9700219F95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6608C12267D7C6229A411E5F /* Pods-SparkBroadcastExtensionKit.release.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C7625FE6205CBB9700219F95 /* ReleaseTest */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5DAC1319DF93EC4288EC71E7 /* Pods-SparkBroadcastExtensionKit.releasetest.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendors",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKit;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = ReleaseTest;
+		};
+		C7625FE8205CBB9700219F95 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7625FE9205CBB9700219F95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C7625FEA205CBB9700219F95 /* ReleaseTest */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3K8M2E3L9T;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = SparkBroadcastExtensionKitTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cisco.SparkBroadcastExtensionKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = ReleaseTest;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1397,6 +1879,26 @@
 				B91E752E1CE2D6FF0080EAE0 /* Debug */,
 				B91E752F1CE2D6FF0080EAE0 /* Release */,
 				3D3131551D3F0420007717B2 /* ReleaseTest */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7625FE3205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7625FE4205CBB9700219F95 /* Debug */,
+				C7625FE5205CBB9700219F95 /* Release */,
+				C7625FE6205CBB9700219F95 /* ReleaseTest */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7625FE7205CBB9700219F95 /* Build configuration list for PBXNativeTarget "SparkBroadcastExtensionKitTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7625FE8205CBB9700219F95 /* Debug */,
+				C7625FE9205CBB9700219F95 /* Release */,
+				C7625FEA205CBB9700219F95 /* ReleaseTest */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
