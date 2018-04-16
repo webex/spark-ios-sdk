@@ -40,14 +40,16 @@ public class RoomClient {
     /// - parameter teamId: If not nil, only list the rooms that are associated with the team by team id.
     /// - parameter max: The maximum number of rooms in the response.
     /// - parameter type: If not nil, only list the rooms of this type. Otherwise all rooms are listed.
+    /// - parameter sortBy: Sort results by roomId(id), most recent activity(lastactivity), or most recently created(created).
+    ///                     Possible values: id, lastactivity, created
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
     /// - since: 1.2.0
-    public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) {
+    public func list(teamId: String? = nil , max: Int? = nil, type: RoomType? = nil, sortBy: RoomSortType? = nil,queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<[Room]>) -> Void) {
         let request = requestBuilder()
             .method(.get)
-            .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue]))
+            .query(RequestParameter(["teamId": teamId, "max": max, "type": type?.rawValue, "sortBy": sortBy?.rawValue]))
             .keyPath("items")
             .queue(queue)
             .build()

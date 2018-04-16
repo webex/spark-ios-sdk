@@ -25,7 +25,7 @@ import Foundation
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.3.1
-public class SSOAuthenticator: OAuthAuthenticator {
+public class SSOAuthenticator : OAuthAuthenticator {
     
     /// The spark email address of the SSO user.
     private let email: String

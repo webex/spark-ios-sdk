@@ -24,8 +24,17 @@ import AlamofireObjectMapper
 import ObjectMapper
 import SwiftyJSON
 
-class ServiceRequest {
+class ServiceRequest : RequestRetrier, RequestAdapter {
+
+    #if INTEGRATIONTEST
+    static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
+    #else
+    static let HYDRA_SERVER_ADDRESS:String = "https://api.ciscospark.com/v1"
+    #endif
+    static let CONVERSATION_SERVER_ADDRESS: String = "https://conv-a.wbx2.com/conversation/api/v1"
+    static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1"
     
+    private var pendingTimeCount : Int = 0
     private let url: URL
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
@@ -34,13 +43,8 @@ class ServiceRequest {
     private let keyPath: String?
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
-    
-#if INTEGRATIONTEST
-    static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
-#else
-    static let HYDRA_SERVER_ADDRESS:String = "https://api.ciscospark.com/v1"
-#endif
-    
+    private var newAccessToken: String? = nil
+    private var refreshTokenCount = 0
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator
@@ -65,7 +69,6 @@ class ServiceRequest {
         private var query: RequestParameter?
         private var keyPath: String?
         private var queue: DispatchQueue?
-        
         
         init(_ authenticator: Authenticator) {
             self.authenticator = authenticator
@@ -127,18 +130,15 @@ class ServiceRequest {
         }
     }
     
-    func responseObject<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<T>) -> Void) {
+    func responseObject<T: BaseMappable>(_ completionHandler: @escaping (ServiceResponse<T>) -> Void) {
         let queue = self.queue
         let keyPath = self.keyPath
-        createAlamofireRequest() { request in             
-            request.responseObject(queue: queue, keyPath: keyPath) {
-                (response: DataResponse<T>) in
+        createAlamofireRequest() { request in
+            request.responseObject(queue: queue, keyPath: keyPath) { (response: DataResponse<T>) in
                 var result: Result<T>
-                
                 switch response.result {
                 case .success(let value):
                     result = .success(value)
-                    
                 case .failure(var error):
                     if response.response != nil {
                         if let data = response.data {
@@ -147,24 +147,20 @@ class ServiceRequest {
                     }
                     result = .failure(error)
                 }
-                
                 completionHandler(ServiceResponse(response.response, result))
             }
         }
     }
     
-    func responseArray<T: Mappable>(_ completionHandler: @escaping (ServiceResponse<[T]>) -> Void) {
+    func responseArray<T: BaseMappable>(_ completionHandler: @escaping (ServiceResponse<[T]>) -> Void) {
         let queue = self.queue
         let keyPath = self.keyPath
-        createAlamofireRequest() { request in         
-            request.responseArray(queue: queue, keyPath: keyPath) {
-                (response: DataResponse<[T]>) in
+        createAlamofireRequest() { request in
+            request.responseArray(queue: queue, keyPath: keyPath) { (response: DataResponse<[T]>) in
                 var result: Result<[T]>
-                
                 switch response.result {
                 case .success(let value):
                     result = .success(value)
-                    
                 case .failure(var error):
                     if response.response != nil {
                         if let data = response.data {
@@ -173,7 +169,6 @@ class ServiceRequest {
                     }
                     result = .failure(error)
                 }
-                
                 completionHandler(ServiceResponse(response.response, result))
             }
         }
@@ -182,14 +177,11 @@ class ServiceRequest {
     func responseJSON(_ completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let queue = self.queue
         createAlamofireRequest() { request in
-            request.responseJSON(queue: queue) {
-                (response: DataResponse<Any>) in
+            request.responseJSON(queue: queue) { (response: DataResponse<Any>) in
                 var result: Result<Any>
-                
                 switch response.result {
                 case .success(let value):
                     result = .success(value)
-                    
                 case .failure(var error):
                     if response.response != nil {
                         if let data = response.data {
@@ -198,9 +190,8 @@ class ServiceRequest {
                     }
                     result = .failure(error)
                 }
-                
                 completionHandler(ServiceResponse(response.response, result))
-            }   
+            }
         }
     }
     
@@ -226,6 +217,7 @@ class ServiceRequest {
             } catch {
                 class ErrorRequestConvertible : URLRequestConvertible {
                     private let error: Error
+                    
                     init(_ error: Error) {
                         self.error = error
                     }
@@ -236,7 +228,8 @@ class ServiceRequest {
                 }
                 urlRequestConvertible = ErrorRequestConvertible(error)
             }
-            
+            SessionManager.default.adapter = self
+            SessionManager.default.retrier = self
             completionHandler(Alamofire.request(urlRequestConvertible).validate())
         }
         
@@ -244,10 +237,48 @@ class ServiceRequest {
             accessTokenCallback(accessToken)
         }
     }
+    
+    func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+        var urlRequest = urlRequest
+        if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization") {
+            urlRequest.setValue("Bearer " + newToken, forHTTPHeaderField: "Authorization")
+            self.refreshTokenCount += 1
+        }
+        return urlRequest
+    }
+    
+    func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+        if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 429 {
+            if var retryAfter = response.allHeaderFields["Retry-After"] as? Int {
+                if retryAfter > 3600 {
+                    retryAfter = 3600
+                } else if retryAfter == 0 {
+                    retryAfter = 60
+                }
+                self.pendingTimeCount += retryAfter
+                completion(true, TimeInterval(retryAfter))
+            }
+        } else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
+            self.authenticator.refreshToken(completionHandler: { accessToken in
+                if accessToken == nil {
+                    self.newAccessToken = accessToken
+                    completion(false, 0.0)
+                } else {
+                    if self.refreshTokenCount >= 2{// After Refreshed token twice, if still get 401 from server, returns error.
+                        completion(false, 0.0)
+                    } else {
+                        self.newAccessToken = accessToken
+                        completion(true, 0.0)
+                    }
+                }
+            })
+        } else {
+            completion(false,0.0)
+        }
+    }
 }
 
 extension SparkError {
-    
     /// Converts the error data to NSError
     static func requestErrorWith(data: Data) -> Error {
         var failureReason = "Service request failed without error message"
@@ -256,6 +287,5 @@ extension SparkError {
         }
         return SparkError.serviceFailed(code: -7000, reason: failureReason)
     }
-    
 }
 

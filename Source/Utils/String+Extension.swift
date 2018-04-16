@@ -19,6 +19,8 @@
 // THE SOFTWARE.
 
 import Foundation
+import MobileCoreServices.UTCoreTypes
+import MobileCoreServices.UTType
 
 extension String {
     private static let allowedQueryCharactersPlusSpace = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._~ ")
@@ -50,4 +52,33 @@ extension String {
         return nil
     }
     
+    subscript(r: Range<Int>) -> String {
+        get {
+            let startIndex = self.index(self.startIndex, offsetBy: r.lowerBound)
+            let endIndex = self.index(self.startIndex, offsetBy: r.upperBound)
+            
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
+        }
+    }
+    
+    subscript(start: Int, end: Int) -> String {
+        get {
+            let startIndex = self.index(self.startIndex, offsetBy: start)
+            let endIndex = self.index(self.startIndex, offsetBy: end+1)
+            return String(self[Range(uncheckedBounds: (startIndex, endIndex))])
+        }
+    }
+    
+    var mimeType: String {
+        if let ext = self.components(separatedBy: ".").last, ext.count > 0 {
+            if let uti = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, ext as CFString, nil)?.takeRetainedValue() {
+                if let mime = UTTypeCopyPreferredTagWithClass(uti, kUTTagClassMIMEType)?.takeUnretainedValue() {
+                    return mime as String;
+                }
+            }
+        }
+        return "application/octet-stream"
+    }
+    
 }
+

@@ -30,7 +30,7 @@ struct OAuthTokenModel {
     var accessTokenCreationDate: Date
 }
 
-extension OAuthTokenModel: Mappable {
+extension OAuthTokenModel : Mappable {
     
     init?(map: Map) {
         accessTokenCreationDate = Date()
@@ -47,7 +47,7 @@ extension OAuthTokenModel: Mappable {
 class OAuthClient {
         
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
+        return ServiceRequest.Builder(SimpleAuthenticator.empty())
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
     }

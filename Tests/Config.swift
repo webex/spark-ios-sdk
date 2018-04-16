@@ -29,6 +29,7 @@ struct Config {
     static let TestcasePendingCheckPollInterval = 0.2
     static let TestcasePendingMediaInit = 3.0
     
+    static let InvalidLocalAddress = "abc/edf"
     static let InvalidId = "abc"
     static let InvalidEmail = EmailAddress.fromString("abc@a.aa")!
     static let FakeRoomId = "Y2lzY29zcGFyazovL3VzL1JPT00vYWNmNjg3MDAtY2FhZC0xMWU3LTg1Y2EtMjUzNjhiNjY3YjQz"

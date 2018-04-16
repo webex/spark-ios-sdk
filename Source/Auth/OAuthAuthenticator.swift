@@ -50,7 +50,7 @@ public struct OAuthTokens {
 /// A delegate to handle OAuth events.
 ///
 /// - since: 1.2.0
-public protocol OAuthAuthenticatorDelegate: class {
+public protocol OAuthAuthenticatorDelegate : AnyObject {
     
     /// Called when an OAuth access token could not be created from the existing refresh token
     ///
@@ -63,7 +63,7 @@ public protocol OAuthAuthenticatorDelegate: class {
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.2.0
-public class OAuthAuthenticator: Authenticator {
+public class OAuthAuthenticator : Authenticator {
     
     let clientId: String
     private let clientSecret: String
@@ -142,9 +142,9 @@ public class OAuthAuthenticator: Authenticator {
     
     func authorizationUrl() -> URL? {
         if let encodedClientId = clientId.encodeQueryParamString,
-           let encodedRedirectUri = redirectUri.encodeQueryParamString,
-           let encodedScope = scope.encodeQueryParamString {
-           return URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
+            let encodedRedirectUri = redirectUri.encodeQueryParamString,
+            let encodedScope = scope.encodeQueryParamString {
+            return URL(string: "\(ServiceRequest.HYDRA_SERVER_ADDRESS)/authorize?response_type=code"
                 + "&client_id=" + encodedClientId
                 + "&redirect_uri=" + encodedRedirectUri
                 + "&scope=" + encodedScope
@@ -153,7 +153,7 @@ public class OAuthAuthenticator: Authenticator {
         
         return nil
     }
-
+    
     /// - see: See Authenticator.accessToken(completionHandler:)
     /// - since: 1.2.0
     public func accessToken(completionHandler: @escaping (String?) -> Void) {
@@ -165,16 +165,21 @@ public class OAuthAuthenticator: Authenticator {
         if let tokens = storage.tokens, tokens.accessTokenExpirationDate > Date(timeInterval: buffer, since: clock.currentTime) {
             completionHandler(tokens.accessToken)
         } else {
-            accessTokenCompletionHandlers.append(completionHandler)
-            
-            if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
-                fetchingAccessTokenInProcess = true
-                oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
-                    SDKLogger.shared.error("Failed to refresh token", error: error)
-                    self.deauthorize()
-                    self.delegate?.refreshAccessTokenFailed()
-                }))
-            }
+            self.refreshToken(completionHandler: completionHandler)
+        }
+    }
+    
+    /// - see: See Authenticator.refreshToken(completionHandler:)
+    /// - since: 1.4.0
+    public func refreshToken(completionHandler: @escaping (String?) -> Void) {
+        accessTokenCompletionHandlers.append(completionHandler)
+        if !fetchingAccessTokenInProcess, let refreshToken = storage.tokens?.refreshToken {
+            fetchingAccessTokenInProcess = true
+            oauthClient.refreshAccessTokenFrom(refreshToken: refreshToken, clientId: clientId, clientSecret: clientSecret, completionHandler: self.createAccessTokenHandler(errorHandler: { error in
+                SDKLogger.shared.error("Failed to refresh token", error: error)
+                self.deauthorize()
+                self.delegate?.refreshAccessTokenFailed()
+            }))
         }
     }
     
@@ -188,13 +193,13 @@ public class OAuthAuthenticator: Authenticator {
             case .failure(let error):
                 errorHandler(error)
             }
-
+            
             let handlers = self.accessTokenCompletionHandlers
             self.accessTokenCompletionHandlers = []
             for handler in handlers {
                 handler(self.storage.tokens?.accessToken)
             }
-
+            
         }
     }
     
@@ -206,9 +211,9 @@ public class OAuthAuthenticator: Authenticator {
             let accessTokenExpirationDate = Date(timeInterval: accessTokenExpiration, since: accessTokenObject.accessTokenCreationDate)
             let refreshTokenExpirationDate = Date(timeInterval: refreshTokenExpiration, since: accessTokenObject.accessTokenCreationDate)
             return OAuthTokens(accessToken: accessToken,
-                                           accessTokenExpirationDate: accessTokenExpirationDate,
-                                           refreshToken: refreshToken,
-                                           refreshTokenExpirationDate: refreshTokenExpirationDate)
+                               accessTokenExpirationDate: accessTokenExpirationDate,
+                               refreshToken: refreshToken,
+                               refreshTokenExpirationDate: refreshTokenExpirationDate)
         }
         return nil
     }

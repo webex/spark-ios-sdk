@@ -18,78 +18,174 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import Foundation
+import UIKit
 import ObjectMapper
 
-/// The struct of a Message on Cisco Spark.
-///
-/// - since: 1.2.0
-public struct Message {
-    
+public enum MessageEvent {
+    case messageReceived(Message)
+    case messageDeleted(String)
+}
+
+public class Message {
+
     /// The identifier of this message.
-    public var id: String?
-    
-    /// The identifier of the person who sent this message.
-    public var personId: String?
-    
-    /// The email address of the person who sent this message.
-    public var personEmail: EmailAddress?
-    
-    /// The identifier of the room where this message was posted.
-    public var roomId: String?
-    
-    /// The content of the message in plain text. This can be the alternate text if markdown is specified.
-    public var text: String?
-    
-    /// A array of public URLs of the attachments in the message.
-    public var files: [String]?
-    
-    /// The identifier of the recipient when sending a private 1:1 message.
-    public var toPersonId: String?
-    
-    /// The email address of the recipient when sending a private 1:1 message.
-    public var toPersonEmail: EmailAddress?
-    
-    /// The timestamp that the message being created.
-    public var created: Date?
-
-}
-
-extension Message: Mappable {
-    
-    /// Message constructor.
-    ///
-    /// - note: for internal use only.
-    public init?(map: Map){
+    public var id: String? {
+        return self.activity.id
     }
     
-    /// Message mapping from JSON.
-    ///
-    /// - note: for internal use only.
-    public mutating func mapping(map: Map) {
-        id <- map["id"]
-        personId <- map["personId"]
-        personEmail <- (map["personEmail"], EmailTransform())
-        roomId <- map["roomId"]
-        text <- map["text"]
-        files <- map["files"]
-        toPersonId <- map["toPersonId"]
-        toPersonEmail <- (map["toPersonEmail"], EmailTransform())
-        created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+    /// The roomId of the message
+    public var roomId: String? {
+        return self.activity.roomId
+    }
+    
+    ///  The room type "group"/"direct"
+    public var roomType: RoomType {
+        return self.activity.roomType ?? RoomType.group
+    }
+    
+    /// Id of who posted the message
+    public var personId: String? {
+        return self.activity.personId
+    }
+    
+    /// Email of who posted the message
+    public var personEmail: String? {
+        return self.activity.personEmail
+    }
+    
+    /// Created time of Message
+    public var created: Date {
+        return self.activity.created ?? Date()
+    }
+    
+    public var mentions: [Mention]? {
+        var mentions = [Mention]()
+        if let peoples = self.activity.mentionedPeople {
+            mentions.append(contentsOf: (peoples.map { Mention.person($0) }))
+        }
+        if let groups = self.activity.mentionedGroup {
+            for group in groups where group == "all" {
+                mentions.append(Mention.all)
+                break
+            }
+        }
+        return mentions.count > 0 ? mentions : nil
+    }
+    
+    /// Content of Message
+    public var text: String? {
+        return self.activity.text
+    }
+    
+    /// Attached Files of message
+    public var files: [RemoteFile]? {
+        return self.activity.files
+    }
+    
+    private let activity: ActivityModel
+
+    init(activity: ActivityModel) {
+        self.activity = activity
     }
 }
 
-class EmailTransform: TransformType {
+public enum Mention {
+    case person(String)
+    case all
+}
+
+public class LocalFile {
     
-    func transformFromJSON(_ value: Any?) -> EmailAddress? {
-        if let value = value as? String {
-            return EmailAddress.fromString(value)
-        } else {
-            return nil
+    let path: String
+    let name: String
+    let progressHandler: ((Double) -> Void)?
+    
+    public init(path: String, name: String? = nil, progressHandler: ((Double) -> Void)? = nil) {
+        self.path = path
+        self.name = name ?? URL(fileURLWithPath: path).lastPathComponent
+        self.progressHandler = progressHandler
+    }
+}
+
+public struct RemoteFile {
+    public internal(set) var url: String?
+    public internal(set) var displayName: String?
+    public internal(set) var mimeType: String?
+    public internal(set) var size: UInt64?
+    public internal(set) var thumbnail: RemoteFileThumbnail?
+    var secureContentRef: String?
+    private init(){}
+}
+
+extension RemoteFile {
+    
+    init(local: LocalFile, downloadUrl: String, size: UInt64) {
+        self.url = downloadUrl
+        self.size = size
+        self.displayName = local.name
+        self.mimeType = local.name.mimeType
+    }
+    
+    mutating func encrypt(key: String?, scr: SecureContentReference) {
+        self.displayName = self.displayName?.encrypt(key: key)
+        if let chilerScr = try? scr.encryptedSecureContentReference(withKey: key) {
+            self.secureContentRef = chilerScr
         }
     }
     
-    func transformToJSON(_ value: EmailAddress?) -> String? {
-        return value?.toString()
+    mutating func decrypt(key: String?) {
+        self.displayName = self.displayName?.decrypt(key: key)
+        self.secureContentRef = self.secureContentRef?.decrypt(key: key)
+        if var thumbnail = self.thumbnail {
+            thumbnail.secureContentRef = self.thumbnail?.secureContentRef?.decrypt(key: key)
+            self.thumbnail = thumbnail
+        }
+    }
+}
+
+public struct RemoteFileThumbnail  {
+    public var url: String?
+    public var width: Int?
+    public var height: Int?
+    var secureContentRef: String?
+    init(){}
+}
+
+extension RemoteFile : Mappable {
+
+    /// File constructor.
+    ///
+    /// - note: for internal use only.
+    public init?(map: Map) {
+    }
+    
+    /// File mapping from JSON.
+    ///
+    /// - note: for internal use only.
+    public mutating func mapping(map: Map) {
+        url <- map["url"]
+        displayName <- map["displayName"]
+        mimeType <- map["mimeType"]
+        size <- map["fileSize"]
+        thumbnail <- map["image"]
+        secureContentRef <- map["scr"]
+    }
+}
+
+extension RemoteFileThumbnail : Mappable {
+    
+    /// File thumbnail constructor.
+    ///
+    /// - note: for internal use only.
+    public init?(map: Map) {}
+    
+    /// File thumbnail mapping from JSON.
+    ///
+    /// - note: for internal use only.
+    public mutating func mapping(map: Map) {
+        url <- map["url"]
+        width <- map["width"]
+        height <- map["height"]
+        secureContentRef <- map["scr"]
     }
 }

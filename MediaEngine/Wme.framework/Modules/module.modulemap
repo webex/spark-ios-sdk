@@ -1,6 +1,0 @@
-framework module Wme {
-  umbrella header "Wme.h"
-
-  export *
-  module * { export * }
-}

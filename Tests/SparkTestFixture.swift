@@ -73,9 +73,12 @@ class SparkTestFixture {
             func accessToken(completionHandler: @escaping (String?) -> Void) {
                 completionHandler(accessToken)
             }
+            func refreshToken(completionHandler: @escaping (String?) -> Void) {
+                completionHandler(accessToken)
+            }
         }
         
-        spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))
+        spark = Spark(authenticator: SimpleAuthenticator(accessToken: selfUser.accessToken))
     }
     
     private static func createAdminAccessToken(clientId: String, clientSecret: String) -> String? {
