@@ -84,8 +84,19 @@ public class Message {
     
     private let activity: ActivityModel
 
+    
+    
     init(activity: ActivityModel) {
         self.activity = activity
+    }
+    
+}
+
+extension Message :CustomStringConvertible{
+    public var description: String {
+        get {
+            return activity.toJSONString(prettyPrint: true) ?? ""
+        }
     }
 }
 
