@@ -367,24 +367,16 @@ class MessageClientImpl {
                 completionHandler(Result.failure(error))
                 return
             }
-            self.authenticator.accessToken { token in
-                guard let token = token else {
-                    completionHandler(Result.failure(SparkError.noAuth))
-                    return
+            let request = self.messageServiceBuilder.path("conversations/" + roomId.locusFormat)
+                .query(RequestParameter(["includeActivities": false, "includeParticipants": false]))
+                .method(.get)
+                .build()
+            request.responseJSON { (response: ServiceResponse<Any>) in
+                if let dict = response.result.data as? [String: Any], let encryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String {
+                    completionHandler(Result.success(encryptionUrl))
                 }
-                // TODO remove token
-                let request = self.messageServiceBuilder.path("conversations/" + roomId.locusFormat)
-                    .query(RequestParameter(["includeActivities": false, "includeParticipants": false]))
-                    .headers(["Authorization": "Bearer " + token])
-                    .method(.get)
-                    .build()
-                request.responseJSON { (response: ServiceResponse<Any>) in
-                    if let dict = response.result.data as? [String: Any], let encryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String {
-                        completionHandler(Result.success(encryptionUrl))
-                    }
-                    else {
-                        completionHandler(Result.failure(response.result.error ?? MSGError.encryptionUrlFetchFail))
-                    }
+                else {
+                    completionHandler(Result.failure(response.result.error ?? MSGError.encryptionUrlFetchFail))
                 }
             }
         }
@@ -577,11 +569,9 @@ class MessageClientImpl {
             }
         }
         else {
-            let query = RequestParameter(["activitiesLimit": 0, "compact": true])
-            let path = "conversations/user/" + email
-            let request = self.messageServiceBuilder.path(path)
+            let request = self.messageServiceBuilder.path("conversations/user/" + email)
                 .method(.put)
-                .query(query)
+                .query(RequestParameter(["activitiesLimit": 0, "compact": true]))
                 .queue(queue)
                 .build()
             request.responseObject { (response: ServiceResponse<Room>) in

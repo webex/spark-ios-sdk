@@ -38,11 +38,11 @@ class UploadFileOperations {
         self.operations.forEach { operation in
             if !operation.done {
                 self.queue.sync {
-                    operation.run(client: client) { [weak self] result in
+                    operation.run(client: client) { result in
                         if let file = result.data {
                             sucess.append(file)
                         }
-                        self?.queue.yield()
+                        self.queue.yield()
                     }
                 }
             }
