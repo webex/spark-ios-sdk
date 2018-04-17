@@ -21,19 +21,25 @@
 import UIKit
 import ObjectMapper
 
+/// The struct of a message event
+///
+/// - since: 1.2.0
 public enum MessageEvent {
     case messageReceived(Message)
     case messageDeleted(String)
 }
 
-public class Message {
+/// The struct of a Message on Cisco Spark.
+///
+/// - since: 1.2.0
+public struct Message {
 
     /// The identifier of this message.
     public var id: String? {
         return self.activity.id
     }
     
-    /// The roomId of the message
+     /// The identifier of the room where this message was posted.
     public var roomId: String? {
         return self.activity.roomId
     }
@@ -43,21 +49,36 @@ public class Message {
         return self.activity.roomType ?? RoomType.group
     }
     
-    /// Id of who posted the message
+    /// The identifier of the person who sent this message.
     public var personId: String? {
         return self.activity.personId
     }
     
-    /// Email of who posted the message
+    /// The email address of the person who sent this message.
     public var personEmail: String? {
         return self.activity.personEmail
     }
     
-    /// Created time of Message
-    public var created: Date {
-        return self.activity.created ?? Date()
+    /// The identifier of the recipient when sending a private 1:1 message.
+    public var toPersonId: String? {
+        // TODO
+        return nil
     }
     
+    /// The email address of the recipient when sending a private 1:1 message.
+    public var toPersonEmail: EmailAddress? {
+        // TODO
+        return nil
+    }
+    
+    /// The timestamp that the message being created.
+    public var created: Date? {
+        return self.activity.created
+    }
+    
+    /// The people mentioned in the message
+    ///
+    /// - since: 1.4.0
     public var mentions: [Mention]? {
         var mentions = [Mention]()
         if let peoples = self.activity.mentionedPeople {
@@ -72,12 +93,14 @@ public class Message {
         return mentions.count > 0 ? mentions : nil
     }
     
-    /// Content of Message
+    /// The content of the message.
     public var text: String? {
         return self.activity.text
     }
     
-    /// Attached Files of message
+    /// A array of the attachments in the message.
+    ///
+    /// - since: 1.4.0
     public var files: [RemoteFile]? {
         return self.activity.files
     }
@@ -89,40 +112,75 @@ public class Message {
     }
 }
 
-public enum Mention {
-    case person(String)
-    case all
-}
-
 public class LocalFile {
+    
+    public class Thumbnail {
+        let path: String
+        let width: Int
+        let height: Int
+        let size: UInt64
+        
+        public init?(path: String, width: Int, height: Int) {
+            if width <= 0 || height <= 0 {
+                return nil
+            }
+            self.path = path
+            self.width = width
+            self.height = height
+            if !FileManager.default.fileExists(atPath: path) || !FileManager.default.isReadableFile(atPath: path) {
+                return nil
+            }
+            guard let attrs = try? FileManager.default.attributesOfItem(atPath: path), let size = attrs[FileAttributeKey.size] as? UInt64 else {
+                return nil
+            }
+            self.size = size
+        }
+    }
     
     let path: String
     let name: String
+    let size: UInt64
     let progressHandler: ((Double) -> Void)?
+    let thumbnail: Thumbnail?
     
-    public init(path: String, name: String? = nil, progressHandler: ((Double) -> Void)? = nil) {
+    public init?(path: String, name: String? = nil, thumbnail: Thumbnail? = nil, progressHandler: ((Double) -> Void)? = nil) {
         self.path = path
         self.name = name ?? URL(fileURLWithPath: path).lastPathComponent
+        self.thumbnail = thumbnail
         self.progressHandler = progressHandler
+        if !FileManager.default.fileExists(atPath: path) || !FileManager.default.isReadableFile(atPath: path) {
+            return nil
+        }
+        guard let attrs = try? FileManager.default.attributesOfItem(atPath: path), let size = attrs[FileAttributeKey.size] as? UInt64 else {
+            return nil
+        }
+        self.size = size
     }
 }
 
 public struct RemoteFile {
-    public internal(set) var url: String?
+    
+    public struct Thumbnail {
+        public internal(set) var width: Int?
+        public internal(set) var height: Int?
+        var url: String?
+        var secureContentRef: String?
+    }
+    
     public internal(set) var displayName: String?
     public internal(set) var mimeType: String?
     public internal(set) var size: UInt64?
-    public internal(set) var thumbnail: RemoteFileThumbnail?
+    public internal(set) var thumbnail: Thumbnail?
+    var url: String?
     var secureContentRef: String?
-    private init(){}
 }
 
 extension RemoteFile {
     
-    init(local: LocalFile, downloadUrl: String, size: UInt64) {
+    init(local: LocalFile, downloadUrl: String) {
         self.url = downloadUrl
-        self.size = size
         self.displayName = local.name
+        self.size = local.size
         self.mimeType = local.name.mimeType
     }
     
@@ -136,19 +194,28 @@ extension RemoteFile {
     mutating func decrypt(key: String?) {
         self.displayName = self.displayName?.decrypt(key: key)
         self.secureContentRef = self.secureContentRef?.decrypt(key: key)
-        if var thumbnail = self.thumbnail {
-            thumbnail.secureContentRef = self.thumbnail?.secureContentRef?.decrypt(key: key)
-            self.thumbnail = thumbnail
-        }
+        self.thumbnail?.decrypt(key: key)
     }
 }
 
-public struct RemoteFileThumbnail  {
-    public var url: String?
-    public var width: Int?
-    public var height: Int?
-    var secureContentRef: String?
-    init(){}
+extension RemoteFile.Thumbnail {
+    
+    init(local: LocalFile.Thumbnail, downloadUrl: String) {
+        self.url = downloadUrl
+        self.width = local.width
+        self.height = local.height
+    }
+    
+    mutating func encrypt(key: String?, scr: SecureContentReference) {
+        if let chilerScr = try? scr.encryptedSecureContentReference(withKey: key) {
+            self.secureContentRef = chilerScr
+        }
+    }
+    
+    fileprivate mutating func decrypt(key: String?) {
+        self.secureContentRef = self.secureContentRef?.decrypt(key: key)
+    }
+    
 }
 
 extension RemoteFile : Mappable {
@@ -172,7 +239,7 @@ extension RemoteFile : Mappable {
     }
 }
 
-extension RemoteFileThumbnail : Mappable {
+extension RemoteFile.Thumbnail : Mappable {
     
     /// File thumbnail constructor.
     ///

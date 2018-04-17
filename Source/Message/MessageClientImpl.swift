@@ -72,58 +72,77 @@ class MessageClientImpl {
     }
     
     func list(roomId: String,
-              sinceDate: String? = nil,
-              maxDate: String? = nil,
-              midDate: String? = nil,
-              limit: Int? = nil,
-              personRefresh: Bool? = false,
-              lastMessageFirst: Bool? = true,
+              mentionedPeople: Mention? = nil,
+              before: Before? = nil,
+              max: Int,
               queue: DispatchQueue? = nil,
               completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) {
-    
-        let query = RequestParameter([
-            "conversationId": roomId.locusFormat,
-            "sinceDate": sinceDate,
-            "maxDate": maxDate,
-            "midDate": midDate,
-            "limit": limit,
-            "personRefresh": personRefresh,
-            "lastActivityFirst": lastMessageFirst,
-            ])
-    
-        let request = self.messageServiceBuilder.path("activities")
-            .keyPath("items")
-            .method(.get)
-            .query(query)
-            .queue(queue)
-            .build()
         
-        request.responseArray { (response: ServiceResponse<[ActivityModel]>) in
-            switch response.result {
-            case .success(let activities):
-                let key = self.encryptionKey(roomId: roomId)
-                key.material(client: self) { material in
-                    if let material = material.data {
-                        let messages = activities.filter({$0.kind == ActivityModel.Kind.post || $0.kind == ActivityModel.Kind.share})
-                            .map { $0.decrypt(key: material) }
-                            .map { Message(activity: $0) }
-                        (queue ?? DispatchQueue.main).async {
-                            completionHandler(ServiceResponse(response.response, Result.success(messages)))
+        if max == 0 {
+            (queue ?? DispatchQueue.main).async {
+                completionHandler(ServiceResponse(nil, Result.success([])))
+            }
+            return
+        }
+        
+        func listBefore(date: Date?, result: [ActivityModel], completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) {
+            let dateKey = mentionedPeople == nil ? "maxDate" : "sinceDate"
+            let request = self.messageServiceBuilder.path(mentionedPeople == nil ? "activities" : "mentions")
+                .keyPath("items")
+                .method(.get)
+                .query(RequestParameter(["conversationId": roomId.locusFormat, "limit": max, dateKey: (date ?? Date()).iso8601String]))
+                .queue(queue)
+                .build()
+            request.responseArray { (response: ServiceResponse<[ActivityModel]>) in
+                switch response.result {
+                case .success(let value):
+                    let result = result + value.filter({$0.kind == ActivityModel.Kind.post || $0.kind == ActivityModel.Kind.share})
+                    if result.count >= max {
+                        let key = self.encryptionKey(roomId: roomId)
+                        key.material(client: self) { material in
+                            if let material = material.data {
+                                let messages = result.prefix(max).map { $0.decrypt(key: material) }.map { Message(activity: $0) }
+                                (queue ?? DispatchQueue.main).async {
+                                    completionHandler(ServiceResponse(response.response, Result.success(messages)))
+                                }
+                            }
+                            else {
+                                (queue ?? DispatchQueue.main).async {
+                                    completionHandler(ServiceResponse(response.response, Result.failure(material.error ?? MSGError.keyMaterialFetchFail)))
+                                }
+                            }
                         }
                     }
                     else {
-                        (queue ?? DispatchQueue.main).async {
-                            completionHandler(ServiceResponse(response.response, Result.failure(material.error ?? MSGError.keyMaterialFetchFail)))
-                        }
+                        listBefore(date: result.last?.created, result: result, completionHandler: completionHandler)
+                    }
+                case .failure(let error):
+                    completionHandler(ServiceResponse(response.response, Result.failure(error)))
+                }
+            }
+        }
+        
+        if let before = before {
+            switch before {
+            case .message(let messageId):
+                self.get(messageId: messageId, decrypt: false, queue: queue) { response in
+                    if let error = response.result.error {
+                        completionHandler(ServiceResponse(response.response, Result.failure(error)))
+                    }
+                    else {
+                        listBefore(date: response.result.data?.created, result: [], completionHandler: completionHandler)
                     }
                 }
-            case .failure(let error):
-                completionHandler(ServiceResponse(response.response, Result.failure(error)))
+            case .date(let date):
+                listBefore(date: date, result: [], completionHandler: completionHandler)
             }
+        }
+        else {
+            listBefore(date: nil, result: [], completionHandler: completionHandler)
         }
     }
     
-    func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
+    func get(messageId: String, decrypt: Bool, queue: DispatchQueue?, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         let request = self.messageServiceBuilder.path("activities")
             .method(.get)
             .path(messageId.locusFormat)
@@ -132,7 +151,7 @@ class MessageClientImpl {
         request.responseObject { (response : ServiceResponse<ActivityModel>) in
             switch response.result {
             case .success(let activity):
-                if let roomId = activity.roomId {
+                if let roomId = activity.roomId, decrypt {
                     let key = self.encryptionKey(roomId: roomId)
                     key.material(client: self) { material in
                         (queue ?? DispatchQueue.main).async {
@@ -141,7 +160,7 @@ class MessageClientImpl {
                     }
                 }
                 else {
-                    completionHandler(ServiceResponse(response.response, Result.failure(response.result.error ?? MSGError.roomFetchFail)))
+                    completionHandler(ServiceResponse(response.response, Result.success(Message(activity: activity))))
                 }
             case .failure(let error):
                 completionHandler(ServiceResponse(response.response, Result.failure(error)))
@@ -149,13 +168,13 @@ class MessageClientImpl {
         }
     }
 
-    func post(email: String,
+    func post(personEmail: EmailAddress,
               text: String? = nil,
               mentions: [Mention]? = nil,
               files: [LocalFile]? = nil,
               queue: DispatchQueue? = nil,
               completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.lookupRoom(email: email, queue: queue) { result in
+        self.lookupRoom(email: personEmail.toString(), queue: queue) { result in
             if let roomId = result.data {
                 self.post(roomId: roomId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
@@ -198,7 +217,6 @@ class MessageClientImpl {
             let opeations = UploadFileOperations(key: key, files: files ?? [LocalFile]())
             opeations.run(client: self) { result in
                 if let files = result.data, files.count > 0 {
-                    // TODO
                     object["objectType"] = ObjectType.content.rawValue
                     object["contentCategory"] = "documents"
                     object["files"] = ["items": files.toJSON()]
@@ -582,5 +600,16 @@ class MessageClientImpl {
                 }
             }
         }
+    }
+}
+
+extension Date {
+    
+    var iso8601String: String {
+        return ISO8601DateFormatter().string(from: self.addingTimeInterval(-0.1))
+    }
+    
+    static func fromISO860(_ string: String) -> Date? {
+        return  ISO8601DateFormatter().date(from:string)
     }
 }

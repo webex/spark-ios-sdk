@@ -65,17 +65,40 @@ class UploadFileOperation {
     }
     
     func run(client: MessageClientImpl, completionHandler: @escaping (Result<RemoteFile>) -> Void) {
-        if !FileManager.default.fileExists(atPath: self.local.path) || !FileManager.default.isReadableFile(atPath: self.local.path) {
-            self.uploadError(completionHandler: completionHandler)
-            return
+        self.doUpload(client: client, path: self.local.path, size: self.local.size, progressStart: 0, progressHandler: self.local.progressHandler) { url, scr, error in
+            if let url = url, let scr = scr {
+                self.key.material(client: client) { material in
+                    var file = RemoteFile(local: self.local, downloadUrl: url)
+                    file.encrypt(key: material.data, scr: scr)
+                    if let thumb = self.local.thumbnail {
+                        self.doUpload(client: client, path: thumb.path, size: thumb.size, progressStart: 0.5, progressHandler: self.local.progressHandler) { url, scr, error in
+                            if let url = url, let scr = scr {
+                                var thumb = RemoteFile.Thumbnail(local: thumb, downloadUrl: url)
+                                thumb.encrypt(key: material.data, scr: scr)
+                                file.thumbnail = thumb
+                            }
+                            self.done = true
+                            completionHandler(Result.success(file))
+                        }
+                    }
+                    else {
+                        self.done = true
+                        completionHandler(Result.success(file))
+                    }
+                }
+            }
+            else {
+                SDKLogger.shared.info("File Uoload Fail...")
+                self.done = true
+                completionHandler(Result.failure(error ?? SparkError.serviceFailed(code: -7000, reason: "upload error")))
+            }
         }
-        guard let attrs = try? FileManager.default.attributesOfItem(atPath: self.local.path), let size = attrs[FileAttributeKey.size] as? UInt64 else {
-            self.uploadError(completionHandler: completionHandler)
-            return
-        }
+    }
+    
+    func doUpload(client: MessageClientImpl, path: String, size: UInt64, progressStart: Double, progressHandler: ((Double) -> Void)?, completionHandler: @escaping (String?, SecureContentReference?, Error?) -> Void) {
         client.authenticator.accessToken { token in
             guard let token = token else {
-                self.uploadError(completionHandler: completionHandler)
+                completionHandler(nil, nil, SparkError.noAuth)
                 return
             }
             self.key.spaceUrl(authenticator: client.authenticator) { result in
@@ -87,10 +110,10 @@ class UploadFileOperation {
                             let uploadUrl = dict["uploadUrl"] as? String,
                             let finishUrl = dict["finishUploadUrl"] as? String,
                             let scr = try? SecureContentReference(error: ()),
-                            let inputStream = try? SecureInputStream(stream: InputStream(fileAtPath: self.local.path), scr: scr) {
+                            let inputStream = try? SecureInputStream(stream: InputStream(fileAtPath: path), scr: scr) {
                             let uploadHeaders: HTTPHeaders = ["Content-Length": String(size)]
                             Alamofire.upload(inputStream, to: uploadUrl, method: .put, headers: uploadHeaders).uploadProgress(closure: { (progress) in
-                                self.local.progressHandler?(progress.fractionCompleted)
+                                progressHandler?(progressStart + progress.fractionCompleted/2)
                             }).responseString { response in
                                 if let _ = response.result.value {
                                     let finishHeaders: HTTPHeaders = ["Authorization": "Bearer " + token, "Content-Type": "application/json;charset=UTF-8"]
@@ -98,39 +121,27 @@ class UploadFileOperation {
                                     Alamofire.request(finishUrl, method: .post, parameters: finishParameters, encoding: JSONEncoding.default, headers: finishHeaders).responseJSON { response in
                                         if let dict = response.result.value as? [String : Any], let downLoadUrl = dict["downloadUrl"] as? String, let url = URL(string: downLoadUrl) {
                                             scr.loc = url
-                                            var file = RemoteFile(local: self.local, downloadUrl: downLoadUrl, size: size)
-                                            self.key.material(client: client) { material in
-                                                file.encrypt(key: material.data, scr: scr)
-                                                self.done = true
-                                                completionHandler(Result.success(file))
-                                            }
+                                            completionHandler(downLoadUrl, scr, nil)
                                         }
                                         else {
-                                            self.uploadError(response.error, completionHandler: completionHandler)
+                                            completionHandler(nil, nil, response.error)
                                         }
                                     }
                                 }
                                 else {
-                                    self.uploadError(response.error, completionHandler: completionHandler)
+                                    completionHandler(nil, nil, response.error)
                                 }
                             }
                         }
                         else {
-                            self.uploadError(response.error, completionHandler: completionHandler)
+                            completionHandler(nil, nil, response.error)
                         }
                     }
                 }
                 else {
-                    self.uploadError(result.error, completionHandler: completionHandler)
+                    completionHandler(nil, nil, result.error)
                 }
             }
         }
     }
-    
-    private func uploadError(_ error: Error? = nil, completionHandler: @escaping (Result<RemoteFile>) -> Void) {
-        SDKLogger.shared.info("File Uoload Fail...")
-        self.done = true
-        completionHandler(Result.failure(error ?? SparkError.serviceFailed(code: -7000, reason: "upload error")))
-    }
-    
 }

@@ -76,25 +76,17 @@ class EncryptionKey {
             completionHandler(Result.success(url))
         }
         else {
-            authenticator.accessToken { token in
-                guard let token = token else {
-                    completionHandler(Result<String>.failure(SparkError.noAuth))
-                    return
+            let request = ServiceRequest.Builder(authenticator).baseUrl(ServiceRequest.CONVERSATION_SERVER_ADDRESS)
+                .path("conversations/" + self.roomId.locusFormat + "/space")
+                .method(.put)
+                .build()
+            request.responseJSON { (response: ServiceResponse<Any>) in
+                if let dict = response.result.data as? [String: Any], let url = dict["spaceUrl"] as? String {
+                    self.spaceUrl = url
+                    completionHandler(Result.success(url))
                 }
-                let header: [String: String] = [ "Authorization": "Bearer " + token]
-                let request = ServiceRequest.Builder(authenticator).baseUrl(ServiceRequest.CONVERSATION_SERVER_ADDRESS)
-                    .path("conversations/" + self.roomId.locusFormat + "/space")
-                    .headers(header)
-                    .method(.put)
-                    .build()
-                request.responseJSON { (response: ServiceResponse<Any>) in
-                    if let dict = response.result.data as? [String: Any], let url = dict["spaceUrl"] as? String {
-                        self.spaceUrl = url
-                        completionHandler(Result.success(url))
-                    }
-                    else {
-                        completionHandler(Result.failure(response.result.error ?? MessageClientImpl.MSGError.spaceUrlFetchFail))
-                    }
+                else {
+                    completionHandler(Result.failure(response.result.error ?? MessageClientImpl.MSGError.spaceUrlFetchFail))
                 }
             }
         }
