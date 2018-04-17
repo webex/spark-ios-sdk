@@ -43,15 +43,21 @@ class EncryptionKey {
             completionHandler(Result.success(marterial))
         }
         else {
-            self.encryptionUrl(client: client) { url in
-                client.requestRoomKeyMaterial(roomId: self.roomId, encryptionUrl: url.data) { result in
-                    switch result {
-                    case .success(let data):
-                        self.encryptionUrl = data.0
-                        self.material = data.1
-                        completionHandler(Result<String>.success(data.1))
-                    case .failure(let error):
-                        completionHandler(Result<String>.failure(error))
+            self.encryptionUrl(client: client) { response in
+                if let error = response.error {
+                    completionHandler(Result<String>.failure(error))
+                }
+                else {
+                    let encrptionUrl = response.data as? String
+                    client.requestRoomKeyMaterial(roomId: self.roomId, encryptionUrl: encrptionUrl) { result in
+                        switch result {
+                        case .success(let data):
+                            self.encryptionUrl = data.0
+                            self.material = data.1
+                            completionHandler(Result<String>.success(data.1))
+                        case .failure(let error):
+                            completionHandler(Result<String>.failure(error))
+                        }
                     }
                 }
             }
@@ -59,13 +65,13 @@ class EncryptionKey {
     }
     
     // TODO thread
-    func encryptionUrl(client: MessageClientImpl, completionHandler: @escaping (Result<String>) -> Void) {
+    func encryptionUrl(client: MessageClientImpl, completionHandler: @escaping (Result<String?>) -> Void) {
         if let url = self.encryptionUrl {
             completionHandler(Result.success(url))
         }
         else {
             client.requestRoomEncryptionURL(roomId: self.roomId) { result in
-                self.encryptionUrl = result.data
+                self.encryptionUrl = result.data as? String
                 completionHandler(result)
             }
         }

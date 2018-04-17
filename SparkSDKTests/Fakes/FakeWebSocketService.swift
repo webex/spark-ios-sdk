@@ -38,14 +38,14 @@ class FakeWebSocketService:WebSocketService {
     
     override func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
         if let call = self.callModel {
-            self.onCallModel?(call)
+            self.onEvent?(MercuryEvent.call(call))
         }
     }
     
     func sendOnincomingCall(caller:TestUser,callee:TestUser) {
         self.callModel = FakeCallModelHelper.initCallModel(caller: caller, allParticipantUsers: [caller,callee], selfUser: callee)
         if let call = self.callModel {
-            self.onCallModel?(call)
+            self.onEvent?(MercuryEvent.call(call))
         }
     }
     

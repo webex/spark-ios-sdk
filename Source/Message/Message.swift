@@ -112,6 +112,14 @@ public struct Message {
     }
 }
 
+extension Message : CustomStringConvertible {
+    public var description: String {
+        get {
+            return activity.toJSONString(prettyPrint: true) ?? ""
+        }
+    }
+}
+
 public class LocalFile {
     
     public class Thumbnail {

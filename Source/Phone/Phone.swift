@@ -517,11 +517,10 @@ public class Phone {
                 return
             }
             if let url = call.model.myself?.url {
-                //TODO check if need stop screen share
-                if #available(iOS 11.2, *) {
+                if #available(iOS 11.2, *), call.sendingScreenShare {
                     self.stopSharing(call: call) {
                         _ in
-                        SDKLogger.shared.error("Unshare screen by call end!")
+                        SDKLogger.shared.warn("Unshare screen by call end!")
                     }
                     call.mediaSession.stopLocalScreenShare()
                 }
