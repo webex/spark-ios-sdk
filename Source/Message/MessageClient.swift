@@ -26,6 +26,18 @@ import SwiftyJSON
 
 public class MessageClient {
     
+    /// Callback when receive Message.
+    ///
+    /// - since: 1.4.0
+    public var onEvent: ((MessageEvent) -> Void)? {
+        get {
+            return self.phone.messages?.onEvent
+        }
+        set {
+            self.phone.messages?.onEvent = newValue
+        }
+    }
+    
     private let phone: Phone
     
     init(phone: Phone) {

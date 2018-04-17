@@ -47,10 +47,7 @@ class MessageClientImpl {
     
     private static let KMS_MSG_SERVER_URL = URL(string: ServiceRequest.KMS_SERVER_ADDRESS + "/kms/messages")!
     
-    /// Callback when receive Message.
-    ///
-    /// - since: 1.4.0
-    public var onEvent: ((MessageEvent) -> Void)?
+    var onEvent: ((MessageEvent) -> Void)?
     
     let authenticator: Authenticator
     var deviceUrl : URL
