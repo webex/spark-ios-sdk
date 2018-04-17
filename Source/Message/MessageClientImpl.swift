@@ -348,17 +348,17 @@ class MessageClientImpl {
                         let handler = self.keyMaterialCompletionHandlers.removeValue(forKey: keyUri) {
                         handler(Result.success((keyUri, keyMaterial)))
                     }
-                    else if let dict = (json["keys"].object as? [[String : Any]])?.first {
-                        if let key = try? KmsKey(from: dict), let handler = self.keysCompletionHandlers.popFirst()?.value {
-                            handler(Result.success((key.uri, key.jwk)))
-                        }
+                }
+                else if let dict = (json["keys"].object as? [[String : Any]])?.first {
+                    if let key = try? KmsKey(from: dict), let handler = self.keysCompletionHandlers.popFirst()?.value {
+                        handler(Result.success((key.uri, key.jwk)))
                     }
                 }
             }
         }
     }
     
-    func requestRoomEncryptionURL(roomId: String, completionHandler: @escaping (Result<String>) -> Void) {
+    func requestRoomEncryptionURL(roomId: String, completionHandler: @escaping (Result<String?>) -> Void) {
         self.prepareEncryptionKey { error in
             if let error = error {
                 completionHandler(Result.failure(error))
@@ -369,8 +369,13 @@ class MessageClientImpl {
                 .method(.get)
                 .build()
             request.responseJSON { (response: ServiceResponse<Any>) in
-                if let dict = response.result.data as? [String: Any], let encryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String {
-                    completionHandler(Result.success(encryptionUrl))
+                if let dict = response.result.data as? [String: Any] {
+                    if let encryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String{
+                        completionHandler(Result.success(encryptionUrl))
+                    }
+                    else{
+                        completionHandler(Result.success(nil))
+                    }
                 }
                 else {
                     completionHandler(Result.failure(response.result.error ?? MSGError.encryptionUrlFetchFail))
