@@ -249,7 +249,7 @@ class JWTAuthenticatorTests: XCTestCase {
     }
     
     private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTTokenModel> {
-        let accessTokenObject = JWTTokenModel(token: accessToken)
+        var accessTokenObject = JWTTokenModel(token: accessToken)
         accessTokenObject.tokenCreationDate = now
         accessTokenObject.tokenExpiration = JWTAuthenticatorTests.oneDay
         return ServiceResponse<JWTTokenModel>(nil, Result.success(accessTokenObject))
