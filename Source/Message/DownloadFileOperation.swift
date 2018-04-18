@@ -21,18 +21,22 @@
 import UIKit
 import Alamofire
 
-class DownloadFileOperation {
+class DownloadFileOperation: NSObject , URLSessionDataDelegate {
     
     private let authenticator: Authenticator
     private let uuid: String
     private let source: String
     private let secureContentRef: String?
-    private let target: URL
+    private var target: URL
     private let queue: DispatchQueue?
     private let progressHandler: ((Double) -> Void)?
     private let completionHandler : ((Result<URL>) -> Void)
+    private var outPutStream : OutputStream?
+    private var downLoadSeesion: URLSession?
+    private var totalSize: UInt64?
+
     
-    init(authenticator: Authenticator, uuid: String, source: String, secureContentRef: String?, thnumnail: Bool, target: URL?, queue: DispatchQueue?, progressHandler: ((Double) -> Void)?, completionHandler: @escaping ((Result<URL>) -> Void)) {
+    init(authenticator: Authenticator, uuid: String, source: String, displayName: String?, secureContentRef: String?, thnumnail: Bool, target: URL?, queue: DispatchQueue?, progressHandler: ((Double) -> Void)?, completionHandler: @escaping ((Result<URL>) -> Void)) {
         self.authenticator = authenticator
         self.source = source
         self.secureContentRef = secureContentRef
@@ -44,14 +48,15 @@ class DownloadFileOperation {
             self.target = target
         }
         else {
-            let path = FileManager.default.temporaryDirectory.appendingPathComponent("com.ciscospark.sdk.download", isDirectory: true)
+            let path = FileManager.default.temporaryDirectory.appendingPathComponent("com.ciscospark.sdk.downloads", isDirectory: true)
             try? FileManager.default.createDirectory(at: path, withIntermediateDirectories: false, attributes: nil)
-            var name = URL(string: source)?.lastPathComponent ?? UUID().uuidString
-            if (thnumnail) {
-                name = "thumb-" + name
-            }
-            self.target = path.appendingPathComponent(name, isDirectory: false)
+            self.target = path
         }
+        var name = uuid + "-" + (displayName ?? Date().iso8601String)
+        if (thnumnail) {
+            name = "thumb-" + name
+        }
+        self.target = self.target.appendingPathComponent(name, isDirectory: false)
     }
     
     func run() {
@@ -64,41 +69,52 @@ class DownloadFileOperation {
                 self.downloadError()
                 return
             }
-            let headers: HTTPHeaders = ["Authorization": "Bearer " + token, "TrackingID": "SPARKSDK_\(self.uuid)_0"]
-            Alamofire.download(url, headers: headers) { (_, _) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
-                return (self.target, [.removePreviousFile, .createIntermediateDirectories])
-                }.downloadProgress { progress in
-                    (self.queue ?? DispatchQueue.main).async {
-                        self.progressHandler?(progress.fractionCompleted)
-                    }
-                }.responseData { response in
-                    switch response.result {
-                    case .success(let data):
-                        var output = OutputStream(url: self.target, append: true)
-                        if let refString = self.secureContentRef, let ref = try? SecureContentReference(json: refString) {
-                            output = try? SecureOutputStream(stream: output, scr: ref)
-                        }
-                        if let output = output {
-                            output.open()
-                            _ = output.write(data: data)
-                            output.close()
-                            if let error = output.streamError {
-                                self.downloadError(error)
-                            }
-                            else {
-                                (self.queue ?? DispatchQueue.main).async {
-                                    self.completionHandler(Result.success(url))
-                                }
-                            }
-                        }
-                        else {
-                            self.downloadError()
-                        }
-                        
-                    case .failure(let error):
-                        self.downloadError(error)
-                    }
+            let trackingID = "ITCLIENT_\(self.uuid)_0"
+            let config = URLSessionConfiguration.default
+            self.downLoadSeesion = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue.main)
+            var request = NSURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 0) as URLRequest
+            request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
+            request.setValue(trackingID, forHTTPHeaderField: "TrackingID")
+            if let dataTask = self.downLoadSeesion?.dataTask(with: request){
+                dataTask.resume()
             }
+        }
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Swift.Void){
+            let resp = response as! HTTPURLResponse
+            let string = resp.allHeaderFields["Content-Length"] as! String
+            let stri : String = string.components(separatedBy: "/").last!
+            self.totalSize = UInt64(stri)!
+            do{
+                var outputStream = OutputStream(toFileAtPath: self.target.path, append: true)
+                let jsonstr =  self.secureContentRef!
+                let scr = try SecureContentReference(json: jsonstr)
+                outputStream = try SecureOutputStream(stream: outputStream, scr: scr) as OutputStream
+                self.outPutStream = outputStream
+                self.outPutStream?.open()
+                completionHandler(URLSession.ResponseDisposition.allow);
+            }catch let error as NSError{
+                SDKLogger.shared.info("DownLoadSession Create Error - \(error.description)")
+            }
+    }
+    
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data){
+        var buffer = [UInt8](repeating: 0, count: data.count)
+        data.copyBytes(to: &buffer, count: data.count)
+        self.outPutStream?.write(buffer, maxLength: data.count)
+        (self.queue ?? DispatchQueue.main).async {
+            self.progressHandler?(Double(data.count)/Double(self.totalSize!))
+        }
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?){
+        if (error != nil) {
+            self.downloadError()
+        }
+        self.outPutStream?.close()
+        (self.queue ?? DispatchQueue.main).async {
+            self.completionHandler(Result.success(self.target))
         }
     }
     
