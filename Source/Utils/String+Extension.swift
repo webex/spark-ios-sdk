@@ -35,7 +35,7 @@ extension String {
     
     func base64Encoded() -> String? {
         if let data = self.data(using: .utf8) {
-            return data.base64EncodedString()
+            return data.base64EncodedString().replacingOccurrences(of: "=", with: "")
         }
         return nil
     }

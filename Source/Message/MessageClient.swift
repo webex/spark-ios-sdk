@@ -281,7 +281,7 @@ public class MessageClient {
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.phone.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
-                impl.post(personEmail: personEmail, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
+                impl.post(person: personEmail.toString(), text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
             else {
                 (queue ?? DispatchQueue.main).async {
@@ -307,7 +307,16 @@ public class MessageClient {
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        // TODO
+        self.phone.doSomethingAfterRegistered { error in
+            if let impl = self.phone.messages {
+                impl.post(person: personId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
+            }
+            else {
+                (queue ?? DispatchQueue.main).async {
+                    completionHandler(ServiceResponse(nil, Result.failure(error ?? SparkError.unregistered)))
+                }
+            }
+        }
     }
     
     /// Posts a plain text message, to a room by roomId.

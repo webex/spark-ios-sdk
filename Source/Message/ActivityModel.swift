@@ -76,10 +76,7 @@ extension ActivityModel : ImmutableMappable {
         }
         if let fileItems: [[String: Any]] = try? map.value("object.files.items"), fileItems.count > 0 {
             self.files = fileItems.compactMap { value in
-                let file = Mapper<RemoteFile>().map(JSON: value)
-                // TODO
-                //file?.roomId = self.roomId
-                return file
+                return Mapper<RemoteFile>().map(JSON: value)
             }
         }
     }

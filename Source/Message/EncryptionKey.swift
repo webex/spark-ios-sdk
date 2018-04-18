@@ -37,7 +37,6 @@ class EncryptionKey {
         }
     }
     
-    // TODO thread
     func material(client: MessageClientImpl, completionHandler: @escaping (Result<String>) -> Void) {
         if let marterial = self.material {
             completionHandler(Result.success(marterial))
@@ -64,7 +63,6 @@ class EncryptionKey {
         }
     }
     
-    // TODO thread
     func encryptionUrl(client: MessageClientImpl, completionHandler: @escaping (Result<String?>) -> Void) {
         if let url = self.encryptionUrl {
             completionHandler(Result.success(url))

@@ -97,7 +97,7 @@ class MessageClientImpl {
                 switch response.result {
                 case .success(let value):
                     let result = result + value.filter({$0.kind == ActivityModel.Kind.post || $0.kind == ActivityModel.Kind.share})
-                    if result.count >= max {
+                    if result.count >= max || value.count < max {
                         let key = self.encryptionKey(roomId: roomId)
                         key.material(client: self) { material in
                             if let material = material.data {
@@ -114,7 +114,7 @@ class MessageClientImpl {
                         }
                     }
                     else {
-                        listBefore(date: result.last?.created, result: result, completionHandler: completionHandler)
+                        listBefore(date: value.last?.created, result: result, completionHandler: completionHandler)
                     }
                 case .failure(let error):
                     completionHandler(ServiceResponse(response.response, Result.failure(error)))
@@ -168,13 +168,13 @@ class MessageClientImpl {
         }
     }
 
-    func post(personEmail: EmailAddress,
+    func post(person: String,
               text: String? = nil,
               mentions: [Mention]? = nil,
               files: [LocalFile]? = nil,
               queue: DispatchQueue? = nil,
               completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.lookupRoom(email: personEmail.toString(), queue: queue) { result in
+        self.lookupRoom(person: person, queue: queue) { result in
             if let roomId = result.data {
                 self.post(roomId: roomId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
@@ -577,14 +577,14 @@ class MessageClientImpl {
         return key!
     }
     
-    private func lookupRoom(email: String, queue: DispatchQueue?, completionHandler: @escaping (Result<String>) -> Void) {
-        if let roomId = self.rooms[email] {
+    private func lookupRoom(person: String, queue: DispatchQueue?, completionHandler: @escaping (Result<String>) -> Void) {
+        if let roomId = self.rooms[person] {
             (queue ?? DispatchQueue.main).async {
                 completionHandler(Result.success(roomId))
             }
         }
         else {
-            let request = self.messageServiceBuilder.path("conversations/user/" + email)
+            let request = self.messageServiceBuilder.path("conversations/user/" + person.locusFormat)
                 .method(.put)
                 .query(RequestParameter(["activitiesLimit": 0, "compact": true]))
                 .queue(queue)
@@ -592,7 +592,7 @@ class MessageClientImpl {
             request.responseObject { (response: ServiceResponse<Room>) in
                 if let room = response.result.data?.id {
                     let roomId = room.hydraFormat(for: .room)
-                    self.rooms[email] = roomId
+                    self.rooms[person] = roomId
                     completionHandler(Result.success(roomId))
                 }
                 else {
@@ -606,10 +606,10 @@ class MessageClientImpl {
 extension Date {
     
     var iso8601String: String {
-        return ISO8601DateFormatter().string(from: self.addingTimeInterval(-0.1))
+        return Timestamp.ISO8601FullFormatterInUTC.string(from: self.addingTimeInterval(-0.1))
     }
     
     static func fromISO860(_ string: String) -> Date? {
-        return  ISO8601DateFormatter().date(from:string)
+        return  Timestamp.ISO8601FullFormatterInUTC.date(from:string)
     }
 }
