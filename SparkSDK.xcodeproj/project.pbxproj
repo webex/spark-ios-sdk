@@ -446,8 +446,7 @@
 				991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */,
 				C79F140E1FC3B88900B43596 /* CallTests.swift */,
 			);
-			name = Tests;
-			path = SparkSDKTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 		3D66B1A71D24ACF60016A072 /* Team */ = {
@@ -493,6 +492,23 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
+		686FA49120870304009937F4 /* Exts */ = {
+			isa = PBXGroup;
+			children = (
+				686FA4922087037E009937F4 /* BroadcastExtensionKit */,
+			);
+			path = Exts;
+			sourceTree = "<group>";
+		};
+		686FA4922087037E009937F4 /* BroadcastExtensionKit */ = {
+			isa = PBXGroup;
+			children = (
+				C7625FD3205CBB9600219F95 /* SparkBroadcastExtensionKit */,
+				C7625FDE205CBB9700219F95 /* SparkBroadcastExtensionKitTests */,
+			);
+			path = BroadcastExtensionKit;
+			sourceTree = "<group>";
+		};
 		8838B91D70254D46671B19F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -512,8 +528,7 @@
 			children = (
 				B91E75301CE2D7B70080EAE0 /* Source */,
 				3D15B70C1D3E176C003BB682 /* Tests */,
-				C7625FD3205CBB9600219F95 /* SparkBroadcastExtensionKit */,
-				C7625FDE205CBB9700219F95 /* SparkBroadcastExtensionKitTests */,
+				686FA49120870304009937F4 /* Exts */,
 				B91E75261CE2D6FF0080EAE0 /* Products */,
 				20E5E3BD68BFD3198EE748AE /* Pods */,
 				8838B91D70254D46671B19F1 /* Frameworks */,
@@ -1411,7 +1426,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1591,7 +1606,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1634,7 +1649,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "$PROJECT_DIR/Source/Info.plist";
+				INFOPLIST_FILE = $PROJECT_DIR/Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1690,7 +1705,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Exts/BroadcastExtensionKit/SparkBroadcastExtensionKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1732,7 +1747,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Exts/BroadcastExtensionKit/SparkBroadcastExtensionKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1772,7 +1787,7 @@
 					"$(PROJECT_DIR)/Vendors",
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu11;
-				INFOPLIST_FILE = SparkBroadcastExtensionKit/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Exts/BroadcastExtensionKit/SparkBroadcastExtensionKit/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
