@@ -23,7 +23,7 @@ import ObjectMapper
 
 /// The struct of a message event
 ///
-/// - since: 1.2.0
+/// - since: 1.4.0
 public enum MessageEvent {
     case messageReceived(Message)
     case messageDeleted(String)
@@ -120,21 +120,24 @@ extension Message : CustomStringConvertible {
     }
 }
 
+/// - since: 1.4.0
 public class LocalFile {
-    
+
     public class Thumbnail {
         let path: String
         let width: Int
         let height: Int
         let size: UInt64
+        let mime: String
         
-        public init?(path: String, width: Int, height: Int) {
+        public init?(path: String, mime: String? = nil, width: Int, height: Int) {
             if width <= 0 || height <= 0 {
                 return nil
             }
             self.path = path
             self.width = width
             self.height = height
+            self.mime = mime ?? URL(fileURLWithPath: path).lastPathComponent.mimeType
             if !FileManager.default.fileExists(atPath: path) || !FileManager.default.isReadableFile(atPath: path) {
                 return nil
             }
@@ -147,13 +150,17 @@ public class LocalFile {
     
     let path: String
     let name: String
+    let mime: String
     let size: UInt64
     let progressHandler: ((Double) -> Void)?
     let thumbnail: Thumbnail?
     
-    public init?(path: String, name: String? = nil, thumbnail: Thumbnail? = nil, progressHandler: ((Double) -> Void)? = nil) {
+    /// - since: 1.4.0
+    public init?(path: String, name: String? = nil, mime: String? = nil, thumbnail: Thumbnail? = nil, progressHandler: ((Double) -> Void)? = nil) {
+        let name = name ?? URL(fileURLWithPath: path).lastPathComponent
         self.path = path
-        self.name = name ?? URL(fileURLWithPath: path).lastPathComponent
+        self.name = name
+        self.mime = mime ?? name.mimeType
         self.thumbnail = thumbnail
         self.progressHandler = progressHandler
         if !FileManager.default.fileExists(atPath: path) || !FileManager.default.isReadableFile(atPath: path) {
@@ -166,11 +173,14 @@ public class LocalFile {
     }
 }
 
+/// - since: 1.4.0
 public struct RemoteFile {
-    
+
     public struct Thumbnail {
+
         public internal(set) var width: Int?
         public internal(set) var height: Int?
+        public internal(set) var mimeType: String?
         var url: String?
         var secureContentRef: String?
     }
@@ -179,6 +189,7 @@ public struct RemoteFile {
     public internal(set) var mimeType: String?
     public internal(set) var size: UInt64?
     public internal(set) var thumbnail: Thumbnail?
+    
     var url: String?
     var secureContentRef: String?
 }
@@ -189,7 +200,7 @@ extension RemoteFile {
         self.url = downloadUrl
         self.displayName = local.name
         self.size = local.size
-        self.mimeType = local.name.mimeType
+        self.mimeType = local.mime
     }
     
     mutating func encrypt(key: String?, scr: SecureContentReference) {
@@ -210,6 +221,7 @@ extension RemoteFile.Thumbnail {
     
     init(local: LocalFile.Thumbnail, downloadUrl: String) {
         self.url = downloadUrl
+        self.mimeType = local.mime
         self.width = local.width
         self.height = local.height
     }
@@ -259,6 +271,7 @@ extension RemoteFile.Thumbnail : Mappable {
     /// - note: for internal use only.
     public mutating func mapping(map: Map) {
         url <- map["url"]
+        mimeType <- map["mimeType"]
         width <- map["width"]
         height <- map["height"]
         secureContentRef <- map["scr"]

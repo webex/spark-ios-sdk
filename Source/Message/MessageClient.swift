@@ -74,11 +74,11 @@ public class MessageClient {
                      completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) {
         
         var condition: Before?
-        if let before = before, let date = Date.fromISO860(before) {
-            condition = Before.date(date)
-        }
-        else if let beforeMessage = beforeMessage {
+        if let beforeMessage = beforeMessage {
             condition = Before.message(beforeMessage)
+        }
+        else if let before = before, let date = Date.fromISO860(before) {
+            condition = Before.date(date)
         }
         self.list(roomId: roomId, before: condition, max: max ?? 50, queue: queue, completionHandler: completionHandler)
     }
