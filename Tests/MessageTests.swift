@@ -86,7 +86,7 @@ class MessageTests: XCTestCase {
     
     func testPostingMessageToRoomWithFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
-        let message = postMessage(conversationId: roomId,files: [file])
+        let message = postMessage(conversationId: roomId,files: [file!])
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
@@ -100,7 +100,7 @@ class MessageTests: XCTestCase {
     
     func testPostingMessageToRoomWithTextAndFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
-        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file])
+        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file!])
         validate(message: message)
         XCTAssertEqual(message?.text, text)
         XCTAssertNotNil(message?.files)
@@ -109,16 +109,10 @@ class MessageTests: XCTestCase {
     func testPostingMessageToRoomWithTextAndFileAndMentionReturnsMessage(){
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let mentionItem = Mention.person(Config.InvalidId)
-        let message = postMessage(conversationId: roomId, text: text, mentions:[mentionItem], files: [file])
+        let message = postMessage(conversationId: roomId, text: text, mentions:[mentionItem], files: [file!])
         validate(message: message)
         XCTAssertEqual(message?.text, text)
         XCTAssertNotNil(message?.files)
-    }
-    
-    func testPostingMessageToRoomWithInvalidFileNotReturnMessage(){
-        let file = LocalFile(path: Config.InvalidLocalAddress, name: "sample.png", progressHandler: nil)
-        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file])
-        XCTAssertNil(message?.files)
     }
     
     func testPostingMessageToInvalidRoomDoesNotReturnMessage() {
@@ -134,14 +128,14 @@ class MessageTests: XCTestCase {
     
     func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
-        let message = postMessage(personEmail: other.email, text: "", files: [file])
+        let message = postMessage(personEmail: other.email, text: "", files: [file!])
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
     
     func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
-        let message = postMessage(personEmail: other.email, text: text, files: [file])
+        let message = postMessage(personEmail: other.email, text: text, files: [file!])
         validate(message: message)
         XCTAssertEqual(message?.text, text)
         XCTAssertNotNil(message?.files)
@@ -173,43 +167,43 @@ class MessageTests: XCTestCase {
         }
     }
     
-//    func testListingMessagesReturnsMessages() {
-//        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        validate(message: message)
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: nil)
-//        XCTAssertEqual(messageArray?.isEmpty, false)
-//    }
-//
-//    func testListingMessagesWithMaxValueOf2ReturnsOnly2Messages() {
-//        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: 2)
-//        XCTAssertEqual(messageArray?.count, 2)
-//    }
+    func testListingMessagesReturnsMessages() {
+        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        validate(message: message)
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: nil)
+        XCTAssertEqual(messageArray?.isEmpty, false)
+    }
+
+    func testListingMessagesWithMaxValueOf2ReturnsOnly2Messages() {
+        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        _ = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 2)
+        XCTAssertEqual(messageArray?.count, 2)
+    }
     
-//    func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
-//        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        Thread.sleep(forTimeInterval: 5)
-//        let now = Date()
-//        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, beforeMessage: nil, max: nil)
-//        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
-//        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
-//    }
+    func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
+        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        Thread.sleep(forTimeInterval: 5)
+        let now = Date()
+        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+    }
     
-//    func testListingMessagesBeforeADateAndAMessageIdDoesReturnMessageWithThatId() {
-//        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        Thread.sleep(forTimeInterval: 5)
-//        let now = Date()
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, beforeMessage: nil, max: nil)
-//        XCTAssertEqual(messageArray?.contains() {$0.id == message?.id}, true)
-//    }
-//
-//    func testListingMessageWithInvalidRoomIdDoesNotReturnMessage() {
-//        let messageArray = listMessages(conversationId: Config.InvalidId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: nil)
-//        XCTAssertNil(messageArray)
-//    }
+    func testListingMessagesBeforeADateAndAMessageIdDoesReturnMessageWithThatId() {
+        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        Thread.sleep(forTimeInterval: 5)
+        let now = Date()
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: nil)
+        XCTAssertEqual(messageArray?.contains() {$0.id == message?.id}, true)
+    }
+
+    func testListingMessageWithInvalidRoomIdDoesNotReturnMessage() {
+        let messageArray = listMessages(conversationId: Config.InvalidId, mentionedPeople: nil, before: nil, max: nil)
+        XCTAssertNil(messageArray)
+    }
     
     func testGettingMessageReturnsMessage() {
         let messageFromCreate = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
@@ -229,74 +223,74 @@ class MessageTests: XCTestCase {
         XCTAssertNil(message)
     }
     
-//    func testDeletingMessageRemovesMessageAndItCanNoLongerBeRetrieved() {
-//        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        XCTAssertNotNil(message?.id)
-//        let messageId = message?.id
-//        XCTAssertTrue(deleteMessage(messageId: messageId!))
-//        XCTAssertEqual(getMessage(messageId: messageId!)?.activity.kind, ActivityModel.Kind.tombstone)
-//    }
+    func testDeletingMessageAndItCanNoLongerBeRetrieved() {
+        let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        validate(message: message)
+        XCTAssertTrue(deleteMessage(messageId: (message?.id)!))
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: nil)
+        XCTAssertNil(messageArray?.filter({$0.id == message?.id}).first)
+    }
     
     func testDeletingMessageWithBadIdFails() {
         XCTAssertFalse(deleteMessage(messageId: Config.InvalidId))
     }
     
-//    func testSendListDeleteMessage() {
-//        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        XCTAssertEqual(message1?.text, text)
-//        XCTAssertEqual(message2?.text, text)
-//        XCTAssertEqual(message3?.text, text)
-//
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: 3)
-//        XCTAssertEqual(messageArray?.count, 3)
-//
-//        XCTAssertTrue(deleteMessage(messageId: message2!.id!))
-//        let messageArray1 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: 3)
-//        XCTAssertEqual(messageArray1?.filter({$0.id == message2?.id}).count, 0)
-//
-//        XCTAssertTrue(deleteMessage(messageId: message3!.id!))
-//        let messageArray2 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: nil, max: 3)
-//        XCTAssertEqual(messageArray2?.filter({$0.id == message3?.id}).count, 0)
-//    }
-//
-//    func testSendListMessageWithBeforeMessage() {
-//        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        XCTAssertEqual(message1?.text, text)
-//        XCTAssertEqual(message2?.text, text)
-//        XCTAssertEqual(message3?.text, text)
-//
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, beforeMessage: message2!.id!, max: 3)
-//        XCTAssertEqual(messageArray?.filter({$0.id == message3?.id}).count, 0)
-//    }
-//
-//    func testSendListMessageWithBefore() {
-//        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        XCTAssertEqual(message1?.text, text)
-//        XCTAssertEqual(message2?.text, text)
-//        XCTAssertEqual(message3?.text, text)
-//
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: message2!.created, beforeMessage: nil, max: 3)
-//        XCTAssertEqual(messageArray?.filter({$0.id == message3?.id}).count, 0)
-//    }
-//
-//    func testListMessageWithMentionpeople(){
-//        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-//        let mention = Mention.person(other.personId)
-//        let message3 = postMessage(conversationId: roomId, text: text, mentions:[mention], files: nil)
-//        XCTAssertEqual(message1?.text, text)
-//        XCTAssertEqual(message2?.text, text)
-//        XCTAssertEqual(message3?.text, text)
-//
-//        let messageArray = listMessages(conversationId: roomId, mentionedPeople: "me" ,before: message2!.created, beforeMessage: nil,max: 3)
-//        XCTAssertEqual(messageArray?.count, 0)
-//    }
+    func testSendListDeleteMessage() {
+        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        XCTAssertEqual(message1?.text, text)
+        XCTAssertEqual(message2?.text, text)
+        XCTAssertEqual(message3?.text, text)
+
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
+        XCTAssertEqual(messageArray?.count, 3)
+
+        XCTAssertTrue(deleteMessage(messageId: message2!.id!))
+        let messageArray1 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
+        XCTAssertEqual(messageArray1?.filter({$0.id == message2?.id}).count, 0)
+
+        XCTAssertTrue(deleteMessage(messageId: message3!.id!))
+        let messageArray2 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
+        XCTAssertEqual(messageArray2?.filter({$0.id == message3?.id}).count, 0)
+    }
+
+    func testSendListMessageWithBeforeMessage() {
+        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        XCTAssertEqual(message1?.text, text)
+        XCTAssertEqual(message2?.text, text)
+        XCTAssertEqual(message3?.text, text)
+
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: message2?.created, max: 3)
+        XCTAssertEqual(messageArray?.filter({$0.id == message3?.id}).count, 0)
+    }
+
+    func testSendListMessageWithBefore() {
+        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message3 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        XCTAssertEqual(message1?.text, text)
+        XCTAssertEqual(message2?.text, text)
+        XCTAssertEqual(message3?.text, text)
+
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: message2!.created, max: 3)
+        XCTAssertEqual(messageArray?.filter({$0.id == message3?.id}).count, 0)
+    }
+
+    func testListMessageWithMentionpeople(){
+        let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
+        let mention = Mention.person(other.personId)
+        let message3 = postMessage(conversationId: roomId, text: text, mentions:[mention], files: nil)
+        XCTAssertEqual(message1?.text, text)
+        XCTAssertEqual(message2?.text, text)
+        XCTAssertEqual(message3?.text, text)
+
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: "me" ,before: message2!.created, max: 3)
+        XCTAssertEqual(messageArray?.count, 0)
+    }
     
     private func deleteMessage(messageId: String) -> Bool {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
@@ -321,30 +315,26 @@ class MessageTests: XCTestCase {
     
     private func postMessage(personEmail: EmailAddress, text: String, files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(email: personEmail.toString(), text: text, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
+            self.messages.post(personEmail: personEmail, text: text, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
     private func postMessage(personEmail: EmailAddress, files: [LocalFile]) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(email: personEmail.toString(), text: nil, mentions: nil, files: nil, queue: nil, completionHandler: completionHandler)
+            self.messages.post(personEmail: personEmail, text: nil, mentions: nil, files: nil, queue: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-//    private func listMessages(conversationId: String, mentionedPeople: String? ,before: Date?, beforeMessage: String?, max: Int?) -> [Message]? {
-//        let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
-//            self.messages
-//            self.messages.list(roomId: conversationId,
-//                               mentionedPeople: mentionedPeople,
-//                               before: before,
-//                               beforeMessage: beforeMessage,
-//                               max: max,
-//                               completionHandler: completionHandler)
-//        }
-//        return fixture.getResponse(testCase: self, request: request)
-//    }
+    private func listMessages(conversationId: String, mentionedPeople: String? ,before: Date?, max: Int?) -> [Message]? {
+        let request = { (completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) in
+            let beforeDate = before != nil ? Before.date(before!) : nil
+            let mentions = mentionedPeople != nil ? Mention.person(mentionedPeople!) : nil
+            self.messages.list(roomId: conversationId, before: beforeDate, max: max ?? 50, mentionedPeople: mentions, queue: nil, completionHandler: completionHandler)
+        }
+        return fixture.getResponse(testCase: self, request: request)
+    }
     
     private func getMessage(messageId: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
