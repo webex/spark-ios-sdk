@@ -396,10 +396,10 @@ public class MessageClient {
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
-    public func downloadFile(file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
+    public func downloadFile(_ file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
         self.phone.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
-                impl.downloadFile(file: file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
+                impl.downloadFile(file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
             }
             else {
                 (DispatchQueue.main).async {
@@ -417,10 +417,10 @@ public class MessageClient {
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
-    public func downloadThumbnail(file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
+    public func downloadThumbnail(for file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
         self.phone.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
-                impl.downloadThumbnail(file: file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
+                impl.downloadThumbnail(for: file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
             }
             else {
                 (DispatchQueue.main).async {

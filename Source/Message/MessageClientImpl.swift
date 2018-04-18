@@ -282,7 +282,7 @@ class MessageClientImpl {
         }
     }
 
-    func downloadFile(file: RemoteFile, to: URL? = nil, queue: DispatchQueue? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
+    func downloadFile(_ file: RemoteFile, to: URL? = nil, queue: DispatchQueue? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
         if let source = file.url {
             let operation = DownloadFileOperation(authenticator: self.authenticator,
                                                   uuid: self.uuid,
@@ -300,7 +300,7 @@ class MessageClientImpl {
         }
     }
     
-    func downloadThumbnail(file: RemoteFile, to: URL? = nil,  queue: DispatchQueue? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
+    func downloadThumbnail(for file: RemoteFile, to: URL? = nil,  queue: DispatchQueue? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
         if let source = file.thumbnail?.url {
             let operation = DownloadFileOperation(authenticator: self.authenticator,
                                                   uuid: self.uuid,
