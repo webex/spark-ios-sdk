@@ -16,6 +16,9 @@
 		1066EF112022F877003745D0 /* DownloadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF062022F877003745D0 /* DownloadFileOperation.swift */; };
 		1066EF142022F877003745D0 /* EncryptionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* EncryptionKey.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
+		107C538520889DA000717C42 /* Seu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C78D1AA22088789B002C6F2C /* Seu.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		107C538620889DA000717C42 /* Sbu.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C78D1A9F20887888002C6F2C /* Sbu.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		107C538720889DF500717C42 /* Seu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C78D1AA22088789B002C6F2C /* Seu.framework */; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -176,6 +179,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				107C538520889DA000717C42 /* Seu.framework in CopyFiles */,
+				107C538620889DA000717C42 /* Sbu.framework in CopyFiles */,
 				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -346,6 +351,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				107C538720889DF500717C42 /* Seu.framework in Frameworks */,
 				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
 				4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */,
@@ -1337,6 +1343,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -1459,6 +1466,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendors",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
