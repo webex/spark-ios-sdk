@@ -138,7 +138,8 @@ class MessageTests: XCTestCase {
         let message = postMessage(personEmail: other.email, text: "", files: [file!])
         validate(message: message)
         let expect = expectation(description: "downLoadingFile")
-        self.messages.downloadFile(file: (message?.files?.first)!, progressHandler: { (porgress) in
+        self.messages.downloadFile((message?.files?.first)!, progressHandler: { (progress) in
+            print(progress)
         }) { (response) in
             expect.fulfill()
             let url = response.data
@@ -146,7 +147,7 @@ class MessageTests: XCTestCase {
             XCTAssertNotNil(image)
         }
         waitForExpectations(timeout: 60) { error in
-            XCTAssertNil(error, "down laod timed out")
+            XCTAssertNil(error, "down load timed out")
         }
 
     }
