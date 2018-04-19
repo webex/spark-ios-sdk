@@ -49,6 +49,9 @@ struct ActivityModel {
 
 extension ActivityModel : ImmutableMappable {
     
+    /// ActivityModel constructor.
+    ///
+    /// - note: for internal use only.
     public init(map: Map) throws {
         self.id = try? map.value("id", using: IdentityTransform(for: IdentityType.message))
         self.created = try? map.value("published", using: CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
@@ -80,7 +83,9 @@ extension ActivityModel : ImmutableMappable {
             }
         }
     }
-
+    /// Mapping activity model to json format.
+    ///
+    /// - since: 1.4.0
     public func mapping(map: Map) {
         self.id >>> map["id"]
         self.roomId >>> map["roomId"]

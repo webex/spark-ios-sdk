@@ -23,16 +23,23 @@ import ObjectMapper
 import Alamofire
 import SwiftyJSON
 
+/// The enumeration of Before types in Spark Message Client.
+///
+/// - since: 1.4.0
 public enum Before {
     case message(String)
     case date(Date)
 }
-
+/// The enumeration of mention types in Spark Message Client.
+///
+/// - since: 1.4.0
 public enum Mention {
     case person(String)
     case all
 }
-
+/// An iOS client wrapper of the Cisco Spark Message APIs.
+///
+/// - since: 1.4.0
 public class MessageClient {
     
     /// Callback when receive Message.
@@ -90,7 +97,7 @@ public class MessageClient {
     /// - parameter roomId: The identifier of the room.
     /// - parameter before: If not nil, only list messages sent only before this condition.
     /// - parameter max: Limit the maximum number of messages in the response, default is 50.
-    /// - parameter mentionedPeople: List messages where the caller is mentioned by specifying "me".
+    /// - parameter mentionedPeople: List messages where the caller is mentioned by using Mention.person("me").
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -265,7 +272,7 @@ public class MessageClient {
     
     /// Posts a plain text message to a room by user email
     ///
-    /// - parameter email: The email of the user where the message is to be posted.
+    /// - parameter personEmail: The EmailAddress of the user to whom the message is to be posted.
     /// - parameter content: The plain text message to be posted to the room.
     /// - parameter medtions: The mention items to be posted to the room.
     /// - parameter files: local file pathes to be uploaded to the room.
@@ -293,9 +300,9 @@ public class MessageClient {
     
     /// Posts a plain text message to a room by user email
     ///
-    /// - parameter email: The email of the user where the message is to be posted.
-    /// - parameter content: The plain text message to be posted to the room.
-    /// - parameter medtions: The mention items to be posted to the room.
+    /// - parameter personId: The personId of the user to whom the message is to be posted.
+    /// - parameter text: The plain text message to be posted to the room.
+    /// - parameter mentions: The mention items to be posted to the room.
     /// - parameter files: local file pathes to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -322,9 +329,9 @@ public class MessageClient {
     /// Posts a plain text message, to a room by roomId.
     ///
     /// - parameter roomId: The identifier of the room where the message is to be posted.
-    /// - parameter content: The plain text message to be posted to the room.
-    /// - parameter medtions: The mention items to be posted to the room.
-    /// - parameter files: local file pathes to be uploaded to the room.
+    /// - parameter text: The plain text message to be posted to the room.
+    /// - parameter mentions: The mention items to be posted to the room.
+    /// - parameter files: local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -367,9 +374,8 @@ public class MessageClient {
         }
     }
     
-    /// Deletes a message, to a room by roomId.
+    /// Deletes a message, to a room by messageId.
     ///
-    /// - parameter roomId: The identifier of the room where the message is to be posted.
     /// - parameter messageId: The messageId to be deleted in the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -388,10 +394,10 @@ public class MessageClient {
         }
     }
     
-    /// Download a file object, download both file body / thumbnail if exist.
+    /// Download a file object, download file to pointed destination.
     ///
-    /// - parameter roomId: The identifier of the room where the fike is fetched.
-    /// - parameter file: file object.
+    /// - parameter file: the RemoteFile object need to be downloaded.
+    /// - parameter to: the local file directory for saving dwonloaded file.
     /// - parameter progressHandler: the download progress indicator.
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
@@ -409,10 +415,10 @@ public class MessageClient {
         }
     }
     
-    /// Download a file object, download both file thumbnail only if exist.
+    /// Download a file object, download file thumbnail.
     ///
-    /// - parameter roomId: The identifier of the room where the fike is fetched.
-    /// - parameter file: file object.
+    /// - parameter file: the RemoteFile object need to be downloaded.
+    /// - parameter to: the local file directory for saving file after download.
     /// - parameter progressHandler: the download progress indicator.
     /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void

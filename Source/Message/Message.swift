@@ -113,6 +113,9 @@ public struct Message {
 }
 
 extension Message : CustomStringConvertible {
+    /// Json format descrition of message.
+    ///
+    /// - since: 1.4.0
     public var description: String {
         get {
             return activity.toJSONString(prettyPrint: true) ?? ""
@@ -120,9 +123,14 @@ extension Message : CustomStringConvertible {
     }
 }
 
+/// A data type represents a local file.
+///
 /// - since: 1.4.0
 public class LocalFile {
 
+    /// A data type represents a local file thumbnail.
+    ///
+    /// - since: 1.4.0
     public class Thumbnail {
         let path: String
         let width: Int
@@ -130,6 +138,9 @@ public class LocalFile {
         let size: UInt64
         let mime: String
         
+        /// LocalFile thumbnail constructor.
+        ///
+        /// - since: 1.4.0
         public init?(path: String, mime: String? = nil, width: Int, height: Int) {
             if width <= 0 || height <= 0 {
                 return nil
@@ -155,6 +166,8 @@ public class LocalFile {
     let progressHandler: ((Double) -> Void)?
     let thumbnail: Thumbnail?
     
+    /// LocalFile constructor.
+    ///
     /// - since: 1.4.0
     public init?(path: String, name: String? = nil, mime: String? = nil, thumbnail: Thumbnail? = nil, progressHandler: ((Double) -> Void)? = nil) {
         let name = name ?? URL(fileURLWithPath: path).lastPathComponent
@@ -172,22 +185,31 @@ public class LocalFile {
         self.size = size
     }
 }
-
+/// Data struct for a remote file.
+///
 /// - since: 1.4.0
 public struct RemoteFile {
 
+    /// A data type represents a thumbnail file.
+    ///
+    /// - since: 1.4.0
     public struct Thumbnail {
-
+        /// The width of thumbanil file.
         public internal(set) var width: Int?
+        /// The height of thumbanil file.
         public internal(set) var height: Int?
+        /// The mimetype of thumbanil file.
         public internal(set) var mimeType: String?
         var url: String?
         var secureContentRef: String?
     }
-    
+    /// The display name of file.
     public internal(set) var displayName: String?
+    /// The mimeType of file.
     public internal(set) var mimeType: String?
+    /// The size in bytes of file.
     public internal(set) var size: UInt64?
+    /// The thumbnail object of file.
     public internal(set) var thumbnail: Thumbnail?
     
     var url: String?
