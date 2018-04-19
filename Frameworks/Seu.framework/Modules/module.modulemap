@@ -1,0 +1,6 @@
+framework module Seu {
+  umbrella header "Seu.h"
+
+  export *
+  module * { export * }
+}

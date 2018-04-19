@@ -16,9 +16,6 @@
 		1066EF112022F877003745D0 /* DownloadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF062022F877003745D0 /* DownloadFileOperation.swift */; };
 		1066EF142022F877003745D0 /* EncryptionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF092022F877003745D0 /* EncryptionKey.swift */; };
 		1066EF152022F877003745D0 /* UploadFileOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1066EF0A2022F877003745D0 /* UploadFileOperation.swift */; };
-		10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		20418FE01EACCFDD00626326 /* KeychainProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */; };
 		204209761F8CD132002D95EB /* MediaShareModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209751F8CD132002D95EB /* MediaShareModel.swift */; };
 		204209781F8CD27F002D95EB /* ConversationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204209771F8CD27F002D95EB /* ConversationClient.swift */; };
@@ -133,8 +130,6 @@
 		B91E75E41CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = B91E758F1CE2D7B70080EAE0 /* SparkSDK-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B91E75E61CE2D7B70080EAE0 /* Webhook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75921CE2D7B70080EAE0 /* Webhook.swift */; };
 		B91E75E81CE2D7B70080EAE0 /* WebhookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */; };
-		C7394FDA20720F2F00E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; };
-		C7394FDB20720F6700E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; };
 		C7625FDB205CBB9700219F95 /* SparkBroadcastExtensionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */; };
 		C7625FE0205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FDF205CBB9700219F95 /* SparkBroadcastExtensionKitTests.swift */; };
 		C7625FEC205CBC4100219F95 /* SparkBroadcastExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */; };
@@ -142,6 +137,9 @@
 		C7625FF1205CC28100219F95 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FF0205CC28100219F95 /* SparkError.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
+		C78D1AA020887888002C6F2C /* Sbu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C78D1A9F20887888002C6F2C /* Sbu.framework */; };
+		C78D1AA12088789B002C6F2C /* Sbu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C78D1A9F20887888002C6F2C /* Sbu.framework */; };
+		C78D1AA32088789B002C6F2C /* Seu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C78D1AA22088789B002C6F2C /* Seu.framework */; };
 		C7957FF8207C6FD30069D672 /* MediaRenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7957FF7207C6FD20069D672 /* MediaRenderView.swift */; };
 		C79F14061FBE7C3A00B43596 /* FakeCallClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */; };
 		C79F14071FBE7C3A00B43596 /* FakeCallModelHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */; };
@@ -152,7 +150,6 @@
 		C79F140C1FBE7C3A00B43596 /* FakeReachabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14041FBE7BE500B43596 /* FakeReachabilityService.swift */; };
 		C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F14051FBE7BE500B43596 /* FakeWebSocketService.swift */; };
 		C79F14101FC3B8C900B43596 /* CallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C79F140E1FC3B88900B43596 /* CallTests.swift */; };
-		C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,8 +176,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C79FBEC9207F2E2500B53AF0 /* SparkSDKBroadcastUtil.framework in CopyFiles */,
-				10EE01662045030100D1DD4A /* SparkSDKEncryptionKit.framework in CopyFiles */,
 				101255982022C3D80072F5DC /* Wme.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,7 +193,6 @@
 		1066EF062022F877003745D0 /* DownloadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadFileOperation.swift; sourceTree = "<group>"; };
 		1066EF092022F877003745D0 /* EncryptionKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncryptionKey.swift; sourceTree = "<group>"; };
 		1066EF0A2022F877003745D0 /* UploadFileOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UploadFileOperation.swift; sourceTree = "<group>"; };
-		10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKEncryptionKit.framework; path = Frameworks/SparkSDKEncryptionKit.framework; sourceTree = "<group>"; };
 		13ACF725E8DF9A0B664825E3 /* Pods-SparkBroadcastExtensionKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkBroadcastExtensionKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit.debug.xcconfig"; sourceTree = "<group>"; };
 		15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDKTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20418FDF1EACCFDD00626326 /* KeychainProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainProtocol.swift; sourceTree = "<group>"; };
@@ -319,7 +313,6 @@
 		B91E75921CE2D7B70080EAE0 /* Webhook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Webhook.swift; sourceTree = "<group>"; };
 		B91E75941CE2D7B70080EAE0 /* WebhookClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebhookClient.swift; sourceTree = "<group>"; };
 		C1494F760D625D66FFBF3F18 /* Pods-SparkSDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkSDK.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK.debug.xcconfig"; sourceTree = "<group>"; };
-		C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkSDKBroadcastUtil.framework; path = Frameworks/SparkSDKBroadcastUtil.framework; sourceTree = "<group>"; };
 		C7625FD2205CBB9600219F95 /* SparkBroadcastExtensionKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SparkBroadcastExtensionKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7625FD5205CBB9600219F95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7625FDA205CBB9600219F95 /* SparkBroadcastExtensionKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SparkBroadcastExtensionKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -330,6 +323,8 @@
 		C7625FF0205CC28100219F95 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
+		C78D1A9F20887888002C6F2C /* Sbu.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sbu.framework; path = Frameworks/Sbu.framework; sourceTree = "<group>"; };
+		C78D1AA22088789B002C6F2C /* Seu.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Seu.framework; path = Frameworks/Seu.framework; sourceTree = "<group>"; };
 		C7957FF7207C6FD20069D672 /* MediaRenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediaRenderView.swift; sourceTree = "<group>"; };
 		C79F13FE1FBE7BE500B43596 /* FakeCallClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallClient.swift; sourceTree = "<group>"; };
 		C79F13FF1FBE7BE500B43596 /* FakeCallModelHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeCallModelHelper.swift; sourceTree = "<group>"; };
@@ -351,7 +346,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10EE01632045005600D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
 				1012559A2022C3E80072F5DC /* Wme.framework in Frameworks */,
 				3D15B7101D3E176C003BB682 /* SparkSDK.framework in Frameworks */,
 				4A985AE5CCD64A08A1EAA48A /* Pods_SparkSDKTests.framework in Frameworks */,
@@ -362,10 +356,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10EE01602044FE9900D1DD4A /* SparkSDKEncryptionKit.framework in Frameworks */,
+				C78D1AA32088789B002C6F2C /* Seu.framework in Frameworks */,
+				C78D1AA12088789B002C6F2C /* Sbu.framework in Frameworks */,
 				105E8EFA1FF2976200EB33F1 /* Wme.framework in Frameworks */,
 				8F76AFC66858F3A389132CA8 /* Pods_SparkSDK.framework in Frameworks */,
-				C7394FDA20720F2F00E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +367,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7394FDB20720F6700E1A190 /* SparkSDKBroadcastUtil.framework in Frameworks */,
+				C78D1AA020887888002C6F2C /* Sbu.framework in Frameworks */,
 				733487BFBC08261DFFFE59F4 /* Pods_SparkBroadcastExtensionKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -512,8 +506,8 @@
 		8838B91D70254D46671B19F1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C7394FD920720F2F00E1A190 /* SparkSDKBroadcastUtil.framework */,
-				10EE015F2044FE9900D1DD4A /* SparkSDKEncryptionKit.framework */,
+				C78D1AA22088789B002C6F2C /* Seu.framework */,
+				C78D1A9F20887888002C6F2C /* Sbu.framework */,
 				105E8EF81FF2976200EB33F1 /* Wme.framework */,
 				6080E1EF317F17286A8D40A5 /* Pods_SparkSDK.framework */,
 				04C39C57C69FBCA5500482A1 /* Pods_SparkSDKTests.framework */,
@@ -1388,6 +1382,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1509,6 +1504,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1569,6 +1565,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -1700,6 +1697,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -1742,6 +1740,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
@@ -1782,6 +1781,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Frameworks",
