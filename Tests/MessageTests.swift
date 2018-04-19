@@ -133,6 +133,25 @@ class MessageTests: XCTestCase {
         XCTAssertNotNil(message?.files)
     }
     
+    func testPostingMessageWithFileAndDwonLoadFile() {
+        let file = LocalFile(path: self.generateLocalFile()!)
+        let message = postMessage(personEmail: other.email, text: "", files: [file!])
+        validate(message: message)
+        let expect = expectation(description: "downLoadingFile")
+        self.messages.downloadFile((message?.files?.first)!, progressHandler: { (progress) in
+            print(progress)
+        }) { (response) in
+            expect.fulfill()
+            let url = response.data
+            let image = UIImage(contentsOfFile: (url?.path)!)
+            XCTAssertNotNil(image)
+        }
+        waitForExpectations(timeout: 60) { error in
+            XCTAssertNil(error, "down load timed out")
+        }
+
+    }
+    
     func testPostingMessageUsingPersonEmailWithTextAndFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let message = postMessage(personEmail: other.email, text: text, files: [file!])
@@ -356,7 +375,7 @@ class MessageTests: XCTestCase {
                 return nil
             }
             let resultImg = UIImage(cgImage: cgImage)
-            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.downloadsDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/SparkUpLoads/"
+            let path = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.downloadsDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).first! + "/"
             let date : Date = Date()
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMMddyyyyhhmmSSS"
