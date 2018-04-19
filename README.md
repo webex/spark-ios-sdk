@@ -35,7 +35,7 @@ Assuming you already have an Xcode project, e.g. _MySparkApp_, for your iOS app,
     ```ruby
     source 'https://github.com/CocoaPods/Specs.git'
 
-    platform :ios, '9.0'
+    platform :ios, '10.0'
     use_frameworks!
 
     target 'MySparkApp' do
