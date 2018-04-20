@@ -61,8 +61,8 @@ class MessageClientImpl {
     private var ephemeralKey: String?
     
     private var ephemeralKeyRequest: (KmsEphemeralKeyRequest, (Error?) -> Void)?
-    private var keyMaterialCompletionHandlers: [String: (Result<(String, String)>) -> Void] = [String: (Result<(String, String)>) -> Void]()
-    private var keysCompletionHandlers: [String: (Result<(String, String)>) -> Void] = [String: (Result<(String, String)>) -> Void]()
+    private var keyMaterialCompletionHandlers: [String: [(Result<(String, String)>) -> Void]] = [String: [(Result<(String, String)>) -> Void]]()
+    private var keysCompletionHandlers: [String: [(Result<(String, String)>) -> Void]] = [String: [(Result<(String, String)>) -> Void]]()
     private var encryptionKeys: [String: EncryptionKey] = [String: EncryptionKey]()
     private var rooms: [String: String] = [String: String]()
     
@@ -363,15 +363,17 @@ class MessageClientImpl {
             }
             else if let key = self.ephemeralKey, let data = try? CjoseWrapper.content(fromCiphertext: response, key: key), let json = try? JSON(data: data) {
                 if let key = json["key"].object as? [String:Any] {
-                    if let jwk = key["jwk"], let uri = key["uri"], let keyMaterial = JSON(jwk).rawString(),
-                        let keyUri = JSON(uri).rawString(),
-                        let handler = self.keyMaterialCompletionHandlers.removeValue(forKey: keyUri) {
-                        handler(Result.success((keyUri, keyMaterial)))
+                    if let jwk = key["jwk"], let uri = key["uri"], let keyMaterial = JSON(jwk).rawString(), let keyUri = JSON(uri).rawString() {
+                        if var handlers = self.keyMaterialCompletionHandlers[keyUri], handlers.count > 0 {
+                            let handler = handlers.removeFirst()
+                            self.keyMaterialCompletionHandlers[keyUri] = handlers
+                            handler(Result.success((keyUri, keyMaterial)))
+                        }
                     }
                 }
                 else if let dict = (json["keys"].object as? [[String : Any]])?.first {
-                    if let key = try? KmsKey(from: dict), let handler = self.keysCompletionHandlers.popFirst()?.value {
-                        handler(Result.success((key.uri, key.jwk)))
+                    if let key = try? KmsKey(from: dict), let handlers = self.keysCompletionHandlers.popFirst()?.value  {
+                        handlers.forEach { $0(Result.success((key.uri, key.jwk))) }
                     }
                 }
             }
@@ -422,11 +424,13 @@ class MessageClientImpl {
                         let serialize = request.serialize(),
                         let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: ephemeralKey) {
                         parameters = ["kmsMessages": [chiperText], "destination": "unused" ] as [String : Any]
-                        self.keyMaterialCompletionHandlers[encryptionUrl] = completionHandler
+                        var handlers: [(Result<(String, String)>) -> Void] = self.keyMaterialCompletionHandlers[encryptionUrl] ?? []
+                        handlers.append(completionHandler)
+                        self.keyMaterialCompletionHandlers[encryptionUrl] = handlers
                     }
                     failed = {
+                        self.keyMaterialCompletionHandlers[encryptionUrl]?.forEach { $0(Result.failure(MSGError.keyMaterialFetchFail)) }
                         self.keyMaterialCompletionHandlers[encryptionUrl] = nil
-                        completionHandler(Result.failure(MSGError.keyMaterialFetchFail))
                     }
                 }
                 else {
@@ -434,12 +438,14 @@ class MessageClientImpl {
                         request.additionalAttributes = ["count": 1]
                         if let serialize = request.serialize(), let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: ephemeralKey) {
                             parameters = ["kmsMessages": [chiperText], "destination": "unused" ] as [String: Any]
-                            self.keysCompletionHandlers[roomId] = completionHandler
+                            var handlers: [(Result<(String, String)>) -> Void] = self.keysCompletionHandlers[roomId] ?? []
+                            handlers.append(completionHandler)
+                            self.keysCompletionHandlers[roomId] = handlers
                         }
                     }
                     failed = {
+                        self.keysCompletionHandlers[roomId]?.forEach { $0(Result.failure(MSGError.keyMaterialFetchFail)) }
                         self.keysCompletionHandlers[roomId] = nil
-                        completionHandler(Result.failure(MSGError.keyMaterialFetchFail))
                     }
                 }
                 if let parameters = parameters, parameters.count >= 2 {

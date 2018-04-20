@@ -122,7 +122,7 @@ public class Phone {
     private var mediaContext: MediaSessionWrapper?
 
     private(set) var isRegistered: Bool = false
-    private(set) var isConnected: Bool = false
+    private(set) var connected: Bool = false
     
     var debug = true;
     
@@ -166,6 +166,10 @@ public class Phone {
                         strong.doConversationEvent(model);
                     case .kms(let model):
                         strong.doKmsEvent(model);
+                    case .connected:
+                        strong.connected = true
+                    case .disconnected:
+                        strong.connected = false
                     case .failure(_):
                         strong.register {_ in
                         }
@@ -205,7 +209,6 @@ public class Phone {
                         if let strong = self {
                             strong.queue.underlying.async {
                                 strong.fetchActiveCalls()
-                                strong.isConnected = true
                                 DispatchQueue.main.async {
                                     strong.reachability.fetch()
                                     strong.startObserving()
@@ -238,7 +241,6 @@ public class Phone {
             self.devices.deregisterDevice(queue: self.queue.underlying) { error in
                 self.isRegistered = false
                 self.webSocket.disconnect()
-                self.isConnected = false
                 DispatchQueue.main.async {
                     self.reachability.clear()
                     self.stopObserving()
@@ -618,19 +620,6 @@ public class Phone {
         let mediaShare : MediaShareModel = MediaShareModel(shareType: MediaShareModel.MediaShareType.screen, url:call.model.mediaShareUrl, shareFloor: floor)
         self.updateMeidaShare(call: call, mediaShare: mediaShare, completionHandler: completionHandler)
     }
-
-    func doSomethingAfterRegistered(block: @escaping (Error?) -> Void) {
-        self.queue.underlying.async {
-            if self.isConnected {
-                block(nil)
-            }
-            else {
-                self.register { error in
-                    block(error)
-                }
-            }
-        }
-    }
     
     private func doLocusResponse(_ ret: LocusResult) {
         switch ret {
@@ -843,6 +832,15 @@ public class Phone {
     
     @objc func onApplicationDidBecomeActive() {
         SDKLogger.shared.info("Application did become active")
+        self.connectToWebSocket()
+    }
+    
+    @objc func onApplicationDidEnterBackground() {
+        SDKLogger.shared.info("Application did enter background")
+        self.disconnectFromWebSocket()
+    }
+    
+    private func connectToWebSocket() {
         if let device = self.devices.device {
             self.webSocket.connect(device.webSocketUrl) { [weak self] error in
                 if let error = error {
@@ -855,9 +853,8 @@ public class Phone {
         }
     }
     
-    @objc func onApplicationDidEnterBackground() {
-        SDKLogger.shared.info("Application did enter background")
-        self.webSocket.disconnect();
+    private func disconnectFromWebSocket() {
+        self.webSocket.disconnect()
     }
     
     private func requestMediaAccess(option: MediaOption, completionHandler: @escaping () -> Void) {

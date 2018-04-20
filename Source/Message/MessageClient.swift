@@ -49,6 +49,8 @@ public class MessageClient {
     
     private let phone: Phone
     
+    private let queue = SerialQueue()
+    
     init(phone: Phone) {
         self.phone = phone
     }
@@ -101,7 +103,7 @@ public class MessageClient {
                      mentionedPeople: Mention? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<[Message]>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.list(roomId: roomId, mentionedPeople: mentionedPeople, before: before, max: max, queue: queue, completionHandler: completionHandler)
             }
@@ -279,7 +281,7 @@ public class MessageClient {
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.post(person: personEmail.toString(), text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
@@ -307,7 +309,7 @@ public class MessageClient {
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.post(person: personId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
@@ -335,7 +337,7 @@ public class MessageClient {
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.post(roomId: roomId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
             }
@@ -355,7 +357,7 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.2.0
     public func get(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.get(messageId: messageId, decrypt: true, queue: queue, completionHandler: completionHandler)
             }
@@ -376,7 +378,7 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.2.0
     public func delete(messageId: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.delete(messageId: messageId, queue: queue, completionHandler: completionHandler)
             }
@@ -397,7 +399,7 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func downloadFile(_ file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.downloadFile(file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
             }
@@ -418,7 +420,7 @@ public class MessageClient {
     /// - returns: Void
     /// - since: 1.4.0
     public func downloadThumbnail(for file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
-        self.phone.doSomethingAfterRegistered { error in
+        self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
                 impl.downloadThumbnail(for: file, to: to, progressHandler: progressHandler, completionHandler: completionHandler)
             }
@@ -437,6 +439,20 @@ public class MessageClient {
             }
             else {
                 completionHandler(Result.failure(response.error ?? MessageClientImpl.MSGError.downloadError))
+            }
+        }
+    }
+    
+    private func doSomethingAfterRegistered(block: @escaping (Error?) -> Void) {
+        self.queue.sync {
+            if self.phone.connected {
+                block(nil)
+            }
+            else {
+                self.phone.register { error in
+                    self.queue.yield()
+                    block(error)
+                }
             }
         }
     }

@@ -26,6 +26,8 @@ import ObjectMapper
 class WebSocketService: WebSocketAdvancedDelegate {
     
     enum MercuryEvent {
+        case connected
+        case disconnected
         case call(CallModel)
         case activity(ActivityModel)
         case kms(KmsMessageModel)
@@ -90,6 +92,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
             block(nil)
             self.onConnected = nil
         }
+        self.onEvent?(MercuryEvent.connected)
         self.connectionRetryCounter.reset()
     }
     
