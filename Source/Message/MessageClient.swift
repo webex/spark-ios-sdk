@@ -27,14 +27,18 @@ import SwiftyJSON
 ///
 /// - since: 1.4.0
 public enum Before {
+    /// Before one particular message by message Id.
     case message(String)
+    /// Before a particular time point by date.
     case date(Date)
 }
 /// The enumeration of mention types in Spark Message Client.
 ///
 /// - since: 1.4.0
 public enum Mention {
+    /// Mention one particular person by person Id.
     case person(String)
+    /// Mention all people in a room.
     case all
 }
 /// An iOS client wrapper of the Cisco Spark Message APIs.
@@ -66,7 +70,7 @@ public class MessageClient {
     ///
     /// - parameter roomId: The identifier of the room.
     /// - parameter before: If not nil, only list messages sent only before this date and time, in ISO8601 format.
-    /// - parameter beforeMessage: if not nil, only list messages sent only before this message by id.
+    /// - parameter beforeMessage: If not nil, only list messages sent only before this message by id.
     /// - parameter max: Limit the maximum number of messages in the response, default is 50.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -270,12 +274,12 @@ public class MessageClient {
         }
     }
     
-    /// Posts a plain text message to a room by user email
+    /// Posts a plain text message, optionally a media content attachment, to a room by user email.
     ///
     /// - parameter personEmail: The EmailAddress of the user to whom the message is to be posted.
     /// - parameter content: The plain text message to be posted to the room.
     /// - parameter medtions: The mention items to be posted to the room.
-    /// - parameter files: local file pathes to be uploaded to the room.
+    /// - parameter files: Local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -298,12 +302,12 @@ public class MessageClient {
         }
     }
     
-    /// Posts a plain text message to a room by user email
+    /// Posts a plain text message, optionally a media content attachment, to a room by person id.
     ///
     /// - parameter personId: The personId of the user to whom the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
     /// - parameter mentions: The mention items to be posted to the room.
-    /// - parameter files: local file pathes to be uploaded to the room.
+    /// - parameter files: Local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -326,12 +330,12 @@ public class MessageClient {
         }
     }
     
-    /// Posts a plain text message, to a room by roomId.
+    /// Posts a plain text message, optionally a media content attachment, to a room by roomId.
     ///
     /// - parameter roomId: The identifier of the room where the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
     /// - parameter mentions: The mention items to be posted to the room.
-    /// - parameter files: local file objects to be uploaded to the room.
+    /// - parameter files: Local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void
@@ -394,12 +398,12 @@ public class MessageClient {
         }
     }
     
-    /// Download a file object, download file to pointed destination.
+    /// Download a file object, save the file to pointed destination.
     ///
-    /// - parameter file: the RemoteFile object need to be downloaded.
-    /// - parameter to: the local file directory for saving dwonloaded file.
-    /// - parameter progressHandler: the download progress indicator.
-    /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
+    /// - parameter file: The RemoteFile object need to be downloaded.
+    /// - parameter to: The local file directory for saving dwonloaded file.
+    /// - parameter progressHandler: The download progress indicator.
+    /// - parameter completionHandler: Downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
     public func downloadFile(_ file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
@@ -415,12 +419,12 @@ public class MessageClient {
         }
     }
     
-    /// Download a file object, download file thumbnail.
+    /// Download a file object, save the file thumbnail.
     ///
-    /// - parameter file: the RemoteFile object need to be downloaded.
-    /// - parameter to: the local file directory for saving file after download.
-    /// - parameter progressHandler: the download progress indicator.
-    /// - parameter completionHandler: downloaded file local address wiil be stored in "file.localFileUrl"
+    /// - parameter file: The RemoteFile object need to be downloaded.
+    /// - parameter to: The local file directory for saving file after download.
+    /// - parameter progressHandler: The download progress indicator.
+    /// - parameter completionHandler: Downloaded file local address wiil be stored in "file.localFileUrl"
     /// - returns: Void
     /// - since: 1.4.0
     public func downloadThumbnail(for file: RemoteFile, to: URL? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {

@@ -25,7 +25,9 @@ import ObjectMapper
 ///
 /// - since: 1.4.0
 public enum MessageEvent {
+    /// The call back when receive a new message
     case messageReceived(Message)
+    /// The call back when a message was deleted
     case messageDeleted(String)
 }
 
