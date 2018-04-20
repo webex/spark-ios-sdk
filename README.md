@@ -221,7 +221,82 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
+    
+9. Screen share (sending):
 
+    9.1 In your containing app:
+    ```swift
+    spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideoScreenShare(video: ..., screenShare: ..., applicationGroupIdentifier: "group.your.application.group.identifier"))) { ret in
+        switch ret {
+        case .success(let call):
+            call.oniOSBroadcastingChanged = {
+                event in
+                if #available(iOS 11.2, *) {
+                    switch event {
+                    case .extensionConnected :
+                        call.startSharing() {
+                            error in
+                            // ...
+                        }
+                        break
+                    case .extensionDisconnected:
+                        call.stopSharing() {
+                            error in
+                            // ...
+                        }
+                        break
+                    }
+                }
+            }
+            }
+        case .failure(let error):
+            // failure
+        }
+    }
+    ```
+    9.2 In your broadcast upload extension sample handler:
+    ```swift
+    override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
+        // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
+        SparkBroadcastExtension.sharedInstance.start(applicationGroupIdentifier: "group.your.application.group.identifier") {
+            error in
+            if let sparkError = error {
+               // ...
+            } else {
+                SparkBroadcastExtension.sharedInstance.onError = {
+                    error in
+                    // ...
+                }
+                SparkBroadcastExtension.sharedInstance.onStateChange = {
+                    state in
+                    // state change
+                }
+            }
+        }
+    }
+    
+    override func broadcastFinished() {
+        // User has requested to finish the broadcast.
+        SparkBroadcastExtension.sharedInstance.finish()
+    }
+    
+    override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
+        switch sampleBufferType {
+            case RPSampleBufferType.video:
+                // Handle video sample buffer
+                SparkBroadcastExtension.sharedInstance.handleVideoSampleBuffer(sampleBuffer: sampleBuffer)
+                break
+            case RPSampleBufferType.audioApp:
+                // Handle audio sample buffer for app audio
+                break
+            case RPSampleBufferType.audioMic:
+                // Handle audio sample buffer for mic audio
+                break
+        }
+    }
+    ```
+    9.3 Get more technical details about the [Containing App & Broadcast upload extension](https://github.com/webex/spark-ios-sdk/wiki/Implementation-Broadcast-upload-extension) and [Set up an App Group](https://github.com/webex/spark-ios-sdk/wiki/Set-up-an-App-Group)
+    
 ## License
 
 &copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
