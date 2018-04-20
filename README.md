@@ -6,7 +6,7 @@
 
 The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.
 
-This SDK is written in [Swift 3](https://developer.apple.com/swift) and requires **iOS 9** or later.
+This SDK is written in [Swift 4](https://developer.apple.com/swift) and requires **iOS 10** or later.
 
 ## Table of Contents
 
@@ -34,12 +34,17 @@ Assuming you already have an Xcode project, e.g. _MySparkApp_, for your iOS app,
 
     ```ruby
     source 'https://github.com/CocoaPods/Specs.git'
-
-    platform :ios, '10.0'
+    
     use_frameworks!
 
     target 'MySparkApp' do
+      platform :ios, '10.0'
       pod 'SparkSDK'
+    end
+    
+    target 'MySparkAppBroadcastExtension' do
+        platform :ios, '11.2'
+        pod 'SparkBroadcastExtensionKit'
     end
     ```
 
