@@ -124,17 +124,7 @@ Here are some examples of how to use the iOS SDK in your app.
             // ...
         }
     }
-
-    // ...
-
-    spark.messages.post(personEmail: email, text: "Hello there") { response in
-        switch response.result {
-        case .success(let message):
-            // ...
-        case .failure(let error):
-            // ...
-        }
-    }
+    
     ```
 
 5. Make an outgoing call:
@@ -221,10 +211,34 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
-    
-9. Screen share (sending):
+9. Post a message:
+    ```
+    // ...
+    spark.messages.post(personEmail: email, text: "Hello there") { response in
+        switch response.result {
+        case .success(let message):
+            // ...
+        case .failure(let error):
+            // ...
+        }
+    }
+    ```
+10. Receie a message:
+    ```
+    spark.messages.onEvent = { messageEvent in
+        switch messageEvent{
+        case .messageReceived(let message):
+            // ...
+            break
+        case .messageDeleted(let error):
+            // ...
+            break
+        }
+    }
+    ```
+11. Screen share (sending):
 
-    9.1 In your containing app:
+    11.1 In your containing app:
     ```swift
     spark.phone.dial("coworker@acm.com", option: MediaOption.audioVideoScreenShare(video: ..., screenShare: ..., applicationGroupIdentifier: "group.your.application.group.identifier"))) { ret in
         switch ret {
@@ -254,7 +268,7 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
-    9.2 In your broadcast upload extension sample handler:
+    11.2 In your broadcast upload extension sample handler:
     ```swift
     override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
         // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional.
@@ -295,7 +309,7 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
-    9.3 Get more technical details about the [Containing App & Broadcast upload extension](https://github.com/webex/spark-ios-sdk/wiki/Implementation-Broadcast-upload-extension) and [Set up an App Group](https://github.com/webex/spark-ios-sdk/wiki/Set-up-an-App-Group)
+    11.3 Get more technical details about the [Containing App & Broadcast upload extension](https://github.com/webex/spark-ios-sdk/wiki/Implementation-Broadcast-upload-extension) and [Set up an App Group](https://github.com/webex/spark-ios-sdk/wiki/Set-up-an-App-Group)
     
 ## License
 
