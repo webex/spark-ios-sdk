@@ -369,6 +369,9 @@ class MessageClientImpl {
                             self.keyMaterialCompletionHandlers[keyUri] = handlers
                             handler(Result.success((keyUri, keyMaterial)))
                         }
+                        if let handlers = self.keyMaterialCompletionHandlers[keyUri], handlers.count == 0 {
+                            self.keyMaterialCompletionHandlers[keyUri] = nil
+                        }
                     }
                 }
                 else if let dict = (json["keys"].object as? [[String : Any]])?.first {

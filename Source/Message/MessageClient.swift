@@ -456,6 +456,7 @@ public class MessageClient {
     private func doSomethingAfterRegistered(block: @escaping (Error?) -> Void) {
         self.queue.sync {
             if self.phone.connected {
+                self.queue.yield()
                 block(nil)
             }
             else {
