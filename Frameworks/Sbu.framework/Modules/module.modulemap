@@ -1,0 +1,11 @@
+framework module Sbu {
+  umbrella header "Sbu.h"
+
+  export *
+  module * { export * }
+}
+
+module Sbu.Swift {
+    header "Sbu-Swift.h"
+    requires objc
+}

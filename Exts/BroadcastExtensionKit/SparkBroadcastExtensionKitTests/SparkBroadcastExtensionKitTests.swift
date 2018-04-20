@@ -7,7 +7,6 @@
 //
 
 import XCTest
-@testable import SparkBroadcastExtensionKit
 
 class SparkBroadcastExtensionKitTests: XCTestCase {
     

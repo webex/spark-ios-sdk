@@ -48,6 +48,8 @@ class SimpleAuthenticator : Authenticator {
         completionHandler(accessToken)
     }
     
+    /// - see: See Authenticator.refreshToken(completionHandler:)
+    /// - since: 1.4.0
     public func refreshToken(completionHandler: @escaping (String?) -> Void){
         completionHandler(accessToken)
     }

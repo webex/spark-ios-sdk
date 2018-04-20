@@ -19,7 +19,7 @@
 // THE SOFTWARE.
 
 import Foundation
-import SparkSDKBroadcastUtil
+import Sbu
 
 @available(iOS 11.2,*)
 class SparkBroadcastClient : BroadcastConnectionClientDelegate{

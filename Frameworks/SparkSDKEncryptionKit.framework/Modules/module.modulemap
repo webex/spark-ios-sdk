@@ -1,6 +1,0 @@
-framework module SparkSDKEncryptionKit {
-  umbrella header "SparkSDKEncryptionKit.h"
-
-  export *
-  module * { export * }
-}
