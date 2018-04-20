@@ -213,7 +213,6 @@ Here are some examples of how to use the iOS SDK in your app.
     ```
 9. Post a message:
     ```
-    // ...
     spark.messages.post(personEmail: email, text: "Hello there") { response in
         switch response.result {
         case .success(let message):
