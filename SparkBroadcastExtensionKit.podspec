@@ -11,6 +11,5 @@ Pod::Spec.new do |s|
   s.preserve_paths = 'Frameworks/*.framework'
   s.xcconfig = {'FRAMEWORK_SEARCH_PATHS' => '$(PODS_ROOT)/SparkBroadcastExtensionKit/Frameworks',
                 'ENABLE_BITCODE' => 'NO',
-                }
-  s.vendored_frameworks = "Frameworks/*.framework"                
+                }               
 end
