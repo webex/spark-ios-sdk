@@ -34,6 +34,7 @@ class DownloadFileOperation : NSObject, URLSessionDataDelegate {
     private var outputStream : OutputStream?
     private var downloadSeesion: URLSession?
     private var totalSize: UInt64?
+    private var countSize: UInt64 = 0
 
     init(authenticator: Authenticator, uuid: String, source: String, displayName: String?, secureContentRef: String?, thnumnail: Bool, target: URL?, queue: DispatchQueue?, progressHandler: ((Double) -> Void)?, completionHandler: @escaping ((Result<URL>) -> Void)) {
         self.authenticator = authenticator
@@ -107,7 +108,8 @@ class DownloadFileOperation : NSObject, URLSessionDataDelegate {
 //        self.outputStream?.write(buffer, maxLength: data.count)
         _ = self.outputStream?.write(data: data)
         self.queue.async {
-            self.progressHandler?(Double(data.count)/Double(self.totalSize!))
+            self.countSize = self.countSize + UInt64(data.count)
+            self.progressHandler?(Double(self.countSize)/Double(self.totalSize!))
         }
     }
     
