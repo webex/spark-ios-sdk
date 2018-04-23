@@ -234,7 +234,7 @@ Here are some examples of how to use the iOS SDK in your app.
         case .messageReceived(let message):
             // ...
             break
-        case .messageDeleted(let error):
+        case .messageDeleted(let messageId):
             // ...
             break
         }
