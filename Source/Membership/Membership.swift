@@ -22,6 +22,8 @@ import Foundation
 import ObjectMapper
 
 /// Membership contents.
+///
+/// - since: 1.2.0
 public struct Membership {
     
     /// The id of this membership.

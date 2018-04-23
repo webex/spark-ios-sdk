@@ -32,6 +32,7 @@ public enum Before {
     /// Before a particular time point by date.
     case date(Date)
 }
+
 /// The enumeration of mention types in Spark Message Client.
 ///
 /// - since: 1.4.0
@@ -41,6 +42,7 @@ public enum Mention {
     /// Mention all people in a room.
     case all
 }
+
 /// An iOS client wrapper of the Cisco Spark Message APIs.
 ///
 /// - since: 1.4.0

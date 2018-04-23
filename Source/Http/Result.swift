@@ -21,6 +21,8 @@
 import Foundation
 
 /// Service request results.
+///
+/// - since: 1.2.0
 public enum Result<T> {
     
     /// Result for Success, with the expected object.

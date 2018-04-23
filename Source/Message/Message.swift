@@ -187,6 +187,7 @@ public class LocalFile {
         self.size = size
     }
 }
+
 /// Data struct for a remote file.
 ///
 /// - since: 1.4.0
@@ -205,6 +206,7 @@ public struct RemoteFile {
         var url: String?
         var secureContentRef: String?
     }
+    
     /// The display name of file.
     public internal(set) var displayName: String?
     /// The mimeType of file.

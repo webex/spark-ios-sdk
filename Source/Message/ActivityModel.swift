@@ -85,7 +85,7 @@ extension ActivityModel : ImmutableMappable {
     }
     /// Mapping activity model to json format.
     ///
-    /// - since: 1.4.0
+    /// - note: for internal use only.
     public func mapping(map: Map) {
         self.id >>> map["id"]
         self.roomId >>> map["roomId"]
