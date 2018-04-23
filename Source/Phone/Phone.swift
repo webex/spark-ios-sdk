@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -131,6 +131,9 @@ public class Phone {
         return self.devices.device != nil
     }
     
+    /// Indicates the SDK how to run when the App switched between foreground and background.
+    ///
+    /// - since: 1.4.0
     public var runMode: RunMode {
         set {
             switch newValue {
