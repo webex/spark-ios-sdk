@@ -26,12 +26,11 @@ import ObjectMapper
 class WebSocketService: WebSocketAdvancedDelegate {
     
     enum MercuryEvent {
-        case connected
-        case disconnected
-        case call(CallModel)
-        case activity(ActivityModel)
-        case kms(KmsMessageModel)
-        case failure(Error?)
+        case connected(Error?)
+        case disconnected(Error?)
+        case recvCall(CallModel)
+        case recvActivity(ActivityModel)
+        case recvKms(KmsMessageModel)
     }
     
     var onEvent: ((MercuryEvent) -> Void)?
@@ -92,7 +91,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
             block(nil)
             self.onConnected = nil
         }
-        self.onEvent?(MercuryEvent.connected)
+        self.onEvent?(MercuryEvent.connected(nil))
         self.connectionRetryCounter.reset()
     }
     
@@ -102,12 +101,14 @@ class WebSocketService: WebSocketAdvancedDelegate {
             let code = (error as NSError?)?.code ?? -7000
             let reason = error?.localizedDescription ?? "Websocket cannot connect"
             block(SparkError.serviceFailed(code: code, reason: reason))
+            self.onEvent?(MercuryEvent.connected(SparkError.serviceFailed(code: code, reason: reason)))
             self.onConnected = nil
         }
         else if let code = (error as NSError?)?.code, let desc = error?.localizedDescription {
             SDKLogger.shared.info("Websocket is disconnected: \(code), \(desc)")
             if self.socket == nil {
                 SDKLogger.shared.info("Websocket is disconnected on purpose")
+                self.onEvent?(MercuryEvent.disconnected(nil))
             }
             else {
                 let backoffTime = connectionRetryCounter.next()
@@ -116,7 +117,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
                         // Abnormal disconnection, re-register device.
                         SDKLogger.shared.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
                         self.socket = nil
-                        self.onEvent?(MercuryEvent.failure(error))
+                        self.onEvent?(MercuryEvent.disconnected(error))
                     }
                     else {
                         // Unexpected disconnection, reconnect socket.
@@ -128,6 +129,10 @@ class WebSocketService: WebSocketAdvancedDelegate {
                     }
                 }
             }
+        }
+        else {
+            SDKLogger.shared.info("Websocket is disconnected by remote on purpose")
+            self.onEvent?(MercuryEvent.disconnected(nil))
         }
     }
     
@@ -147,7 +152,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
                         let call = event.callModel,
                         let type = event.type {
                         SDKLogger.shared.info("Receive locus event: \(type)")
-                        self.onEvent?(MercuryEvent.call(call))
+                        self.onEvent?(MercuryEvent.recvCall(call))
                     }
                     else {
                         SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventData.object)")
@@ -159,14 +164,14 @@ class WebSocketService: WebSocketAdvancedDelegate {
                         let verb = activityObj["verb"] as? String,
                         verb == "post" || verb == "share" || verb == "delete" {
                         if let activity = try? Mapper<ActivityModel>().map(JSON: activityObj) {
-                            self.onEvent?(MercuryEvent.activity(activity))
+                            self.onEvent?(MercuryEvent.recvActivity(activity))
                         }
                     }
                 }
                 else if eventType == "encryption.kms_message" {
                     if let kmsObj = eventData["encryption"].object as? [String: Any],
                         let kms = Mapper<KmsMessageModel>().map(JSON: kmsObj) {
-                        self.onEvent?(MercuryEvent.kms(kms))
+                        self.onEvent?(MercuryEvent.recvKms(kms))
                     }
                 }
             }
