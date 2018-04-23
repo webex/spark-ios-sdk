@@ -67,18 +67,6 @@ public class Phone {
         case maxBandwidthAudio = 64000
     }
     
-    /// Indicates the SDK how to run when the App switched between foreground and background.
-    ///
-    /// - since: 1.4.0
-    public enum RunMode {
-        // The SDK automatically detects the current running state and performs the corresponding processing.
-        case automatic
-        // Tell the SDK that the App is now running in the background.
-        case background
-        // Tell the SDK that the App is now running in the foreground.
-        case foreground
-    }
-    
     /// The max bandwidth for audio in unit bps for the call.
     /// Only effective if set before the start of call.
     /// if 0, default value of 64 * 1000 is used.
@@ -131,27 +119,6 @@ public class Phone {
         return self.devices.device != nil
     }
     
-    /// Indicates the SDK how to run when the App switched between foreground and background.
-    ///
-    /// - since: 1.4.0
-    public var runMode: RunMode {
-        set {
-            switch newValue {
-            case .automatic:
-                self.detectsMode = true
-            case .background:
-                self.detectsMode = false
-                self.disconnectFromWebSocket()
-            case .foreground:
-                self.detectsMode = false
-                self.connectToWebSocket()
-            }
-        }
-        get {
-            return self.detectsMode ? RunMode.automatic : (self.connected ? RunMode.foreground : RunMode.background)
-        }
-    }
-    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -165,7 +132,6 @@ public class Phone {
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
-    private var detectsMode: Bool = true
     
     var debug = true;
     
@@ -282,7 +248,7 @@ public class Phone {
     public func deregister(_ completionHandler: @escaping ((Error?) -> Void)) {
         self.queue.sync {
             self.devices.deregisterDevice(queue: self.queue.underlying) { error in
-                self.webSocket.disconnect()
+                self.disconnectFromWebSocket()
                 DispatchQueue.main.async {
                     self.reachability.clear()
                     self.stopObserving()
@@ -292,15 +258,7 @@ public class Phone {
             }
         }
     }
-    
-    public func connec() {
-        self.connectToWebSocket()
-    }
-    
-    public func disconnect() {
-        self.disconnectFromWebSocket()
-    }
-    
+        
     /// Makes a call to an intended recipient on behalf of the authenticated user.
     /// It supports the following address formats for the receipient:
     ///
@@ -882,16 +840,12 @@ public class Phone {
     
     @objc func onApplicationDidBecomeActive() {
         SDKLogger.shared.info("Application did become active")
-        if self.detectsMode {
-            self.connectToWebSocket()
-        }
+        self.connectToWebSocket()
     }
     
     @objc func onApplicationDidEnterBackground() {
         SDKLogger.shared.info("Application did enter background")
-        if self.detectsMode {
-            self.disconnectFromWebSocket()
-        }
+        self.disconnectFromWebSocket()
     }
     
     private func connectToWebSocket() {
