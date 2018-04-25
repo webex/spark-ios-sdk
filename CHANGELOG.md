@@ -48,7 +48,7 @@ All notable changes to this project will be documented in this file.
 Released on 2018-05-15.
 
 #### Added
-- support screen sharing for both [sending and receiving](https://github.com/webex/spark-ios-sdk/blob/EFT/1.4.0/README.md#usage), see more details [here](https://github.com/webex/spark-ios-sdk/wiki/screen-sharing...TBD)
+- Support screen sharing for both [sending and receiving](https://github.com/webex/spark-ios-sdk/blob/EFT/1.4.0/README.md#usage), see more details [here](https://github.com/webex/spark-ios-sdk/wiki/screen-sharing...TBD)
 - A new API to refresh token for [authentication](https://webex.github.io/spark-ios-sdk/Protocols/Authenticator.html#/...TBD)
 - Two properties in [Membership](https://webex.github.io/spark-ios-sdk/Structs/Membership.html): personDisplayName, personOrgId
 - Support real time message receiving
