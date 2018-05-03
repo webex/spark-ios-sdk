@@ -118,7 +118,7 @@ extension ActivityModel {
     }
     func setToPersonId(_ personId: String?) -> ActivityModel {
         var activity = self
-        activity.toPersonId = personId
+        activity.toPersonId = personId?.hydraFormat(for: IdentityType.people)
         return activity;
     }
 }
