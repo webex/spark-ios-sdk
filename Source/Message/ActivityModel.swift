@@ -45,6 +45,7 @@ struct ActivityModel {
     private(set) var files : [RemoteFile]?
     private(set) var encryptionKeyUrl: String?
     private(set) var kind: ActivityModel.Kind?
+    private(set) var clientTempId: String?
 }
 
 extension ActivityModel : ImmutableMappable {
@@ -61,6 +62,7 @@ extension ActivityModel : ImmutableMappable {
         self.personEmail = try? map.value("actor.emailAddress")
         self.roomId = try? map.value("target.id", using: IdentityTransform(for: IdentityType.room))
         self.roomType = try? map.value("target.tags", using: RoomTypeTransform())
+        self.clientTempId = try? map.value("clientTempId")
         if let text: String = try? map.value("object.displayName") {
             self.text = text
         }
@@ -100,6 +102,7 @@ extension ActivityModel : ImmutableMappable {
         self.mentionedPeople >>> map["mentionedPeople"]
         self.mentionedGroup >>> map["mentionedGroup"]
         self.files >>> map["files"]
+        self.clientTempId >>> map["clientTempId"]
     }
 }
 
@@ -112,6 +115,11 @@ extension ActivityModel {
             file.decrypt(key: key)
             return file
         }
+        return activity;
+    }
+    func setToPersonId(_ personId: String?) -> ActivityModel {
+        var activity = self
+        activity.toPersonId = personId
         return activity;
     }
 }
