@@ -102,7 +102,6 @@ extension ActivityModel : ImmutableMappable {
         self.mentionedPeople >>> map["mentionedPeople"]
         self.mentionedGroup >>> map["mentionedGroup"]
         self.files >>> map["files"]
-        self.clientTempId >>> map["clientTempId"]
     }
 }
 
