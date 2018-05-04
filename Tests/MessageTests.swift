@@ -196,6 +196,7 @@ class MessageTests: XCTestCase {
     func testListingMessagesReturnsMessages() {
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         validate(message: message)
+        Thread.sleep(forTimeInterval: 3)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: nil)
         XCTAssertEqual(messageArray?.isEmpty, false)
     }
@@ -268,7 +269,7 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(message1?.text, text)
         XCTAssertEqual(message2?.text, text)
         XCTAssertEqual(message3?.text, text)
-
+        Thread.sleep(forTimeInterval: 3)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
         XCTAssertEqual(messageArray?.count, 3)
 
