@@ -78,6 +78,13 @@ class MessageTests: XCTestCase {
         super.tearDown()
     }
     
+    
+    func testPostingMessageToPersonWithPersonId() {
+        let message = postMessage(personId: other.personId, text: text, files: nil)
+        validate(message: message)
+        XCTAssertEqual(message?.text, text)
+    }
+    
     func testPostingMessageToRoomWithTextReturnsMessage() {
         let message = postMessage(conversationId: roomId, text: text, mentions: nil, files:nil)
         validate(message: message)
@@ -86,7 +93,7 @@ class MessageTests: XCTestCase {
     
     func testPostingMessageToRoomWithFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
-        let message = postMessage(conversationId: roomId,files: [file!])
+        let message = postMessage(conversationId: roomId, text: nil, mentions: nil, files: [file!])
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
@@ -189,6 +196,7 @@ class MessageTests: XCTestCase {
     func testListingMessagesReturnsMessages() {
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         validate(message: message)
+        Thread.sleep(forTimeInterval: 3)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: nil)
         XCTAssertEqual(messageArray?.isEmpty, false)
     }
@@ -261,7 +269,7 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(message1?.text, text)
         XCTAssertEqual(message2?.text, text)
         XCTAssertEqual(message3?.text, text)
-
+        Thread.sleep(forTimeInterval: 3)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
         XCTAssertEqual(messageArray?.count, 3)
 
@@ -318,30 +326,23 @@ class MessageTests: XCTestCase {
         return fixture.getResponse(testCase: self, request: request) != nil
     }
     
-    private func postMessage(conversationId: String, text: String, mentions:[Mention]?,files: [LocalFile]?) -> Message? {
+    private func postMessage(conversationId: String, text: String?, mentions:[Mention]?,files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: conversationId, text: text, mentions: mentions, files: files, queue: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(conversationId: String, files: [LocalFile]?) -> Message? {
+    private func postMessage(personEmail: EmailAddress, text: String?, files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(roomId: conversationId, text: nil, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
+            self.messages.post(personEmail: personEmail, text: text, files: files, queue: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }
     
-    private func postMessage(personEmail: EmailAddress, text: String, files: [LocalFile]?) -> Message? {
+    private func postMessage(personId: String, text: String?, files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(personEmail: personEmail, text: text, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
-        }
-        return fixture.getResponse(testCase: self, request: request)
-    }
-    
-    private func postMessage(personEmail: EmailAddress, files: [LocalFile]) -> Message? {
-        let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
-            self.messages.post(personEmail: personEmail, text: nil, mentions: nil, files: nil, queue: nil, completionHandler: completionHandler)
+            self.messages.post(personId: personId, text: text, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
         }
         return fixture.getResponse(testCase: self, request: request)
     }

@@ -73,6 +73,7 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "CLIENTSECRET"
+            value = "$(CLIENTSECRET)"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

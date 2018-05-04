@@ -10,21 +10,14 @@ env:
     - DESTINATION="platform=iOS Simulator,name=iPhone 6s plus,OS=10.1"  CONFIGURATION="ReleaseTest"
     - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.2"      CONFIGURATION="ReleaseTest"
     - DESTINATION="platform=iOS Simulator,name=iPhone 7,OS=10.3.1" CONFIGURATION="ReleaseTest"
-    - DESTINATION="platform=iOS Simulator,name=iPhone 7 plus,OS=11.0"      CONFIGURATION="ReleaseTest"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 7 Plus,OS=11.0.1"  CONFIGURATION="ReleaseTest"
 before_install:
-#  - gem install cocoapods --pre
-#  - pod repo update > /dev/null
-#  - brew install sendemail
-  - brew update
-  - brew outdated carthage || brew upgrade carthage
-  - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
-  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+  - gem install cocoapods --pre
   - pod repo update > /dev/null
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
   - brew install sendemail
 script:
-#  - set -o pipefail
-#  - travis_retry xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clientSecret="$CLIENTSECRET" test | xcpretty -c
-#  - travis_wait 50 bash IntegrationTesting.sh
-  - xctool clean build -workspace SparkSDK.xcworkspace -scheme SparkSDK -sdk iphonesimulator | xcpretty
-  - xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO clientSecret="$CLIENTSECRET" test | xcpretty -c
+  - set -o pipefail
+  - travis_retry xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -configuration "$CONFIGURATION" CLIENTSECRET="$CLIENTSECRET" test | xcpretty -c
+  - travis_wait 50 bash IntegrationTesting.sh
 branches:

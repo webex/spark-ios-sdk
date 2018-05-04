@@ -63,8 +63,7 @@ public struct Message {
     
     /// The identifier of the recipient when sending a private 1:1 message.
     public var toPersonId: String? {
-        // TODO
-        return nil
+        return self.activity.toPersonId
     }
     
     /// The email address of the recipient when sending a private 1:1 message.
@@ -93,6 +92,23 @@ public struct Message {
             }
         }
         return mentions.count > 0 ? mentions : nil
+    }
+    
+    /// Returns true if the user included in message's mention list
+    ///
+    /// - since: 1.4.0
+    public var isSelfMentioned: Bool? {
+        var result = false
+        if let peoples = self.activity.mentionedPeople,let to = self.toPersonId {
+            result = peoples.contains(to)
+        }
+        if let groups = self.activity.mentionedGroup {
+            for group in groups where group == "all" {
+                result = true
+                break
+            }
+        }
+        return result
     }
     
     /// The content of the message.

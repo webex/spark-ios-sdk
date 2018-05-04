@@ -800,7 +800,6 @@
 				3D15B7081D3E176C003BB682 /* Frameworks */,
 				3D15B7091D3E176C003BB682 /* Resources */,
 				D0535B5A7F83833998D6F04D /* [CP] Embed Pods Frameworks */,
-				8724ACA0DDEFC147B4AF9C21 /* [CP] Copy Pods Resources */,
 				3D2D51061D3E2168005FC665 /* CopyFiles */,
 			);
 			buildRules = (
@@ -822,7 +821,6 @@
 				B91E75211CE2D6FF0080EAE0 /* Frameworks */,
 				B91E75221CE2D6FF0080EAE0 /* Headers */,
 				B91E75231CE2D6FF0080EAE0 /* Resources */,
-				2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -842,7 +840,6 @@
 				C7625FCE205CBB9600219F95 /* Frameworks */,
 				C7625FCF205CBB9600219F95 /* Headers */,
 				C7625FD0205CBB9600219F95 /* Resources */,
-				E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -861,8 +858,6 @@
 				C7625FD6205CBB9600219F95 /* Sources */,
 				C7625FD7205CBB9600219F95 /* Frameworks */,
 				C7625FD8205CBB9600219F95 /* Resources */,
-				8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */,
-				255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -994,66 +989,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		255D5C223942BE8B63ED08A0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		2B2A32C79D9D980F993492E1 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDK/Pods-SparkSDK-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8724ACA0DDEFC147B4AF9C21 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8A50AEB074F444E1610B4129 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKitTests/Pods-SparkBroadcastExtensionKitTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		C5EB7B8F84910F513673EE82 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1116,21 +1051,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkSDKTests/Pods-SparkSDKTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E5A5FA8CA805E59DEAA52724 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SparkBroadcastExtensionKit/Pods-SparkBroadcastExtensionKit-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1314,7 +1234,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 15D66403F3F4E4F8A79206C0 /* Pods-SparkSDKTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1337,7 +1256,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EF24E1A7E273A02785039D56 /* Pods-SparkSDKTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1459,7 +1377,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 03465B4B839D301A66862F33 /* Pods-SparkSDKTests.releasetest.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1809,7 +1726,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CEAE5B5C28179D6B08608A7F /* Pods-SparkBroadcastExtensionKitTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1839,7 +1755,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 013C3D04B865371637397D1A /* Pods-SparkBroadcastExtensionKitTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -1868,7 +1783,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6458FEE315CC4233B589D740 /* Pods-SparkBroadcastExtensionKitTests.releasetest.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;

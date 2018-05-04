@@ -225,7 +225,7 @@ class MessageClientImpl {
                 let target: [String: Any] = ["id": roomId.locusFormat, "objectType": ObjectType.conversation.rawValue]
                 key.encryptionUrl(client: self) { encryptionUrl in
                     if let url = encryptionUrl.data {
-                        let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target])
+                        let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)"])
                         let request = self.messageServiceBuilder.path("activities")
                             .method(.post)
                             .body(body)
@@ -326,6 +326,9 @@ class MessageClientImpl {
             SDKLogger.shared.error("Not a room message \(activity.id ?? (activity.toJSONString() ?? ""))")
             return
         }
+        if let clientTempId = activity.clientTempId, let uuid = clientTempId.split(separator: ":").first, uuid == self.uuid{
+            return
+        }
         let key = self.encryptionKey(roomId: roomId)
         if let encryptionUrl = activity.encryptionKeyUrl {
             key.tryRefresh(encryptionUrl: encryptionUrl)
@@ -339,7 +342,8 @@ class MessageClientImpl {
             DispatchQueue.main.async {
                 switch kind {
                 case .post, .share:
-                    self.onEvent?(MessageEvent.messageReceived(Message(activity: decryption)))
+                    let decryptActivity = decryption.setToPersonId(self.userId)
+                    self.onEvent?(MessageEvent.messageReceived(Message(activity: decryptActivity)))
                 case .delete:
                     self.onEvent?(MessageEvent.messageDeleted(decryption.id ?? "illegal id"))
                 default:
