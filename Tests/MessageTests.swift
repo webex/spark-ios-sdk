@@ -211,12 +211,12 @@ class MessageTests: XCTestCase {
     
     func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
         let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-        Thread.sleep(forTimeInterval: 5)
+        Thread.sleep(forTimeInterval: 3)
         let now = Date()
         let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: nil)
-        XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
-        XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: 50)
+        XCTAssertEqual(messageArray?.filter{$0.id == message1?.id}.first != nil, true)
+        XCTAssertEqual(messageArray?.filter{$0.id == message2?.id}.first == nil, true)
     }
     
     func testListingMessagesBeforeADateAndAMessageIdDoesReturnMessageWithThatId() {
