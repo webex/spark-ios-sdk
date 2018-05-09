@@ -213,6 +213,7 @@ class MessageTests: XCTestCase {
         let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         Thread.sleep(forTimeInterval: 3)
         let now = Date()
+        Thread.sleep(forTimeInterval: 3)
         let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: 50)
         XCTAssertEqual(messageArray?.filter{$0.id == message1?.id}.first != nil, true)
