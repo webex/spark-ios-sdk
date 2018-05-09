@@ -44,6 +44,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
     private var newAccessToken: String? = nil
+    private var accessToken: String? = nil
     private var refreshTokenCount = 0
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
@@ -200,6 +201,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
             var headers = self.headers
             if let accessToken = accessToken {
                 headers["Authorization"] = "Bearer " + accessToken
+                self.accessToken = accessToken
             }
             
             let urlRequestConvertible: URLRequestConvertible
@@ -243,6 +245,9 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
         if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization") {
             urlRequest.setValue("Bearer " + newToken, forHTTPHeaderField: "Authorization")
             self.refreshTokenCount += 1
+        }
+        else if let token = self.accessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization") {
+            urlRequest.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
         }
         return urlRequest
     }
