@@ -25,7 +25,7 @@ import ObjectMapper
 import SwiftyJSON
 
 class ServiceRequest : RequestRetrier, RequestAdapter {
-
+    
     #if INTEGRATIONTEST
     static let HYDRA_SERVER_ADDRESS:String = ProcessInfo().environment["HYDRA_SERVER_ADDRESS"] == nil ? "https://api.ciscospark.com/v1":ProcessInfo().environment["HYDRA_SERVER_ADDRESS"]!
     #else
@@ -44,8 +44,13 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
     private let queue: DispatchQueue?
     private let authenticator: Authenticator
     private var newAccessToken: String? = nil
-    private var accessToken: String? = nil
     private var refreshTokenCount = 0
+    private let sessionManager: SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+        return SessionManager(configuration: configuration)
+    }()
+    
     
     private init(authenticator: Authenticator, url: URL, headers: [String: String], method: Alamofire.HTTPMethod, body: RequestParameter?, query: RequestParameter?, keyPath: String?, queue: DispatchQueue?) {
         self.authenticator = authenticator
@@ -201,7 +206,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
             var headers = self.headers
             if let accessToken = accessToken {
                 headers["Authorization"] = "Bearer " + accessToken
-                self.accessToken = accessToken
             }
             
             let urlRequestConvertible: URLRequestConvertible
@@ -230,9 +234,16 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
                 }
                 urlRequestConvertible = ErrorRequestConvertible(error)
             }
-            SessionManager.default.adapter = self
-            SessionManager.default.retrier = self
-            completionHandler(Alamofire.request(urlRequestConvertible).validate())
+            self.sessionManager.retrier = self
+            self.sessionManager.adapter = self
+            self.sessionManager.delegate.taskWillPerformHTTPRedirection = { session, task, response, request in
+                var finalRequest = request
+                if let accessToken = accessToken {
+                    finalRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+                }
+                return finalRequest
+            }
+            completionHandler(self.sessionManager.request(urlRequestConvertible).validate())
         }
         
         authenticator.accessToken { accessToken in
@@ -245,9 +256,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
         if let newToken = self.newAccessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization") {
             urlRequest.setValue("Bearer " + newToken, forHTTPHeaderField: "Authorization")
             self.refreshTokenCount += 1
-        }
-        else if let token = self.accessToken, let _ =  urlRequest.value(forHTTPHeaderField: "Authorization") {
-            urlRequest.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
         }
         return urlRequest
     }
@@ -280,6 +288,26 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
         } else {
             completion(false,0.0)
         }
+    }
+}
+
+class LoggingSessionDelegate: SessionDelegate {
+    override func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        willPerformHTTPRedirection response: HTTPURLResponse,
+        newRequest request: URLRequest,
+        completionHandler: @escaping (URLRequest?) -> Void)
+    {
+        print("URLSession will perform HTTP redirection to request: \(request)")
+        
+        super.urlSession(
+            session,
+            task: task,
+            willPerformHTTPRedirection: response,
+            newRequest: request,
+            completionHandler: completionHandler
+        )
     }
 }
 
