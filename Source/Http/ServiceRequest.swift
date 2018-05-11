@@ -291,26 +291,6 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
     }
 }
 
-class LoggingSessionDelegate: SessionDelegate {
-    override func urlSession(
-        _ session: URLSession,
-        task: URLSessionTask,
-        willPerformHTTPRedirection response: HTTPURLResponse,
-        newRequest request: URLRequest,
-        completionHandler: @escaping (URLRequest?) -> Void)
-    {
-        print("URLSession will perform HTTP redirection to request: \(request)")
-        
-        super.urlSession(
-            session,
-            task: task,
-            willPerformHTTPRedirection: response,
-            newRequest: request,
-            completionHandler: completionHandler
-        )
-    }
-}
-
 extension SparkError {
     /// Converts the error data to NSError
     static func requestErrorWith(data: Data) -> Error {
