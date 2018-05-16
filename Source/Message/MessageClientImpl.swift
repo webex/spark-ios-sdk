@@ -327,7 +327,7 @@ class MessageClientImpl {
             SDKLogger.shared.error("Not a room message \(activity.id ?? (activity.toJSONString() ?? ""))")
             return
         }
-        if let clientTempId = activity.clientTempId, let uuid = clientTempId.split(separator: ":").first, uuid == self.uuid{
+        if let clientTempId = activity.clientTempId, clientTempId.starts(with: self.uuid) {
             return
         }
         let key = self.encryptionKey(roomId: roomId)
@@ -335,7 +335,7 @@ class MessageClientImpl {
             key.tryRefresh(encryptionUrl: encryptionUrl)
         }
         key.material(client: self) { material in
-            let decryption = activity.decrypt(key: material.data)
+            var decryption = activity.decrypt(key: material.data)
             guard let kind = decryption.kind else {
                 SDKLogger.shared.error("Not a valid message \(activity.id ?? (activity.toJSONString() ?? ""))")
                 return
@@ -343,8 +343,8 @@ class MessageClientImpl {
             DispatchQueue.main.async {
                 switch kind {
                 case .post, .share:
-                    let decryptActivity = decryption.setToPersonId(self.userId)
-                    self.onEvent?(MessageEvent.messageReceived(Message(activity: decryptActivity)))
+                    decryption.toPersonId = self.userId?.hydraFormat(for: .people)
+                    self.onEvent?(MessageEvent.messageReceived(Message(activity: decryption)))
                 case .delete:
                     self.onEvent?(MessageEvent.messageDeleted(decryption.id ?? "illegal id"))
                 default:

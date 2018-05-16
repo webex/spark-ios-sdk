@@ -34,7 +34,7 @@ struct ActivityModel {
     private(set) var id: String?
     private(set) var roomId: String?
     private(set) var roomType: RoomType?
-    private(set) var toPersonId: String?
+    var toPersonId: String?
     private(set) var toPersonEmail: String?
     private(set) var text: String?
     private(set) var personId: String?
@@ -85,6 +85,7 @@ extension ActivityModel : ImmutableMappable {
             }
         }
     }
+    
     /// Mapping activity model to json format.
     ///
     /// - note: for internal use only.
@@ -114,11 +115,6 @@ extension ActivityModel {
             file.decrypt(key: key)
             return file
         }
-        return activity;
-    }
-    func setToPersonId(_ personId: String?) -> ActivityModel {
-        var activity = self
-        activity.toPersonId = personId?.hydraFormat(for: IdentityType.people)
         return activity;
     }
 }

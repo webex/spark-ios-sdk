@@ -77,38 +77,18 @@ public struct Message {
         return self.activity.created
     }
     
-    /// The people mentioned in the message
-    ///
-    /// - since: 1.4.0
-    public var mentions: [Mention]? {
-        var mentions = [Mention]()
-        if let peoples = self.activity.mentionedPeople {
-            mentions.append(contentsOf: (peoples.map { Mention.person($0) }))
-        }
-        if let groups = self.activity.mentionedGroup {
-            for group in groups where group == "all" {
-                mentions.append(Mention.all)
-                break
-            }
-        }
-        return mentions.count > 0 ? mentions : nil
-    }
-    
     /// Returns true if the user included in message's mention list
     ///
     /// - since: 1.4.0
-    public var isSelfMentioned: Bool? {
-        var result = false
-        if let peoples = self.activity.mentionedPeople,let to = self.toPersonId {
-            result = peoples.contains(to)
-        }
-        if let groups = self.activity.mentionedGroup {
-            for group in groups where group == "all" {
-                result = true
-                break
+    public var isSelfMentioned: Bool {
+        return self.mentions?.find { metion in
+            switch metion {
+            case .person(let id):
+                return id == self.toPersonId
+            case .all:
+                return true
             }
-        }
-        return result
+        } != nil
     }
     
     /// The content of the message.
@@ -127,6 +107,20 @@ public struct Message {
 
     init(activity: ActivityModel) {
         self.activity = activity
+    }
+    
+    private var mentions: [Mention]? {
+        var mentions = [Mention]()
+        if let peoples = self.activity.mentionedPeople {
+            mentions.append(contentsOf: (peoples.map { Mention.person($0) }))
+        }
+        if let groups = self.activity.mentionedGroup {
+            for group in groups where group == "all" {
+                mentions.append(Mention.all)
+                break
+            }
+        }
+        return mentions.count > 0 ? mentions : nil
     }
 }
 
