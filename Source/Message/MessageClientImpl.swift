@@ -59,6 +59,7 @@ class MessageClientImpl {
     private var kmsCluster: String?
     private var rsaPublicKey: String?
     private var ephemeralKey: String?
+    private var keySerialization: String?
     
     private var ephemeralKeyRequest: (KmsEphemeralKeyRequest, (Error?) -> Void)?
     private var keyMaterialCompletionHandlers: [String: [(Result<(String, String)>) -> Void]] = [String: [(Result<(String, String)>) -> Void]]()
@@ -225,7 +226,7 @@ class MessageClientImpl {
                 let target: [String: Any] = ["id": roomId.locusFormat, "objectType": ObjectType.conversation.rawValue]
                 key.encryptionUrl(client: self) { encryptionUrl in
                     if let url = encryptionUrl.data {
-                        let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)"])
+                        let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)", "kmsMessage": self.keySerialization ?? nil])
                         let request = self.messageServiceBuilder.path("activities")
                             .method(.post)
                             .body(body)
@@ -444,6 +445,7 @@ class MessageClientImpl {
                     if let request = try? KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString, userId: userId, bearer: token, method: "create", uri: "/keys") {
                         request.additionalAttributes = ["count": 1]
                         if let serialize = request.serialize(), let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: ephemeralKey) {
+                            self.keySerialization = chiperText
                             parameters = ["kmsMessages": [chiperText], "destination": "unused" ] as [String: Any]
                             var handlers: [(Result<(String, String)>) -> Void] = self.keysCompletionHandlers[roomId] ?? []
                             handlers.append(completionHandler)

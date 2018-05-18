@@ -275,13 +275,21 @@ class FakeCallModelHelper {
     }
     
     static func grantedScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        return getGrantedScreenShareCallModel(callModel:callModel,shareUser:shareUser,isSelfDevice:false)
+    }
+    
+    static func grantedLocalScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        return getGrantedScreenShareCallModel(callModel:callModel,shareUser:shareUser,isSelfDevice:true)
+    }
+    
+    static private func getGrantedScreenShareCallModel(callModel:CallModel,shareUser:TestUser,isSelfDevice:Bool) -> CallModel {
         var newModel = callModel
         var newMediaShares :[MediaShareModel] = []
         
         if let oldMediaShares = newModel.mediaShares {
             for var mediaShare in oldMediaShares {
                 if mediaShare.shareType == MediaShareModel.MediaShareType.screen {
-                    mediaShare = getGrantedScreenShareModel(shareUser: shareUser)
+                    mediaShare = getGrantedScreenShareModel(shareUser: shareUser,isSelfDevice: isSelfDevice)
                 }
                 newMediaShares.append(mediaShare)
             }
@@ -294,14 +302,23 @@ class FakeCallModelHelper {
         return newModel
     }
     
+    
     static func releaseScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        return getReleaseScreenShareCallModel(callModel: callModel, shareUser: shareUser, isSelfDevice: false)
+    }
+    
+    static func releaseLocalScreenShareCallModel(callModel:CallModel,shareUser:TestUser) -> CallModel {
+        return getReleaseScreenShareCallModel(callModel: callModel, shareUser: shareUser, isSelfDevice: true)
+    }
+    
+    static private func getReleaseScreenShareCallModel(callModel:CallModel,shareUser:TestUser,isSelfDevice:Bool) -> CallModel {
         var newModel = callModel
         var newMediaShares :[MediaShareModel] = []
         
         if let oldMediaShares = newModel.mediaShares {
             for var mediaShare in oldMediaShares {
                 if mediaShare.shareType == MediaShareModel.MediaShareType.screen {
-                    mediaShare = getReleaseScreenShareModel(shareUser: shareUser)
+                    mediaShare = getReleaseScreenShareModel(shareUser: shareUser,isSelfDevice: isSelfDevice)
                 }
                 newMediaShares.append(mediaShare)
             }
@@ -313,6 +330,8 @@ class FakeCallModelHelper {
         newModel.setMediaShares(newMediaShares: newMediaShares)
         return newModel
     }
+    
+    
     
     private static func getPersonModel(testUser:TestUser) -> PersonModel {
         return PersonModel(JSON: ["name" : testUser.name,
@@ -508,20 +527,22 @@ class FakeCallModelHelper {
         return participantModel
     }
     
-    private static func getGrantedScreenShareModel(shareUser:TestUser) -> MediaShareModel {
-        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
-        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: nil, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
+    private static func getGrantedScreenShareModel(shareUser:TestUser,isSelfDevice:Bool = false) -> MediaShareModel {
+        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: isSelfDevice ? Config.FakeSelfDeviceUrl:Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
+        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: isSelfDevice ? Config.FakeSelfDeviceUrl:Config.FakeOtherDeviceUrl, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
         
-        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.granted, granted: "2017-11-22T06:31:16.188Z", released: nil, requested: "2017-11-22T06:31:14.917Z", requester: requestParticipant)
+        let dateString = String(describing: Date())
+        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.granted, granted: dateString, released: nil, requested: dateString, requester: requestParticipant)
         
         return MediaShareModel.init(shareType: MediaShareModel.MediaShareType.screen, url: "MediaShareModelUrl", shareFloor: mediaShareFloor)
     }
     
-    private static func getReleaseScreenShareModel(shareUser:TestUser) -> MediaShareModel {
-        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
-        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: nil, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
+    private static func getReleaseScreenShareModel(shareUser:TestUser,isSelfDevice:Bool = false) -> MediaShareModel {
+        let device:ParticipantModel.DeviceModel = ParticipantModel.DeviceModel.init(url: isSelfDevice ? Config.FakeSelfDeviceUrl:Config.FakeOtherDeviceUrl, deviceType: nil, featureToggles: nil, mediaConnections: nil, state: nil, callLegId: nil)
+        let requestParticipant:ParticipantModel = ParticipantModel.init(isCreator: false, id: shareUser.personId, url: shareUser.personId, state: nil, type: "USER", person: nil, status: nil, deviceUrl: isSelfDevice ? Config.FakeSelfDeviceUrl:Config.FakeOtherDeviceUrl, mediaBaseUrl: nil, guest: false, alertHint: nil, alertType: nil, enableDTMF: nil, devices: [device])
         
-        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.released, granted: "2017-11-22T06:31:16.188Z", released: "2017-11-22T06:33:53.603Z", requested: "2017-11-22T06:31:14.917Z", requester: requestParticipant)
+        let dateString = String(describing: Date())
+        let mediaShareFloor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor.init(beneficiary: requestParticipant, disposition: MediaShareModel.ShareFloorDisposition.released, granted: dateString, released: dateString, requested: dateString, requester: requestParticipant)
         
         return MediaShareModel.init(shareType: MediaShareModel.MediaShareType.screen, url: "MediaShareModelUrl", shareFloor: mediaShareFloor)
     }

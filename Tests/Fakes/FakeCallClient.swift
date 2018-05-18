@@ -158,6 +158,19 @@ class FakeCallClient: CallClient {
         completionHandler(ServiceResponse(HTTPURLResponse(url: URL(string: "www.aaa.com")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: ["Content-Type":"application/json;charset=UTF-8"]), Result.success("success")))
     }
     
+    override func updateMediaShare(_ mediaShare: MediaShareModel, by device: Device, mediaShareUrl: String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
+        if enableServerReturnError {
+            let error = SparkError.serviceFailed(code: -7000, reason: "updateMediaShare error")
+            completionHandler(ServiceResponse(HTTPURLResponse(url: URL(string: "www.aaa.com")!, statusCode: 404, httpVersion: "HTTP/1.1", headerFields: ["Content-Type":"application/json;charset=UTF-8"]), Result.failure(error)))
+            return
+        }
+        
+        if let oldModel = self.callModel {
+//            self.callModel = FakeCallModelHelper.updateMediaCallModel(callModel: oldModel, updateUser: updateUser,localMedia:localMedia)
+            completionHandler(ServiceResponse(HTTPURLResponse(url: URL(string: "www.aaa.com")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: ["Content-Type":"application/json;charset=UTF-8"]), Result.success(oldModel.toJSONString())))
+        }
+    }
+    
 }
 
 

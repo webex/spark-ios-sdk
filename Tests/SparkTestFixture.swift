@@ -184,7 +184,7 @@ class SparkTestFixture {
         return getResponse(testCase: testCase, request: request) != nil
     }
     
-    func getResponse<T>(testCase: XCTestCase, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
+    func getResponse<T>(testCase: XCTestCase, timeOut: Double? = nil, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
         let expect = testCase.expectation(description: "Service call")
         var output: T?
         request() { response in
@@ -196,7 +196,12 @@ class SparkTestFixture {
             }
             expect.fulfill()
         }
-        testCase.waitForExpectations(timeout: 30) { error in XCTAssertNil(error, "Timeout") }
+        if let timeOut = timeOut{
+            testCase.waitForExpectations(timeout: timeOut) { error in XCTAssertNil(error, "Timeout") }
+        }
+        else {
+            testCase.waitForExpectations(timeout: 30) { error in XCTAssertNil(error, "Timeout") }
+        }
         return output
     }
     

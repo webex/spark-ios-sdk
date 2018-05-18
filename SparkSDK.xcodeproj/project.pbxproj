@@ -138,6 +138,7 @@
 		C7625FEC205CBC4100219F95 /* SparkBroadcastExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */; };
 		C7625FEF205CC09400219F95 /* SparkBroadcastClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FEE205CC09400219F95 /* SparkBroadcastClient.swift */; };
 		C7625FF1205CC28100219F95 /* SparkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7625FF0205CC28100219F95 /* SparkError.swift */; };
+		C7672E1B20A5647C008C1F97 /* ScreenShareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7672E1A20A5647B008C1F97 /* ScreenShareTests.swift */; };
 		C78D19B71EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */; };
 		C78D19B91EC2D36400B59D18 /* OAuthAuthenticatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */; };
 		C78D1AA020887888002C6F2C /* Sbu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C78D1A9F20887888002C6F2C /* Sbu.framework */; };
@@ -326,6 +327,7 @@
 		C7625FEB205CBC4100219F95 /* SparkBroadcastExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkBroadcastExtension.swift; sourceTree = "<group>"; };
 		C7625FEE205CC09400219F95 /* SparkBroadcastClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkBroadcastClient.swift; sourceTree = "<group>"; };
 		C7625FF0205CC28100219F95 /* SparkError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SparkError.swift; sourceTree = "<group>"; };
+		C7672E1A20A5647B008C1F97 /* ScreenShareTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenShareTests.swift; sourceTree = "<group>"; };
 		C78D19B61EC2C0EF00B59D18 /* JWTAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JWTAuthenticatorTests.swift; path = Tests/JWTAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OAuthAuthenticatorTests.swift; path = Tests/OAuthAuthenticatorTests.swift; sourceTree = SOURCE_ROOT; };
 		C78D1A9F20887888002C6F2C /* Sbu.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sbu.framework; path = Frameworks/Sbu.framework; sourceTree = "<group>"; };
@@ -445,6 +447,7 @@
 				C78D19B81EC2D36400B59D18 /* OAuthAuthenticatorTests.swift */,
 				991DA8AB1F389D6200939724 /* SSOAuthenticatorTests.swift */,
 				C79F140E1FC3B88900B43596 /* CallTests.swift */,
+				C7672E1A20A5647B008C1F97 /* ScreenShareTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -1071,6 +1074,7 @@
 				C79F140D1FBE7C3A00B43596 /* FakeWebSocketService.swift in Sources */,
 				3D31B78D1D41B7F500D8DB55 /* TeamTests.swift in Sources */,
 				3D31B7881D41B7F500D8DB55 /* PeopleTests.swift in Sources */,
+				C7672E1B20A5647C008C1F97 /* ScreenShareTests.swift in Sources */,
 				3D3131431D3EF932007717B2 /* Config.swift in Sources */,
 				3D31B78F1D41B7F500D8DB55 /* WebhookTests.swift in Sources */,
 				3D31B7911D41B7F500D8DB55 /* TestTeam.swift in Sources */,

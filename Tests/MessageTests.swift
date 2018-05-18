@@ -212,9 +212,12 @@ class MessageTests: XCTestCase {
     func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
         let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         Thread.sleep(forTimeInterval: 5)
-        let now = Date()
+        var nowDate = Date()
+        if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(3) {
+            nowDate = createDate.addingTimeInterval(3)
+        }
         let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: nil)
+        let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nowDate, max: nil)
         XCTAssertEqual(messageArray?.contains() {$0.id == message1?.id}, true)
         XCTAssertEqual(messageArray?.contains() {$0.id == message2?.id}, false)
     }
@@ -323,14 +326,14 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.messages.delete(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request) != nil
+        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request) != nil
     }
     
     private func postMessage(conversationId: String, text: String?, mentions:[Mention]?,files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: conversationId, text: text, mentions: mentions, files: files, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
     }
     
     private func postMessage(personEmail: EmailAddress, text: String?, files: [LocalFile]?) -> Message? {
@@ -344,7 +347,7 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personId: personId, text: text, mentions: nil, files: files, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
     }
     
     private func listMessages(conversationId: String, mentionedPeople: String? ,before: Date?, max: Int?) -> [Message]? {
@@ -353,14 +356,14 @@ class MessageTests: XCTestCase {
             let mentions = mentionedPeople != nil ? Mention.person(mentionedPeople!) : nil
             self.messages.list(roomId: conversationId, before: beforeDate, max: max ?? 50, mentionedPeople: mentions, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
     }
     
     private func getMessage(messageId: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.get(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
     }
     
     private func generateLocalFile() -> String?{
