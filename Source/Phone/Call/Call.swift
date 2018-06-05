@@ -534,7 +534,12 @@ public class Call {
     }
     
     private var remoteSDP: String? {
-        return self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp
+        if let remoteSDP = self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp {
+                return remoteSDP
+            } else if let remoteSDP = self.model.mediaConnections?.first?.remoteSdp?.sdp {
+                return remoteSDP
+            }
+        return nil
     }
     
     init(model: CallModel, device: Device, media: MediaSessionWrapper, direction: Direction, group: Bool, uuid: UUID?) {
@@ -721,7 +726,7 @@ public class Call {
     }
     
     func startMedia() {
-        if let remoteSDP = self.model.myself?[device: self.device.deviceUrl]?.mediaConnections?.first?.remoteSdp?.sdp {
+        if let remoteSDP = self.remoteSDP {
             self.mediaSession.setRemoteSdp(remoteSDP)
         }
         else {
@@ -763,7 +768,12 @@ public class Call {
     func update(model: CallModel) {
         if model.isValid {
             let old = self.model
-            if let new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {
+            if var new = CallEventSequencer.sequence(old: old, new: model, invalid: { self.device.phone.fetch(call: self) }) {
+                //some response's mediaConnection is nil, sync all model hold the latest media connection
+                if new.mediaConnections == nil, let oldMediaConnextions = old.mediaConnections {
+                    new.setMediaConnections(newMediaConnections: old.mediaConnections)
+                }
+                
                 self.doCallModel(new)
                 DispatchQueue.main.async {
                     if new.isRemoteVideoMuted != old.isRemoteVideoMuted {
@@ -878,6 +888,11 @@ public class Call {
                             }
                         }
                     }                    
+                }
+            } else {
+                //some response's mediaConnection is nil, sync all model hold the latest media connection
+                if self.model.mediaConnections == nil, let mediaConnection = model.mediaConnections {
+                    self.model.setMediaConnections(newMediaConnections: mediaConnection)
                 }
             }
         }

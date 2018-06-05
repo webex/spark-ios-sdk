@@ -44,7 +44,7 @@ class FakeCallModelHelper {
         
         let sequenceModel = getSequenceModel()
         let mediaShares = getMediaShareModels()
-        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: myselfModel, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShares)
+        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: myselfModel, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShares,mediaConnections:nil)
     }
     
     static func dialIllegalCallModel(caller:TestUser,callee:TestUser,type:CallIllegalStatusType) -> CallModel {
@@ -130,7 +130,7 @@ class FakeCallModelHelper {
         let fullStateModel = getFullState(participants: participants)
         let sequenceModel = getSequenceModel()
         let mediaShareModels = getMediaShareModels()
-        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: mySelf, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShareModels)
+        return CallModel.init(locusUrl: locusUrl, participants: participants, myself: mySelf, host: host, fullState: fullStateModel, sequence: sequenceModel, replaces: nil, mediaShares: mediaShareModels,mediaConnections:nil)
     }
     
     static func answerCallModel(callModel:CallModel,answerUser:TestUser) -> CallModel {

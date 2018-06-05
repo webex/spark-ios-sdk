@@ -33,6 +33,7 @@ class ServiceRequest : RequestRetrier, RequestAdapter {
     #endif
     static let CONVERSATION_SERVER_ADDRESS: String = "https://conv-a.wbx2.com/conversation/api/v1"
     static let KMS_SERVER_ADDRESS: String = "https://encryption-a.wbx2.com/encryption/api/v1"
+    static let LOCUS_RESPONSE_ONLY_SDP: Bool = true
     
     private var pendingTimeCount : Int = 0
     private let url: URL
