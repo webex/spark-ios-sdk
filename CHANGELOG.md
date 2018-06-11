@@ -51,8 +51,8 @@ Released on 2018-05-15.
 - Support screen sharing for both sending and receiving.
 - A new API to refresh token for authentication.
 - Two properties in Membership: personDisplayName, personOrgId.
-- Support real time message receiving
-- Support message end to end encription
+- Support real time message receiving.
+- Support message end to end encription.
 - A few new APIs to do message/file end to end encryption, Mention in message, upload and download encrypted files.
 - Five properties in Person: nickName, firstName, lastName, orgId, type.
 - Three functions to create/update/delete a person for organization's administrator.
