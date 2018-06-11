@@ -48,23 +48,23 @@ All notable changes to this project will be documented in this file.
 Released on 2018-05-15.
 
 #### Added
-- Support screen sharing for both [sending](https://github.com/webex/spark-ios-sdk/blob/EFT/1.4.0/README.md#usage) and [receiving](https://github.com/webex/spark-ios-sdk/blob/EFT/1.4.0/README.md#usage), see more details [here](https://github.com/webex/spark-ios-sdk/wiki/screen-sharing...TBD)
-- A new API to refresh token for [authentication](https://webex.github.io/spark-ios-sdk/Protocols/Authenticator.html#/...TBD)
-- Two properties in [Membership](https://webex.github.io/spark-ios-sdk/Structs/Membership.html): personDisplayName, personOrgId
+- Support screen sharing for both sending and receiving.
+- A new API to refresh token for authentication.
+- Two properties in Membership: personDisplayName, personOrgId.
 - Support real time message receiving
 - Support message end to end encription
-- A few new APIs to do [message](https://webex.github.io/spark-ios-sdk/Classes/MessageClient.html#/...TBD)/[file](https://webex.github.io/spark-ios-sdk/Classes/MessageClient.html#/...TBD) end to end encryption, [Mention](https://webex.github.io/spark-ios-sdk/Classes/MessageClient.html#/...TBD) in message, [upload](https://webex.github.io/spark-ios-sdk/Structs/Message.html#/...LocalFile) and [download](https://webex.github.io/spark-ios-sdk/Structs/Message.html#/...RemoteFile) encrypted files
-- Five properties in [Person](https://webex.github.io/spark-ios-sdk/Structs/Person.html): nickName, firstName, lastName, orgId, type
-- Three functions to [create](https://webex.github.io/spark-ios-sdk/Classes/PersonClient.html#/...TBD)/[update](https://webex.github.io/spark-ios-sdk/Classes/PersonClient.html#/...TBD)/[delete](https://webex.github.io/spark-ios-sdk/Classes/PersonClient.html#/...TBD) a person for organization's administrator
-- Support room [list](https://webex.github.io/spark-ios-sdk/Classes/RoomClient.html#/...TBD) ordered by either room ID, lastactivity time or creation time
-- A new property in [TeamMembership](https://webex.github.io/spark-ios-sdk/Structs/TeamMembership.html): personOrgId
-- Two new parameters to [update](https://webex.github.io/spark-ios-sdk/Classes/WebhookClient.html#/...TBD) webhook : status and secret
+- A few new APIs to do message/file end to end encryption, Mention in message, upload and download encrypted files.
+- Five properties in Person: nickName, firstName, lastName, orgId, type.
+- Three functions to create/update/delete a person for organization's administrator.
+- Support room list ordered by either room ID, lastactivity time or creation time.
+- A new property in TeamMembership: personOrgId.
+- Two new parameters to update webhook : status and secret.
 
 #### Updated
-- Fixed ocassional crash when switching between video call and audio call when CallKit is used
-- Fixed video freeze when iOS SDK makes a call to JavaScript SDK
-- Fixed crash issue when invoking Phone.requestMediaAccess function from background thread
-- Fixed wrong call type for room calling when there are only two people in the call
+- Fixed ocassional crash when switching between video call and audio call when CallKit is used.
+- Fixed video freeze when iOS SDK makes a call to JavaScript SDK.
+- Fixed crash issue when invoking Phone.requestMediaAccess function from background thread.
+- Fixed wrong call type for room calling when there are only two people in the call.
 
 ## [1.3.1](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.3.1)
 Released on 2018-1-12.
