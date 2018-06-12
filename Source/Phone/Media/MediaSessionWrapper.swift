@@ -238,8 +238,10 @@ class MediaSessionWrapper {
             mediaSession.setDefaultCamera(phone.defaultFacingMode == Phone.FacingMode.user)
             mediaSession.setDefaultAudioOutput(phone.defaultLoudSpeaker)
             
-            if let appGroupID = option.applicationGroupIdentifier {
+            if let appGroupID = option.applicationGroupIdentifier, let _ = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) {
                 self.broadcastServer = BroadcastConnectionServer(applicationGroupIdentifier: appGroupID, delegate: self)
+            } else {
+                SDKLogger.shared.error("Fail to create broadcast server: Illegal Application Group Identifier.")
             }
         }
     }

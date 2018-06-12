@@ -41,6 +41,11 @@ struct ReplaceModel  {
     fileprivate(set) var locusUrl: String?
 }
 
+struct CallResponseModel {
+    fileprivate(set) var callModel: CallModel?
+    fileprivate(set) var mediaConnections: [MediaConnectionModel]?
+}
+
 struct CallModel {
     fileprivate(set) var locusUrl: String? // Mandatory
     fileprivate(set) var participants: [ParticipantModel]?
@@ -50,6 +55,7 @@ struct CallModel {
     fileprivate(set) var sequence: SequenceModel? // Mandatory
     fileprivate(set) var replaces: [ReplaceModel]?
     fileprivate(set) var mediaShares: [MediaShareModel]?
+    fileprivate(set) var mediaConnections: [MediaConnectionModel]?
     
     subscript(participant id: String) -> ParticipantModel? {
         return self.participants?.filter({$0.id == id}).first
@@ -178,6 +184,16 @@ extension ReplaceModel: Mappable {
     }
 }
 
+extension CallResponseModel: Mappable {
+    init?(map: Map) {
+    }
+    
+    mutating func mapping(map: Map) {
+        callModel <- map["locus"]
+        mediaConnections <- map["mediaConnections"]
+    }
+}
+
 internal extension CallModel {
     internal mutating func setLocusUrl(newLocusUrl:String?) {
         self.locusUrl = newLocusUrl
@@ -209,6 +225,10 @@ internal extension CallModel {
     
     internal mutating func setMediaShares(newMediaShares:[MediaShareModel]?) {
         self.mediaShares = newMediaShares
+    }
+    
+    internal mutating func setMediaConnections(newMediaConnections:[MediaConnectionModel]?) {
+        self.mediaConnections = newMediaConnections
     }
 }
 

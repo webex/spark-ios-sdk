@@ -555,7 +555,7 @@ public class Phone {
         DispatchQueue.main.async {
             let reachabilities = self.reachability.feedback?.reachabilities
             self.queue.sync {
-                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.localSdp?.sdp, let mediaID = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.mediaId else {
+                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.mediaConnections?.first?.localSdp?.sdp, let mediaID = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.mediaId else {
                     self.queue.yield()
                     return
                 }

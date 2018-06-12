@@ -132,7 +132,7 @@ class WebSocketService: WebSocketAdvancedDelegate {
         }
         else {
             SDKLogger.shared.info("Websocket is disconnected by remote on purpose")
-            self.onEvent?(MercuryEvent.disconnected(nil))
+            self.onEvent?(MercuryEvent.disconnected(SparkError.serviceFailed(code: 404, reason: "Websocket is disconnected by remote on purpose")))
         }
     }
     

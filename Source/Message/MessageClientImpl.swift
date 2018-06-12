@@ -171,13 +171,12 @@ class MessageClientImpl {
 
     func post(person: String,
               text: String? = nil,
-              mentions: [Mention]? = nil,
               files: [LocalFile]? = nil,
               queue: DispatchQueue? = nil,
               completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.lookupRoom(person: person, queue: queue) { result in
             if let roomId = result.data {
-                self.post(roomId: roomId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
+                self.post(roomId: roomId, text: text, files: files, queue: queue, completionHandler: completionHandler)
             }
             else {
                 completionHandler(ServiceResponse(nil, Result.failure(result.error ?? MSGError.roomFetchFail)))

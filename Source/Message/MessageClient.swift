@@ -192,7 +192,7 @@ public class MessageClient {
         if let file = files {
             self.download(from: file) { result in
                 if let file = result.data {
-                    self.post(personId: personId, text: text, mentions: nil, files: [file], queue: queue, completionHandler: completionHandler)
+                    self.post(personId: personId, text: text, files: [file], queue: queue, completionHandler: completionHandler)
                 }
                 else {
                     (queue ?? DispatchQueue.main).async {
@@ -202,7 +202,7 @@ public class MessageClient {
             }
         }
         else {
-            self.post(personId: personId, text: text, mentions: nil, files: nil, queue: queue, completionHandler: completionHandler)
+            self.post(personId: personId, text: text, files: nil, queue: queue, completionHandler: completionHandler)
         }
     }
     
@@ -218,7 +218,7 @@ public class MessageClient {
     public func post(personId: String, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.download(from: files) { result in
             if let file = result.data {
-                self.post(personId: personId, text: nil, mentions: nil, files: [file], queue: queue, completionHandler: completionHandler)
+                self.post(personId: personId, text: nil, files: [file], queue: queue, completionHandler: completionHandler)
             }
             else {
                 (queue ?? DispatchQueue.main).async {
@@ -242,7 +242,7 @@ public class MessageClient {
         if let file = files {
             self.download(from: file) { result in
                 if let file = result.data {
-                    self.post(personEmail: personEmail, text: text, mentions: nil, files: [file], queue: queue, completionHandler: completionHandler)
+                    self.post(personEmail: personEmail, text: text, files: [file], queue: queue, completionHandler: completionHandler)
                 }
                 else {
                     (queue ?? DispatchQueue.main).async {
@@ -252,7 +252,7 @@ public class MessageClient {
             }
         }
         else {
-            self.post(personEmail: personEmail, text: text, mentions: nil, files: nil, queue: queue, completionHandler: completionHandler)
+            self.post(personEmail: personEmail, text: text, files: nil, queue: queue, completionHandler: completionHandler)
         }
     }
     
@@ -268,7 +268,7 @@ public class MessageClient {
     public func post(personEmail: EmailAddress, files: String, queue: DispatchQueue? = nil, completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.download(from: files) { result in
             if let file = result.data {
-                self.post(personEmail: personEmail, text: nil, mentions: nil, files: [file], queue: queue, completionHandler: completionHandler)
+                self.post(personEmail: personEmail, text: nil, files: [file], queue: queue, completionHandler: completionHandler)
             }
             else {
                 (queue ?? DispatchQueue.main).async {
@@ -282,7 +282,6 @@ public class MessageClient {
     ///
     /// - parameter personEmail: The EmailAddress of the user to whom the message is to be posted.
     /// - parameter content: The plain text message to be posted to the room.
-    /// - parameter medtions: The mention items to be posted to the room.
     /// - parameter files: Local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -290,13 +289,12 @@ public class MessageClient {
     /// - since: 1.4.0
     public func post(personEmail: EmailAddress,
                      text: String? = nil,
-                     mentions: [Mention]? = nil,
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
-                impl.post(person: personEmail.toString(), text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
+                impl.post(person: personEmail.toString(), text: text, files: files, queue: queue, completionHandler: completionHandler)
             }
             else {
                 (queue ?? DispatchQueue.main).async {
@@ -310,7 +308,6 @@ public class MessageClient {
     ///
     /// - parameter personId: The personId of the user to whom the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
-    /// - parameter mentions: The mention items to be posted to the room.
     /// - parameter files: Local file objects to be uploaded to the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
@@ -318,13 +315,12 @@ public class MessageClient {
     /// - since: 1.4.0
     public func post(personId: String,
                      text: String? = nil,
-                     mentions: [Mention]? = nil,
                      files: [LocalFile]? = nil,
                      queue: DispatchQueue? = nil,
                      completionHandler: @escaping (ServiceResponse<Message>) -> Void) {
         self.doSomethingAfterRegistered { error in
             if let impl = self.phone.messages {
-                impl.post(person: personId, text: text, mentions: mentions, files: files, queue: queue, completionHandler: completionHandler)
+                impl.post(person: personId, text: text, files: files, queue: queue, completionHandler: completionHandler)
             }
             else {
                 (queue ?? DispatchQueue.main).async {
