@@ -900,7 +900,7 @@ public class Call {
     
     private func doCallModel(_ model: CallModel) {
         self.model = model
-        if let participants = model.participants?.filter({ $0.type == "USER" }) {
+        if let participants = model.participants?.filter({ $0.isCIUser() }) {
             let oldMemberships = self.memberships
             var newMemberships = [CallMembership]()
             var onCallMembershipChanges = [CallMembershipChangedEvent]()

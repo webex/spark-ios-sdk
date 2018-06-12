@@ -77,6 +77,14 @@ struct ParticipantModel {
         return isDeclined && self.deviceUrl == by.absoluteString
     }
     
+    func isCIUser() -> Bool {
+        if let typeString = self.type, typeString == "USER" || typeString == "RESOURCE_ROOM"{
+            return true
+        }
+        
+        return false
+    }
+    
     subscript(device url: URL) -> ParticipantModel.DeviceModel? {
         return self.devices?.filter{ $0.url == url.absoluteString }.first
     }
