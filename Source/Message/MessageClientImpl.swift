@@ -226,7 +226,8 @@ class MessageClientImpl {
                 let target: [String: Any] = ["id": roomId.locusFormat, "objectType": ObjectType.conversation.rawValue]
                 key.encryptionUrl(client: self) { encryptionUrl in
                     if let url = encryptionUrl.data {
-                        let requestBody: (String?)->Void = { keySerialization in
+                        typealias KeyReqeustBlock = (String?)->Void
+                        let postMessage: KeyReqeustBlock = { keySerialization in
                             let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)", "kmsMessage": keySerialization ?? nil])
                             let request = self.messageServiceBuilder.path("activities")
                                 .method(.post)
@@ -243,20 +244,24 @@ class MessageClientImpl {
                                 }
                             }
                         }
-                        if key.roomUserIds.isEmpty {
-                            requestBody(self.keySerialization)
-                        }
-                        else {
+                        
+                        let createKeyResource:(@escaping KeyReqeustBlock) -> Void = { postMessage in
                             self.authenticator.accessToken{ token in
                                 if let request = try? KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString, userId: self.userId, bearer: token, method: "create", uri: "/resources") {
                                     request.additionalAttributes = ["keyUris":[url],"userIds": key.roomUserIds]
                                     if let serialize = request.serialize(), let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: self.ephemeralKey) {
                                         self.keyResourceSerialization = chiperText
-                                        requestBody(self.keyResourceSerialization)
+                                        postMessage(self.keyResourceSerialization)
                                     }
-                                    
                                 }
                             }
+                        }
+            
+                        if key.roomUserIds.isEmpty {
+                            postMessage(self.keySerialization)
+                        }
+                        else {
+                            createKeyResource(postMessage)
                         }
                     }
                     else {
@@ -613,10 +618,6 @@ class MessageClientImpl {
     
     private var messageServiceBuilder: ServiceRequest.Builder {
         return ServiceRequest.Builder(self.authenticator).baseUrl(ServiceRequest.CONVERSATION_SERVER_ADDRESS)
-    }
-    
-    private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(self.authenticator).path("people")
     }
     
     private func encryptionKey(roomId: String) -> EncryptionKey {
