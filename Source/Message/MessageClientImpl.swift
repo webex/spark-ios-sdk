@@ -60,6 +60,7 @@ class MessageClientImpl {
     private var rsaPublicKey: String?
     private var ephemeralKey: String?
     private var keySerialization: String?
+    private var keyResourceSerialization: String?
     
     private var ephemeralKeyRequest: (KmsEphemeralKeyRequest, (Error?) -> Void)?
     private var keyMaterialCompletionHandlers: [String: [(Result<(String, String)>) -> Void]] = [String: [(Result<(String, String)>) -> Void]]()
@@ -168,7 +169,7 @@ class MessageClientImpl {
             }
         }
     }
-
+    
     func post(person: String,
               text: String? = nil,
               files: [LocalFile]? = nil,
@@ -225,18 +226,36 @@ class MessageClientImpl {
                 let target: [String: Any] = ["id": roomId.locusFormat, "objectType": ObjectType.conversation.rawValue]
                 key.encryptionUrl(client: self) { encryptionUrl in
                     if let url = encryptionUrl.data {
-                        let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)", "kmsMessage": self.keySerialization ?? nil])
-                        let request = self.messageServiceBuilder.path("activities")
-                            .method(.post)
-                            .body(body)
-                            .queue(queue)
-                            .build()
-                        request.responseObject { (response: ServiceResponse<ActivityModel>) in
-                            switch response.result{
-                            case .success(let activity):
-                                completionHandler(ServiceResponse(response.response, Result.success(Message(activity: activity.decrypt(key: material.data)))))
-                            case .failure(let error):
-                                completionHandler(ServiceResponse(response.response, Result.failure(error)))
+                        let requestBody: (String?)->Void = { keySerialization in
+                            let body = RequestParameter(["verb": verb.rawValue, "encryptionKeyUrl": url, "object": object, "target": target, "clientTempId": "\(self.uuid):\(UUID().uuidString)", "kmsMessage": keySerialization ?? nil])
+                            let request = self.messageServiceBuilder.path("activities")
+                                .method(.post)
+                                .body(body)
+                                .queue(queue)
+                                .build()
+                            request.responseObject { (response: ServiceResponse<ActivityModel>) in
+                                switch response.result{
+                                case .success(let activity):
+                                    key.roomUserIds.removeAll()
+                                    completionHandler(ServiceResponse(response.response, Result.success(Message(activity: activity.decrypt(key: material.data)))))
+                                case .failure(let error):
+                                    completionHandler(ServiceResponse(response.response, Result.failure(error)))
+                                }
+                            }
+                        }
+                        if key.roomUserIds.isEmpty {
+                            requestBody(self.keySerialization)
+                        }
+                        else {
+                            self.authenticator.accessToken{ token in
+                                if let request = try? KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString, userId: self.userId, bearer: token, method: "create", uri: "/resources") {
+                                    request.additionalAttributes = ["keyUris":[url],"userIds": key.roomUserIds]
+                                    if let serialize = request.serialize(), let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: self.ephemeralKey) {
+                                        self.keyResourceSerialization = chiperText
+                                        requestBody(self.keyResourceSerialization)
+                                    }
+                                    
+                                }
                             }
                         }
                     }
@@ -281,7 +300,7 @@ class MessageClientImpl {
             }
         }
     }
-
+    
     func downloadFile(_ file: RemoteFile, to: URL? = nil, queue: DispatchQueue? = nil, progressHandler: ((Double)->Void)? = nil, completionHandler: @escaping (Result<URL>) -> Void) {
         if let source = file.url {
             let operation = DownloadFileOperation(authenticator: self.authenticator,
@@ -394,12 +413,23 @@ class MessageClientImpl {
                 return
             }
             let request = self.messageServiceBuilder.path("conversations/" + roomId.locusFormat)
-                .query(RequestParameter(["includeActivities": false, "includeParticipants": false]))
+                .query(RequestParameter(["includeActivities": false, "includeParticipants": true]))
                 .method(.get)
                 .build()
             request.responseJSON { (response: ServiceResponse<Any>) in
                 if let dict = response.result.data as? [String: Any] {
-                    completionHandler(Result.success((dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String))
+                    if let roomEncryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String{
+                        completionHandler(Result.success(roomEncryptionUrl))
+                    }else if let _ = dict["kmsResourceObjectUrl"] {
+                        if let paticipients = dict["participants"] as? [String: Any], let participantsArray = paticipients["items"] as? [[String: String]]{
+                            participantsArray.forEach{ pdict in
+                                if let userId = pdict["entryUUID"], !self.encryptionKey(roomId: roomId).roomUserIds.contains(userId){
+                                    self.encryptionKey(roomId: roomId).roomUserIds.append(userId)
+                                }
+                            }
+                        }
+                        completionHandler(Result.success(nil))
+                    }
                 }
                 else {
                     completionHandler(Result.failure(response.result.error ?? MSGError.encryptionUrlFetchFail))
@@ -430,6 +460,7 @@ class MessageClientImpl {
                     if let request = try? KmsRequest(requestId: self.uuid, clientId: self.deviceUrl.absoluteString, userId: userId, bearer: token, method: "retrieve", uri: encryptionUrl),
                         let serialize = request.serialize(),
                         let chiperText = try? CjoseWrapper.ciphertext(fromContent: serialize.data(using: .utf8), key: ephemeralKey) {
+                        self.keySerialization = chiperText
                         parameters = ["kmsMessages": [chiperText], "destination": "unused" ] as [String : Any]
                         var handlers: [(Result<(String, String)>) -> Void] = self.keyMaterialCompletionHandlers[encryptionUrl] ?? []
                         handlers.append(completionHandler)
@@ -582,6 +613,10 @@ class MessageClientImpl {
     
     private var messageServiceBuilder: ServiceRequest.Builder {
         return ServiceRequest.Builder(self.authenticator).baseUrl(ServiceRequest.CONVERSATION_SERVER_ADDRESS)
+    }
+    
+    private func requestBuilder() -> ServiceRequest.Builder {
+        return ServiceRequest.Builder(self.authenticator).path("people")
     }
     
     private func encryptionKey(roomId: String) -> EncryptionKey {
