@@ -426,9 +426,9 @@ class MessageClientImpl {
                     if let roomEncryptionUrl = (dict["encryptionKeyUrl"] ?? dict["defaultActivityEncryptionKeyUrl"]) as? String{
                         completionHandler(Result.success(roomEncryptionUrl))
                     }else if let _ = dict["kmsResourceObjectUrl"] {
-                        if let paticipients = dict["participants"] as? [String: Any], let participantsArray = paticipients["items"] as? [[String: String]]{
+                        if let paticipients = dict["participants"] as? [String: Any], let participantsArray = paticipients["items"] as? [[String: Any]]{
                             participantsArray.forEach{ pdict in
-                                if let userId = pdict["entryUUID"], !self.encryptionKey(roomId: roomId).roomUserIds.contains(userId){
+                                if let userId = pdict["entryUUID"] as? String, !self.encryptionKey(roomId: roomId).roomUserIds.contains(userId){
                                     self.encryptionKey(roomId: roomId).roomUserIds.append(userId)
                                 }
                             }
