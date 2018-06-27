@@ -29,6 +29,7 @@ struct ActivityModel {
         case delete
         case tombstone
         case acknowledge
+        case updateKey
     }
     
     private(set) var id: String?
