@@ -227,7 +227,7 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
-10. Receie a message:
+10. Receive a message:
     ```
     spark.messages.onEvent = { messageEvent in
         switch messageEvent{
