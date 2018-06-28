@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
-import SparkSDK
+//import SparkSDK
 import XCTest
 @testable import SparkSDK
 
@@ -41,8 +41,7 @@ class SparkTestFixture {
     private let adminClientSecret: String
     private let adminAccessToken: String
     let selfUser: TestUser
-    let spark: Spark
-    
+    var spark: Spark
     private init?() {
         guard let adminClientSecretValue = ProcessInfo().environment["CLIENTSECRET"] else { // check , !adminClientSecretValue.isEmpty()
             print("Failed to get client secret from CLIENTSECRET environment variable")
@@ -74,11 +73,12 @@ class SparkTestFixture {
             func accessToken(completionHandler: @escaping (String?) -> Void) {
                 completionHandler(accessToken)
             }
+            func refreshToken(completionHandler: @escaping (String?) -> Void) {
+                completionHandler(accessToken)
+            }
         }
         
-        spark = Spark(authenticator: SimpleAuthStrategy(accessToken: selfUser.accessToken))
-        
-        
+        spark = Spark(authenticator: SimpleAuthenticator(accessToken: selfUser.accessToken))
     }
     
     private static func createAdminAccessToken(clientId: String, clientSecret: String) -> String? {
@@ -184,7 +184,7 @@ class SparkTestFixture {
         return getResponse(testCase: testCase, request: request) != nil
     }
     
-    func getResponse<T>(testCase: XCTestCase, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
+    func getResponse<T>(testCase: XCTestCase, timeOut: Double? = nil, request: @escaping (_ completionHandler: @escaping (ServiceResponse<T>) -> Void) -> Void) -> T? {
         let expect = testCase.expectation(description: "Service call")
         var output: T?
         request() { response in
@@ -196,7 +196,12 @@ class SparkTestFixture {
             }
             expect.fulfill()
         }
-        testCase.waitForExpectations(timeout: 30) { error in XCTAssertNil(error, "Timeout") }
+        if let timeOut = timeOut{
+            testCase.waitForExpectations(timeout: timeOut) { error in XCTAssertNil(error, "Timeout") }
+        }
+        else {
+            testCase.waitForExpectations(timeout: 30) { error in XCTAssertNil(error, "Timeout") }
+        }
         return output
     }
     
@@ -216,3 +221,5 @@ class SparkTestFixture {
         return getResponse(testCase: testCase, request: request) == nil ? false : true
     }
 }
+
+

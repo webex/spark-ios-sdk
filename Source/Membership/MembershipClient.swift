@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,6 @@ import Foundation
 public class MembershipClient {
     
     let authenticator: Authenticator
-    
     init(authenticator: Authenticator) {
         self.authenticator = authenticator
     }

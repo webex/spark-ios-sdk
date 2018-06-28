@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -60,6 +60,11 @@ public struct TeamMembership {
     ///
     /// - since: 1.2.0
     public var created: Date?
+    
+    /// The personOrgId of the person.
+    ///
+    /// - since: 1.4.0
+    public var personOrgId: String?
 }
 
 extension TeamMembership: Mappable {
@@ -80,6 +85,7 @@ extension TeamMembership: Mappable {
         personEmail <- (map["personEmail"], EmailTransform())
         personDisplayName <- map["personDisplayName"]
         isModerator <- map["isModerator"]
+        personOrgId <- map["personOrgId"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
     }
 }

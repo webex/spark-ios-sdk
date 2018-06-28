@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -115,18 +115,20 @@ class CallClient {
     }
     
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(authenticator).keyPath("locus")
+        return ServiceRequest.Builder(authenticator)
     }
     
     private func body(deviceUrl: URL, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
         result["deviceUrl"] = deviceUrl.absoluteString
+        result["respOnlySdp"] = ServiceRequest.LOCUS_RESPONSE_ONLY_SDP
         return RequestParameter(result)
     }
 
     private func body(device: Device, json: [String:Any?] = [:]) -> RequestParameter {
         var result = json
-        result["device"] = ["url":device.deviceUrl.absoluteString, "deviceType":device.deviceType, "regionCode":device.countryCode, "countryCode":device.regionCode]        
+        result["device"] = ["url":device.deviceUrl.absoluteString, "deviceType":device.deviceType, "regionCode":device.countryCode, "countryCode":device.regionCode]
+        result["respOnlySdp"] = ServiceRequest.LOCUS_RESPONSE_ONLY_SDP
         return RequestParameter(result)
     }
     
@@ -136,6 +138,22 @@ class CallClient {
             return ["localMedias": [["mediaId":id ,"type": "SDP", "localSdp": mediaInfoJSON]]]
         }
         return ["localMedias": [["type": "SDP", "localSdp": mediaInfoJSON]]]
+    }
+    
+    private func handleLocusOnlySDPResponse(completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) ->((ServiceResponse<CallResponseModel>) -> Void) {
+        return {
+            result in
+            switch result.result {
+            case .success(let callResponse):
+                if var callModel = callResponse.callModel {
+                    callModel.setMediaConnections(newMediaConnections: callResponse.mediaConnections)
+                    completionHandler(ServiceResponse.init(result.response, Result.success(callModel)))
+                }
+            case .failure(let error):
+                completionHandler(ServiceResponse.init(result.response, Result.failure(error)))
+            }
+        }
+        
     }
     
     func create(_ toAddress: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
@@ -150,7 +168,7 @@ class CallClient {
             .queue(queue)
             .build()
         
-        request.responseObject(completionHandler)
+        request.responseObject(handleLocusOnlySDPResponse(completionHandler: completionHandler))
     }
     
     func join(_ callUrl: String, by device: Device, localMedia: MediaModel, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
@@ -163,7 +181,7 @@ class CallClient {
             .queue(queue)
             .build()
         
-        request.responseObject(completionHandler)
+        request.responseObject(handleLocusOnlySDPResponse(completionHandler: completionHandler))
     }
     
     func leave(_ participantUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
@@ -175,13 +193,14 @@ class CallClient {
             .queue(queue)
             .build()
         
-        request.responseObject(completionHandler)
+        request.responseObject(handleLocusOnlySDPResponse(completionHandler: completionHandler))
     }
     
     func decline(_ callUrl: String, by device: Device, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(callUrl)
+            .keyPath("locus")
             .body(body(deviceUrl: device.deviceUrl))
             .path("participant/decline")
             .queue(queue)
@@ -194,6 +213,7 @@ class CallClient {
         let request = requestBuilder()
             .method(.put)
             .baseUrl(callUrl)
+            .keyPath("locus")
             .body(body(deviceUrl: device.deviceUrl))
             .path("participant/alert")
             .queue(queue)
@@ -217,6 +237,7 @@ class CallClient {
         let request = requestBuilder()
             .method(.post)
             .baseUrl(participantUrl)
+            .keyPath("locus")
             .body(body(deviceUrl: device.deviceUrl, json: json))
             .path("sendDtmf")
             .queue(queue)
@@ -234,12 +255,13 @@ class CallClient {
             .queue(queue)
             .build()
         
-        request.responseObject(completionHandler)
+        request.responseObject(handleLocusOnlySDPResponse(completionHandler: completionHandler))
     }
     
     func fetch(_ callUrl: String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<CallModel>) -> Void) {
         let request = requestBuilder()
             .method(.get)
+            .keyPath("locus")
             .baseUrl(callUrl)
             .queue(queue)
             .build()
@@ -257,5 +279,24 @@ class CallClient {
             .build()
         
         request.responseArray(completionHandler)
+    }
+    
+    func updateMediaShare(_ mediaShare: MediaShareModel, by device: Device, mediaShareUrl:String, queue: DispatchQueue, completionHandler: @escaping (ServiceResponse<Any>) -> Void) {
+        var mediaShareUpdateParam: [String: Any?]
+        let floorParam: [String: Any?] = ["disposition": mediaShare.shareFloor?.disposition?.rawValue.uppercased() ?? "RELEASE",
+                                          "requester": ["url": mediaShare.shareFloor?.requester?.url],
+                                          "beneficiary": ["url": mediaShare.shareFloor?.beneficiary?.url as Any,
+                                                          "devices": ["url": device.deviceUrl.absoluteString] as Any]]
+        mediaShareUpdateParam = ["floor": floorParam]
+        let body = RequestParameter(mediaShareUpdateParam)
+        let request = requestBuilder()
+            .method(.put)
+            .keyPath("locus")
+            .baseUrl(mediaShareUrl)
+            .body(body)
+            .queue(queue)
+            .build()
+            
+        request.responseJSON(completionHandler)
     }
 }

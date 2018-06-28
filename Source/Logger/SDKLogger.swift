@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -127,7 +127,7 @@ class MemoryLoggerStorage {
     func write(_ message: String) {
         synchronized(lock: self) {
             blocks[blockIndex] += message + "\n"
-            if blocks[blockIndex].characters.count > BlockSize {
+            if blocks[blockIndex].count > BlockSize {
                 blockIndex = (blockIndex + 1) % BlockCount
                 blocks[blockIndex] = ""
             }

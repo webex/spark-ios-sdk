@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,65 +41,65 @@ class XCPeopleSpec: XCTestCase {
         people = fixture.spark.people
     }
     
-    /* TODO: Fix these tests?
-     1. Why are we using XCTAssertLessThanOrEqual with PeopleCountValid? (e.g. testListPeopleWithEmailAddressAndDisplayNameAndValidCount)
-     2. Why are we checking that the people[0].displayName contains other.name? (e.g. testListPeopleWithDisplayName)
-    */
-    
     func testListPeopleWithEmailAddressAndDisplayNameAndValidCount() {
-        if let people = listPeople(email: other.email, displayName: other.name, max: 10), let displayName = people[0].displayName, let emails = people[0].emails {
+        let peopleList = listPeople(email: other.email, displayName: other.name, max: 10)
+        XCTAssertNotNil(peopleList)
+        if let people = peopleList {
             XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertEqual(displayName, other.name)
-            XCTAssertTrue(emails.contains(other.email))
-        } else {
-            XCTFail("Failed to list people")
+            XCTAssertEqual(people[0].displayName, other.name)
+            XCTAssertNotNil(people[0].emails)
+            XCTAssertTrue(people[0].emails!.contains(other.email))
         }
     }
     
     func testListPeopleWithOnlyEmailAddress() {
-        if let people = listPeople(email: other.email, displayName: nil, max: nil), let displayName = people[0].displayName, let emails = people[0].emails {
-            XCTAssertEqual(people.count, 1)
-            validate(person: people[0])
-            XCTAssertNil(people[0].avatar)
-            XCTAssertEqual(displayName, other.name)
-            XCTAssertTrue(emails.contains(other.email))
-        } else {
-            XCTFail("Failed to list people")
-        }
+            let peopleList = listPeople(email: other.email, displayName: nil, max: nil)
+            XCTAssertNotNil(peopleList)
+            if let people = peopleList {
+                XCTAssertEqual(people.count, 1)
+                validate(person: people[0])
+                XCTAssertNil(people[0].avatar)
+                XCTAssertEqual(people[0].displayName, other.name)
+                XCTAssertNotNil(people[0].emails)
+                XCTAssertTrue(people[0].emails!.contains(other.email))
+            }
     }
     
     func testListPeopleWithDisplayName() {
-        if let people = listPeople(email: nil, displayName: other.name, max: nil), let displayName = people[0].displayName {
+        let peopleList = listPeople(email: nil, displayName: other.name, max: nil)
+        XCTAssertNotNil(peopleList)
+        if let people = peopleList {
             XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertTrue(displayName.contains(other.name))
-        } else {
-            XCTFail("Failed to list people")
+            XCTAssertNotNil(people[0].displayName)
+            XCTAssertTrue(people[0].displayName!.contains(other.name))
         }
     }
     
     func testListPeopleWithDisplayNameAndMaxCount() {
-        if let people = listPeople(email: nil, displayName: other.name, max: 10), let displayName = people[0].displayName {
+        let peopleList = listPeople(email: nil, displayName: other.name, max: 10)
+        XCTAssertNotNil(peopleList)
+        if let people = peopleList {
             XCTAssertEqual(people.count, 1)
             validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertTrue(displayName.contains(other.name))
-        } else {
-            XCTFail("Failed to list people")
+            XCTAssertNotNil(people[0].displayName)
+            XCTAssertTrue(people[0].displayName!.contains(other.name))
         }
     }
     
     func testListPeopleWithEmailAndMaxCount() {
-        if let people = listPeople(email: other.email, displayName: nil, max: 10), let emails = people[0].emails {
-            validate(person: people[0])
+        let peopleList = listPeople(email: other.email, displayName: nil, max: 10)
+        XCTAssertNotNil(peopleList)
+        if let people = peopleList {
             XCTAssertEqual(people.count, 1)
+            validate(person: people[0])
             XCTAssertNil(people[0].avatar)
-            XCTAssertTrue(emails.contains(other.email))
-        } else {
-            XCTFail("Failed to list people")
+            XCTAssertNotNil(people[0].emails)
+            XCTAssertTrue(people[0].emails!.contains(other.email))
         }
     }
     
@@ -109,12 +109,14 @@ class XCPeopleSpec: XCTestCase {
     }
     
     func testListPeopleWithEmailAndDisplayName() {
-        if let people = listPeople(email: other.email, displayName: other.name, max: nil), let displayName = people[0].displayName {
+        let peopleList = listPeople(email: other.email, displayName: other.name, max: nil)
+        XCTAssertNotNil(peopleList)
+        if let people = peopleList {
             XCTAssertEqual(people.count, 1)
             validate(person: people[0])
-            XCTAssertTrue(displayName.contains(other.name))
-        } else {
-            XCTFail("Failed to list people")
+            
+            XCTAssertNotNil(people[0].displayName)
+            XCTAssertTrue(people[0].displayName!.contains(other.name))
         }
     }
     
@@ -144,24 +146,26 @@ class XCPeopleSpec: XCTestCase {
     }
     
     func testGetMe() {
-        if let person = getMe(), let emails = person.emails {
-            validate(person: person)
-            XCTAssertNil(person.avatar)
-            XCTAssertEqual(person.displayName, fixture.selfUser.name)
-            XCTAssert(emails.contains(fixture.selfUser.email))
-        } else {
-            XCTFail("Failed to get me")
+        let person = getMe()
+        XCTAssertNotNil(person)
+        if let me = person {
+            validate(person: me)
+            XCTAssertNil(me.avatar)
+            XCTAssertEqual(me.displayName, fixture.selfUser.name)
+            XCTAssertNotNil(me.emails)
+            XCTAssert(me.emails!.contains(fixture.selfUser.email))
         }
     }
     
     func testGetWithPersonId() {
-        if let person = get(personId: fixture.selfUser.personId), let emails = person.emails {
+        let getPerson = get(personId: fixture.selfUser.personId)
+        XCTAssertNotNil(getPerson)
+        if let person = getPerson {
             validate(person: person)
             XCTAssertNil(person.avatar)
             XCTAssertEqual(person.displayName, fixture.selfUser.name)
-            XCTAssert(emails.contains(fixture.selfUser.email))
-        } else {
-            XCTFail("Failed to get me")
+            XCTAssertNotNil(person.emails)
+            XCTAssert(person.emails!.contains(fixture.selfUser.email))
         }
     }
     

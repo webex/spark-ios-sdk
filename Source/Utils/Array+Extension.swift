@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,14 @@ extension Array where Element: Equatable {
         }
     }
     
+    mutating func removeObject(equality: (Element) -> Bool) -> Element? {
+        for (idx, element) in self.enumerated() {
+            if equality(element) {
+                return self.remove(at: idx);
+            }
+        }
+        return nil
+    }
 }
 
 extension Sequence {

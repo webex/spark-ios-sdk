@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -107,6 +107,18 @@ public class Phone {
     /// - since: 1.2.0
     public var onIncoming: ((Call) -> Void)?
     
+    /// Indicates whether or not the SDK is connected with the Cisco Spark cloud.
+    ///
+    /// - since: 1.4.0
+    public private(set) var connected: Bool = false
+    
+    /// Indicates whether or not the SDK is registered with the Cisco Spark cloud.
+    ///
+    /// - since: 1.4.0
+    public var registered: Bool {
+        return self.devices.device != nil
+    }
+    
     let authenticator: Authenticator
     let reachability: ReachabilityService
     let client: CallClient
@@ -114,8 +126,9 @@ public class Phone {
     let prompter: H264LicensePrompter
     let queue = SerialQueue()
     let metrics: MetricsEngine
+    private(set) var messages: MessageClientImpl?
     
-    private let devices: DeviceService    
+    private let devices: DeviceService
     private let webSocket: WebSocketService
     private var calls = [String: Call]()
     private var mediaContext: MediaSessionWrapper?
@@ -129,26 +142,48 @@ public class Phone {
         case reject(Call, ServiceResponse<Any>, (Error?) -> Void)
         case alert(Call, ServiceResponse<Any>, (Error?) -> Void)
         case update(Call, ServiceResponse<CallModel>)
+        case updateMediaShare(Call, ServiceResponse<Any>, (Error?) -> Void)
     }
     
-    init(authenticator: Authenticator) {
+    convenience init(authenticator: Authenticator) {
+        let device = DeviceService(authenticator: authenticator)
+        let metrics = MetricsEngine(authenticator: authenticator, service: device)
+        self.init(authenticator: authenticator,
+                  devices: device,
+                  reachability: ReachabilityService(authenticator: authenticator, deviceService: device),
+                  client: CallClient(authenticator: authenticator),
+                  conversations: ConversationClient(authenticator: authenticator), metrics: metrics, prompter: H264LicensePrompter(metrics: metrics), webSocket: WebSocketService(authenticator: authenticator))
+    }
+    
+    init(authenticator: Authenticator, devices:DeviceService, reachability:ReachabilityService, client:CallClient, conversations:ConversationClient, metrics:MetricsEngine, prompter:H264LicensePrompter, webSocket:WebSocketService) {
         let _ = MediaEngineWrapper.sharedInstance.WMEVersion
         self.authenticator = authenticator
-        self.devices = DeviceService(authenticator: authenticator)
-        self.reachability = ReachabilityService(authenticator: authenticator, deviceService: self.devices)
-        self.client = CallClient(authenticator: authenticator)
-        self.conversations = ConversationClient(authenticator: authenticator)
-        self.metrics = MetricsEngine(authenticator: authenticator, service: self.devices)
-        self.prompter = H264LicensePrompter(metrics: self.metrics)
-        self.webSocket = WebSocketService(authenticator: authenticator)
-        self.webSocket.onFailed = { [weak self] in
-            self?.register {_ in
-            }
-        }
-        self.webSocket.onCallModel = { [weak self] model in
+        self.devices = devices
+        self.reachability = reachability
+        self.client = client
+        self.conversations = conversations
+        self.metrics = metrics
+        self.prompter = prompter
+        self.webSocket = webSocket
+        self.webSocket.onEvent = { [weak self] event in
             if let strong = self {
                 strong.queue.underlying.async {
-                    strong.doLocusEvent(model);
+                    switch event {
+                    case .recvCall(let model):
+                        strong.doLocusEvent(model);
+                    case .recvActivity(let model):
+                        strong.doConversationEvent(model);
+                    case .recvKms(let model):
+                        strong.doKmsEvent(model);
+                    case .connected:
+                        strong.connected = true
+                    case .disconnected(let error):
+                        strong.connected = false
+                        if error != nil {
+                            strong.register {_ in
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -170,18 +205,26 @@ public class Phone {
             self.devices.registerDevice(phone: self, queue: self.queue.underlying) { result in
                 switch result {
                 case .success(let device):
+                    if let messages = self.messages {
+                        messages.deviceUrl = device.deviceUrl
+                    }
+                    else {
+                        self.messages = MessageClientImpl(authenticator: self.authenticator, deviceUrl: device.deviceUrl)
+                    }
                     self.webSocket.connect(device.webSocketUrl) { [weak self] error in
                         if let error = error {
                             SDKLogger.shared.error("Failed to Register device", error: error)
                         }
-                        self?.queue.underlying.async {
-                            self?.fetchActiveCalls()
-                            DispatchQueue.main.async {
-                                self?.reachability.fetch()
-                                self?.startObserving()
-                                completionHandler(error)
+                        if let strong = self {
+                            strong.queue.underlying.async {
+                                strong.fetchActiveCalls()
+                                DispatchQueue.main.async {
+                                    strong.reachability.fetch()
+                                    strong.startObserving()
+                                    completionHandler(error)
+                                }
+                                strong.queue.yield()
                             }
-                            self?.queue.yield()
                         }
                     }
                 case .failure(let error):
@@ -205,7 +248,7 @@ public class Phone {
     public func deregister(_ completionHandler: @escaping ((Error?) -> Void)) {
         self.queue.sync {
             self.devices.deregisterDevice(queue: self.queue.underlying) { error in
-                self.webSocket.disconnect()
+                self.disconnectFromWebSocket()
                 DispatchQueue.main.async {
                     self.reachability.clear()
                     self.stopObserving()
@@ -215,7 +258,7 @@ public class Phone {
             }
         }
     }
-    
+        
     /// Makes a call to an intended recipient on behalf of the authenticated user.
     /// It supports the following address formats for the receipient:
     ///
@@ -484,6 +527,15 @@ public class Phone {
                 return
             }
             if let url = call.model.myself?.url {
+                if #available(iOS 11.2, *), call.sendingScreenShare {
+                    self.stopSharing(call: call) {
+                        _ in
+                        SDKLogger.shared.warn("Unshare screen by call end!")
+                    }
+                    call.mediaSession.stopLocalScreenShare()
+                }
+                
+                
                 self.client.leave(url, by: call.device, queue: self.queue.underlying) { res in
                     self.doLocusResponse(LocusResult.leave(call, res, completionHandler))
                     self.queue.yield()
@@ -503,7 +555,7 @@ public class Phone {
         DispatchQueue.main.async {
             let reachabilities = self.reachability.feedback?.reachabilities
             self.queue.sync {
-                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.localSdp?.sdp, let mediaID = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.mediaId else {
+                guard let url = call.model.myself?.mediaBaseUrl, let sdp = call.model.mediaConnections?.first?.localSdp?.sdp, let mediaID = call.model.myself?[device: call.device.deviceUrl]?.mediaConnections?.first?.mediaId else {
                     self.queue.yield()
                     return
                 }
@@ -523,6 +575,58 @@ public class Phone {
                 self.queue.yield()
             }
         }
+    }
+    
+    @available(iOS 11.2,*)
+    func startSharing(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
+        if !call.mediaSession.hasScreenShare {
+            let error = SparkError.illegalOperation(reason: "Call media option unsupport content share.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
+        }
+        
+        if call.isScreenSharedBySelfDevice() {
+            let error = SparkError.illegalStatus(reason: "Already shared by self.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
+        }
+        
+        if call.status != .connected {
+            let error = SparkError.illegalStatus(reason: "No active call.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
+        }
+        
+        let floor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor(beneficiary: call.model.myself, disposition: MediaShareModel.ShareFloorDisposition.granted, granted: nil, released: nil, requested: nil, requester: call.model.myself)
+        
+        let mediaShare : MediaShareModel = MediaShareModel(shareType: MediaShareModel.MediaShareType.screen, url:call.model.mediaShareUrl, shareFloor: floor)
+        self.updateMeidaShare(call: call, mediaShare: mediaShare, completionHandler: completionHandler)
+
+    }
+    
+    @available(iOS 11.2,*)
+    func stopSharing(call:Call, completionHandler: @escaping ((Error?) -> Void)) {
+        if !call.mediaSession.hasScreenShare {
+            let error = SparkError.illegalOperation(reason: "Call media option unsupport content share.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
+        }
+        
+        if !call.isScreenSharedBySelfDevice() {
+            let error = SparkError.illegalStatus(reason: "Local share screen not start.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+            return
+        }
+        
+        let floor : MediaShareModel.MediaShareFloor = MediaShareModel.MediaShareFloor(beneficiary: call.model.myself, disposition: MediaShareModel.ShareFloorDisposition.released, granted: nil, released: nil, requested: nil, requester: call.model.myself)
+        
+        let mediaShare : MediaShareModel = MediaShareModel(shareType: MediaShareModel.MediaShareType.screen, url:call.model.mediaShareUrl, shareFloor: floor)
+        self.updateMeidaShare(call: call, mediaShare: mediaShare, completionHandler: completionHandler)
     }
     
     private func doLocusResponse(_ ret: LocusResult) {
@@ -623,6 +727,19 @@ public class Phone {
             case .failure(let error):
                 SDKLogger.shared.error("Failure update media ", error: error)
             }
+        case .updateMediaShare( _, let res, let completionHandler):
+            switch res.result {
+            case .success(let json):
+                SDKLogger.shared.debug("Receive update media share locus response: \(json)")
+                DispatchQueue.main.async {
+                    completionHandler(nil)
+                }
+            case .failure(let error):
+                SDKLogger.shared.error("Failure update media share", error: error)
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
+            }
         }
         
     }
@@ -658,6 +775,20 @@ public class Phone {
         }
         else {
             SDKLogger.shared.info("Cannot handle the CallModel.")
+        }
+    }
+    
+    private func doConversationEvent(_ model: ActivityModel){
+        if let messages = self.messages {
+            SDKLogger.shared.debug("Receive Conversation Acitivity: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+            messages.handle(activity: model)
+        }
+    }
+    
+    private func doKmsEvent( _ model: KmsMessageModel){
+        if let messages = self.messages{
+            SDKLogger.shared.debug("Receive Kms Message: \(model.toJSONString(prettyPrint: self.debug) ?? "Nil JSON")")
+            messages.handle(kms: model)
         }
     }
     
@@ -709,6 +840,15 @@ public class Phone {
     
     @objc func onApplicationDidBecomeActive() {
         SDKLogger.shared.info("Application did become active")
+        self.connectToWebSocket()
+    }
+    
+    @objc func onApplicationDidEnterBackground() {
+        SDKLogger.shared.info("Application did enter background")
+        self.disconnectFromWebSocket()
+    }
+    
+    private func connectToWebSocket() {
         if let device = self.devices.device {
             self.webSocket.connect(device.webSocketUrl) { [weak self] error in
                 if let error = error {
@@ -721,15 +861,14 @@ public class Phone {
         }
     }
     
-    @objc func onApplicationDidEnterBackground() {
-        SDKLogger.shared.info("Application did enter background")
-        self.webSocket.disconnect();
+    private func disconnectFromWebSocket() {
+        self.webSocket.disconnect()
     }
     
     private func requestMediaAccess(option: MediaOption, completionHandler: @escaping () -> Void) {
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeAudio) { audioGranted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.audio) { audioGranted in
             if option.hasVideo {
-                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { videoGranted in
+                AVCaptureDevice.requestAccess(for: AVMediaType.video) { videoGranted in
                     DispatchQueue.main.async {
                         completionHandler()
                     }
@@ -743,4 +882,19 @@ public class Phone {
             
         }
     }
+    
+    func updateMeidaShare(call:Call, mediaShare: MediaShareModel,completionHandler: @escaping ((Error?) -> Void)) {
+        if let mediaShareUrl = mediaShare.url {
+            self.client.updateMediaShare(mediaShare, by: call.device, mediaShareUrl: mediaShareUrl, queue: self.queue.underlying) { res in
+                self.doLocusResponse(LocusResult.updateMediaShare(call, res,completionHandler))
+                self.queue.yield()
+            }
+        } else {
+            let error = SparkError.serviceFailed(code: -700, reason: "Unsupport media share.")
+            completionHandler(error)
+            SDKLogger.shared.error("Failure", error: error)
+        }
+        
+    }
+    
 }

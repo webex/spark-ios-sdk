@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,11 @@ struct ReplaceModel  {
     fileprivate(set) var locusUrl: String?
 }
 
+struct CallResponseModel {
+    fileprivate(set) var callModel: CallModel?
+    fileprivate(set) var mediaConnections: [MediaConnectionModel]?
+}
+
 struct CallModel {
     fileprivate(set) var locusUrl: String? // Mandatory
     fileprivate(set) var participants: [ParticipantModel]?
@@ -50,6 +55,7 @@ struct CallModel {
     fileprivate(set) var sequence: SequenceModel? // Mandatory
     fileprivate(set) var replaces: [ReplaceModel]?
     fileprivate(set) var mediaShares: [MediaShareModel]?
+    fileprivate(set) var mediaConnections: [MediaConnectionModel]?
     
     subscript(participant id: String) -> ParticipantModel? {
         return self.participants?.filter({$0.id == id}).first
@@ -101,7 +107,7 @@ struct CallModel {
     }
     
     var isGrantedScreenShare: Bool {
-        return self.screenMediaShare != nil
+        return self.screenMediaShare != nil && self.screenMediaShare?.shareFloor?.disposition == MediaShareModel.ShareFloorDisposition.granted
     }
     
     var screenMediaShare: MediaShareModel? {
@@ -116,6 +122,17 @@ struct CallModel {
     
     var screenShareMediaFloor : MediaShareModel.MediaShareFloor? {
         return self.screenMediaShare?.shareFloor
+    }
+    
+    var mediaShareUrl : String? {
+        guard self.mediaShares != nil else {
+            return nil
+        }
+        
+        for mediaShare in self.mediaShares ?? [] where mediaShare.shareType == MediaShareModel.MediaShareType.screen {
+            return mediaShare.url
+        }
+        return nil
     }
 }
 
@@ -164,5 +181,79 @@ extension ReplaceModel: Mappable {
     
     mutating func mapping(map: Map) {
         locusUrl <- map["locusUrl"]
+    }
+}
+
+extension CallResponseModel: Mappable {
+    init?(map: Map) {
+    }
+    
+    mutating func mapping(map: Map) {
+        callModel <- map["locus"]
+        mediaConnections <- map["mediaConnections"]
+    }
+}
+
+internal extension CallModel {
+    internal mutating func setLocusUrl(newLocusUrl:String?) {
+        self.locusUrl = newLocusUrl
+    }
+    
+    internal mutating func setParticipants(newParticipants:[ParticipantModel]?) {
+        self.participants = newParticipants
+    }
+    
+    internal mutating func setMyself(newParticipant:ParticipantModel?) {
+        self.myself = newParticipant
+    }
+    
+    internal mutating func setHost(newPerson:PersonModel?) {
+        self.host = newPerson
+    }
+    
+    internal mutating func setFullState(newFullState:FullStateModel?) {
+        self.fullState = newFullState
+    }
+    
+    internal mutating func setSequence(newSequence:SequenceModel?) {
+        self.sequence = newSequence
+    }
+    
+    internal mutating func setReplace(newReplaces:[ReplaceModel]?) {
+        self.replaces = newReplaces
+    }
+    
+    internal mutating func setMediaShares(newMediaShares:[MediaShareModel]?) {
+        self.mediaShares = newMediaShares
+    }
+    
+    internal mutating func setMediaConnections(newMediaConnections:[MediaConnectionModel]?) {
+        self.mediaConnections = newMediaConnections
+    }
+}
+
+internal extension FullStateModel {
+    internal mutating func setActive(newActive:Bool?) {
+        self.active = newActive
+    }
+    
+    internal mutating func setCount(newCount:Int?) {
+        self.count = newCount
+    }
+    
+    internal mutating func setLocked(newLocked:Bool?) {
+        self.locked = newLocked
+    }
+    
+    internal mutating func setLastActive(newLastActive:String?) {
+        self.lastActive = newLastActive
+    }
+    
+    internal mutating func setState(newState:String?) {
+        self.state = newState
+    }
+    
+    internal mutating func setType(newType:String?) {
+        self.type = newType
     }
 }

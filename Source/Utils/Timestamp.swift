@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,12 @@ import Foundation
 
 class Timestamp {
     static var nowInUTC: String {
-        return Timestamp.dateFormatterUTC.string(from: Date())
+        return Timestamp.ISO8601FullFormatterInUTC.string(from: Date())
     }
 
-    private static var dateFormatterUTC: DateFormatter {
+    static var ISO8601FullFormatterInUTC: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         formatter.timeZone = TimeZone(abbreviation: "UTC")
         return formatter
     }

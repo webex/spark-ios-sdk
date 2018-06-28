@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ public struct CallMembership {
     /// The identifier of the person.
     ///
     /// - since: 1.2.0
-    public private(set) var presonId: String?
+    public private(set) var personId: String?
 
     /// The status of the person in this *CallMembership*.
     ///
@@ -104,7 +104,7 @@ public struct CallMembership {
     
     let id: String
     
-    let isSelf: Bool
+    public let isSelf: Bool
     
     var model: ParticipantModel {
         get { self.call.lock(); defer { self.call.unlock() }; return _model }
@@ -124,7 +124,7 @@ public struct CallMembership {
         self.isSelf = participant.id == call.model.myselfId
         self.isInitiator = participant.isCreator ?? false
         if let personId = participant.person?.id {
-            self.presonId = "ciscospark://us/PEOPLE/\(personId)".base64Encoded()
+            self.personId = "ciscospark://us/PEOPLE/\(personId)".base64Encoded()
         }
         self._model = participant
     }

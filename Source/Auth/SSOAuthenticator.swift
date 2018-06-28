@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ import Foundation
 ///
 /// - see: [Cisco Spark Integration](https://developer.ciscospark.com/authentication.html)
 /// - since: 1.3.1
-public class SSOAuthenticator: OAuthAuthenticator {
+public class SSOAuthenticator : OAuthAuthenticator {
     
     /// The spark email address of the SSO user.
     private let email: String

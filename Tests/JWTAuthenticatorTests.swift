@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -249,7 +249,7 @@ class JWTAuthenticatorTests: XCTestCase {
     }
     
     private func accessTokenResponse(accessToken: String) -> ServiceResponse<JWTTokenModel> {
-        let accessTokenObject = JWTTokenModel(token: accessToken)
+        var accessTokenObject = JWTTokenModel(token: accessToken)
         accessTokenObject.tokenCreationDate = now
         accessTokenObject.tokenExpiration = JWTAuthenticatorTests.oneDay
         return ServiceResponse<JWTTokenModel>(nil, Result.success(accessTokenObject))

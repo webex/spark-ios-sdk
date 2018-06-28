@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,23 +36,32 @@ public struct MediaOption {
     ///
     /// - since: 1.2.0
     public static func audioVideo(local: MediaRenderView, remote: MediaRenderView) -> MediaOption {
-        return MediaOption(local: local, remote: remote,hasVideo:true)
+        return MediaOption(local: local, remote: remote, hasVideo: true)
     }
     
     /// Constructs an audio and video media option with optional render views.
     /// The render views can be set after call is connected.
     ///
     /// - since: 1.3.0
-    public static func audioVideo(renderViews:(local:MediaRenderView,remote:MediaRenderView)? = nil) -> MediaOption {
-        return MediaOption(local: renderViews?.local, remote: renderViews?.remote,hasVideo:true)
+    public static func audioVideo(renderViews: (local:MediaRenderView,remote:MediaRenderView)? = nil) -> MediaOption {
+        return MediaOption(local: renderViews?.local, remote: renderViews?.remote, hasVideo: true)
     }
     
     /// Constructs an audio, video, and screen share media option with optional render views.
     /// The render views can be set after call is connected.
     ///
     /// - since: 1.3.0
-    public static func audioVideoScreenShare(video:(local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil) -> MediaOption {
-        return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo:true, hasScreenShare:true)
+    public static func audioVideoScreenShare(video: (local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil) -> MediaOption {
+        return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo: true, hasScreenShare: true)
+    }
+    
+    /// Constructs an audio, video,receive and send screen share media option with optional render views.
+    /// The render views can be set after call is connected.
+    ///
+    /// - since: 1.4.0
+    @available(iOS 11.2, *)
+    public static func audioVideoScreenShare(video: (local:MediaRenderView,remote:MediaRenderView)? = nil, screenShare: MediaRenderView? = nil, applicationGroupIdentifier: String) -> MediaOption {
+        return MediaOption(local: video?.local, remote: video?.remote, screenShare: screenShare, hasVideo: true, hasScreenShare: true, applicationGroupIdentifier: applicationGroupIdentifier)
     }
     
     var localVideoView: MediaRenderView?
@@ -67,17 +76,21 @@ public struct MediaOption {
     
     let hasScreenShare: Bool
     
+    let applicationGroupIdentifier:String?
+    
     init() {
         self.hasVideo = false
         self.hasScreenShare = false
+        self.applicationGroupIdentifier = nil
     }
     
-    init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false) {
+    init(local: MediaRenderView? = nil, remote: MediaRenderView? = nil ,screenShare: MediaRenderView? = nil, hasVideo: Bool = false, hasScreenShare: Bool = false, applicationGroupIdentifier:String? = nil) {
         self.hasVideo = hasVideo
         self.hasScreenShare = hasScreenShare
         self.localVideoView = local
         self.remoteVideoView = remote
         self.screenShareView = screenShare
+        self.applicationGroupIdentifier = applicationGroupIdentifier
     }
 }
 

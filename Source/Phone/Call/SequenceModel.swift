@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -59,25 +59,6 @@ extension SequenceModel: Mappable {
         entries <- (map["entries"], UInt64Transform())
         rangeStart <- (map["rangeStart"], UInt64Transform())
         rangeEnd <- (map["rangeEnd"], UInt64Transform())
-    }
-    
-    class UInt64Transform: TransformType {
-        
-        func transformFromJSON(_ value: Any?) -> UInt64?{
-            if let number = value as? NSNumber {
-                let uint64Value = number.uint64Value
-                return uint64Value
-            }
-            
-            return nil
-        }
-        
-        func transformToJSON(_ value: UInt64?) -> String? {
-            guard let input = value else {
-                return nil
-            }
-            return String(input)
-        }
     }
 }
 

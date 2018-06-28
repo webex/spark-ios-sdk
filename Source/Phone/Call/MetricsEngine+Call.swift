@@ -30,7 +30,7 @@ extension MetricsEngine {
         data["user.rating"] = String(rating)
         data["user.comments"] = comments ?? ""
         if includeLogs {
-            print("####: \(String(describing: SDKLogger.shared.logs?.characters.count))")
+            print("####: \(String(describing: SDKLogger.shared.logs?.count))")
             data["user.logs"] = SDKLogger.shared.logs
         }
         self.track(name: Metric.Call.Rating, data)

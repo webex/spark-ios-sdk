@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,9 @@ public enum SparkError: Error {
     case illegalOperation(reason: String)
     /// The service is in an illegal status.
     case illegalStatus(reason: String)
+    /// The authentication is failed.
+    /// - since 1.4.0
+    case noAuth
 }
 
 extension SparkError: LocalizedError {
@@ -48,17 +51,19 @@ extension SparkError: LocalizedError {
         case .serviceFailed(let code, let reason):
             return "The service returned an error \(code), \(reason)"
         case .unregistered:
-            return ""
+            return "unregistered"
         case .requireH264:
-            return ""
+            return "requireH264"
         case .invalidDTMF:
-            return ""
+            return "invalidDTMF"
         case .unsupportedDTMF:
-            return ""
+            return "unsupportedDTMF"
         case .illegalOperation(let reason):
             return reason
         case .illegalStatus(let reason):
             return reason
+        case .noAuth:
+            return "noAuth"
         }
     }
     

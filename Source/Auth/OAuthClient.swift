@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ struct OAuthTokenModel {
     var accessTokenCreationDate: Date
 }
 
-extension OAuthTokenModel: Mappable {
+extension OAuthTokenModel : Mappable {
     
     init?(map: Map) {
         accessTokenCreationDate = Date()
@@ -47,7 +47,7 @@ extension OAuthTokenModel: Mappable {
 class OAuthClient {
         
     private func requestBuilder() -> ServiceRequest.Builder {
-        return ServiceRequest.Builder(SimpleAuthStrategy.neverAuthorized())
+        return ServiceRequest.Builder(SimpleAuthenticator.empty())
             .path("access_token")
             .headers(["Content-Type": "application/x-www-form-urlencoded"])
     }

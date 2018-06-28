@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,17 @@ import Starscream
 import SwiftyJSON
 import ObjectMapper
 
-class WebSocketService: WebSocketDelegate {
+class WebSocketService: WebSocketAdvancedDelegate {
     
-    var onCallModel: ((CallModel) -> Void)?
-    var onFailed: (() -> Void)?
+    enum MercuryEvent {
+        case connected(Error?)
+        case disconnected(Error?)
+        case recvCall(CallModel)
+        case recvActivity(ActivityModel)
+        case recvKms(KmsMessageModel)
+    }
+    
+    var onEvent: ((MercuryEvent) -> Void)?
     
     private var socket: WebSocket?
     private var connectionRetryCounter: ExponentialBackOffCounter
@@ -53,10 +60,10 @@ class WebSocketService: WebSocketDelegate {
                     SDKLogger.shared.info("Web socket is being connected")
                     let socket = WebSocket(url: webSocketUrl)
                     if let token = token {
-                        socket.headers["Authorization"] = "Bearer " + token
+                        socket.request.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
                     }
                     socket.callbackQueue = self.queue
-                    socket.delegate = self
+                    socket.advancedDelegate = self
                     self.onConnected = block
                     self.socket = socket
                     socket.connect()
@@ -65,7 +72,6 @@ class WebSocketService: WebSocketDelegate {
         }
     }
     
-
     func disconnect() {
         self.queue.async {
             if let socket = self.socket, socket.isConnected {
@@ -85,31 +91,35 @@ class WebSocketService: WebSocketDelegate {
             block(nil)
             self.onConnected = nil
         }
+        self.onEvent?(MercuryEvent.connected(nil))
         self.connectionRetryCounter.reset()
     }
     
-    func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
+    func websocketDidDisconnect(socket: WebSocket, error: Error?) {
         if let block = self.onConnected {
             SDKLogger.shared.info("Websocket cannot connect: \(String(describing: error))")
-            let code = error?.code ?? -7000
+            let code = (error as NSError?)?.code ?? -7000
             let reason = error?.localizedDescription ?? "Websocket cannot connect"
             block(SparkError.serviceFailed(code: code, reason: reason))
+            self.onEvent?(MercuryEvent.connected(SparkError.serviceFailed(code: code, reason: reason)))
             self.onConnected = nil
         }
-        else if let code = error?.code, let desc = error?.localizedDescription {
+        else if let code = (error as NSError?)?.code, let desc = error?.localizedDescription {
             SDKLogger.shared.info("Websocket is disconnected: \(code), \(desc)")
             if self.socket == nil {
                 SDKLogger.shared.info("Websocket is disconnected on purpose")
+                self.onEvent?(MercuryEvent.disconnected(nil))
             }
             else {
                 let backoffTime = connectionRetryCounter.next()
                 despatch_after(backoffTime) {
-                    if code > Int(WebSocket.CloseCode.normal.rawValue) {
+                    if code > Int(CloseCode.normal.rawValue) {
                         // Abnormal disconnection, re-register device.
                         SDKLogger.shared.error("Abnormal disconnection, re-register device in \(backoffTime) seconds")
                         self.socket = nil
-                        self.onFailed?()
-                    } else {
+                        self.onEvent?(MercuryEvent.disconnected(error))
+                    }
+                    else {
                         // Unexpected disconnection, reconnect socket.
                         SDKLogger.shared.warn("Unexpected disconnection, websocket will reconnect in \(backoffTime) seconds")
                         if let socket = self.socket, !socket.isConnected {
@@ -120,29 +130,54 @@ class WebSocketService: WebSocketDelegate {
                 }
             }
         }
+        else {
+            SDKLogger.shared.info("Websocket is disconnected by remote on purpose")
+            self.onEvent?(MercuryEvent.disconnected(SparkError.serviceFailed(code: 404, reason: "Websocket is disconnected by remote on purpose")))
+        }
     }
     
-    func websocketDidReceiveMessage(socket: WebSocket, text: String) {
+    func websocketDidReceiveMessage(socket: WebSocket, text: String, response: WebSocket.WSResponse) {
         SDKLogger.shared.info("Websocket got some text: \(text)")
     }
     
-    func websocketDidReceiveData(socket: WebSocket, data: Data) {
-        let json = JSON(data: data)
-        ackMessage(socket, messageId: json["id"].string ?? "")
-        let eventData = json["data"]
-        if let eventType = eventData["eventType"].string {
-            if eventType.hasPrefix("locus") {
-                let eventObj = eventData.object;
-                guard let eventJson = eventObj as? [String: Any],
-                    let event = Mapper<CallEventModel>().map(JSON: eventJson),
-                    let call = event.callModel,
-                    let type = event.type else {
-                        SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventObj)")
+    func websocketDidReceiveData(socket: WebSocket, data: Data, response: WebSocket.WSResponse) {
+        do {
+            let json = try JSON(data: data)
+            ackMessage(socket, messageId: json["id"].string ?? "")
+            let eventData = json["data"]
+            if let eventType = eventData["eventType"].string {
+                if eventType.hasPrefix("locus") {
+                    if let eventObj = eventData.object as? [String: Any],
+                        let event = Mapper<CallEventModel>().map(JSON: eventObj),
+                        let call = event.callModel,
+                        let type = event.type {
+                        SDKLogger.shared.info("Receive locus event: \(type)")
+                        self.onEvent?(MercuryEvent.recvCall(call))
+                    }
+                    else {
+                        SDKLogger.shared.error("Malformed call event could not be processed as a call event \(eventData.object)")
                         return
+                    }
                 }
-                SDKLogger.shared.info("Receive locus event: \(type)")
-                self.onCallModel?(call)
+                else if eventType == "conversation.activity" {
+                    if let activityObj = eventData["activity"].object as? [String: Any],
+                        let verb = activityObj["verb"] as? String,
+                        verb == "post" || verb == "share" || verb == "delete" {
+                        if let activity = try? Mapper<ActivityModel>().map(JSON: activityObj) {
+                            self.onEvent?(MercuryEvent.recvActivity(activity))
+                        }
+                    }
+                }
+                else if eventType == "encryption.kms_message" {
+                    if let kmsObj = eventData["encryption"].object as? [String: Any],
+                        let kms = Mapper<KmsMessageModel>().map(JSON: kmsObj) {
+                        self.onEvent?(MercuryEvent.recvKms(kms))
+                    }
+                }
             }
+        }
+        catch let error {
+            SDKLogger.shared.error("Websocket data to Json error: \(error.localizedDescription)")
         }
     }
     
@@ -155,6 +190,14 @@ class WebSocketService: WebSocketDelegate {
         } catch {
             SDKLogger.shared.error("Failed to acknowledge message")
         }
+    }
+    
+    func websocketHttpUpgrade(socket: WebSocket, request: String) {
+        
+    }
+    
+    func websocketHttpUpgrade(socket: WebSocket, response: String) {
+        
     }
     
     private func despatch_after(_ delay: Double, closure: @escaping () -> Void) {

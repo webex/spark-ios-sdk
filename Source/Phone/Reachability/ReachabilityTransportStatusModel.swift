@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,48 +35,5 @@ extension ReachabilityTransportStatusModel: Mappable {
         latencyInMilliseconds <- (map["latencyInMilliseconds"], StringAndIntTransform())
         reachable <- (map["reachable"], StringAndBoolTransform())
     }
-    
-    class StringAndIntTransform: TransformType {
 
-        func transformFromJSON(_ value: Any?) -> Int? {
-            if let inputString = value as? String {
-                return Int(inputString)
-            } else if let inputInt = value as? Int {
-                return inputInt
-            }
-            return nil
-        }
-        
-        func transformToJSON(_ value: Int?) -> String? {
-            guard let input = value else {
-                return nil
-            }
-            return String(input)
-        }
-    }
-    
-    class StringAndBoolTransform: TransformType {
-        typealias Object = Bool
-        typealias JSON = String
-        
-        func transformFromJSON(_ value: Any?) -> Object? {
-            if let inputString = value as? String {
-                switch inputString.lowercased() {
-                case "true": return true
-                case "false": return false
-                default: return nil
-                }
-            } else if let inputBool = value as? Bool {
-                return inputBool
-            }
-            return nil
-        }
-        
-        func transformToJSON(_ value: Object?) -> JSON? {
-            guard let input = value else {
-                return nil
-            }
-            return input ? "true" : "false"
-        }
-    }
 }

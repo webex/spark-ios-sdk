@@ -1,5 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+#### 1.4.0 Releases
+
+- `1.4.0` Releases - [1.4.0](#140)
 #### 1.3.1 Releases
 
 - `1.3.1` Releases - [1.3.1](#131)
@@ -41,6 +44,28 @@ All notable changes to this project will be documented in this file.
 - `0.9.137` Releases - [0.9.137](#09137)
 
 ---
+## [1.4.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.4.0)
+Released on 2018-05-15.
+
+#### Added
+- Support screen sharing for both sending and receiving.
+- A new API to refresh token for authentication.
+- Two properties in Membership: personDisplayName, personOrgId.
+- Support real time message receiving.
+- Support message end to end encription.
+- A few new APIs to do message/file end to end encryption, Mention in message, upload and download encrypted files.
+- Five properties in Person: nickName, firstName, lastName, orgId, type.
+- Three functions to create/update/delete a person for organization's administrator.
+- Support room list ordered by either room ID, lastactivity time or creation time.
+- A new property in TeamMembership: personOrgId.
+- Two new parameters to update webhook : status and secret.
+
+#### Updated
+- Fixed ocassional crash when switching between video call and audio call when CallKit is used.
+- Fixed video freeze when iOS SDK makes a call to JavaScript SDK.
+- Fixed crash issue when invoking Phone.requestMediaAccess function from background thread.
+- Fixed wrong call type for room calling when there are only two people in the call.
+
 ## [1.3.1](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.3.1)
 Released on 2018-1-12.
 

@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -53,4 +53,11 @@ public protocol Authenticator : class {
     /// - parameter completionHandler: a closure to be executed when completed, with the access token if successfuly retrieved, otherwise nil.
     /// - since: 1.2.0
     func accessToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
+    
+    /// Refresh the access token of this *authenticator*.
+    ///
+    /// - parameter completionHandler: a closure to be executed when completed, with the new access token if successfuly retrieved, otherwise nil.
+    /// - since: 1.4.0
+    func refreshToken(completionHandler: @escaping (_ accessToken: String?) -> Void)
+
 }

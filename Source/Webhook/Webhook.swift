@@ -1,4 +1,4 @@
-// Copyright 2016-2017 Cisco Systems Inc
+// Copyright 2016-2018 Cisco Systems Inc
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -61,6 +61,16 @@ public struct Webhook {
     ///
     /// - since: 1.2.0
     public var created: Date?
+    
+    /// The status of the webhook. Use <code>active</code> to reactivate a disabled webhook.
+    ///
+    /// - since: 1.4.0
+    public var status: String?
+    
+    /// The Secret use to generate payload signiture.
+    ///
+    /// - since: 1.4.0
+    public var secret: String?
 }
 
 extension Webhook: Mappable {
@@ -83,5 +93,7 @@ extension Webhook: Mappable {
         name <- map["name"]
         filter <- map["filter"]
         created <- (map["created"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"))
+        status <- map["status"]
+        secret <- map["secret"]
     }
 }
