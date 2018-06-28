@@ -101,6 +101,7 @@ public class MessageClient {
     /// Lists all messages in a room by room Id.
     /// If present, it includes the associated media content attachment for each message.
     /// The list sorts the messages in descending order by creation date.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter roomId: The identifier of the room.
     /// - parameter before: If not nil, only list messages sent only before this condition.
@@ -279,6 +280,7 @@ public class MessageClient {
     }
     
     /// Posts a plain text message, optionally a media content attachment, to a room by user email.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter personEmail: The EmailAddress of the user to whom the message is to be posted.
     /// - parameter content: The plain text message to be posted to the room.
@@ -305,6 +307,7 @@ public class MessageClient {
     }
     
     /// Posts a plain text message, optionally a media content attachment, to a room by person id.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter personId: The personId of the user to whom the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
@@ -331,6 +334,7 @@ public class MessageClient {
     }
     
     /// Posts a plain text message, optionally a media content attachment, to a room by roomId.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter roomId: The identifier of the room where the message is to be posted.
     /// - parameter text: The plain text message to be posted to the room.
@@ -359,6 +363,7 @@ public class MessageClient {
     }
     
     /// Detail of one message.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter messageID: The identifier of the message.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
@@ -379,6 +384,7 @@ public class MessageClient {
     }
     
     /// Deletes a message, to a room by messageId.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter messageId: The messageId to be deleted in the room.
     /// - parameter queue: If not nil, the queue on which the completion handler is dispatched. Otherwise, the handler is dispatched on the application's main thread.
@@ -399,6 +405,7 @@ public class MessageClient {
     }
     
     /// Download a file object, save the file to pointed destination.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter file: The RemoteFile object need to be downloaded.
     /// - parameter to: The local file directory for saving dwonloaded file.
@@ -420,6 +427,7 @@ public class MessageClient {
     }
     
     /// Download a file object, save the file thumbnail.
+    /// This Api will automatically register phone to websocket, if phone was not been registered before.
     ///
     /// - parameter file: The RemoteFile object need to be downloaded.
     /// - parameter to: The local file directory for saving file after download.
