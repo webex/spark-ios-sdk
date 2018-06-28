@@ -2,7 +2,7 @@
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/SparkSDK.svg)](https://cocoapods.org/pods/SparkSDK)
 [![Travis CI](https://travis-ci.org/webex/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/webex/spark-ios-sdk)
-[![license](https://img.shields.io/github/license/ciscospark/spark-ios-sdk.svg)](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/webex/spark-ios-sdk.svg)](https://github.com/ciscospark/spark-ios-sdk/blob/webex/LICENSE)
 
 The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.
 
@@ -227,7 +227,7 @@ Here are some examples of how to use the iOS SDK in your app.
         }
     }
     ```
-10. Receie a message:
+10. Receive a message:
     ```
     spark.messages.onEvent = { messageEvent in
         switch messageEvent{

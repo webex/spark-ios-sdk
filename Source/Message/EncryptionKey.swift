@@ -21,13 +21,14 @@
 class EncryptionKey {
     
     let roomId: String // locus format
+    var roomUserIds: [String] = []
     
     private var encryptionUrl: String?
     private var material: String?
     private var spaceUrl: String?
     
     init(roomId: String) {
-       self.roomId = roomId
+        self.roomId = roomId
     }
     
     func tryRefresh(encryptionUrl: String) {
@@ -95,5 +96,4 @@ class EncryptionKey {
             }
         }
     }
-    
 }
