@@ -67,6 +67,7 @@ extension EmailAddress: Equatable {}
 ///
 /// - returns: True if the two email addresses are equal. Otherwise, false.
 /// - since: 1.2.0
+/// :nodoc:
 public func ==(lhs: EmailAddress, rhs: EmailAddress) -> Bool {
     return lhs.address == rhs.address
 }
