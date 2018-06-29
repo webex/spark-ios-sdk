@@ -10,10 +10,11 @@
     
   </head>
   <body>
+    <a name="//apple_ref/swift/Section/Classes" class="dashAnchor"></a>
     <a title="Classes  Reference"></a>
     <header>
       <div class="content-wrapper">
-        <p><a href="index.html">SparkSDK Docs</a> (97% documented)</p>
+        <p><a href="index.html">SparkSDK Docs</a> (96% documented)</p>
         <p class="header-right"><a href="https://github.com/ciscospark/spark-ios-sdk/"><img src="img/gh.png"/>View on GitHub</a></p>
       </div>
     </header>
@@ -46,6 +47,9 @@
                 <a href="Classes/Call/CallMembershipChangedEvent.html">– CallMembershipChangedEvent</a>
               </li>
               <li class="nav-group-task">
+                <a href="Classes/Call/iOSBroadcastingEvent.html">– iOSBroadcastingEvent</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Classes/Call/Capabilities.html">– Capabilities</a>
               </li>
               <li class="nav-group-task">
@@ -56,6 +60,15 @@
               </li>
               <li class="nav-group-task">
                 <a href="Classes/JWTAuthenticator.html">JWTAuthenticator</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/LocalFile.html">LocalFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/LocalFile/Thumbnail.html">– Thumbnail</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Classes/MediaRenderView.html">MediaRenderView</a>
               </li>
               <li class="nav-group-task">
                 <a href="Classes/MembershipClient.html">MembershipClient</a>
@@ -105,13 +118,25 @@
             <a href="Enums.html">Enumerations</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
+                <a href="Enums/Before.html">Before</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/CallStatus.html">CallStatus</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/LogLevel.html">LogLevel</a>
               </li>
               <li class="nav-group-task">
+                <a href="Enums/Mention.html">Mention</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/MessageEvent.html">MessageEvent</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/RoomSortType.html">RoomSortType</a>
               </li>
               <li class="nav-group-task">
                 <a href="Enums/RoomType.html">RoomType</a>
@@ -122,10 +147,13 @@
             </ul>
           </li>
           <li class="nav-group-name">
-            <a href="Functions.html">Functions</a>
+            <a href="Extensions.html">Extensions</a>
             <ul class="nav-group-tasks">
               <li class="nav-group-task">
-                <a href="Functions.html#/s:8SparkSDK2eeoiSbAA12EmailAddressC_ADtF">==(_:_:)</a>
+                <a href="Extensions/ActivityModel.html">ActivityModel</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/MediaSessionWrapper.html">MediaSessionWrapper</a>
               </li>
             </ul>
           </li>
@@ -180,6 +208,12 @@
                 <a href="Structs/Person.html">Person</a>
               </li>
               <li class="nav-group-task">
+                <a href="Structs/RemoteFile.html">RemoteFile</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/RemoteFile/Thumbnail.html">– Thumbnail</a>
+              </li>
+              <li class="nav-group-task">
                 <a href="Structs/Room.html">Room</a>
               </li>
               <li class="nav-group-task">
@@ -211,9 +245,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SparkSDK10TeamClientC"></a>
-                    <a name="//apple_ref/swift/Class/TeamClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK10TeamClientC">TeamClient</a>
+                    <a name="/s:8SparkSDK22JWTAuthKeychainStorageC"></a>
+                    <a name="//apple_ref/swift/Class/JWTAuthKeychainStorage" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK22JWTAuthKeychainStorageC">JWTAuthKeychainStorage</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -221,20 +255,329 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-teams.html">Teams REST API</a> .</p>
+                        <p>A JWTAuthStorage implementation based on the iOS device keychain.</p>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
 
-                        <a href="Classes/TeamClient.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/JWTAuthKeychainStorage.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TeamClient</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTAuthKeychainStorage</span> <span class="p">:</span> <span class="kt"><a href="Protocols/JWTAuthStorage.html">JWTAuthStorage</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK16JWTAuthenticatorC"></a>
+                    <a name="//apple_ref/swift/Class/JWTAuthenticator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK16JWTAuthenticatorC">JWTAuthenticator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A <a href="https://jwt.io/introduction">JSON Web Token</a> (JWT) based authentication strategy
+is to be used to authenticate a guest user on Cisco Spark.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/JWTAuthenticator.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTAuthenticator</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Authenticator.html">Authenticator</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK18OAuthAuthenticatorC"></a>
+                    <a name="//apple_ref/swift/Class/OAuthAuthenticator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC">OAuthAuthenticator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An <a href="https://oauth.net/2/">OAuth</a> based authentication strategy
+for authenticating a user on Cisco Spark.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
+
+</div>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/OAuthAuthenticator.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuthAuthenticator</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Authenticator.html">Authenticator</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK20OAuthKeychainStorageC"></a>
+                    <a name="//apple_ref/swift/Class/OAuthKeychainStorage" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK20OAuthKeychainStorageC">OAuthKeychainStorage</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An OAuthStorage implementation based on the iOS device keychain.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/OAuthKeychainStorage.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuthKeychainStorage</span> <span class="p">:</span> <span class="kt"><a href="Protocols/OAuthStorage.html">OAuthStorage</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK16SSOAuthenticatorC"></a>
+                    <a name="//apple_ref/swift/Class/SSOAuthenticator" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK16SSOAuthenticatorC">SSOAuthenticator</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An Single sign-on <a href="https://help.webex.com/docs/DOC-9143#reference_E9B2CEDE975E4CD311C56D9B0EF2476C">SSO</a>
+based authentication strategy used to authenticate a user on Cisco Spark.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
+
+</div>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.3.1
+
+</div>
+
+                        <a href="Classes/SSOAuthenticator.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSOAuthenticator</span> <span class="p">:</span> <span class="kt"><a href="Classes/OAuthAuthenticator.html">OAuthAuthenticator</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK16MembershipClientC"></a>
+                    <a name="//apple_ref/swift/Class/MembershipClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK16MembershipClientC">MembershipClient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-memberships.html">Room Memberships REST API</a> .</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/MembershipClient.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MembershipClient</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK9LocalFileC"></a>
+                    <a name="//apple_ref/swift/Class/LocalFile" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK9LocalFileC">LocalFile</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A data type represents a local file.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.4.0
+
+</div>
+
+                        <a href="Classes/LocalFile.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">LocalFile</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK13MessageClientC"></a>
+                    <a name="//apple_ref/swift/Class/MessageClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK13MessageClientC">MessageClient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An iOS client wrapper of the Cisco Spark Message APIs.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.4.0
+
+</div>
+
+                        <a href="Classes/MessageClient.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MessageClient</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK12PersonClientC"></a>
+                    <a name="//apple_ref/swift/Class/PersonClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK12PersonClientC">PersonClient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-people.html">People REST API</a> .</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/PersonClient.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">PersonClient</span></code></pre>
 
                         </div>
                       </div>
@@ -329,9 +672,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SparkSDK22JWTAuthKeychainStorageC"></a>
-                    <a name="//apple_ref/swift/Class/JWTAuthKeychainStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK22JWTAuthKeychainStorageC">JWTAuthKeychainStorage</a>
+                    <a name="/c:@M@SparkSDK@objc(cs)MediaRenderView"></a>
+                    <a name="//apple_ref/swift/Class/MediaRenderView" class="dashAnchor"></a>
+                    <a class="token" href="#/c:@M@SparkSDK@objc(cs)MediaRenderView">MediaRenderView</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -339,20 +682,15 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>A JWTAuthStorage implementation based on the iOS device keychain.</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
+                        <p>Undocumented</p>
 
-</div>
-
-                        <a href="Classes/JWTAuthKeychainStorage.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/MediaRenderView.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTAuthKeychainStorage</span><span class="p">:</span> <span class="kt"><a href="Protocols/JWTAuthStorage.html">JWTAuthStorage</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MediaRenderView</span> <span class="p">:</span> <span class="kt">UIView</span></code></pre>
 
                         </div>
                       </div>
@@ -414,9 +752,9 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SparkSDK18OAuthAuthenticatorC"></a>
-                    <a name="//apple_ref/swift/Class/OAuthAuthenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK18OAuthAuthenticatorC">OAuthAuthenticator</a>
+                    <a name="/s:8SparkSDK10RoomClientC"></a>
+                    <a name="//apple_ref/swift/Class/RoomClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK10RoomClientC">RoomClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -424,329 +762,20 @@ The <em>phone</em> must be registered before it can make or receive calls.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An <a href="https://oauth.net/2/">OAuth</a> based authentication strategy
-for authenticating a user on Cisco Spark.</p>
-<div class="aside aside-see">
-    <p class="aside-title">See</p>
-    <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
-
-</div>
+                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-rooms.html">Rooms REST API</a> .</p>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
 
-                        <a href="Classes/OAuthAuthenticator.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/RoomClient.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuthAuthenticator</span><span class="p">:</span> <span class="kt"><a href="Protocols/Authenticator.html">Authenticator</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK13WebhookClientC"></a>
-                    <a name="//apple_ref/swift/Class/WebhookClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK13WebhookClientC">WebhookClient</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-webhooks.html">Webhooks REST API</a> .</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/WebhookClient.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">WebhookClient</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK13MessageClientC"></a>
-                    <a name="//apple_ref/swift/Class/MessageClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK13MessageClientC">MessageClient</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-messages.html">Messages REST API</a> .</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/MessageClient.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MessageClient</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK16MembershipClientC"></a>
-                    <a name="//apple_ref/swift/Class/MembershipClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK16MembershipClientC">MembershipClient</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-memberships.html">Room Memberships REST API</a> .</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/MembershipClient.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">MembershipClient</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK12EmailAddressC"></a>
-                    <a name="//apple_ref/swift/Class/EmailAddress" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK12EmailAddressC">EmailAddress</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A data type represents an email address with validation and equatable implementation.</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/EmailAddress.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">EmailAddress</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK16JWTAuthenticatorC"></a>
-                    <a name="//apple_ref/swift/Class/JWTAuthenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK16JWTAuthenticatorC">JWTAuthenticator</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>A <a href="https://jwt.io/introduction">JSON Web Token</a> (JWT) based authentication strategy
-is to be used to authenticate a guest user on Cisco Spark.</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/JWTAuthenticator.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">JWTAuthenticator</span><span class="p">:</span> <span class="kt"><a href="Protocols/Authenticator.html">Authenticator</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK16SSOAuthenticatorC"></a>
-                    <a name="//apple_ref/swift/Class/SSOAuthenticator" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK16SSOAuthenticatorC">SSOAuthenticator</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An Single sign-on <a href="https://help.webex.com/docs/DOC-9143#reference_E9B2CEDE975E4CD311C56D9B0EF2476C">SSO</a>
-based authentication strategy used to authenticate a user on Cisco Spark.</p>
-<div class="aside aside-see">
-    <p class="aside-title">See</p>
-    <a href="https://developer.ciscospark.com/authentication.html">Cisco Spark Integration</a>
-
-</div>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.3.1
-
-</div>
-
-                        <a href="Classes/SSOAuthenticator.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">SSOAuthenticator</span><span class="p">:</span> <span class="kt"><a href="Classes/OAuthAuthenticator.html">OAuthAuthenticator</a></span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK12PersonClientC"></a>
-                    <a name="//apple_ref/swift/Class/PersonClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK12PersonClientC">PersonClient</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-people.html">People REST API</a> .</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/PersonClient.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">PersonClient</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:8SparkSDK20OAuthKeychainStorageC"></a>
-                    <a name="//apple_ref/swift/Class/OAuthKeychainStorage" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK20OAuthKeychainStorageC">OAuthKeychainStorage</a>
-                    </code>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>An OAuthStorage implementation based on the iOS device keychain.</p>
-<div class="aside aside-since">
-    <p class="aside-title">Since</p>
-    1.2.0
-
-</div>
-
-                        <a href="Classes/OAuthKeychainStorage.html" class="slightly-smaller">See more</a>
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">OAuthKeychainStorage</span><span class="p">:</span> <span class="kt"><a href="Protocols/OAuthStorage.html">OAuthStorage</a></span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span></code></pre>
 
                         </div>
                       </div>
@@ -832,9 +861,9 @@ based authentication strategy used to authenticate a user on Cisco Spark.</p>
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:8SparkSDK10RoomClientC"></a>
-                    <a name="//apple_ref/swift/Class/RoomClient" class="dashAnchor"></a>
-                    <a class="token" href="#/s:8SparkSDK10RoomClientC">RoomClient</a>
+                    <a name="/s:8SparkSDK10TeamClientC"></a>
+                    <a name="//apple_ref/swift/Class/TeamClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK10TeamClientC">TeamClient</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -842,20 +871,20 @@ based authentication strategy used to authenticate a user on Cisco Spark.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-rooms.html">Rooms REST API</a> .</p>
+                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-teams.html">Teams REST API</a> .</p>
 <div class="aside aside-since">
     <p class="aside-title">Since</p>
     1.2.0
 
 </div>
 
-                        <a href="Classes/RoomClient.html" class="slightly-smaller">See more</a>
+                        <a href="Classes/TeamClient.html" class="slightly-smaller">See more</a>
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">RoomClient</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">TeamClient</span></code></pre>
 
                         </div>
                       </div>
@@ -901,11 +930,85 @@ based authentication strategy used to authenticate a user on Cisco Spark.</p>
                 </li>
               </ul>
             </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK12EmailAddressC"></a>
+                    <a name="//apple_ref/swift/Class/EmailAddress" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK12EmailAddressC">EmailAddress</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A data type represents an email address with validation and equatable implementation.</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/EmailAddress.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">open</span> <span class="kd">class</span> <span class="kt">EmailAddress</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:8SparkSDK13WebhookClientC"></a>
+                    <a name="//apple_ref/swift/Class/WebhookClient" class="dashAnchor"></a>
+                    <a class="token" href="#/s:8SparkSDK13WebhookClientC">WebhookClient</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>An iOS client wrapper of the Cisco Spark <a href="https://developer.ciscospark.com/resource-webhooks.html">Webhooks REST API</a> .</p>
+<div class="aside aside-since">
+    <p class="aside-title">Since</p>
+    1.2.0
+
+</div>
+
+                        <a href="Classes/WebhookClient.html" class="slightly-smaller">See more</a>
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">WebhookClient</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </section>
         </section>
         <section id="footer">
-          <p>&copy; 2018 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2018-01-12)</p>
-          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.1</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+          <p>&copy; 2018 <a class="link" href="https://developer.ciscospark.com" target="_blank" rel="external">Cisco Systems, Inc.</a>. All rights reserved. (Last updated: 2018-06-29)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
         </section>
       </article>
     </div>
