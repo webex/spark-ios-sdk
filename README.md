@@ -317,6 +317,6 @@ Here are some examples of how to use the iOS SDK in your app.
     
 ## License
 
-&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
+&copy; 2016-2018 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
 
 See [LICENSE](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE) for details.
