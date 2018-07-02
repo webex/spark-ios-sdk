@@ -321,7 +321,7 @@ Here are some examples of how to use the iOS SDK in your app.
 1. Minimum Deployment Target: ~~8.0~~ => 10.0
 2. Support Swift Language Version: ~~3.0~~ => 4.0
 3. If you were using 'MediaRenderView', need to add "import SparkSDK". 
-4. If you were using 'MediaRenderView' class in storyboard, need to set view's module to 'SparkSDK'.
+4. If you were using 'MediaRenderView' class in storyboard, set the view's module to 'SparkSDK'.
 
 ## License
 
