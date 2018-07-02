@@ -13,7 +13,7 @@ This SDK is written in [Swift 4](https://developer.apple.com/swift) and requires
 - [Install](#install)
 - [Usage](#usage)
 - [License](#license)
-- [Upgrade 1.3.1 to 1.4.0](#Upgrade Breaking Changes)
+- [Upgrade 1.3.1 to 1.4.0](#Upgrade-SDK-1.3.1-to-1.4.0-Breaking-Changes)
 
 ## Install
 
