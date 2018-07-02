@@ -12,7 +12,7 @@ This SDK is written in [Swift 4](https://developer.apple.com/swift) and requires
 
 - [Install](#install)
 - [Usage](#usage)
-- [Upgrade 1.3.1 to 1.4.0](#upgrade-sdk-1.3.1-to-1.4.0-breaking-changes)
+- [Upgrade 1.3.1 to 1.4.0](#upgrade-sdk-131-to-140-breaking-changes)
 - [License](#license)
 
 ## Install
@@ -317,6 +317,7 @@ Here are some examples of how to use the iOS SDK in your app.
     11.3 Get more technical details about the [Containing App & Broadcast upload extension](https://github.com/webex/spark-ios-sdk/wiki/Implementation-Broadcast-upload-extension) and [Set up an App Group](https://github.com/webex/spark-ios-sdk/wiki/Set-up-an-App-Group)
 
 ## Upgrade SDK 1.3.1 to 1.4.0 Breaking Changes
+
 1. Minimum Deployment Target: ~~8.0~~ => 10.0
 2. Support Swift Language Version: ~~3.0~~ => 4.0
 3. If you were using 'MediaRenderView', need to add 'import SparkSDK". 
