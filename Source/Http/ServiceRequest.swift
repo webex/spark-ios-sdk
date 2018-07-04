@@ -26,6 +26,8 @@ import SwiftyJSON
 
 class ServiceRequest {
     
+    static let LOCUS_RESPONSE_ONLY_SDP: Bool = true
+    
     private let url: URL
     private let headers: [String: String]
     private let method: Alamofire.HTTPMethod
