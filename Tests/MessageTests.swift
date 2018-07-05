@@ -347,7 +347,7 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personEmail: personEmail, text: text, files: files, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request)
     }
     
     private func postMessage(personId: String, text: String?, files: [LocalFile]?) -> Message? {
