@@ -94,6 +94,7 @@ class MessageTests: XCTestCase {
     func testPostingMessageToRoomWithFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let message = postMessage(conversationId: roomId, text: nil, mentions: nil, files: [file!])
+        Thread.sleep(forTimeInterval: 10)
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
@@ -108,6 +109,7 @@ class MessageTests: XCTestCase {
     func testPostingMessageToRoomWithTextAndFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: [file!])
+        Thread.sleep(forTimeInterval: 10)
         validate(message: message)
         XCTAssertEqual(message?.text, text)
         XCTAssertNotNil(message?.files)
@@ -117,6 +119,7 @@ class MessageTests: XCTestCase {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let mentionItem = Mention.person(Config.InvalidId)
         let message = postMessage(conversationId: roomId, text: text, mentions:[mentionItem], files: [file!])
+        Thread.sleep(forTimeInterval: 10)
         validate(message: message)
         XCTAssertEqual(message?.text, text)
         XCTAssertNotNil(message?.files)
@@ -136,6 +139,7 @@ class MessageTests: XCTestCase {
     func testPostingMessageUsingPersonEmailWithFileReturnsMessage() {
         let file = LocalFile(path: self.generateLocalFile()!, name: "sample.png", progressHandler: nil)
         let message = postMessage(personEmail: other.email, text: "", files: [file!])
+        Thread.sleep(forTimeInterval: 10)
         validate(message: message)
         XCTAssertNotNil(message?.files)
     }
@@ -143,6 +147,7 @@ class MessageTests: XCTestCase {
     func testPostingMessageWithFileAndDwonLoadFile() {
         let file = LocalFile(path: self.generateLocalFile()!)
         let message = postMessage(personEmail: other.email, text: "", files: [file!])
+        Thread.sleep(forTimeInterval: 10)
         validate(message: message)
         let expect = expectation(description: "downLoadingFile")
         self.messages.downloadFile((message?.files?.first)!, progressHandler: { (progress) in
@@ -153,7 +158,7 @@ class MessageTests: XCTestCase {
             let image = UIImage(contentsOfFile: (url?.path)!)
             XCTAssertNotNil(image)
         }
-        waitForExpectations(timeout: 60) { error in
+        waitForExpectations(timeout: 120) { error in
             XCTAssertNil(error, "down load timed out")
         }
 
@@ -196,7 +201,7 @@ class MessageTests: XCTestCase {
     func testListingMessagesReturnsMessages() {
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         validate(message: message)
-        Thread.sleep(forTimeInterval: 3)
+        Thread.sleep(forTimeInterval: 10)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: nil)
         XCTAssertEqual(messageArray?.isEmpty, false)
     }
@@ -211,10 +216,10 @@ class MessageTests: XCTestCase {
     
     func testListingMessagesBeforeADateReturnsMessagesPostedBeforeThatDate() {
         let message1 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-        Thread.sleep(forTimeInterval: 5)
+        Thread.sleep(forTimeInterval: 10)
         var nowDate = Date()
         if let createDate = message1?.created,nowDate > createDate.addingTimeInterval(3) {
-            nowDate = createDate.addingTimeInterval(3)
+            nowDate = createDate.addingTimeInterval(10)
         }
         let message2 = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nowDate, max: nil)
@@ -224,7 +229,7 @@ class MessageTests: XCTestCase {
     
     func testListingMessagesBeforeADateAndAMessageIdDoesReturnMessageWithThatId() {
         let message = postMessage(conversationId: roomId, text: text, mentions:nil, files: nil)
-        Thread.sleep(forTimeInterval: 5)
+        Thread.sleep(forTimeInterval: 10)
         let now = Date()
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: now, max: nil)
         XCTAssertEqual(messageArray?.contains() {$0.id == message?.id}, true)
@@ -272,15 +277,17 @@ class MessageTests: XCTestCase {
         XCTAssertEqual(message1?.text, text)
         XCTAssertEqual(message2?.text, text)
         XCTAssertEqual(message3?.text, text)
-        Thread.sleep(forTimeInterval: 3)
+        Thread.sleep(forTimeInterval: 10)
         let messageArray = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
         XCTAssertEqual(messageArray?.count, 3)
 
         XCTAssertTrue(deleteMessage(messageId: message2!.id!))
+        Thread.sleep(forTimeInterval: 5)
         let messageArray1 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
         XCTAssertEqual(messageArray1?.filter({$0.id == message2?.id}).count, 0)
 
         XCTAssertTrue(deleteMessage(messageId: message3!.id!))
+        Thread.sleep(forTimeInterval: 5)
         let messageArray2 = listMessages(conversationId: roomId, mentionedPeople: nil, before: nil, max: 3)
         XCTAssertEqual(messageArray2?.filter({$0.id == message3?.id}).count, 0)
     }
@@ -326,14 +333,14 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Any>) -> Void) in
             self.messages.delete(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request) != nil
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request) != nil
     }
     
     private func postMessage(conversationId: String, text: String?, mentions:[Mention]?,files: [LocalFile]?) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(roomId: conversationId, text: text, mentions: mentions, files: files, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request)
     }
     
     private func postMessage(personEmail: EmailAddress, text: String?, files: [LocalFile]?) -> Message? {
@@ -347,7 +354,7 @@ class MessageTests: XCTestCase {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.post(personId: personId, text: text, files: files, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request)
     }
     
     private func listMessages(conversationId: String, mentionedPeople: String? ,before: Date?, max: Int?) -> [Message]? {
@@ -356,14 +363,14 @@ class MessageTests: XCTestCase {
             let mentions = mentionedPeople != nil ? Mention.person(mentionedPeople!) : nil
             self.messages.list(roomId: conversationId, before: beforeDate, max: max ?? 50, mentionedPeople: mentions, queue: nil, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request)
     }
     
     private func getMessage(messageId: String) -> Message? {
         let request = { (completionHandler: @escaping (ServiceResponse<Message>) -> Void) in
             self.messages.get(messageId: messageId, completionHandler: completionHandler)
         }
-        return fixture.getResponse(testCase: self, timeOut: 60.0, request: request)
+        return fixture.getResponse(testCase: self, timeOut: 120.0, request: request)
     }
     
     private func generateLocalFile() -> String?{
