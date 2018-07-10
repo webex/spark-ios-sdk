@@ -2,7 +2,7 @@
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/SparkSDK.svg)](https://cocoapods.org/pods/SparkSDK)
 [![Travis CI](https://travis-ci.org/webex/spark-ios-sdk.svg?branch=master)](https://travis-ci.org/webex/spark-ios-sdk)
-[![license](https://img.shields.io/github/license/webex/spark-ios-sdk.svg)](https://github.com/ciscospark/spark-ios-sdk/blob/webex/LICENSE)
+[![license](https://img.shields.io/github/license/webex/spark-ios-sdk.svg)](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE)
 
 The Cisco Spark iOS SDK makes it easy to integrate secure and convenient Cisco Spark messaging and calling features in your iOS apps.
 
@@ -12,6 +12,7 @@ This SDK is written in [Swift 4](https://developer.apple.com/swift) and requires
 
 - [Install](#install)
 - [Usage](#usage)
+- [Upgrade 1.3.1 to 1.4.0](#upgrade-sdk-131-to-140-breaking-changes)
 - [License](#license)
 
 ## Install
@@ -314,9 +315,16 @@ Here are some examples of how to use the iOS SDK in your app.
     }
     ```
     11.3 Get more technical details about the [Containing App & Broadcast upload extension](https://github.com/webex/spark-ios-sdk/wiki/Implementation-Broadcast-upload-extension) and [Set up an App Group](https://github.com/webex/spark-ios-sdk/wiki/Set-up-an-App-Group)
-    
+
+## Upgrade SDK 1.3.1 to 1.4.0 Breaking Changes
+
+1. Minimum Deployment Target: ~~8.0~~ => 10.0
+2. Support Swift Language Version: ~~3.0~~ => 4.0
+3. If you were using 'MediaRenderView', need to add "import SparkSDK". 
+4. If you were using 'MediaRenderView' class in storyboard, set the view's module to 'SparkSDK'.
+
 ## License
 
-&copy; 2016-2017 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
+&copy; 2016-2018 Cisco Systems, Inc. and/or its affiliates. All Rights Reserved.
 
 See [LICENSE](https://github.com/ciscospark/spark-ios-sdk/blob/master/LICENSE) for details.

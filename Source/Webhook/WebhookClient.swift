@@ -107,7 +107,7 @@ public class WebhookClient {
     /// - parameter name: A user-friendly name for this webhook.
     /// - parameter targetUrl: The URL that receives POST requests for each event.
     /// - parameter status: The status of the webhook. Use "active" to reactivate a disabled webhook.
-    /// - parameter queue: The queue on which the completion handler is dispatched.
+    /// - parameter secret: The secret used to generate payload signature.
     /// - parameter queue: The queue on which the completion handler is dispatched.
     /// - parameter completionHandler: A closure to be executed once the request has finished.
     /// - returns: Void

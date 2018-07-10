@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   s.name = "SparkBroadcastExtensionKit"
   s.version = "1.4.0"
   s.summary = "iOS Broadcast Extension Kit for Spark iOS SDK"
-  s.homepage = "https://webex.ciscospark.com"
+  s.homepage = "https://developer.webex.com"
   s.license = "MIT"
   s.author = { "Spark SDK team" => "spark-sdk-crdc@cisco.com" }
   s.source = { :git => "https://github.com/webex/spark-ios-sdk.git", :tag => s.version }
