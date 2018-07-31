@@ -195,7 +195,7 @@ private class VerbTransform : TransformType {
 private class RoomTypeTransform : TransformType {
     
     func transformFromJSON(_ value: Any?) -> RoomType? {
-        if let tags = value as? String, tags.contains("ONE_ON_ONE") {
+        if let tags = value as? [String], tags.contains("ONE_ON_ONE") {
             return RoomType.direct
         }
         return RoomType.group
