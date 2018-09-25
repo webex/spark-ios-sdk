@@ -45,7 +45,7 @@ All notable changes to this project will be documented in this file.
 
 ---
 ## [1.4.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.4.0)
-Released on 2018-05-15.
+Released on 2018-07-02.
 
 #### Added
 - Support screen sharing for both sending and receiving.
