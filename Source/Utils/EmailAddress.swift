@@ -36,7 +36,7 @@ open class EmailAddress {
     /// - parameter address: The email address string.
     /// - returns: EmailAddress
     /// - since: 1.2.0
-    open static func fromString(_ address: String) -> EmailAddress? {
+    open class func fromString(_ address: String) -> EmailAddress? {
         guard isValid(address) else {
             return nil
         }

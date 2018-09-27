@@ -31,7 +31,11 @@ class MetricsEngine {
     init(authenticator: Authenticator, service: DeviceService) {
         self.authenticator = authenticator
         self.client = MetricsClient(authenticator: authenticator, service: service)
+        #if swift(>=4.2)
+        RunLoop.current.add(self.timer, forMode: RunLoop.Mode.common)
+        #else
         RunLoop.current.add(self.timer, forMode: RunLoopMode.commonModes)
+        #endif
     }
 
     func release() {
