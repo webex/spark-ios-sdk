@@ -62,7 +62,7 @@ public class Spark {
     /// The version number of this Cisco Spark iOS SDK.
     ///
     /// - since: 1.2.0
-    public static let version = "1.4.0"
+    public static let version = "1.4.1"
     
     /// The logger for this SDK.
     ///
