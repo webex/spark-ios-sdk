@@ -1,110 +1,110 @@
 {
   "warnings": [
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Message/ActivityModel.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Message/ActivityModel.swift",
       "line": null,
       "symbol": "ActivityModel",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Call/CallMembership.swift",
       "line": 107,
       "symbol": "CallMembership.isSelf",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaRenderView.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaRenderView.swift",
       "line": 23,
       "symbol": "MediaRenderView",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaRenderView.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaRenderView.swift",
       "line": 25,
       "symbol": "MediaRenderView.layerClass",
       "symbol_kind": "source.lang.swift.decl.var.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
       "line": null,
       "symbol": "MediaSessionWrapper",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
       "line": 340,
       "symbol": "MediaSessionWrapper.shouldAcceptNewConnection()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
       "line": 349,
       "symbol": "MediaSessionWrapper.didReceivedFrame(_:frameData:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Media/MediaSessionWrapper.swift",
       "line": 355,
       "symbol": "MediaSessionWrapper.didReceivedError(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 55,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth90p",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 57,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth180p",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 59,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth360p",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 61,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth720p",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 63,
       "symbol": "Phone.DefaultBandwidth.maxBandwidth1080p",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 65,
       "symbol": "Phone.DefaultBandwidth.maxBandwidthSession",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk/Source/Phone/Phone.swift",
+      "file": "/Users/panzh/Desktop/gitPush/spark-ios-sdk/Source/Phone/Phone.swift",
       "line": 67,
       "symbol": "Phone.DefaultBandwidth.maxBandwidthAudio",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/kt/Work/SparkSDK/Code/spark-ios-sdk"
+  "source_directory": "/Users/panzh/Desktop/gitPush/spark-ios-sdk"
 }
