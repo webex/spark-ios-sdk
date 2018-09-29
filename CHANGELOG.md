@@ -1,5 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+#### 1.4.1 Releases
+
+- `1.4.1` Releases - [1.4.1](#141)
 #### 1.4.0 Releases
 
 - `1.4.0` Releases - [1.4.0](#140)
@@ -44,6 +47,17 @@ All notable changes to this project will be documented in this file.
 - `0.9.137` Releases - [0.9.137](#09137)
 
 ---
+## [1.4.1](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.4.1)
+Released on 2018-09-29.
+#### Added
+- Support Swift4.2 and Xcode10.
+
+#### Updated
+- Fixed Activity roomtype always be 'group'.
+- Remove Seu umbrella warning.
+- Fixed Spark call crashing on iOS when using CallKit.
+- Speed up reachability check.
+
 ## [1.4.0](https://github.com/ciscospark/spark-ios-sdk/releases/tag/1.4.0)
 Released on 2018-07-02.
 
