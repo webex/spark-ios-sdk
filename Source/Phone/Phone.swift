@@ -924,9 +924,9 @@ public class Phone {
 
 extension Notification.Name {
     /// A notification name for an incoming call in background.
-    static let incomingCallInBackground = Notification.Name("Cisco.SparkSDK.incomingCallInBackground")
+    public static let incomingCallInBackground = Notification.Name("Cisco.SparkSDK.incomingCallInBackground")
     /// A notification name for a declined call in background.
-    static let declinedCallInBackground = Notification.Name("Cisco.SparkSDK.declinedCallInBackground")
+    public static let declinedCallInBackground = Notification.Name("Cisco.SparkSDK.declinedCallInBackground")
 }
 
 extension NSNotification {
