@@ -1,3 +1,5 @@
+DEPRECATED. Check our newer iOS SDK https://github.com/webex/webex-ios-sdk
+
 # Cisco Spark iOS SDK
 
 [![CocoaPods](https://img.shields.io/cocoapods/v/SparkSDK.svg)](https://cocoapods.org/pods/SparkSDK)
